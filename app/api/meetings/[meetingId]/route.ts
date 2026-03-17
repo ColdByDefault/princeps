@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { auth } from "@/lib/auth";
+import { deleteMeeting } from "@/lib/meetings/delete.logic";
 import { getMeeting } from "@/lib/meetings/get.logic";
 import { updateMeeting } from "@/lib/meetings/update.logic";
 import {
@@ -108,6 +109,51 @@ export async function PATCH(req: Request, context: RouteContext) {
 
     return NextResponse.json(
       { error: "Failed to update meeting" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(req: Request, context: RouteContext) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const rateLimit = writeRateLimiter.check(
+    getRateLimitIdentifier(req, session.user.id),
+  );
+
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.retryAfterSeconds);
+  }
+
+  try {
+    const { meetingId } = await context.params;
+    await deleteMeeting(session.user.id, meetingId);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0]?.message ?? "Invalid request" },
+        { status: 400 },
+      );
+    }
+
+    if (error instanceof Error && error.message === "Meeting not found") {
+      return NextResponse.json({ error: error.message }, { status: 404 });
+    }
+
+    if (error instanceof Error && error.message === "Invalid meeting id") {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json(
+      { error: "Failed to delete meeting" },
       { status: 500 },
     );
   }

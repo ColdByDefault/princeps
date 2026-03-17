@@ -53,6 +53,10 @@ function toInitialValues(meeting: MeetingDetail): MeetingFormInitialValues {
     participants: meeting.participants
       .map((participant) => participant.name)
       .join("\n"),
+    summary: meeting.summary ?? "",
+    nextSteps: meeting.nextSteps ?? "",
+    actionItems: meeting.actionItems.map((item) => item.title).join("\n"),
+    decisions: meeting.decisions.map((decision) => decision.title).join("\n"),
   };
 }
 

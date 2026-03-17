@@ -83,6 +83,14 @@ export interface CreateMeetingPayload {
   participants?: Array<{
     name: string;
   }>;
+  summary?: string | null;
+  nextSteps?: string | null;
+  actionItems?: Array<{
+    title: string;
+  }>;
+  decisions?: Array<{
+    title: string;
+  }>;
 }
 
 export interface MeetingFormInitialValues {
@@ -93,4 +101,8 @@ export interface MeetingFormInitialValues {
   location: string;
   prepNotes: string;
   participants: string;
+  summary: string;
+  nextSteps: string;
+  actionItems: string;
+  decisions: string;
 }

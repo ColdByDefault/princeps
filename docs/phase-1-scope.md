@@ -68,13 +68,7 @@ This scope defines the recommended Phase 1 product slice:
 - authenticated UI now exists for meeting list, meeting creation, meeting detail, and entry from `/home`
 - tested working flow today: creating a meeting and navigating to its detail page
 - meeting editing now exists through a dedicated edit page that reuses the same form and PATCH route
+- meeting deletion now exists with a confirmation flow from the edit screen
+- post-meeting editing now exists for summary, next steps, action items, and decisions
 
-## Later
 
-- Add meeting deletion with a clear confirmation flow.
-- Add post-meeting editing for summary, next steps, action items, and decisions.
-- Add prep-brief generation and structured follow-up generation with the LLM.
-- Add user review and confirmation before LLM-generated actions or decisions are saved.
-- Add task orchestration once action items from meetings are working well.
-- Add contact intelligence after participant context becomes useful often enough.
-- Add daily briefings only after the system has enough stored signals to make them meaningful.

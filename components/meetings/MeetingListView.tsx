@@ -11,6 +11,7 @@ import {
   GitBranch,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import MeetingListItemActions from "@/components/meetings/MeetingListItemActions";
 import { getMessage } from "@/lib/i18n";
 import { type MessageDictionary } from "@/types/i18n";
 import { type MeetingListItem } from "@/types/meetings";
@@ -149,7 +150,11 @@ export default function MeetingListView({
                   </div>
                 </div>
 
-                <div>
+                <div className="flex items-center gap-2 self-start lg:self-center">
+                  <MeetingListItemActions
+                    meetingId={meeting.id}
+                    messages={messages}
+                  />
                   <Button
                     size="lg"
                     className="cursor-pointer rounded-xl px-5"

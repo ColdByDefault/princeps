@@ -27,6 +27,14 @@ function parseParticipants(value: string) {
     .map((name) => ({ name }));
 }
 
+function parseTitledItems(value: string) {
+  return value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((title) => ({ title }));
+}
+
 function buildInitialValues(
   initialValues?: Partial<MeetingFormInitialValues>,
 ): MeetingFormInitialValues {
@@ -38,6 +46,10 @@ function buildInitialValues(
     location: initialValues?.location ?? "",
     prepNotes: initialValues?.prepNotes ?? "",
     participants: initialValues?.participants ?? "",
+    summary: initialValues?.summary ?? "",
+    nextSteps: initialValues?.nextSteps ?? "",
+    actionItems: initialValues?.actionItems ?? "",
+    decisions: initialValues?.decisions ?? "",
   };
 }
 
@@ -63,8 +75,13 @@ export default function MeetingCreateForm({
   const [location, setLocation] = useState(defaults.location);
   const [participants, setParticipants] = useState(defaults.participants);
   const [prepNotes, setPrepNotes] = useState(defaults.prepNotes);
+  const [summary, setSummary] = useState(defaults.summary);
+  const [nextSteps, setNextSteps] = useState(defaults.nextSteps);
+  const [actionItems, setActionItems] = useState(defaults.actionItems);
+  const [decisions, setDecisions] = useState(defaults.decisions);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -79,6 +96,10 @@ export default function MeetingCreateForm({
       location: location || null,
       prepNotes: prepNotes || null,
       participants: parseParticipants(participants),
+      summary: summary || null,
+      nextSteps: nextSteps || null,
+      actionItems: parseTitledItems(actionItems),
+      decisions: parseTitledItems(decisions),
     };
 
     try {
@@ -132,6 +153,60 @@ export default function MeetingCreateForm({
         ),
       );
       setLoading(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!meetingId) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      getMessage(
+        messages,
+        "meetings.form.deleteConfirm",
+        "Delete this meeting? This cannot be undone.",
+      ),
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setError(null);
+    setDeleting(true);
+
+    try {
+      const response = await fetch(`/api/meetings/${meetingId}`, {
+        method: "DELETE",
+      });
+
+      const result = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        setError(
+          result.error ??
+            getMessage(
+              messages,
+              "meetings.form.deleteErrorFallback",
+              "Unable to delete meeting. Please try again.",
+            ),
+        );
+        setDeleting(false);
+        return;
+      }
+
+      router.push("/meetings");
+      router.refresh();
+    } catch {
+      setError(
+        getMessage(
+          messages,
+          "meetings.form.deleteErrorFallback",
+          "Unable to delete meeting. Please try again.",
+        ),
+      );
+      setDeleting(false);
     }
   }
 
@@ -196,6 +271,48 @@ export default function MeetingCreateForm({
             className="min-h-44 rounded-2xl bg-background/80"
           />
         </div>
+
+        {mode === "edit" ? (
+          <>
+            <div className="space-y-2">
+              <label htmlFor="summary" className="text-sm font-medium">
+                {getMessage(messages, "meetings.form.summaryLabel", "Summary")}
+              </label>
+              <Textarea
+                id="summary"
+                value={summary}
+                onChange={(event) => setSummary(event.target.value)}
+                placeholder={getMessage(
+                  messages,
+                  "meetings.form.summaryPlaceholder",
+                  "What happened, what was aligned, and what changed?",
+                )}
+                className="min-h-36 rounded-2xl bg-background/80"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="nextSteps" className="text-sm font-medium">
+                {getMessage(
+                  messages,
+                  "meetings.form.nextStepsLabel",
+                  "Next steps",
+                )}
+              </label>
+              <Textarea
+                id="nextSteps"
+                value={nextSteps}
+                onChange={(event) => setNextSteps(event.target.value)}
+                placeholder={getMessage(
+                  messages,
+                  "meetings.form.nextStepsPlaceholder",
+                  "What should happen next after this meeting?",
+                )}
+                className="min-h-32 rounded-2xl bg-background/80"
+              />
+            </div>
+          </>
+        ) : null}
       </div>
 
       <div className="space-y-5">
@@ -286,6 +403,66 @@ export default function MeetingCreateForm({
           </p>
         </div>
 
+        {mode === "edit" ? (
+          <>
+            <div className="space-y-2">
+              <label htmlFor="actionItems" className="text-sm font-medium">
+                {getMessage(
+                  messages,
+                  "meetings.form.actionItemsLabel",
+                  "Action items",
+                )}
+              </label>
+              <Textarea
+                id="actionItems"
+                value={actionItems}
+                onChange={(event) => setActionItems(event.target.value)}
+                placeholder={getMessage(
+                  messages,
+                  "meetings.form.actionItemsPlaceholder",
+                  "Share updated board memo\nConfirm budget assumptions",
+                )}
+                className="min-h-32 rounded-2xl bg-background/80"
+              />
+              <p className="text-sm text-muted-foreground">
+                {getMessage(
+                  messages,
+                  "meetings.form.actionItemsHint",
+                  "One action item per line.",
+                )}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="decisions" className="text-sm font-medium">
+                {getMessage(
+                  messages,
+                  "meetings.form.decisionsLabel",
+                  "Decisions",
+                )}
+              </label>
+              <Textarea
+                id="decisions"
+                value={decisions}
+                onChange={(event) => setDecisions(event.target.value)}
+                placeholder={getMessage(
+                  messages,
+                  "meetings.form.decisionsPlaceholder",
+                  "Approve revised roadmap\nDelay vendor migration to Q3",
+                )}
+                className="min-h-32 rounded-2xl bg-background/80"
+              />
+              <p className="text-sm text-muted-foreground">
+                {getMessage(
+                  messages,
+                  "meetings.form.decisionsHint",
+                  "One decision per line.",
+                )}
+              </p>
+            </div>
+          </>
+        ) : null}
+
         {error ? (
           <div className="rounded-2xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
             {error}
@@ -295,7 +472,7 @@ export default function MeetingCreateForm({
         <div className="flex flex-wrap items-center gap-3 pt-2">
           <Button
             type="submit"
-            disabled={loading}
+            disabled={loading || deleting}
             className="cursor-pointer rounded-xl px-5"
             size="lg"
           >
@@ -316,10 +493,25 @@ export default function MeetingCreateForm({
                 )}
             <ArrowRight className="size-4" />
           </Button>
+          {mode === "edit" && meetingId ? (
+            <Button
+              type="button"
+              variant="destructive"
+              size="lg"
+              disabled={loading || deleting}
+              className="cursor-pointer rounded-xl px-5"
+              onClick={handleDelete}
+            >
+              {deleting
+                ? getMessage(messages, "meetings.form.deleting", "Deleting...")
+                : getMessage(messages, "meetings.nav.delete", "Delete meeting")}
+            </Button>
+          ) : null}
           <Button
             type="button"
             variant="outline"
             size="lg"
+            disabled={loading || deleting}
             className="cursor-pointer rounded-xl px-5"
             nativeButton={false}
             render={
