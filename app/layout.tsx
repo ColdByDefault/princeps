@@ -6,8 +6,8 @@
 import { headers } from "next/headers";
 import { getRequestConfig } from "@/i18n/request";
 import { auth } from "@/lib/auth";
-import AppShell from "@/components/navigation/AppShell";
-import ThemeProvider from "@/components/theme/ThemeProvider";
+import { Footer, Navbar } from "@/components/navigation";
+import { ThemeProvider } from "@/components/theme";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 import { Geist } from "next/font/google";
@@ -60,7 +60,7 @@ export default async function RootLayout({
               className="from-background pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b to-transparent"
             />
             <main className="relative flex min-h-svh flex-1 flex-col">
-              <AppShell
+              <Navbar
                 messages={messages}
                 sessionUser={
                   session?.user
@@ -70,9 +70,9 @@ export default async function RootLayout({
                       }
                     : null
                 }
-              >
-                {children}
-              </AppShell>
+              />
+              <div className="flex flex-1 flex-col">{children}</div>
+              <Footer messages={messages} />
             </main>
           </div>
         </ThemeProvider>

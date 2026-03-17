@@ -14,20 +14,24 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
-  Plus,
   X,
   type LucideIcon,
 } from "lucide-react";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 import { useLanguage } from "@/hooks/use-language";
 import { authClient } from "@/lib/auth-client";
 import { getMessage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { type AppLanguage, type MessageDictionary } from "@/types/i18n";
 
-type AppShellProps = {
-  children: React.ReactNode;
+type NavbarProps = {
   messages: MessageDictionary;
   sessionUser: {
     email: string | null;
@@ -38,11 +42,6 @@ type AppShellProps = {
 type NavLink = {
   href: string;
   icon: LucideIcon;
-  label: string;
-};
-
-type FooterLink = {
-  href: string;
   label: string;
 };
 
@@ -60,32 +59,6 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       icon: CalendarDays,
       label: getMessage(messages, "shell.nav.meetings", "Meetings"),
     },
-    {
-      href: "/meetings/new",
-      icon: Plus,
-      label: getMessage(messages, "shell.nav.newMeeting", "New meeting"),
-    },
-  ];
-}
-
-function getFooterLinks(messages: MessageDictionary): FooterLink[] {
-  return [
-    {
-      href: "/privacy-policy",
-      label: getMessage(
-        messages,
-        "shell.footer.privacyPolicy",
-        "Privacy policy",
-      ),
-    },
-    {
-      href: "/terms-of-use",
-      label: getMessage(messages, "shell.footer.termsOfUse", "Terms of use"),
-    },
-    {
-      href: "/security",
-      label: getMessage(messages, "shell.footer.security", "Security"),
-    },
   ];
 }
 
@@ -100,10 +73,10 @@ function isActivePath(pathname: string, href: string) {
 function LanguageToggle({ messages }: { messages: MessageDictionary }) {
   const router = useRouter();
   const { language, changeLanguage } = useLanguage();
-  const groupLabel = getMessage(
+  const currentLanguageLabel = getMessage(
     messages,
-    "shell.language.groupLabel",
-    "Language selector",
+    `shell.language.${language}`,
+    language.toUpperCase(),
   );
 
   const handleLanguageChange = (nextLanguage: AppLanguage) => {
@@ -116,54 +89,68 @@ function LanguageToggle({ messages }: { messages: MessageDictionary }) {
   };
 
   return (
-    <div
-      role="group"
-      aria-label={groupLabel}
-      className="inline-flex items-center gap-1 rounded-full border border-border/70 bg-background/70 p-1 backdrop-blur-sm"
-    >
-      <span className="pl-2 text-muted-foreground">
-        <Globe className="size-3.5" />
-      </span>
-      {(["de", "en"] as const).map((option) => {
-        const isActive = language === option;
-        const label = getMessage(
-          messages,
-          `shell.language.${option}`,
-          option.toUpperCase(),
-        );
-
-        return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
           <Button
-            key={option}
             type="button"
-            size="xs"
-            variant={isActive ? "default" : "ghost"}
-            aria-label={label}
-            aria-pressed={isActive}
-            title={label}
-            className="cursor-pointer rounded-full px-2.5 uppercase"
-            onClick={() => handleLanguageChange(option)}
+            variant="outline"
+            size="sm"
+            aria-label={getMessage(
+              messages,
+              "shell.language.groupLabel",
+              "Language selector",
+            )}
+            className="cursor-pointer rounded-full border-border/70 bg-background/70 px-3 backdrop-blur-sm"
           >
-            {option}
+            <Globe className="size-3.5" />
+            {currentLanguageLabel}
           </Button>
-        );
-      })}
-    </div>
+        }
+      />
+      <DropdownMenuContent
+        align="end"
+        className="min-w-40 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
+      >
+        {(["de", "en"] as const).map((option) => {
+          const label = getMessage(
+            messages,
+            `shell.language.${option}`,
+            option.toUpperCase(),
+          );
+
+          return (
+            <DropdownMenuItem
+              key={option}
+              className="cursor-pointer rounded-xl"
+              onClick={() => handleLanguageChange(option)}
+            >
+              <span className="flex w-full items-center justify-between gap-3">
+                <span>{label}</span>
+                {language === option ? (
+                  <span className="text-xs text-muted-foreground">
+                    {getMessage(messages, "shell.language.current", "Current")}
+                  </span>
+                ) : null}
+              </span>
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
-function Navbar({
-  messages,
-  pathname,
-  sessionUser,
-}: {
-  messages: MessageDictionary;
-  pathname: string;
-  sessionUser: AppShellProps["sessionUser"];
-}) {
+export default function Navbar({ messages, sessionUser }: NavbarProps) {
+  const pathname = usePathname();
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
+
+  if (HIDDEN_NAVBAR_PATHS.has(pathname)) {
+    return null;
+  }
+
   const navLinks = getNavLinks(messages);
   const userLabel =
     sessionUser?.name?.trim() ||
@@ -191,7 +178,7 @@ function Navbar({
   return (
     <div className="sticky top-4 z-40 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="rounded-[1.75rem] border border-black/8 bg-white/58 px-4 py-3 shadow-lg shadow-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-black/42">
+        <div className="rounded-[1.75rem] border border-black/10 bg-white/50 px-4 py-3 shadow-lg shadow-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-black/35">
           <div className="flex items-center gap-3">
             <Link
               href="/home"
@@ -211,7 +198,7 @@ function Navbar({
                     variant={isActive ? "secondary" : "ghost"}
                     size="sm"
                     className={cn(
-                      "cursor-pointer rounded-full px-3",
+                      "cursor-pointer rounded-full bg-transparent px-3",
                       isActive && "shadow-sm",
                     )}
                     nativeButton={false}
@@ -239,7 +226,7 @@ function Navbar({
                   "shell.nav.signOut",
                   "Sign out",
                 )}
-                className="cursor-pointer rounded-full px-3"
+                className="cursor-pointer rounded-full border-border/70 bg-background/70 px-3 backdrop-blur-sm"
                 disabled={isSigningOut}
                 onClick={handleSignOut}
               >
@@ -268,7 +255,7 @@ function Navbar({
                 isMenuOpen ? "shell.nav.closeMenu" : "shell.nav.openMenu",
                 isMenuOpen ? "Close menu" : "Open menu",
               )}
-              className="cursor-pointer rounded-full min-[1000px]:hidden"
+              className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm min-[1000px]:hidden"
               onClick={() => setIsMenuOpen((current) => !current)}
             >
               {isMenuOpen ? (
@@ -291,7 +278,7 @@ function Navbar({
                       key={link.href}
                       variant={isActive ? "secondary" : "ghost"}
                       size="default"
-                      className="cursor-pointer justify-start rounded-2xl px-4"
+                      className="cursor-pointer justify-start rounded-2xl bg-transparent px-4"
                       nativeButton={false}
                       render={<Link href={link.href} />}
                     >
@@ -307,14 +294,14 @@ function Navbar({
                 <ThemeToggle messages={messages} />
               </div>
 
-              <div className="rounded-2xl border border-border/70 bg-background/70 px-4 py-3 text-sm text-muted-foreground">
+              <div className="rounded-2xl border border-border/70 bg-background/70 px-4 py-3 text-sm text-muted-foreground backdrop-blur-sm">
                 {userLabel}
               </div>
 
               <Button
                 type="button"
                 variant="outline"
-                className="cursor-pointer rounded-2xl"
+                className="cursor-pointer rounded-2xl border-border/70 bg-background/70 backdrop-blur-sm"
                 disabled={isSigningOut}
                 onClick={handleSignOut}
               >
@@ -332,101 +319,5 @@ function Navbar({
         </div>
       </div>
     </div>
-  );
-}
-
-function Footer({ messages }: { messages: MessageDictionary }) {
-  const navLinks = getNavLinks(messages);
-  const footerLinks = getFooterLinks(messages);
-
-  return (
-    <footer className="px-4 pb-6 sm:px-6 lg:px-8">
-      <div className="mx-auto mt-8 max-w-7xl rounded-[2rem] border border-black/8 bg-white/42 px-6 py-5 backdrop-blur-xl dark:border-white/10 dark:bg-black/28">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-xl space-y-2">
-            <p className="text-sm font-semibold tracking-[0.24em] uppercase text-foreground">
-              {getMessage(messages, "auth.brandName", "See-Sweet")}
-            </p>
-            <p className="text-sm leading-6 text-muted-foreground">
-              {getMessage(
-                messages,
-                "shell.footer.description",
-                "Private executive workspace for continuity, preparation, and follow-through.",
-              )}
-            </p>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[auto_auto] lg:gap-10">
-            <div className="space-y-3">
-              <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
-                {getMessage(messages, "shell.footer.workspace", "Workspace")}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {navLinks.map((link) => (
-                  <Button
-                    key={link.href}
-                    variant="ghost"
-                    size="sm"
-                    className="cursor-pointer rounded-full px-0 text-sm text-muted-foreground hover:text-foreground"
-                    nativeButton={false}
-                    render={<Link href={link.href} />}
-                  >
-                    {link.label}
-                  </Button>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
-                {getMessage(
-                  messages,
-                  "shell.footer.placeholderLinks",
-                  "Policies",
-                )}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {footerLinks.map((link) => (
-                  <Button
-                    key={link.href}
-                    variant="ghost"
-                    size="sm"
-                    className="cursor-pointer rounded-full px-0 text-sm text-muted-foreground hover:text-foreground"
-                    nativeButton={false}
-                    render={<Link href={link.href} />}
-                  >
-                    {link.label}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-export default function AppShell({
-  children,
-  messages,
-  sessionUser,
-}: AppShellProps) {
-  const pathname = usePathname();
-  const showNavbar = !HIDDEN_NAVBAR_PATHS.has(pathname);
-
-  return (
-    <>
-      {showNavbar ? (
-        <Navbar
-          key={pathname}
-          messages={messages}
-          pathname={pathname}
-          sessionUser={sessionUser}
-        />
-      ) : null}
-      <div className="flex flex-1 flex-col">{children}</div>
-      <Footer messages={messages} />
-    </>
   );
 }
