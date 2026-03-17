@@ -1,4 +1,9 @@
-# See-Sweet Workspace Instructions
+<!-- 
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
+ -->
+ 
+ # See-Sweet Workspace Instructions
 
 ## Product Direction
 

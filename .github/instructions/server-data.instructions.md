@@ -1,4 +1,8 @@
----
+<!-- 
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
+ -->
+ ---
 description: "Use when working on API routes, server logic, Prisma, auth enforcement, or data access in See-Sweet. Covers route shape, validation, user scoping, and server/client boundaries."
 name: "See-Sweet Server And Data"
 applyTo: "app/api/**, lib/**, prisma/**, proxy.ts"

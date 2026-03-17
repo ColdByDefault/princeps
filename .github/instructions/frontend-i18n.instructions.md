@@ -1,3 +1,7 @@
+<!-- 
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
+ -->
 ---
 description: "Use when working on pages, components, layout, navigation, frontend UX, or localization in See-Sweet. Covers App Router page patterns, UI conventions, and i18n requirements."
 name: "See-Sweet Frontend And I18n"

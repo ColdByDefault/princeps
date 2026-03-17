@@ -1,7 +1,6 @@
 /**
  * @author ColdByDefault
  * @copyright  2026 ColdByDefault. All Rights Reserved.
- *
  */
 
 import Link from "next/link";

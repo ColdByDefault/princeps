@@ -1,7 +1,6 @@
 /**
  * @author ColdByDefault
  * @copyright  2026 ColdByDefault. All Rights Reserved.
- *
  */
 
 import ThemeProvider from "@/components/theme/ThemeProvider";
@@ -18,7 +17,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html
-      lang="de"
+      lang="en"
       suppressHydrationWarning
       className={cn("font-sans", geist.variable)}
     >
