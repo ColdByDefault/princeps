@@ -4,20 +4,18 @@
  *
  */
 
-import { headers } from "next/headers";
+import ThemeProvider from "@/components/theme/ThemeProvider";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 import { Geist } from "next/font/google";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth.api.getSession({ headers: await headers() });
-
   return (
     <html
       lang="de"
@@ -53,6 +51,9 @@ export default async function RootLayout({
               aria-hidden
               className="from-background pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b to-transparent"
             />
+            <main className="relative flex min-h-svh flex-1 flex-col">
+              {children}
+            </main>
           </div>
         </ThemeProvider>
       </body>

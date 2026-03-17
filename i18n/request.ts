@@ -3,6 +3,8 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
+import deMessages from "@/messages/de.json";
+import enMessages from "@/messages/en.json";
 import { cookies, headers } from "next/headers";
 import {
   DEFAULT_LANGUAGE,
@@ -10,13 +12,12 @@ import {
   isSupportedLanguage,
   type AppLanguage,
   type MessageDictionary,
-  type MessageModule,
 } from "@/types/i18n";
 
-const messageLoaders = {
-  de: () => import("@/messages/de.js"),
-  en: () => import("@/messages/en.js"),
-} satisfies Record<AppLanguage, () => Promise<MessageModule>>;
+const messagesByLanguage: Record<AppLanguage, MessageDictionary> = {
+  de: deMessages as MessageDictionary,
+  en: enMessages as MessageDictionary,
+};
 
 function getLanguageFromHeader(value: string | null): AppLanguage {
   if (!value) {
@@ -51,7 +52,7 @@ export async function getRequestLanguage(): Promise<AppLanguage> {
 export async function getRequestMessages(
   language: AppLanguage,
 ): Promise<MessageDictionary> {
-  return (await messageLoaders[language]()).default;
+  return messagesByLanguage[language];
 }
 
 export async function getRequestConfig() {
