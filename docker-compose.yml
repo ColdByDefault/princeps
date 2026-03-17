@@ -1,0 +1,45 @@
+services:
+  db:
+    image: pgvector/pgvector:pg18
+    container_name: seesweet-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-seesweet}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-seesweet}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-seesweet} -d ${POSTGRES_DB:-seesweet}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    command: >
+      bash -c "
+        docker-entrypoint.sh postgres &
+        until pg_isready -U $${POSTGRES_USER:-seesweet} -d $${POSTGRES_DB:-seesweet}; do
+          echo 'Waiting for database...';
+          sleep 2;
+        done;
+        echo 'Database ready, ensuring pgvector extension...';
+        psql -U $${POSTGRES_USER:-seesweet} -d $${POSTGRES_DB:-seesweet} -c 'CREATE EXTENSION IF NOT EXISTS vector;' || true;
+        echo 'Extensions ready';
+        wait
+      "
+    networks:
+      - seesweet-network
+
+networks:
+  seesweet-network:
+    driver: bridge
+
+volumes:
+  pgdata:
