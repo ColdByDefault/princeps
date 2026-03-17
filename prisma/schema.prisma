@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Better Auth tables ───────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  timezone      String    @default("UTC")
+  role          String    @default("user")   // "user" | "admin"
+  tier          String    @default("free")   // "free" | "pro" | "premium"
+  knowledgeCharsUsed Int @default(0)
+  knowledgeUploadsUsed Int @default(0)
+  knowledgeUploadWindowStartedAt DateTime @default(now())
+  preferences   Json      @default("{}")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions     Session[]
+  accounts     Account[]
+  documents    Document[]
+  personalInfo PersonalInfo?
+  systemConfig SystemConfig?
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("verification")
+}
+
+
+// ─── Knowledge Base ───────────────────────────────────────
+
+model Document {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  sourceType  String               // "pdf" | "docx" | "text" | "markdown" | "paste"
+  textContent String               // full extracted text (kept for re-chunking)
+  tags        String[] @default([])
+  priority    String   @default("medium")  // "low" | "medium" | "high"
+  charCount   Int      @default(0)
+  chunkCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chunks DocumentChunk[]
+
+  @@index([userId])
+  @@map("document")
+}
+
+model DocumentChunk {
+  id         String   @id @default(uuid())
+  documentId String
+  content    String                          // chunk text
+  chunkIndex Int                             // order within document
+  embedding  Unsupported("vector(4096)")     // pgvector 4096-dim
+  createdAt  DateTime @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+  @@map("document_chunk")
+}
+
+// ─── Personal Info ────────────────────────────────────────
+
+model PersonalInfo {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  fullName     String?
+  dateOfBirth  String?
+  phone        String?
+  address      String?
+  occupation   String?
+  bio          String?
+  customFields Json     @default("[]") // [{ label: string, value: string }]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("personal_info")
+}
+
+// ─── System Config ────────────────────────────────────────
+
+model SystemConfig {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  assistantName   String   @default("Emma")
+  assistantGender String   @default("female") // "female" | "male"
+  personaPreset   String   @default("professional") // "professional" | "joyful" | "serious" | "warm" | "coach" | "playful" | "calm" | "executive"
+  formality       String   @default("balanced") // "casual" | "balanced" | "formal"
+  verbosity       String   @default("brief") // "brief" | "balanced" | "detailed"
+  directness      String   @default("balanced") // "gentle" | "balanced" | "blunt"
+  proactivity     String   @default("proactive") // "reactive" | "balanced" | "proactive"
+  emojiEnabled    Boolean  @default(false)
+  systemPrompt    String?  // custom system prompt (null = use default)
+  maxTokens       Int      @default(512)
+  temperature     Float    @default(0.7)
+  topP            Float    @default(1)
+  stopSequences   String[] @default([])
+  ragTopK         Int      @default(5)
+  historyWindow   Int      @default(10)
+  similarityThreshold Float @default(0)
+  contextWindow   Int      @default(0) // Ollama only, 0 = provider default
+  repeatPenalty   Float    @default(1) // Ollama only, 1 = neutral
+  presencePenalty Float    @default(0) // Azure/OpenAI style only
+  frequencyPenalty Float   @default(0) // Azure/OpenAI style only
+  thinkingEnabled Boolean  @default(false) // Ollama thinking mode (qwen3 models)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("system_config")
+}
