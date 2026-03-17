@@ -107,6 +107,9 @@ This checklist defines the intended implementation order for Phase 3 and reflect
 - `lib/knowledge/` now has the initial shared, quota, extraction, chunking, and embedding helpers needed for the next API-layer step.
 - `lib/knowledge/` now includes list, upload, delete, re-index, and personal-info server logic.
 - `app/api/knowledge/` now includes thin handlers for list/upload, delete, re-index, and personal-info flows.
+- `types/chat.ts` now exists for conversation, message, source, and reply contracts.
+- `lib/chat/` now includes conversation loading, prompt assembly, Ollama provider calls, persistent send logic, and stateless widget send logic.
+- `app/api/chat/` now includes handlers for persistent chat and stateless widget chat.
 
 ## Later
 
