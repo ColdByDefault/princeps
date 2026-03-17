@@ -21,6 +21,7 @@ name: "See-Sweet Repo Overview"
 
 - `app/` holds App Router pages, layouts, metadata, and API handlers.
 - `components/<feature>/` holds interactive UI by feature; `components/ui/` holds shared primitives.
+- `components/<feature>/` always include `index.tsx` for the main component and export all others as needed.
 - `lib/<feature>/` holds server-side business logic, usually split into one operation per `*.logic.ts`.
 - `types/` holds shared client-safe contracts and enums.
 - `messages/`, `i18n/`, and `hooks/use-language.ts` provide localization support.

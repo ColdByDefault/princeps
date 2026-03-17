@@ -36,16 +36,16 @@ This is a small but high-signal addition because it creates durable executive me
 3. Meeting detail page with prep brief and post-meeting capture.
 4. Small decision log view, either embedded in the meeting detail page or available as a simple filtered list.
 
-### Data Shape To Add
+### Data Shape
 
-Phase 1 likely needs new user-scoped models for:
+Phase 1 now has a concrete minimal data model:
 
-- meetings
-- meeting participants or participant text fields
-- action items
-- decisions
+- `Meeting` as the parent record for prep, summary, and next steps
+- `MeetingParticipant` for simple participant details per meeting
+- `MeetingActionItem` for follow-up items created from meetings
+- `Decision` for meeting-linked decisions and rationale
 
-The data model should stay simple. It is better to store structured essentials first than to over-design a full operations system.
+The model stays intentionally small. It captures structured essentials first and leaves broader task or contact systems for later.
 
 ### Explicitly Out Of Scope
 
@@ -63,9 +63,18 @@ This scope defines the recommended Phase 1 product slice:
 - one main feature: meeting prep and follow-up
 - one small companion feature: decision log
 - minimal shell needs only enough navigation to reach the workflow
+- Prisma schema now includes the first Phase 1 user-scoped data entities for meetings, participants, action items, and decisions
+- meeting server logic and API routes now exist for create, list, detail, and update flows
+- authenticated UI now exists for meeting list, meeting creation, meeting detail, and entry from `/home`
+- tested working flow today: creating a meeting and navigating to its detail page
+- meeting editing now exists through a dedicated edit page that reuses the same form and PATCH route
 
 ## Later
 
+- Add meeting deletion with a clear confirmation flow.
+- Add post-meeting editing for summary, next steps, action items, and decisions.
+- Add prep-brief generation and structured follow-up generation with the LLM.
+- Add user review and confirmation before LLM-generated actions or decisions are saved.
 - Add task orchestration once action items from meetings are working well.
 - Add contact intelligence after participant context becomes useful often enough.
 - Add daily briefings only after the system has enough stored signals to make them meaningful.
