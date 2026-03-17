@@ -53,8 +53,6 @@ The model stays intentionally small. It captures structured essentials first and
 - calendar sync
 - email integration
 - team collaboration
-- advanced navigation chrome such as a full sidebar and footer system
-- privacy policy and terms pages before a public release requirement exists
 
 ## Done
 
