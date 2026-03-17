@@ -18,6 +18,7 @@ applyTo: "app/**/*.tsx, components/**, messages/**, hooks/**, i18n/**"
 - Preserve the current visual language: layered cards, rounded surfaces, subtle gradients, and feature-specific layouts.
 - Do not flatten the app into generic dashboard scaffolding.
 - Prefer existing `components/ui` primitives before creating new low-level controls, but keep the established custom feature layouts where they already exist.
+- If any component doesnt exist inside ui/, npm add shadcn/ui <component> like `npx shadcn@latest add button`.
 - Prefer the shared `Alert` component for inline success and error states.
 - Use Colored Icons, Badges, Tags, and similar components for status indicators, but avoid adding new ones if the existing set is sufficient.
 - Always add cursor-pointer to interactive elements and use the `aria-label` attribute for accessibility on non-text controls.
