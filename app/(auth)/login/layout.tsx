@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: getMessage(
       messages,
       "auth.login.metadata.description",
-      "Sign in to your Akhiil workspace and continue with your assistant.",
+      "Sign in to your See-Sweet workspace and continue with your assistant.",
     ),
     path: "/login",
     locale: getSeoLocale(language),

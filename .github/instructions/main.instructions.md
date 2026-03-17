@@ -7,8 +7,9 @@ name: "See-Sweet Repo Overview"
 
 ## Product Intent
 
-- See-Sweet should feel like a private executive secretariat or chief-of-staff system, similar to the support structure major CEOs rely on, but adapted for one authenticated user workspace.
-- The product is not just a generic chatbot. It should coordinate chat, knowledge, tasks, contacts, meetings, decisions, and assistant behavior across sessions.
+- See-Sweet is a private executive secretariat, not a generic chatbot.
+- Prioritize workflows around preparation, memory, decisions, coordination, and follow-through.
+- Favor features that increase user leverage inside a personal authenticated workspace.
 - Keep changes aligned with the product's core shape: user-scoped data, retrieval-backed chat, configurable assistant behavior, multilingual UI, and structured workspace flows.
 - Removed features stay removed. Do not reintroduce LiveAvatar, ElevenLabs TTS, `/api/greeting`, or greeting controls in system config.
 
