@@ -57,8 +57,12 @@ export async function generateMetadata({
   const page = legalPages[slug];
 
   return defineSEO({
-    title: getMessage(messages, page.metadataTitleKey, "Placeholder"),
-    description: getMessage(messages, page.descriptionKey, "Placeholder page"),
+    title: getMessage(messages, page.metadataTitleKey, "Policy"),
+    description: getMessage(
+      messages,
+      page.descriptionKey,
+      "Policy information",
+    ),
     path: page.path,
     locale: getSeoLocale(language),
   });
@@ -92,29 +96,25 @@ export default async function LegalPlaceholderPage({
         <div className="w-full rounded-[2rem] border border-border/70 bg-card/70 p-6 shadow-2xl shadow-black/5 backdrop-blur lg:p-10">
           <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm text-muted-foreground">
             <ShieldCheck className="size-4 text-primary" />
-            {getMessage(
-              messages,
-              "legal.placeholder.badge",
-              "Phase 2 placeholder",
-            )}
+            {getMessage(messages, "legal.placeholder.badge", "Policies")}
           </div>
 
           <div className="mt-6 space-y-4">
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              {getMessage(messages, page.titleKey, "Placeholder page")}
+              {getMessage(messages, page.titleKey, "Policy")}
             </h1>
             <p className="max-w-3xl text-base leading-8 text-muted-foreground sm:text-lg">
               {getMessage(
                 messages,
                 "legal.placeholder.description",
-                "This page is in place for the authenticated shell and legal navigation. Replace the placeholder content when the final policy text is ready.",
+                "Review the policy information related to your workspace here.",
               )}
             </p>
           </div>
 
           <div className="mt-8 rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
             <p className="text-sm leading-7 text-foreground">
-              {getMessage(messages, page.bodyKey, "Placeholder body")}
+              {getMessage(messages, page.bodyKey, "Policy information")}
             </p>
           </div>
 
@@ -122,7 +122,7 @@ export default async function LegalPlaceholderPage({
             {getMessage(
               messages,
               "legal.placeholder.note",
-              "The current version is intentionally short and exists to complete the protected navigation flow in Phase 2.",
+              "Additional policy details can be published on this page over time.",
             )}
           </p>
         </div>

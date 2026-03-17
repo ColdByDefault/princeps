@@ -11,6 +11,7 @@ Phase 2 adds the first shared product shell around the authenticated workspace. 
 - Mounted a shared footer with placeholder policy and security links.
 - Added protected placeholder pages for privacy policy, terms of use, and security.
 - Updated the proxy so landing and auth entry routes stay public while all other page routes require authentication.
+- Removed phase and rollout-status wording from user-facing workspace screens so internal implementation stages do not appear in the UI.
 
 ## Later
 

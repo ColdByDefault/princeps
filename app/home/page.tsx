@@ -54,7 +54,7 @@ export default async function HomePage() {
         <div className="space-y-5">
           <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm text-muted-foreground">
             <Sparkles className="size-4 text-primary" />
-            {getMessage(messages, "home.focusTitle", "Phase 1 focus")}
+            {getMessage(messages, "home.focusTitle", "What matters now")}
           </div>
           <div className="space-y-3">
             <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
@@ -64,7 +64,7 @@ export default async function HomePage() {
               {getMessage(
                 messages,
                 "home.description",
-                "Start with the meeting workflow, keep decisions visible, and build continuity session by session.",
+                "Start with meetings, keep decisions visible, and build continuity session by session.",
               )}
             </p>
           </div>
@@ -92,13 +92,13 @@ export default async function HomePage() {
 
         <div className="rounded-[1.75rem] border border-border/70 bg-background/70 p-5">
           <p className="text-sm font-semibold tracking-[0.22em] text-muted-foreground uppercase">
-            {getMessage(messages, "home.focusTitle", "Phase 1 focus")}
+            {getMessage(messages, "home.focusTitle", "What matters now")}
           </p>
           <p className="mt-3 text-sm leading-7 text-muted-foreground">
             {getMessage(
               messages,
               "home.focusBody",
-              "Meeting prep and follow-up is now the main workflow in the authenticated workspace.",
+              "Keep your meetings, outcomes, and follow-through in one place.",
             )}
           </p>
         </div>
@@ -134,7 +134,7 @@ export default async function HomePage() {
               {getMessage(
                 messages,
                 "home.emptyMeetings",
-                "No meetings yet. Create one to begin the Phase 1 workflow.",
+                "No meetings yet. Create one to get started.",
               )}
             </div>
           ) : (
