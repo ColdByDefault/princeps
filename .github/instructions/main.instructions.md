@@ -1,4 +1,8 @@
----
+<!-- 
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
+ -->
+ ---
 description: "Use when you need the high-level shape of the See-Sweet repository. Covers product intent, feature boundaries, and repository-wide architecture."
 name: "See-Sweet Repo Overview"
 ---
