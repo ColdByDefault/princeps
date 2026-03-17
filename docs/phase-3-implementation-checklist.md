@@ -103,6 +103,10 @@ This checklist defines the intended implementation order for Phase 3 and reflect
 - knowledge base supports upload, delete, and re-index.
 - chat uses knowledge base, personal info, and meetings.
 - assistant configuration stays out of scope.
+- Prisma schema now includes Phase 3 conversation persistence and document ingestion metadata.
+- `lib/knowledge/` now has the initial shared, quota, extraction, chunking, and embedding helpers needed for the next API-layer step.
+- `lib/knowledge/` now includes list, upload, delete, re-index, and personal-info server logic.
+- `app/api/knowledge/` now includes thin handlers for list/upload, delete, re-index, and personal-info flows.
 
 ## Later
 
