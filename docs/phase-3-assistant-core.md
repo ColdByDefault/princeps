@@ -145,6 +145,7 @@ This scope defines the recommended Phase 3 product slice:
 - no assistant settings or system configuration UI in this phase
 - no raw uploaded file retention after extraction and indexing
 - document deletion and re-indexing included in phase scope
+- Prisma schema now includes Phase 3 document ingestion metadata plus persistent conversation and conversation-message models as the implementation foundation.
 
 ## Later
 

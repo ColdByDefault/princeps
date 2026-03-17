@@ -1,1 +1,7 @@
 - language toggle fix
+- index.ts empty => /auth 
+- adjust login sign-up Context
+- global-error.tsx fill
+- Check Errors and create global erro handler
+- check if skelton or loading.tsx are needed
+- 
