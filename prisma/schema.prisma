@@ -1,3 +1,8 @@
+/* 
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
+ */ 
+ 
 generator client {
   provider = "prisma-client"
   output   = "../lib/generated/prisma"
@@ -28,10 +33,98 @@ model User {
   sessions     Session[]
   accounts     Account[]
   documents    Document[]
+  meetings     Meeting[]
+  meetingActionItems MeetingActionItem[]
+  decisions    Decision[]
   personalInfo PersonalInfo?
   systemConfig SystemConfig?
 
   @@map("user")
+}
+
+
+// ─── Meeting Workspace ───────────────────────────────────
+
+model Meeting {
+  id                String   @id @default(uuid())
+  userId            String
+  title             String
+  objective         String?
+  scheduledAt       DateTime?
+  durationMinutes   Int?
+  location          String?
+  status            String   @default("planned") // "planned" | "completed" | "cancelled"
+  prepNotes         String?
+  prepBrief         String?
+  summary           String?
+  nextSteps         String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  participants MeetingParticipant[]
+  actionItems  MeetingActionItem[]
+  decisions    Decision[]
+
+  @@index([userId, scheduledAt])
+  @@map("meeting")
+}
+
+model MeetingParticipant {
+  id         String   @id @default(uuid())
+  meetingId  String
+  name       String
+  role       String?
+  email      String?
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@index([meetingId])
+  @@map("meeting_participant")
+}
+
+model MeetingActionItem {
+  id           String   @id @default(uuid())
+  userId       String
+  meetingId    String
+  title        String
+  notes        String?
+  assigneeName String?
+  dueAt        DateTime?
+  status       String   @default("open") // "open" | "done" | "cancelled"
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([meetingId])
+  @@map("meeting_action_item")
+}
+
+model Decision {
+  id          String   @id @default(uuid())
+  userId      String
+  meetingId   String
+  title       String
+  rationale   String?
+  outcome     String?
+  status      String   @default("active") // "active" | "superseded" | "reversed"
+  decidedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@index([userId, decidedAt])
+  @@index([meetingId])
+  @@map("decision")
 }
 
 model Session {
