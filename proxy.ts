@@ -6,7 +6,14 @@
 
 import { type NextRequest, NextResponse } from "next/server";
 
-const publicRoutes = ["/", "/login", "/sign-up"];
+const publicRoutes = [
+  "/",
+  "/login",
+  "/sign-up",
+  "/privacy-policy",
+  "/terms-of-use",
+  "/security",
+];
 const authRoutes = ["/login", "/sign-up"];
 
 function matchesRoute(pathname: string, route: string) {

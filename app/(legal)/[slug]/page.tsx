@@ -3,12 +3,10 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
-import { headers } from "next/headers";
 import { type Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ShieldCheck } from "lucide-react";
 import { getRequestConfig } from "@/i18n/request";
-import { auth } from "@/lib/auth";
 import { getMessage } from "@/lib/i18n";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 
@@ -73,14 +71,6 @@ export default async function LegalPlaceholderPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    redirect("/login");
-  }
-
   const { slug } = await params;
 
   if (!isLegalSlug(slug)) {
