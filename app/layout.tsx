@@ -3,7 +3,11 @@
  * @copyright  2026 ColdByDefault. All Rights Reserved.
  */
 
-import ThemeProvider from "@/components/theme/ThemeProvider";
+import { headers } from "next/headers";
+import { getRequestConfig } from "@/i18n/request";
+import { auth } from "@/lib/auth";
+import { Footer, Navbar } from "@/components/navigation";
+import { ThemeProvider } from "@/components/theme";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 import { Geist } from "next/font/google";
@@ -15,9 +19,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { language, messages } = await getRequestConfig();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   return (
     <html
-      lang="en"
+      lang={language}
       suppressHydrationWarning
       className={cn("font-sans", geist.variable)}
     >
@@ -51,7 +60,19 @@ export default async function RootLayout({
               className="from-background pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b to-transparent"
             />
             <main className="relative flex min-h-svh flex-1 flex-col">
-              {children}
+              <Navbar
+                messages={messages}
+                sessionUser={
+                  session?.user
+                    ? {
+                        email: session.user.email ?? null,
+                        name: session.user.name ?? null,
+                      }
+                    : null
+                }
+              />
+              <div className="flex flex-1 flex-col">{children}</div>
+              <Footer messages={messages} />
             </main>
           </div>
         </ThemeProvider>

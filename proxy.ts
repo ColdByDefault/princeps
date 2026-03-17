@@ -6,11 +6,23 @@
 
 import { type NextRequest, NextResponse } from "next/server";
 
-// Routes that require authentication
-const protectedRoutes = ["/home"];
-
-// Routes accessible only when NOT authenticated
+const publicRoutes = [
+  "/",
+  "/login",
+  "/sign-up",
+  "/privacy-policy",
+  "/terms-of-use",
+  "/security",
+];
 const authRoutes = ["/login", "/sign-up"];
+
+function matchesRoute(pathname: string, route: string) {
+  if (route === "/") {
+    return pathname === route;
+  }
+
+  return pathname === route || pathname.startsWith(`${route}/`);
+}
 
 export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -20,18 +32,18 @@ export default async function proxy(req: NextRequest) {
     req.cookies.get("__Secure-better-auth.session_token")?.value;
 
   const isAuthenticated = Boolean(sessionCookie);
-  const isProtected = protectedRoutes.some((r) => pathname.startsWith(r));
-  const isAuthRoute = authRoutes.some((r) => pathname.startsWith(r));
+  const isPublicRoute = publicRoutes.some((route) =>
+    matchesRoute(pathname, route),
+  );
+  const isAuthRoute = authRoutes.some((route) => matchesRoute(pathname, route));
 
-  // Unauthenticated user hitting a protected route → redirect to login
-  if (isProtected && !isAuthenticated) {
+  if (!isPublicRoute && !isAuthenticated) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(url);
   }
 
-  // Authenticated user hitting login/sign-up → redirect to home
   if (isAuthRoute && isAuthenticated) {
     const url = req.nextUrl.clone();
     url.pathname = "/home";
@@ -42,5 +54,7 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:png|svg|jpg|jpeg|webp|gif)$).*)",
+  ],
 };

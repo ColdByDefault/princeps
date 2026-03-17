@@ -38,7 +38,7 @@ export default function MeetingListView({
       eyebrow={getMessage(
         messages,
         "meetings.list.eyebrow",
-        "Phase 1 workspace",
+        "Meetings workspace",
       )}
       title={getMessage(
         messages,

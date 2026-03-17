@@ -36,3 +36,4 @@
 - Keep business logic in `lib/<feature>/` instead of page components or route handlers.
 - Keep Prisma and other server-only dependencies out of client bundles.
 - Do not hardcode user-facing copy when localized messages are expected.
+- /docs should be the source of truth for product decisions, scope, and implementation notes. Update them as needed when making changes.

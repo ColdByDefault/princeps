@@ -3,5 +3,5 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
-
-// fill then update imports as needed
+export { default as ThemeProvider } from "./ThemeProvider";
+export { default as ThemeToggle } from "./ThemeToggle";
