@@ -5,8 +5,9 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageSquareText } from "lucide-react";
+import { usePathname } from "next/navigation";
 import ChatComposer from "@/components/chat/ChatComposer";
 import ChatSourceList from "@/components/chat/ChatSourceList";
 import ChatThread from "@/components/chat/ChatThread";
@@ -23,13 +24,68 @@ export default function ChatPageView({
   initialConversation,
   messages,
 }: ChatPageViewProps) {
+  const pathname = usePathname();
   const [conversation, setConversation] =
     useState<ChatConversation>(initialConversation);
+  const [isPending, setIsPending] = useState(false);
   const [latestSources, setLatestSources] = useState<ChatSource[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  async function refreshConversation() {
+    const response = await fetch("/api/chat", {
+      cache: "no-store",
+    });
+
+    const payload = (await response.json()) as {
+      conversation?: ChatConversation;
+      error?: string;
+    };
+
+    if (!response.ok || !payload.conversation) {
+      setError(payload.error ?? "Failed to load conversation");
+      return;
+    }
+
+    setConversation(payload.conversation);
+    setLatestSources([]);
+    setError(null);
+    setIsPending(false);
+  }
+
+  useEffect(() => {
+    void refreshConversation();
+  }, [pathname]);
+
+  useEffect(() => {
+    setConversation(initialConversation);
+    setLatestSources([]);
+    setError(null);
+    setIsPending(false);
+  }, [initialConversation]);
+
+  useEffect(() => {
+    function handleFocus() {
+      void refreshConversation();
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === "visible") {
+        void refreshConversation();
+      }
+    }
+
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   async function handleSend(message: string) {
     setError(null);
+    setLatestSources([]);
 
     const response = await fetch("/api/chat", {
       method: "POST",
@@ -78,13 +134,18 @@ export default function ChatPageView({
 
       <section className="mt-8 grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
         <div className="space-y-6 rounded-[2rem] border border-border/70 bg-card/70 p-6 shadow-xl shadow-black/5 backdrop-blur lg:p-8">
-          <ChatThread messages={messages} thread={conversation.messages} />
+          <ChatThread
+            isPending={isPending}
+            messages={messages}
+            thread={conversation.messages}
+          />
           {error ? (
             <div className="rounded-[1.25rem] border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
               {error}
             </div>
           ) : null}
           <ChatComposer
+            onPendingChange={setIsPending}
             messages={messages}
             onSubmit={handleSend}
             placeholderKey="chat.composer.placeholder"
@@ -105,7 +166,7 @@ export default function ChatPageView({
               {getMessage(
                 messages,
                 "chat.page.historyBody",
-                "Phase 3 keeps one conversation per user here, while the home widget stays stateless.",
+                "This page keeps your workspace conversation, while the home widget starts fresh for each question.",
               )}
             </p>
           </div>

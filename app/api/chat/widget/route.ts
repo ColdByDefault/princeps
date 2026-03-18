@@ -50,7 +50,11 @@ export async function POST(req: Request) {
       );
     }
 
-    if (error instanceof Error && error.message === "LLM request failed") {
+    if (
+      error instanceof Error &&
+      (error.message === "LLM request failed" ||
+        error.message === "LLM response was empty")
+    ) {
       return NextResponse.json({ error: error.message }, { status: 502 });
     }
 

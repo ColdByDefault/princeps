@@ -11,11 +11,28 @@ import { type KnowledgeRetrievalChunk } from "@/lib/knowledge/retrieve.logic";
 export function buildDocumentSources(
   chunks: KnowledgeRetrievalChunk[],
 ): ChatSource[] {
-  return chunks.map((chunk) => ({
-    kind: "document",
-    label: chunk.documentTitle,
-    snippet: chunk.content.slice(0, 180),
-  }));
+  const sourcesByDocument = new Map<string, ChatSource>();
+
+  for (const chunk of chunks) {
+    const key = chunk.documentId;
+    const snippet = chunk.content.slice(0, 180);
+    const existing = sourcesByDocument.get(key);
+
+    if (!existing) {
+      sourcesByDocument.set(key, {
+        kind: "document",
+        label: chunk.documentTitle,
+        snippet,
+      });
+      continue;
+    }
+
+    if (!existing.snippet.includes(snippet)) {
+      existing.snippet = `${existing.snippet}\n\n${snippet}`.slice(0, 380);
+    }
+  }
+
+  return Array.from(sourcesByDocument.values());
 }
 
 export function buildProfileSource(lines: string[]): ChatSource[] {
@@ -84,5 +101,28 @@ export function buildMeetingSources(input: {
       `Decision status: ${decision.status}`,
   }));
 
-  return [...meetingSources, ...actionItemSources, ...decisionSources];
+  const mergedSources = new Map<string, ChatSource>();
+
+  for (const source of [
+    ...meetingSources,
+    ...actionItemSources,
+    ...decisionSources,
+  ]) {
+    const key = `${source.kind}:${source.label}`;
+    const existing = mergedSources.get(key);
+
+    if (!existing) {
+      mergedSources.set(key, source);
+      continue;
+    }
+
+    if (!existing.snippet.includes(source.snippet)) {
+      existing.snippet = `${existing.snippet} | ${source.snippet}`.slice(
+        0,
+        380,
+      );
+    }
+  }
+
+  return Array.from(mergedSources.values());
 }

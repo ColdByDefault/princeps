@@ -15,6 +15,7 @@ import { type MessageDictionary } from "@/types/i18n";
 type ChatComposerProps = {
   disabled?: boolean;
   messages: MessageDictionary;
+  onPendingChange?: (isPending: boolean) => void;
   onSubmit: (message: string) => Promise<void>;
   placeholderKey: string;
   placeholderFallback: string;
@@ -23,6 +24,7 @@ type ChatComposerProps = {
 export default function ChatComposer({
   disabled,
   messages,
+  onPendingChange,
   onSubmit,
   placeholderKey,
   placeholderFallback,
@@ -38,12 +40,14 @@ export default function ChatComposer({
     }
 
     setIsSubmitting(true);
+    onPendingChange?.(true);
 
     try {
       await onSubmit(nextValue);
       setValue("");
     } finally {
       setIsSubmitting(false);
+      onPendingChange?.(false);
     }
   }
 

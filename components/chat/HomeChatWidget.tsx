@@ -19,12 +19,15 @@ type HomeChatWidgetProps = {
 };
 
 export default function HomeChatWidget({ messages }: HomeChatWidgetProps) {
+  const [isPending, setIsPending] = useState(false);
   const [reply, setReply] = useState<string | null>(null);
   const [sources, setSources] = useState<ChatSource[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   async function handleSend(message: string) {
     setError(null);
+    setReply(null);
+    setSources([]);
 
     const response = await fetch("/api/chat/widget", {
       method: "POST",
@@ -79,6 +82,7 @@ export default function HomeChatWidget({ messages }: HomeChatWidgetProps) {
 
       <div className="mt-6 space-y-6">
         <ChatComposer
+          onPendingChange={setIsPending}
           messages={messages}
           onSubmit={handleSend}
           placeholderKey="home.chat.placeholder"
@@ -98,6 +102,21 @@ export default function HomeChatWidget({ messages }: HomeChatWidgetProps) {
             </p>
             <p className="mt-3 whitespace-pre-wrap text-sm leading-7">
               {reply}
+            </p>
+          </div>
+        ) : null}
+
+        {isPending ? (
+          <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
+            <p className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
+              {getMessage(messages, "chat.thread.assistant", "Assistant")}
+            </p>
+            <p className="mt-3 text-sm leading-7 text-muted-foreground">
+              {getMessage(
+                messages,
+                "chat.thread.pending",
+                "Assistant is preparing your answer...",
+              )}
             </p>
           </div>
         ) : null}
