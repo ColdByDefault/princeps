@@ -16,6 +16,15 @@ import {
   type KnowledgeDocumentPriority,
 } from "@/types/knowledge";
 
+function isMissingColumnError(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === "P2022"
+  );
+}
+
 export async function listKnowledgeDocuments(
   userId: string,
   input: {
@@ -27,9 +36,10 @@ export async function listKnowledgeDocuments(
     ? (input.priority as KnowledgeDocumentPriority)
     : undefined;
   const tag = input.tag?.trim() || undefined;
+  const usage = await getUserKnowledgeUsage(userId);
 
-  const [documents, usage] = await Promise.all([
-    prisma.document.findMany({
+  try {
+    const documents = await prisma.document.findMany({
       where: {
         userId,
         ...(priority ? { priority } : {}),
@@ -37,12 +47,23 @@ export async function listKnowledgeDocuments(
       },
       orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
       select: knowledgeDocumentListSelect,
-    }),
-    getUserKnowledgeUsage(userId),
-  ]);
+    });
 
-  return {
-    documents,
-    usage: buildKnowledgeUsageSnapshot(usage),
-  };
+    return {
+      documents,
+      usage: buildKnowledgeUsageSnapshot(usage),
+      error: null,
+    };
+  } catch (error) {
+    if (!isMissingColumnError(error)) {
+      throw error;
+    }
+
+    return {
+      documents: [],
+      usage: buildKnowledgeUsageSnapshot(usage),
+      error:
+        "Database schema is out of sync. Run npm run db:push and reload the page.",
+    };
+  }
 }

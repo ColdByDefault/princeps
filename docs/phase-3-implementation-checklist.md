@@ -110,10 +110,14 @@ This checklist defines the intended implementation order for Phase 3 and reflect
 - `types/chat.ts` now exists for conversation, message, source, and reply contracts.
 - `lib/chat/` now includes conversation loading, prompt assembly, Ollama provider calls, persistent send logic, and stateless widget send logic.
 - `app/api/chat/` now includes handlers for persistent chat and stateless widget chat.
+- `/knowledge` now has an authenticated UI for uploads, document management, quota visibility, and personal info editing.
+- `/chat` now has an authenticated persistent conversation UI with request-time source visibility.
+- `/home` now includes a clearly labeled stateless chat widget that routes longer usage into `/chat`.
+- the navbar now exposes `/knowledge` and `/chat` for authenticated users.
 
 ## Later
 
-Open details that still need final values before development begins:
+Open details that still need refinement after the first Phase 3 pass:
 
 1. Set the cumulative embedding usage limits for `free` and `premium`.
 2. Decide whether to add a total stored-character cap in addition to upload count and embedding usage.

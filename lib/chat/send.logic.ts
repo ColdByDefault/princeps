@@ -29,16 +29,20 @@ export async function sendConversationMessage(userId: string, message: string) {
       content: true,
     },
   });
+  const history = existingMessages.map((entry) => ({
+    role: entry.role as "user" | "assistant",
+    content: entry.content,
+  }));
 
   const { prompt, sources } = await buildChatPrompt({
-    history: existingMessages,
+    history,
     message,
     userId,
   });
 
   const providerMessages: ProviderMessage[] = [
     { role: "system", content: prompt },
-    ...existingMessages,
+    ...history,
     { role: "user", content: message },
   ];
 
