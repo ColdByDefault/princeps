@@ -25,6 +25,130 @@ type KnowledgePageViewProps = {
   messages: MessageDictionary;
 };
 
+function KnowledgeUsageCards({
+  usage,
+  messages,
+}: {
+  usage: KnowledgeUsageSnapshot;
+  messages: MessageDictionary;
+}) {
+  return (
+    <div className="grid gap-4 lg:grid-cols-3">
+      <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
+        <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
+          {getMessage(messages, "knowledge.usage.tier", "Tier")}
+        </p>
+        <p className="mt-3 text-lg font-semibold">{usage.tier}</p>
+      </div>
+      <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
+        <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
+          {getMessage(messages, "knowledge.usage.documents", "Documents")}
+        </p>
+        <p className="mt-3 text-lg font-semibold">
+          {usage.activeDocuments} / {usage.maxDocuments}
+        </p>
+      </div>
+      <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
+        <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
+          {getMessage(messages, "knowledge.usage.embedding", "Embedding usage")}
+        </p>
+        <p className="mt-3 text-lg font-semibold">
+          {usage.embeddingCharsUsed.toLocaleString()} /{" "}
+          {usage.embeddingCharsLimit.toLocaleString()}
+        </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {getMessage(
+            messages,
+            "knowledge.usage.note",
+            "Deleting documents does not refund embedding usage.",
+          )}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function KnowledgeQuotaPanel({
+  usage,
+  messages,
+}: {
+  usage: KnowledgeUsageSnapshot;
+  messages: MessageDictionary;
+}) {
+  return (
+    <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
+      <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
+        {getMessage(messages, "knowledge.usage.panelTitle", "Workspace quota")}
+      </p>
+      <div className="mt-4 space-y-4 text-sm">
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-muted-foreground">
+              {getMessage(messages, "knowledge.usage.documents", "Documents")}
+            </span>
+            <span className="font-medium text-foreground">
+              {usage.activeDocuments} / {usage.maxDocuments}
+            </span>
+          </div>
+          <div className="h-2 rounded-full bg-muted">
+            <div
+              className="h-2 rounded-full bg-primary transition-[width]"
+              style={{
+                width: `${Math.min((usage.activeDocuments / usage.maxDocuments) * 100, 100)}%`,
+              }}
+            />
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-muted-foreground">
+              {getMessage(
+                messages,
+                "knowledge.usage.embedding",
+                "Embedding usage",
+              )}
+            </span>
+            <span className="font-medium text-foreground">
+              {usage.embeddingCharsUsed.toLocaleString()} /{" "}
+              {usage.embeddingCharsLimit.toLocaleString()}
+            </span>
+          </div>
+          <div className="h-2 rounded-full bg-muted">
+            <div
+              className="h-2 rounded-full bg-primary transition-[width]"
+              style={{
+                width: `${Math.min((usage.embeddingCharsUsed / usage.embeddingCharsLimit) * 100, 100)}%`,
+              }}
+            />
+          </div>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border border-border/70 bg-card/70 p-3">
+            <p className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
+              {getMessage(messages, "knowledge.usage.uploads", "Uploads used")}
+            </p>
+            <p className="mt-2 text-base font-semibold">
+              {usage.uploadCountUsed}
+            </p>
+          </div>
+          <div className="rounded-xl border border-border/70 bg-card/70 p-3">
+            <p className="text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground">
+              {getMessage(
+                messages,
+                "knowledge.usage.maxUploadSize",
+                "Max upload size",
+              )}
+            </p>
+            <p className="mt-2 text-base font-semibold">
+              {formatBytes(usage.maxUploadBytes)}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function formatBytes(value: number) {
   return `${(value / (1024 * 1024)).toFixed(1)} MB`;
 }
@@ -304,41 +428,8 @@ export default function KnowledgePageView({
           )}
         </p>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
-          <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
-            <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
-              {getMessage(messages, "knowledge.usage.tier", "Tier")}
-            </p>
-            <p className="mt-3 text-lg font-semibold">{usage.tier}</p>
-          </div>
-          <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
-            <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
-              {getMessage(messages, "knowledge.usage.documents", "Documents")}
-            </p>
-            <p className="mt-3 text-lg font-semibold">
-              {usage.activeDocuments} / {usage.maxDocuments}
-            </p>
-          </div>
-          <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
-            <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
-              {getMessage(
-                messages,
-                "knowledge.usage.embedding",
-                "Embedding usage",
-              )}
-            </p>
-            <p className="mt-3 text-lg font-semibold">
-              {usage.embeddingCharsUsed.toLocaleString()} /{" "}
-              {usage.embeddingCharsLimit.toLocaleString()}
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">
-              {getMessage(
-                messages,
-                "knowledge.usage.note",
-                "Deleting documents does not refund embedding usage.",
-              )}
-            </p>
-          </div>
+        <div className="mt-8">
+          <KnowledgeUsageCards usage={usage} messages={messages} />
         </div>
       </section>
 
@@ -375,68 +466,71 @@ export default function KnowledgePageView({
 
         {activeTab === "documents" ? (
           <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="space-y-4 rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
-              <h2 className="text-lg font-semibold">
-                {getMessage(
-                  messages,
-                  "knowledge.upload.title",
-                  "Upload a document",
-                )}
-              </h2>
-              <Input
-                value={uploadTitle}
-                onChange={(event) => setUploadTitle(event.target.value)}
-                placeholder={getMessage(
-                  messages,
-                  "knowledge.upload.titlePlaceholder",
-                  "Document title",
-                )}
-              />
-              <Input
-                type="file"
-                accept=".txt,.md,.markdown,.pdf,text/plain,text/markdown,application/pdf"
-                onChange={(event) =>
-                  setSelectedFile(event.target.files?.[0] ?? null)
-                }
-                className="cursor-pointer"
-              />
-              <Input
-                value={tagsValue}
-                onChange={(event) => setTagsValue(event.target.value)}
-                placeholder={getMessage(
-                  messages,
-                  "knowledge.upload.tagsPlaceholder",
-                  "Tags, comma separated",
-                )}
-              />
-              <Input
-                value={priorityValue}
-                onChange={(event) => setPriorityValue(event.target.value)}
-                placeholder={getMessage(
-                  messages,
-                  "knowledge.upload.priorityPlaceholder",
-                  "Priority: low, medium, or high",
-                )}
-              />
-              <p className="text-xs text-muted-foreground">
-                {getMessage(
-                  messages,
-                  "knowledge.upload.helper",
-                  `Supported files: txt, md, pdf. Max upload size for your plan: ${formatBytes(usage.maxUploadBytes)}.`,
-                )}
-              </p>
-              <Button
-                type="button"
-                className="cursor-pointer rounded-xl px-4"
-                disabled={isBusy}
-                onClick={handleUpload}
-              >
-                {getMessage(
-                  messages,
-                  "knowledge.upload.submit",
-                  "Upload document",
-                )}
-              </Button>
+            <div className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+              <KnowledgeQuotaPanel usage={usage} messages={messages} />
+              <div className="space-y-4 rounded-[1.5rem] border border-border/70 bg-background/70 p-5">
+                <h2 className="text-lg font-semibold">
+                  {getMessage(
+                    messages,
+                    "knowledge.upload.title",
+                    "Upload a document",
+                  )}
+                </h2>
+                <Input
+                  value={uploadTitle}
+                  onChange={(event) => setUploadTitle(event.target.value)}
+                  placeholder={getMessage(
+                    messages,
+                    "knowledge.upload.titlePlaceholder",
+                    "Document title",
+                  )}
+                />
+                <Input
+                  type="file"
+                  accept=".txt,.md,.markdown,.pdf,text/plain,text/markdown,application/pdf"
+                  onChange={(event) =>
+                    setSelectedFile(event.target.files?.[0] ?? null)
+                  }
+                  className="cursor-pointer"
+                />
+                <Input
+                  value={tagsValue}
+                  onChange={(event) => setTagsValue(event.target.value)}
+                  placeholder={getMessage(
+                    messages,
+                    "knowledge.upload.tagsPlaceholder",
+                    "Tags, comma separated",
+                  )}
+                />
+                <Input
+                  value={priorityValue}
+                  onChange={(event) => setPriorityValue(event.target.value)}
+                  placeholder={getMessage(
+                    messages,
+                    "knowledge.upload.priorityPlaceholder",
+                    "Priority: low, medium, or high",
+                  )}
+                />
+                <p className="text-xs text-muted-foreground">
+                  {getMessage(
+                    messages,
+                    "knowledge.upload.helper",
+                    `Supported files: txt, md, pdf. Max upload size for your plan: ${formatBytes(usage.maxUploadBytes)}.`,
+                  )}
+                </p>
+                <Button
+                  type="button"
+                  className="cursor-pointer rounded-xl px-4"
+                  disabled={isBusy}
+                  onClick={handleUpload}
+                >
+                  {getMessage(
+                    messages,
+                    "knowledge.upload.submit",
+                    "Upload document",
+                  )}
+                </Button>
+              </div>
             </div>
 
             <div className="space-y-4">

@@ -3,15 +3,15 @@
 - [x] index.ts empty => /auth
 - [x] global-error.tsx fill
 - [x] Check Errors and create global erro handler
-- [ ] check if skelton or loading.tsx are needed
-- [ ] Workspace Quota disappear very fast, need to check if it's a UI issue or the API is responding too fast
+- [x] check if skelton or loading.tsx are needed
+- [x] Workspace Quota disappear very fast, need to check if it's a UI issue or the API is responding too fast
 - [ ] Workspace Thread Card check again deeply
 - [ ] Switch all "Sie" to "Du" in the translation files
 - [ ] Add success/error alarms in /meetings for deleted meetings, also switch the default pop-up delete confirmation with Shadcn UI pop-up
 - [ ] Same as above for /knowledge
 - [ ] Show Beta badge in the footer next to version number
 - [ ] remove x-achsis overflow in Login/sign-up pages
-- [ ]
+- [ ] Knowledge PageView start to get too big, need to split it into smaller components
 - [ ]
 - [ ]
 - [ ]
