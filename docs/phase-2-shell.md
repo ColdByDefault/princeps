@@ -13,6 +13,7 @@ Phase 2 adds the first shared product shell around the authenticated workspace. 
 - Updated the proxy so landing, auth entry, and policy routes stay public while the authenticated workspace routes require authentication.
 - Removed phase and rollout-status wording from user-facing workspace screens so internal implementation stages do not appear in the UI.
 - Kept policy and security content intentionally as placeholders for a later project stage instead of expanding scope inside Phase 2.
+- Confirmed the login and sign-up messaging still matches the current See-Sweet positioning; the real auth mismatch was disabled social OAuth in the environment, so those providers are now commented out until credentials are supplied.
 
 ## Later
 

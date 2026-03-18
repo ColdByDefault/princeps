@@ -1,8 +1,20 @@
-- language toggle fix
-- index.ts empty => /auth 
-- adjust login sign-up Context
-- global-error.tsx fill
-- Check Errors and create global erro handler
-- check if skelton or loading.tsx are needed
-- Workspace Quota disappear very fast, need to check if it's a UI issue or the API is responding too fast
-- Workspace Thread Card check again deeply
+- [ ] language toggle fix => if i switch to english and hard refresh the page, language in UI stays English but toogle switch back to german, 
+also dont show full name of language in the toggle, just show "DE" and "EN"
+- [ ] index.ts empty => /auth 
+- [ ] adjust login sign-up Context
+- [ ] global-error.tsx fill
+- [ ] Check Errors and create global erro handler
+- [ ] check if skelton or loading.tsx are needed
+- [ ] Workspace Quota disappear very fast, need to check if it's a UI issue or the API is responding too fast
+- [ ] Workspace Thread Card check again deeply
+- [ ] Switch all "Sie" to "Du" in the translation files
+- [ ] Add success/error alarms in /meetings for deleted meetings, also switch the default pop-up delete confirmation with Shadcn UI pop-up
+- [ ] Same as above for /knowledge
+- [ ] Show Beta badge in the footer next to version number
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 

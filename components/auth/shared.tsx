@@ -10,14 +10,14 @@ import { type ComponentType, type ReactNode, type SVGProps } from "react";
 import { Button } from "@/components/ui/button";
 import { type MessageDictionary } from "@/types/i18n";
 
-export const AUTH_PROVIDERS = [
-  "google",
-  "github",
-  "microsoft",
-  "apple",
-] as const;
+export type AuthProvider = "google" | "github" | "microsoft" | "apple";
 
-export type AuthProvider = (typeof AUTH_PROVIDERS)[number];
+export const AUTH_PROVIDERS = [
+  // "google",
+  // "github",
+  // "microsoft",
+  // "apple",
+] as const satisfies readonly AuthProvider[];
 
 const AUTH_PROVIDER_MESSAGE_KEYS: Record<AuthProvider, string> = {
   apple: "auth.providers.apple",
@@ -212,6 +212,10 @@ export function OAuthProviderButtonGroup({
   onProviderSelect,
   providers = AUTH_PROVIDERS,
 }: OAuthProviderButtonGroupProps) {
+  if (providers.length === 0) {
+    return null;
+  }
+
   return (
     <>
       <div className="relative py-1">
