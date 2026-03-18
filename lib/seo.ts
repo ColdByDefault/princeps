@@ -11,6 +11,7 @@ type DefineSeoInput = {
   description: string;
   path?: string;
   locale?: string;
+  noIndex?: boolean;
 };
 
 function getSiteUrl(): URL {
@@ -31,6 +32,7 @@ export function defineSEO({
   description,
   path = "/",
   locale = getSeoLocale(DEFAULT_LANGUAGE),
+  noIndex = false,
 }: DefineSeoInput): Metadata {
   const siteUrl = getSiteUrl();
   const url = new URL(path, siteUrl).toString();
@@ -54,5 +56,11 @@ export function defineSEO({
       title,
       description,
     },
+    robots: noIndex
+      ? {
+          index: false,
+          follow: false,
+        }
+      : undefined,
   };
 }

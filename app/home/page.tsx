@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, CalendarDays, Sparkles } from "lucide-react";
+import { HomeChatWidget } from "@/components/chat";
 import { Button } from "@/components/ui/button";
 import { getRequestConfig } from "@/i18n/request";
 import { auth } from "@/lib/auth";
@@ -103,6 +104,8 @@ export default async function HomePage() {
           </p>
         </div>
       </section>
+
+      <HomeChatWidget messages={messages} />
 
       <section className="mt-8 rounded-[2rem] border border-border/70 bg-card/70 p-6 shadow-xl shadow-black/5 backdrop-blur lg:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">

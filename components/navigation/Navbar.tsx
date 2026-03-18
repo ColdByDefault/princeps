@@ -11,9 +11,11 @@ import { useState } from "react";
 import {
   CalendarDays,
   Globe,
+  LibraryBig,
   LayoutDashboard,
   LogOut,
   Menu,
+  MessageSquareText,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -58,6 +60,16 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/meetings",
       icon: CalendarDays,
       label: getMessage(messages, "shell.nav.meetings", "Meetings"),
+    },
+    {
+      href: "/knowledge",
+      icon: LibraryBig,
+      label: getMessage(messages, "shell.nav.knowledge", "Knowledge"),
+    },
+    {
+      href: "/chat",
+      icon: MessageSquareText,
+      label: getMessage(messages, "shell.nav.chat", "Chat"),
     },
   ];
 }
