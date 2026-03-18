@@ -1,6 +1,6 @@
-- [ ] language toggle fix => if i switch to english and hard refresh the page, language in UI stays English but toogle switch back to german, 
-also dont show full name of language in the toggle, just show "DE" and "EN"
-- [ ] index.ts empty => /auth 
+- [x] language toggle fix => if i switch to english and hard refresh the page, language in UI stays English but toogle switch back to german,
+      also dont show full name of language in the toggle, just show "DE" and "EN"
+- [x] index.ts empty => /auth
 - [ ] adjust login sign-up Context
 - [ ] global-error.tsx fill
 - [ ] Check Errors and create global erro handler
@@ -11,10 +11,10 @@ also dont show full name of language in the toggle, just show "DE" and "EN"
 - [ ] Add success/error alarms in /meetings for deleted meetings, also switch the default pop-up delete confirmation with Shadcn UI pop-up
 - [ ] Same as above for /knowledge
 - [ ] Show Beta badge in the footer next to version number
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
+- [ ] remove x-achsis overflow in Login/sign-up pages
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]

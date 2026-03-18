@@ -85,11 +85,7 @@ function isActivePath(pathname: string, href: string) {
 function LanguageToggle({ messages }: { messages: MessageDictionary }) {
   const router = useRouter();
   const { language, changeLanguage } = useLanguage();
-  const currentLanguageLabel = getMessage(
-    messages,
-    `shell.language.${language}`,
-    language.toUpperCase(),
-  );
+  const currentLanguageLabel = language.toUpperCase();
 
   const handleLanguageChange = (nextLanguage: AppLanguage) => {
     if (nextLanguage === language) {
@@ -125,11 +121,7 @@ function LanguageToggle({ messages }: { messages: MessageDictionary }) {
         className="min-w-40 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
       >
         {(["de", "en"] as const).map((option) => {
-          const label = getMessage(
-            messages,
-            `shell.language.${option}`,
-            option.toUpperCase(),
-          );
+          const label = option.toUpperCase();
 
           return (
             <DropdownMenuItem
