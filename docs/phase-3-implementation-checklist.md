@@ -117,12 +117,26 @@ This checklist defines the intended implementation order for Phase 3 and reflect
 - the navbar now exposes `/knowledge` and `/chat` for authenticated users.
 - Phase 3 MVP is now functionally ship-ready for an internal or controlled release: auth, upload, retrieval, delete, re-index, stateless home chat, persistent chat, source visibility, and model fallback behavior are all implemented and validated.
 
+## Known Issues
+
+These items are known at Phase 3 closure but are not considered MVP blockers:
+
+1. The cumulative embedding usage limits for `free` and `premium` are still product-policy decisions rather than finalized launch values.
+2. The quota model still needs a final decision on whether document count alone is sufficient or whether a total stored-character cap should also be enforced.
+3. The knowledge base quota UI is functional but still basic; richer warnings, progress states, and visual summaries remain polish work.
+4. Runtime coverage is strongest on `.txt`; broader `.md` and `.pdf` smoke coverage is still recommended.
+5. The local Ollama model can still vary in responsiveness and output quality depending on the selected model size, even though the app now has streaming, thinking suppression, and final-answer fallback behavior.
+
+## Blockers
+
+No unresolved Phase 3 blockers remain for the agreed MVP scope.
+
 ## Later
 
-Open details that still need refinement after the first Phase 3 pass:
+Phase 3 is closed. Any remaining work below should be treated as follow-up refinement or Phase 4 input, not as Phase 3 completion criteria.
 
 1. Set the cumulative embedding usage limits for `free` and `premium`.
 2. Decide whether to add a total stored-character cap in addition to upload count and embedding usage.
 3. Decide how rich the quota UI should be in the knowledge base page.
 4. Optional polish: broader `.md` and `.pdf` runtime smoke coverage, richer quota visuals, and stronger source presentation.
-5. Phase 4 can start once the remaining quota-policy decisions are accepted as follow-up polish rather than Phase 3 blockers.
+5. Phase 4 can start now, with the remaining quota-policy decisions handled as follow-up product decisions.
