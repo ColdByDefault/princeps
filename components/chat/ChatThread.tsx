@@ -52,6 +52,11 @@ export default function ChatThread({
     <div className="space-y-3">
       {thread.map((message) => {
         const isUser = message.role === "user";
+        const isPendingAssistantMessage =
+          !isUser &&
+          isPending &&
+          message.id === thread[thread.length - 1]?.id &&
+          message.content.trim().length === 0;
 
         return (
           <article
@@ -70,27 +75,19 @@ export default function ChatThread({
                   ? getMessage(messages, "chat.thread.user", "You")
                   : getMessage(messages, "chat.thread.assistant", "Assistant")}
               </p>
-              <p className="whitespace-pre-wrap">{message.content}</p>
+              <p className="whitespace-pre-wrap">
+                {isPendingAssistantMessage
+                  ? getMessage(
+                      messages,
+                      "chat.thread.pending",
+                      "Assistant is preparing your answer...",
+                    )
+                  : message.content}
+              </p>
             </div>
           </article>
         );
       })}
-      {isPending ? (
-        <article className="flex justify-start">
-          <div className="max-w-[85%] rounded-[1.5rem] border border-border/70 bg-background/70 px-4 py-3 text-sm leading-7">
-            <p className="mb-1 text-[11px] font-semibold tracking-[0.18em] uppercase opacity-70">
-              {getMessage(messages, "chat.thread.assistant", "Assistant")}
-            </p>
-            <p className="text-muted-foreground">
-              {getMessage(
-                messages,
-                "chat.thread.pending",
-                "Assistant is preparing your answer...",
-              )}
-            </p>
-          </div>
-        </article>
-      ) : null}
     </div>
   );
 }

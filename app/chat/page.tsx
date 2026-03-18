@@ -38,6 +38,10 @@ export default async function ChatPage() {
   );
 
   return (
-    <ChatPageView initialConversation={conversation} messages={messages} />
+    <ChatPageView
+      key={`${conversation.id}:${conversation.lastMessageAt}:${conversation.messages.length}`}
+      initialConversation={conversation}
+      messages={messages}
+    />
   );
 }

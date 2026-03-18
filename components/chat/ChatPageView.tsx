@@ -7,12 +7,15 @@
 
 import { useEffect, useState } from "react";
 import { MessageSquareText } from "lucide-react";
-import { usePathname } from "next/navigation";
 import ChatComposer from "@/components/chat/ChatComposer";
 import ChatSourceList from "@/components/chat/ChatSourceList";
 import ChatThread from "@/components/chat/ChatThread";
 import { getMessage } from "@/lib/i18n";
-import { type ChatConversation, type ChatSource } from "@/types/chat";
+import {
+  type ChatConversation,
+  type ChatSource,
+  type ChatStreamEvent,
+} from "@/types/chat";
 import { type MessageDictionary } from "@/types/i18n";
 
 type ChatPageViewProps = {
@@ -24,7 +27,6 @@ export default function ChatPageView({
   initialConversation,
   messages,
 }: ChatPageViewProps) {
-  const pathname = usePathname();
   const [conversation, setConversation] =
     useState<ChatConversation>(initialConversation);
   const [isPending, setIsPending] = useState(false);
@@ -53,17 +55,6 @@ export default function ChatPageView({
   }
 
   useEffect(() => {
-    void refreshConversation();
-  }, [pathname]);
-
-  useEffect(() => {
-    setConversation(initialConversation);
-    setLatestSources([]);
-    setError(null);
-    setIsPending(false);
-  }, [initialConversation]);
-
-  useEffect(() => {
     function handleFocus() {
       void refreshConversation();
     }
@@ -86,28 +77,127 @@ export default function ChatPageView({
   async function handleSend(message: string) {
     setError(null);
     setLatestSources([]);
+    const previousConversation = conversation;
+    const createdAt = new Date().toISOString();
+    const optimisticUserId = `optimistic-user-${Date.now()}`;
+    const optimisticAssistantId = `optimistic-assistant-${Date.now()}`;
+
+    setConversation((current) => ({
+      ...current,
+      messages: [
+        ...current.messages,
+        {
+          id: optimisticUserId,
+          role: "user",
+          content: message,
+          createdAt,
+        },
+        {
+          id: optimisticAssistantId,
+          role: "assistant",
+          content: "",
+          createdAt,
+        },
+      ],
+    }));
 
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, stream: true }),
     });
 
-    const payload = (await response.json()) as {
-      conversation?: ChatConversation;
-      error?: string;
-      sources?: ChatSource[];
-    };
-
-    if (!response.ok || !payload.conversation) {
+    if (!response.ok) {
+      const payload = (await response.json()) as {
+        error?: string;
+      };
+      setConversation(previousConversation);
       setError(payload.error ?? "Failed to send chat message");
       return;
     }
 
-    setConversation(payload.conversation);
-    setLatestSources(payload.sources ?? []);
+    if (!response.body) {
+      setConversation(previousConversation);
+      setError("Failed to stream chat message");
+      return;
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let handledDone = false;
+
+    const applyChunk = (chunk: string) => {
+      setConversation((current) => ({
+        ...current,
+        messages: current.messages.map((entry) =>
+          entry.id === optimisticAssistantId
+            ? {
+                ...entry,
+                content: `${entry.content}${chunk}`,
+              }
+            : entry,
+        ),
+      }));
+    };
+
+    const handleEvent = (event: ChatStreamEvent) => {
+      if (event.type === "chunk") {
+        applyChunk(event.content);
+        return;
+      }
+
+      if (event.type === "sources") {
+        setLatestSources(event.sources);
+        return;
+      }
+
+      if (event.type === "done") {
+        handledDone = true;
+        setConversation(event.conversation);
+        setLatestSources(event.sources);
+        return;
+      }
+
+      setConversation(previousConversation);
+      setLatestSources([]);
+      setError(event.error);
+    };
+
+    while (true) {
+      const { done, value } = await reader.read();
+
+      buffer += decoder.decode(value ?? new Uint8Array(), {
+        stream: !done,
+      });
+
+      let newlineIndex = buffer.indexOf("\n");
+
+      while (newlineIndex >= 0) {
+        const line = buffer.slice(0, newlineIndex).trim();
+        buffer = buffer.slice(newlineIndex + 1);
+
+        if (line) {
+          handleEvent(JSON.parse(line) as ChatStreamEvent);
+        }
+
+        newlineIndex = buffer.indexOf("\n");
+      }
+
+      if (done) {
+        break;
+      }
+    }
+
+    if (buffer.trim()) {
+      handleEvent(JSON.parse(buffer.trim()) as ChatStreamEvent);
+    }
+
+    if (!handledDone && !error) {
+      await refreshConversation();
+    }
   }
 
   return (

@@ -112,8 +112,10 @@ This checklist defines the intended implementation order for Phase 3 and reflect
 - `app/api/chat/` now includes handlers for persistent chat and stateless widget chat.
 - `/knowledge` now has an authenticated UI for uploads, document management, quota visibility, and personal info editing.
 - `/chat` now has an authenticated persistent conversation UI with request-time source visibility.
+- `/chat` now supports progressive answer rendering, with non-stream fallback when the local model does not yield a usable streamed final answer.
 - `/home` now includes a clearly labeled stateless chat widget that routes longer usage into `/chat`.
 - the navbar now exposes `/knowledge` and `/chat` for authenticated users.
+- Phase 3 MVP is now functionally ship-ready for an internal or controlled release: auth, upload, retrieval, delete, re-index, stateless home chat, persistent chat, source visibility, and model fallback behavior are all implemented and validated.
 
 ## Later
 
@@ -122,3 +124,5 @@ Open details that still need refinement after the first Phase 3 pass:
 1. Set the cumulative embedding usage limits for `free` and `premium`.
 2. Decide whether to add a total stored-character cap in addition to upload count and embedding usage.
 3. Decide how rich the quota UI should be in the knowledge base page.
+4. Optional polish: broader `.md` and `.pdf` runtime smoke coverage, richer quota visuals, and stronger source presentation.
+5. Phase 4 can start once the remaining quota-policy decisions are accepted as follow-up polish rather than Phase 3 blockers.

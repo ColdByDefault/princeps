@@ -11,6 +11,7 @@ import { CHAT_MESSAGE_ROLES } from "@/types/chat";
 export const chatMessageRoleSchema = z.enum(CHAT_MESSAGE_ROLES);
 export const chatMessageInputSchema = z.object({
   message: z.string().trim().min(1).max(2_000),
+  stream: z.boolean().optional(),
 });
 
 export const conversationMessageSelect = {

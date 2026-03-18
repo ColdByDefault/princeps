@@ -36,3 +36,23 @@ export interface ChatReplyResponse {
   reply: string;
   sources: ChatSource[];
 }
+
+export type ChatStreamEvent =
+  | {
+      type: "sources";
+      sources: ChatSource[];
+    }
+  | {
+      type: "chunk";
+      content: string;
+    }
+  | {
+      type: "done";
+      conversation: ChatConversation;
+      reply: string;
+      sources: ChatSource[];
+    }
+  | {
+      type: "error";
+      error: string;
+    };

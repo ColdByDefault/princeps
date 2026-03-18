@@ -8,13 +8,16 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { ensureConversationForUser } from "@/lib/chat/conversation.logic";
 import { buildChatPrompt } from "@/lib/chat/prompt.logic";
-import { sendChatCompletion } from "@/lib/chat/provider.logic";
+import {
+  sendChatCompletion,
+  streamChatCompletion,
+} from "@/lib/chat/provider.logic";
 import {
   conversationSelect,
   type ProviderMessage,
 } from "@/lib/chat/shared.logic";
 
-export async function sendConversationMessage(userId: string, message: string) {
+async function buildConversationRequest(userId: string, message: string) {
   const conversation = await ensureConversationForUser(userId);
   const existingMessages = await prisma.conversationMessage.findMany({
     where: {
@@ -46,35 +49,81 @@ export async function sendConversationMessage(userId: string, message: string) {
     { role: "user", content: message },
   ];
 
-  const reply = await sendChatCompletion(providerMessages);
+  return {
+    conversationId: conversation.id,
+    providerMessages,
+    sources,
+  };
+}
 
+async function persistConversationReply(input: {
+  conversationId: string;
+  message: string;
+  reply: string;
+}) {
   await prisma.$transaction(async (tx) => {
     await tx.conversationMessage.createMany({
       data: [
         {
-          conversationId: conversation.id,
+          conversationId: input.conversationId,
           role: "user",
-          content: message,
+          content: input.message,
         },
         {
-          conversationId: conversation.id,
+          conversationId: input.conversationId,
           role: "assistant",
-          content: reply,
+          content: input.reply,
         },
       ],
     });
 
     await tx.conversation.update({
-      where: { id: conversation.id },
+      where: { id: input.conversationId },
       data: {
         lastMessageAt: new Date(),
       },
     });
   });
 
-  const updatedConversation = await prisma.conversation.findUniqueOrThrow({
-    where: { id: conversation.id },
+  return prisma.conversation.findUniqueOrThrow({
+    where: { id: input.conversationId },
     select: conversationSelect,
+  });
+}
+
+export async function sendConversationMessage(userId: string, message: string) {
+  const { conversationId, providerMessages, sources } =
+    await buildConversationRequest(userId, message);
+
+  const reply = await sendChatCompletion(providerMessages);
+
+  const updatedConversation = await persistConversationReply({
+    conversationId,
+    message,
+    reply,
+  });
+
+  return {
+    conversation: updatedConversation,
+    reply,
+    sources,
+  };
+}
+
+export async function streamConversationMessage(
+  userId: string,
+  message: string,
+  onChunk: (chunk: string) => void,
+) {
+  const { conversationId, providerMessages, sources } =
+    await buildConversationRequest(userId, message);
+
+  const reply = await streamChatCompletion(providerMessages, onChunk);
+
+  const updatedConversation = await persistConversationReply({
+    conversationId,
+    message,
+    reply,
   });
 
   return {
