@@ -2,7 +2,7 @@
       also dont show full name of language in the toggle, just show "DE" and "EN"
 - [x] index.ts empty => /auth
 - [x] global-error.tsx fill
-- [ ] Check Errors and create global erro handler
+- [x] Check Errors and create global erro handler
 - [ ] check if skelton or loading.tsx are needed
 - [ ] Workspace Quota disappear very fast, need to check if it's a UI issue or the API is responding too fast
 - [ ] Workspace Thread Card check again deeply
