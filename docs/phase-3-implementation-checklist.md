@@ -117,6 +117,47 @@ This checklist defines the intended implementation order for Phase 3 and reflect
 - the navbar now exposes `/knowledge` and `/chat` for authenticated users.
 - Phase 3 MVP is now functionally ship-ready for an internal or controlled release: auth, upload, retrieval, delete, re-index, stateless home chat, persistent chat, source visibility, and model fallback behavior are all implemented and validated.
 
+## Final Scope
+
+Phase 3 delivered one focused product slice:
+
+1. Knowledge base
+   - authenticated `/knowledge`
+   - document upload for `.txt`, `.md`, and `.pdf`
+   - personal info editing
+   - delete and re-index
+   - retrieval-ready chunking and embeddings
+2. Chat assistant
+   - stateless widget on `/home`
+   - persistent `/chat`
+   - request-time source visibility
+   - meeting-aware retrieval context
+   - progressive answer rendering with fallback behavior
+
+Out of scope for Phase 3:
+
+1. assistant/system configuration pages
+2. calendar or email integrations
+3. team-shared assistants or delegated workflows
+4. raw uploaded file retention after ingestion
+
+## Implemented Quota Shape
+
+The current implemented server-side quota defaults are:
+
+1. `free`
+   - `20` active documents
+   - `2 MB` max upload size
+   - `250,000` cumulative embedding characters
+2. `pro`
+   - `50` active documents
+   - `5 MB` max upload size
+   - `1,000,000` cumulative embedding characters
+3. `premium`
+   - `100` active documents
+   - `10 MB` max upload size
+   - `3,000,000` cumulative embedding characters
+
 ## Known Issues
 
 These items are known at Phase 3 closure but are not considered MVP blockers:
