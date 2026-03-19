@@ -9,8 +9,8 @@
 - [x] Switch all "Sie" to "Du" in the translation files
 - [ ] Add success/error alarms in /meetings for deleted meetings, also switch the default pop-up delete confirmation with Shadcn UI pop-up
 - [ ] Same as above for /knowledge
-- [ ] Show Beta badge in the footer next to version number
-- [ ] remove x-achsis overflow in Login/sign-up pages
+- [x] Show Beta badge in the footer next to version number
+- [x] remove y-axis overflow in Login/sign-up pages
 - [ ] Knowledge PageView start to get too big, need to split it into smaller components
 - [ ]
 - [ ]

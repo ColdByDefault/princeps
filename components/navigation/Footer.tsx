@@ -3,10 +3,15 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import VersionDisplay from "@/components/VersionDisplay";
 import { getMessage } from "@/lib/i18n";
 import { type MessageDictionary } from "@/types/i18n";
+
+const HIDDEN_FOOTER_PATHS = new Set(["/login", "/sign-up"]);
 
 type FooterProps = {
   messages: MessageDictionary;
@@ -79,6 +84,12 @@ function FooterColumn({
 }
 
 export default function Footer({ messages }: FooterProps) {
+  const pathname = usePathname();
+
+  if (HIDDEN_FOOTER_PATHS.has(pathname)) {
+    return null;
+  }
+
   const workspaceLinks = getWorkspaceLinks(messages);
   const policyLinks = getPolicyLinks(messages);
 
@@ -92,7 +103,11 @@ export default function Footer({ messages }: FooterProps) {
           />
 
           <FooterColumn
-            title={getMessage(messages, "shell.footer.placeholderLinks", "Policies")}
+            title={getMessage(
+              messages,
+              "shell.footer.placeholderLinks",
+              "Policies",
+            )}
             links={policyLinks}
           />
 
@@ -100,14 +115,19 @@ export default function Footer({ messages }: FooterProps) {
             <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
               {getMessage(messages, "auth.brandName", "See-Sweet")}
             </p>
-            <VersionDisplay
-              className="block text-sm text-muted-foreground"
-              titleLabel={getMessage(
-                messages,
-                "shell.footer.versionTitle",
-                "Application version",
-              )}
-            />
+            <div className="flex items-center gap-2 lg:justify-end">
+              <VersionDisplay
+                className="block text-sm text-muted-foreground"
+                titleLabel={getMessage(
+                  messages,
+                  "shell.footer.versionTitle",
+                  "Application version",
+                )}
+              />
+              <span className="inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.18em] text-amber-700 uppercase dark:text-amber-300">
+                {getMessage(messages, "shell.footer.beta", "Beta")}
+              </span>
+            </div>
             <p className="text-sm text-muted-foreground">
               {getMessage(messages, "shell.footer.copyright", "Copyright")}
             </p>

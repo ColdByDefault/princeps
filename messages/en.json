@@ -222,6 +222,7 @@
   "shell.footer.termsOfUse": "Terms of use",
   "shell.footer.security": "Security",
   "shell.footer.versionTitle": "Application version",
+  "shell.footer.beta": "Beta",
   "shell.footer.copyright": "© 2026 See-Sweet. All rights reserved.",
   "error.global.badge": "Application recovery",
   "error.global.title": "Something went wrong.",

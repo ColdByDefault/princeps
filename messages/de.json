@@ -222,6 +222,7 @@
   "shell.footer.termsOfUse": "Nutzungsbedingungen",
   "shell.footer.security": "Sicherheit",
   "shell.footer.versionTitle": "Anwendungsversion",
+  "shell.footer.beta": "Beta",
   "shell.footer.copyright": "© 2026 See-Sweet. Alle Rechte vorbehalten.",
   "error.global.badge": "Anwendungswiederherstellung",
   "error.global.title": "Es ist ein unerwarteter Fehler aufgetreten.",
