@@ -5,19 +5,33 @@
 
 "use client";
 
-import { Github, type LucideIcon } from "lucide-react";
-import { type ComponentType, type ReactNode, type SVGProps } from "react";
+import { Github, XIcon, type LucideIcon } from "lucide-react";
+import {
+  useState,
+  type ComponentType,
+  type ReactNode,
+  type SVGProps,
+} from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { type MessageDictionary } from "@/types/i18n";
+
+export type AuthProvider = "google" | "github" | "microsoft" | "apple";
 
 export const AUTH_PROVIDERS = [
   "google",
   "github",
   "microsoft",
   "apple",
-] as const;
-
-export type AuthProvider = (typeof AUTH_PROVIDERS)[number];
+] as const satisfies readonly AuthProvider[];
 
 const AUTH_PROVIDER_MESSAGE_KEYS: Record<AuthProvider, string> = {
   apple: "auth.providers.apple",
@@ -53,6 +67,7 @@ type OAuthProviderButtonGroupProps = {
   messages: MessageDictionary;
   onProviderSelect: (provider: AuthProvider) => void;
   providers?: readonly AuthProvider[];
+  unavailableProviders?: readonly AuthProvider[];
 };
 
 function GoogleIcon(props: SVGProps<SVGSVGElement>) {
@@ -211,9 +226,31 @@ export function OAuthProviderButtonGroup({
   messages,
   onProviderSelect,
   providers = AUTH_PROVIDERS,
+  unavailableProviders = AUTH_PROVIDERS,
 }: OAuthProviderButtonGroupProps) {
+  const [selectedUnavailableProvider, setSelectedUnavailableProvider] =
+    useState<AuthProvider | null>(null);
+
+  const unavailableProviderLabel = selectedUnavailableProvider
+    ? getAuthMessage(
+        messages,
+        AUTH_PROVIDER_MESSAGE_KEYS[selectedUnavailableProvider],
+      )
+    : "";
+
+  const unavailableDescription = unavailableProviderLabel
+    ? `${unavailableProviderLabel} ${getAuthMessage(messages, "auth.oauthUnavailable.bodySuffix")}`
+    : "";
+
   return (
-    <>
+    <Dialog
+      open={selectedUnavailableProvider !== null}
+      onOpenChange={(open) => {
+        if (!open) {
+          setSelectedUnavailableProvider(null);
+        }
+      }}
+    >
       <div className="relative py-1">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t border-border/70" />
@@ -237,8 +274,15 @@ export function OAuthProviderButtonGroup({
                 key={provider}
                 type="button"
                 variant="outline"
-                onClick={() => onProviderSelect(provider)}
-                className="h-11 justify-start gap-2 rounded-xl px-4"
+                onClick={() => {
+                  if (unavailableProviders.includes(provider)) {
+                    setSelectedUnavailableProvider(provider);
+                    return;
+                  }
+
+                  onProviderSelect(provider);
+                }}
+                className="h-11 cursor-pointer justify-start gap-2 rounded-xl px-4"
               >
                 <Icon
                   className={`size-4 shrink-0 ${AUTH_PROVIDER_ICON_CLASSNAMES[provider]}`}
@@ -249,6 +293,41 @@ export function OAuthProviderButtonGroup({
           })(),
         )}
       </div>
-    </>
+
+      <DialogContent
+        showCloseButton={false}
+        className="w-[calc(100%-2rem)] max-w-md rounded-2xl p-2 pt-4"
+      >
+        <DialogHeader className="px-6 pt-8 pb-4">
+          <div className="flex items-start justify-between gap-4">
+            <DialogTitle className="text-base font-semibold leading-snug">
+              {getAuthMessage(messages, "auth.oauthUnavailable.title")}
+            </DialogTitle>
+            <DialogClose
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="-mt-0.5 shrink-0 cursor-pointer"
+                />
+              }
+            >
+              <XIcon />
+              <span className="sr-only">
+                {getAuthMessage(messages, "auth.oauthUnavailable.close")}
+              </span>
+            </DialogClose>
+          </div>
+          <DialogDescription>{unavailableDescription}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="rounded-b-2xl">
+          <DialogClose
+            render={<Button className="cursor-pointer" variant="outline" />}
+          >
+            {getAuthMessage(messages, "auth.oauthUnavailable.close")}
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import {
   ArrowRight,
-  Database,
   Eye,
   EyeOff,
   ShieldCheck,
@@ -79,11 +78,6 @@ export default function LoginCard({
           body: getAuthMessage(messages, "auth.login.point.privateBody"),
           icon: ShieldCheck,
           title: getAuthMessage(messages, "auth.login.point.private"),
-        },
-        {
-          body: getAuthMessage(messages, "auth.login.point.knowledgeBody"),
-          icon: Database,
-          title: getAuthMessage(messages, "auth.login.point.knowledge"),
         },
         {
           body: getAuthMessage(messages, "auth.login.point.controlBody"),

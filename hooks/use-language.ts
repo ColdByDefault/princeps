@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import {
   DEFAULT_LANGUAGE,
   LANGUAGE_COOKIE_NAME,
@@ -14,7 +14,7 @@ import {
   type AppLanguage,
 } from "@/types/i18n";
 
-const emptySubscribe = () => () => {};
+const LANGUAGE_CHANGE_EVENT = "akhiil-language-change";
 
 function getCookie(name: string): string | null {
   if (typeof document === "undefined") {
@@ -48,18 +48,17 @@ function persistLanguage(language: AppLanguage) {
 
   if (typeof window !== "undefined") {
     window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    window.dispatchEvent(
+      new CustomEvent<AppLanguage>(LANGUAGE_CHANGE_EVENT, {
+        detail: language,
+      }),
+    );
   }
 }
 
 function getSnapshot(): AppLanguage {
-  if (typeof document === "undefined") {
+  if (typeof window === "undefined") {
     return DEFAULT_LANGUAGE;
-  }
-
-  const htmlLanguage = document.documentElement.lang.toLowerCase();
-
-  if (isSupportedLanguage(htmlLanguage)) {
-    return htmlLanguage;
   }
 
   const cookieLanguage = getCookie(LANGUAGE_COOKIE_NAME);
@@ -74,26 +73,42 @@ function getSnapshot(): AppLanguage {
     return storedLanguage;
   }
 
+  const htmlLanguage = document.documentElement.lang.toLowerCase();
+
+  if (isSupportedLanguage(htmlLanguage)) {
+    return htmlLanguage;
+  }
+
   return getBrowserLanguage();
 }
 
+function subscribe(callback: () => void) {
+  if (typeof window === "undefined") {
+    return () => undefined;
+  }
+
+  const handleChange = () => {
+    callback();
+  };
+
+  window.addEventListener("storage", handleChange);
+  window.addEventListener(LANGUAGE_CHANGE_EVENT, handleChange);
+
+  return () => {
+    window.removeEventListener("storage", handleChange);
+    window.removeEventListener(LANGUAGE_CHANGE_EVENT, handleChange);
+  };
+}
+
 export function useLanguage() {
-  const initialLanguage = useSyncExternalStore(
-    emptySubscribe,
+  const language = useSyncExternalStore(
+    subscribe,
     getSnapshot,
     () => DEFAULT_LANGUAGE,
   );
 
-  const [language, setLanguage] = useState<AppLanguage>(initialLanguage);
-
-  useEffect(() => {
-    setLanguage(initialLanguage);
-    persistLanguage(initialLanguage);
-  }, [initialLanguage]);
-
   const changeLanguage = (nextLanguage: AppLanguage) => {
     persistLanguage(nextLanguage);
-    setLanguage(nextLanguage);
   };
 
   return {
