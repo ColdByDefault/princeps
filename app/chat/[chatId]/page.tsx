@@ -49,16 +49,13 @@ export default async function ChatPage({ params }: Props) {
   }));
 
   return (
-    // flex-1 fills the remaining height inside the main flex column (after Navbar)
-    <div className="flex flex-1 overflow-hidden">
-      <ChatShell
-        chats={chatSummaries}
-        activeChatId={chatId}
-        initialMessages={initialMessages}
-        messages={messages}
-        atLimit={chats.length >= CHAT_LIMIT}
-      />
-    </div>
+    <ChatShell
+      chats={chatSummaries}
+      activeChatId={chatId}
+      initialMessages={initialMessages}
+      messages={messages}
+      atLimit={chats.length >= CHAT_LIMIT}
+    />
   );
 }
 

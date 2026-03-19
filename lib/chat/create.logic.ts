@@ -40,3 +40,27 @@ export async function setInitialTitle(chatId: string, firstMessage: string) {
     data: { title },
   });
 }
+
+/**
+ * Returns the most recent chat id for the user, creating a new one if none
+ * exist. Returns null only when the chat limit is reached and no chats exist
+ * (practically impossible on first visit).
+ */
+export async function getOrCreateFirstChat(
+  userId: string,
+): Promise<string | null> {
+  const chats = await db.chat.findMany({
+    where: { userId },
+    orderBy: { updatedAt: "desc" },
+    take: 1,
+    select: { id: true },
+  });
+
+  if (chats.length > 0) {
+    return chats[0].id;
+  }
+
+  const result = await createChat(userId);
+
+  return result.ok ? result.chatId : null;
+}

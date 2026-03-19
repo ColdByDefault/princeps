@@ -150,7 +150,19 @@ All user-visible strings go through the `messages/` system. Keys will be added u
 
 ## Done
 
-_Nothing yet._
+- All API routes (`/api/chat`, `/api/chat/[chatId]`, `/api/chat/[chatId]/stream`) implemented and functional.
+- Prisma `Chat` + `ChatMessage` models migrated.
+- Streaming SSE pipeline: Ollama → server `ReadableStream` → client token-by-token render.
+- Thinking mode toggle (localStorage, `useSyncExternalStore`); progress bar while thinking.
+- Auto-title from first user message; rename + delete with confirm dialog.
+- 10-chat limit enforced server-side and surfaced in sidebar.
+- `app/chat/layout.tsx` repurposed as auth guard + full-height flex container.
+- `getOrCreateFirstChat` moved to `lib/chat/create.logic.ts`.
+- Root layout changed to `h-svh` + `min-h-0` chain so chat fills precisely between navbar and footer.
+- ChatShell redesigned: sidebar + divider + main column with chat-title header.
+- ChatSidebar: active indicator dot, tighter active style, improved rename input.
+- System prompt rewritten: concise, exec-first, date-aware, no stubs; instructs model to avoid clarifying questions and not draft emails unless asked.
+- Streaming `done` event now breaks the outer `while` loop (prevents any post-done read cycle).
 
 ## Later
 

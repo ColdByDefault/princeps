@@ -42,7 +42,7 @@ export default async function RootLayout({
         >
           <TooltipProvider>
             <NoticeProvider>
-              <div className="bg-background relative flex min-h-svh flex-col overflow-hidden">
+              <div className="bg-background relative flex h-svh flex-col overflow-hidden">
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-0 opacity-15 dark:opacity-25"
@@ -64,7 +64,7 @@ export default async function RootLayout({
                   aria-hidden
                   className="from-background pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b to-transparent"
                 />
-                <main className="relative flex min-h-svh flex-1 flex-col">
+                <main className="relative flex flex-1 flex-col overflow-hidden">
                   <Navbar
                     messages={messages}
                     sessionUser={
@@ -76,7 +76,7 @@ export default async function RootLayout({
                         : null
                     }
                   />
-                  <div className="flex flex-1 flex-col">{children}</div>
+                  <div className="flex min-h-0 flex-1 flex-col">{children}</div>
                   <Footer messages={messages} />
                 </main>
               </div>

@@ -6,15 +6,11 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { getRequestConfig } from "@/i18n/request";
-import { listChats } from "@/lib/chat/list.logic";
-import { CHAT_LIMIT } from "@/types/chat";
-import { createChat } from "@/lib/chat/create.logic";
 
 /**
- * The chat layout is intentionally minimal — it only handles auth and
- * first-visit redirect. The sidebar and shell are rendered inside each
- * [chatId] page so they have access to the active chat id.
+ * Chat layout: auth guard + full-height viewport container.
+ * All /chat pages inherit the flex full-height structure needed for the
+ * sidebar + thread + input layout to fill the space between navbar and footer.
  */
 export default async function ChatLayout({
   children,
@@ -27,33 +23,9 @@ export default async function ChatLayout({
     redirect("/login");
   }
 
-  void getRequestConfig; // used in child pages
-
-  return <>{children}</>;
+  return <div className="flex min-h-0 flex-1 overflow-hidden">{children}</div>;
 }
 
 export async function generateMetadata() {
   return { title: "Chat — See-Sweet" };
-}
-
-/**
- * Exported so the index page can call it without duplicating auth logic.
- * Returns the chatId to redirect to, or null if at limit.
- */
-export async function getOrCreateFirstChat(
-  userId: string,
-): Promise<string | null> {
-  const chats = await listChats(userId);
-
-  if (chats.length > 0) {
-    return chats[0].id;
-  }
-
-  if (chats.length >= CHAT_LIMIT) {
-    return null;
-  }
-
-  const result = await createChat(userId);
-
-  return result.ok ? result.chatId : null;
 }

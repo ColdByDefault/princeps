@@ -10,10 +10,8 @@ import { type OllamaMessage } from "@/lib/chat/ollama";
 
 /**
  * Assembles the system prompt from all available user-scoped data.
- *
- * Each section is independently fetched; missing features (tables that don't
- * exist yet or have no data) simply contribute an empty block. Adding a new
- * feature means adding a new slot here — nothing else needs to change.
+ * Each section is independently fetched; missing features simply contribute
+ * nothing. Adding a new feature means adding a new slot here.
  */
 export async function buildSystemPrompt(
   userId: string,
@@ -29,66 +27,37 @@ export async function buildSystemPrompt(
       ? (user.preferences as Record<string, unknown>)
       : {};
 
-  // ── User identity ──────────────────────────────────────────────────────────
-  const identity = [
-    `You are the private executive assistant for ${user?.name ?? "the user"}.`,
-    `User email: ${user?.email ?? "unknown"}.`,
-    `User timezone: ${user?.timezone ?? "UTC"}.`,
-  ].join("\n");
+  const tz = user?.timezone ?? "UTC";
+  const now = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: tz,
+  });
 
-  // ── Custom assistant behavior (from preferences) ───────────────────────────
-  const behaviorNote =
+  const customInstructions =
     typeof prefs["assistantInstructions"] === "string" &&
     prefs["assistantInstructions"].trim()
-      ? `\nCustom instructions: ${prefs["assistantInstructions"].trim()}`
-      : "";
+      ? prefs["assistantInstructions"].trim()
+      : null;
 
-  // ── Meetings ───────────────────────────────────────────────────────────────
-  // TODO: When the Meeting model is added, fetch upcoming meetings here and
-  // inject them. Example:
-  //   const meetings = await db.meeting.findMany({ where: { userId }, take: 10 });
-  const meetingsSection = ""; // stub — will populate in the meetings phase
+  const lines: string[] = [
+    `You are the private executive assistant for ${user?.name ?? "the user"}.`,
+    `Today is ${now} (${tz}).`,
+    "",
+    "Behavior:",
+    "- Be direct, concise, and actionable.",
+    "- Make reasonable inferences — do not ask clarifying questions unless absolutely necessary.",
+    "- Do not offer to draft emails, messages, or communications unless the user explicitly asks.",
+    "- Focus on decisions, planning, preparation, and follow-through.",
+  ];
 
-  // ── Contacts ──────────────────────────────────────────────────────────────
-  // TODO: When the Contact model is added, fetch relevant contacts and inject.
-  const contactsSection = ""; // stub — will populate in the contacts phase
+  if (customInstructions) {
+    lines.push("", `Custom instructions from user: ${customInstructions}`);
+  }
 
-  // ── Active tasks ──────────────────────────────────────────────────────────
-  // TODO: When the Task model is added, fetch open tasks and inject.
-  const tasksSection = ""; // stub — will populate in the tasks phase
+  void chatId; // reserved for per-chat context
 
-  // ── Decisions ─────────────────────────────────────────────────────────────
-  // TODO: When the Decision model is added, fetch recent decisions and inject.
-  const decisionsSection = ""; // stub — will populate in the decisions phase
-
-  // ── Knowledge base (RAG) ──────────────────────────────────────────────────
-  // TODO: When pgvector retrieval is wired, perform a similarity search against
-  // the user's document corpus using the latest user message as the query, then
-  // inject the top-k chunks here.
-  const ragSection = ""; // stub — will populate in the knowledge-base phase
-
-  // ── Product self-awareness ────────────────────────────────────────────────
-  const productAwareness = [
-    "\nYou operate inside See-Sweet, a private executive secretariat.",
-    "As features are added (meetings, contacts, tasks, decisions, knowledge base),",
-    "their data will be injected into this system prompt automatically.",
-    "Always reason over all context provided to give precise, actionable answers.",
-  ].join(" ");
-
-  const content = [
-    identity,
-    behaviorNote,
-    meetingsSection,
-    contactsSection,
-    tasksSection,
-    decisionsSection,
-    ragSection,
-    productAwareness,
-  ]
-    .filter(Boolean)
-    .join("\n\n");
-
-  void chatId; // reserved for per-chat context in future
-
-  return { role: "system", content };
+  return { role: "system", content: lines.join("\n") };
 }

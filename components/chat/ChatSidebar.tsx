@@ -98,7 +98,7 @@ export default function ChatSidebar({
   };
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border/60 bg-card/50">
+    <aside className="flex h-full w-60 shrink-0 flex-col border-r border-border/60 bg-background/50 backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
         <span className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
@@ -170,7 +170,7 @@ export default function ChatSidebar({
                           setRenameValue("");
                         }
                       }}
-                      className="w-full rounded-xl border border-primary/40 bg-background px-3 py-1.5 text-sm outline-none"
+                      className="w-full rounded-lg border border-primary/50 bg-background/80 px-2.5 py-1.5 text-sm outline-none ring-2 ring-primary/20"
                     />
                   ) : (
                     <>
@@ -178,30 +178,37 @@ export default function ChatSidebar({
                         variant={isActive ? "secondary" : "ghost"}
                         size="sm"
                         className={cn(
-                          "w-full cursor-pointer justify-start truncate rounded-xl pr-7 text-left text-sm",
-                          isActive && "shadow-sm",
+                          "w-full cursor-pointer justify-start truncate rounded-lg pr-7 text-left text-sm",
+                          isActive
+                            ? "bg-primary/10 font-medium text-primary shadow-none hover:bg-primary/15"
+                            : "text-muted-foreground hover:text-foreground",
                         )}
                         nativeButton={false}
                         render={<a href={`/chat/${chat.id}`} />}
                       >
+                        {isActive && (
+                          <span className="mr-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+                        )}
                         <span className="truncate">{chat.title}</span>
                       </Button>
 
                       {/* Per-chat actions */}
                       <DropdownMenu>
-                        <DropdownMenuTrigger>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon-sm"
-                            aria-label="Chat options"
-                            className={cn(
-                              "absolute right-1 cursor-pointer rounded-lg opacity-0 transition-opacity group-hover:opacity-100",
-                              isActive && "opacity-100",
-                            )}
-                          >
-                            <MoreHorizontal className="size-3.5" />
-                          </Button>
+                        <DropdownMenuTrigger
+                          render={
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon-sm"
+                              aria-label="Chat options"
+                              className={cn(
+                                "absolute right-1 cursor-pointer rounded-lg opacity-0 transition-opacity group-hover:opacity-100",
+                                isActive && "opacity-100",
+                              )}
+                            />
+                          }
+                        >
+                          <MoreHorizontal className="size-3.5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="end"

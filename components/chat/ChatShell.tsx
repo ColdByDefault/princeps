@@ -89,8 +89,9 @@ export default function ChatShell({
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
+      let streamDone = false;
 
-      while (true) {
+      while (!streamDone) {
         const { done, value } = await reader.read();
 
         if (done) break;
@@ -129,6 +130,7 @@ export default function ChatShell({
                 : null,
             );
           } else if (event.type === "done") {
+            streamDone = true;
             break;
           } else if (event.type === "error") {
             setStreamingMessage((prev) =>
@@ -140,6 +142,8 @@ export default function ChatShell({
                   }
                 : null,
             );
+            streamDone = true;
+            break;
           }
         }
       }
@@ -188,7 +192,7 @@ export default function ChatShell({
   };
 
   return (
-    <div className="flex h-full flex-1">
+    <div className="flex min-h-0 flex-1 overflow-hidden rounded-none">
       {/* Sidebar */}
       <ChatSidebar
         chats={chats}
@@ -198,7 +202,14 @@ export default function ChatShell({
       />
 
       {/* Main area */}
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-card/20">
+        {/* Chat header */}
+        <div className="flex h-11 shrink-0 items-center border-b border-border/60 bg-background/60 px-4 backdrop-blur-sm">
+          <span className="truncate text-sm font-medium text-foreground/80">
+            {chats.find((c) => c.id === activeChatId)?.title ?? "New chat"}
+          </span>
+        </div>
+
         <ChatThread
           messages={chatMessages}
           streamingMessage={streamingMessage}

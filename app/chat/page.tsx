@@ -6,7 +6,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { getOrCreateFirstChat } from "@/app/chat/layout";
+import { getOrCreateFirstChat } from "@/lib/chat/create.logic";
 
 /**
  * /chat — redirect to the most recent chat, or create one if none exist.
