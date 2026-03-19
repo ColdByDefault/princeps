@@ -7,7 +7,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { getRequestConfig } from "@/i18n/request";
-import { listChats, CHAT_LIMIT } from "@/lib/chat/list.logic";
+import { listChats } from "@/lib/chat/list.logic";
+import { CHAT_LIMIT } from "@/types/chat";
 import { createChat } from "@/lib/chat/create.logic";
 
 /**

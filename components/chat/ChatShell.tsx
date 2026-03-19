@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import ChatSidebar from "@/components/chat/ChatSidebar";
 import ChatThread from "@/components/chat/ChatThread";
 import ChatInput from "@/components/chat/ChatInput";
-import { CHAT_LIMIT } from "@/lib/chat/list.logic";
+import { CHAT_LIMIT } from "@/types/chat";
 import {
   type ChatSummary,
   type ChatMessageData,

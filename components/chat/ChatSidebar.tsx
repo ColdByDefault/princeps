@@ -189,7 +189,7 @@ export default function ChatSidebar({
 
                       {/* Per-chat actions */}
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
+                        <DropdownMenuTrigger>
                           <Button
                             type="button"
                             variant="ghost"

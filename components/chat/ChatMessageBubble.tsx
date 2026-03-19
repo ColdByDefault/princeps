@@ -49,7 +49,7 @@ export default function ChatMessageBubble({ message }: Props) {
         {thinking ? (
           <ThinkingIndicator />
         ) : (
-          <div className="prose prose-sm dark:prose-invert max-w-none break-words">
+          <div className="prose prose-sm dark:prose-invert max-w-none wrap-break-word">
             <ReactMarkdown>{message.content}</ReactMarkdown>
           </div>
         )}

@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useSyncExternalStore, useState, useRef } from "react";
 import { ArrowUp, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,14 @@ import { cn } from "@/lib/utils";
 import { type MessageDictionary } from "@/types/i18n";
 
 const THINKING_STORAGE_KEY = "see-sweet:chat:think";
+
+function getThinkSnapshot() {
+  try {
+    return localStorage.getItem(THINKING_STORAGE_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
 
 type Props = {
   messages: MessageDictionary;
@@ -30,21 +38,22 @@ export default function ChatInput({
   onSend,
 }: Props) {
   const [value, setValue] = useState("");
-  const [think, setThink] = useState(false);
   const ref = useRef<HTMLTextAreaElement>(null);
 
-  // Load think preference from localStorage
-  useEffect(() => {
-    try {
-      setThink(localStorage.getItem(THINKING_STORAGE_KEY) === "true");
-    } catch {
-      // storage unavailable — keep default
-    }
-  }, []);
+  // SSR-safe read from localStorage — no useEffect/setState needed.
+  const storedThink = useSyncExternalStore(
+    () => () => {}, // no subscription
+    getThinkSnapshot, // client
+    () => false, // server
+  );
+
+  // Local override so a toggle click is reflected instantly without waiting for a re-render cycle.
+  const [thinkOverride, setThinkOverride] = useState<boolean | null>(null);
+  const think = thinkOverride !== null ? thinkOverride : storedThink;
 
   const toggleThink = () => {
     const next = !think;
-    setThink(next);
+    setThinkOverride(next);
 
     try {
       localStorage.setItem(THINKING_STORAGE_KEY, String(next));
@@ -61,7 +70,6 @@ export default function ChatInput({
     onSend(text, think);
     setValue("");
 
-    // Reset textarea height
     if (ref.current) {
       ref.current.style.height = "auto";
     }
@@ -77,7 +85,6 @@ export default function ChatInput({
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
 
-    // Auto-grow
     const el = ref.current;
 
     if (el) {
@@ -100,15 +107,14 @@ export default function ChatInput({
             rows={1}
             className={cn(
               "flex-1 resize-none bg-transparent py-1 text-sm leading-6 outline-none placeholder:text-muted-foreground/60",
-              "max-h-[200px] overflow-y-auto",
+              "max-h-50 overflow-y-auto",
               disabled && "cursor-not-allowed opacity-50",
             )}
           />
 
           <div className="flex shrink-0 items-center gap-1.5 pb-0.5">
-            {/* Thinking toggle */}
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger>
                 <Button
                   type="button"
                   variant="ghost"
@@ -131,7 +137,6 @@ export default function ChatInput({
               </TooltipContent>
             </Tooltip>
 
-            {/* Send */}
             <Button
               type="button"
               size="icon-sm"

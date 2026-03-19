@@ -12,3 +12,6 @@ export const prisma =
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
+
+/** Alias for importing Prisma as `db` per convention in feature logic files. */
+export const db = prisma;

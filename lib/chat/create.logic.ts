@@ -6,7 +6,7 @@
 import "server-only";
 
 import { db } from "@/lib/db";
-import { CHAT_LIMIT } from "@/lib/chat/list.logic";
+import { CHAT_LIMIT } from "@/types/chat";
 
 export type CreateChatResult =
   | { ok: true; chatId: string }
