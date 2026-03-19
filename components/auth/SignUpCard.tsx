@@ -169,7 +169,7 @@ export default function SignUpCard({
                   showPassword ? "auth.password.hide" : "auth.password.show",
                 )}
                 onClick={() => setShowPassword((current) => !current)}
-                className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
+                className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
               >
                 {showPassword ? (
                   <EyeOff className="size-4" />
@@ -185,7 +185,7 @@ export default function SignUpCard({
           <Button
             type="submit"
             disabled={loading}
-            className="h-11 w-full rounded-xl"
+            className="h-11 w-full cursor-pointer rounded-xl"
           >
             {loading
               ? getAuthMessage(messages, "auth.signUp.submitting")
@@ -209,7 +209,7 @@ export default function SignUpCard({
           {getAuthMessage(messages, "auth.signUp.switchPrompt")}{" "}
           <Link
             href="/login"
-            className="font-medium text-foreground hover:text-primary"
+            className="cursor-pointer font-medium text-foreground hover:text-primary"
           >
             {getAuthMessage(messages, "auth.signUp.switchLink")}
           </Link>
