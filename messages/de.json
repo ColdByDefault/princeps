@@ -92,6 +92,7 @@
   "home.greetingAfternoon": "Guten Tag",
   "home.greetingEvening": "Guten Abend",
   "shell.nav.home": "Workspace",
+  "shell.nav.chat": "Chat",
   "shell.nav.signOut": "Abmelden",
   "shell.nav.signingOut": "Abmeldung läuft...",
   "shell.nav.openMenu": "Navigationsmenü öffnen",
@@ -138,5 +139,17 @@
   "theme.selector.light": "Hell",
   "theme.selector.dark": "Dunkel",
   "theme.selector.system": "System",
-  "theme.selector.current": "Aktiv"
+  "theme.selector.current": "Aktiv",
+  "chat.metadata.title": "Chat",
+  "chat.sidebar.title": "Chats",
+  "chat.sidebar.newChat": "Neuer Chat",
+  "chat.sidebar.empty": "Noch keine Chats.",
+  "chat.sidebar.limitReached": "Lösche einen Chat, um einen neuen zu erstellen",
+  "chat.sidebar.limitNotice": "Limit von 10 Chats erreicht. Lösche einen, um einen neuen Chat zu starten.",
+  "chat.sidebar.rename": "Umbenennen",
+  "chat.sidebar.delete": "Löschen",
+  "chat.sidebar.deleteTitle": "Diesen Chat löschen?",
+  "chat.sidebar.deleteDescription": "Dieser Chat und alle seine Nachrichten werden dauerhaft gelöscht.",
+  "chat.sidebar.deleteConfirm": "Löschen",
+  "shared.cancel": "Abbrechen"
 }

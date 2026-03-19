@@ -82,7 +82,7 @@ function FooterColumn({
 export default function Footer({ messages }: FooterProps) {
   const pathname = usePathname();
 
-  if (HIDDEN_FOOTER_PATHS.has(pathname)) {
+  if (HIDDEN_FOOTER_PATHS.has(pathname) || pathname.startsWith("/chat")) {
     return null;
   }
 

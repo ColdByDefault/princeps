@@ -13,6 +13,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  MessageSquare,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -53,6 +54,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       icon: LayoutDashboard,
       label: getMessage(messages, "shell.nav.home", "Workspace"),
     },
+    {
+      href: "/chat",
+      icon: MessageSquare,
+      label: getMessage(messages, "shell.nav.chat", "Chat"),
+    },
   ];
 }
 
@@ -63,7 +69,6 @@ function isActivePath(pathname: string, href: string) {
 
   return pathname === href || pathname.startsWith(`${href}/`);
 }
-
 function LanguageToggle({ messages }: { messages: MessageDictionary }) {
   const router = useRouter();
   const { language, changeLanguage } = useLanguage();

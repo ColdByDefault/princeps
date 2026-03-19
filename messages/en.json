@@ -92,6 +92,7 @@
   "home.greetingAfternoon": "Good afternoon",
   "home.greetingEvening": "Good evening",
   "shell.nav.home": "Workspace",
+  "shell.nav.chat": "Chat",
   "shell.nav.signOut": "Sign out",
   "shell.nav.signingOut": "Signing out...",
   "shell.nav.openMenu": "Open navigation menu",
@@ -138,5 +139,17 @@
   "theme.selector.light": "Light",
   "theme.selector.dark": "Dark",
   "theme.selector.system": "System",
-  "theme.selector.current": "Current"
+  "theme.selector.current": "Current",
+  "chat.metadata.title": "Chat",
+  "chat.sidebar.title": "Chats",
+  "chat.sidebar.newChat": "New chat",
+  "chat.sidebar.empty": "No chats yet.",
+  "chat.sidebar.limitReached": "Delete a chat to create a new one",
+  "chat.sidebar.limitNotice": "10 chat limit reached. Delete one to start a new chat.",
+  "chat.sidebar.rename": "Rename",
+  "chat.sidebar.delete": "Delete",
+  "chat.sidebar.deleteTitle": "Delete this chat?",
+  "chat.sidebar.deleteDescription": "This will permanently delete this chat and all its messages.",
+  "chat.sidebar.deleteConfirm": "Delete",
+  "shared.cancel": "Cancel"
 }
