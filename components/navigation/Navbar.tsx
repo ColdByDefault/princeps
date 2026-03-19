@@ -9,13 +9,10 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
-  CalendarDays,
   Globe,
-  LibraryBig,
   LayoutDashboard,
   LogOut,
   Menu,
-  MessageSquareText,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -55,21 +52,6 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/home",
       icon: LayoutDashboard,
       label: getMessage(messages, "shell.nav.home", "Workspace"),
-    },
-    {
-      href: "/meetings",
-      icon: CalendarDays,
-      label: getMessage(messages, "shell.nav.meetings", "Meetings"),
-    },
-    {
-      href: "/knowledge",
-      icon: LibraryBig,
-      label: getMessage(messages, "shell.nav.knowledge", "Knowledge"),
-    },
-    {
-      href: "/chat",
-      icon: MessageSquareText,
-      label: getMessage(messages, "shell.nav.chat", "Chat"),
     },
   ];
 }

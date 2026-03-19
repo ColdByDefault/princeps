@@ -15,12 +15,13 @@ name: "See-Sweet Repo Overview"
 - Prioritize workflows around preparation, memory, decisions, coordination, and follow-through.
 - Favor features that increase user leverage inside a personal authenticated workspace.
 - Keep changes aligned with the product's core shape: user-scoped data, retrieval-backed chat, configurable assistant behavior, multilingual UI, and structured workspace flows.
-- Removed features stay removed. Do not reintroduce LiveAvatar, ElevenLabs TTS, `/api/greeting`, or greeting controls in system config.
 
 ## Architecture Shape
 
 - `app/` holds App Router pages, layouts, metadata, and API handlers.
-- `components/<feature>/` holds interactive UI by feature; `components/ui/` holds shared primitives.
+- `components/<feature>/` holds interactive UI by feature; 
+- `components/ui/` holds shared primitives added from Shadcn UI ONLY.
+- `components/shared/` holds shared primitives.
 - `components/<feature>/` always include `index.tsx` for the main component and export all others as needed.
 - `lib/<feature>/` holds server-side business logic, usually split into one operation per `*.logic.ts`.
 - `types/` holds shared client-safe contracts and enums.
@@ -33,3 +34,4 @@ name: "See-Sweet Repo Overview"
 - Chat behavior is assembled from system config, personal info, task context, and retrieval context in server logic.
 - Keep Prisma, pgvector access, Better Auth server helpers, and other Node-only code out of client import chains.
 - Keep technical, validation, and system-facing text in English.
+- The LLM (assistant) is aware of all user data and all implemented features, for example when user create a meeting, upload knowledge file, or do anything else, the assistant should be able to reason about that data and those features when generating responses.

@@ -10,7 +10,6 @@
 - Treat See-Sweet as a private executive secretariat or chief-of-staff product, similar to the support structure used by major CEOs, but adapted for an individual user.
 - The assistant should help the user stay organized across tasks, meetings, contacts, decisions, retrieval context, and system behavior, not behave like a generic prompt box.
 - Preserve the product's current shape: authenticated workspace, user-scoped data, retrieval-backed chat, configurable assistant behavior, and multilingual UI.
-- Removed features stay removed. Do not reintroduce LiveAvatar, ElevenLabs TTS, `/api/greeting`, or greeting controls in system config.
 
 ## Workflow Rules
 

@@ -28,10 +28,6 @@ function getWorkspaceLinks(messages: MessageDictionary): FooterLink[] {
       href: "/home",
       label: getMessage(messages, "shell.nav.home", "Workspace"),
     },
-    {
-      href: "/meetings",
-      label: getMessage(messages, "shell.nav.meetings", "Meetings"),
-    },
   ];
 }
 
