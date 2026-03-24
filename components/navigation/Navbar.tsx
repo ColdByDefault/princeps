@@ -138,7 +138,11 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
 
-  if (HIDDEN_NAVBAR_PATHS.has(pathname) || !sessionUser) {
+  if (
+    HIDDEN_NAVBAR_PATHS.has(pathname) ||
+    pathname.startsWith("/chat") ||
+    !sessionUser
+  ) {
     return null;
   }
 
