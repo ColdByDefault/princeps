@@ -11,14 +11,11 @@ import {
   SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSkeleton,
   SidebarRail,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { getMessage } from "@/lib/i18n";
@@ -34,8 +31,7 @@ type AppSidebarProps = {
 export function AppSidebar({ messages }: AppSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [chats, setChats] = useState<ChatSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [chats, setChats] = useState<ChatSummary[] | null>(null);
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
@@ -48,14 +44,18 @@ export function AppSidebar({ messages }: AppSidebarProps) {
       const data = (await res.json()) as { chats: ChatSummary[] };
       setChats(data.chats);
     } catch {
-      // silent
-    } finally {
-      setLoading(false);
+      setChats([]);
     }
   }, []);
 
   useEffect(() => {
     void fetchChats();
+  }, [fetchChats]);
+
+  useEffect(() => {
+    const handler = () => void fetchChats();
+    window.addEventListener("chat:updated", handler);
+    return () => window.removeEventListener("chat:updated", handler);
   }, [fetchChats]);
 
   const handleNewChat = async () => {
@@ -90,7 +90,7 @@ export function AppSidebar({ messages }: AppSidebarProps) {
       toast.error("Failed to delete chat");
       return;
     }
-    const remaining = chats.filter((c) => c.id !== chatId);
+    const remaining = (chats ?? []).filter((c) => c.id !== chatId);
     setChats(remaining);
     setDeleteTarget(null);
     if (activeChatId === chatId) {
@@ -102,26 +102,10 @@ export function AppSidebar({ messages }: AppSidebarProps) {
     }
   };
 
-  const atLimit = chats.length >= CHAT_LIMIT;
+  const atLimit = (chats?.length ?? 0) >= CHAT_LIMIT;
 
   return (
     <Sidebar collapsible="icon">
-      {/* Header */}
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" className="gap-3">
-              <MessageSquare className="size-5 shrink-0 text-primary" />
-              <span className="font-semibold">
-                {getMessage(messages, "chat.sidebar.title", "Chats")}
-              </span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-
-      <SidebarSeparator />
-
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>
@@ -147,19 +131,7 @@ export function AppSidebar({ messages }: AppSidebarProps) {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {loading ? (
-                <>
-                  <SidebarMenuItem>
-                    <SidebarMenuSkeleton showIcon />
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuSkeleton showIcon />
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuSkeleton showIcon />
-                  </SidebarMenuItem>
-                </>
-              ) : chats.length === 0 ? (
+              {chats === null ? null : chats.length === 0 ? (
                 <p className="px-2 py-1.5 text-xs text-muted-foreground">
                   {getMessage(messages, "chat.sidebar.empty", "No chats yet.")}
                 </p>
@@ -175,18 +147,20 @@ export function AppSidebar({ messages }: AppSidebarProps) {
                       <MessageSquare className="size-4 shrink-0" />
                       <span className="truncate">{chat.title}</span>
                     </SidebarMenuButton>
-                    <SidebarMenuAction
-                      showOnHover
-                      onClick={() => setDeleteTarget(chat.id)}
-                      aria-label={getMessage(
-                        messages,
-                        "chat.sidebar.delete",
-                        "Delete",
-                      )}
-                      className="cursor-pointer"
-                    >
-                      <Trash2 className="size-3.5 text-destructive" />
-                    </SidebarMenuAction>
+                    {chats.length > 1 && (
+                      <SidebarMenuAction
+                        showOnHover
+                        onClick={() => setDeleteTarget(chat.id)}
+                        aria-label={getMessage(
+                          messages,
+                          "chat.sidebar.delete",
+                          "Delete",
+                        )}
+                        className="cursor-pointer"
+                      >
+                        <Trash2 className="size-3.5 text-destructive" />
+                      </SidebarMenuAction>
+                    )}
                   </SidebarMenuItem>
                 ))
               )}

@@ -157,6 +157,7 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
       inFlightRef.current = false;
       setStreaming(false);
       textareaRef.current?.focus();
+      window.dispatchEvent(new CustomEvent("chat:updated"));
     }
   };
 
