@@ -7,6 +7,17 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { type UserPreferences, DEFAULT_PREFERENCES } from "@/types/settings";
+import {
+  isSupportedLanguage,
+  type AppLanguage,
+  DEFAULT_LANGUAGE,
+} from "@/types/i18n";
+
+function parseLanguage(raw: Record<string, unknown>): AppLanguage {
+  const v = raw["language"];
+  if (typeof v === "string" && isSupportedLanguage(v)) return v;
+  return DEFAULT_LANGUAGE;
+}
 
 export async function getUserPreferences(
   userId: string,
@@ -22,6 +33,7 @@ export async function getUserPreferences(
       : {};
 
   return {
+    language: parseLanguage(raw),
     assistantInstructions:
       typeof raw["assistantInstructions"] === "string"
         ? raw["assistantInstructions"]
