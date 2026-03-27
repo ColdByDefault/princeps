@@ -3,7 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { MessageSquare, Plus, Trash2 } from "lucide-react";
+import {
+  ChevronUp,
+  LogOut,
+  MessageSquare,
+  Plus,
+  Settings,
+  Trash2,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +23,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarFooter,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { getMessage } from "@/lib/i18n";
@@ -23,17 +32,28 @@ import { type MessageDictionary } from "@/types/i18n";
 import { type ChatSummary, CHAT_LIMIT } from "@/types/chat";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type AppSidebarProps = {
   messages: MessageDictionary;
+  sessionUser: {
+    name: string | null;
+    email: string | null;
+  } | null;
 };
 
-export function AppSidebar({ messages }: AppSidebarProps) {
+export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [chats, setChats] = useState<ChatSummary[] | null>(null);
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const activeChatId = pathname.match(/^\/chat\/([^/]+)/)?.[1] ?? null;
 
@@ -103,6 +123,24 @@ export function AppSidebar({ messages }: AppSidebarProps) {
   };
 
   const atLimit = (chats?.length ?? 0) >= CHAT_LIMIT;
+
+  const handleSignOut = async () => {
+    if (isSigningOut) return;
+    setIsSigningOut(true);
+    const { authClient } = await import("@/lib/auth-client");
+    const result = await authClient.signOut();
+    if (result.error) {
+      setIsSigningOut(false);
+      return;
+    }
+    router.replace("/login");
+    router.refresh();
+  };
+
+  const userLabel =
+    sessionUser?.name?.trim() ||
+    sessionUser?.email ||
+    getMessage(messages, "shell.nav.userFallback", "Workspace user");
 
   return (
     <Sidebar collapsible="icon">
@@ -193,6 +231,58 @@ export function AppSidebar({ messages }: AppSidebarProps) {
         confirmClassName="bg-destructive text-white hover:bg-destructive/90"
         onConfirm={() => deleteTarget && void handleDelete(deleteTarget)}
       />
+
+      <SidebarSeparator />
+
+      {/* Footer */}
+      <SidebarFooter>
+        <div className="flex items-center gap-0">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <SidebarMenuButton
+                size="lg"
+                className="flex-1 gap-3 cursor-pointer"
+              >
+                <div className="flex flex-1 flex-col leading-none text-left overflow-hidden">
+                  <span className="font-medium text-sm truncate">
+                    {userLabel}
+                  </span>
+                  {sessionUser?.email && (
+                    <span className="text-xs text-sidebar-foreground/60 truncate">
+                      {sessionUser.email}
+                    </span>
+                  )}
+                </div>
+                <ChevronUp className="ml-auto size-4 shrink-0" />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="top" align="end" className="w-56">
+              <DropdownMenuItem
+                className="cursor-pointer text-destructive focus:text-destructive"
+                disabled={isSigningOut}
+                onClick={() => void handleSignOut()}
+              >
+                <LogOut className="mr-2 size-4" />
+                {isSigningOut
+                  ? getMessage(
+                      messages,
+                      "shell.nav.signingOut",
+                      "Signing out...",
+                    )
+                  : getMessage(messages, "shell.nav.signOut", "Sign out")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <SidebarMenuButton
+            size="default"
+            aria-label="Assistant Settings"
+            className="cursor-pointer shrink-0 w-9 h-9 p-0 flex items-center justify-center"
+          >
+            <Settings className="size-4" />
+          </SidebarMenuButton>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }
