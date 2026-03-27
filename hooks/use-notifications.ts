@@ -7,6 +7,7 @@
 
 import * as React from "react";
 import type { NotificationRecord } from "@/types/api";
+import { useNotice } from "@/components/shared/notice-context";
 
 interface UseNotificationsReturn {
   notifications: NotificationRecord[];
@@ -19,6 +20,12 @@ export function useNotifications(): UseNotificationsReturn {
   const [notifications, setNotifications] = React.useState<
     NotificationRecord[]
   >([]);
+  const { addNotice } = useNotice();
+  // Ref so the SSE handler always sees the latest addNotice without re-running the effect
+  const addNoticeRef = React.useRef(addNotice);
+  React.useEffect(() => {
+    addNoticeRef.current = addNotice;
+  }, [addNotice]);
 
   // Load initial list and open SSE stream
   React.useEffect(() => {
@@ -47,6 +54,18 @@ export function useNotifications(): UseNotificationsReturn {
             if (prev.some((n) => n.id === notification.id)) return prev;
             return [notification, ...prev];
           });
+
+          // Show popup only for notifications created within the last 60 seconds
+          // so old unread records don't pop up on every page load.
+          const ageMs = Date.now() - new Date(notification.createdAt).getTime();
+          if (ageMs < 60_000) {
+            addNoticeRef.current({
+              type: "info",
+              title: notification.title,
+              message: notification.body,
+              duration: 5000,
+            });
+          }
         } catch {
           // Malformed event — ignore
         }
