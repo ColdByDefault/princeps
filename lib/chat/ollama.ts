@@ -10,6 +10,8 @@ export const OLLAMA_BASE_URL =
 
 export const OLLAMA_MODEL = process.env.OLLAMA_MODEL ?? "qwen3.5:4b";
 
+export const OLLAMA_EMBED_MODEL = process.env.OLLAMA_EMBED_MODEL ?? null;
+
 export type OllamaMessage = {
   role: "system" | "user" | "assistant";
   content: string;
