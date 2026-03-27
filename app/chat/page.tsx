@@ -1,21 +1,26 @@
 /**
  * @author ColdByDefault
- * @copyright  2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
-import { AppSidebar, SiteHeader } from "@/components/shared";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { getRequestConfig } from "@/i18n/request";
 
-export default async function TestPage() {
-  const { messages } = await getRequestConfig();
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { getOrCreateFirstChat } from "@/lib/chat/create.logic";
 
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <SiteHeader messages={messages} />
-        <div className="flex flex-1 flex-col overflow-auto">test</div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+export default async function ChatPage() {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  const chatId = await getOrCreateFirstChat(session.user.id);
+
+  if (!chatId) {
+    // Chat limit reached and no chats exist — redirect home
+    redirect("/home");
+  }
+
+  redirect(`/chat/${chatId}`);
 }
