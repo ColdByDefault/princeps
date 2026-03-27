@@ -79,8 +79,11 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
       setChats(data.chats);
     } catch {
       setChats([]);
+      toast.error(
+        getMessage(messages, "chat.error.load", "Failed to load chats."),
+      );
     }
-  }, []);
+  }, [messages]);
 
   useEffect(() => {
     void fetchChats();
@@ -161,6 +164,9 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
     const remaining = (chats ?? []).filter((c) => c.id !== chatId);
     setChats(remaining);
     setDeleteTarget(null);
+    toast.success(
+      getMessage(messages, "chat.sidebar.deleteSuccess", "Chat deleted."),
+    );
     if (activeChatId === chatId) {
       if (remaining.length > 0) {
         router.push(`/chat/${remaining[0].id}`);
@@ -189,6 +195,9 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
       (prev) =>
         prev?.map((c) => (c.id === chatId ? { ...c, title: trimmed } : c)) ??
         prev,
+    );
+    toast.success(
+      getMessage(messages, "chat.sidebar.renameSuccess", "Chat renamed."),
     );
   };
 

@@ -132,3 +132,18 @@
     @apply font-sans;
   }
 }
+
+/* Indeterminate progress bar animation (used during thinking phase) */
+@keyframes progress-slide {
+  0% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(500%);
+  }
+}
+
+[data-slot="progress"][data-indeterminate] [data-slot="progress-indicator"] {
+  width: 30%;
+  animation: progress-slide 1.4s ease-in-out infinite;
+}
