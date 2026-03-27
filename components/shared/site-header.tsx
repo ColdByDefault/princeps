@@ -21,31 +21,33 @@ export function SiteHeader() {
   const [status, setStatus] = useState<StatusData | null>(null);
   const [chatCount, setChatCount] = useState<number | null>(null);
 
-  const fetchStatus = async () => {
-    try {
-      const res = await fetch("/api/status");
-      if (res.ok) {
-        const data = (await res.json()) as StatusData;
-        setStatus(data);
-      }
-    } catch {
-      // silently ignore
-    }
-  };
-
-  const fetchChatCount = async () => {
-    try {
-      const res = await fetch("/api/chat");
-      if (res.ok) {
-        const data = (await res.json()) as { chats: ChatSummary[] };
-        setChatCount(data.chats.length);
-      }
-    } catch {
-      // silently ignore
-    }
-  };
-
   useEffect(() => {
+    let cancelled = false;
+
+    async function fetchStatus() {
+      try {
+        const res = await fetch("/api/status");
+        if (res.ok) {
+          const data = (await res.json()) as StatusData;
+          if (!cancelled) setStatus(data);
+        }
+      } catch {
+        // silently ignore
+      }
+    }
+
+    async function fetchChatCount() {
+      try {
+        const res = await fetch("/api/chat");
+        if (res.ok) {
+          const data = (await res.json()) as { chats: ChatSummary[] };
+          if (!cancelled) setChatCount(data.chats.length);
+        }
+      } catch {
+        // silently ignore
+      }
+    }
+
     void fetchStatus();
     void fetchChatCount();
 
@@ -54,6 +56,7 @@ export function SiteHeader() {
     window.addEventListener("chat:updated", handler);
 
     return () => {
+      cancelled = true;
       clearInterval(interval);
       window.removeEventListener("chat:updated", handler);
     };
