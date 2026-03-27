@@ -7,7 +7,7 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import type { Notification } from "@/lib/generated/prisma/client";
-import { Prisma } from "@/lib/generated/prisma/client";
+import { type Prisma } from "@/lib/generated/prisma/client";
 
 type CreateInput = {
   userId: string;

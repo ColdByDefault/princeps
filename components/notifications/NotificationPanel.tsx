@@ -13,7 +13,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NotificationItem } from "./NotificationItem";
 import { useNotifications } from "@/hooks/use-notifications";
@@ -30,29 +29,21 @@ export function NotificationPanel({ messages }: Props) {
 
   return (
     <Sheet>
-      <SheetTrigger>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="relative cursor-pointer"
-          aria-label={getMessage(
-            messages,
-            "notifications.bell",
-            "Notifications",
-          )}
-        >
-          <Bell className="size-4" />
-          {unreadCount > 0 && (
-            <span
-              className={cn(
-                "absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-blue-500 text-[10px] font-semibold text-white",
-              )}
-              aria-hidden
-            >
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          )}
-        </Button>
+      <SheetTrigger
+        aria-label={getMessage(messages, "notifications.bell", "Notifications")}
+        className="relative inline-flex size-9 cursor-pointer items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+      >
+        <Bell className="size-4" />
+        {unreadCount > 0 && (
+          <span
+            className={cn(
+              "absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-blue-500 text-[10px] font-semibold text-white",
+            )}
+            aria-hidden
+          >
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
+        )}
       </SheetTrigger>
 
       <SheetContent

@@ -99,7 +99,6 @@ Respond with valid JSON only — no markdown, no explanation, no code fence:
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const notification = await createNotification({
       userId,
       category,

@@ -34,7 +34,6 @@ export async function GET() {
 
       // Flush any pending notifications on connect
       void listNotifications(userId, 0).then((notifications) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const unread = notifications.filter((item) => item.read === false);
         for (const n of unread) {
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(n)}\n\n`));
