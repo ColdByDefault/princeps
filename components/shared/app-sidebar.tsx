@@ -217,6 +217,9 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
       <SidebarContent>
         {/* Top navigation group */}
         <SidebarGroup>
+          <SidebarGroupLabel>
+            {getMessage(messages, "shell.nav.group", "Navigation")}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>

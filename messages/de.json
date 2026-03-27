@@ -91,6 +91,7 @@
   "home.greetingMorning": "Guten Morgen",
   "home.greetingAfternoon": "Guten Tag",
   "home.greetingEvening": "Guten Abend",
+  "shell.nav.group": "Navigation",
   "shell.nav.home": "Workspace",
   "shell.nav.chat": "Chat",
   "shell.nav.signOut": "Abmelden",
