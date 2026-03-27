@@ -443,7 +443,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
 
       {/* Footer */}
       <SidebarFooter>
-        <SidebarMenu>
+        <SidebarMenu className="gap-2">
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip={getMessage(messages, "shell.nav.settings", "Settings")}
