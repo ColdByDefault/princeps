@@ -71,6 +71,12 @@ export async function POST(req: Request, { params }: Params) {
 
   const isFirstMessage = chatData.messages.length === 0;
 
+  // Set the title eagerly from the first user message so it persists even
+  // if the Ollama stream later fails or produces no content.
+  if (isFirstMessage) {
+    await setInitialTitle(chatId, userMessage);
+  }
+
   // Build the system prompt from all available context
   const systemMessage = await buildSystemPrompt(session.user.id, chatId);
 
@@ -189,11 +195,6 @@ export async function POST(req: Request, { params }: Params) {
           );
 
           await touchChat(chatId);
-
-          // Set title from first user message
-          if (isFirstMessage) {
-            await setInitialTitle(chatId, userMessage);
-          }
         }
 
         send({ type: "done" });
