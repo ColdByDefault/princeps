@@ -10,6 +10,7 @@ import {
   MessageSquare,
   Plus,
   Settings,
+  SlidersHorizontal,
   Trash2,
 } from "lucide-react";
 import {
@@ -26,6 +27,7 @@ import {
   SidebarRail,
   SidebarFooter,
   SidebarSeparator,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import ThemeToggle from "@/components/theme/ThemeToggle";
@@ -59,6 +61,8 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   const activeChatId = pathname.match(/^\/chat\/([^/]+)/)?.[1] ?? null;
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   const fetchChats = useCallback(async () => {
     try {
@@ -166,10 +170,27 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
-            <div className="flex items-center gap-1 px-1 pt-1">
-              <LanguageToggle messages={messages} />
-              <ThemeToggle messages={messages} />
-            </div>
+            {isCollapsed ? (
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    tooltip={getMessage(
+                      messages,
+                      "shell.nav.appearance",
+                      "Appearance",
+                    )}
+                    className="cursor-pointer"
+                  >
+                    <SlidersHorizontal className="size-4 shrink-0" />
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            ) : (
+              <div className="flex items-center gap-1 px-1 pt-1">
+                <LanguageToggle messages={messages} />
+                <ThemeToggle messages={messages} />
+              </div>
+            )}
           </SidebarGroupContent>
         </SidebarGroup>
 
@@ -199,7 +220,26 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {chats === null ? null : chats.length === 0 ? (
+              {isCollapsed ? (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    render={
+                      <Link
+                        href={activeChatId ? `/chat/${activeChatId}` : "/chat"}
+                      />
+                    }
+                    isActive={pathname.startsWith("/chat")}
+                    tooltip={getMessage(
+                      messages,
+                      "chat.sidebar.title",
+                      "Chats",
+                    )}
+                    className="cursor-pointer"
+                  >
+                    <MessageSquare className="size-4 shrink-0" />
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ) : chats === null ? null : chats.length === 0 ? (
                 <p className="px-2 py-1.5 text-xs text-muted-foreground">
                   {getMessage(messages, "chat.sidebar.empty", "No chats yet.")}
                 </p>
@@ -266,12 +306,24 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
 
       {/* Footer */}
       <SidebarFooter>
-        <div className="flex items-center gap-0">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <SidebarMenuButton
-                size="lg"
-                className="flex-1 gap-3 cursor-pointer"
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip={getMessage(messages, "shell.nav.settings", "Settings")}
+              className="cursor-pointer"
+            >
+              <Settings className="size-4 shrink-0" />
+              <span>
+                {getMessage(messages, "shell.nav.settings", "Settings")}
+              </span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <SidebarMenuButton size="lg" className="cursor-pointer" />
+                }
               >
                 <div className="flex flex-1 flex-col leading-none text-left overflow-hidden">
                   <span className="font-medium text-sm truncate">
@@ -284,34 +336,26 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   )}
                 </div>
                 <ChevronUp className="ml-auto size-4 shrink-0" />
-              </SidebarMenuButton>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent side="top" align="end" className="w-56">
-              <DropdownMenuItem
-                className="cursor-pointer text-destructive focus:text-destructive"
-                disabled={isSigningOut}
-                onClick={() => void handleSignOut()}
-              >
-                <LogOut className="mr-2 size-4" />
-                {isSigningOut
-                  ? getMessage(
-                      messages,
-                      "shell.nav.signingOut",
-                      "Signing out...",
-                    )
-                  : getMessage(messages, "shell.nav.signOut", "Sign out")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <SidebarMenuButton
-            size="default"
-            aria-label="Assistant Settings"
-            className="cursor-pointer shrink-0 w-9 h-9 p-0 flex items-center justify-center"
-          >
-            <Settings className="size-4" />
-          </SidebarMenuButton>
-        </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="top" align="end" className="w-56">
+                <DropdownMenuItem
+                  className="cursor-pointer text-destructive focus:text-destructive"
+                  disabled={isSigningOut}
+                  onClick={() => void handleSignOut()}
+                >
+                  <LogOut className="mr-2 size-4" />
+                  {isSigningOut
+                    ? getMessage(
+                        messages,
+                        "shell.nav.signingOut",
+                        "Signing out...",
+                      )
+                    : getMessage(messages, "shell.nav.signOut", "Sign out")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );

@@ -98,6 +98,8 @@
   "shell.nav.openMenu": "Navigationsmenü öffnen",
   "shell.nav.closeMenu": "Navigationsmenü schließen",
   "shell.nav.userFallback": "Workspace-Nutzer",
+  "shell.nav.settings": "Einstellungen",
+  "shell.nav.appearance": "Erscheinungsbild",
   "shell.language.groupLabel": "Sprachauswahl",
   "shell.language.de": "Deutsch",
   "shell.language.en": "Englisch",
