@@ -13,6 +13,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  MessageSquare,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -53,6 +54,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       icon: LayoutDashboard,
       label: getMessage(messages, "shell.nav.home", "Workspace"),
     },
+    {
+      href: "/chat",
+      icon: MessageSquare,
+      label: getMessage(messages, "shell.nav.chat", "Chat"),
+    },
   ];
 }
 
@@ -63,8 +69,7 @@ function isActivePath(pathname: string, href: string) {
 
   return pathname === href || pathname.startsWith(`${href}/`);
 }
-
-function LanguageToggle({ messages }: { messages: MessageDictionary }) {
+export function LanguageToggle({ messages }: { messages: MessageDictionary }) {
   const router = useRouter();
   const { language, changeLanguage } = useLanguage();
   const currentLanguageLabel = language.toUpperCase();
@@ -133,7 +138,11 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
 
-  if (HIDDEN_NAVBAR_PATHS.has(pathname) || !sessionUser) {
+  if (
+    HIDDEN_NAVBAR_PATHS.has(pathname) ||
+    pathname.startsWith("/chat") ||
+    !sessionUser
+  ) {
     return null;
   }
 

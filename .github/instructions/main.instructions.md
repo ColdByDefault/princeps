@@ -1,10 +1,13 @@
-<!-- 
+<!--
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  -->
- ---
+
+---
+
 description: "Use when you need the high-level shape of the See-Sweet repository. Covers product intent, feature boundaries, and repository-wide architecture."
 name: "See-Sweet Repo Overview"
+
 ---
 
 # See-Sweet Repo Overview
@@ -19,10 +22,10 @@ name: "See-Sweet Repo Overview"
 ## Architecture Shape
 
 - `app/` holds App Router pages, layouts, metadata, and API handlers.
-- `components/<feature>/` holds interactive UI by feature; 
+- `components/<feature>/` holds interactive UI by feature;
 - `components/ui/` holds shared primitives added from Shadcn UI ONLY.
-- `components/shared/` holds shared primitives.
-- `components/<feature>/` always include `index.tsx` for the main component and export all others as needed.
+- `components/shared/` holds cross-feature shared components (not shadcn/ui — those go in `components/ui/` only).
+- `components/<feature>/` always include an `index.ts` (or `index.tsx` when the barrel itself renders JSX) that exports all public members of the feature.
 - `lib/<feature>/` holds server-side business logic, usually split into one operation per `*.logic.ts`.
 - `types/` holds shared client-safe contracts and enums.
 - `messages/`, `i18n/`, and `hooks/use-language.ts` provide localization support.

@@ -82,7 +82,7 @@ function FooterColumn({
 export default function Footer({ messages }: FooterProps) {
   const pathname = usePathname();
 
-  if (HIDDEN_FOOTER_PATHS.has(pathname)) {
+  if (HIDDEN_FOOTER_PATHS.has(pathname) || pathname.startsWith("/chat")) {
     return null;
   }
 
@@ -107,10 +107,7 @@ export default function Footer({ messages }: FooterProps) {
             links={policyLinks}
           />
 
-          <div className="space-y-3 lg:text-right">
-            <p className="text-xs font-semibold tracking-[0.22em] uppercase text-muted-foreground">
-              {getMessage(messages, "auth.brandName", "See-Sweet")}
-            </p>
+          <div className="flex flex-col lg:text-right ">
             <div className="flex items-center gap-2 lg:justify-end">
               <VersionDisplay
                 className="block text-sm text-muted-foreground"
@@ -120,11 +117,11 @@ export default function Footer({ messages }: FooterProps) {
                   "Application version",
                 )}
               />
-              <span className="inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.18em] text-amber-700 uppercase dark:text-amber-300">
+              <span className="inline-flex items-center rounded-full bg-amber-500/10 px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.18em] text-amber-700 uppercase dark:text-amber-300">
                 {getMessage(messages, "shell.footer.beta", "Beta")}
               </span>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mt-auto">
               {getMessage(messages, "shell.footer.copyright", "Copyright")}
             </p>
           </div>
