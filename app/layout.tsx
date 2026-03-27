@@ -76,8 +76,10 @@ export default async function RootLayout({
                         : null
                     }
                   />
-                  <div className="flex min-h-0 flex-1 flex-col">{children}</div>
-                  <Footer messages={messages} />
+                  <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+                    {children}
+                    <Footer messages={messages} />
+                  </div>
                 </main>
               </div>
               <FloatingNotices />

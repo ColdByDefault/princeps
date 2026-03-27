@@ -71,7 +71,7 @@ export default async function LandingPage() {
   ];
 
   return (
-    <div className="mx-auto flex min-h-svh w-full max-w-7xl flex-col px-6 py-8 sm:px-8 lg:px-10">
+    <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col px-6 py-8 sm:px-8 lg:px-10">
       <header className="flex items-center justify-between gap-4 py-4">
         <div>
           <p className="text-sm font-semibold tracking-[0.24em] text-primary uppercase">
