@@ -14,3 +14,4 @@ export { NoticePanel } from "./NoticePanel";
 export { ConfirmDialog } from "./ConfirmDialog";
 export { AppSidebar } from "./app-sidebar";
 export { SiteHeader } from "./site-header";
+export { SettingsDialog } from "./SettingsDialog";

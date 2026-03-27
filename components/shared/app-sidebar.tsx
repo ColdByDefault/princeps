@@ -33,6 +33,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
+import { SettingsDialog } from "@/components/shared/SettingsDialog";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LanguageToggle } from "@/components/navigation/Navbar";
 import { getMessage } from "@/lib/i18n";
@@ -64,6 +65,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   const [renameTarget, setRenameTarget] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const activeChatId = pathname.match(/^\/chat\/([^/]+)/)?.[1] ?? null;
   const { state, toggleSidebar } = useSidebar();
@@ -387,6 +389,12 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
         onConfirm={() => deleteTarget && void handleDelete(deleteTarget)}
       />
 
+      <SettingsDialog
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+        messages={messages}
+      />
+
       {/* Footer */}
       <SidebarFooter>
         <SidebarMenu>
@@ -394,6 +402,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
             <SidebarMenuButton
               tooltip={getMessage(messages, "shell.nav.settings", "Settings")}
               className="cursor-pointer"
+              onClick={() => setSettingsOpen(true)}
             >
               <Settings className="size-4 shrink-0" />
               <span>

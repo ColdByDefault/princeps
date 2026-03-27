@@ -16,6 +16,7 @@ import {
 import { setInitialTitle } from "@/lib/chat/create.logic";
 import { streamOllamaChat, type OllamaStreamChunk } from "@/lib/chat/ollama";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
+import { getUserPreferences } from "@/lib/settings/get.logic";
 
 type Params = { params: Promise<{ chatId: string }> };
 
@@ -73,6 +74,9 @@ export async function POST(req: Request, { params }: Params) {
   // Build the system prompt from all available context
   const systemMessage = await buildSystemPrompt(session.user.id, chatId);
 
+  // Load user preferences for inference options
+  const { ollamaOptions } = await getUserPreferences(session.user.id);
+
   // Map stored messages to Ollama format
   const historyMessages = chatData.messages.map((m) => ({
     role: m.role as "user" | "assistant",
@@ -89,7 +93,11 @@ export async function POST(req: Request, { params }: Params) {
   let ollamaResponse: Response;
 
   try {
-    ollamaResponse = await streamOllamaChat(ollamaMessages, think);
+    ollamaResponse = await streamOllamaChat(
+      ollamaMessages,
+      think,
+      ollamaOptions,
+    );
   } catch {
     return NextResponse.json(
       { error: "Assistant unavailable. Is Ollama running?" },
