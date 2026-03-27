@@ -30,6 +30,7 @@ export function useNotifications(): UseNotificationsReturn {
   // Load initial list and open SSE stream
   React.useEffect(() => {
     let es: EventSource | null = null;
+    const initialIds = new Set<string>();
 
     async function init() {
       try {
@@ -39,6 +40,20 @@ export function useNotifications(): UseNotificationsReturn {
             notifications: NotificationRecord[];
           };
           setNotifications(data.notifications);
+          for (const n of data.notifications) {
+            initialIds.add(n.id);
+            // Show popup for very-fresh notifications (generated just after
+            // sign-up / login) so the welcome message is always visible.
+            const ageMs = Date.now() - new Date(n.createdAt).getTime();
+            if (!n.read && ageMs < 30_000) {
+              addNoticeRef.current({
+                type: "info",
+                title: n.title,
+                message: n.body,
+                duration: 5000,
+              });
+            }
+          }
         }
       } catch {
         // Non-fatal — SSE will backfill unread ones
@@ -50,15 +65,13 @@ export function useNotifications(): UseNotificationsReturn {
         try {
           const notification = JSON.parse(event.data) as NotificationRecord;
           setNotifications((prev) => {
-            // Deduplicate — the stream may resend unread records on reconnect
             if (prev.some((n) => n.id === notification.id)) return prev;
             return [notification, ...prev];
           });
 
-          // Show popup only for notifications created within the last 60 seconds
-          // so old unread records don't pop up on every page load.
-          const ageMs = Date.now() - new Date(notification.createdAt).getTime();
-          if (ageMs < 60_000) {
+          // Only pop for IDs that weren't in the initial REST fetch
+          // (i.e. genuinely new live-pushed notifications).
+          if (!initialIds.has(notification.id)) {
             addNoticeRef.current({
               type: "info",
               title: notification.title,
