@@ -38,7 +38,7 @@ export default async function ChatIdPage({ params }: Props) {
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar messages={messages} />
       <SidebarInset>
         <SiteHeader messages={messages} />
         <div className="flex flex-1 flex-col overflow-hidden">
