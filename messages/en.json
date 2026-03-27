@@ -147,6 +147,7 @@
   "chat.sidebar.newChat": "New chat",
   "chat.sidebar.empty": "No chats yet.",
   "chat.sidebar.limitReached": "Delete a chat to create a new one",
+  "chat.sidebar.pendingEmpty": "Start chatting first — empty chats are not saved.",
   "chat.sidebar.limitNotice": "10 chat limit reached. Delete one to start a new chat.",
   "chat.sidebar.rename": "Rename",
   "chat.sidebar.delete": "Delete",

@@ -147,6 +147,7 @@
   "chat.sidebar.newChat": "Neuer Chat",
   "chat.sidebar.empty": "Noch keine Chats.",
   "chat.sidebar.limitReached": "Lösche einen Chat, um einen neuen zu erstellen",
+  "chat.sidebar.pendingEmpty": "Schreib zuerst eine Nachricht — leere Chats werden nicht gespeichert.",
   "chat.sidebar.limitNotice": "Limit von 10 Chats erreicht. Lösche einen, um einen neuen Chat zu starten.",
   "chat.sidebar.rename": "Umbenennen",
   "chat.sidebar.delete": "Löschen",

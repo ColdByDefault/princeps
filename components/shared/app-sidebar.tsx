@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   ChevronUp,
-  Home,
+  LayoutDashboard,
   LogOut,
   MessageSquare,
   MoreHorizontal,
@@ -87,13 +87,46 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   }, [fetchChats]);
 
   useEffect(() => {
-    const handler = () => void fetchChats();
+    const handler = () => {
+      sessionStorage.removeItem("ssweet:pending-empty-chat");
+      void fetchChats();
+    };
     window.addEventListener("chat:updated", handler);
     return () => window.removeEventListener("chat:updated", handler);
   }, [fetchChats]);
 
+  // Auto-delete an empty newly-created chat when the user navigates away
+  useEffect(() => {
+    const pending = sessionStorage.getItem("ssweet:pending-empty-chat");
+    if (!pending) return;
+    if (pathname.includes(pending)) return;
+    sessionStorage.removeItem("ssweet:pending-empty-chat");
+    void fetch(`/api/chat/${pending}`, { method: "DELETE" }).then((res) => {
+      if (res.ok) {
+        setChats((prev) => prev?.filter((c) => c.id !== pending) ?? prev);
+      }
+    });
+  }, [pathname]);
+
   const handleNewChat = async () => {
     if (creating) return;
+    // If there is already an unused empty chat, block and inform the user
+    const pending = sessionStorage.getItem("ssweet:pending-empty-chat");
+    if (pending) {
+      toast(
+        getMessage(
+          messages,
+          "chat.sidebar.pendingEmpty",
+          "Start chatting first — empty chats are not saved.",
+        ),
+        {
+          icon: (
+            <span className="size-2 rounded-full bg-red-500 inline-block" />
+          ),
+        },
+      );
+      return;
+    }
     setCreating(true);
     try {
       const res = await fetch("/api/chat", { method: "POST" });
@@ -109,6 +142,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
       }
       if (!res.ok) throw new Error();
       const data = (await res.json()) as { chatId: string };
+      sessionStorage.setItem("ssweet:pending-empty-chat", data.chatId);
       await fetchChats();
       router.push(`/chat/${data.chatId}`);
     } catch {
@@ -192,7 +226,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   tooltip={getMessage(messages, "shell.nav.home", "Workspace")}
                   className="cursor-pointer"
                 >
-                  <Home className="size-4 shrink-0" />
+                  <LayoutDashboard className="size-4 shrink-0" />
                   <span className="truncate">
                     {getMessage(messages, "shell.nav.home", "Workspace")}
                   </span>
