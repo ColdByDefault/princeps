@@ -8,6 +8,8 @@ import {
   Home,
   LogOut,
   MessageSquare,
+  MoreHorizontal,
+  Pencil,
   Plus,
   Settings,
   SlidersHorizontal,
@@ -59,6 +61,8 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   const [chats, setChats] = useState<ChatSummary[] | null>(null);
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [renameTarget, setRenameTarget] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   const activeChatId = pathname.match(/^\/chat\/([^/]+)/)?.[1] ?? null;
@@ -128,6 +132,28 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
         router.push("/chat");
       }
     }
+  };
+
+  const handleRename = async (chatId: string) => {
+    const trimmed = renameValue.trim();
+    setRenameTarget(null);
+    if (!trimmed) return;
+    const current = chats?.find((c) => c.id === chatId);
+    if (current && trimmed === current.title) return;
+    const res = await fetch(`/api/chat/${chatId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: trimmed }),
+    });
+    if (!res.ok) {
+      toast.error("Failed to rename chat");
+      return;
+    }
+    setChats(
+      (prev) =>
+        prev?.map((c) => (c.id === chatId ? { ...c, title: trimmed } : c)) ??
+        prev,
+    );
   };
 
   const atLimit = (chats?.length ?? 0) >= CHAT_LIMIT;
@@ -244,28 +270,89 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
               ) : (
                 chats.map((chat) => (
                   <SidebarMenuItem key={chat.id}>
-                    <SidebarMenuButton
-                      render={<Link href={`/chat/${chat.id}`} />}
-                      isActive={chat.id === activeChatId}
-                      tooltip={chat.title}
-                      className="cursor-pointer"
-                    >
-                      <MessageSquare className="size-4 shrink-0" />
-                      <span className="truncate">{chat.title}</span>
-                    </SidebarMenuButton>
-                    {chats.length > 1 && (
-                      <SidebarMenuAction
-                        showOnHover
-                        onClick={() => setDeleteTarget(chat.id)}
-                        aria-label={getMessage(
-                          messages,
-                          "chat.sidebar.delete",
-                          "Delete",
-                        )}
-                        className="cursor-pointer"
+                    {renameTarget === chat.id ? (
+                      <form
+                        className="flex w-full items-center px-2 py-1"
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          void handleRename(chat.id);
+                        }}
                       >
-                        <Trash2 className="size-3.5 text-destructive" />
-                      </SidebarMenuAction>
+                        <input
+                          autoFocus
+                          className="flex-1 min-w-0 rounded-sm border border-input bg-background px-1.5 py-0.5 text-sm outline-none focus:ring-1 focus:ring-ring"
+                          value={renameValue}
+                          maxLength={80}
+                          placeholder={getMessage(
+                            messages,
+                            "chat.rename.placeholder",
+                            "Chat title",
+                          )}
+                          onChange={(e) => setRenameValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Escape") setRenameTarget(null);
+                          }}
+                          onBlur={() => void handleRename(chat.id)}
+                        />
+                      </form>
+                    ) : (
+                      <>
+                        <SidebarMenuButton
+                          render={<Link href={`/chat/${chat.id}`} />}
+                          isActive={chat.id === activeChatId}
+                          tooltip={chat.title}
+                          className="cursor-pointer"
+                        >
+                          <MessageSquare className="size-4 shrink-0" />
+                          <span className="truncate">{chat.title}</span>
+                        </SidebarMenuButton>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger
+                            render={
+                              <SidebarMenuAction
+                                showOnHover
+                                aria-label={getMessage(
+                                  messages,
+                                  "chat.sidebar.rename",
+                                  "Rename",
+                                )}
+                                className="cursor-pointer"
+                              />
+                            }
+                          >
+                            <MoreHorizontal className="size-3.5" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent side="right" align="start">
+                            <DropdownMenuItem
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setRenameTarget(chat.id);
+                                setRenameValue(chat.title);
+                              }}
+                            >
+                              <Pencil className="mr-2 size-3.5" />
+                              {getMessage(
+                                messages,
+                                "chat.sidebar.rename",
+                                "Rename",
+                              )}
+                            </DropdownMenuItem>
+                            {chats.length > 1 && (
+                              <DropdownMenuItem
+                                className="cursor-pointer text-destructive focus:text-destructive"
+                                onClick={() => setDeleteTarget(chat.id)}
+                              >
+                                <Trash2 className="mr-2 size-3.5" />
+                                {getMessage(
+                                  messages,
+                                  "chat.sidebar.delete",
+                                  "Delete",
+                                )}
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </>
                     )}
                   </SidebarMenuItem>
                 ))
