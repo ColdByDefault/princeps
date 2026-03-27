@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   ChevronUp,
+  Home,
   LogOut,
   MessageSquare,
   Plus,
@@ -27,6 +28,8 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
+import ThemeToggle from "@/components/theme/ThemeToggle";
+import { LanguageToggle } from "@/components/navigation/Navbar";
 import { getMessage } from "@/lib/i18n";
 import { type MessageDictionary } from "@/types/i18n";
 import { type ChatSummary, CHAT_LIMIT } from "@/types/chat";
@@ -145,6 +148,33 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
+        {/* Top navigation group */}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/home" />}
+                  isActive={pathname === "/home"}
+                  tooltip={getMessage(messages, "shell.nav.home", "Workspace")}
+                  className="cursor-pointer"
+                >
+                  <Home className="size-4 shrink-0" />
+                  <span className="truncate">
+                    {getMessage(messages, "shell.nav.home", "Workspace")}
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+            <div className="flex items-center gap-1 px-1 pt-1">
+              <LanguageToggle messages={messages} />
+              <ThemeToggle messages={messages} />
+            </div>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarSeparator />
+
         <SidebarGroup>
           <SidebarGroupLabel>
             {getMessage(messages, "chat.sidebar.title", "Chats")}

@@ -40,7 +40,7 @@ export default async function ChatIdPage({ params }: Props) {
     <SidebarProvider>
       <AppSidebar messages={messages} sessionUser={session.user} />
       <SidebarInset>
-        <SiteHeader messages={messages} />
+        <SiteHeader />
         <div className="flex flex-1 flex-col overflow-hidden">
           <ChatWindow
             chatId={chatId}

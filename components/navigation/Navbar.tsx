@@ -69,7 +69,7 @@ function isActivePath(pathname: string, href: string) {
 
   return pathname === href || pathname.startsWith(`${href}/`);
 }
-function LanguageToggle({ messages }: { messages: MessageDictionary }) {
+export function LanguageToggle({ messages }: { messages: MessageDictionary }) {
   const router = useRouter();
   const { language, changeLanguage } = useLanguage();
   const currentLanguageLabel = language.toUpperCase();
