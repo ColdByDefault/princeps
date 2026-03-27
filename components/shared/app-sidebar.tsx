@@ -12,6 +12,7 @@ import {
   Settings,
   SlidersHorizontal,
   Trash2,
+  User,
 } from "lucide-react";
 import {
   Sidebar,
@@ -61,7 +62,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   const activeChatId = pathname.match(/^\/chat\/([^/]+)/)?.[1] ?? null;
-  const { state } = useSidebar();
+  const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
 
   const fetchChats = useCallback(async () => {
@@ -180,6 +181,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                       "Appearance",
                     )}
                     className="cursor-pointer"
+                    onClick={toggleSidebar}
                   >
                     <SlidersHorizontal className="size-4 shrink-0" />
                   </SidebarMenuButton>
@@ -223,11 +225,6 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
               {isCollapsed ? (
                 <SidebarMenuItem>
                   <SidebarMenuButton
-                    render={
-                      <Link
-                        href={activeChatId ? `/chat/${activeChatId}` : "/chat"}
-                      />
-                    }
                     isActive={pathname.startsWith("/chat")}
                     tooltip={getMessage(
                       messages,
@@ -235,6 +232,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                       "Chats",
                     )}
                     className="cursor-pointer"
+                    onClick={toggleSidebar}
                   >
                     <MessageSquare className="size-4 shrink-0" />
                   </SidebarMenuButton>
@@ -302,8 +300,6 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
         onConfirm={() => deleteTarget && void handleDelete(deleteTarget)}
       />
 
-      <SidebarSeparator />
-
       {/* Footer */}
       <SidebarFooter>
         <SidebarMenu>
@@ -321,21 +317,25 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger
-                render={
-                  <SidebarMenuButton size="lg" className="cursor-pointer" />
-                }
+                render={<SidebarMenuButton className="cursor-pointer" />}
               >
-                <div className="flex flex-1 flex-col leading-none text-left overflow-hidden">
-                  <span className="font-medium text-sm truncate">
-                    {userLabel}
-                  </span>
-                  {sessionUser?.email && (
-                    <span className="text-xs text-sidebar-foreground/60 truncate">
-                      {sessionUser.email}
-                    </span>
-                  )}
-                </div>
-                <ChevronUp className="ml-auto size-4 shrink-0" />
+                {isCollapsed ? (
+                  <User className="size-4 shrink-0" />
+                ) : (
+                  <>
+                    <div className="flex flex-1 flex-col leading-none text-left overflow-hidden">
+                      <span className="font-medium text-sm truncate">
+                        {userLabel}
+                      </span>
+                      {sessionUser?.email && (
+                        <span className="text-xs text-sidebar-foreground/60 truncate">
+                          {sessionUser.email}
+                        </span>
+                      )}
+                    </div>
+                    <ChevronUp className="ml-auto size-4 shrink-0" />
+                  </>
+                )}
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" align="end" className="w-56">
                 <DropdownMenuItem
