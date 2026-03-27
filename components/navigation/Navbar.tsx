@@ -25,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { NotificationPanel } from "@/components/notifications";
 import { useLanguage } from "@/hooks/use-language";
 import { authClient } from "@/lib/auth-client";
 import { getMessage } from "@/lib/i18n";
@@ -207,6 +208,7 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
             </nav>
 
             <div className="ml-auto hidden items-center gap-2 min-[1000px]:flex">
+              <NotificationPanel messages={messages} />
               <LanguageToggle messages={messages} />
               <ThemeToggle messages={messages} />
               <div className="rounded-full border border-border/70 bg-background/70 px-3 py-2 text-sm text-muted-foreground backdrop-blur-sm">
@@ -285,6 +287,7 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
               </nav>
 
               <div className="flex flex-wrap items-center gap-2">
+                <NotificationPanel messages={messages} />
                 <LanguageToggle messages={messages} />
                 <ThemeToggle messages={messages} />
               </div>
