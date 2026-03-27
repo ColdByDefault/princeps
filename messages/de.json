@@ -151,5 +151,20 @@
   "chat.sidebar.deleteTitle": "Diesen Chat löschen?",
   "chat.sidebar.deleteDescription": "Dieser Chat und alle seine Nachrichten werden dauerhaft gelöscht.",
   "chat.sidebar.deleteConfirm": "Löschen",
-  "shared.cancel": "Abbrechen"
+  "chat.metadata.description": "Dein privater Chat-Workspace.",
+  "chat.input.placeholder": "Stell eine Frage\u2026",
+  "chat.input.send": "Senden",
+  "chat.input.think": "Denken",
+  "chat.input.thinkTooltip": "Erweiterte Überlegung aktivieren",
+  "chat.empty.title": "Gespräch beginnen",
+  "chat.empty.body": "Sende eine Nachricht, um zu starten.",
+  "chat.thinking": "Denkt nach\u2026",
+  "chat.error.send": "Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
+  "chat.error.load": "Nachrichten konnten nicht geladen werden.",
+  "chat.rename.title": "Chat umbenennen",
+  "chat.rename.placeholder": "Chat-Titel",
+  "chat.rename.submit": "Umbenennen",
+  "chat.rename.submitting": "Wird umbenannt\u2026",
+  "shared.cancel": "Abbrechen",
+  "shared.dismiss": "Schließen"
 }
