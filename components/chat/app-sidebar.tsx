@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   ChevronUp,
+  FileText,
   LayoutDashboard,
   LogOut,
   MessageSquare,
@@ -241,6 +242,19 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   <LayoutDashboard className="size-4 shrink-0" />
                   <span className="truncate">
                     {getMessage(messages, "shell.nav.home", "Workspace")}
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/knowledge" />}
+                  isActive={pathname === "/knowledge"}
+                  tooltip={getMessage(messages, "shell.nav.knowledge", "Knowledge Base")}
+                  className="cursor-pointer"
+                >
+                  <FileText className="size-4 shrink-0" />
+                  <span className="truncate">
+                    {getMessage(messages, "shell.nav.knowledge", "Knowledge Base")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>

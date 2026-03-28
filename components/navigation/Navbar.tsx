@@ -9,6 +9,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
+  FileText,
   Globe,
   LayoutDashboard,
   LogOut,
@@ -54,6 +55,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/home",
       icon: LayoutDashboard,
       label: getMessage(messages, "shell.nav.home", "Workspace"),
+    },
+    {
+      href: "/knowledge",
+      icon: FileText,
+      label: getMessage(messages, "shell.nav.knowledge", "Knowledge Base"),
     },
     {
       href: "/chat",
