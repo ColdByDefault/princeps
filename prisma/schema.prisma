@@ -29,10 +29,13 @@ model User {
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
 
-  sessions           Session[]
-  accounts           Account[]
-  chats              Chat[]
-  notifications      Notification[]
+  sessions             Session[]
+  accounts             Account[]
+  chats                Chat[]
+  notifications        Notification[]
+  knowledgeDocuments   KnowledgeDocument[]
+  knowledgeChunks      KnowledgeChunk[]
+  personalInfo         PersonalInfo?
 
   @@map("user")
 }
@@ -129,5 +132,50 @@ model Notification {
 
   @@index([userId, dismissed, createdAt(sort: Desc)])
   @@map("notification")
+}
+
+// ─── Knowledge Base ───────────────────────────────────────
+
+model KnowledgeDocument {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String   // original filename — display only, never stored as file
+  charCount Int      // total chars contributed to quota
+  createdAt DateTime @default(now())
+
+  user   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chunks KnowledgeChunk[]
+
+  @@index([userId])
+  @@map("knowledge_document")
+}
+
+model KnowledgeChunk {
+  id         String                       @id @default(cuid())
+  documentId String
+  userId     String
+  content    String
+  embedding  Unsupported("vector(4096)")?
+  chunkIndex Int
+  createdAt  DateTime                     @default(now())
+
+  document KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user     User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("knowledge_chunk")
+}
+
+// ─── Personal Info ────────────────────────────────────────
+
+model PersonalInfo {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  fields    Json     @default("{}")
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("personal_info")
 }
 

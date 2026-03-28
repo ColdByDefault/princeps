@@ -6,7 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { buildSystemPrompt } from "@/lib/chat/context.logic";
+import { buildSystemPrompt } from "@/lib/context/build";
 import {
   getChatMessages,
   saveUserMessage,
@@ -83,7 +83,7 @@ export async function POST(req: Request, { params }: Params) {
   // Build the system prompt from all available context
   const systemMessage = await buildSystemPrompt(
     session.user.id,
-    chatId,
+    userMessage,
     preferences.assistantInstructions.trim() || null,
   );
 
