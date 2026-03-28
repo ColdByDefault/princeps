@@ -7,7 +7,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { getChatMessages } from "@/lib/chat/messages.logic";
-import { AppSidebar, SiteHeader } from "@/components/shared";
+import { AppSidebar, SiteHeader } from "@/components/chat";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getRequestConfig } from "@/i18n/request";
 import { ChatWindow } from "@/components/chat";

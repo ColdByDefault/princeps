@@ -81,6 +81,14 @@ export function LanguageToggle({ messages }: { messages: MessageDictionary }) {
     }
 
     changeLanguage(nextLanguage);
+
+    // Persist to DB so all app features (notifications, cross-device) stay in sync
+    void fetch("/api/settings", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ language: nextLanguage }),
+    });
+
     router.refresh();
   };
 

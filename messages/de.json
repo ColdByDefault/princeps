@@ -200,5 +200,7 @@
   "settings.model.numCtx": "Kontextfenster",
   "settings.model.numCtxDesc": "Anzahl der Tokens, die das Modell gleichzeitig verarbeiten kann.",
   "settings.model.repeatPenalty": "Wiederholungsstrafe",
-  "settings.model.repeatPenaltyDesc": "Bestraft wiederholte Tokens. Höhere Werte reduzieren Wiederholungen."
+  "settings.model.repeatPenaltyDesc": "Bestraft wiederholte Tokens. Höhere Werte reduzieren Wiederholungen.",
+  "settings.section.language": "Sprache",
+  "settings.language.description": "Sprache, die in der gesamten App und in Assistenten-Nachrichten verwendet wird."
 }

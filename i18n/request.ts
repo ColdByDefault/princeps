@@ -3,9 +3,13 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
+import "server-only";
+
 import deMessages from "@/messages/de.json";
 import enMessages from "@/messages/en.json";
 import { cookies, headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { getUserPreferences } from "@/lib/settings/get.logic";
 import {
   DEFAULT_LANGUAGE,
   LANGUAGE_COOKIE_NAME,
@@ -45,6 +49,19 @@ export async function getRequestLanguage(): Promise<AppLanguage> {
   }
 
   const headerStore = await headers();
+
+  // No cookie: check DB preference for authenticated users (cross-device persistence)
+  try {
+    const session = await auth.api.getSession({ headers: headerStore });
+    if (session?.user?.id) {
+      const prefs = await getUserPreferences(session.user.id);
+      if (isSupportedLanguage(prefs.language)) {
+        return prefs.language;
+      }
+    }
+  } catch {
+    // ignore auth/db errors, fall through to accept-language
+  }
 
   return getLanguageFromHeader(headerStore.get("accept-language"));
 }

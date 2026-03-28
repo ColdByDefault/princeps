@@ -200,5 +200,7 @@
   "settings.model.numCtx": "Context window",
   "settings.model.numCtxDesc": "Number of tokens the model can process at once.",
   "settings.model.repeatPenalty": "Repeat penalty",
-  "settings.model.repeatPenaltyDesc": "Penalizes repeated tokens. Higher values reduce repetition."
+  "settings.model.repeatPenaltyDesc": "Penalizes repeated tokens. Higher values reduce repetition.",
+  "settings.section.language": "Language",
+  "settings.language.description": "Language used throughout the app and in assistant messages."
 }
