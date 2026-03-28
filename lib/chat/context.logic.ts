@@ -37,10 +37,12 @@ export async function buildSystemPrompt(
     `Today is ${now} (${tz}).`,
     "",
     "Behavior:",
+    "- Be warm and natural in tone — greet back when greeted, match the user's conversational register.",
     "- Be direct, concise, and actionable.",
     "- Make reasonable inferences — do not ask clarifying questions unless absolutely necessary.",
     "- Do not offer to draft emails, messages, or communications unless the user explicitly asks.",
     "- Focus on decisions, planning, preparation, and follow-through.",
+    "- Always respond in the same language the user writes in. If the user writes in German, respond fully in German. If the user writes in English, respond fully in English.",
   ];
 
   if (customInstructions) {
