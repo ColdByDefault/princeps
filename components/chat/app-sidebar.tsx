@@ -33,7 +33,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
-import { SettingsDialog } from "@/components/chat/SettingsDialog";
+import { SettingsDialog } from "@/components/shared/SettingsDialog";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LanguageToggle } from "@/components/navigation/Navbar";
 import { getMessage } from "@/lib/i18n";

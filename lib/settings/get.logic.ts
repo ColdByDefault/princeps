@@ -19,6 +19,14 @@ function parseLanguage(raw: Record<string, unknown>): AppLanguage {
   return DEFAULT_LANGUAGE;
 }
 
+function numOpt(
+  opts: Record<string, unknown>,
+  key: string,
+  fallback: number,
+): number {
+  return typeof opts[key] === "number" ? (opts[key] as number) : fallback;
+}
+
 export async function getUserPreferences(
   userId: string,
 ): Promise<UserPreferences> {
@@ -32,6 +40,13 @@ export async function getUserPreferences(
       ? (user.preferences as Record<string, unknown>)
       : {};
 
+  const rawOpts =
+    raw["ollamaOptions"] && typeof raw["ollamaOptions"] === "object"
+      ? (raw["ollamaOptions"] as Record<string, unknown>)
+      : {};
+
+  const d = DEFAULT_PREFERENCES.ollamaOptions;
+
   return {
     language: parseLanguage(raw),
     assistantInstructions:
@@ -39,46 +54,11 @@ export async function getUserPreferences(
         ? raw["assistantInstructions"]
         : DEFAULT_PREFERENCES.assistantInstructions,
     ollamaOptions: {
-      temperature:
-        typeof (raw["ollamaOptions"] as Record<string, unknown> | undefined)?.[
-          "temperature"
-        ] === "number"
-          ? ((raw["ollamaOptions"] as Record<string, unknown>)[
-              "temperature"
-            ] as number)
-          : DEFAULT_PREFERENCES.ollamaOptions.temperature,
-      top_p:
-        typeof (raw["ollamaOptions"] as Record<string, unknown> | undefined)?.[
-          "top_p"
-        ] === "number"
-          ? ((raw["ollamaOptions"] as Record<string, unknown>)[
-              "top_p"
-            ] as number)
-          : DEFAULT_PREFERENCES.ollamaOptions.top_p,
-      top_k:
-        typeof (raw["ollamaOptions"] as Record<string, unknown> | undefined)?.[
-          "top_k"
-        ] === "number"
-          ? ((raw["ollamaOptions"] as Record<string, unknown>)[
-              "top_k"
-            ] as number)
-          : DEFAULT_PREFERENCES.ollamaOptions.top_k,
-      num_ctx:
-        typeof (raw["ollamaOptions"] as Record<string, unknown> | undefined)?.[
-          "num_ctx"
-        ] === "number"
-          ? ((raw["ollamaOptions"] as Record<string, unknown>)[
-              "num_ctx"
-            ] as number)
-          : DEFAULT_PREFERENCES.ollamaOptions.num_ctx,
-      repeat_penalty:
-        typeof (raw["ollamaOptions"] as Record<string, unknown> | undefined)?.[
-          "repeat_penalty"
-        ] === "number"
-          ? ((raw["ollamaOptions"] as Record<string, unknown>)[
-              "repeat_penalty"
-            ] as number)
-          : DEFAULT_PREFERENCES.ollamaOptions.repeat_penalty,
+      temperature: numOpt(rawOpts, "temperature", d.temperature),
+      top_p: numOpt(rawOpts, "top_p", d.top_p),
+      top_k: numOpt(rawOpts, "top_k", d.top_k),
+      num_ctx: numOpt(rawOpts, "num_ctx", d.num_ctx),
+      repeat_penalty: numOpt(rawOpts, "repeat_penalty", d.repeat_penalty),
     },
   };
 }

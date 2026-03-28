@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 import { generateAndPushNotification } from "./generate.logic";
 import { isSupportedLanguage, DEFAULT_LANGUAGE } from "@/types/i18n";
 
@@ -33,7 +33,7 @@ export async function onUserCreated(user: {
   id: string;
   name?: string | null;
 }): Promise<void> {
-  const record = await prisma.user.findUnique({
+  const record = await db.user.findUnique({
     where: { id: user.id },
     select: { preferences: true },
   });
@@ -56,7 +56,7 @@ export async function onUserCreated(user: {
 export async function onSessionCreated(session: {
   userId: string;
 }): Promise<void> {
-  const user = await prisma.user.findUnique({
+  const user = await db.user.findUnique({
     where: { id: session.userId },
     select: { name: true, createdAt: true, preferences: true },
   });

@@ -24,24 +24,18 @@ export async function PATCH(req: Request, { params }: Params) {
   if (
     typeof body !== "object" ||
     body === null ||
+    Array.isArray(body) ||
     (body.read === undefined && body.dismissed === undefined)
   ) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const input: {
-    id: string;
-    userId: string;
-    read?: boolean;
-    dismissed?: boolean;
-  } = {
+  const updated = await updateNotification({
     id,
     userId: session.user.id,
-  };
-  if (body.read !== undefined) input.read = body.read;
-  if (body.dismissed !== undefined) input.dismissed = body.dismissed;
-
-  const updated = await updateNotification(input);
+    ...(body.read !== undefined && { read: body.read }),
+    ...(body.dismissed !== undefined && { dismissed: body.dismissed }),
+  });
 
   if (!updated) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });

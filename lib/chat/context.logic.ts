@@ -16,16 +16,12 @@ import { type OllamaMessage } from "@/lib/chat/ollama";
 export async function buildSystemPrompt(
   userId: string,
   chatId: string,
+  customInstructions: string | null,
 ): Promise<OllamaMessage> {
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { name: true, email: true, timezone: true, preferences: true },
+    select: { name: true, timezone: true },
   });
-
-  const prefs =
-    user?.preferences && typeof user.preferences === "object"
-      ? (user.preferences as Record<string, unknown>)
-      : {};
 
   const tz = user?.timezone ?? "UTC";
   const now = new Date().toLocaleDateString("en-US", {
@@ -35,12 +31,6 @@ export async function buildSystemPrompt(
     day: "numeric",
     timeZone: tz,
   });
-
-  const customInstructions =
-    typeof prefs["assistantInstructions"] === "string" &&
-    prefs["assistantInstructions"].trim()
-      ? prefs["assistantInstructions"].trim()
-      : null;
 
   const lines: string[] = [
     `You are the private executive assistant for ${user?.name ?? "the user"}.`,
