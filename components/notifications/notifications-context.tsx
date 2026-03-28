@@ -8,10 +8,41 @@
 import * as React from "react";
 import type { NotificationRecord } from "@/types/api";
 import { useNotice } from "@/components/shared/notice-context";
+import { useLanguage } from "@/hooks/use-language";
 
 // Module-level set: tracks notification IDs that have already triggered a
-// pop-up banner in this browser session. Survives context remounts.
-const shownNoticeIds = new Set<string>();
+// pop-up banner in this browser session. Persisted to sessionStorage so it
+// survives page reloads (e.g. after cookie deletion) within the same tab session.
+const SHOWN_KEY = "akhiil-shown-notices";
+
+function loadShownIds(): Set<string> {
+  if (typeof sessionStorage === "undefined") return new Set();
+  try {
+    const raw = sessionStorage.getItem(SHOWN_KEY);
+    return new Set<string>(raw ? (JSON.parse(raw) as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+const shownNoticeIds: Set<string> = loadShownIds();
+
+// Captured once when JS module first loads — used as a precise page-load
+// cutoff so initial-fetch pop-ups only fire for notifications that were
+// created around or after this page load, not from previous sessions.
+const PAGE_LOAD_EPOCH =
+  typeof performance !== "undefined" ? performance.timeOrigin : Date.now();
+
+function addShownId(id: string): void {
+  shownNoticeIds.add(id);
+  if (typeof sessionStorage !== "undefined") {
+    try {
+      sessionStorage.setItem(SHOWN_KEY, JSON.stringify([...shownNoticeIds]));
+    } catch {
+      // sessionStorage unavailable (e.g. private mode quota) — degrade silently
+    }
+  }
+}
 
 interface NotificationsContextValue {
   notifications: NotificationRecord[];
@@ -35,6 +66,20 @@ export function NotificationsProvider({
     NotificationRecord[]
   >([]);
   const { addNotice } = useNotice();
+  const { language } = useLanguage();
+
+  // Keep DB language in sync with whatever the client is showing.
+  // This ensures server-side hooks (e.g. greeting notifications) always
+  // use the correct locale, even when the cookie was set by client-side
+  // detection rather than an explicit user action.
+  React.useEffect(() => {
+    if (!authenticated) return;
+    void fetch("/api/settings", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ language }),
+    });
+  }, [authenticated, language]);
 
   // Ref so the SSE handler always sees the latest addNotice without re-running the effect
   const addNoticeRef = React.useRef(addNotice);
@@ -64,9 +109,16 @@ export function NotificationsProvider({
           setNotifications(data.notifications);
           for (const n of data.notifications) {
             initialIds.add(n.id);
-            const ageMs = Date.now() - new Date(n.createdAt).getTime();
-            if (!n.read && ageMs < 30_000 && !shownNoticeIds.has(n.id)) {
-              shownNoticeIds.add(n.id);
+            // Only pop notifications created around or after this page load.
+            // Using PAGE_LOAD_EPOCH (not a rolling 30s window) prevents old
+            // unread notifications from re-popping after a browser data wipe.
+            const notifTime = new Date(n.createdAt).getTime();
+            if (
+              !n.read &&
+              notifTime > PAGE_LOAD_EPOCH - 15_000 &&
+              !shownNoticeIds.has(n.id)
+            ) {
+              addShownId(n.id);
               addNoticeRef.current({
                 type: "info",
                 title: n.title,
@@ -96,7 +148,7 @@ export function NotificationsProvider({
             !initialIds.has(notification.id) &&
             !shownNoticeIds.has(notification.id)
           ) {
-            shownNoticeIds.add(notification.id);
+            addShownId(notification.id);
             addNoticeRef.current({
               type: "info",
               title: notification.title,
