@@ -9,11 +9,27 @@ import { useState } from "react";
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import { NoticePanel } from "@/components/shared";
 import { useNotice } from "@/components/shared";
 import { getMessage } from "@/lib/i18n";
 import type { PersonalInfoFields } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
+
+// These keys are always shown and always sent to the LLM regardless of whether
+// the user fills them in. Their order is stable here so the LLM sees them
+// consistently. Do not reorder without also updating personal-info.slot.ts.
+const CONSTANT_KEYS = [
+  "name",
+  "age",
+  "jobTitle",
+  "company",
+  "location",
+  "bio",
+] as const;
+
+type ConstantKey = (typeof CONSTANT_KEYS)[number];
 
 interface PersonalInfoFormProps {
   messages: MessageDictionary;
@@ -25,25 +41,42 @@ export function PersonalInfoForm({
   initialFields,
 }: PersonalInfoFormProps) {
   const { addNotice } = useNotice();
-  const [rows, setRows] = useState<{ key: string; value: string }[]>(() =>
-    Object.entries(initialFields).map(([k, v]) => ({
-      key: k,
-      value: v == null ? "" : String(v),
-    })),
+
+  const [constantValues, setConstantValues] = useState<
+    Record<ConstantKey, string>
+  >(() => {
+    const acc = {} as Record<ConstantKey, string>;
+    for (const k of CONSTANT_KEYS) {
+      const v = initialFields[k];
+      acc[k] = v == null ? "" : String(v);
+    }
+    return acc;
+  });
+
+  const [extraRows, setExtraRows] = useState<{ key: string; value: string }[]>(
+    () =>
+      Object.entries(initialFields)
+        .filter(([k]) => !(CONSTANT_KEYS as readonly string[]).includes(k))
+        .map(([k, v]) => ({ key: k, value: v == null ? "" : String(v) })),
   );
+
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function addRow() {
-    setRows((prev) => [...prev, { key: "", value: "" }]);
+  function addExtraRow() {
+    setExtraRows((prev) => [...prev, { key: "", value: "" }]);
   }
 
-  function removeRow(index: number) {
-    setRows((prev) => prev.filter((_, i) => i !== index));
+  function removeExtraRow(index: number) {
+    setExtraRows((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function updateRow(index: number, field: "key" | "value", value: string) {
-    setRows((prev) =>
+  function updateExtraRow(
+    index: number,
+    field: "key" | "value",
+    value: string,
+  ) {
+    setExtraRows((prev) =>
       prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
     );
   }
@@ -52,8 +85,8 @@ export function PersonalInfoForm({
     setError(null);
     setSaving(true);
 
-    const fields: PersonalInfoFields = {};
-    for (const row of rows) {
+    const fields: PersonalInfoFields = { ...constantValues };
+    for (const row of extraRows) {
       const k = row.key.trim();
       if (k) fields[k] = row.value.trim();
     }
@@ -101,7 +134,7 @@ export function PersonalInfoForm({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {error && (
         <NoticePanel
           type="error"
@@ -111,93 +144,147 @@ export function PersonalInfoForm({
         />
       )}
 
-      {rows.length === 0 && (
-        <div className="rounded-xl border border-dashed border-border/70 bg-card/40 px-6 py-10 text-center">
-          <p className="font-medium">
-            {getMessage(
-              messages,
-              "knowledge.personalInfo.empty",
-              "No personal info saved yet.",
-            )}
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {getMessage(
-              messages,
-              "knowledge.personalInfo.emptyBody",
-              "Add your name, job, location, or any context the assistant should know about you.",
-            )}
-          </p>
+      {/* ── Core fields ─────────────────────────────────────────────── */}
+      <section className="space-y-3">
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          {getMessage(
+            messages,
+            "knowledge.personalInfo.coreSection",
+            "Core details",
+          )}
+        </p>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          {(["name", "age", "jobTitle", "company", "location"] as const).map(
+            (key) => (
+              <div key={key} className="flex flex-col gap-1">
+                <label className="text-sm font-medium">
+                  {getMessage(
+                    messages,
+                    `knowledge.personalInfo.field.${key}`,
+                    key,
+                  )}
+                </label>
+                <Input
+                  value={constantValues[key]}
+                  onChange={(e) =>
+                    setConstantValues((prev) => ({
+                      ...prev,
+                      [key]: e.target.value,
+                    }))
+                  }
+                  placeholder={getMessage(
+                    messages,
+                    `knowledge.personalInfo.field.${key}.placeholder`,
+                    "",
+                  )}
+                />
+              </div>
+            ),
+          )}
         </div>
-      )}
 
-      {rows.length > 0 && (
-        <ul className="space-y-2">
-          {rows.map((row, i) => (
-            <li key={i} className="flex items-center gap-2">
-              <Input
-                value={row.key}
-                onChange={(e) => updateRow(i, "key", e.target.value)}
-                placeholder={getMessage(
-                  messages,
-                  "knowledge.personalInfo.keyPlaceholder",
-                  "Field name",
-                )}
-                className="w-36 shrink-0"
-                aria-label={getMessage(
-                  messages,
-                  "knowledge.personalInfo.keyPlaceholder",
-                  "Field name",
-                )}
-              />
-              <Input
-                value={row.value}
-                onChange={(e) => updateRow(i, "value", e.target.value)}
-                placeholder={getMessage(
-                  messages,
-                  "knowledge.personalInfo.valuePlaceholder",
-                  "Value",
-                )}
-                className="flex-1"
-                aria-label={getMessage(
-                  messages,
-                  "knowledge.personalInfo.valuePlaceholder",
-                  "Value",
-                )}
-              />
-              <Button
-                variant="ghost"
-                size="icon"
-                className="cursor-pointer shrink-0 text-muted-foreground hover:text-destructive"
-                onClick={() => removeRow(i)}
-                aria-label={getMessage(
-                  messages,
-                  "knowledge.personalInfo.removeField",
-                  "Remove field",
-                )}
-              >
-                <X className="size-4" />
-              </Button>
-            </li>
-          ))}
-        </ul>
-      )}
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">
+            {getMessage(messages, "knowledge.personalInfo.field.bio", "Bio")}
+          </label>
+          <Textarea
+            value={constantValues.bio}
+            onChange={(e) =>
+              setConstantValues((prev) => ({ ...prev, bio: e.target.value }))
+            }
+            placeholder={getMessage(
+              messages,
+              "knowledge.personalInfo.field.bio.placeholder",
+              "Short note about yourself",
+            )}
+            rows={3}
+            className="resize-none"
+          />
+        </div>
+      </section>
 
-      <div className="flex items-center justify-between pt-2">
+      <Separator />
+
+      {/* ── Extra fields ─────────────────────────────────────────────── */}
+      <section className="space-y-3">
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          {getMessage(
+            messages,
+            "knowledge.personalInfo.extraSection",
+            "Additional context",
+          )}
+        </p>
+
+        {extraRows.length > 0 && (
+          <ul className="space-y-2">
+            {extraRows.map((row, i) => (
+              <li key={i} className="flex items-center gap-2">
+                <Input
+                  value={row.key}
+                  onChange={(e) => updateExtraRow(i, "key", e.target.value)}
+                  placeholder={getMessage(
+                    messages,
+                    "knowledge.personalInfo.keyPlaceholder",
+                    "Field name",
+                  )}
+                  className="w-36 shrink-0"
+                  aria-label={getMessage(
+                    messages,
+                    "knowledge.personalInfo.keyPlaceholder",
+                    "Field name",
+                  )}
+                />
+                <Input
+                  value={row.value}
+                  onChange={(e) => updateExtraRow(i, "value", e.target.value)}
+                  placeholder={getMessage(
+                    messages,
+                    "knowledge.personalInfo.valuePlaceholder",
+                    "Value",
+                  )}
+                  className="flex-1"
+                  aria-label={getMessage(
+                    messages,
+                    "knowledge.personalInfo.valuePlaceholder",
+                    "Value",
+                  )}
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="cursor-pointer shrink-0 text-muted-foreground hover:text-destructive"
+                  onClick={() => removeExtraRow(i)}
+                  aria-label={getMessage(
+                    messages,
+                    "knowledge.personalInfo.removeField",
+                    "Remove field",
+                  )}
+                >
+                  <X className="size-4" />
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+
         <Button
           variant="outline"
           size="sm"
           className="cursor-pointer gap-1.5"
-          onClick={addRow}
-          aria-label={getMessage(
-            messages,
-            "knowledge.personalInfo.addField",
-            "Add field",
-          )}
+          onClick={addExtraRow}
         >
           <Plus className="size-4" />
-          {getMessage(messages, "knowledge.personalInfo.addField", "Add field")}
+          {getMessage(
+            messages,
+            "knowledge.personalInfo.addField",
+            "Add custom field",
+          )}
         </Button>
+      </section>
 
+      {/* ── Save ─────────────────────────────────────────────────────── */}
+      <div className="flex justify-end pt-1">
         <Button
           size="sm"
           disabled={saving}
