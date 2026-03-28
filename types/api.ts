@@ -20,3 +20,14 @@ export interface NotificationRecord {
   metadata: Record<string, unknown> | null;
   createdAt: string; // ISO string on the client
 }
+
+/** Client-safe shape of a KnowledgeDocument (no chunks, no embeddings). */
+export interface KnowledgeDocumentRecord {
+  id: string;
+  name: string;
+  charCount: number;
+  createdAt: string; // ISO string on the client
+}
+
+/** Client-safe shape of the PersonalInfo fields map. */
+export type PersonalInfoFields = Record<string, string | number | null>;

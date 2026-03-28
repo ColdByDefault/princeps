@@ -202,5 +202,35 @@
   "settings.model.repeatPenalty": "Repeat penalty",
   "settings.model.repeatPenaltyDesc": "Penalizes repeated tokens. Higher values reduce repetition.",
   "settings.section.language": "Language",
-  "settings.language.description": "Language used throughout the app and in assistant messages."
+  "settings.language.description": "Language used throughout the app and in assistant messages.",
+
+  "knowledge.metadata.title": "Knowledge Base",
+  "knowledge.metadata.description": "Manage your private knowledge and personal information.",
+  "knowledge.tab.documents": "Knowledge Base",
+  "knowledge.tab.personalInfo": "Personal Info",
+
+  "knowledge.documents.empty": "No documents uploaded yet.",
+  "knowledge.documents.emptyBody": "Upload a .txt or .md file to give the assistant access to your knowledge.",
+  "knowledge.documents.upload": "Upload file",
+  "knowledge.documents.uploading": "Uploading\u2026",
+  "knowledge.documents.uploadSuccess": "Document uploaded.",
+  "knowledge.documents.uploadError": "Upload failed. Please try again.",
+  "knowledge.documents.fileTypeError": "Only .txt and .md files are accepted.",
+  "knowledge.documents.deleteTitle": "Delete this document?",
+  "knowledge.documents.deleteDescription": "This will permanently remove the document and all its stored chunks.",
+  "knowledge.documents.deleteConfirm": "Delete",
+  "knowledge.documents.deleteSuccess": "Document deleted.",
+  "knowledge.documents.deleteError": "Could not delete document.",
+  "knowledge.documents.chars": "chars",
+
+  "knowledge.personalInfo.save": "Save",
+  "knowledge.personalInfo.saving": "Saving\u2026",
+  "knowledge.personalInfo.saved": "Personal info saved.",
+  "knowledge.personalInfo.saveError": "Failed to save. Please try again.",
+  "knowledge.personalInfo.addField": "Add field",
+  "knowledge.personalInfo.removeField": "Remove field",
+  "knowledge.personalInfo.keyPlaceholder": "Field name",
+  "knowledge.personalInfo.valuePlaceholder": "Value",
+  "knowledge.personalInfo.empty": "No personal info saved yet.",
+  "knowledge.personalInfo.emptyBody": "Add your name, job, location, or any context the assistant should know about you."
 }

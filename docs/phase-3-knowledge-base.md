@@ -213,12 +213,12 @@ components/
 
 ### Decisions Made
 
-| #   | Decision                                                                                                                                                                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Embedding model read from `EMBEDDING_MODEL` env var (e.g. `nomic-embed-text`). Vector column dimension must match the chosen model — set once and documented in `.env.example`. |
-| 2   | Top-k defaults to **5** chunks per chat request. Configurable per user in a future settings update.                                                                             |
-| 3   | Uploaded files are never stored. Only chunks are persisted. No file-level deletion concept — deleting a `KnowledgeDocument` cascades to its chunks.                             |
-| 4   | Per-upload raw text size cap: **1 MB**, enforced before chunking. Tier quota caps managed in the tier phase.                                                                    |
+| #   | Decision                                                                                                                                                                                                                                                                                                                                                                            |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Embedding model read from `OLLAMA_EMBED_MODEL` env var. Configured as `qwen3-embedding:8b` (4096 dims). pgvector index types cap at 2000 dims (vector) and 4000 dims (halfvec HNSW) — both are below 4096. Sequential scan (`<=>`) is used instead; it is sufficient at free-tier scale (≤5 documents). If a ≤2000-dim model is switched to later, add an HNSW index at that point. |
+| 2   | Top-k defaults to **5** chunks per chat request. Configurable per user in a future settings update.                                                                                                                                                                                                                                                                                 |
+| 3   | Uploaded files are never stored. Only chunks are persisted. No file-level deletion concept — deleting a `KnowledgeDocument` cascades to its chunks.                                                                                                                                                                                                                                 |
+| 4   | Per-upload raw text size cap: **1 MB**, enforced before chunking. Tier quota caps managed in the tier phase.                                                                                                                                                                                                                                                                        |
 
 ---
 

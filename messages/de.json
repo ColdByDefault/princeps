@@ -202,5 +202,35 @@
   "settings.model.repeatPenalty": "Wiederholungsstrafe",
   "settings.model.repeatPenaltyDesc": "Bestraft wiederholte Tokens. Höhere Werte reduzieren Wiederholungen.",
   "settings.section.language": "Sprache",
-  "settings.language.description": "Sprache, die in der gesamten App und in Assistenten-Nachrichten verwendet wird."
+  "settings.language.description": "Sprache, die in der gesamten App und in Assistenten-Nachrichten verwendet wird.",
+
+  "knowledge.metadata.title": "Wissensbasis",
+  "knowledge.metadata.description": "Verwalte deine private Wissensbasis und pers\u00f6nliche Informationen.",
+  "knowledge.tab.documents": "Wissensbasis",
+  "knowledge.tab.personalInfo": "Pers\u00f6nliche Infos",
+
+  "knowledge.documents.empty": "Noch keine Dokumente hochgeladen.",
+  "knowledge.documents.emptyBody": "Lade eine .txt- oder .md-Datei hoch, damit der Assistent auf dein Wissen zugreifen kann.",
+  "knowledge.documents.upload": "Datei hochladen",
+  "knowledge.documents.uploading": "Wird hochgeladen\u2026",
+  "knowledge.documents.uploadSuccess": "Dokument hochgeladen.",
+  "knowledge.documents.uploadError": "Upload fehlgeschlagen. Bitte erneut versuchen.",
+  "knowledge.documents.fileTypeError": "Nur .txt- und .md-Dateien werden akzeptiert.",
+  "knowledge.documents.deleteTitle": "Dieses Dokument l\u00f6schen?",
+  "knowledge.documents.deleteDescription": "Das Dokument und alle gespeicherten Abschnitte werden dauerhaft entfernt.",
+  "knowledge.documents.deleteConfirm": "L\u00f6schen",
+  "knowledge.documents.deleteSuccess": "Dokument gel\u00f6scht.",
+  "knowledge.documents.deleteError": "Dokument konnte nicht gel\u00f6scht werden.",
+  "knowledge.documents.chars": "Zeichen",
+
+  "knowledge.personalInfo.save": "Speichern",
+  "knowledge.personalInfo.saving": "Wird gespeichert\u2026",
+  "knowledge.personalInfo.saved": "Pers\u00f6nliche Infos gespeichert.",
+  "knowledge.personalInfo.saveError": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
+  "knowledge.personalInfo.addField": "Feld hinzuf\u00fcgen",
+  "knowledge.personalInfo.removeField": "Feld entfernen",
+  "knowledge.personalInfo.keyPlaceholder": "Feldname",
+  "knowledge.personalInfo.valuePlaceholder": "Wert",
+  "knowledge.personalInfo.empty": "Noch keine pers\u00f6nlichen Infos gespeichert.",
+  "knowledge.personalInfo.emptyBody": "F\u00fcge deinen Namen, Beruf, Standort oder anderen Kontext hinzu, den der Assistent \u00fcber dich wissen soll."
 }
