@@ -16,16 +16,12 @@ import { type OllamaMessage } from "@/lib/chat/ollama";
 export async function buildSystemPrompt(
   userId: string,
   chatId: string,
+  customInstructions: string | null,
 ): Promise<OllamaMessage> {
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { name: true, email: true, timezone: true, preferences: true },
+    select: { name: true, timezone: true },
   });
-
-  const prefs =
-    user?.preferences && typeof user.preferences === "object"
-      ? (user.preferences as Record<string, unknown>)
-      : {};
 
   const tz = user?.timezone ?? "UTC";
   const now = new Date().toLocaleDateString("en-US", {
@@ -36,21 +32,17 @@ export async function buildSystemPrompt(
     timeZone: tz,
   });
 
-  const customInstructions =
-    typeof prefs["assistantInstructions"] === "string" &&
-    prefs["assistantInstructions"].trim()
-      ? prefs["assistantInstructions"].trim()
-      : null;
-
   const lines: string[] = [
     `You are the private executive assistant for ${user?.name ?? "the user"}.`,
     `Today is ${now} (${tz}).`,
     "",
     "Behavior:",
+    "- Be warm and natural in tone — greet back when greeted, match the user's conversational register.",
     "- Be direct, concise, and actionable.",
     "- Make reasonable inferences — do not ask clarifying questions unless absolutely necessary.",
     "- Do not offer to draft emails, messages, or communications unless the user explicitly asks.",
     "- Focus on decisions, planning, preparation, and follow-through.",
+    "- Always respond in the same language the user writes in. If the user writes in German, respond fully in German. If the user writes in English, respond fully in English.",
   ];
 
   if (customInstructions) {

@@ -71,11 +71,21 @@ export async function POST(req: Request, { params }: Params) {
 
   const isFirstMessage = chatData.messages.length === 0;
 
-  // Build the system prompt from all available context
-  const systemMessage = await buildSystemPrompt(session.user.id, chatId);
+  // Set the title eagerly from the first user message so it persists even
+  // if the Ollama stream later fails or produces no content.
+  if (isFirstMessage) {
+    await setInitialTitle(chatId, userMessage);
+  }
 
-  // Load user preferences for inference options
-  const { ollamaOptions } = await getUserPreferences(session.user.id);
+  // Load user preferences for inference options and custom instructions
+  const preferences = await getUserPreferences(session.user.id);
+
+  // Build the system prompt from all available context
+  const systemMessage = await buildSystemPrompt(
+    session.user.id,
+    chatId,
+    preferences.assistantInstructions.trim() || null,
+  );
 
   // Map stored messages to Ollama format
   const historyMessages = chatData.messages.map((m) => ({
@@ -96,7 +106,7 @@ export async function POST(req: Request, { params }: Params) {
     ollamaResponse = await streamOllamaChat(
       ollamaMessages,
       think,
-      ollamaOptions,
+      preferences.ollamaOptions,
     );
   } catch {
     return NextResponse.json(
@@ -189,11 +199,6 @@ export async function POST(req: Request, { params }: Params) {
           );
 
           await touchChat(chatId);
-
-          // Set title from first user message
-          if (isFirstMessage) {
-            await setInitialTitle(chatId, userMessage);
-          }
         }
 
         send({ type: "done" });

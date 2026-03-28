@@ -8,6 +8,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import type { Prisma } from "@/lib/generated/prisma/client";
 import { type UserPreferences, DEFAULT_PREFERENCES } from "@/types/settings";
+import { isSupportedLanguage } from "@/types/i18n";
 
 export async function updateUserPreferences(
   userId: string,
@@ -30,6 +31,10 @@ export async function updateUserPreferences(
   const merged: Record<string, unknown> = {
     ...existing,
   };
+
+  if (patch.language !== undefined && isSupportedLanguage(patch.language)) {
+    merged["language"] = patch.language;
+  }
 
   if (patch.assistantInstructions !== undefined) {
     merged["assistantInstructions"] = patch.assistantInstructions

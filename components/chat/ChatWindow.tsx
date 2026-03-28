@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Send, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,11 +15,37 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
+import { Progress } from "@/components/ui/progress";
 import { getMessage } from "@/lib/i18n";
 import { type ChatMessageData } from "@/types/chat";
 import { type MessageDictionary } from "@/types/i18n";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+
+// ---------------------------------------------------------------------------
+// localStorage-backed think toggle store
+// ---------------------------------------------------------------------------
+const THINK_KEY = "ssweet:think";
+
+function subscribeThink(cb: () => void) {
+  window.addEventListener("ssweet:think-changed", cb);
+  return () => window.removeEventListener("ssweet:think-changed", cb);
+}
+function getThinkSnapshot() {
+  try {
+    return localStorage.getItem(THINK_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+function setThinkPersisted(value: boolean) {
+  try {
+    localStorage.setItem(THINK_KEY, String(value));
+  } catch {
+    // ignore — storage unavailable
+  }
+  window.dispatchEvent(new Event("ssweet:think-changed"));
+}
 
 type Props = {
   chatId: string;
@@ -28,7 +54,7 @@ type Props = {
 };
 
 type LiveMessage =
-  | (ChatMessageData & { streaming?: false })
+  | (ChatMessageData & { streaming?: false; hadThinking?: boolean })
   | {
       id: string;
       role: "user" | "assistant";
@@ -41,9 +67,14 @@ type LiveMessage =
 export function ChatWindow({ chatId, initialMessages, messages }: Props) {
   const [msgs, setMsgs] = useState<LiveMessage[]>(initialMessages);
   const [input, setInput] = useState("");
-  const [think, setThink] = useState(false);
+  const think = useSyncExternalStore(
+    subscribeThink,
+    getThinkSnapshot,
+    () => false,
+  );
   const [streaming, setStreaming] = useState(false);
   const inFlightRef = useRef(false);
+  const hadThinkingRef = useRef(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -70,6 +101,7 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
     setMsgs((prev) => [...prev, userMsg]);
 
     // Placeholder for assistant response
+    hadThinkingRef.current = false;
     const assistantId = `tmp-assistant-${Date.now()}`;
     const assistantPlaceholder: LiveMessage = {
       id: assistantId,
@@ -115,6 +147,7 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
           }
 
           if (event.type === "thinking") {
+            hadThinkingRef.current = true;
             setMsgs((prev) =>
               prev.map((m) =>
                 m.id === assistantId && "streaming" in m && m.streaming
@@ -131,10 +164,16 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
               ),
             );
           } else if (event.type === "done") {
+            const usedThinking = hadThinkingRef.current;
             setMsgs((prev) =>
               prev.map((m) =>
                 m.id === assistantId && "streaming" in m && m.streaming
-                  ? { ...m, streaming: false, isThinking: false }
+                  ? {
+                      ...m,
+                      streaming: false,
+                      isThinking: false,
+                      hadThinking: usedThinking,
+                    }
                   : m,
               ),
             );
@@ -171,9 +210,9 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
   const isEmpty = msgs.length === 0;
 
   return (
-    <div className="flex h-full flex-col">
-      {/* Message list */}
-      <div className="flex-1 overflow-y-auto px-4 py-6">
+    <div className="flex flex-1 min-h-0 flex-col">
+      {/* Message list — only this scrolls */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6">
         {isEmpty ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
             <p className="text-base font-medium text-foreground">
@@ -197,6 +236,11 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
                   messages,
                   "chat.thinking",
                   "Thinking…",
+                )}
+                reasonedLabel={getMessage(
+                  messages,
+                  "chat.reasoned",
+                  "Model reasoned",
                 )}
               />
             ))}
@@ -234,7 +278,7 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
                       </span>
                       <Switch
                         checked={think}
-                        onCheckedChange={setThink}
+                        onCheckedChange={setThinkPersisted}
                         disabled={streaming}
                         aria-label={getMessage(
                           messages,
@@ -276,12 +320,14 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
 type BubbleProps = {
   msg: LiveMessage;
   thinkingLabel: string;
+  reasonedLabel: string;
 };
 
-function MessageBubble({ msg, thinkingLabel }: BubbleProps) {
+function MessageBubble({ msg, thinkingLabel, reasonedLabel }: BubbleProps) {
   const isUser = msg.role === "user";
   const isThinking = "isThinking" in msg && msg.isThinking;
   const isStreamingEmpty = "streaming" in msg && msg.streaming && !msg.content;
+  const hadThinking = "hadThinking" in msg && msg.hadThinking;
 
   return (
     <div
@@ -296,16 +342,22 @@ function MessageBubble({ msg, thinkingLabel }: BubbleProps) {
         )}
       >
         {isThinking || isStreamingEmpty ? (
-          <span className="flex items-center gap-1.5 text-muted-foreground italic">
-            <span className="inline-flex gap-0.5">
-              <span className="animate-bounce [animation-delay:0ms]">·</span>
-              <span className="animate-bounce [animation-delay:150ms]">·</span>
-              <span className="animate-bounce [animation-delay:300ms]">·</span>
+          <div className="flex flex-col gap-2 py-1 w-40">
+            <span className="text-xs text-muted-foreground italic">
+              {thinkingLabel}
             </span>
-            {thinkingLabel}
-          </span>
+            <Progress value={null} className="w-full" />
+          </div>
         ) : (
-          <p className="whitespace-pre-wrap wrap-break-word">{msg.content}</p>
+          <>
+            {hadThinking && (
+              <span className="mb-2 inline-flex items-center gap-1 rounded-full border border-muted-foreground/20 bg-muted/60 px-2 py-0.5 text-xs text-muted-foreground">
+                <Brain className="size-3" />
+                {reasonedLabel}
+              </span>
+            )}
+            <p className="whitespace-pre-wrap wrap-break-word">{msg.content}</p>
+          </>
         )}
       </div>
     </div>

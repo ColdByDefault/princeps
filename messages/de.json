@@ -155,6 +155,8 @@
   "chat.sidebar.deleteTitle": "Diesen Chat löschen?",
   "chat.sidebar.deleteDescription": "Dieser Chat und alle seine Nachrichten werden dauerhaft gelöscht.",
   "chat.sidebar.deleteConfirm": "Löschen",
+  "chat.sidebar.deleteSuccess": "Chat gelöscht.",
+  "chat.sidebar.renameSuccess": "Chat umbenannt.",
   "chat.metadata.description": "Dein privater Chat-Workspace.",
   "chat.input.placeholder": "Stell eine Frage\u2026",
   "chat.input.send": "Senden",
@@ -163,6 +165,7 @@
   "chat.empty.title": "Gespräch beginnen",
   "chat.empty.body": "Sende eine Nachricht, um zu starten.",
   "chat.thinking": "Denkt nach\u2026",
+  "chat.reasoned": "Modell hat nachgedacht",
   "chat.error.send": "Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
   "chat.error.load": "Nachrichten konnten nicht geladen werden.",
   "chat.rename.title": "Chat umbenennen",
@@ -171,6 +174,12 @@
   "chat.rename.submitting": "Wird umbenannt\u2026",
   "shared.cancel": "Abbrechen",
   "shared.dismiss": "Schließen",
+  "notifications.bell": "Benachrichtigungen",
+  "notifications.panelTitle": "Benachrichtigungen",
+  "notifications.empty": "Noch keine Benachrichtigungen.",
+  "notifications.dismiss": "Schließen",
+  "notifications.markRead": "Als gelesen markieren",
+  "notifications.new": "Neu",
   "settings.title": "Einstellungen",
   "settings.loading": "Lädt…",
   "settings.saving": "Wird gespeichert…",
@@ -191,5 +200,7 @@
   "settings.model.numCtx": "Kontextfenster",
   "settings.model.numCtxDesc": "Anzahl der Tokens, die das Modell gleichzeitig verarbeiten kann.",
   "settings.model.repeatPenalty": "Wiederholungsstrafe",
-  "settings.model.repeatPenaltyDesc": "Bestraft wiederholte Tokens. Höhere Werte reduzieren Wiederholungen."
+  "settings.model.repeatPenaltyDesc": "Bestraft wiederholte Tokens. Höhere Werte reduzieren Wiederholungen.",
+  "settings.section.language": "Sprache",
+  "settings.language.description": "Sprache, die in der gesamten App und in Assistenten-Nachrichten verwendet wird."
 }

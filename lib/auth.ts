@@ -1,6 +1,10 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/db";
+import {
+  onUserCreated,
+  onSessionCreated,
+} from "@/lib/notifications/greetings.logic";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -46,6 +50,19 @@ export const auth = betterAuth({
       preferences: {
         type: "string",
         defaultValue: "{}",
+      },
+    },
+  },
+
+  databaseHooks: {
+    user: {
+      create: {
+        after: onUserCreated,
+      },
+    },
+    session: {
+      create: {
+        after: onSessionCreated,
       },
     },
   },

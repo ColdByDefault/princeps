@@ -32,6 +32,7 @@ model User {
   sessions           Session[]
   accounts           Account[]
   chats              Chat[]
+  notifications      Notification[]
 
   @@map("user")
 }
@@ -108,5 +109,25 @@ model ChatMessage {
   chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
 
   @@map("chat_message")
+}
+
+// ─── Notifications ─────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  category  String   // e.g. "welcome_signup" | "welcome_login" | "system" | "token_limit"
+  source    String   @default("assistant") // "assistant" | "system"
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  dismissed Boolean  @default(false)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, dismissed, createdAt(sort: Desc)])
+  @@map("notification")
 }
 

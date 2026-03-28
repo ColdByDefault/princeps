@@ -33,7 +33,7 @@ export async function PATCH(req: Request) {
 
   const body = (await req.json()) as Partial<UserPreferences>;
 
-  if (typeof body !== "object" || body === null) {
+  if (typeof body !== "object" || body === null || Array.isArray(body)) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 

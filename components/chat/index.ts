@@ -4,3 +4,6 @@
  */
 
 export { ChatWindow } from "./ChatWindow";
+export { AppSidebar } from "./app-sidebar";
+export { SiteHeader } from "./site-header";
+export { SettingsDialog } from "@/components/shared/SettingsDialog";

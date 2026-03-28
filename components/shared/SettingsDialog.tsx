@@ -6,6 +6,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -17,9 +18,17 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { getMessage } from "@/lib/i18n";
-import { type MessageDictionary } from "@/types/i18n";
+import { type MessageDictionary, type AppLanguage } from "@/types/i18n";
 import { type UserPreferences, DEFAULT_PREFERENCES } from "@/types/settings";
+import { useLanguage } from "@/hooks/use-language";
 import { CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -75,6 +84,8 @@ function SliderField({
 }
 
 export function SettingsDialog({ open, onOpenChange, messages }: Props) {
+  const router = useRouter();
+  const { language: clientLanguage, changeLanguage } = useLanguage();
   const [prefs, setPrefs] = useState<UserPreferences>(DEFAULT_PREFERENCES);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -112,6 +123,13 @@ export function SettingsDialog({ open, onOpenChange, messages }: Props) {
         body: JSON.stringify(prefs),
       });
       if (!res.ok) throw new Error();
+
+      // Sync cookie/localStorage so the full app UI reflects the saved language
+      if (prefs.language !== clientLanguage) {
+        changeLanguage(prefs.language);
+        router.refresh();
+      }
+
       toast.success(getMessage(messages, "settings.saved", "Settings saved"), {
         icon: <CheckCircle2 className="size-4 text-emerald-500" />,
       });
@@ -144,6 +162,40 @@ export function SettingsDialog({ open, onOpenChange, messages }: Props) {
           </div>
         ) : (
           <div className="min-w-0 max-h-[65vh] overflow-y-auto space-y-6 py-2 pr-8">
+            {/* Language */}
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold">
+                {getMessage(messages, "settings.section.language", "Language")}
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                {getMessage(
+                  messages,
+                  "settings.language.description",
+                  "Language used throughout the app and in assistant messages.",
+                )}
+              </p>
+              <Select
+                value={prefs.language}
+                onValueChange={(v) =>
+                  setPrefs((p) => ({ ...p, language: v as AppLanguage }))
+                }
+              >
+                <SelectTrigger className="w-40 cursor-pointer">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="de" className="cursor-pointer">
+                    {getMessage(messages, "shell.language.de", "German")}
+                  </SelectItem>
+                  <SelectItem value="en" className="cursor-pointer">
+                    {getMessage(messages, "shell.language.en", "English")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Separator />
+
             {/* Assistant instructions */}
             <div className="space-y-2">
               <Label className="text-sm font-semibold">

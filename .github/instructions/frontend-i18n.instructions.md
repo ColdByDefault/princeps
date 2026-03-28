@@ -40,9 +40,9 @@ These are project-level UI primitives shared across features. Import from `@/com
   ```tsx
   <NoticePanel
     type="error"
-    title={getMessage(messages, "feature.save.errorTitle")}
+    title={getMessage(messages, "feature.save.errorTitle", "Save failed")}
     message={error}
-    dismissLabel={getMessage(messages, "shared.dismiss")}
+    dismissLabel={getMessage(messages, "shared.dismiss", "Dismiss")}
     onDismiss={() => setError(null)}
   />
   ```
@@ -56,9 +56,9 @@ These are project-level UI primitives shared across features. Import from `@/com
   const { addNotice, removeNotice } = useNotice();
   addNotice({
     type: "success",
-    title: getMessage(messages, "feature.save.success"),
-    message: getMessage(messages, "feature.save.successBody"),
-    dismissLabel: getMessage(messages, "shared.dismiss"),
+    title: getMessage(messages, "feature.save.success", "Saved"),
+    message: getMessage(messages, "feature.save.successBody", ""),
+    dismissLabel: getMessage(messages, "shared.dismiss", "Dismiss"),
   });
   // Loading pattern: const id = addNotice({ type: "loading", title: "..." }); then removeNotice(id)
   ```
@@ -69,10 +69,10 @@ These are project-level UI primitives shared across features. Import from `@/com
   <ConfirmDialog
     open={open}
     onOpenChange={setOpen}
-    title={getMessage(messages, "feature.delete.title")}
-    description={getMessage(messages, "feature.delete.description")}
-    confirmLabel={getMessage(messages, "shared.confirm.delete")}
-    cancelLabel={getMessage(messages, "shared.cancel")}
+    title={getMessage(messages, "feature.delete.title", "Delete")}
+    description={getMessage(messages, "feature.delete.description", "")}
+    confirmLabel={getMessage(messages, "shared.confirm.delete", "Delete")}
+    cancelLabel={getMessage(messages, "shared.cancel", "Cancel")}
     confirmClassName="bg-destructive text-white hover:bg-destructive/90"
     onConfirm={handleDelete}
   />

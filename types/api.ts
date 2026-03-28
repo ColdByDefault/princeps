@@ -6,3 +6,17 @@
 export interface ApiErrorResponse {
   error: string;
 }
+
+/** Client-safe shape of a Notification record (matches the Prisma model). */
+export interface NotificationRecord {
+  id: string;
+  userId: string;
+  category: string;
+  source: string;
+  title: string;
+  body: string;
+  read: boolean;
+  dismissed: boolean;
+  metadata: Record<string, unknown> | null;
+  createdAt: string; // ISO string on the client
+}

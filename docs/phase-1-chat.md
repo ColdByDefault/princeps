@@ -163,11 +163,14 @@ All user-visible strings go through the `messages/` system. Keys will be added u
 - ChatSidebar: active indicator dot, tighter active style, improved rename input.
 - System prompt rewritten: concise, exec-first, date-aware, no stubs; instructs model to avoid clarifying questions and not draft emails unless asked.
 - Streaming `done` event now breaks the outer `while` loop (prevents any post-done read cycle).
+- `think` toggle persisted to `localStorage` via `useSyncExternalStore` + custom `ssweet:think-changed` event (no hydration mismatch).
+- Thinking phase renders an indeterminate `Progress` bar instead of bouncing dots.
+- Resolved assistant messages show a "Model reasoned" chip when thinking was used (option b — no raw content exposed).
+- `chat.error.load` wired to sidebar `fetchChats` catch block (shows a toast on network failure).
+- Site header is `sticky top-0 z-10` — stays visible while scrolling through messages.
+- Settings dialog is global (user-scoped preferences, not per-chat) — kept as-is.
+- Success toasts on chat delete and rename.
 
 ## Later
 
-- Attach documents to a single message (multimodal).
-- Per-chat assistant behavior overrides.
-- Export chat transcript.
 - Pin important chats above the 10-chat limit.
-- Voice input.
