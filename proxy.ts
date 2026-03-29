@@ -15,6 +15,8 @@ const publicRoutes = [
   "/security",
 ];
 const authRoutes = ["/login", "/sign-up"];
+// Routes that should not trigger the onboarding redirect
+const onboardingBypassRoutes = ["/onboarding", "/api/onboarding"];
 
 function matchesRoute(pathname: string, route: string) {
   if (route === "/") {
@@ -49,6 +51,24 @@ export default async function proxy(req: NextRequest) {
     url.pathname = "/home";
     return NextResponse.redirect(url);
   }
+
+  // Onboarding gate — redirect authenticated users who haven't completed
+  // onboarding. The ob_done cookie is set by /api/onboarding/complete and
+  // /api/onboarding/confirm (for users who completed before the cookie existed).
+  const isOnboardingBypass = onboardingBypassRoutes.some((route) =>
+    matchesRoute(pathname, route),
+  );
+  if (isAuthenticated && !isOnboardingBypass) {
+    const obDone = req.cookies.get("ob_done")?.value;
+    if (!obDone) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/onboarding";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  // Admin guard — role check happens server-side in the page
+  // (cookie only carries session token, not role; page does the DB check)
 
   return NextResponse.next();
 }

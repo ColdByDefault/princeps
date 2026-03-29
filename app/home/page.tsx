@@ -35,6 +35,19 @@ export default async function HomePage() {
     redirect("/login");
   }
 
+  // Redirect first-time users to onboarding
+  const userRow = await db.user.findUnique({
+    where: { id: session.user.id },
+    select: { preferences: true },
+  });
+  const rawPrefs =
+    userRow?.preferences && typeof userRow.preferences === "object"
+      ? (userRow.preferences as Record<string, unknown>)
+      : {};
+  if (!rawPrefs["onboardingDone"]) {
+    redirect("/onboarding");
+  }
+
   const greeting = getGreeting(messages);
   const firstName = session.user.name?.split(" ")[0] ?? "";
   const snapshot = await getBriefingSnapshot(session.user.id);

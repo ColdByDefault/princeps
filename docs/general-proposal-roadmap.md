@@ -44,6 +44,7 @@ The roadmap can be discussed in four stages:
 3. Knowledge base: document upload + RAG retrieval, personal info record, context slot registry. ✅ Done
 4. Executive workflow layer: contacts, meetings, tasks, assistant-driven creation, reports, and home briefing. ✅ Done (feat/core-4)
 5. Chief-of-staff layer: decision log, LLM briefing, meeting prep packs, post-meeting capture, contact interaction history, and proactive nudges. ✅ Done (feat/core-5)
+6. SaaS launch layer: billing (Stripe), email (Resend), admin panel, rate limiting, and onboarding flow. 🔲 Planned (phase-6-saas-launch.md)
 
 Open questions for discussion:
 

@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { generateBriefing } from "@/lib/briefing/generate.logic";
+import { briefingRateLimiter, createRateLimitResponse } from "@/lib/security";
 
 const STALE_MS = 12 * 60 * 60 * 1000; // 12 hours
 
@@ -56,6 +57,9 @@ export async function POST() {
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const rl = briefingRateLimiter.check(session.user.id);
+  if (!rl.allowed) return createRateLimitResponse(rl.retryAfterSeconds);
 
   try {
     const result = await generateBriefing(
