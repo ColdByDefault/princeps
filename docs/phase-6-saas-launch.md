@@ -188,6 +188,30 @@ No other new models needed. `onboardingDone` and `nudgeLastFired` live in the ex
 
 > Features 1 (Billing) and 2 (Email) deferred — see **Later**.
 
+- **Seed scripts**:
+  - `prisma/seed-admin.ts` — creates or promotes one admin account from `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_NAME` env vars. Run via `npm run db:seed-admin` (also called by `npm run db:seed`). Idempotent.
+  - `prisma/seed-demo.ts` — creates 3 demo users (Sophie Laurent / pro, Marcus Webb / free, Lena Fischer / premium) each with contacts, meetings with participants, tasks, and full assistant preferences. Run via `npm run db:seed-demo`. Idempotent — skips existing emails.
+  - `prisma/seed.ts` — master entry point (`npm run db:seed`), calls `seedAdmin()` by default; demo seed import commented out for production safety.
+
+  **Admin account** (seeded by `db:seed-admin`):
+
+  | Field    | Value               |
+  | -------- | ------------------- |
+  | Email    | admin@see-sweet.dev |
+  | Password | Admin@123456!       |
+  | Name     | Administrator       |
+  | Role     | admin               |
+
+  **Demo accounts** (seeded by `db:seed-demo`, password `Demo1234!` for all):
+
+  | Name           | Email                     | Tier    | Assistant | Language |
+  | -------------- | ------------------------- | ------- | --------- | -------- |
+  | Sophie Laurent | sophie@demo.see-sweet.dev | pro     | Iris      | en       |
+  | Marcus Webb    | marcus@demo.see-sweet.dev | free    | Atlas     | en       |
+  | Lena Fischer   | lena@demo.see-sweet.dev   | premium | Nova      | de       |
+
+- **Navbar admin link**: Settings dropdown conditionally renders an **Admin** item when `session.user.role === "admin"`. Role flows from `layout.tsx` → `Navbar` via `sessionUser.role`. Hidden for all other roles.
+
 ## Later
 
 - Marketing landing page (`/` public route with feature highlights and pricing table)

@@ -48,6 +48,7 @@ type NavbarProps = {
   sessionUser: {
     email: string | null;
     name: string | null;
+    role?: string | null;
   } | null;
 };
 
@@ -223,6 +224,7 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
     return null;
   }
 
+  const isAdmin = sessionUser?.role === "admin";
   const navLinks = getNavLinks(messages);
   const userLabel =
     sessionUser?.name?.trim() ||
@@ -387,6 +389,19 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
                             </DropdownMenuItem>
                           );
                         })}
+                        {isAdmin && (
+                          <DropdownMenuItem
+                            className={cn(
+                              "cursor-pointer rounded-xl gap-2",
+                              isActivePath(pathname, "/admin") &&
+                                "bg-accent text-accent-foreground",
+                            )}
+                            onClick={() => router.push("/admin")}
+                          >
+                            <SlidersHorizontal className="size-4" />
+                            Admin
+                          </DropdownMenuItem>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   );

@@ -10,8 +10,8 @@
 - [ ] Ai-briefing => support both languages.
 - [ ] fix MeetingList UI
 - [ ] LLM can generate 24 h Link for Contact/Info Card for none see-sweet users. 
-- [ ]
-- [ ]
+- [ ] LLm cant link contacts to meetings.
+- [ ] add Meetings eye icon for better UX and view
 - [ ]
 - [ ]
 - [ ]
