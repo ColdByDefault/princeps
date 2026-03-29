@@ -389,5 +389,14 @@
   "reports.tool.create_meeting": "Meeting created",
   "reports.tool.create_task": "Task created",
   "reports.actions": "Actions",
-  "shell.nav.reports": "Reports"
+  "shell.nav.reports": "Reports",
+
+  "home.briefing.label": "Today's brief",
+  "home.briefing.nextMeeting": "Next meeting",
+  "home.briefing.noMeetings": "No upcoming meetings",
+  "home.briefing.openTasks": "Open tasks",
+  "home.briefing.noTasks": "No open tasks",
+  "home.briefing.overdue": "overdue",
+  "home.briefing.urgent": "urgent",
+  "home.briefing.high": "high"
 }

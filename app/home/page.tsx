@@ -10,6 +10,8 @@ import { Sparkles } from "lucide-react";
 import { getRequestConfig } from "@/i18n/request";
 import { auth } from "@/lib/auth";
 import { getMessage } from "@/lib/i18n";
+import { getBriefingSnapshot } from "@/lib/briefing/snapshot";
+import { BriefingCard } from "@/components/home/BriefingCard";
 
 function getGreeting(messages: Record<string, string>): string {
   const hour = new Date().getHours();
@@ -34,6 +36,7 @@ export default async function HomePage() {
 
   const greeting = getGreeting(messages);
   const firstName = session.user.name?.split(" ")[0] ?? "";
+  const snapshot = await getBriefingSnapshot(session.user.id);
 
   return (
     <div className="mx-auto flex min-h-svh w-full max-w-7xl flex-col px-6 py-8 sm:px-8 lg:px-10">
@@ -57,18 +60,7 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <div className="rounded-[1.75rem] border border-border/70 bg-background/70 p-5">
-          <p className="text-sm font-semibold tracking-[0.22em] text-muted-foreground uppercase">
-            {getMessage(messages, "home.focusTitle", "What matters now")}
-          </p>
-          <p className="mt-3 text-sm leading-7 text-muted-foreground">
-            {getMessage(
-              messages,
-              "home.focusBody",
-              "Keep your context, decisions, and follow-through in one place.",
-            )}
-          </p>
-        </div>
+        <BriefingCard messages={messages} snapshot={snapshot} />
       </section>
     </div>
   );
