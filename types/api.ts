@@ -68,3 +68,16 @@ export interface MeetingRecord {
   updatedAt: string; // ISO string on the client
   participants: MeetingParticipantRecord[];
 }
+
+/** Client-safe shape of a Task record. */
+export interface TaskRecord {
+  id: string;
+  title: string;
+  notes: string | null;
+  status: string; // "open" | "in_progress" | "done" | "cancelled"
+  priority: string; // "low" | "normal" | "high" | "urgent"
+  dueDate: string | null; // ISO string on the client
+  meetingId: string | null;
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}

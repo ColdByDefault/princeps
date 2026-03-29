@@ -12,6 +12,7 @@ import {
   MoreHorizontal,
   Pencil,
   CalendarDays,
+  CheckSquare,
   Plus,
   Settings,
   SlidersHorizontal,
@@ -307,6 +308,23 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                       "meetings.metadata.title",
                       "Meetings",
                     )}
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/tasks" />}
+                  isActive={pathname === "/tasks"}
+                  tooltip={getMessage(
+                    messages,
+                    "tasks.metadata.title",
+                    "Tasks",
+                  )}
+                  className="cursor-pointer"
+                >
+                  <CheckSquare className="size-4 shrink-0" />
+                  <span className="truncate">
+                    {getMessage(messages, "tasks.metadata.title", "Tasks")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>

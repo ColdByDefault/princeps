@@ -9,6 +9,7 @@ import { personalInfoSlot } from "./personal-info.slot";
 import { knowledgeSlot } from "./knowledge.slot";
 import { contactsSlot } from "./contacts.slot";
 import { meetingsSlot } from "./meetings.slot";
+import { tasksSlot } from "./tasks.slot";
 
 /**
  * A context slot contributes one labeled section to the LLM system prompt.
@@ -35,5 +36,6 @@ export const SLOT_REGISTRY: ContextSlot[] = [
   knowledgeSlot,
   contactsSlot,
   meetingsSlot,
-  // future: tasksSlot, decisionsSlot
+  tasksSlot,
+  // future: decisionsSlot
 ];

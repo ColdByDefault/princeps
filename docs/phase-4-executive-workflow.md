@@ -301,6 +301,12 @@ Navigation links for `/contacts`, `/meetings`, and `/tasks` added to the app sid
 
 ## Done
 
+- **Contacts** — `Contact` Prisma model, migration `20260328182309_add_contacts`, `lib/contacts/` (list, create, update, delete), `app/api/contacts/` (GET, POST, PATCH, DELETE), `lib/context/contacts.slot.ts`, `ContactRecord` in `types/api.ts`, i18n keys `contacts.*` (en + de), `components/contacts/` (ContactList, ContactForm), `app/contacts/page.tsx`, sidebar nav link.
+- **Meetings** — `Meeting` + `MeetingParticipant` Prisma models, migration `20260329075736_add_meetings`, `lib/meetings/` (list, create, update, delete), `app/api/meetings/` (GET, POST, PATCH, DELETE), `lib/context/meetings.slot.ts` (next 3 upcoming + last 2 done), `MeetingRecord` + `MeetingParticipantRecord` in `types/api.ts`, i18n keys `meetings.*` (en + de), `components/meetings/` (MeetingList, MeetingForm, MeetingsView), `app/meetings/page.tsx`, sidebar nav link.
+- **Tasks** — `Task` Prisma model (with optional `meetingId` back-link to Meeting), migration `20260329081923_add_tasks`, `lib/tasks/` (list, create, update, delete), `app/api/tasks/` (GET, POST, PATCH, DELETE), `lib/context/tasks.slot.ts` (open + in_progress, sorted by priority then due date, cap 10), `TaskRecord` in `types/api.ts`, i18n keys `tasks.*` (en + de), `components/tasks/` (TaskList, TaskForm, TasksView), `app/tasks/page.tsx`, sidebar nav link.
+- All five context slots registered in `lib/context/index.ts`: `personalInfoSlot`, `knowledgeSlot`, `contactsSlot`, `meetingsSlot`, `tasksSlot`.
+- All checks passing: lint ✅ typecheck ✅ build ✅ (32 routes).
+
 ## Later
 
 - Decision log (Phase 5): record decisions with rationale, status, and change history.

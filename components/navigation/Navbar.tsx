@@ -19,6 +19,7 @@ import {
   MessageSquare,
   X,
   type LucideIcon,
+  CheckSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -72,6 +73,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/meetings",
       icon: CalendarDays,
       label: getMessage(messages, "shell.nav.meetings", "Meetings"),
+    },
+    {
+      href: "/tasks",
+      icon: CheckSquare,
+      label: getMessage(messages, "shell.nav.tasks", "Tasks"),
     },
     {
       href: "/chat",

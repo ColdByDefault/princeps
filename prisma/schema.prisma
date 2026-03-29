@@ -38,6 +38,7 @@ model User {
   personalInfo         PersonalInfo?
   contacts             Contact[]
   meetings             Meeting[]
+  tasks                Task[]
 
   @@map("user")
 }
@@ -221,6 +222,7 @@ model Meeting {
 
   user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   participants MeetingParticipant[]
+  tasks        Task[]
 
   @@index([userId])
   @@map("meeting")
@@ -236,5 +238,26 @@ model MeetingParticipant {
 
   @@unique([meetingId, contactId])
   @@map("meeting_participant")
+}
+
+// ─── Tasks ────────────────────────────────────────────────
+
+model Task {
+  id        String    @id @default(cuid())
+  userId    String
+  title     String
+  notes     String?
+  status    String    @default("open")    // open | in_progress | done | cancelled
+  priority  String    @default("normal") // low | normal | high | urgent
+  dueDate   DateTime?
+  meetingId String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("task")
 }
 
