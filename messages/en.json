@@ -377,5 +377,17 @@
   "tasks.field.notes.placeholder": "Additional context\u2026",
   "tasks.field.status": "Status",
   "tasks.field.priority": "Priority",
-  "tasks.field.dueDate": "Due date"
+  "tasks.field.dueDate": "Due date",
+
+  "reports.metadata.title": "Assistant Reports",
+  "reports.metadata.description": "A log of actions performed by the assistant on your behalf.",
+  "reports.title": "Assistant Reports",
+  "reports.subtitle": "Every time the assistant creates a contact, meeting, or task on your behalf, a brief report is recorded here.",
+  "reports.empty": "No reports yet.",
+  "reports.emptyBody": "Reports are generated automatically when the assistant performs actions for you.",
+  "reports.tool.create_contact": "Contact created",
+  "reports.tool.create_meeting": "Meeting created",
+  "reports.tool.create_task": "Task created",
+  "reports.actions": "Actions",
+  "shell.nav.reports": "Reports"
 }

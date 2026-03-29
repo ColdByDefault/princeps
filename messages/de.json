@@ -377,5 +377,17 @@
   "tasks.field.notes.placeholder": "Zus\u00e4tzlicher Kontext\u2026",
   "tasks.field.status": "Status",
   "tasks.field.priority": "Priorit\u00e4t",
-  "tasks.field.dueDate": "F\u00e4lligkeitsdatum"
+  "tasks.field.dueDate": "F\u00e4lligkeitsdatum",
+
+  "reports.metadata.title": "Assistentenberichte",
+  "reports.metadata.description": "Ein Protokoll der Aktionen, die der Assistent in Ihrem Auftrag durchgef\u00fchrt hat.",
+  "reports.title": "Assistentenberichte",
+  "reports.subtitle": "Jedes Mal, wenn der Assistent in Ihrem Auftrag einen Kontakt, ein Meeting oder eine Aufgabe erstellt, wird hier ein kurzer Bericht festgehalten.",
+  "reports.empty": "Noch keine Berichte.",
+  "reports.emptyBody": "Berichte werden automatisch erstellt, wenn der Assistent Aktionen f\u00fcr Sie ausf\u00fchrt.",
+  "reports.tool.create_contact": "Kontakt erstellt",
+  "reports.tool.create_meeting": "Meeting erstellt",
+  "reports.tool.create_task": "Aufgabe erstellt",
+  "reports.actions": "Aktionen",
+  "shell.nav.reports": "Berichte"
 }

@@ -61,21 +61,74 @@ export type OllamaChatOptions = {
   repeat_penalty?: number;
 };
 
+export type OllamaChatResult = {
+  content: string;
+  thinking: string;
+  toolCalls: OllamaToolCallEntry[];
+};
+
+type OllamaNonStreamResponse = {
+  message: {
+    role: string;
+    content: string;
+    thinking?: string;
+    tool_calls?: OllamaToolCallEntry[];
+  };
+};
+
+/**
+ * Non-streaming call to Ollama.
+ * Used for tool detection: avoids the think+tools streaming incompatibility
+ * in Qwen3 where thinking mode swallows tool_calls entirely.
+ *
+ * @param messages  Full conversation array including the system prompt.
+ * @param options   Optional inference parameters.
+ * @param tools     Optional tool definitions the model may call.
+ */
+export async function callOllamaChat(
+  messages: OllamaMessage[],
+  options?: OllamaChatOptions,
+  tools?: OllamaToolDefinition[],
+): Promise<OllamaChatResult> {
+  const response = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: OLLAMA_MODEL,
+      messages,
+      stream: false,
+      ...(tools && tools.length > 0 ? { tools } : {}),
+      ...(options && Object.keys(options).length > 0 ? { options } : {}),
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Ollama returned ${response.status}`);
+  }
+
+  const json = (await response.json()) as OllamaNonStreamResponse;
+
+  return {
+    content: json.message.content ?? "",
+    thinking: json.message.thinking ?? "",
+    toolCalls: json.message.tool_calls ?? [],
+  };
+}
+
 /**
  * Opens a streaming connection to the local Ollama instance.
  * Returns the raw Response so the caller can pipe or iterate the body.
+ * Do NOT pass tools here — use callOllamaChat for tool detection instead.
  *
  * @param messages  Full conversation array including the system prompt.
  * @param think     When true, passes think:true so Qwen3 emits reasoning
  *                  tokens in message.thinking (never shown to the user).
  * @param options   Optional inference parameters from user preferences.
- * @param tools     Optional tool definitions the model may call.
  */
 export async function streamOllamaChat(
   messages: OllamaMessage[],
   think: boolean,
   options?: OllamaChatOptions,
-  tools?: OllamaToolDefinition[],
 ): Promise<Response> {
   const response = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
     method: "POST",
@@ -85,7 +138,6 @@ export async function streamOllamaChat(
       messages,
       stream: true,
       think,
-      ...(tools && tools.length > 0 ? { tools } : {}),
       ...(options && Object.keys(options).length > 0 ? { options } : {}),
     }),
   });

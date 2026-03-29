@@ -330,6 +330,24 @@ The chat and chat-widget can create contacts, meetings, and tasks on behalf of t
 - No tools in the follow-up call to prevent re-entry loops.
 - Validation on tool arguments is strict (required fields, date parsing); errors return a JSON error string back to the model as the tool result.
 - The widget uses hardcoded English action labels (it has no access to the server-side message bundle).
+- Architecture fix: switched from streaming-first to non-streaming-first (`callOllamaChat`, `stream: false`) for tool detection, because Qwen3 with `think: true` + streaming + tools produced empty responses.
+
+### Assistant Reports
+
+After any tool-call batch completes, the assistant generates a brief report and a real-time notification.
+
+**How it works:**
+
+- `prisma/schema.prisma` — new `AssistantReport` model (`id`, `userId`, `toolsCalled: Json`, `summary: String`, `createdAt`).
+- `lib/reports/create.logic.ts` — persists a report record.
+- `lib/reports/list.logic.ts` — returns all reports for a user, newest first.
+- `lib/reports/generate.logic.ts` — calls Ollama to write a plain-language summary and a notification title from the action batch, persists the `AssistantReport`, then creates + pushes a `Notification` (category `assistant_report`) via the existing SSE emitter.
+- Both chat stream routes (`/api/chat/[chatId]/stream` and `/api/chat/widget`) call `void generateAndPushReport(...)` fire-and-forget after tool execution.
+- `/app/reports/page.tsx` — server page; loads and serializes reports, renders `ReportsView`.
+- `components/reports/ReportsView.tsx` — read-only client component; shows empty state or a card per report (timestamp, colored tool badges, LLM summary).
+- `/api/reports` — GET endpoint that returns the current user's reports.
+- Navbar: "Reports" added to the Settings dropdown (`ClipboardList` icon, `/reports` href).
+- i18n keys: `reports.*` group (en + de); `shell.nav.reports` (en + de).
 
 - Decision log (Phase 5): record decisions with rationale, status, and change history.
 - Automated post-meeting action extraction: assistant parses a pasted transcript and proposes tasks.

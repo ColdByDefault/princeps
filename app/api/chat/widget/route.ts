@@ -9,13 +9,15 @@ import { auth } from "@/lib/auth";
 import { buildSystemPrompt } from "@/lib/context/build";
 import {
   streamOllamaChat,
+  callOllamaChat,
   type OllamaMessage,
   type OllamaStreamChunk,
-  type OllamaToolCallEntry,
 } from "@/lib/chat/ollama";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
 import { getUserPreferences } from "@/lib/settings/get.logic";
 import { CHAT_TOOLS, executeToolCall } from "@/lib/chat/tools";
+import type { ActionResult } from "@/lib/chat/tools";
+import { generateAndPushReport } from "@/lib/reports/generate.logic";
 
 type HistoryEntry = { role: "user" | "assistant"; content: string };
 
@@ -86,31 +88,6 @@ export async function POST(req: Request) {
     { role: "user" as const, content: userMessage },
   ];
 
-  let ollamaResponse: Response;
-
-  try {
-    ollamaResponse = await streamOllamaChat(
-      ollamaMessages,
-      false,
-      preferences.ollamaOptions,
-      CHAT_TOOLS,
-    );
-  } catch {
-    return NextResponse.json(
-      { error: "Assistant unavailable. Is Ollama running?" },
-      { status: 502 },
-    );
-  }
-
-  const ollamaBody = ollamaResponse.body;
-
-  if (!ollamaBody) {
-    return NextResponse.json(
-      { error: "Empty response from Ollama" },
-      { status: 502 },
-    );
-  }
-
   const stream = new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
@@ -121,96 +98,41 @@ export async function POST(req: Request) {
         );
       };
 
-      // ── Helper: drain a non-token stream pass ─────────────────────────────
-      async function drainBody(body: ReadableStream<Uint8Array>) {
-        const r = body.getReader();
-        const dec = new TextDecoder();
-        let buf = "";
-        let content = "";
-        let toolCalls: OllamaToolCallEntry[] = [];
-        try {
-          while (true) {
-            const { done, value } = await r.read();
-            if (done) break;
-            buf += dec.decode(value, { stream: true });
-            const lines = buf.split("\n");
-            buf = lines.pop() ?? "";
-            for (const line of lines) {
-              if (!line.trim()) continue;
-              let chunk: OllamaStreamChunk;
-              try {
-                chunk = JSON.parse(line) as OllamaStreamChunk;
-              } catch {
-                continue;
-              }
-              if (chunk.message?.content) content += chunk.message.content;
-              if (chunk.done && chunk.message?.tool_calls?.length)
-                toolCalls = chunk.message.tool_calls;
-            }
-          }
-        } finally {
-          r.releaseLock();
-        }
-        return { content, toolCalls };
-      }
-
       try {
-        // ── Phase 1: stream first response ───────────────────────────────────
-        const reader = ollamaBody.getReader();
-        const decoder = new TextDecoder();
-        let buffer = "";
-        let firstPhaseToolCalls: OllamaToolCallEntry[] = [];
-
+        // ── Non-streaming call with tools ─────────────────────────────────────
+        let firstResult;
         try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split("\n");
-            buffer = lines.pop() ?? "";
-
-            for (const line of lines) {
-              if (!line.trim()) continue;
-
-              let chunk: OllamaStreamChunk;
-              try {
-                chunk = JSON.parse(line) as OllamaStreamChunk;
-              } catch {
-                continue;
-              }
-
-              if (chunk.message?.content) {
-                send({ type: "token", text: chunk.message.content });
-              }
-
-              if (chunk.done && chunk.message?.tool_calls?.length) {
-                firstPhaseToolCalls = chunk.message.tool_calls;
-              }
-
-              if (chunk.done) break;
-            }
-          }
-        } finally {
-          reader.releaseLock();
+          firstResult = await callOllamaChat(
+            ollamaMessages,
+            preferences.ollamaOptions,
+            CHAT_TOOLS,
+          );
+        } catch {
+          send({
+            type: "error",
+            message: "Assistant unavailable. Is Ollama running?",
+          });
+          return;
         }
 
-        // ── Phase 2: execute tool calls ───────────────────────────────────────
-        if (firstPhaseToolCalls.length > 0) {
+        if (firstResult.toolCalls.length > 0) {
+          // ── Phase 2: execute tool calls ──────────────────────────────────────
           const toolResultMessages: OllamaMessage[] = [];
+          const collectedActions: ActionResult[] = [];
           const assistantWithTools: OllamaMessage = {
             role: "assistant",
-            content: "",
-            tool_calls: firstPhaseToolCalls,
+            content: firstResult.content,
+            tool_calls: firstResult.toolCalls,
           };
 
-          for (const toolCall of firstPhaseToolCalls) {
+          for (const toolCall of firstResult.toolCalls) {
             const { action, summary } = await executeToolCall(
               session.user.id,
               toolCall,
             );
 
             if (action) {
+              collectedActions.push(action);
               send({
                 type: "action",
                 name: action.name,
@@ -221,7 +143,17 @@ export async function POST(req: Request) {
             toolResultMessages.push({ role: "tool", content: summary });
           }
 
-          // ── Phase 3: follow-up reply ──────────────────────────────────────
+          // Fire-and-forget: generate report + notification for this batch
+          if (collectedActions.length > 0) {
+            void generateAndPushReport({
+              userId: session.user.id,
+              userName: session.user.name ?? null,
+              locale: preferences.language ?? "en",
+              actions: collectedActions,
+            });
+          }
+
+          // ── Phase 3: stream the follow-up reply ───────────────────────────
           const followUpMessages: OllamaMessage[] = [
             ...ollamaMessages,
             assistantWithTools,
@@ -241,15 +173,40 @@ export async function POST(req: Request) {
             return;
           }
 
-          if (followUpResponse.body) {
-            const { content: followUpContent } = await drainBody(
-              followUpResponse.body,
-            );
-            if (followUpContent) {
-              for (const token of followUpContent.split(/(?<=\s)|(?=\s)/)) {
-                if (token) send({ type: "token", text: token });
+          const followUpBody = followUpResponse.body;
+          if (followUpBody) {
+            const reader = followUpBody.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+            try {
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split("\n");
+                buffer = lines.pop() ?? "";
+                for (const line of lines) {
+                  if (!line.trim()) continue;
+                  let chunk: OllamaStreamChunk;
+                  try {
+                    chunk = JSON.parse(line) as OllamaStreamChunk;
+                  } catch {
+                    continue;
+                  }
+                  if (chunk.message?.content) {
+                    send({ type: "token", text: chunk.message.content });
+                  }
+                  if (chunk.done) break;
+                }
               }
+            } finally {
+              reader.releaseLock();
             }
+          }
+        } else {
+          // ── No tool calls: send result from non-streaming call ────────────
+          if (firstResult.content) {
+            send({ type: "token", text: firstResult.content });
           }
         }
       } catch (err) {

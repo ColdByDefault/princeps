@@ -39,6 +39,7 @@ model User {
   contacts             Contact[]
   meetings             Meeting[]
   tasks                Task[]
+  assistantReports     AssistantReport[]
 
   @@map("user")
 }
@@ -238,6 +239,21 @@ model MeetingParticipant {
 
   @@unique([meetingId, contactId])
   @@map("meeting_participant")
+}
+
+// ─── Assistant Reports ────────────────────────────────────
+
+model AssistantReport {
+  id          String   @id @default(cuid())
+  userId      String
+  toolsCalled Json     // string[] — ordered list of tool names that were invoked
+  summary     String   // LLM-generated brief description of what was done
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("assistant_report")
 }
 
 // ─── Tasks ────────────────────────────────────────────────

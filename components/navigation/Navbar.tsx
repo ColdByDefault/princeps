@@ -12,6 +12,7 @@ import {
   Briefcase,
   Bot,
   ChevronDown,
+  ClipboardList,
   ContactRound,
   FileText,
   Globe,
@@ -57,7 +58,11 @@ type NavLink = {
 
 const HIDDEN_NAVBAR_PATHS = new Set(["/", "/login", "/sign-up"]);
 const GROUP_HREFS = new Set(["/contacts", "/meetings", "/tasks"]);
-const SETTINGS_HREFS = new Set(["/settings/app", "/settings/assistant"]);
+const SETTINGS_HREFS = new Set([
+  "/settings/app",
+  "/settings/assistant",
+  "/reports",
+]);
 
 function getNavLinks(messages: MessageDictionary): NavLink[] {
   return [
@@ -100,6 +105,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/settings/assistant",
       icon: Bot,
       label: getMessage(messages, "shell.nav.assistantSettings", "Assistant"),
+    },
+    {
+      href: "/reports",
+      icon: ClipboardList,
+      label: getMessage(messages, "shell.nav.reports", "Reports"),
     },
   ];
 }
