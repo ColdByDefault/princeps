@@ -46,3 +46,25 @@ export interface ContactRecord {
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }
+
+/** Client-safe shape of a meeting participant. */
+export interface MeetingParticipantRecord {
+  id: string;
+  contactId: string;
+  contactName: string;
+}
+
+/** Client-safe shape of a Meeting record. */
+export interface MeetingRecord {
+  id: string;
+  title: string;
+  scheduledAt: string; // ISO string on the client
+  durationMin: number | null;
+  location: string | null;
+  agenda: string | null;
+  summary: string | null;
+  status: string; // "upcoming" | "done" | "cancelled"
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+  participants: MeetingParticipantRecord[];
+}

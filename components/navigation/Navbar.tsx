@@ -12,6 +12,7 @@ import {
   ContactRound,
   FileText,
   Globe,
+  CalendarDays,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -66,6 +67,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/contacts",
       icon: ContactRound,
       label: getMessage(messages, "shell.nav.contacts", "Contacts"),
+    },
+    {
+      href: "/meetings",
+      icon: CalendarDays,
+      label: getMessage(messages, "shell.nav.meetings", "Meetings"),
     },
     {
       href: "/chat",

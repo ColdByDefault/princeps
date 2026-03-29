@@ -37,6 +37,7 @@ model User {
   knowledgeChunks      KnowledgeChunk[]
   personalInfo         PersonalInfo?
   contacts             Contact[]
+  meetings             Meeting[]
 
   @@map("user")
 }
@@ -196,9 +197,44 @@ model Contact {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meetings MeetingParticipant[]
 
   @@index([userId])
   @@map("contact")
+}
+
+// ─── Meetings ─────────────────────────────────────────────
+
+model Meeting {
+  id          String    @id @default(cuid())
+  userId      String
+  title       String
+  scheduledAt DateTime
+  durationMin Int?
+  location    String?
+  agenda      String?
+  summary     String?
+  status      String    @default("upcoming") // upcoming | done | cancelled
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  participants MeetingParticipant[]
+
+  @@index([userId])
+  @@map("meeting")
+}
+
+model MeetingParticipant {
+  id        String @id @default(cuid())
+  meetingId String
+  contactId String
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@unique([meetingId, contactId])
+  @@map("meeting_participant")
 }
 

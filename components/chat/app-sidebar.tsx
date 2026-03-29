@@ -11,6 +11,7 @@ import {
   MessageSquare,
   MoreHorizontal,
   Pencil,
+  CalendarDays,
   Plus,
   Settings,
   SlidersHorizontal,
@@ -284,6 +285,27 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                       messages,
                       "contacts.metadata.title",
                       "Contacts",
+                    )}
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/meetings" />}
+                  isActive={pathname === "/meetings"}
+                  tooltip={getMessage(
+                    messages,
+                    "meetings.metadata.title",
+                    "Meetings",
+                  )}
+                  className="cursor-pointer"
+                >
+                  <CalendarDays className="size-4 shrink-0" />
+                  <span className="truncate">
+                    {getMessage(
+                      messages,
+                      "meetings.metadata.title",
+                      "Meetings",
                     )}
                   </span>
                 </SidebarMenuButton>
