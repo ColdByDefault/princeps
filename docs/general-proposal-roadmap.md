@@ -43,7 +43,7 @@ The roadmap can be discussed in four stages:
 2. Notification system: real-time LLM-generated notifications, persistent inbox, SSE delivery, scalable category model. ✅ Done
 3. Knowledge base: document upload + RAG retrieval, personal info record, context slot registry. ✅ Done
 4. Executive workflow layer: contacts, meetings, tasks, assistant-driven creation, reports, and home briefing. ✅ Done (feat/core-4)
-5. Chief-of-staff layer: proactive recommendations, cross-workstream coordination, and deeper operational intelligence.
+5. Chief-of-staff layer: decision log, LLM briefing, meeting prep packs, post-meeting capture, contact interaction history, and proactive nudges. ✅ Done (feat/core-5)
 
 Open questions for discussion:
 

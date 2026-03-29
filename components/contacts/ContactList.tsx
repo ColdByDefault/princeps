@@ -6,7 +6,13 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, Trash2, UserPlus } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Pencil,
+  Trash2,
+  UserPlus,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/shared";
 import { useNotice } from "@/components/shared";
@@ -14,6 +20,13 @@ import { getMessage } from "@/lib/i18n";
 import { ContactForm } from "./ContactForm";
 import type { ContactRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
+
+interface Interaction {
+  id: string;
+  source: string;
+  sourceId: string;
+  createdAt: string;
+}
 
 interface ContactListProps {
   messages: MessageDictionary;
@@ -30,6 +43,28 @@ export function ContactList({
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<ContactRecord | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [interactions, setInteractions] = useState<Interaction[]>([]);
+  const [interactionsLoading, setInteractionsLoading] = useState(false);
+
+  async function toggleExpand(contactId: string) {
+    if (expandedId === contactId) {
+      setExpandedId(null);
+      setInteractions([]);
+      return;
+    }
+    setExpandedId(contactId);
+    setInteractionsLoading(true);
+    try {
+      const res = await fetch(`/api/contacts/${contactId}/interactions`);
+      if (res.ok) {
+        const data = (await res.json()) as { interactions: Interaction[] };
+        setInteractions(data.interactions);
+      }
+    } finally {
+      setInteractionsLoading(false);
+    }
+  }
 
   function openCreate() {
     setEditTarget(null);
@@ -97,50 +132,127 @@ export function ContactList({
       ) : (
         <ul className="divide-y rounded-lg border">
           {contacts.map((contact) => (
-            <li
-              key={contact.id}
-              className="flex items-start justify-between gap-4 px-4 py-3"
-            >
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{contact.name}</p>
-                {(contact.role || contact.company) && (
-                  <p className="text-muted-foreground truncate text-xs">
-                    {[contact.role, contact.company]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </p>
-                )}
-                {contact.tags.length > 0 && (
-                  <div className="mt-1 flex flex-wrap gap-1">
-                    {contact.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="bg-muted rounded px-1.5 py-0.5 text-xs"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+            <li key={contact.id}>
+              <div className="flex items-start justify-between gap-4 px-4 py-3">
+                <button
+                  className="flex min-w-0 flex-1 cursor-pointer items-start gap-2 text-left"
+                  aria-label={getMessage(
+                    messages,
+                    "contacts.interactions.toggle",
+                    "Toggle interaction history",
+                  )}
+                  onClick={() => toggleExpand(contact.id)}
+                >
+                  <span className="text-muted-foreground mt-1 shrink-0">
+                    {expandedId === contact.id ? (
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    ) : (
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    )}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">
+                      {contact.name}
+                    </p>
+                    {(contact.role || contact.company) && (
+                      <p className="text-muted-foreground truncate text-xs">
+                        {[contact.role, contact.company]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </p>
+                    )}
+                    {contact.tags.length > 0 && (
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {contact.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="bg-muted rounded px-1.5 py-0.5 text-xs"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
+                </button>
+                <div className="flex shrink-0 gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 cursor-pointer"
+                    aria-label={getMessage(
+                      messages,
+                      "contacts.editLabel",
+                      "Edit contact",
+                    )}
+                    onClick={() => openEdit(contact)}
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 cursor-pointer"
+                    aria-label={getMessage(
+                      messages,
+                      "contacts.deleteLabel",
+                      "Delete contact",
+                    )}
+                    onClick={() => setDeleteTarget(contact.id)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
               </div>
-              <div className="flex shrink-0 gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7"
-                  onClick={() => openEdit(contact)}
-                >
-                  <Pencil className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7"
-                  onClick={() => setDeleteTarget(contact.id)}
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
-              </div>
+
+              {expandedId === contact.id && (
+                <div className="bg-muted/30 border-t px-6 pb-3 pt-2">
+                  <p className="text-muted-foreground mb-2 text-xs font-medium uppercase tracking-wide">
+                    {getMessage(
+                      messages,
+                      "contacts.interactions.label",
+                      "Interaction history",
+                    )}
+                  </p>
+                  {interactionsLoading ? (
+                    <p className="text-muted-foreground text-xs">
+                      {getMessage(
+                        messages,
+                        "contacts.interactions.loading",
+                        "Loading…",
+                      )}
+                    </p>
+                  ) : interactions.length === 0 ? (
+                    <p className="text-muted-foreground text-xs">
+                      {getMessage(
+                        messages,
+                        "contacts.interactions.empty",
+                        "No interactions recorded yet.",
+                      )}
+                    </p>
+                  ) : (
+                    <ul className="space-y-1">
+                      {interactions.map((ix) => (
+                        <li
+                          key={ix.id}
+                          className="flex items-center gap-2 text-xs"
+                        >
+                          <span className="bg-primary/10 text-primary rounded px-1.5 py-0.5 capitalize">
+                            {getMessage(
+                              messages,
+                              `contacts.interactions.source.${ix.source}` as never,
+                              ix.source,
+                            )}
+                          </span>
+                          <span className="text-muted-foreground">
+                            {new Date(ix.createdAt).toLocaleDateString()}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
             </li>
           ))}
         </ul>

@@ -63,6 +63,7 @@ export interface MeetingRecord {
   location: string | null;
   agenda: string | null;
   summary: string | null;
+  prepPack: string | null;
   status: string; // "upcoming" | "done" | "cancelled"
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
@@ -77,6 +78,19 @@ export interface TaskRecord {
   status: string; // "open" | "in_progress" | "done" | "cancelled"
   priority: string; // "low" | "normal" | "high" | "urgent"
   dueDate: string | null; // ISO string on the client
+  meetingId: string | null;
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}
+
+/** Client-safe shape of a Decision record. */
+export interface DecisionRecord {
+  id: string;
+  title: string;
+  rationale: string | null;
+  outcome: string | null;
+  status: string; // "open" | "decided" | "reversed"
+  decidedAt: string | null; // ISO string on the client
   meetingId: string | null;
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client

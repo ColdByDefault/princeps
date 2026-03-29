@@ -7,6 +7,7 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import type { Prisma } from "@/lib/generated/prisma/client";
+import { logInteraction } from "@/lib/contacts/log-interaction";
 import type { MeetingParticipantRecord, MeetingRecord } from "./list.logic";
 
 const meetingInclude = {
@@ -61,6 +62,12 @@ export async function createMeeting(
     include: meetingInclude,
   });
 
+  if (input.participantContactIds && input.participantContactIds.length > 0) {
+    for (const contactId of input.participantContactIds) {
+      logInteraction(contactId, "meeting", row.id);
+    }
+  }
+
   return toRecord(row);
 }
 
@@ -73,6 +80,7 @@ function toRecord(row: MeetingWithParticipants): MeetingRecord {
     location: row.location,
     agenda: row.agenda,
     summary: row.summary,
+    prepPack: row.prepPack,
     status: row.status,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
