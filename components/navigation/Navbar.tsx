@@ -9,6 +9,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
+  Briefcase,
+  Bot,
+  ChevronDown,
   ContactRound,
   FileText,
   Globe,
@@ -18,6 +21,7 @@ import {
   Menu,
   MessageSquare,
   Settings,
+  SlidersHorizontal,
   X,
   type LucideIcon,
   CheckSquare,
@@ -52,6 +56,8 @@ type NavLink = {
 };
 
 const HIDDEN_NAVBAR_PATHS = new Set(["/", "/login", "/sign-up"]);
+const GROUP_HREFS = new Set(["/contacts", "/meetings", "/tasks"]);
+const SETTINGS_HREFS = new Set(["/settings/app", "/settings/assistant"]);
 
 function getNavLinks(messages: MessageDictionary): NavLink[] {
   return [
@@ -86,9 +92,14 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       label: getMessage(messages, "shell.nav.chat", "Chat"),
     },
     {
+      href: "/settings/app",
+      icon: SlidersHorizontal,
+      label: getMessage(messages, "shell.nav.appSettings", "App Settings"),
+    },
+    {
       href: "/settings/assistant",
-      icon: Settings,
-      label: getMessage(messages, "shell.nav.settings", "Settings"),
+      icon: Bot,
+      label: getMessage(messages, "shell.nav.assistantSettings", "Assistant"),
     },
   ];
 }
@@ -97,8 +108,16 @@ function isActivePath(pathname: string, href: string) {
   if (href === "/home") {
     return pathname === href;
   }
+  if (href === "/settings/app") {
+    return (
+      pathname === "/settings/app" || pathname.startsWith("/settings/app/")
+    );
+  }
   if (href === "/settings/assistant") {
-    return pathname.startsWith("/settings");
+    return (
+      pathname === "/settings/assistant" ||
+      pathname.startsWith("/settings/assistant/")
+    );
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -226,9 +245,140 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
 
             <nav className="hidden min-[1000px]:flex min-[1000px]:items-center min-[1000px]:gap-2">
               {navLinks.map((link) => {
+                if (link.href === "/contacts") {
+                  const groupLinks = navLinks.filter((l) =>
+                    GROUP_HREFS.has(l.href),
+                  );
+                  const isGroupActive = groupLinks.some((l) =>
+                    isActivePath(pathname, l.href),
+                  );
+                  return (
+                    <DropdownMenu key="organize-group">
+                      <DropdownMenuTrigger
+                        render={
+                          <Button
+                            type="button"
+                            variant={isGroupActive ? "secondary" : "ghost"}
+                            size="sm"
+                            aria-label={getMessage(
+                              messages,
+                              "shell.nav.organize",
+                              "Organize",
+                            )}
+                            className={cn(
+                              "cursor-pointer rounded-full bg-transparent px-3",
+                              isGroupActive && "shadow-sm",
+                            )}
+                          >
+                            <Briefcase className="size-3.5" />
+                            {getMessage(
+                              messages,
+                              "shell.nav.organize",
+                              "Organize",
+                            )}
+                            <ChevronDown className="size-3 opacity-60" />
+                          </Button>
+                        }
+                      />
+                      <DropdownMenuContent
+                        align="start"
+                        className="min-w-44 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
+                      >
+                        {groupLinks.map((groupLink) => {
+                          const GIcon = groupLink.icon;
+                          const isLinkActive = isActivePath(
+                            pathname,
+                            groupLink.href,
+                          );
+                          return (
+                            <DropdownMenuItem
+                              key={groupLink.href}
+                              className={cn(
+                                "cursor-pointer rounded-xl gap-2",
+                                isLinkActive &&
+                                  "bg-accent text-accent-foreground",
+                              )}
+                              onClick={() => router.push(groupLink.href)}
+                            >
+                              <GIcon className="size-4" />
+                              {groupLink.label}
+                            </DropdownMenuItem>
+                          );
+                        })}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  );
+                }
+                if (GROUP_HREFS.has(link.href)) return null;
+
+                if (link.href === "/settings/app") {
+                  const settingsLinks = navLinks.filter((l) =>
+                    SETTINGS_HREFS.has(l.href),
+                  );
+                  const isSettingsActive = settingsLinks.some((l) =>
+                    isActivePath(pathname, l.href),
+                  );
+                  return (
+                    <DropdownMenu key="settings-group">
+                      <DropdownMenuTrigger
+                        render={
+                          <Button
+                            type="button"
+                            variant={isSettingsActive ? "secondary" : "ghost"}
+                            size="sm"
+                            aria-label={getMessage(
+                              messages,
+                              "shell.nav.settings",
+                              "Settings",
+                            )}
+                            className={cn(
+                              "cursor-pointer rounded-full bg-transparent px-3",
+                              isSettingsActive && "shadow-sm",
+                            )}
+                          >
+                            <Settings className="size-3.5" />
+                            {getMessage(
+                              messages,
+                              "shell.nav.settings",
+                              "Settings",
+                            )}
+                            <ChevronDown className="size-3 opacity-60" />
+                          </Button>
+                        }
+                      />
+                      <DropdownMenuContent
+                        align="start"
+                        className="min-w-44 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
+                      >
+                        {settingsLinks.map((settingsLink) => {
+                          const SIcon = settingsLink.icon;
+                          const isLinkActive = isActivePath(
+                            pathname,
+                            settingsLink.href,
+                          );
+                          return (
+                            <DropdownMenuItem
+                              key={settingsLink.href}
+                              className={cn(
+                                "cursor-pointer rounded-xl gap-2",
+                                isLinkActive &&
+                                  "bg-accent text-accent-foreground",
+                              )}
+                              onClick={() => router.push(settingsLink.href)}
+                            >
+                              <SIcon className="size-4" />
+                              {settingsLink.label}
+                            </DropdownMenuItem>
+                          );
+                        })}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  );
+                }
+                if (SETTINGS_HREFS.has(link.href)) return null;
+
                 const Icon = link.icon;
                 const isActive = isActivePath(pathname, link.href);
-
                 return (
                   <Button
                     key={link.href}

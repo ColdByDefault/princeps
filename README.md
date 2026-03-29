@@ -3,4 +3,5 @@
 - add cursor-pointer Tasks and icons colors to pop-ups
 - navbar new items translations
 - add cursor-pointer meeting and icons colors to pop-ups, Status translation drop-down
-- navbar re-orginze, with sub-menus
+- add app-settings tab in /settings, and seperate from assistant settings
+- improve user language reference, save in appsettings and db
