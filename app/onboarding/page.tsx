@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { getRequestConfig } from "@/i18n/request";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { OnboardingWizard } from "./OnboardingWizard";
+import { OnboardingWizard } from "@/components/onboarding";
 
 export const metadata = { title: "Welcome" };
 

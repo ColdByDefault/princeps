@@ -12,7 +12,7 @@
 - [ ] LLM can generate 24 h Link for Contact/Info Card for none see-sweet users. 
 - [ ] LLm cant link contacts to meetings.
 - [ ] add Meetings eye icon for better UX and view
-- [ ] OnboardingWizard.tsx => move to components
+- [x] OnboardingWizard.tsx => move to components
 - [ ] "/" where are tier and prices on first page before login/sign-up
 - [ ]
 - [ ]
