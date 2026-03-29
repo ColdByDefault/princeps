@@ -27,19 +27,22 @@ export function NotificationItem({
   onDismiss,
 }: Props) {
   const isNew = !notification.read;
+  const isGreeting =
+    notification.category === "welcome_signup" ||
+    notification.category === "welcome_login";
 
   return (
     <div
       className={cn(
         "group relative flex flex-col gap-1 rounded-lg border p-3 text-sm transition-colors",
-        isNew
+        isNew && !isGreeting
           ? "border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/30"
           : "border-border bg-muted/30",
       )}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0">
-          {isNew && (
+          {isNew && !isGreeting && (
             <Badge
               variant="secondary"
               className="shrink-0 bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-[10px] px-1.5 py-0"
@@ -53,7 +56,7 @@ export function NotificationItem({
         </div>
 
         <div className="flex shrink-0 items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          {isNew && (
+          {isNew && !isGreeting && (
             <Button
               variant="ghost"
               size="icon"

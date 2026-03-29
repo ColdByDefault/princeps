@@ -119,8 +119,11 @@ export function NotificationsProvider({
               !shownNoticeIds.has(n.id)
             ) {
               addShownId(n.id);
+              const isGreeting =
+                n.category === "welcome_signup" ||
+                n.category === "welcome_login";
               addNoticeRef.current({
-                type: "info",
+                type: isGreeting ? "neutral" : "info",
                 title: n.title,
                 message: n.body,
                 duration: 5000,
@@ -149,8 +152,11 @@ export function NotificationsProvider({
             !shownNoticeIds.has(notification.id)
           ) {
             addShownId(notification.id);
+            const isGreeting =
+              notification.category === "welcome_signup" ||
+              notification.category === "welcome_login";
             addNoticeRef.current({
-              type: "info",
+              type: isGreeting ? "neutral" : "info",
               title: notification.title,
               message: notification.body,
               duration: 5000,

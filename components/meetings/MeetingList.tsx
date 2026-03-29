@@ -204,7 +204,7 @@ export function MeetingList({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-7 gap-1.5 px-2 text-xs"
+                        className="h-7 cursor-pointer gap-1.5 px-2 text-xs"
                         onClick={() =>
                           hasPack
                             ? togglePrep(meeting.id)
@@ -242,7 +242,7 @@ export function MeetingList({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7"
+                    className="h-7 w-7 cursor-pointer text-muted-foreground hover:text-foreground"
                     onClick={() => openEdit(meeting)}
                   >
                     <Pencil className="h-3.5 w-3.5" />
@@ -251,7 +251,7 @@ export function MeetingList({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 text-destructive hover:text-destructive"
+                    className="h-7 w-7 cursor-pointer text-destructive hover:text-destructive"
                     onClick={() => setDeleteTarget(meeting.id)}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -277,7 +277,7 @@ export function MeetingList({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-6 gap-1.5 px-2 text-xs"
+                      className="h-6 cursor-pointer gap-1.5 px-2 text-xs"
                       onClick={() => void handleGeneratePrep(meeting)}
                       disabled={isLoading}
                     >

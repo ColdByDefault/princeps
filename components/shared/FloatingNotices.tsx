@@ -18,14 +18,24 @@ import {
 import { cn } from "@/lib/utils";
 import { useNotice, type NoticeType } from "./notice-context";
 
-const noticeStyles: Record<NoticeType, { iconColor: string }> = {
-  success: { iconColor: "text-emerald-500" },
-  error: { iconColor: "text-red-500" },
-  warning: { iconColor: "text-amber-500" },
-  info: { iconColor: "text-blue-500" },
-  neutral: { iconColor: "text-muted-foreground" },
-  loading: { iconColor: "text-muted-foreground" },
-};
+const noticeStyles: Record<NoticeType, { iconColor: string; border: string }> =
+  {
+    success: {
+      iconColor: "text-emerald-500",
+      border: "border-l-4 border-l-emerald-500",
+    },
+    error: { iconColor: "text-red-500", border: "border-l-4 border-l-red-500" },
+    warning: {
+      iconColor: "text-amber-500",
+      border: "border-l-4 border-l-amber-500",
+    },
+    info: {
+      iconColor: "text-blue-500",
+      border: "border-l-4 border-l-blue-500",
+    },
+    neutral: { iconColor: "text-muted-foreground", border: "" },
+    loading: { iconColor: "text-muted-foreground", border: "" },
+  };
 
 const noticeIcons: Record<NoticeType, React.ElementType> = {
   success: CheckCircle2,
@@ -62,6 +72,7 @@ function NoticeItem({
     <div
       className={cn(
         "pointer-events-auto w-full max-w-sm overflow-hidden rounded-xl border border-border bg-card shadow-lg backdrop-blur-sm transition-all duration-200",
+        styles.border,
         isExiting ? "translate-x-full opacity-0" : "translate-x-0 opacity-100",
         "animate-in slide-in-from-right-full",
       )}

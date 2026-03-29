@@ -118,12 +118,7 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
 
     const assistantId = Date.now() + 1;
     let accumulated = "";
-
-    // Placeholder assistant message to stream tokens into
-    setMessages((prev) => [
-      ...prev,
-      { id: assistantId, text: "", sender: "assistant", time: getTime() },
-    ]);
+    let firstToken = true;
 
     try {
       const res = await fetch("/api/chat/widget", {
@@ -161,11 +156,25 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
 
           if (event.type === "token") {
             accumulated += event.text;
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === assistantId ? { ...m, text: accumulated } : m,
-              ),
-            );
+            if (firstToken) {
+              firstToken = false;
+              setThinking(false);
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: assistantId,
+                  text: accumulated,
+                  sender: "assistant",
+                  time: getTime(),
+                },
+              ]);
+            } else {
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === assistantId ? { ...m, text: accumulated } : m,
+                ),
+              );
+            }
           } else if (event.type === "action") {
             const actionNameMap: Record<string, string> = {
               create_contact: "Contact created",
@@ -193,16 +202,27 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
           }
         }
       }
-
-      setProgress(100);
     } catch {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === assistantId
-            ? { ...m, text: "Something went wrong. Please try again." }
-            : m,
-        ),
-      );
+      if (firstToken) {
+        // No message was added yet — insert one with the error text
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: assistantId,
+            text: "Something went wrong. Please try again.",
+            sender: "assistant",
+            time: getTime(),
+          },
+        ]);
+      } else {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantId
+              ? { ...m, text: "Something went wrong. Please try again." }
+              : m,
+          ),
+        );
+      }
     } finally {
       setThinking(false);
     }

@@ -179,7 +179,7 @@ export function ContactList({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 cursor-pointer"
+                    className="h-7 w-7 cursor-pointer text-muted-foreground hover:text-foreground"
                     aria-label={getMessage(
                       messages,
                       "contacts.editLabel",
@@ -192,7 +192,7 @@ export function ContactList({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 cursor-pointer"
+                    className="h-7 w-7 cursor-pointer text-destructive hover:text-destructive"
                     aria-label={getMessage(
                       messages,
                       "contacts.deleteLabel",

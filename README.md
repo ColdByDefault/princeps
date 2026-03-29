@@ -1,19 +1,19 @@
-- [ ] greetings messages pop up remove color
-- [ ] add cursor-pointer contact and icons colors to pop-ups
-- [ ] add cursor-pointer Tasks and icons colors to pop-ups
+- [x] greetings messages pop up remove color
+- [x] add cursor-pointer contact and icons colors to pop-ups
+- [x] add cursor-pointer Tasks and icons colors to pop-ups
 - [ ] navbar new items translations
-- [ ] add cursor-pointer meeting and icons colors to pop-ups, Status translation drop-down
+- [x] add cursor-pointer meeting and icons colors to pop-ups
 - [ ] add app-settings tab in /settings, and seperate from assistant settings
 - [ ] improve user language reference, save in appsettings and db
-- [ ] Chat-widget douple progress bar, also check thinking.
+- [x] Chat-widget douple progress bar, also check thinking.
 - [ ] when calling tools, argue if entities are missing or already exist, e.g. contact already exists, meeting time missing, etc.
 - [ ] Ai-briefing => support both languages.
 - [ ] fix MeetingList UI
 - [ ] LLM can generate 24 h Link for Contact/Info Card for none see-sweet users. 
 - [ ] LLm cant link contacts to meetings.
 - [ ] add Meetings eye icon for better UX and view
-- [ ]
-- [ ]
+- [ ] OnboardingWizard.tsx => move to components
+- [ ] "/" where are tier and prices on first page before login/sign-up
 - [ ]
 - [ ]
 - [ ]
