@@ -62,6 +62,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       label: getMessage(messages, "shell.nav.knowledge", "Knowledge Base"),
     },
     {
+      href: "/contacts",
+      icon: FileText,
+      label: getMessage(messages, "shell.nav.contacts", "Contacts"),
+    },
+    {
       href: "/chat",
       icon: MessageSquare,
       label: getMessage(messages, "shell.nav.chat", "Chat"),

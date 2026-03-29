@@ -31,3 +31,18 @@ export interface KnowledgeDocumentRecord {
 
 /** Client-safe shape of the PersonalInfo fields map. */
 export type PersonalInfoFields = Record<string, string | number | null>;
+
+/** Client-safe shape of a Contact record. */
+export interface ContactRecord {
+  id: string;
+  name: string;
+  role: string | null;
+  company: string | null;
+  email: string | null;
+  phone: string | null;
+  notes: string | null;
+  tags: string[];
+  lastContact: string | null; // ISO string on the client
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}

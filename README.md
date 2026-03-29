@@ -1,0 +1,2 @@
+- greetings messages pop up remove color
+- add cursor-pointer contact and icons colors to pop-ups

@@ -37,12 +37,13 @@ This proposal establishes the first positioning baseline for discussion:
 
 ## Later
 
-The roadmap can be discussed in three stages:
+The roadmap can be discussed in four stages:
 
-1. Foundation: reliable chat, user memory, document retrieval, assistant configuration, and multilingual support.
-2. Notification system: real-time LLM-generated notifications, persistent inbox, SSE delivery, scalable category model.
-3. Executive workflow layer: daily briefings, meeting prep, action tracking, contacts, and decision logs.
-4. Chief-of-staff layer: proactive recommendations, cross-workstream coordination, and deeper operational intelligence.
+1. Foundation: reliable chat, user memory, document retrieval, assistant configuration, and multilingual support. ✅ Done
+2. Notification system: real-time LLM-generated notifications, persistent inbox, SSE delivery, scalable category model. ✅ Done
+3. Knowledge base: document upload + RAG retrieval, personal info record, context slot registry. ✅ Done
+4. Executive workflow layer: contacts, meetings, tasks, decision logs, and daily briefing. → In progress (feat/core-4)
+5. Chief-of-staff layer: proactive recommendations, cross-workstream coordination, and deeper operational intelligence.
 
 Open questions for discussion:
 

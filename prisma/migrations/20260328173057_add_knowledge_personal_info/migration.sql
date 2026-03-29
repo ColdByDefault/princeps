@@ -56,7 +56,5 @@ ALTER TABLE "knowledge_chunk" ADD CONSTRAINT "knowledge_chunk_userId_fkey" FOREI
 -- AddForeignKey
 ALTER TABLE "personal_info" ADD CONSTRAINT "personal_info_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- Note: pgvector index types (ivfflat, hnsw) cap at 2000 dims (vector) / 4000 dims (halfvec).
--- qwen3-embedding:8b produces 4096 dims which exceeds both limits.
 -- Cosine search via sequential scan (`<=>`) is used instead, which is
 -- sufficient at free-tier scale (5 documents, ~500 chunks max).
