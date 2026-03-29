@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { generatePrepPack } from "@/lib/meetings/prep.logic";
+import { prepRateLimiter, createRateLimitResponse } from "@/lib/security";
 
 /**
  * GET /api/meetings/[id]/prep
@@ -50,6 +51,9 @@ export async function POST(
   }
 
   const { id } = await params;
+
+  const rl = prepRateLimiter.check(session.user.id);
+  if (!rl.allowed) return createRateLimitResponse(rl.retryAfterSeconds);
 
   try {
     const result = await generatePrepPack(session.user.id, id);
