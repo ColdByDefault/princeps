@@ -6,6 +6,7 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import { logInteraction } from "@/lib/contacts/log-interaction";
 import type { MeetingRecord } from "./list.logic";
 
 export interface UpdateMeetingInput {
@@ -56,6 +57,12 @@ export async function updateMeeting(
       },
     },
   });
+
+  if (participantContactIds && participantContactIds.length > 0) {
+    for (const contactId of participantContactIds) {
+      logInteraction(contactId, "meeting", row.id);
+    }
+  }
 
   return {
     id: row.id,

@@ -9,5 +9,15 @@
 - [ ] when calling tools, argue if entities are missing or already exist, e.g. contact already exists, meeting time missing, etc.
 - [ ] Ai-briefing => support both languages.
 - [ ] fix MeetingList UI
-
-create a meeting for Release update on 30.06.2024, 10:00 AM, with contact John Doe, and task "Prepare slides for release update". Then rename the chat to "Release Update Planning". Plattform: microsoft teams.
+- [ ] LLM can generate 24 h Link for Contact/Info Card for none users. 
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
