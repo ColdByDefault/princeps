@@ -14,6 +14,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { ChatWidgetProvider } from "@/components/chat-widget/ChatWidgetProvider";
+import { NudgeTrigger } from "@/components/nudges/NudgeTrigger";
 import { getUserPreferences } from "@/lib/settings/get.logic";
 import "./globals.css";
 import { Geist } from "next/font/google";
@@ -96,6 +97,7 @@ export default async function RootLayout({
                   authenticated={!!session}
                   assistantName={assistantName}
                 />
+                <NudgeTrigger authenticated={!!session} />
               </NotificationsProvider>
             </NoticeProvider>
           </TooltipProvider>

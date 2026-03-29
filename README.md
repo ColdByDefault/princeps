@@ -9,7 +9,7 @@
 - [ ] when calling tools, argue if entities are missing or already exist, e.g. contact already exists, meeting time missing, etc.
 - [ ] Ai-briefing => support both languages.
 - [ ] fix MeetingList UI
-- [ ] LLM can generate 24 h Link for Contact/Info Card for none users. 
+- [ ] LLM can generate 24 h Link for Contact/Info Card for none see-sweet users. 
 - [ ]
 - [ ]
 - [ ]
