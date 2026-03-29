@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface ChatWidgetProps {
-  assistantName?: string;
+  assistantName?: string | undefined;
 }
 
 interface Message {

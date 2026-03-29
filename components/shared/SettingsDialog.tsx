@@ -6,7 +6,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -16,19 +15,9 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { getMessage } from "@/lib/i18n";
-import { type MessageDictionary, type AppLanguage } from "@/types/i18n";
+import { type MessageDictionary } from "@/types/i18n";
 import { type UserPreferences, DEFAULT_PREFERENCES } from "@/types/settings";
-import { useLanguage } from "@/hooks/use-language";
 import { CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -84,8 +73,6 @@ function SliderField({
 }
 
 export function SettingsDialog({ open, onOpenChange, messages }: Props) {
-  const router = useRouter();
-  const { language: clientLanguage, changeLanguage } = useLanguage();
   const [prefs, setPrefs] = useState<UserPreferences>(DEFAULT_PREFERENCES);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -120,15 +107,9 @@ export function SettingsDialog({ open, onOpenChange, messages }: Props) {
       const res = await fetch("/api/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(prefs),
+        body: JSON.stringify({ ollamaOptions: prefs.ollamaOptions }),
       });
       if (!res.ok) throw new Error();
-
-      // Sync cookie/localStorage so the full app UI reflects the saved language
-      if (prefs.language !== clientLanguage) {
-        changeLanguage(prefs.language);
-        router.refresh();
-      }
 
       toast.success(getMessage(messages, "settings.saved", "Settings saved"), {
         icon: <CheckCircle2 className="size-4 text-emerald-500" />,
@@ -144,7 +125,10 @@ export function SettingsDialog({ open, onOpenChange, messages }: Props) {
   };
 
   const handleReset = () => {
-    setPrefs(DEFAULT_PREFERENCES);
+    setPrefs((p) => ({
+      ...p,
+      ollamaOptions: DEFAULT_PREFERENCES.ollamaOptions,
+    }));
   };
 
   return (
@@ -152,7 +136,7 @@ export function SettingsDialog({ open, onOpenChange, messages }: Props) {
       <DialogContent className="sm:max-w-3xl overflow-x-clip">
         <DialogHeader>
           <DialogTitle>
-            {getMessage(messages, "settings.title", "Settings")}
+            {getMessage(messages, "settings.llm.title", "LLM Settings")}
           </DialogTitle>
         </DialogHeader>
 
@@ -161,172 +145,88 @@ export function SettingsDialog({ open, onOpenChange, messages }: Props) {
             {getMessage(messages, "settings.loading", "Loading…")}
           </div>
         ) : (
-          <div className="min-w-0 max-h-[65vh] overflow-y-auto space-y-6 py-2 pr-8">
-            {/* Language */}
-            <div className="space-y-2">
-              <Label className="text-sm font-semibold">
-                {getMessage(messages, "settings.section.language", "Language")}
-              </Label>
-              <p className="text-xs text-muted-foreground">
-                {getMessage(
-                  messages,
-                  "settings.language.description",
-                  "Language used throughout the app and in assistant messages.",
-                )}
-              </p>
-              <Select
-                value={prefs.language}
-                onValueChange={(v) =>
-                  setPrefs((p) => ({ ...p, language: v as AppLanguage }))
-                }
-              >
-                <SelectTrigger className="w-40 cursor-pointer">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="de" className="cursor-pointer">
-                    {getMessage(messages, "shell.language.de", "German")}
-                  </SelectItem>
-                  <SelectItem value="en" className="cursor-pointer">
-                    {getMessage(messages, "shell.language.en", "English")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="min-w-0 max-h-[65vh] overflow-y-auto space-y-4 py-2 pr-8">
+            <SliderField
+              label={getMessage(
+                messages,
+                "settings.model.temperature",
+                "Temperature",
+              )}
+              description={getMessage(
+                messages,
+                "settings.model.temperatureDesc",
+                "Controls randomness. Higher values produce more creative responses.",
+              )}
+              value={prefs.ollamaOptions.temperature}
+              min={0}
+              max={2}
+              step={0.05}
+              onChange={(v) => setOpt("temperature", v)}
+            />
 
-            <Separator />
+            <SliderField
+              label={getMessage(messages, "settings.model.topP", "Top P")}
+              description={getMessage(
+                messages,
+                "settings.model.topPDesc",
+                "Nucleus sampling. Lower values make output more focused.",
+              )}
+              value={prefs.ollamaOptions.top_p}
+              min={0}
+              max={1}
+              step={0.05}
+              onChange={(v) => setOpt("top_p", v)}
+            />
 
-            {/* Assistant instructions */}
-            <div className="space-y-2">
-              <Label className="text-sm font-semibold">
-                {getMessage(
-                  messages,
-                  "settings.section.assistant",
-                  "Assistant",
-                )}
-              </Label>
-              <p className="text-xs text-muted-foreground">
-                {getMessage(
-                  messages,
-                  "settings.instructions.description",
-                  "Custom instructions applied to every conversation.",
-                )}
-              </p>
-              <Textarea
-                rows={4}
-                maxLength={2000}
-                placeholder={getMessage(
-                  messages,
-                  "settings.instructions.placeholder",
-                  "Always reply in bullet points. Focus on actionability.",
-                )}
-                value={prefs.assistantInstructions}
-                onChange={(e) =>
-                  setPrefs((p) => ({
-                    ...p,
-                    assistantInstructions: e.target.value,
-                  }))
-                }
-              />
-              <p className="text-right text-[10px] text-muted-foreground/60">
-                {prefs.assistantInstructions.length}/2000
-              </p>
-            </div>
+            <SliderField
+              label={getMessage(messages, "settings.model.topK", "Top K")}
+              description={getMessage(
+                messages,
+                "settings.model.topKDesc",
+                "Limits the token pool per step. 0 disables the limit.",
+              )}
+              value={prefs.ollamaOptions.top_k}
+              min={0}
+              max={200}
+              step={1}
+              onChange={(v) => setOpt("top_k", Math.round(v))}
+            />
 
-            <Separator />
+            <SliderField
+              label={getMessage(
+                messages,
+                "settings.model.numCtx",
+                "Context window",
+              )}
+              description={getMessage(
+                messages,
+                "settings.model.numCtxDesc",
+                "Number of tokens the model can process at once.",
+              )}
+              value={prefs.ollamaOptions.num_ctx}
+              min={512}
+              max={131072}
+              step={512}
+              onChange={(v) => setOpt("num_ctx", Math.round(v))}
+            />
 
-            {/* Model options */}
-            <div className="space-y-4">
-              <Label className="text-sm font-semibold">
-                {getMessage(
-                  messages,
-                  "settings.section.model",
-                  "Model options",
-                )}
-              </Label>
-
-              <SliderField
-                label={getMessage(
-                  messages,
-                  "settings.model.temperature",
-                  "Temperature",
-                )}
-                description={getMessage(
-                  messages,
-                  "settings.model.temperatureDesc",
-                  "Controls randomness. Higher values produce more creative responses.",
-                )}
-                value={prefs.ollamaOptions.temperature}
-                min={0}
-                max={2}
-                step={0.05}
-                onChange={(v) => setOpt("temperature", v)}
-              />
-
-              <SliderField
-                label={getMessage(messages, "settings.model.topP", "Top P")}
-                description={getMessage(
-                  messages,
-                  "settings.model.topPDesc",
-                  "Nucleus sampling. Lower values make output more focused.",
-                )}
-                value={prefs.ollamaOptions.top_p}
-                min={0}
-                max={1}
-                step={0.05}
-                onChange={(v) => setOpt("top_p", v)}
-              />
-
-              <SliderField
-                label={getMessage(messages, "settings.model.topK", "Top K")}
-                description={getMessage(
-                  messages,
-                  "settings.model.topKDesc",
-                  "Limits the token pool per step. 0 disables the limit.",
-                )}
-                value={prefs.ollamaOptions.top_k}
-                min={0}
-                max={200}
-                step={1}
-                onChange={(v) => setOpt("top_k", Math.round(v))}
-              />
-
-              <SliderField
-                label={getMessage(
-                  messages,
-                  "settings.model.numCtx",
-                  "Context window",
-                )}
-                description={getMessage(
-                  messages,
-                  "settings.model.numCtxDesc",
-                  "Number of tokens the model can process at once.",
-                )}
-                value={prefs.ollamaOptions.num_ctx}
-                min={512}
-                max={131072}
-                step={512}
-                onChange={(v) => setOpt("num_ctx", Math.round(v))}
-              />
-
-              <SliderField
-                label={getMessage(
-                  messages,
-                  "settings.model.repeatPenalty",
-                  "Repeat penalty",
-                )}
-                description={getMessage(
-                  messages,
-                  "settings.model.repeatPenaltyDesc",
-                  "Penalizes repeated tokens. Higher values reduce repetition.",
-                )}
-                value={prefs.ollamaOptions.repeat_penalty}
-                min={0.5}
-                max={2}
-                step={0.05}
-                onChange={(v) => setOpt("repeat_penalty", v)}
-              />
-            </div>
+            <SliderField
+              label={getMessage(
+                messages,
+                "settings.model.repeatPenalty",
+                "Repeat penalty",
+              )}
+              description={getMessage(
+                messages,
+                "settings.model.repeatPenaltyDesc",
+                "Penalizes repeated tokens. Higher values reduce repetition.",
+              )}
+              value={prefs.ollamaOptions.repeat_penalty}
+              min={0.5}
+              max={2}
+              step={0.05}
+              onChange={(v) => setOpt("repeat_penalty", v)}
+            />
           </div>
         )}
 

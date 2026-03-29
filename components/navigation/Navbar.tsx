@@ -17,6 +17,7 @@ import {
   LogOut,
   Menu,
   MessageSquare,
+  Settings,
   X,
   type LucideIcon,
   CheckSquare,
@@ -84,12 +85,20 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       icon: MessageSquare,
       label: getMessage(messages, "shell.nav.chat", "Chat"),
     },
+    {
+      href: "/settings/assistant",
+      icon: Settings,
+      label: getMessage(messages, "shell.nav.settings", "Settings"),
+    },
   ];
 }
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/home") {
     return pathname === href;
+  }
+  if (href === "/settings/assistant") {
+    return pathname.startsWith("/settings");
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);

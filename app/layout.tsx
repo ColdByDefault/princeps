@@ -14,6 +14,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { ChatWidgetProvider } from "@/components/chat-widget/ChatWidgetProvider";
+import { getUserPreferences } from "@/lib/settings/get.logic";
 import "./globals.css";
 import { Geist } from "next/font/google";
 
@@ -28,6 +29,10 @@ export default async function RootLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
+  const assistantName = session
+    ? (await getUserPreferences(session.user.id)).assistantName
+    : undefined;
 
   return (
     <html
@@ -87,7 +92,10 @@ export default async function RootLayout({
                 </div>
                 <FloatingNotices />
                 <Toaster />
-                <ChatWidgetProvider authenticated={!!session} />
+                <ChatWidgetProvider
+                  authenticated={!!session}
+                  assistantName={assistantName}
+                />
               </NotificationsProvider>
             </NoticeProvider>
           </TooltipProvider>

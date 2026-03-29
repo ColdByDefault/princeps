@@ -8,6 +8,20 @@ import "server-only";
 import { db } from "@/lib/db";
 import { type OllamaMessage } from "@/lib/chat/ollama";
 import { SLOT_REGISTRY } from "@/lib/context";
+import { type ResponseStyle } from "@/types/settings";
+
+type AssistantOpts = {
+  assistantName: string;
+  systemPrompt: string;
+  responseStyle: ResponseStyle;
+};
+
+const RESPONSE_STYLE_LINES: Record<ResponseStyle, string> = {
+  concise: "Keep answers short and focused. Avoid unnecessary elaboration.",
+  detailed: "Provide thorough, well-explained answers with relevant context.",
+  formal: "Maintain a professional, formal tone in all responses.",
+  casual: "Keep a natural, conversational tone.",
+};
 
 /**
  * Assembles the full LLM system prompt from:
@@ -20,7 +34,7 @@ import { SLOT_REGISTRY } from "@/lib/context";
 export async function buildSystemPrompt(
   userId: string,
   query: string,
-  customInstructions: string | null,
+  opts: AssistantOpts,
 ): Promise<OllamaMessage> {
   const user = await db.user.findUnique({
     where: { id: userId },
@@ -37,6 +51,7 @@ export async function buildSystemPrompt(
   });
 
   const lines: string[] = [
+    `Your name is ${opts.assistantName}.`,
     `You are the private executive assistant for ${user?.name ?? "the user"}.`,
     `Today is ${now} (${tz}).`,
     "",
@@ -47,10 +62,11 @@ export async function buildSystemPrompt(
     "- Do not offer to draft emails, messages, or communications unless the user explicitly asks.",
     "- Focus on decisions, planning, preparation, and follow-through.",
     "- Always respond in the same language the user writes in. If the user writes in German, respond fully in German. If the user writes in English, respond fully in English.",
+    `- ${RESPONSE_STYLE_LINES[opts.responseStyle]}`,
   ];
 
-  if (customInstructions) {
-    lines.push("", `Custom instructions from user: ${customInstructions}`);
+  if (opts.systemPrompt) {
+    lines.push("", `Custom instructions from user: ${opts.systemPrompt}`);
   }
 
   // Run all slots in parallel; omit sections that return null.

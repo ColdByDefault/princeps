@@ -81,11 +81,11 @@ export async function POST(req: Request, { params }: Params) {
   const preferences = await getUserPreferences(session.user.id);
 
   // Build the system prompt from all available context
-  const systemMessage = await buildSystemPrompt(
-    session.user.id,
-    userMessage,
-    preferences.assistantInstructions.trim() || null,
-  );
+  const systemMessage = await buildSystemPrompt(session.user.id, userMessage, {
+    assistantName: preferences.assistantName,
+    systemPrompt: preferences.systemPrompt,
+    responseStyle: preferences.responseStyle,
+  });
 
   // Map stored messages to Ollama format
   const historyMessages = chatData.messages.map((m) => ({

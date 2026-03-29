@@ -68,11 +68,11 @@ export async function POST(req: Request) {
 
   const preferences = await getUserPreferences(session.user.id);
 
-  const systemMessage = await buildSystemPrompt(
-    session.user.id,
-    userMessage,
-    preferences.assistantInstructions.trim() || null,
-  );
+  const systemMessage = await buildSystemPrompt(session.user.id, userMessage, {
+    assistantName: preferences.assistantName,
+    systemPrompt: preferences.systemPrompt,
+    responseStyle: preferences.responseStyle,
+  });
 
   const ollamaMessages = [
     systemMessage,
