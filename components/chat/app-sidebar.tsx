@@ -11,11 +11,14 @@ import {
   MessageSquare,
   MoreHorizontal,
   Pencil,
+  CalendarDays,
+  CheckSquare,
   Plus,
   Settings,
   SlidersHorizontal,
   Trash2,
   User,
+  Users,
 } from "lucide-react";
 import {
   Sidebar,
@@ -249,12 +252,79 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                 <SidebarMenuButton
                   render={<Link href="/knowledge" />}
                   isActive={pathname === "/knowledge"}
-                  tooltip={getMessage(messages, "shell.nav.knowledge", "Knowledge Base")}
+                  tooltip={getMessage(
+                    messages,
+                    "shell.nav.knowledge",
+                    "Knowledge Base",
+                  )}
                   className="cursor-pointer"
                 >
                   <FileText className="size-4 shrink-0" />
                   <span className="truncate">
-                    {getMessage(messages, "shell.nav.knowledge", "Knowledge Base")}
+                    {getMessage(
+                      messages,
+                      "shell.nav.knowledge",
+                      "Knowledge Base",
+                    )}
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/contacts" />}
+                  isActive={pathname === "/contacts"}
+                  tooltip={getMessage(
+                    messages,
+                    "contacts.metadata.title",
+                    "Contacts",
+                  )}
+                  className="cursor-pointer"
+                >
+                  <Users className="size-4 shrink-0" />
+                  <span className="truncate">
+                    {getMessage(
+                      messages,
+                      "contacts.metadata.title",
+                      "Contacts",
+                    )}
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/meetings" />}
+                  isActive={pathname === "/meetings"}
+                  tooltip={getMessage(
+                    messages,
+                    "meetings.metadata.title",
+                    "Meetings",
+                  )}
+                  className="cursor-pointer"
+                >
+                  <CalendarDays className="size-4 shrink-0" />
+                  <span className="truncate">
+                    {getMessage(
+                      messages,
+                      "meetings.metadata.title",
+                      "Meetings",
+                    )}
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/tasks" />}
+                  isActive={pathname === "/tasks"}
+                  tooltip={getMessage(
+                    messages,
+                    "tasks.metadata.title",
+                    "Tasks",
+                  )}
+                  className="cursor-pointer"
+                >
+                  <CheckSquare className="size-4 shrink-0" />
+                  <span className="truncate">
+                    {getMessage(messages, "tasks.metadata.title", "Tasks")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>

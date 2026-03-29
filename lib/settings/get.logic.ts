@@ -6,7 +6,11 @@
 import "server-only";
 
 import { db } from "@/lib/db";
-import { type UserPreferences, DEFAULT_PREFERENCES } from "@/types/settings";
+import {
+  type UserPreferences,
+  DEFAULT_PREFERENCES,
+  isResponseStyle,
+} from "@/types/settings";
 import {
   isSupportedLanguage,
   type AppLanguage,
@@ -49,10 +53,19 @@ export async function getUserPreferences(
 
   return {
     language: parseLanguage(raw),
-    assistantInstructions:
-      typeof raw["assistantInstructions"] === "string"
-        ? raw["assistantInstructions"]
-        : DEFAULT_PREFERENCES.assistantInstructions,
+    assistantName:
+      typeof raw["assistantName"] === "string" && raw["assistantName"].trim()
+        ? raw["assistantName"].trim().slice(0, 30)
+        : DEFAULT_PREFERENCES.assistantName,
+    systemPrompt:
+      typeof raw["systemPrompt"] === "string"
+        ? raw["systemPrompt"]
+        : typeof raw["assistantInstructions"] === "string"
+          ? raw["assistantInstructions"]
+          : DEFAULT_PREFERENCES.systemPrompt,
+    responseStyle: isResponseStyle(raw["responseStyle"])
+      ? raw["responseStyle"]
+      : DEFAULT_PREFERENCES.responseStyle,
     ollamaOptions: {
       temperature: numOpt(rawOpts, "temperature", d.temperature),
       top_p: numOpt(rawOpts, "top_p", d.top_p),

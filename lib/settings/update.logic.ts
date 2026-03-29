@@ -7,7 +7,11 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import type { Prisma } from "@/lib/generated/prisma/client";
-import { type UserPreferences, DEFAULT_PREFERENCES } from "@/types/settings";
+import {
+  type UserPreferences,
+  DEFAULT_PREFERENCES,
+  isResponseStyle,
+} from "@/types/settings";
 import { isSupportedLanguage } from "@/types/i18n";
 
 export async function updateUserPreferences(
@@ -36,10 +40,21 @@ export async function updateUserPreferences(
     merged["language"] = patch.language;
   }
 
-  if (patch.assistantInstructions !== undefined) {
-    merged["assistantInstructions"] = patch.assistantInstructions
-      .trim()
-      .slice(0, 2000);
+  if (patch.assistantName !== undefined) {
+    merged["assistantName"] =
+      patch.assistantName.trim().slice(0, 30) ||
+      DEFAULT_PREFERENCES.assistantName;
+  }
+
+  if (patch.systemPrompt !== undefined) {
+    merged["systemPrompt"] = patch.systemPrompt.trim().slice(0, 2000);
+  }
+
+  if (
+    patch.responseStyle !== undefined &&
+    isResponseStyle(patch.responseStyle)
+  ) {
+    merged["responseStyle"] = patch.responseStyle;
   }
 
   if (patch.ollamaOptions !== undefined) {

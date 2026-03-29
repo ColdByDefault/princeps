@@ -224,6 +224,16 @@ components/
 
 ## Done
 
+- Prisma `KnowledgeDocument`, `KnowledgeChunk`, and `PersonalInfo` models added and migrated.
+- `lib/knowledge/` — `upload.logic.ts`, `chunk.logic.ts`, `embed.logic.ts`, `search.logic.ts`, `delete.logic.ts`, `personal-info.logic.ts`, `list.logic.ts`.
+- API routes: `GET/POST /api/knowledge/documents`, `DELETE /api/knowledge/documents/[id]`, `GET/PATCH /api/knowledge/personal-info`.
+- Upload pipeline: validate type + size cap (1 MB) → chunk (~500 tokens, 50-token overlap) → embed via Ollama → store in pgvector. Quota (`knowledgeUploadsUsed`, `knowledgeCharsUsed`) recalculated on upload and delete.
+- `lib/context/` slot registry introduced: `index.ts`, `build.ts`, `personal-info.slot.ts`, `knowledge.slot.ts`. `buildSystemPrompt` replaces the old `lib/chat/context.logic.ts`.
+- `app/knowledge/page.tsx` — server auth guard, passes initial documents and personal-info to client.
+- `components/knowledge/` — `KnowledgeTabs.tsx`, `DocumentList.tsx` (includes upload UI), `PersonalInfoForm.tsx`, `index.ts`.
+- i18n keys added to `en.json` and `de.json` under `knowledge.*`.
+- Lint, typecheck, and build pass clean.
+
 ## Later
 
 - Stream upload progress for large files.

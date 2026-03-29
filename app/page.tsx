@@ -101,6 +101,7 @@ export default async function LandingPage() {
       </header>
 
       <section className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[1.15fr_0.85fr] lg:py-16">
+
         <div className="space-y-8">
           <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm text-muted-foreground backdrop-blur">
             <Sparkles className="size-4 text-primary" />

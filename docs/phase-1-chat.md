@@ -171,6 +171,37 @@ All user-visible strings go through the `messages/` system. Keys will be added u
 - Settings dialog is global (user-scoped preferences, not per-chat) — kept as-is.
 - Success toasts on chat delete and rename.
 
+## Chat-Widget
+
+A floating assistant widget rendered on all authenticated routes except `/chat`, `/`, `/login`, and `/sign-up`. It is managed by `ChatWidgetProvider` in the root layout.
+
+- **Stateless** — messages are held in component state only; nothing is persisted to the DB. The 10-chat limit on `/chat` is unaffected.
+- Sends full conversation history to `POST /api/chat/widget` on each turn (capped at last 20 turns server-side).
+- Uses the same `buildSystemPrompt` + `getUserPreferences` pipeline as `/chat/[chatId]/stream`, so global assistant settings (name, system prompt, response style) apply equally.
+- The assistant name displayed in the widget header and greeting is loaded server-side in the root layout from `getUserPreferences` and passed down through `ChatWidgetProvider → ChatWidget`.
+
+## Assistant Settings (`/settings/assistant`)
+
+A dedicated global settings page for personalizing the assistant. Accessible from the main nav ("Settings" link). Saves to `User.preferences` JSON via `PATCH /api/settings`, same column used by the LLM dialog.
+
+**Fields managed here:**
+
+| Field           | Type                                              | Default     |
+| --------------- | ------------------------------------------------- | ----------- |
+| `assistantName` | string (max 30)                                   | `"Atlas"`   |
+| `language`      | `"en" \| "de"`                                    | `"en"`      |
+| `responseStyle` | `"concise" \| "detailed" \| "formal" \| "casual"` | `"concise"` |
+| `systemPrompt`  | string (max 2000)                                 | `""`        |
+
+- `assistantName` is injected into the system prompt identity line and shown in the chat-widget header.
+- `systemPrompt` replaces the old `assistantInstructions` field (DB values are migrated on first read via fallback).
+- `responseStyle` appends a single behavior line to the system prompt (e.g. "Keep answers short and focused.").
+- `language` moves the language selector out of the LLM dialog and into this page.
+
+Both `/chat` and the chat-widget read these settings on every request — changing them takes effect immediately on the next conversation turn.
+
+**LLM Settings dialog (chat-only):** Stripped to model parameters only (temperature, top_p, top_k, context window, repeat penalty). Accessible via the ⚙ icon inside `/chat`.
+
 ## Later
 
 - Pin important chats above the 10-chat limit.

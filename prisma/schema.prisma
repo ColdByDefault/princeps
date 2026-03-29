@@ -36,6 +36,10 @@ model User {
   knowledgeDocuments   KnowledgeDocument[]
   knowledgeChunks      KnowledgeChunk[]
   personalInfo         PersonalInfo?
+  contacts             Contact[]
+  meetings             Meeting[]
+  tasks                Task[]
+  assistantReports     AssistantReport[]
 
   @@map("user")
 }
@@ -177,5 +181,99 @@ model PersonalInfo {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("personal_info")
+}
+
+// ─── Contacts ─────────────────────────────────────────────
+
+model Contact {
+  id          String    @id @default(cuid())
+  userId      String
+  name        String
+  role        String?
+  company     String?
+  email       String?
+  phone       String?
+  notes       String?
+  tags        Json      @default("[]")
+  lastContact DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user     User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meetings MeetingParticipant[]
+
+  @@index([userId])
+  @@map("contact")
+}
+
+// ─── Meetings ─────────────────────────────────────────────
+
+model Meeting {
+  id          String    @id @default(cuid())
+  userId      String
+  title       String
+  scheduledAt DateTime
+  durationMin Int?
+  location    String?
+  agenda      String?
+  summary     String?
+  status      String    @default("upcoming") // upcoming | done | cancelled
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  participants MeetingParticipant[]
+  tasks        Task[]
+
+  @@index([userId])
+  @@map("meeting")
+}
+
+model MeetingParticipant {
+  id        String @id @default(cuid())
+  meetingId String
+  contactId String
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@unique([meetingId, contactId])
+  @@map("meeting_participant")
+}
+
+// ─── Assistant Reports ────────────────────────────────────
+
+model AssistantReport {
+  id          String   @id @default(cuid())
+  userId      String
+  toolsCalled Json     // string[] — ordered list of tool names that were invoked
+  summary     String   // LLM-generated brief description of what was done
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("assistant_report")
+}
+
+// ─── Tasks ────────────────────────────────────────────────
+
+model Task {
+  id        String    @id @default(cuid())
+  userId    String
+  title     String
+  notes     String?
+  status    String    @default("open")    // open | in_progress | done | cancelled
+  priority  String    @default("normal") // low | normal | high | urgent
+  dueDate   DateTime?
+  meetingId String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("task")
 }
 

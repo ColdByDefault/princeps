@@ -13,15 +13,32 @@ export type OllamaOptions = {
   repeat_penalty: number;
 };
 
+export type ResponseStyle = "concise" | "detailed" | "formal" | "casual";
+
+export const RESPONSE_STYLES: ResponseStyle[] = [
+  "concise",
+  "detailed",
+  "formal",
+  "casual",
+];
+
+export function isResponseStyle(v: unknown): v is ResponseStyle {
+  return RESPONSE_STYLES.includes(v as ResponseStyle);
+}
+
 export type UserPreferences = {
   language: AppLanguage;
-  assistantInstructions: string;
+  assistantName: string;
+  systemPrompt: string;
+  responseStyle: ResponseStyle;
   ollamaOptions: OllamaOptions;
 };
 
 export const DEFAULT_PREFERENCES: UserPreferences = {
   language: DEFAULT_LANGUAGE,
-  assistantInstructions: "",
+  assistantName: "Atlas",
+  systemPrompt: "",
+  responseStyle: "concise",
   ollamaOptions: {
     temperature: 0.8,
     top_p: 0.9,
