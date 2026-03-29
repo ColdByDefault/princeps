@@ -182,9 +182,9 @@ model Task {
 | ---------------- | ---------------------- | ------------- |
 | Personal Info    | `PersonalInfo.fields`  | ✅ Phase 3    |
 | Knowledge chunks | `KnowledgeChunk` + RAG | ✅ Phase 3    |
-| Contacts         | `Contact` model        | Phase 4       |
-| Meetings         | `Meeting` model        | Phase 4       |
-| Tasks            | `Task` model           | Phase 4       |
+| Contacts         | `Contact` model        | ✅ Phase 4    |
+| Meetings         | `Meeting` model        | ✅ Phase 4    |
+| Tasks            | `Task` model           | ✅ Phase 4    |
 | Decisions        | `Decision` model       | Stub / future |
 
 New slot files added to `lib/context/`:
@@ -349,9 +349,36 @@ After any tool-call batch completes, the assistant generates a brief report and 
 - Navbar: "Reports" added to the Settings dropdown (`ClipboardList` icon, `/reports` href).
 - i18n keys: `reports.*` group (en + de); `shell.nav.reports` (en + de).
 
-- Decision log (Phase 5): record decisions with rationale, status, and change history.
+### Tool-Call Deduplication
+
+Before writing, `executeToolCall` runs a fast DB lookup for each tool:
+
+| Tool             | Guard                                                             |
+| ---------------- | ----------------------------------------------------------------- |
+| `create_contact` | Same name (case-insensitive) already exists for this user         |
+| `create_meeting` | Same title (case-insensitive) + `scheduledAt` within ±1 hour      |
+| `create_task`    | Same title (case-insensitive) + status is `open` or `in_progress` |
+
+If a match is found: no write, no SSE action event — the model receives `{skipped, reason, id}` as the tool result and can inform the user naturally.
+
+### Home Page Briefing Card
+
+The right panel of `/home` now shows a live workspace snapshot (server-rendered, zero LLM calls):
+
+- **Next meeting** — title + formatted date from `Meeting` (status `upcoming`, nearest `scheduledAt`)
+- **Open tasks** — total count + red badge for urgent/high priority items
+- **Overdue warning** — amber strip if any open tasks are past their `dueDate`
+
+`lib/briefing/snapshot.ts` — two parallel DB queries assembled with `Promise.all`.
+`components/home/BriefingCard.tsx` — pure server-compatible display component.
+i18n keys: `home.briefing.*` (en + de).
+
+- All checks passing: lint ✅ typecheck ✅ build ✅ (36 routes).
+
+## Later (carry to Phase 5)
+
+- Decision log: record decisions with rationale, status, and change history.
 - Automated post-meeting action extraction: assistant parses a pasted transcript and proposes tasks.
 - Contact interaction history: log when a contact was discussed in chat or linked to a meeting.
 - Recurring meetings / standing cadences.
 - Task dependencies (blocked-by links).
-- Daily briefing digest generated from open tasks + upcoming meetings.
