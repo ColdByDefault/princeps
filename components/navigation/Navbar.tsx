@@ -9,6 +9,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
+  ContactRound,
   FileText,
   Globe,
   LayoutDashboard,
@@ -63,7 +64,7 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
     },
     {
       href: "/contacts",
-      icon: FileText,
+      icon: ContactRound,
       label: getMessage(messages, "shell.nav.contacts", "Contacts"),
     },
     {
