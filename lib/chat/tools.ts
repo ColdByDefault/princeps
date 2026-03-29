@@ -8,6 +8,7 @@ import "server-only";
 import { createContact } from "@/lib/contacts/create.logic";
 import { createMeeting } from "@/lib/meetings/create.logic";
 import { createTask } from "@/lib/tasks/create.logic";
+import { db } from "@/lib/db";
 
 import {
   type OllamaToolDefinition,
@@ -155,6 +156,23 @@ export async function executeToolCall(
       return { action: null, summary: '{"error":"contact name is required"}' };
     }
 
+    // Deduplication: skip if a contact with the same name already exists
+    const existing = await db.contact.findFirst({
+      where: { userId, name: { equals: a.name.trim(), mode: "insensitive" } },
+      select: { id: true, name: true },
+    });
+    if (existing) {
+      return {
+        action: null,
+        summary: JSON.stringify({
+          skipped: true,
+          reason: "contact already exists",
+          id: existing.id,
+          name: existing.name,
+        }),
+      };
+    }
+
     const record = await createContact(userId, {
       name: a.name.trim(),
       role: typeof a.role === "string" ? a.role : null,
@@ -206,6 +224,29 @@ export async function executeToolCall(
       };
     }
 
+    // Deduplication: skip if a meeting with the same title exists within ±1 hour of the same time
+    const windowStart = new Date(scheduledAt.getTime() - 60 * 60 * 1000);
+    const windowEnd = new Date(scheduledAt.getTime() + 60 * 60 * 1000);
+    const existingMeeting = await db.meeting.findFirst({
+      where: {
+        userId,
+        title: { equals: a.title.trim(), mode: "insensitive" },
+        scheduledAt: { gte: windowStart, lte: windowEnd },
+      },
+      select: { id: true, title: true },
+    });
+    if (existingMeeting) {
+      return {
+        action: null,
+        summary: JSON.stringify({
+          skipped: true,
+          reason: "meeting already exists",
+          id: existingMeeting.id,
+          title: existingMeeting.title,
+        }),
+      };
+    }
+
     const record = await createMeeting(userId, {
       title: a.title.trim(),
       scheduledAt,
@@ -234,6 +275,27 @@ export async function executeToolCall(
 
     if (typeof a.title !== "string" || !a.title.trim()) {
       return { action: null, summary: '{"error":"task title is required"}' };
+    }
+
+    // Deduplication: skip if an open/in_progress task with the same title already exists
+    const existingTask = await db.task.findFirst({
+      where: {
+        userId,
+        title: { equals: a.title.trim(), mode: "insensitive" },
+        status: { in: ["open", "in_progress"] },
+      },
+      select: { id: true, title: true },
+    });
+    if (existingTask) {
+      return {
+        action: null,
+        summary: JSON.stringify({
+          skipped: true,
+          reason: "task already exists",
+          id: existingTask.id,
+          title: existingTask.title,
+        }),
+      };
     }
 
     const VALID_PRIORITIES = new Set(["low", "normal", "high", "urgent"]);
