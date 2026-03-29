@@ -293,7 +293,8 @@ Additions to existing components:
 ## Done
 
 - **Decision Log** — `Decision` Prisma model, migration `20260329120459_add_decisions`, `lib/decisions/` (list, create, update, delete), `app/api/decisions/` (GET, POST, PATCH, DELETE), `lib/context/decisions.slot.ts` (open decisions + last 5 decided/reversed), `DecisionRecord` in `types/api.ts`, i18n keys `decisions.*` (en + de), `components/decisions/` (DecisionList, DecisionForm, DecisionsView), `app/decisions/page.tsx`, sidebar nav link (`GitFork` icon), `create_decision` tool call in `lib/chat/tools.ts` with deduplication guard.
-- All checks passing: lint ✅ typecheck ✅ build ✅ (39 routes).
+- **LLM-Powered Daily Briefing** — `BriefingCache` Prisma model + migration `20260329154252_add_briefing_cache`, `lib/briefing/generate.logic.ts` (assembles all context slots, calls Ollama non-streaming, upserts cache), `app/api/briefing/route.ts` (GET: returns cached if < 12h, else generates; POST: force regenerates), `BriefingCard.tsx` upgraded to client component (LLM brief section, Generate/Regenerate button, stale warning > 12h, generatedAt timestamp), `app/home/page.tsx` updated (serialized snapshot, hydrates with cached brief), i18n keys `home.briefing.ai.*` + generate/regenerate/stale/generatedAt (en + de).
+- All checks passing: lint ✅ typecheck ✅ build ✅ (40 routes).
 
 ## Later
 

@@ -41,6 +41,7 @@ model User {
   tasks                Task[]
   assistantReports     AssistantReport[]
   decisions            Decision[]
+  briefingCache        BriefingCache?
 
   @@map("user")
 }
@@ -298,5 +299,16 @@ model Decision {
 
   @@index([userId])
   @@map("decision")
+}
+
+model BriefingCache {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  content     String
+  generatedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("briefing_cache")
 }
 

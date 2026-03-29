@@ -429,5 +429,12 @@
   "home.briefing.noTasks": "Keine offenen Aufgaben",
   "home.briefing.overdue": "\u00fcberf\u00e4llig",
   "home.briefing.urgent": "dringend",
-  "home.briefing.high": "hoch"
+  "home.briefing.high": "hoch",
+  "home.briefing.ai.label": "KI-Briefing",
+  "home.briefing.ai.empty": "Noch kein Briefing generiert.",
+  "home.briefing.generate": "Briefing erstellen",
+  "home.briefing.regenerate": "Neu generieren",
+  "home.briefing.generating": "Wird generiert\u2026",
+  "home.briefing.generatedAt": "Generiert",
+  "home.briefing.stale": "Briefing ist \u00fcber 12 Stunden alt"
 }

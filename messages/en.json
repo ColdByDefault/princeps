@@ -429,5 +429,12 @@
   "home.briefing.noTasks": "No open tasks",
   "home.briefing.overdue": "overdue",
   "home.briefing.urgent": "urgent",
-  "home.briefing.high": "high"
+  "home.briefing.high": "high",
+  "home.briefing.ai.label": "AI brief",
+  "home.briefing.ai.empty": "No brief generated yet.",
+  "home.briefing.generate": "Generate brief",
+  "home.briefing.regenerate": "Regenerate",
+  "home.briefing.generating": "Generating…",
+  "home.briefing.generatedAt": "Generated",
+  "home.briefing.stale": "Brief is over 12 hours old"
 }
