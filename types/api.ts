@@ -63,6 +63,7 @@ export interface MeetingRecord {
   location: string | null;
   agenda: string | null;
   summary: string | null;
+  prepPack: string | null;
   status: string; // "upcoming" | "done" | "cancelled"
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client

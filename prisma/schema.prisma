@@ -219,6 +219,7 @@ model Meeting {
   location    String?
   agenda      String?
   summary     String?
+  prepPack    String?
   status      String    @default("upcoming") // upcoming | done | cancelled
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

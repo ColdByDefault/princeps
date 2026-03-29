@@ -73,6 +73,7 @@ function toRecord(row: MeetingWithParticipants): MeetingRecord {
     location: row.location,
     agenda: row.agenda,
     summary: row.summary,
+    prepPack: row.prepPack,
     status: row.status,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,

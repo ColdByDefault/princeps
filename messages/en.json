@@ -346,6 +346,12 @@
   "meetings.field.summary.placeholder": "Key decisions and outcomes\u2026",
   "meetings.field.status": "Status",
   "meetings.field.participants": "Participants",
+  "meetings.prep.label": "Meeting Prep",
+  "meetings.prep.generate": "Generate prep",
+  "meetings.prep.regenerate": "Regenerate",
+  "meetings.prep.generating": "Generating…",
+  "meetings.prep.close": "Close",
+  "meetings.prep.error": "Prep generation failed. Please try again.",
 
   "tasks.metadata.title": "Tasks",
   "tasks.metadata.description": "Track your open actions, priorities, and deadlines.",

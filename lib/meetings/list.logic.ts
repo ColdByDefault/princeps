@@ -21,6 +21,7 @@ export interface MeetingRecord {
   location: string | null;
   agenda: string | null;
   summary: string | null;
+  prepPack: string | null;
   status: string;
   createdAt: Date;
   updatedAt: Date;
@@ -49,6 +50,7 @@ export async function listMeetings(userId: string): Promise<MeetingRecord[]> {
     location: r.location,
     agenda: r.agenda,
     summary: r.summary,
+    prepPack: r.prepPack,
     status: r.status,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,

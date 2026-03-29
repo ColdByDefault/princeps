@@ -346,6 +346,12 @@
   "meetings.field.summary.placeholder": "Wichtige Entscheidungen und Ergebnisse\u2026",
   "meetings.field.status": "Status",
   "meetings.field.participants": "Teilnehmer",
+  "meetings.prep.label": "Meeting-Vorbereitung",
+  "meetings.prep.generate": "Vorbereitung erstellen",
+  "meetings.prep.regenerate": "Neu generieren",
+  "meetings.prep.generating": "Wird generiert…",
+  "meetings.prep.close": "Schließen",
+  "meetings.prep.error": "Vorbereitung fehlgeschlagen. Bitte erneut versuchen.",
 
   "tasks.metadata.title": "Aufgaben",
   "tasks.metadata.description": "Verfolge deine offenen Aktionen, Priorit\u00e4ten und Fristen.",
