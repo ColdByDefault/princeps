@@ -40,6 +40,7 @@ model User {
   meetings             Meeting[]
   tasks                Task[]
   assistantReports     AssistantReport[]
+  decisions            Decision[]
 
   @@map("user")
 }
@@ -224,6 +225,7 @@ model Meeting {
   user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   participants MeetingParticipant[]
   tasks        Task[]
+  decisions    Decision[]
 
   @@index([userId])
   @@map("meeting")
@@ -275,5 +277,26 @@ model Task {
 
   @@index([userId])
   @@map("task")
+}
+
+// ─── Decisions ────────────────────────────────────────────
+
+model Decision {
+  id          String    @id @default(cuid())
+  userId      String
+  title       String
+  rationale   String?
+  outcome     String?
+  status      String    @default("open") // open | decided | reversed
+  decidedAt   DateTime?
+  meetingId   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("decision")
 }
 

@@ -81,3 +81,16 @@ export interface TaskRecord {
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }
+
+/** Client-safe shape of a Decision record. */
+export interface DecisionRecord {
+  id: string;
+  title: string;
+  rationale: string | null;
+  outcome: string | null;
+  status: string; // "open" | "decided" | "reversed"
+  decidedAt: string | null; // ISO string on the client
+  meetingId: string | null;
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}

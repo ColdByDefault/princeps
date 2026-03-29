@@ -8,6 +8,7 @@ import "server-only";
 import { createContact } from "@/lib/contacts/create.logic";
 import { createMeeting } from "@/lib/meetings/create.logic";
 import { createTask } from "@/lib/tasks/create.logic";
+import { createDecision } from "@/lib/decisions/create.logic";
 import { db } from "@/lib/db";
 
 import {
@@ -21,7 +22,7 @@ export type { OllamaToolDefinition, OllamaToolCall };
 
 export type ActionResult = {
   /** Matches one of the tool function names */
-  name: "create_contact" | "create_meeting" | "create_task";
+  name: "create_contact" | "create_meeting" | "create_task" | "create_decision";
   /** The persisted record returned by the logic layer */
   record: Record<string, unknown>;
 };
@@ -120,6 +121,41 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
           dueDate: {
             type: "string",
             description: "ISO 8601 date-time string for the due date.",
+          },
+        },
+        required: ["title"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "create_decision",
+      description:
+        "Logs a decision in the user's decision log. Use when the user asks you to record, log, or save a decision they have made or are considering.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: {
+            type: "string",
+            description: "Short decision label (required).",
+          },
+          rationale: {
+            type: "string",
+            description: "Why this decision was made.",
+          },
+          outcome: {
+            type: "string",
+            description: "What was decided or what happened.",
+          },
+          status: {
+            type: "string",
+            enum: ["open", "decided", "reversed"],
+            description: "Decision status. Defaults to open.",
+          },
+          decidedAt: {
+            type: "string",
+            description: "ISO 8601 date string for when the decision was made.",
           },
         },
         required: ["title"],
@@ -319,6 +355,71 @@ export async function executeToolCall(
     return {
       action: {
         name: "create_task",
+        record: record as unknown as Record<string, unknown>,
+      },
+      summary: JSON.stringify({ id: record.id, title: record.title }),
+    };
+  }
+
+  if (name === "create_decision") {
+    const a = args as {
+      title?: unknown;
+      rationale?: unknown;
+      outcome?: unknown;
+      status?: unknown;
+      decidedAt?: unknown;
+    };
+
+    if (typeof a.title !== "string" || !a.title.trim()) {
+      return {
+        action: null,
+        summary: '{"error":"decision title is required"}',
+      };
+    }
+
+    // Deduplication: skip if an open decision with the same title already exists
+    const existingDecision = await db.decision.findFirst({
+      where: {
+        userId,
+        title: { equals: a.title.trim(), mode: "insensitive" },
+        status: "open",
+      },
+      select: { id: true, title: true },
+    });
+    if (existingDecision) {
+      return {
+        action: null,
+        summary: JSON.stringify({
+          skipped: true,
+          reason: "decision already exists",
+          id: existingDecision.id,
+          title: existingDecision.title,
+        }),
+      };
+    }
+
+    const VALID_STATUSES = new Set(["open", "decided", "reversed"]);
+    const status =
+      typeof a.status === "string" && VALID_STATUSES.has(a.status)
+        ? a.status
+        : "open";
+
+    const decidedAtRaw =
+      typeof a.decidedAt === "string" ? new Date(a.decidedAt) : null;
+    const decidedAt =
+      decidedAtRaw && !isNaN(decidedAtRaw.getTime()) ? decidedAtRaw : null;
+
+    const record = await createDecision(userId, {
+      title: a.title.trim(),
+      rationale: typeof a.rationale === "string" ? a.rationale : null,
+      outcome: typeof a.outcome === "string" ? a.outcome : null,
+      status,
+      decidedAt,
+    });
+
+    return {
+      action: {
+        name: "create_decision",
         record: record as unknown as Record<string, unknown>,
       },
       summary: JSON.stringify({ id: record.id, title: record.title }),

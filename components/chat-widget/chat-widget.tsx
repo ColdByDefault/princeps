@@ -171,6 +171,7 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
               create_contact: "Contact created",
               create_meeting: "Meeting created",
               create_task: "Task created",
+              create_decision: "Decision logged",
             };
             const label = actionNameMap[event.name] ?? event.name;
             const record = event.record as { name?: string; title?: string };

@@ -281,6 +281,11 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
                     "chat.action.created.task",
                     "Task created",
                   ),
+                  create_decision: getMessage(
+                    messages,
+                    "chat.action.created.decision",
+                    "Decision logged",
+                  ),
                 }}
               />
             ))}

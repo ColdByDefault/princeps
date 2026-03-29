@@ -13,6 +13,7 @@ import {
   Pencil,
   CalendarDays,
   CheckSquare,
+  GitFork,
   Plus,
   Settings,
   SlidersHorizontal,
@@ -325,6 +326,27 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   <CheckSquare className="size-4 shrink-0" />
                   <span className="truncate">
                     {getMessage(messages, "tasks.metadata.title", "Tasks")}
+                  </span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/decisions" />}
+                  isActive={pathname === "/decisions"}
+                  tooltip={getMessage(
+                    messages,
+                    "decisions.metadata.title",
+                    "Decisions",
+                  )}
+                  className="cursor-pointer"
+                >
+                  <GitFork className="size-4 shrink-0" />
+                  <span className="truncate">
+                    {getMessage(
+                      messages,
+                      "decisions.metadata.title",
+                      "Decisions",
+                    )}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>

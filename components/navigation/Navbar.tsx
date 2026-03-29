@@ -15,6 +15,7 @@ import {
   ClipboardList,
   ContactRound,
   FileText,
+  GitFork,
   Globe,
   CalendarDays,
   LayoutDashboard,
@@ -57,7 +58,7 @@ type NavLink = {
 };
 
 const HIDDEN_NAVBAR_PATHS = new Set(["/", "/login", "/sign-up"]);
-const GROUP_HREFS = new Set(["/contacts", "/meetings", "/tasks"]);
+const GROUP_HREFS = new Set(["/contacts", "/meetings", "/tasks", "/decisions"]);
 const SETTINGS_HREFS = new Set([
   "/settings/app",
   "/settings/assistant",
@@ -90,6 +91,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/tasks",
       icon: CheckSquare,
       label: getMessage(messages, "shell.nav.tasks", "Tasks"),
+    },
+    {
+      href: "/decisions",
+      icon: GitFork,
+      label: getMessage(messages, "decisions.metadata.title", "Decisions"),
     },
     {
       href: "/chat",
