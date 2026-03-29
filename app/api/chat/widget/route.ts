@@ -7,9 +7,15 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { buildSystemPrompt } from "@/lib/context/build";
-import { streamOllamaChat, type OllamaStreamChunk } from "@/lib/chat/ollama";
+import {
+  streamOllamaChat,
+  type OllamaMessage,
+  type OllamaStreamChunk,
+  type OllamaToolCallEntry,
+} from "@/lib/chat/ollama";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
 import { getUserPreferences } from "@/lib/settings/get.logic";
+import { CHAT_TOOLS, executeToolCall } from "@/lib/chat/tools";
 
 type HistoryEntry = { role: "user" | "assistant"; content: string };
 
@@ -87,6 +93,7 @@ export async function POST(req: Request) {
       ollamaMessages,
       false,
       preferences.ollamaOptions,
+      CHAT_TOOLS,
     );
   } catch {
     return NextResponse.json(
@@ -107,9 +114,6 @@ export async function POST(req: Request) {
   const stream = new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
-      const reader = ollamaBody.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
 
       const send = (event: object) => {
         controller.enqueue(
@@ -117,30 +121,135 @@ export async function POST(req: Request) {
         );
       };
 
+      // ── Helper: drain a non-token stream pass ─────────────────────────────
+      async function drainBody(body: ReadableStream<Uint8Array>) {
+        const r = body.getReader();
+        const dec = new TextDecoder();
+        let buf = "";
+        let content = "";
+        let toolCalls: OllamaToolCallEntry[] = [];
+        try {
+          while (true) {
+            const { done, value } = await r.read();
+            if (done) break;
+            buf += dec.decode(value, { stream: true });
+            const lines = buf.split("\n");
+            buf = lines.pop() ?? "";
+            for (const line of lines) {
+              if (!line.trim()) continue;
+              let chunk: OllamaStreamChunk;
+              try {
+                chunk = JSON.parse(line) as OllamaStreamChunk;
+              } catch {
+                continue;
+              }
+              if (chunk.message?.content) content += chunk.message.content;
+              if (chunk.done && chunk.message?.tool_calls?.length)
+                toolCalls = chunk.message.tool_calls;
+            }
+          }
+        } finally {
+          r.releaseLock();
+        }
+        return { content, toolCalls };
+      }
+
       try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+        // ── Phase 1: stream first response ───────────────────────────────────
+        const reader = ollamaBody.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let firstPhaseToolCalls: OllamaToolCallEntry[] = [];
 
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split("\n");
-          buffer = lines.pop() ?? "";
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
 
-          for (const line of lines) {
-            if (!line.trim()) continue;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
 
-            let chunk: OllamaStreamChunk;
-            try {
-              chunk = JSON.parse(line) as OllamaStreamChunk;
-            } catch {
-              continue;
+            for (const line of lines) {
+              if (!line.trim()) continue;
+
+              let chunk: OllamaStreamChunk;
+              try {
+                chunk = JSON.parse(line) as OllamaStreamChunk;
+              } catch {
+                continue;
+              }
+
+              if (chunk.message?.content) {
+                send({ type: "token", text: chunk.message.content });
+              }
+
+              if (chunk.done && chunk.message?.tool_calls?.length) {
+                firstPhaseToolCalls = chunk.message.tool_calls;
+              }
+
+              if (chunk.done) break;
+            }
+          }
+        } finally {
+          reader.releaseLock();
+        }
+
+        // ── Phase 2: execute tool calls ───────────────────────────────────────
+        if (firstPhaseToolCalls.length > 0) {
+          const toolResultMessages: OllamaMessage[] = [];
+          const assistantWithTools: OllamaMessage = {
+            role: "assistant",
+            content: "",
+            tool_calls: firstPhaseToolCalls,
+          };
+
+          for (const toolCall of firstPhaseToolCalls) {
+            const { action, summary } = await executeToolCall(
+              session.user.id,
+              toolCall,
+            );
+
+            if (action) {
+              send({
+                type: "action",
+                name: action.name,
+                record: action.record,
+              });
             }
 
-            if (chunk.message?.content) {
-              send({ type: "token", text: chunk.message.content });
-            }
+            toolResultMessages.push({ role: "tool", content: summary });
+          }
 
-            if (chunk.done) break;
+          // ── Phase 3: follow-up reply ──────────────────────────────────────
+          const followUpMessages: OllamaMessage[] = [
+            ...ollamaMessages,
+            assistantWithTools,
+            ...toolResultMessages,
+          ];
+
+          let followUpResponse: Response;
+          try {
+            followUpResponse = await streamOllamaChat(
+              followUpMessages,
+              false,
+              preferences.ollamaOptions,
+            );
+          } catch {
+            send({ type: "done" });
+            controller.close();
+            return;
+          }
+
+          if (followUpResponse.body) {
+            const { content: followUpContent } = await drainBody(
+              followUpResponse.body,
+            );
+            if (followUpContent) {
+              for (const token of followUpContent.split(/(?<=\s)|(?=\s)/)) {
+                if (token) send({ type: "token", text: token });
+              }
+            }
           }
         }
       } catch (err) {
@@ -149,7 +258,6 @@ export async function POST(req: Request) {
           message: err instanceof Error ? err.message : "Stream error",
         });
       } finally {
-        reader.releaseLock();
         send({ type: "done" });
         controller.close();
       }

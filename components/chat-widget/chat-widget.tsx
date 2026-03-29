@@ -6,7 +6,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send, Minus, Bot, ChevronDown } from "lucide-react";
+import { X, Send, Minus, Bot, ChevronDown, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -17,8 +17,10 @@ interface ChatWidgetProps {
 interface Message {
   id: number;
   text: string;
-  sender: "user" | "assistant";
+  sender: "user" | "assistant" | "action";
   time: string;
+  /** Populated only when sender === "action" */
+  actionLabel?: string;
 }
 
 type HistoryEntry = { role: "user" | "assistant"; content: string };
@@ -26,7 +28,8 @@ type HistoryEntry = { role: "user" | "assistant"; content: string };
 type SseEvent =
   | { type: "token"; text: string }
   | { type: "done" }
-  | { type: "error"; message: string };
+  | { type: "error"; message: string }
+  | { type: "action"; name: string; record: Record<string, unknown> };
 
 function getTime() {
   return new Date().toLocaleTimeString("en-US", {
@@ -103,10 +106,13 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
     setThinking(true);
     setProgress(0);
 
-    // Build history from all messages currently in view (excluding the greeting)
+    // Build history from all messages currently in view (excluding the greeting and action cards)
     const history: HistoryEntry[] = messagesRef.current
-      .filter((m) => m.id !== 1)
-      .map((m) => ({ role: m.sender, content: m.text }));
+      .filter((m) => m.id !== 1 && m.sender !== "action")
+      .map((m) => ({
+        role: m.sender as "user" | "assistant",
+        content: m.text,
+      }));
     // Include the new user message in the history sent to the backend
     history.push({ role: "user", content: text });
 
@@ -160,6 +166,25 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
                 m.id === assistantId ? { ...m, text: accumulated } : m,
               ),
             );
+          } else if (event.type === "action") {
+            const actionNameMap: Record<string, string> = {
+              create_contact: "Contact created",
+              create_meeting: "Meeting created",
+              create_task: "Task created",
+            };
+            const label = actionNameMap[event.name] ?? event.name;
+            const record = event.record as { name?: string; title?: string };
+            const recordName = record.name ?? record.title ?? null;
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: Date.now(),
+                text: recordName ? `${label}: ${recordName}` : label,
+                sender: "action",
+                time: getTime(),
+                actionLabel: label,
+              },
+            ]);
           } else if (event.type === "done") {
             break;
           } else if (event.type === "error") {
@@ -263,34 +288,43 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
                     msg.sender === "user" ? "items-end" : "items-start",
                   )}
                 >
-                  {msg.sender === "assistant" && (
-                    <div className="mb-1 flex items-center gap-1.5">
-                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary">
-                        <Bot className="h-3 w-3 text-primary-foreground" />
-                      </div>
-                      <span className="text-[11px] font-medium text-muted-foreground">
-                        {assistantName}
-                      </span>
+                  {msg.sender === "action" ? (
+                    <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
+                      <CheckCircle2 className="size-4 shrink-0" />
+                      <span>{msg.text}</span>
                     </div>
+                  ) : (
+                    <>
+                      {msg.sender === "assistant" && (
+                        <div className="mb-1 flex items-center gap-1.5">
+                          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary">
+                            <Bot className="h-3 w-3 text-primary-foreground" />
+                          </div>
+                          <span className="text-[11px] font-medium text-muted-foreground">
+                            {assistantName}
+                          </span>
+                        </div>
+                      )}
+                      <div
+                        className={cn(
+                          "max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+                          msg.sender === "user"
+                            ? "rounded-br-sm bg-primary text-primary-foreground"
+                            : "ml-6 rounded-bl-sm border border-border bg-card text-card-foreground shadow-sm",
+                        )}
+                      >
+                        {msg.text}
+                      </div>
+                      <span
+                        className={cn(
+                          "mt-1 px-0.5 text-[10px] text-muted-foreground",
+                          msg.sender === "assistant" && "ml-6",
+                        )}
+                      >
+                        {msg.time}
+                      </span>
+                    </>
                   )}
-                  <div
-                    className={cn(
-                      "max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-                      msg.sender === "user"
-                        ? "rounded-br-sm bg-primary text-primary-foreground"
-                        : "ml-6 rounded-bl-sm border border-border bg-card text-card-foreground shadow-sm",
-                    )}
-                  >
-                    {msg.text}
-                  </div>
-                  <span
-                    className={cn(
-                      "mt-1 px-0.5 text-[10px] text-muted-foreground",
-                      msg.sender === "assistant" && "ml-6",
-                    )}
-                  >
-                    {msg.time}
-                  </span>
                 </div>
               ))}
 

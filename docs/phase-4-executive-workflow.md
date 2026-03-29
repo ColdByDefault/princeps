@@ -14,7 +14,7 @@ All three are designed as a coordinated set. Contacts feed into Meetings (partic
 
 - **Data first, then intelligence.** The value of Phase 4 is not clever UI — it is structured, user-owned data that the assistant can reason over. CRUD quality and context slot fidelity matter more than visual polish.
 - **Thin context slots.** Each slot injects only what the assistant needs per request — not the full table dump. Recency, relevance, and conciseness are the filters.
-- **No autonomous agents yet.** The assistant reads and references this data; it does not write to the database on behalf of the user. That boundary is Phase 5+ territory.
+- **No autonomous agents yet.** The assistant reads and references this data; it does not write to the database on behalf of the user in an uncontrolled way. Writes happen through declared tool calls (see Assistant-Driven Creation below).
 - **One route, one tab.** Each feature gets a dedicated route (`/contacts`, `/meetings`, `/tasks`) mirroring the Knowledge Base pattern: server auth guard, initial data load, client tabs.
 
 ---
@@ -307,7 +307,29 @@ Navigation links for `/contacts`, `/meetings`, and `/tasks` added to the app sid
 - All five context slots registered in `lib/context/index.ts`: `personalInfoSlot`, `knowledgeSlot`, `contactsSlot`, `meetingsSlot`, `tasksSlot`.
 - All checks passing: lint ✅ typecheck ✅ build ✅ (32 routes).
 
-## Later
+### Assistant-Driven Creation (tool calling)
+
+The chat and chat-widget can create contacts, meetings, and tasks on behalf of the user via LLM tool calls. Users have two paths:
+
+1. **Manual** — navigate to `/contacts`, `/meetings`, `/tasks` and create records through the form UI.
+2. **Conversational** — ask the assistant (in chat or the floating widget) and it creates the record directly, then confirms inline.
+
+**How it works:**
+
+- `lib/chat/tools.ts` — defines the three tool schemas (`create_contact`, `create_meeting`, `create_task`) and the `executeToolCall` executor that delegates to the existing logic layer.
+- `lib/chat/ollama.ts` — extended with `OllamaToolDefinition`, `OllamaToolCallEntry`, and an optional `tools` parameter in `streamOllamaChat`.
+- Both stream routes (`/api/chat/[chatId]/stream` and `/api/chat/widget`) now pass `CHAT_TOOLS` to Ollama and run a three-phase loop:
+  1. Stream the first response; collect any `tool_calls` from the final done chunk.
+  2. Execute each tool call server-side via `executeToolCall`; emit `{ type: "action", name, record }` SSE events.
+  3. Send a follow-up request to Ollama with the tool results; stream the conversational reply.
+- `ChatWindow` and `ChatWidget` handle the `action` SSE event and render a green confirmation card inline (`✅ Contact created: Jane Doe`).
+- i18n keys: `chat.action.created.contact`, `chat.action.created.meeting`, `chat.action.created.task` (en + de).
+
+**Decisions:**
+
+- No tools in the follow-up call to prevent re-entry loops.
+- Validation on tool arguments is strict (required fields, date parsing); errors return a JSON error string back to the model as the tool result.
+- The widget uses hardcoded English action labels (it has no access to the server-side message bundle).
 
 - Decision log (Phase 5): record decisions with rationale, status, and change history.
 - Automated post-meeting action extraction: assistant parses a pasted transcript and proposes tasks.

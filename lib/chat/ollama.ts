@@ -12,10 +12,34 @@ export const OLLAMA_MODEL = process.env.OLLAMA_MODEL ?? "qwen3.5:4b";
 
 export const OLLAMA_EMBED_MODEL = process.env.OLLAMA_EMBED_MODEL ?? null;
 
-export type OllamaMessage = {
-  role: "system" | "user" | "assistant";
-  content: string;
+export type OllamaToolCallEntry = {
+  function: {
+    name: string;
+    arguments: Record<string, unknown>;
+  };
 };
+
+export type OllamaToolDefinition = {
+  type: "function";
+  function: {
+    name: string;
+    description: string;
+    parameters: {
+      type: "object";
+      properties: Record<string, unknown>;
+      required?: string[];
+    };
+  };
+};
+
+export type OllamaMessage =
+  | {
+      role: "system" | "user" | "assistant";
+      content: string;
+      tool_calls?: never;
+    }
+  | { role: "assistant"; content: string; tool_calls: OllamaToolCallEntry[] }
+  | { role: "tool"; content: string; tool_calls?: never };
 
 export type OllamaStreamChunk = {
   model: string;
@@ -23,8 +47,10 @@ export type OllamaStreamChunk = {
     role: string;
     content: string;
     thinking?: string;
+    tool_calls?: OllamaToolCallEntry[];
   };
   done: boolean;
+  done_reason?: string;
 };
 
 export type OllamaChatOptions = {
@@ -43,11 +69,13 @@ export type OllamaChatOptions = {
  * @param think     When true, passes think:true so Qwen3 emits reasoning
  *                  tokens in message.thinking (never shown to the user).
  * @param options   Optional inference parameters from user preferences.
+ * @param tools     Optional tool definitions the model may call.
  */
 export async function streamOllamaChat(
   messages: OllamaMessage[],
   think: boolean,
   options?: OllamaChatOptions,
+  tools?: OllamaToolDefinition[],
 ): Promise<Response> {
   const response = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
     method: "POST",
@@ -57,6 +85,7 @@ export async function streamOllamaChat(
       messages,
       stream: true,
       think,
+      ...(tools && tools.length > 0 ? { tools } : {}),
       ...(options && Object.keys(options).length > 0 ? { options } : {}),
     }),
   });

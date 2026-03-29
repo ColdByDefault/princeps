@@ -6,7 +6,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { Send, Brain } from "lucide-react";
+import { Send, Brain, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -62,6 +62,13 @@ type LiveMessage =
       createdAt: string;
       streaming: true;
       isThinking: boolean;
+    }
+  | {
+      id: string;
+      role: "action";
+      name: string;
+      record: Record<string, unknown>;
+      createdAt: string;
     };
 
 export function ChatWindow({ chatId, initialMessages, messages }: Props) {
@@ -163,6 +170,22 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
                   : m,
               ),
             );
+          } else if (event.type === "action" && "name" in event) {
+            const actionEvent = event as {
+              type: "action";
+              name: string;
+              record: Record<string, unknown>;
+            };
+            setMsgs((prev) => [
+              ...prev,
+              {
+                id: `action-${Date.now()}-${actionEvent.name}`,
+                role: "action" as const,
+                name: actionEvent.name,
+                record: actionEvent.record,
+                createdAt: new Date().toISOString(),
+              },
+            ]);
           } else if (event.type === "done") {
             const usedThinking = hadThinkingRef.current;
             setMsgs((prev) =>
@@ -242,6 +265,23 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
                   "chat.reasoned",
                   "Model reasoned",
                 )}
+                actionLabels={{
+                  create_contact: getMessage(
+                    messages,
+                    "chat.action.created.contact",
+                    "Contact created",
+                  ),
+                  create_meeting: getMessage(
+                    messages,
+                    "chat.action.created.meeting",
+                    "Meeting created",
+                  ),
+                  create_task: getMessage(
+                    messages,
+                    "chat.action.created.task",
+                    "Task created",
+                  ),
+                }}
               />
             ))}
             <div ref={bottomRef} />
@@ -321,9 +361,38 @@ type BubbleProps = {
   msg: LiveMessage;
   thinkingLabel: string;
   reasonedLabel: string;
+  actionLabels: Record<string, string>;
 };
 
-function MessageBubble({ msg, thinkingLabel, reasonedLabel }: BubbleProps) {
+function MessageBubble({
+  msg,
+  thinkingLabel,
+  reasonedLabel,
+  actionLabels,
+}: BubbleProps) {
+  if (msg.role === "action") {
+    const label = actionLabels[msg.name] ?? msg.name;
+    const nameStr =
+      typeof (msg.record as { name?: unknown; title?: unknown }).name ===
+      "string"
+        ? (msg.record as { name: string }).name
+        : typeof (msg.record as { name?: unknown; title?: unknown }).title ===
+            "string"
+          ? (msg.record as { title: string }).title
+          : null;
+    return (
+      <div className="flex w-full justify-start">
+        <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
+          <CheckCircle2 className="size-4 shrink-0" />
+          <span>
+            {label}
+            {nameStr ? `: ${nameStr}` : ""}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   const isUser = msg.role === "user";
   const isThinking = "isThinking" in msg && msg.isThinking;
   const isStreamingEmpty = "streaming" in msg && msg.streaming && !msg.content;
