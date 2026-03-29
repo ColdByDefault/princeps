@@ -120,6 +120,7 @@
   "shell.nav.meetings": "Termine",
   "shell.nav.tasks": "Aufgaben",
   "shell.nav.organize": "Organisieren",
+  "shell.nav.admin": "Admin",
   "shell.nav.appearance": "Erscheinungsbild",
   "shell.language.groupLabel": "Sprachauswahl",
   "shell.language.de": "Deutsch",
@@ -247,7 +248,6 @@
   "assistant.systemPrompt.label": "System-Prompt",
   "assistant.systemPrompt.description": "Dauerhafte Anweisungen, die der Assistent in jedem Gespräch befolgt.",
   "assistant.systemPrompt.placeholder": "Antworte immer in Stichpunkten. Bevorzuge Kürze gegenüber Vollständigkeit.",
-  "shell.nav.settings": "Einstellungen",
 
   "knowledge.metadata.title": "Wissensbasis",
   "knowledge.metadata.description": "Verwalte deine private Wissensbasis und pers\u00f6nliche Informationen.",
@@ -335,6 +335,8 @@
 
   "meetings.metadata.title": "Termine",
   "meetings.metadata.description": "Plane und dokumentiere deine Meetings mit Kontext und Ergebnissen.",
+  "meetings.count.one": "1 Termin",
+  "meetings.count.many": "{n} Termine",
   "meetings.empty": "Noch keine Termine.",
   "meetings.emptyBody": "F\u00fcge Meetings hinzu, um anstehende Ereignisse und vergangene Ergebnisse zu verfolgen.",
   "meetings.add": "Termin hinzuf\u00fcgen",
@@ -369,6 +371,8 @@
   "meetings.field.participants": "Teilnehmer",
   "meetings.prep.label": "Meeting-Vorbereitung",
   "meetings.prep.generate": "Vorbereitung erstellen",
+  "meetings.prep.view": "Vorbereitung anzeigen",
+  "meetings.prep.hide": "Vorbereitung ausblenden",
   "meetings.prep.regenerate": "Neu generieren",
   "meetings.prep.generating": "Wird generiert…",
   "meetings.prep.close": "Schließen",

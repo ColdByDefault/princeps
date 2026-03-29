@@ -399,7 +399,7 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
                             onClick={() => router.push("/admin")}
                           >
                             <SlidersHorizontal className="size-4" />
-                            Admin
+                            {getMessage(messages, "shell.nav.admin", "Admin")}
                           </DropdownMenuItem>
                         )}
                       </DropdownMenuContent>

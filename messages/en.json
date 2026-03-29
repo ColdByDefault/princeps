@@ -121,6 +121,7 @@
   "shell.nav.meetings": "Meetings",
   "shell.nav.tasks": "Tasks",
   "shell.nav.organize": "Organize",
+  "shell.nav.admin": "Admin",
   "shell.nav.appearance": "Appearance",
   "shell.language.groupLabel": "Language selector",
   "shell.language.de": "German",
@@ -248,7 +249,6 @@
   "assistant.systemPrompt.label": "System prompt",
   "assistant.systemPrompt.description": "Standing instructions the assistant follows in every conversation.",
   "assistant.systemPrompt.placeholder": "Always reply in bullet points. Prioritize brevity over completeness.",
-  "shell.nav.settings": "Settings",
 
   "knowledge.metadata.title": "Knowledge Base",
   "knowledge.metadata.description": "Manage your private knowledge and personal information.",
@@ -336,6 +336,8 @@
 
   "meetings.metadata.title": "Meetings",
   "meetings.metadata.description": "Schedule and review your meetings with context and outcomes.",
+  "meetings.count.one": "1 meeting",
+  "meetings.count.many": "{n} meetings",
   "meetings.empty": "No meetings yet.",
   "meetings.emptyBody": "Add meetings to track upcoming events and past outcomes.",
   "meetings.add": "Add meeting",
@@ -370,6 +372,8 @@
   "meetings.field.participants": "Participants",
   "meetings.prep.label": "Meeting Prep",
   "meetings.prep.generate": "Generate prep",
+  "meetings.prep.view": "View prep",
+  "meetings.prep.hide": "Hide prep",
   "meetings.prep.regenerate": "Regenerate",
   "meetings.prep.generating": "Generating…",
   "meetings.prep.close": "Close",
