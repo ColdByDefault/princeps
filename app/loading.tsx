@@ -17,7 +17,7 @@ export default async function Loading() {
   const { messages } = await getRequestConfig();
 
   return (
-    <div className="mx-auto flex min-h-svh w-full max-w-7xl flex-col px-6 py-8 sm:px-8 lg:px-10">
+    <div className="mx-auto flex w-full max-w-7xl flex-col px-6 py-8 sm:px-8 lg:px-10">
       <section className="grid gap-6 rounded-[2rem] border border-border/70 bg-card/70 p-6 shadow-2xl shadow-black/5 backdrop-blur lg:grid-cols-[1.15fr_0.85fr] lg:p-8">
         <div className="space-y-5">
           <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm text-muted-foreground">

@@ -52,7 +52,7 @@ export default async function MeetingsPage() {
   }));
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 py-8 sm:px-8 lg:px-10">
+    <div className="mx-auto flex w-full max-w-4xl flex-col px-6 py-8 sm:px-8 lg:px-10">
       <MeetingsView
         messages={messages}
         initialMeetings={meetings}

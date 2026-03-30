@@ -91,7 +91,7 @@ export default async function RootLayout({
                       }
                     />
                     <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-                      {children}
+                      <div className="flex-1">{children}</div>
                       <Footer messages={messages} />
                     </div>
                   </main>
