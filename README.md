@@ -1,3 +1,5 @@
+## feat/refactor-2 — completed
+
 - [x] greetings messages pop up remove color
 - [x] add cursor-pointer contact and icons colors to pop-ups
 - [x] add cursor-pointer Tasks and icons colors to pop-ups
@@ -17,8 +19,3 @@
 - [x] Script (maybe github actions) to update version in package.json after each merge to main
 - [x] Footer issue: some page.tsx take min-h-screen which pushes footer to the bottom, but some dont, which makes the footer look different across pages.
       Also, when it gets pushed to the bottom, but the page content is not enough to fill the screen, Users will see a big gap between the content and the footer, which looks weird.
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
