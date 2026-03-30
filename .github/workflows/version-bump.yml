@@ -35,10 +35,41 @@ jobs:
                   echo "old=$OLD" >> "$GITHUB_OUTPUT"
                   echo "new=$NEW" >> "$GITHUB_OUTPUT"
 
+            - name: Generate changelog entry
+              run: |
+                  NEW_VERSION="${{ steps.bump.outputs.new }}"
+                  DATE=$(date +%Y-%m-%d)
+
+                  # Collect commits since the previous version-bump commit
+                  PREV_BUMP=$(git log --format="%H" --grep="chore: bump version" -1)
+                  if [ -z "$PREV_BUMP" ]; then
+                    COMMITS=$(git log --no-merges --format="- %s" | grep -v "^- chore: bump version" | head -30)
+                  else
+                    COMMITS=$(git log "${PREV_BUMP}..HEAD" --no-merges --format="- %s" | grep -v "^- chore: bump version")
+                  fi
+
+                  if [ -z "$COMMITS" ]; then
+                    COMMITS="- Minor updates and improvements"
+                  fi
+
+                  # Prepend new entry; create header on first run
+                  if [ ! -f CHANGELOG.md ]; then
+                    echo "# Changelog" > CHANGELOG.md
+                    echo "" >> CHANGELOG.md
+                  fi
+
+                  {
+                    echo "## [${NEW_VERSION}] - ${DATE}"
+                    echo ""
+                    echo "${COMMITS}"
+                    echo ""
+                    cat CHANGELOG.md
+                  } > CHANGELOG.md.new && mv CHANGELOG.md.new CHANGELOG.md
+
             - name: Commit and push
               run: |
                   git config user.name  "github-actions[bot]"
                   git config user.email "github-actions[bot]@users.noreply.github.com"
-                  git add package.json
+                  git add package.json CHANGELOG.md
                   git commit -m "chore: bump version ${{ steps.bump.outputs.old }} → ${{ steps.bump.outputs.new }} [skip ci]"
                   git push
