@@ -14,7 +14,7 @@
 - [x] add Meetings eye icon for better UX and view
 - [x] OnboardingWizard.tsx => move to components
 - [ ] "/" where are tier and prices on first page before login/sign-up
-- [ ] Script (maybe github actions) to update version in package.json after each merge to main
+- [x] Script (maybe github actions) to update version in package.json after each merge to main
 - [ ]
 - [ ]
 - [ ]
