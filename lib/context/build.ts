@@ -14,6 +14,7 @@ type AssistantOpts = {
   assistantName: string;
   systemPrompt: string;
   responseStyle: ResponseStyle;
+  language: string;
 };
 
 const RESPONSE_STYLE_LINES: Record<ResponseStyle, string> = {
@@ -42,7 +43,9 @@ export async function buildSystemPrompt(
   });
 
   const tz = user?.timezone ?? "UTC";
-  const now = new Date().toLocaleDateString("en-US", {
+  const dateLocale = opts.language === "de" ? "de-DE" : "en-US";
+  const langName = opts.language === "de" ? "German" : "English";
+  const now = new Date().toLocaleDateString(dateLocale, {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -61,7 +64,7 @@ export async function buildSystemPrompt(
     "- Make reasonable inferences — do not ask clarifying questions unless absolutely necessary.",
     "- Do not offer to draft emails, messages, or communications unless the user explicitly asks.",
     "- Focus on decisions, planning, preparation, and follow-through.",
-    "- Always respond in the same language the user writes in. If the user writes in German, respond fully in German. If the user writes in English, respond fully in English.",
+    `- The user's preferred language is ${langName}. Default to ${langName} in all responses. If the user writes in a different language, match that language instead.`,
     `- ${RESPONSE_STYLE_LINES[opts.responseStyle]}`,
   ];
 

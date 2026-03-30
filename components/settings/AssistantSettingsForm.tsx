@@ -6,7 +6,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,13 +19,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getMessage } from "@/lib/i18n";
-import { type MessageDictionary, type AppLanguage } from "@/types/i18n";
+import { type MessageDictionary } from "@/types/i18n";
 import {
   type UserPreferences,
   type ResponseStyle,
   DEFAULT_PREFERENCES,
 } from "@/types/settings";
-import { useLanguage } from "@/hooks/use-language";
 import { CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -36,8 +34,6 @@ type Props = {
 };
 
 export function AssistantSettingsForm({ initialPreferences, messages }: Props) {
-  const router = useRouter();
-  const { language: clientLanguage, changeLanguage } = useLanguage();
   const [prefs, setPrefs] = useState<UserPreferences>(initialPreferences);
   const [saving, setSaving] = useState(false);
 
@@ -51,15 +47,9 @@ export function AssistantSettingsForm({ initialPreferences, messages }: Props) {
           assistantName: prefs.assistantName,
           systemPrompt: prefs.systemPrompt,
           responseStyle: prefs.responseStyle,
-          language: prefs.language,
         }),
       });
       if (!res.ok) throw new Error();
-
-      if (prefs.language !== clientLanguage) {
-        changeLanguage(prefs.language);
-        router.refresh();
-      }
 
       toast.success(getMessage(messages, "settings.saved", "Settings saved"), {
         icon: <CheckCircle2 className="size-4 text-emerald-500" />,
@@ -94,59 +84,32 @@ export function AssistantSettingsForm({ initialPreferences, messages }: Props) {
             {getMessage(
               messages,
               "assistant.identity.description",
-              "Name and language the assistant will use.",
+              "Name the assistant will use in every conversation.",
             )}
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          {/* Assistant name */}
-          <div className="space-y-1.5">
-            <Label htmlFor="assistant-name" className="text-sm">
-              {getMessage(messages, "assistant.name.label", "Assistant name")}
-            </Label>
-            <Input
-              id="assistant-name"
-              maxLength={30}
-              placeholder={getMessage(
-                messages,
-                "assistant.name.placeholder",
-                "Atlas",
-              )}
-              value={prefs.assistantName}
-              onChange={(e) =>
-                setPrefs((p) => ({ ...p, assistantName: e.target.value }))
-              }
-            />
-            <p className="text-right text-[10px] text-muted-foreground/60">
-              {prefs.assistantName.length}/30
-            </p>
-          </div>
-
-          {/* Language */}
-          <div className="space-y-1.5">
-            <Label htmlFor="language-select" className="text-sm">
-              {getMessage(messages, "settings.section.language", "Language")}
-            </Label>
-            <Select
-              value={prefs.language}
-              onValueChange={(v) =>
-                setPrefs((p) => ({ ...p, language: v as AppLanguage }))
-              }
-            >
-              <SelectTrigger id="language-select" className="cursor-pointer">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="de" className="cursor-pointer">
-                  {getMessage(messages, "shell.language.de", "German")}
-                </SelectItem>
-                <SelectItem value="en" className="cursor-pointer">
-                  {getMessage(messages, "shell.language.en", "English")}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        {/* Assistant name */}
+        <div className="space-y-1.5">
+          <Label htmlFor="assistant-name" className="text-sm">
+            {getMessage(messages, "assistant.name.label", "Assistant name")}
+          </Label>
+          <Input
+            id="assistant-name"
+            maxLength={30}
+            placeholder={getMessage(
+              messages,
+              "assistant.name.placeholder",
+              "Atlas",
+            )}
+            value={prefs.assistantName}
+            onChange={(e) =>
+              setPrefs((p) => ({ ...p, assistantName: e.target.value }))
+            }
+          />
+          <p className="text-right text-[10px] text-muted-foreground/60">
+            {prefs.assistantName.length}/30
+          </p>
         </div>
       </div>
 

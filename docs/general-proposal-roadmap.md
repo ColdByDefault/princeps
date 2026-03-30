@@ -45,6 +45,7 @@ The roadmap can be discussed in four stages:
 4. Executive workflow layer: contacts, meetings, tasks, assistant-driven creation, reports, and home briefing. ✅ Done (feat/core-4)
 5. Chief-of-staff layer: decision log, LLM briefing, meeting prep packs, post-meeting capture, contact interaction history, and proactive nudges. ✅ Done (feat/core-5)
 6. SaaS launch layer: billing (Stripe), email (Resend), admin panel, rate limiting, and onboarding flow. 🔲 Planned (phase-6-saas-launch.md)
+7. UI/UX & polish pass — cross-cutting quality improvements and 24-hour Contact Card share link. ✅ Done (feat/refactor-2 — see feat-refactor-2.md)
 
 Open questions for discussion:
 

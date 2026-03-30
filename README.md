@@ -1,23 +1,21 @@
-- [ ] greetings messages pop up remove color
-- [ ] add cursor-pointer contact and icons colors to pop-ups
-- [ ] add cursor-pointer Tasks and icons colors to pop-ups
-- [ ] navbar new items translations
-- [ ] add cursor-pointer meeting and icons colors to pop-ups, Status translation drop-down
-- [ ] add app-settings tab in /settings, and seperate from assistant settings
-- [ ] improve user language reference, save in appsettings and db
-- [ ] Chat-widget douple progress bar, also check thinking.
-- [ ] when calling tools, argue if entities are missing or already exist, e.g. contact already exists, meeting time missing, etc.
-- [ ] Ai-briefing => support both languages.
-- [ ] fix MeetingList UI
-- [ ] LLM can generate 24 h Link for Contact/Info Card for none see-sweet users. 
-- [ ] LLm cant link contacts to meetings.
-- [ ] add Meetings eye icon for better UX and view
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
+## feat/refactor-2 — completed
+
+- [x] greetings messages pop up remove color
+- [x] add cursor-pointer contact and icons colors to pop-ups
+- [x] add cursor-pointer Tasks and icons colors to pop-ups
+- [x] navbar new items translations
+- [x] add cursor-pointer meeting and icons colors to pop-ups
+- [x] add app-settings tab in /settings, and seperate from assistant settings
+- [x] improve user language reference, save in appsettings and db
+- [x] Chat-widget douple progress bar, also check thinking.
+- [x] when calling tools, argue if entities are missing or already exist, e.g. contact already exists, meeting time missing, etc.
+- [x] Ai-briefing => support both languages.
+- [x] fix MeetingList UI
+- [x] App/LLM can generate 24 h Link for Contact/Info Card of the user for none see-sweet users.
+- [x] LLm cant link contacts to meetings.
+- [x] add Meetings eye icon for better UX and view
+- [x] OnboardingWizard.tsx => move to components
+- [x] "/" where are tier and prices on first page before login/sign-up
+- [x] Script (maybe github actions) to update version in package.json after each merge to main
+- [x] Footer issue: some page.tsx take min-h-screen which pushes footer to the bottom, but some dont, which makes the footer look different across pages.
+      Also, when it gets pushed to the bottom, but the page content is not enough to fill the screen, Users will see a big gap between the content and the footer, which looks weird.

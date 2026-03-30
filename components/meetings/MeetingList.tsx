@@ -11,9 +11,9 @@ import {
   Pencil,
   Trash2,
   Sparkles,
-  ChevronDown,
-  ChevronUp,
   RefreshCw,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -57,6 +57,7 @@ export function MeetingList({
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   // Prep state — keyed by meeting id
+  const [detailOpen, setDetailOpen] = useState<Record<string, boolean>>({});
   const [prepOpen, setPrepOpen] = useState<Record<string, boolean>>({});
   const [prepLoading, setPrepLoading] = useState<Record<string, boolean>>({});
   const [prepPacks, setPrepPacks] = useState<Record<string, string>>(() => {
@@ -66,6 +67,10 @@ export function MeetingList({
     }
     return map;
   });
+
+  function toggleDetail(id: string) {
+    setDetailOpen((prev) => ({ ...prev, [id]: !prev[id] }));
+  }
 
   function togglePrep(id: string) {
     setPrepOpen((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -151,7 +156,10 @@ export function MeetingList({
           const isLoading = !!prepLoading[meeting.id];
 
           return (
-            <li key={meeting.id} className="flex flex-col">
+            <li
+              key={meeting.id}
+              className={`group flex flex-col${!isUpcoming ? " opacity-60 hover:opacity-100 transition-opacity" : ""}`}
+            >
               <div className="flex items-start justify-between gap-4 px-4 py-3">
                 <div className="min-w-0 flex-1 space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -170,19 +178,6 @@ export function MeetingList({
                         meeting.status,
                       )}
                     </Badge>
-                    {isUpcoming && hasPack && (
-                      <Badge
-                        variant="outline"
-                        className="shrink-0 text-xs gap-1"
-                      >
-                        <Sparkles className="size-2.5" />
-                        {getMessage(
-                          messages,
-                          "meetings.prep.label",
-                          "Meeting Prep",
-                        )}
-                      </Badge>
-                    )}
                   </div>
                   <p className="text-muted-foreground text-xs">
                     {formatDateTime(meeting.scheduledAt)}
@@ -200,65 +195,135 @@ export function MeetingList({
                 </div>
                 <div className="flex shrink-0 gap-1 items-center">
                   {isUpcoming && (
-                    <>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 gap-1.5 px-2 text-xs"
-                        onClick={() =>
-                          hasPack
-                            ? togglePrep(meeting.id)
-                            : void handleGeneratePrep(meeting)
-                        }
-                        disabled={isLoading}
-                      >
-                        {isLoading ? (
-                          <RefreshCw className="size-3 animate-spin" />
-                        ) : (
-                          <Sparkles className="size-3" />
-                        )}
-                        {isLoading ? (
-                          getMessage(
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 cursor-pointer gap-1.5 px-2 text-xs"
+                      onClick={() =>
+                        hasPack
+                          ? togglePrep(meeting.id)
+                          : void handleGeneratePrep(meeting)
+                      }
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <RefreshCw className="size-3 animate-spin" />
+                      ) : (
+                        <Sparkles className="size-3" />
+                      )}
+                      {isLoading
+                        ? getMessage(
                             messages,
                             "meetings.prep.generating",
                             "Generating\u2026",
                           )
-                        ) : hasPack ? (
-                          isOpen ? (
-                            <ChevronUp className="size-3" />
-                          ) : (
-                            <ChevronDown className="size-3" />
-                          )
-                        ) : (
-                          getMessage(
-                            messages,
-                            "meetings.prep.generate",
-                            "Generate prep",
-                          )
-                        )}
-                      </Button>
-                    </>
+                        : hasPack
+                          ? isOpen
+                            ? getMessage(
+                                messages,
+                                "meetings.prep.hide",
+                                "Hide prep",
+                              )
+                            : getMessage(
+                                messages,
+                                "meetings.prep.view",
+                                "View prep",
+                              )
+                          : getMessage(
+                              messages,
+                              "meetings.prep.generate",
+                              "Generate prep",
+                            )}
+                    </Button>
                   )}
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7"
-                    onClick={() => openEdit(meeting)}
+                    className="h-7 w-7 cursor-pointer text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:text-foreground"
+                    onClick={() => toggleDetail(meeting.id)}
+                    aria-label={
+                      detailOpen[meeting.id]
+                        ? getMessage(
+                            messages,
+                            "meetings.detail.hideLabel",
+                            "Hide details",
+                          )
+                        : getMessage(
+                            messages,
+                            "meetings.detail.viewLabel",
+                            "View details",
+                          )
+                    }
                   >
-                    <Pencil className="h-3.5 w-3.5" />
-                    <span className="sr-only">Edit</span>
+                    {detailOpen[meeting.id] ? (
+                      <EyeOff className="h-3.5 w-3.5" />
+                    ) : (
+                      <Eye className="h-3.5 w-3.5" />
+                    )}
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 text-destructive hover:text-destructive"
+                    className="h-7 w-7 cursor-pointer text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:text-foreground"
+                    onClick={() => openEdit(meeting)}
+                    aria-label={getMessage(
+                      messages,
+                      "meetings.editLabel",
+                      "Edit meeting",
+                    )}
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive"
                     onClick={() => setDeleteTarget(meeting.id)}
+                    aria-label={getMessage(
+                      messages,
+                      "meetings.deleteLabel",
+                      "Delete meeting",
+                    )}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
-                    <span className="sr-only">Delete</span>
                   </Button>
                 </div>
               </div>
+
+              {/* Detail panel */}
+              {detailOpen[meeting.id] &&
+                (meeting.agenda ?? meeting.summary) && (
+                  <div className="border-t bg-muted/20 px-4 py-3 space-y-2">
+                    {meeting.agenda && (
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                          {getMessage(
+                            messages,
+                            "meetings.detail.agenda",
+                            "Agenda",
+                          )}
+                        </p>
+                        <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                          {meeting.agenda}
+                        </p>
+                      </div>
+                    )}
+                    {meeting.summary && (
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                          {getMessage(
+                            messages,
+                            "meetings.detail.summary",
+                            "Summary",
+                          )}
+                        </p>
+                        <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                          {meeting.summary}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
 
               {/* Prep pack panel */}
               {isUpcoming && isOpen && hasPack && (
@@ -277,7 +342,7 @@ export function MeetingList({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-6 gap-1.5 px-2 text-xs"
+                      className="h-6 cursor-pointer gap-1.5 px-2 text-xs"
                       onClick={() => void handleGeneratePrep(meeting)}
                       disabled={isLoading}
                     >
@@ -307,7 +372,13 @@ export function MeetingList({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-sm">
-          {meetings.length} {meetings.length === 1 ? "meeting" : "meetings"}
+          {meetings.length === 1
+            ? getMessage(messages, "meetings.count.one", "1 meeting")
+            : getMessage(
+                messages,
+                "meetings.count.many",
+                `${meetings.length} meetings`,
+              ).replace("{n}", String(meetings.length))}
         </span>
         <Button size="sm" onClick={openCreate}>
           <CalendarPlus className="mr-2 h-4 w-4" />

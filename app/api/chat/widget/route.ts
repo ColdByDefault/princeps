@@ -80,6 +80,7 @@ export async function POST(req: Request) {
     assistantName: preferences.assistantName,
     systemPrompt: preferences.systemPrompt,
     responseStyle: preferences.responseStyle,
+    language: preferences.language,
   });
 
   const ollamaMessages = [

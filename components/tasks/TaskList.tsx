@@ -134,7 +134,7 @@ export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-7 w-7 cursor-pointer text-muted-foreground hover:text-foreground"
                 onClick={() => openEdit(task)}
               >
                 <Pencil className="h-3.5 w-3.5" />
@@ -143,7 +143,7 @@ export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 text-destructive hover:text-destructive"
+                className="h-7 w-7 cursor-pointer text-destructive hover:text-destructive"
                 onClick={() => setDeleteTarget(task.id)}
               >
                 <Trash2 className="h-3.5 w-3.5" />
