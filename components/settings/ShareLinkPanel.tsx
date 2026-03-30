@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link2, Copy, Trash2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -69,6 +69,34 @@ export function ShareLinkPanel({
   const [generating, setGenerating] = useState(false);
   const [revoking, setRevoking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Sync token from server on mount and whenever the tab regains focus,
+  // so LLM-generated tokens show up without requiring a full page reload.
+  useEffect(() => {
+    async function refresh() {
+      try {
+        const res = await fetch("/api/share");
+        if (!res.ok) return;
+        const data = (await res.json()) as { token: ActiveToken | null };
+        if (data.token) {
+          setToken(data.token);
+          setSelected(new Set(getTokenFields(data.token)));
+        } else {
+          setToken(null);
+        }
+      } catch {
+        // silently ignore network errors in background refresh
+      }
+    }
+
+    void refresh();
+
+    function onVisible() {
+      if (document.visibilityState === "visible") void refresh();
+    }
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, []);
 
   function toggleField(key: ShareableFieldKey) {
     setSelected((prev) => {
