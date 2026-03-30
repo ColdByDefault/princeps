@@ -5,25 +5,9 @@
 
 import "server-only";
 
-import { db } from "@/lib/db";
 import { generateAndPushNotification } from "./generate.logic";
-import { isSupportedLanguage, DEFAULT_LANGUAGE } from "@/types/i18n";
-
-function extractLocale(preferences: unknown): string {
-  if (
-    preferences &&
-    typeof preferences === "object" &&
-    "language" in preferences &&
-    isSupportedLanguage(
-      typeof (preferences as Record<string, unknown>)["language"] === "string"
-        ? ((preferences as Record<string, unknown>)["language"] as string)
-        : undefined,
-    )
-  ) {
-    return (preferences as Record<string, unknown>)["language"] as string;
-  }
-  return DEFAULT_LANGUAGE;
-}
+import { getUserPreferences } from "@/lib/settings/get.logic";
+import { db } from "@/lib/db";
 
 /**
  * Fires a welcome_signup notification after a new user record is created.
@@ -33,16 +17,12 @@ export async function onUserCreated(user: {
   id: string;
   name?: string | null;
 }): Promise<void> {
-  const record = await db.user.findUnique({
-    where: { id: user.id },
-    select: { preferences: true },
-  });
-  const locale = extractLocale(record?.preferences);
+  const prefs = await getUserPreferences(user.id);
 
   void generateAndPushNotification({
     userId: user.id,
     userName: user.name ?? null,
-    locale,
+    locale: prefs.language,
     category: "welcome_signup",
   });
 }
@@ -58,7 +38,7 @@ export async function onSessionCreated(session: {
 }): Promise<void> {
   const user = await db.user.findUnique({
     where: { id: session.userId },
-    select: { name: true, createdAt: true, preferences: true },
+    select: { name: true, createdAt: true },
   });
 
   if (!user) return;
@@ -66,12 +46,12 @@ export async function onSessionCreated(session: {
   const ageMs = Date.now() - new Date(user.createdAt).getTime();
   if (ageMs < 60_000) return;
 
-  const locale = extractLocale(user.preferences);
+  const prefs = await getUserPreferences(session.userId);
 
   void generateAndPushNotification({
     userId: session.userId,
     userName: user.name ?? null,
-    locale,
+    locale: prefs.language,
     category: "welcome_login",
   });
 }

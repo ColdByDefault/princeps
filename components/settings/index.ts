@@ -4,3 +4,4 @@
  */
 
 export { AssistantSettingsForm } from "./AssistantSettingsForm";
+export { AppSettingsForm } from "./AppSettingsForm";

@@ -9,6 +9,8 @@ import { SlidersHorizontal } from "lucide-react";
 import { getRequestConfig } from "@/i18n/request";
 import { auth } from "@/lib/auth";
 import { getMessage } from "@/lib/i18n";
+import { getUserPreferences } from "@/lib/settings/get.logic";
+import { AppSettingsForm } from "@/components/settings";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,6 +33,7 @@ export default async function AppSettingsPage() {
   }
 
   const { messages } = await getRequestConfig();
+  const preferences = await getUserPreferences(session.user.id);
 
   return (
     <div className="mx-auto w-full max-w-2xl px-6 py-8 sm:px-8">
@@ -53,13 +56,7 @@ export default async function AppSettingsPage() {
       </div>
 
       <div className="rounded-2xl border border-border/70 bg-card/70 p-6 shadow-sm backdrop-blur">
-        <p className="text-sm text-muted-foreground">
-          {getMessage(
-            messages,
-            "appSettings.page.comingSoon",
-            "App settings coming soon.",
-          )}
-        </p>
+        <AppSettingsForm initialPreferences={preferences} messages={messages} />
       </div>
     </div>
   );

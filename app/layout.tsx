@@ -8,7 +8,11 @@ import { getRequestConfig } from "@/i18n/request";
 import { auth } from "@/lib/auth";
 import { Footer, Navbar } from "@/components/navigation";
 import { ThemeProvider } from "@/components/theme";
-import { NoticeProvider, FloatingNotices } from "@/components/shared";
+import {
+  NoticeProvider,
+  FloatingNotices,
+  LanguageHydrator,
+} from "@/components/shared";
 import { NotificationsProvider } from "@/components/notifications";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -94,6 +98,7 @@ export default async function RootLayout({
                 </div>
                 <FloatingNotices />
                 <Toaster />
+                <LanguageHydrator language={language} />
                 <ChatWidgetProvider
                   authenticated={!!session}
                   assistantName={assistantName}

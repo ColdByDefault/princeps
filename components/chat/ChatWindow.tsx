@@ -286,6 +286,11 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
                     "chat.action.created.decision",
                     "Decision logged",
                   ),
+                  link_contact_to_meeting: getMessage(
+                    messages,
+                    "chat.action.created.linked_contact_to_meeting",
+                    "Contacts linked to meeting",
+                  ),
                 }}
               />
             ))}

@@ -22,9 +22,12 @@ export async function generateBriefing(
   userId: string,
   userName: string | null,
   timezone: string,
+  language: string = "en",
 ): Promise<BriefingResult> {
   const tz = timezone || "UTC";
-  const now = new Date().toLocaleDateString("en-US", {
+  const dateLocale = language === "de" ? "de-DE" : "en-US";
+  const langName = language === "de" ? "German" : "English";
+  const now = new Date().toLocaleDateString(dateLocale, {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -52,7 +55,7 @@ Today is ${now} (${tz}).
 Here is the user's current workspace context:
 ${context || "(no context available)"}
 
-Write a focused daily brief in 3–5 sentences. Highlight the most important thing they should do or be aware of today — a meeting to prepare for, overdue tasks, or an open decision that needs action. Be direct and actionable. Do not list everything; focus on what matters most. Do not use headers, bullet points, or markdown formatting. Write in plain prose. Respond with plain text only.`;
+Write a focused daily brief in 3–5 sentences. Highlight the most important thing they should do or be aware of today — a meeting to prepare for, overdue tasks, or an open decision that needs action. Be direct and actionable. Do not list everything; focus on what matters most. Do not use headers, bullet points, or markdown formatting. Write in plain prose. Write entirely in ${langName}. Respond with plain text only.`;
 
   const response = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
     method: "POST",

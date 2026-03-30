@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { generateBriefing } from "@/lib/briefing/generate.logic";
 import { briefingRateLimiter, createRateLimitResponse } from "@/lib/security";
+import { getUserPreferences } from "@/lib/settings/get.logic";
 
 const STALE_MS = 12 * 60 * 60 * 1000; // 12 hours
 
@@ -33,10 +34,12 @@ export async function GET() {
   }
 
   try {
+    const prefs = await getUserPreferences(userId);
     const result = await generateBriefing(
       userId,
       session.user.name ?? null,
       (session.user as { timezone?: string }).timezone ?? "UTC",
+      prefs.language,
     );
     return NextResponse.json({
       content: result.content,
@@ -62,10 +65,12 @@ export async function POST() {
   if (!rl.allowed) return createRateLimitResponse(rl.retryAfterSeconds);
 
   try {
+    const prefs = await getUserPreferences(session.user.id);
     const result = await generateBriefing(
       session.user.id,
       session.user.name ?? null,
       (session.user as { timezone?: string }).timezone ?? "UTC",
+      prefs.language,
     );
     return NextResponse.json({
       content: result.content,

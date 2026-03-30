@@ -93,6 +93,7 @@ export async function POST(req: Request, { params }: Params) {
     assistantName: preferences.assistantName,
     systemPrompt: preferences.systemPrompt,
     responseStyle: preferences.responseStyle,
+    language: preferences.language,
   });
 
   // Map stored messages to Ollama format

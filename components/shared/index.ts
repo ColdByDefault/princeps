@@ -13,3 +13,4 @@ export { FloatingNotices } from "./FloatingNotices";
 export { NoticePanel } from "./NoticePanel";
 export { ConfirmDialog } from "./ConfirmDialog";
 export { SettingsDialog } from "./SettingsDialog";
+export { LanguageHydrator } from "./LanguageHydrator";
