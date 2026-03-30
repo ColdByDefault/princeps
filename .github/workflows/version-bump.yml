@@ -1,44 +1,44 @@
 name: Version Bump
 
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 
 jobs:
-  bump:
-    # Skip if this push was itself a version-bump commit from this workflow
-    if: "!startsWith(github.event.head_commit.message, 'chore: bump version')"
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    bump:
+        # Skip if this push was itself a version-bump commit from this workflow
+        if: "!startsWith(github.event.head_commit.message, 'chore: bump version')"
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          # Use a token with write access so the push back to main is allowed
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  # Use a token with write access so the push back to main is allowed
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
 
-      - name: Bump patch version
-        id: bump
-        run: |
-          OLD=$(node -p "require('./package.json').version")
-          npm version patch --no-git-tag-version
-          NEW=$(node -p "require('./package.json').version")
-          echo "old=$OLD" >> "$GITHUB_OUTPUT"
-          echo "new=$NEW" >> "$GITHUB_OUTPUT"
+            - name: Bump patch version
+              id: bump
+              run: |
+                  OLD=$(node -p "require('./package.json').version")
+                  npm version patch --no-git-tag-version
+                  NEW=$(node -p "require('./package.json').version")
+                  echo "old=$OLD" >> "$GITHUB_OUTPUT"
+                  echo "new=$NEW" >> "$GITHUB_OUTPUT"
 
-      - name: Commit and push
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add package.json
-          git commit -m "chore: bump version ${{ steps.bump.outputs.old }} → ${{ steps.bump.outputs.new }} [skip ci]"
-          git push
+            - name: Commit and push
+              run: |
+                  git config user.name  "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git add package.json
+                  git commit -m "chore: bump version ${{ steps.bump.outputs.old }} → ${{ steps.bump.outputs.new }} [skip ci]"
+                  git push
