@@ -12,6 +12,8 @@ import {
   Trash2,
   Sparkles,
   RefreshCw,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -55,6 +57,7 @@ export function MeetingList({
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   // Prep state — keyed by meeting id
+  const [detailOpen, setDetailOpen] = useState<Record<string, boolean>>({});
   const [prepOpen, setPrepOpen] = useState<Record<string, boolean>>({});
   const [prepLoading, setPrepLoading] = useState<Record<string, boolean>>({});
   const [prepPacks, setPrepPacks] = useState<Record<string, string>>(() => {
@@ -64,6 +67,10 @@ export function MeetingList({
     }
     return map;
   });
+
+  function toggleDetail(id: string) {
+    setDetailOpen((prev) => ({ ...prev, [id]: !prev[id] }));
+  }
 
   function togglePrep(id: string) {
     setPrepOpen((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -233,6 +240,31 @@ export function MeetingList({
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 cursor-pointer text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:text-foreground"
+                    onClick={() => toggleDetail(meeting.id)}
+                    aria-label={
+                      detailOpen[meeting.id]
+                        ? getMessage(
+                            messages,
+                            "meetings.detail.hideLabel",
+                            "Hide details",
+                          )
+                        : getMessage(
+                            messages,
+                            "meetings.detail.viewLabel",
+                            "View details",
+                          )
+                    }
+                  >
+                    {detailOpen[meeting.id] ? (
+                      <EyeOff className="h-3.5 w-3.5" />
+                    ) : (
+                      <Eye className="h-3.5 w-3.5" />
+                    )}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 cursor-pointer text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:text-foreground"
                     onClick={() => openEdit(meeting)}
                     aria-label={getMessage(
                       messages,
@@ -257,6 +289,41 @@ export function MeetingList({
                   </Button>
                 </div>
               </div>
+
+              {/* Detail panel */}
+              {detailOpen[meeting.id] &&
+                (meeting.agenda ?? meeting.summary) && (
+                  <div className="border-t bg-muted/20 px-4 py-3 space-y-2">
+                    {meeting.agenda && (
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                          {getMessage(
+                            messages,
+                            "meetings.detail.agenda",
+                            "Agenda",
+                          )}
+                        </p>
+                        <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                          {meeting.agenda}
+                        </p>
+                      </div>
+                    )}
+                    {meeting.summary && (
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                          {getMessage(
+                            messages,
+                            "meetings.detail.summary",
+                            "Summary",
+                          )}
+                        </p>
+                        <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                          {meeting.summary}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
 
               {/* Prep pack panel */}
               {isUpcoming && isOpen && hasPack && (

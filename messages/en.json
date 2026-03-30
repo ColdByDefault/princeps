@@ -378,6 +378,10 @@
   "meetings.prep.generating": "Generating…",
   "meetings.prep.close": "Close",
   "meetings.prep.error": "Prep generation failed. Please try again.",
+  "meetings.detail.viewLabel": "View details",
+  "meetings.detail.hideLabel": "Hide details",
+  "meetings.detail.agenda": "Agenda",
+  "meetings.detail.summary": "Summary",
 
   "tasks.metadata.title": "Tasks",
   "tasks.metadata.description": "Track your open actions, priorities, and deadlines.",

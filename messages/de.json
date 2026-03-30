@@ -377,6 +377,10 @@
   "meetings.prep.generating": "Wird generiert…",
   "meetings.prep.close": "Schließen",
   "meetings.prep.error": "Vorbereitung fehlgeschlagen. Bitte erneut versuchen.",
+  "meetings.detail.viewLabel": "Details anzeigen",
+  "meetings.detail.hideLabel": "Details ausblenden",
+  "meetings.detail.agenda": "Agenda",
+  "meetings.detail.summary": "Zusammenfassung",
 
   "tasks.metadata.title": "Aufgaben",
   "tasks.metadata.description": "Verfolge deine offenen Aktionen, Priorit\u00e4ten und Fristen.",
