@@ -29,8 +29,9 @@ export async function onUserCreated(user: {
 
 /**
  * Fires a welcome_login notification after a new session is created.
- * Skips if the session was created within 60 seconds of the user record
- * to avoid double-firing alongside welcome_signup.
+ * Skips if:
+ * - the session was created within 60 seconds of the user record (new signup)
+ * - a welcome_login notification was already generated for this user today (UTC)
  * Intended for use in the Better Auth `session.create.after` database hook.
  */
 export async function onSessionCreated(session: {
@@ -45,6 +46,20 @@ export async function onSessionCreated(session: {
 
   const ageMs = Date.now() - new Date(user.createdAt).getTime();
   if (ageMs < 60_000) return;
+
+  const startOfToday = new Date();
+  startOfToday.setUTCHours(0, 0, 0, 0);
+
+  const alreadyGreetedToday = await db.notification.findFirst({
+    where: {
+      userId: session.userId,
+      category: "welcome_login",
+      createdAt: { gte: startOfToday },
+    },
+    select: { id: true },
+  });
+
+  if (alreadyGreetedToday) return;
 
   const prefs = await getUserPreferences(session.userId);
 

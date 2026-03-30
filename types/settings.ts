@@ -26,12 +26,29 @@ export function isResponseStyle(v: unknown): v is ResponseStyle {
   return RESPONSE_STYLES.includes(v as ResponseStyle);
 }
 
+export type ScheduledCadence = "off" | "daily" | "weekly";
+
+export type ScheduledNotifPrefs = {
+  briefing: ScheduledCadence;
+  tasksOverdue: "off" | "daily";
+  meetingFollowup: "off" | "on";
+  weeklyDigest: "off" | "on";
+};
+
+export const DEFAULT_SCHEDULED_NOTIF_PREFS: ScheduledNotifPrefs = {
+  briefing: "off",
+  tasksOverdue: "off",
+  meetingFollowup: "off",
+  weeklyDigest: "off",
+};
+
 export type UserPreferences = {
   language: AppLanguage;
   assistantName: string;
   systemPrompt: string;
   responseStyle: ResponseStyle;
   ollamaOptions: OllamaOptions;
+  scheduledNotifications: ScheduledNotifPrefs;
 };
 
 export const DEFAULT_PREFERENCES: UserPreferences = {
@@ -46,4 +63,5 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
     num_ctx: 2048,
     repeat_penalty: 1.1,
   },
+  scheduledNotifications: DEFAULT_SCHEDULED_NOTIF_PREFS,
 };

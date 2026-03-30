@@ -225,7 +225,34 @@ components/
 
 ## Done
 
-_(empty — work not yet started)_
+- **Feature 1 — Notification hygiene fix**: `onSessionCreated` in `lib/notifications/greetings.logic.ts` now queries for an existing `welcome_login` notification created today (UTC) before firing. Users receive at most one login greeting per calendar day.
+
+- **Feature 2 — Google Calendar integration (read-only)**:
+  - New `Integration` model in Prisma schema with `@@unique([userId, provider])` — extensible to Outlook/other providers.
+  - `Meeting.googleEventId String? @unique` added to schema.
+  - Migration `add_integrations_google_calendar` applied.
+  - `lib/integrations/google-oauth.logic.ts` — `getGoogleAuthUrl`, `exchangeGoogleCode`, `refreshGoogleToken`, `getValidAccessToken`.
+  - `lib/integrations/google-calendar.logic.ts` — `syncGoogleCalendar`: polls primary calendar for next 30 days, upserts `Meeting` records. Re-syncs preserve user edits (only `scheduledAt`/`durationMin` updated on existing records).
+  - `app/api/integrations/google/connect/route.ts` — redirects to Google OAuth with signed state JWT for CSRF protection.
+  - `app/api/integrations/google/callback/route.ts` — verifies state JWT, exchanges code, upserts `Integration`.
+  - `app/api/integrations/google/sync/route.ts` — manual sync.
+  - `app/api/integrations/google/route.ts` — GET status, DELETE disconnect.
+  - `components/settings/IntegrationsTab.tsx` — connect/sync/disconnect UI with live status.
+  - i18n keys `integrations.*` added (en + de).
+
+- **Feature 3 — Scheduled agent behaviors**:
+  - `lib/cron/shared.logic.ts` — `getScheduledNotifPrefs`, `getScheduledNotifPrefsFromRaw`, `alreadyFiredToday`, `alreadyFiredThisWeek`.
+  - `lib/cron/briefing.logic.ts` — daily/weekly briefing delivery to notification inbox.
+  - `lib/cron/tasks-overdue.logic.ts` — overdue task alert, lists tasks by priority.
+  - `lib/cron/meeting-followup.logic.ts` — nudge for meetings ended >2h ago with no summary.
+  - `lib/cron/digest.logic.ts` — Friday weekly digest counting decisions/tasks/meetings.
+  - `app/api/cron/{briefing,tasks-overdue,meeting-followup,digest}/route.ts` — `CRON_SECRET` bearer-protected GET endpoints.
+  - `vercel.json` — schedules all 4 jobs. Routes are plain HTTP — portable to any external scheduler.
+  - `types/settings.ts` extended with `ScheduledNotifPrefs`, `ScheduledCadence`, `DEFAULT_SCHEDULED_NOTIF_PREFS`.
+  - `lib/settings/get.logic.ts` + `update.logic.ts` updated to read/write `scheduledNotifications` in `User.preferences`.
+  - `components/settings/ScheduledNotificationsSection.tsx` — per-job cadence selector UI.
+  - Settings App page now renders both new sections below existing content.
+  - i18n keys `scheduledNotif.*` added (en + de).
 
 ## Later
 
