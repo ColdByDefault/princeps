@@ -1,3 +1,7 @@
+## [0.1.15] - 2026-03-30
+
+- docs: add Phase 8 hardening plan for production readiness
+
 ## [0.1.14] - 2026-03-30
 
 - feat: add Google Calendar integration setup guide
