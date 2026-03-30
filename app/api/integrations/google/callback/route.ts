@@ -23,7 +23,7 @@ export async function GET(req: Request) {
 
   if (error || !code || !state) {
     return NextResponse.redirect(
-      `${appUrl}/settings?tab=integrations&error=google_denied`,
+      `${appUrl}/settings/app?success=google_denied`,
     );
   }
 
@@ -34,7 +34,7 @@ export async function GET(req: Request) {
     userId = payload.userId as string;
   } catch {
     return NextResponse.redirect(
-      `${appUrl}/settings?tab=integrations&error=google_state_invalid`,
+      `${appUrl}/settings/app?error=google_state_invalid`,
     );
   }
 
@@ -59,11 +59,11 @@ export async function GET(req: Request) {
     });
   } catch {
     return NextResponse.redirect(
-      `${appUrl}/settings?tab=integrations&error=google_exchange_failed`,
+      `${appUrl}/settings/app?error=google_exchange_failed`,
     );
   }
 
   return NextResponse.redirect(
-    `${appUrl}/settings?tab=integrations&success=google_connected`,
+    `${appUrl}/settings/app?success=google_connected`,
   );
 }

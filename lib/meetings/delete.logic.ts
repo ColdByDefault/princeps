@@ -22,6 +22,6 @@ export async function deleteMeeting(
 
   if (!existing || existing.userId !== userId) return false;
 
-  await db.meeting.delete({ where: { id: meetingId } });
+  await db.meeting.deleteMany({ where: { id: meetingId, userId } });
   return true;
 }

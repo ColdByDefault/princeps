@@ -47,6 +47,7 @@ The roadmap can be discussed in four stages:
 6. SaaS launch layer: admin panel, rate limiting (partial), onboarding flow. ✅ Done (phase-6-launch-saas.md) — billing and email deferred.
 7. UI/UX & polish pass — cross-cutting quality improvements and 24-hour Contact Card share link. ✅ Done (feat/refactor-2 — see phase-6-refactor-2.md)
 8. Calendar integration & scheduled agent layer — Google Calendar read-only sync, portable cron jobs (briefing, overdue tasks, meeting follow-up, weekly digest), notification hygiene fix, app-settings cadence toggles. 🔲 Planned (phase-7-integrations-agent.md)
+9. Production hardening — pagination, token revocation, cron loop isolation, N+1 batch fix, OAuth UX feedback, timezone-aware jobs, env var guards. 🔲 Planned (phase-8-hardening.md)
 
 Open questions for discussion:
 
