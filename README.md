@@ -13,9 +13,10 @@
 - [x] LLm cant link contacts to meetings.
 - [x] add Meetings eye icon for better UX and view
 - [x] OnboardingWizard.tsx => move to components
-- [ ] "/" where are tier and prices on first page before login/sign-up
+- [x] "/" where are tier and prices on first page before login/sign-up
 - [x] Script (maybe github actions) to update version in package.json after each merge to main
-- [ ]
+- [ ] Footer issue: some page.tsx take min-h-screen which pushes footer to the bottom, but some dont, which makes the footer look different across pages.
+      Also, when it gets pushed to the bottom, but the page content is not enough to fill the screen, Users will see a big gap between the content and the footer, which looks weird.
 - [ ]
 - [ ]
 - [ ]

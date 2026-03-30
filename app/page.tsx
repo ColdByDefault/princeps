@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import {
   ArrowRight,
   CalendarCheck2,
+  Check,
   FileSearch,
   Network,
   ShieldCheck,
@@ -70,6 +71,74 @@ export default async function LandingPage() {
     getMessage(messages, "landing.capability.decisions", ""),
   ];
 
+  const tiers = [
+    {
+      name: getMessage(messages, "landing.pricing.free.name", "Free"),
+      price: getMessage(messages, "landing.pricing.free.price", "$0"),
+      period: getMessage(messages, "landing.pricing.free.period", "forever"),
+      description: getMessage(messages, "landing.pricing.free.description", ""),
+      features: [
+        getMessage(messages, "landing.pricing.free.feature1", ""),
+        getMessage(messages, "landing.pricing.free.feature2", ""),
+        getMessage(messages, "landing.pricing.free.feature3", ""),
+        getMessage(messages, "landing.pricing.free.feature4", ""),
+        getMessage(messages, "landing.pricing.free.feature5", ""),
+      ],
+      cta: getMessage(messages, "landing.pricing.cta.free", "Get started free"),
+      ctaHref: "/sign-up",
+      highlighted: false,
+    },
+    {
+      name: getMessage(messages, "landing.pricing.pro.name", "Pro"),
+      price: getMessage(messages, "landing.pricing.pro.price", "Coming soon"),
+      period: getMessage(messages, "landing.pricing.pro.period", "per month"),
+      description: getMessage(messages, "landing.pricing.pro.description", ""),
+      features: [
+        getMessage(messages, "landing.pricing.pro.feature1", ""),
+        getMessage(messages, "landing.pricing.pro.feature2", ""),
+        getMessage(messages, "landing.pricing.pro.feature3", ""),
+        getMessage(messages, "landing.pricing.pro.feature4", ""),
+        getMessage(messages, "landing.pricing.pro.feature5", ""),
+      ],
+      cta: getMessage(messages, "landing.pricing.cta.paid", "Coming soon"),
+      ctaHref: null,
+      highlighted: true,
+      badge: getMessage(
+        messages,
+        "landing.pricing.badge.popular",
+        "Most popular",
+      ),
+    },
+    {
+      name: getMessage(messages, "landing.pricing.premium.name", "Premium"),
+      price: getMessage(
+        messages,
+        "landing.pricing.premium.price",
+        "Coming soon",
+      ),
+      period: getMessage(
+        messages,
+        "landing.pricing.premium.period",
+        "per month",
+      ),
+      description: getMessage(
+        messages,
+        "landing.pricing.premium.description",
+        "",
+      ),
+      features: [
+        getMessage(messages, "landing.pricing.premium.feature1", ""),
+        getMessage(messages, "landing.pricing.premium.feature2", ""),
+        getMessage(messages, "landing.pricing.premium.feature3", ""),
+        getMessage(messages, "landing.pricing.premium.feature4", ""),
+        getMessage(messages, "landing.pricing.premium.feature5", ""),
+      ],
+      cta: getMessage(messages, "landing.pricing.cta.paid", "Coming soon"),
+      ctaHref: null,
+      highlighted: false,
+    },
+  ];
+
   return (
     <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col px-6 py-8 sm:px-8 lg:px-10">
       <header className="flex items-center justify-between gap-4 py-4">
@@ -101,7 +170,6 @@ export default async function LandingPage() {
       </header>
 
       <section className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[1.15fr_0.85fr] lg:py-16">
-
         <div className="space-y-8">
           <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm text-muted-foreground backdrop-blur">
             <Sparkles className="size-4 text-primary" />
@@ -225,6 +293,85 @@ export default async function LandingPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Pricing section */}
+      <section className="py-16">
+        <div className="text-center">
+          <h2 className="text-3xl font-semibold tracking-tight text-foreground">
+            {getMessage(messages, "landing.pricing.sectionTitle", "Pricing")}
+          </h2>
+          <p className="mt-3 text-base text-muted-foreground">
+            {getMessage(messages, "landing.pricing.sectionSubtitle", "")}
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          {tiers.map((tier) => (
+            <div
+              key={tier.name}
+              className={`relative flex flex-col rounded-2xl border p-6 ${
+                tier.highlighted
+                  ? "border-primary/50 bg-primary/5 shadow-lg shadow-primary/10"
+                  : "border-border/70 bg-background/75"
+              } backdrop-blur`}
+            >
+              {tier.badge && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-primary/30 bg-primary px-3 py-0.5 text-xs font-semibold text-primary-foreground">
+                  {tier.badge}
+                </span>
+              )}
+
+              <div>
+                <p className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">
+                  {tier.name}
+                </p>
+                <div className="mt-2 flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-foreground">
+                    {tier.price}
+                  </span>
+                  {tier.ctaHref && (
+                    <span className="text-sm text-muted-foreground">
+                      / {tier.period}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {tier.description}
+                </p>
+              </div>
+
+              <ul className="mt-6 flex-1 space-y-3">
+                {tier.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2 text-sm">
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <span className="text-foreground">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8">
+                {tier.ctaHref ? (
+                  <Button
+                    className="w-full rounded-xl"
+                    nativeButton={false}
+                    render={<Link href={tier.ctaHref} />}
+                  >
+                    {tier.cta}
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full rounded-xl"
+                    variant="outline"
+                    disabled
+                  >
+                    {tier.cta}
+                  </Button>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </div>
