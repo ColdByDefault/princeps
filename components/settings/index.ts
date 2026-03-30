@@ -5,3 +5,4 @@
 
 export { AssistantSettingsForm } from "./AssistantSettingsForm";
 export { AppSettingsForm } from "./AppSettingsForm";
+export { ShareLinkPanel } from "./ShareLinkPanel";

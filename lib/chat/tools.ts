@@ -10,6 +10,11 @@ import { createMeeting } from "@/lib/meetings/create.logic";
 import { updateMeeting } from "@/lib/meetings/update.logic";
 import { createTask } from "@/lib/tasks/create.logic";
 import { createDecision } from "@/lib/decisions/create.logic";
+import { createShareToken } from "@/lib/share/create.logic";
+import {
+  SHAREABLE_FIELD_KEYS,
+  type ShareableFieldKey,
+} from "@/lib/share/types";
 import { db } from "@/lib/db";
 
 import {
@@ -28,7 +33,8 @@ export type ActionResult = {
     | "create_meeting"
     | "create_task"
     | "create_decision"
-    | "link_contact_to_meeting";
+    | "link_contact_to_meeting"
+    | "generate_share_link";
   /** The persisted record returned by the logic layer */
   record: Record<string, unknown>;
 };
@@ -196,6 +202,26 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
           },
         },
         required: ["meetingTitle", "contactNames"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "generate_share_link",
+      description:
+        "Generates a 24-hour public share link containing the user's contact card. Use when the user asks to share their contact info, create a share link, or generate a link with their details. Ask the user which fields to include if not specified. Valid fields are: name, email, jobTitle, company, location, bio, phone.",
+      parameters: {
+        type: "object",
+        properties: {
+          fields: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "List of fields to include in the card. Valid values: name, email, jobTitle, company, location, bio, phone.",
+          },
+        },
+        required: ["fields"],
       },
     },
   },
@@ -611,6 +637,44 @@ export async function executeToolCall(
       summary: linkSummaryParts.join("; "),
     };
   }
+  if (name === "generate_share_link") {
+    const a = args as { fields?: unknown };
 
+    if (!Array.isArray(a.fields) || a.fields.length === 0) {
+      return {
+        action: null,
+        summary:
+          "Share link generation failed: no fields were specified. Ask the user which fields (name, email, jobTitle, company, location, bio, phone) they want to include.",
+      };
+    }
+
+    const validSet = new Set<string>(SHAREABLE_FIELD_KEYS);
+    const fields = (a.fields as unknown[]).filter(
+      (f): f is ShareableFieldKey => typeof f === "string" && validSet.has(f),
+    );
+
+    if (fields.length === 0) {
+      return {
+        action: null,
+        summary:
+          "Share link generation failed: none of the specified fields are valid. Valid fields are: name, email, jobTitle, company, location, bio, phone. Ask the user to pick from those.",
+      };
+    }
+
+    const token = await createShareToken(userId, fields);
+    const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/share/${token.id}`;
+
+    return {
+      action: {
+        name: "generate_share_link",
+        record: {
+          id: token.id,
+          fields,
+          expiresAt: token.expiresAt,
+        } as unknown as Record<string, unknown>,
+      },
+      summary: `Share link generated successfully. URL: ${shareUrl} — Tell the user their link is ready, share the URL with them, and mention it expires in 24 hours.`,
+    };
+  }
   return { action: null, summary: `{"error":"unknown tool \\"${name}\\""}` };
 }

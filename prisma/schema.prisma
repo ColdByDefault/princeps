@@ -42,6 +42,7 @@ model User {
   assistantReports     AssistantReport[]
   decisions            Decision[]
   briefingCache        BriefingCache?
+  shareTokens          ShareToken[]
 
   @@map("user")
 }
@@ -325,5 +326,19 @@ model BriefingCache {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("briefing_cache")
+}
+
+model ShareToken {
+  id        String   @id @default(cuid())
+  userId    String
+  fields    Json     // string[] of shareable field keys
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("share_token")
 }
 
