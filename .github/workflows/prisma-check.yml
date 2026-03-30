@@ -27,7 +27,10 @@ jobs:
               run: npx prisma validate
 
             - name: Check schema formatting
-              run: npx prisma format --check
+              run: |
+                  npx prisma format
+                  git diff --exit-code prisma/schema.prisma \
+                  || (echo "ERROR: schema.prisma is not formatted. Run 'prisma format' locally and commit the result." && exit 1)
 
             - name: Check migration drift
               # Compares the cumulative state of all local migration files against

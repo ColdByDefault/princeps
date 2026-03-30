@@ -1,8 +1,8 @@
-/* 
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault. All Rights Reserved.
- */ 
- 
+ */
+
 generator client {
   provider = "prisma-client"
   output   = "../lib/generated/prisma"
@@ -15,34 +15,34 @@ datasource db {
 // ─── Better Auth tables ───────────────────────────────────
 
 model User {
-  id                   String    @id @default(cuid())
+  id                   String   @id @default(cuid())
   name                 String?
-  email                String    @unique
-  emailVerified        Boolean   @default(false)
+  email                String   @unique
+  emailVerified        Boolean  @default(false)
   image                String?
-  timezone             String    @default("UTC")
-  role                 String    @default("user") // "user" | "admin"
-  tier                 String    @default("free") // "free" | "pro" | "premium"
-  knowledgeCharsUsed   Int       @default(0)
-  knowledgeUploadsUsed Int       @default(0)
-  preferences          Json      @default("{}")
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  timezone             String   @default("UTC")
+  role                 String   @default("user") // "user" | "admin"
+  tier                 String   @default("free") // "free" | "pro" | "premium"
+  knowledgeCharsUsed   Int      @default(0)
+  knowledgeUploadsUsed Int      @default(0)
+  preferences          Json     @default("{}")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
-  sessions             Session[]
-  accounts             Account[]
-  chats                Chat[]
-  notifications        Notification[]
-  knowledgeDocuments   KnowledgeDocument[]
-  knowledgeChunks      KnowledgeChunk[]
-  personalInfo         PersonalInfo?
-  contacts             Contact[]
-  meetings             Meeting[]
-  tasks                Task[]
-  assistantReports     AssistantReport[]
-  decisions            Decision[]
-  briefingCache        BriefingCache?
-  shareTokens          ShareToken[]
+  sessions           Session[]
+  accounts           Account[]
+  chats              Chat[]
+  notifications      Notification[]
+  knowledgeDocuments KnowledgeDocument[]
+  knowledgeChunks    KnowledgeChunk[]
+  personalInfo       PersonalInfo?
+  contacts           Contact[]
+  meetings           Meeting[]
+  tasks              Task[]
+  assistantReports   AssistantReport[]
+  decisions          Decision[]
+  briefingCache      BriefingCache?
+  shareTokens        ShareToken[]
 
   @@map("user")
 }
@@ -111,9 +111,9 @@ model Chat {
 model ChatMessage {
   id        String   @id @default(cuid())
   chatId    String
-  role      String   // "user" | "assistant"
+  role      String // "user" | "assistant"
   content   String
-  thinking  String?  // stored for audit; never rendered in the UI
+  thinking  String? // stored for audit; never rendered in the UI
   createdAt DateTime @default(now())
 
   chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
@@ -126,7 +126,7 @@ model ChatMessage {
 model Notification {
   id        String   @id @default(cuid())
   userId    String
-  category  String   // e.g. "welcome_signup" | "welcome_login" | "system" | "token_limit"
+  category  String // e.g. "welcome_signup" | "welcome_login" | "system" | "token_limit"
   source    String   @default("assistant") // "assistant" | "system"
   title     String
   body      String
@@ -146,8 +146,8 @@ model Notification {
 model KnowledgeDocument {
   id        String   @id @default(cuid())
   userId    String
-  name      String   // original filename — display only, never stored as file
-  charCount Int      // total chars contributed to quota
+  name      String // original filename — display only, never stored as file
+  charCount Int // total chars contributed to quota
   createdAt DateTime @default(now())
 
   user   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -202,7 +202,7 @@ model Contact {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   meetings     MeetingParticipant[]
   interactions ContactInteraction[]
 
@@ -213,7 +213,7 @@ model Contact {
 model ContactInteraction {
   id        String   @id @default(cuid())
   contactId String
-  source    String   // "meeting" | "task"
+  source    String // "meeting" | "task"
   sourceId  String
   createdAt DateTime @default(now())
 
@@ -226,7 +226,7 @@ model ContactInteraction {
 // ─── Meetings ─────────────────────────────────────────────
 
 model Meeting {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   userId      String
   title       String
   scheduledAt DateTime
@@ -235,11 +235,11 @@ model Meeting {
   agenda      String?
   summary     String?
   prepPack    String?
-  status      String    @default("upcoming") // upcoming | done | cancelled
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  status      String   @default("upcoming") // upcoming | done | cancelled
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   participants MeetingParticipant[]
   tasks        Task[]
   decisions    Decision[]
@@ -265,8 +265,8 @@ model MeetingParticipant {
 model AssistantReport {
   id          String   @id @default(cuid())
   userId      String
-  toolsCalled Json     // string[] — ordered list of tool names that were invoked
-  summary     String   // LLM-generated brief description of what was done
+  toolsCalled Json // string[] — ordered list of tool names that were invoked
+  summary     String // LLM-generated brief description of what was done
   createdAt   DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -282,7 +282,7 @@ model Task {
   userId    String
   title     String
   notes     String?
-  status    String    @default("open")    // open | in_progress | done | cancelled
+  status    String    @default("open") // open | in_progress | done | cancelled
   priority  String    @default("normal") // low | normal | high | urgent
   dueDate   DateTime?
   meetingId String?
@@ -299,16 +299,16 @@ model Task {
 // ─── Decisions ────────────────────────────────────────────
 
 model Decision {
-  id          String    @id @default(cuid())
-  userId      String
-  title       String
-  rationale   String?
-  outcome     String?
-  status      String    @default("open") // open | decided | reversed
-  decidedAt   DateTime?
-  meetingId   String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String    @id @default(cuid())
+  userId    String
+  title     String
+  rationale String?
+  outcome   String?
+  status    String    @default("open") // open | decided | reversed
+  decidedAt DateTime?
+  meetingId String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
@@ -331,7 +331,7 @@ model BriefingCache {
 model ShareToken {
   id        String   @id @default(cuid())
   userId    String
-  fields    Json     // string[] of shareable field keys
+  fields    Json // string[] of shareable field keys
   expiresAt DateTime
   revoked   Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -341,4 +341,3 @@ model ShareToken {
   @@index([userId])
   @@map("share_token")
 }
-
