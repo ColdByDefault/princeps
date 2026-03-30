@@ -65,6 +65,7 @@ export interface MeetingRecord {
   summary: string | null;
   prepPack: string | null;
   status: string; // "upcoming" | "done" | "cancelled"
+  googleEventId: string | null;
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
   participants: MeetingParticipantRecord[];

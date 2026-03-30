@@ -414,6 +414,7 @@
   "meetings.cancel": "Cancel",
   "meetings.deleteTitle": "Delete this meeting?",
   "meetings.deleteDescription": "This will permanently remove the meeting record.",
+  "meetings.deleteDescriptionGoogle": "This meeting was synced from Google Calendar. It will be removed from See-Sweet only — your Google Calendar event will not be affected.",
   "meetings.deleteConfirm": "Delete",
   "meetings.createSuccess": "Meeting added.",
   "meetings.updateSuccess": "Meeting updated.",

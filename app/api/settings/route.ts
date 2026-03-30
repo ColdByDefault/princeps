@@ -31,13 +31,20 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = (await req.json()) as Partial<UserPreferences>;
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+  }
 
   if (typeof body !== "object" || body === null || Array.isArray(body)) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const result = await updateUserPreferences(session.user.id, body);
+  const preferences = body as Partial<UserPreferences>;
+
+  const result = await updateUserPreferences(session.user.id, preferences);
 
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 500 });

@@ -413,6 +413,7 @@
   "meetings.cancel": "Abbrechen",
   "meetings.deleteTitle": "Diesen Termin l\u00f6schen?",
   "meetings.deleteDescription": "Der Termineintrag wird dauerhaft entfernt.",
+  "meetings.deleteDescriptionGoogle": "Dieser Termin wurde aus Google Kalender synchronisiert. Er wird nur in See-Sweet entfernt — dein Google-Kalender-Eintrag bleibt unberührt.",
   "meetings.deleteConfirm": "L\u00f6schen",
   "meetings.createSuccess": "Termin hinzugef\u00fcgt.",
   "meetings.updateSuccess": "Termin aktualisiert.",

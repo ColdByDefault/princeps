@@ -53,7 +53,7 @@ export async function onSessionCreated(session: {
   const alreadyGreetedToday = await db.notification.findFirst({
     where: {
       userId: session.userId,
-      category: "welcome_login",
+      category: { in: ["welcome_signup", "welcome_login"] },
       createdAt: { gte: startOfToday },
     },
     select: { id: true },

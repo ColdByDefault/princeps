@@ -54,7 +54,10 @@ export function MeetingList({
   const { addNotice } = useNotice();
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<MeetingRecord | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string;
+    isGoogleSynced: boolean;
+  } | null>(null);
 
   // Prep state — keyed by meeting id
   const [detailOpen, setDetailOpen] = useState<Record<string, boolean>>({});
@@ -118,11 +121,11 @@ export function MeetingList({
 
   async function handleDelete() {
     if (!deleteTarget) return;
-    const res = await fetch(`/api/meetings/${deleteTarget}`, {
+    const res = await fetch(`/api/meetings/${deleteTarget.id}`, {
       method: "DELETE",
     });
     if (res.ok) {
-      onMeetingsChange(meetings.filter((m) => m.id !== deleteTarget));
+      onMeetingsChange(meetings.filter((m) => m.id !== deleteTarget.id));
       addNotice({
         type: "success",
         title: getMessage(
@@ -278,7 +281,12 @@ export function MeetingList({
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive"
-                    onClick={() => setDeleteTarget(meeting.id)}
+                    onClick={() =>
+                      setDeleteTarget({
+                        id: meeting.id,
+                        isGoogleSynced: !!meeting.googleEventId,
+                      })
+                    }
                     aria-label={getMessage(
                       messages,
                       "meetings.deleteLabel",
@@ -454,11 +462,19 @@ export function MeetingList({
           "meetings.deleteTitle",
           "Delete this meeting?",
         )}
-        description={getMessage(
-          messages,
-          "meetings.deleteDescription",
-          "This will permanently remove the meeting record.",
-        )}
+        description={
+          deleteTarget?.isGoogleSynced
+            ? getMessage(
+                messages,
+                "meetings.deleteDescriptionGoogle",
+                "This meeting was synced from Google Calendar. It will be removed from See-Sweet only — your Google Calendar event will not be affected.",
+              )
+            : getMessage(
+                messages,
+                "meetings.deleteDescription",
+                "This will permanently remove the meeting record.",
+              )
+        }
         confirmLabel={getMessage(messages, "meetings.deleteConfirm", "Delete")}
         cancelLabel={getMessage(messages, "meetings.cancel", "Cancel")}
         onConfirm={() => void handleDelete()}

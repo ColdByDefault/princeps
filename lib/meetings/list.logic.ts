@@ -23,6 +23,7 @@ export interface MeetingRecord {
   summary: string | null;
   prepPack: string | null;
   status: string;
+  googleEventId: string | null;
   createdAt: Date;
   updatedAt: Date;
   participants: MeetingParticipantRecord[];
@@ -52,6 +53,7 @@ export async function listMeetings(userId: string): Promise<MeetingRecord[]> {
     summary: r.summary,
     prepPack: r.prepPack,
     status: r.status,
+    googleEventId: r.googleEventId,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
     participants: r.participants.map((p) => ({
