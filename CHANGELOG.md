@@ -1,3 +1,11 @@
+## [0.1.14] - 2026-03-30
+
+- feat: add Google Calendar integration setup guide
+- feat: add Google Calendar integration with sync and notification features
+- feat: update SaaS launch layer details and add Phase 7 documentation for Calendar integration and scheduled agent behaviors
+- feat: add Phase 6 documentation for SaaS launch and refactor UI/UX with Contact Card share link
+- chore: remove outdated CI and audit workflows
+
 ## [0.1.13] - 2026-03-30
 
 - fix: correct option for Prisma migrate diff command in workflow
