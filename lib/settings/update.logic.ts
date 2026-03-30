@@ -11,6 +11,7 @@ import {
   type UserPreferences,
   DEFAULT_PREFERENCES,
   isResponseStyle,
+  DEFAULT_SCHEDULED_NOTIF_PREFS,
 } from "@/types/settings";
 import { isSupportedLanguage } from "@/types/i18n";
 
@@ -71,6 +72,27 @@ export async function updateUserPreferences(
         0.5,
         2,
       ),
+    };
+  }
+
+  if (patch.scheduledNotifications !== undefined) {
+    const sn = patch.scheduledNotifications;
+    const d = DEFAULT_SCHEDULED_NOTIF_PREFS;
+    const validBriefing = ["off", "daily", "weekly"];
+    const validOnOff = ["off", "on"];
+    const validDaily = ["off", "daily"];
+
+    merged["scheduledNotifications"] = {
+      briefing: validBriefing.includes(sn.briefing) ? sn.briefing : d.briefing,
+      tasksOverdue: validDaily.includes(sn.tasksOverdue)
+        ? sn.tasksOverdue
+        : d.tasksOverdue,
+      meetingFollowup: validOnOff.includes(sn.meetingFollowup)
+        ? sn.meetingFollowup
+        : d.meetingFollowup,
+      weeklyDigest: validOnOff.includes(sn.weeklyDigest)
+        ? sn.weeklyDigest
+        : d.weeklyDigest,
     };
   }
 

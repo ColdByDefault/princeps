@@ -44,8 +44,9 @@ The roadmap can be discussed in four stages:
 3. Knowledge base: document upload + RAG retrieval, personal info record, context slot registry. ✅ Done
 4. Executive workflow layer: contacts, meetings, tasks, assistant-driven creation, reports, and home briefing. ✅ Done (feat/core-4)
 5. Chief-of-staff layer: decision log, LLM briefing, meeting prep packs, post-meeting capture, contact interaction history, and proactive nudges. ✅ Done (feat/core-5)
-6. SaaS launch layer: billing (Stripe), email (Resend), admin panel, rate limiting, and onboarding flow. 🔲 Planned (phase-6-saas-launch.md)
-7. UI/UX & polish pass — cross-cutting quality improvements and 24-hour Contact Card share link. ✅ Done (feat/refactor-2 — see feat-refactor-2.md)
+6. SaaS launch layer: admin panel, rate limiting (partial), onboarding flow. ✅ Done (phase-6-launch-saas.md) — billing and email deferred.
+7. UI/UX & polish pass — cross-cutting quality improvements and 24-hour Contact Card share link. ✅ Done (feat/refactor-2 — see phase-6-refactor-2.md)
+8. Calendar integration & scheduled agent layer — Google Calendar read-only sync, portable cron jobs (briefing, overdue tasks, meeting follow-up, weekly digest), notification hygiene fix, app-settings cadence toggles. 🔲 Planned (phase-7-integrations-agent.md)
 
 Open questions for discussion:
 

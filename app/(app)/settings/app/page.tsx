@@ -11,7 +11,12 @@ import { auth } from "@/lib/auth";
 import { getMessage } from "@/lib/i18n";
 import { getUserPreferences } from "@/lib/settings/get.logic";
 import { getActiveShareToken } from "@/lib/share/get.logic";
-import { AppSettingsForm, ShareLinkPanel } from "@/components/settings";
+import {
+  AppSettingsForm,
+  ShareLinkPanel,
+  ScheduledNotificationsSection,
+  IntegrationsTab,
+} from "@/components/settings";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -74,6 +79,17 @@ export default async function AppSettingsPage() {
               : null
           }
         />
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-border/70 bg-card/70 p-6 shadow-sm backdrop-blur">
+        <ScheduledNotificationsSection
+          initialPrefs={preferences.scheduledNotifications}
+          messages={messages}
+        />
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-border/70 bg-card/70 p-6 shadow-sm backdrop-blur">
+        <IntegrationsTab messages={messages} />
       </div>
     </div>
   );

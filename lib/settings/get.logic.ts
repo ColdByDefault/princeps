@@ -10,6 +10,7 @@ import {
   type UserPreferences,
   DEFAULT_PREFERENCES,
   isResponseStyle,
+  type ScheduledNotifPrefs,
 } from "@/types/settings";
 import {
   isSupportedLanguage,
@@ -73,5 +74,43 @@ export async function getUserPreferences(
       num_ctx: numOpt(rawOpts, "num_ctx", d.num_ctx),
       repeat_penalty: numOpt(rawOpts, "repeat_penalty", d.repeat_penalty),
     },
+    scheduledNotifications: parseScheduledNotifPrefs(raw),
+  };
+}
+
+function parseScheduledNotifPrefs(
+  raw: Record<string, unknown>,
+): ScheduledNotifPrefs {
+  const sn =
+    raw["scheduledNotifications"] &&
+    typeof raw["scheduledNotifications"] === "object"
+      ? (raw["scheduledNotifications"] as Record<string, unknown>)
+      : {};
+
+  function pick(v: unknown, allowed: string[], fallback: string): string {
+    return typeof v === "string" && allowed.includes(v) ? v : fallback;
+  }
+
+  return {
+    briefing: pick(
+      sn["briefing"],
+      ["off", "daily", "weekly"],
+      "off",
+    ) as ScheduledNotifPrefs["briefing"],
+    tasksOverdue: pick(
+      sn["tasksOverdue"],
+      ["off", "daily"],
+      "off",
+    ) as ScheduledNotifPrefs["tasksOverdue"],
+    meetingFollowup: pick(
+      sn["meetingFollowup"],
+      ["off", "on"],
+      "off",
+    ) as ScheduledNotifPrefs["meetingFollowup"],
+    weeklyDigest: pick(
+      sn["weeklyDigest"],
+      ["off", "on"],
+      "off",
+    ) as ScheduledNotifPrefs["weeklyDigest"],
   };
 }
