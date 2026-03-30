@@ -9,7 +9,7 @@
 - [x] when calling tools, argue if entities are missing or already exist, e.g. contact already exists, meeting time missing, etc.
 - [x] Ai-briefing => support both languages.
 - [x] fix MeetingList UI
-- [ ] App/LLM can generate 24 h Link for Contact/Info Card of the user for none see-sweet users.
+- [x] App/LLM can generate 24 h Link for Contact/Info Card of the user for none see-sweet users.
 - [x] LLm cant link contacts to meetings.
 - [x] add Meetings eye icon for better UX and view
 - [x] OnboardingWizard.tsx => move to components
