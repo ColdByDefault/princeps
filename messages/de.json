@@ -214,6 +214,8 @@
   "chat.sidebar.deleteConfirm": "Löschen",
   "chat.sidebar.deleteSuccess": "Chat gelöscht.",
   "chat.sidebar.renameSuccess": "Chat umbenannt.",
+  "chat.sidebar.quotaHistoryLabel": "Gespeicherte Chats",
+  "chat.sidebar.quotaDailyLabel": "Chats heute",
   "chat.metadata.description": "Dein privater Chat-Workspace.",
   "chat.input.placeholder": "Stell eine Frage\u2026",
   "chat.input.send": "Senden",
@@ -335,6 +337,7 @@
   "knowledge.documents.deleteSuccess": "Dokument gel\u00f6scht.",
   "knowledge.documents.deleteError": "Dokument konnte nicht gel\u00f6scht werden.",
   "knowledge.documents.chars": "Zeichen",
+  "knowledge.documents.quotaLabel": "Gespeicherte Dokumente",
 
   "knowledge.personalInfo.save": "Speichern",
   "knowledge.personalInfo.saving": "Wird gespeichert\u2026",

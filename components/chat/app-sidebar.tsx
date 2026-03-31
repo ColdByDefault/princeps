@@ -66,6 +66,8 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   const router = useRouter();
   const [chats, setChats] = useState<ChatSummary[] | null>(null);
   const [chatHistoryLimit, setChatHistoryLimit] = useState<number>(10);
+  const [dailyUsed, setDailyUsed] = useState<number>(0);
+  const [dailyLimit, setDailyLimit] = useState<number>(10);
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [renameTarget, setRenameTarget] = useState<string | null>(null);
@@ -84,9 +86,13 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
       const data = (await res.json()) as {
         chats: ChatSummary[];
         historyLimit: number;
+        dailyUsed: number;
+        dailyLimit: number;
       };
       setChats(data.chats);
       setChatHistoryLimit(data.historyLimit);
+      setDailyUsed(data.dailyUsed ?? 0);
+      setDailyLimit(data.dailyLimit ?? 10);
     } catch {
       setChats([]);
       toast.error(
@@ -406,6 +412,45 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
           </SidebarGroupAction>
 
           <SidebarGroupContent>
+            {!isCollapsed && chats !== null && (
+              <div className="flex items-center gap-1.5 px-2 pb-1.5 pt-0.5">
+                <span
+                  title={getMessage(
+                    messages,
+                    "chat.sidebar.quotaHistoryLabel",
+                    "Saved chats",
+                  )}
+                  className={cn(
+                    "rounded px-1.5 py-0.5 text-xs tabular-nums",
+                    chats.length >= chatHistoryLimit
+                      ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      : chats.length >= Math.ceil(chatHistoryLimit * 0.8)
+                        ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                        : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {chats.length}&nbsp;/&nbsp;{chatHistoryLimit}
+                </span>
+                <span className="text-xs text-muted-foreground/40">·</span>
+                <span
+                  title={getMessage(
+                    messages,
+                    "chat.sidebar.quotaDailyLabel",
+                    "Chats today",
+                  )}
+                  className={cn(
+                    "rounded px-1.5 py-0.5 text-xs tabular-nums",
+                    dailyUsed >= dailyLimit
+                      ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      : dailyUsed >= Math.ceil(dailyLimit * 0.8)
+                        ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                        : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {dailyUsed}&nbsp;/&nbsp;{dailyLimit}
+                </span>
+              </div>
+            )}
             <SidebarMenu>
               {isCollapsed ? (
                 <SidebarMenuItem>

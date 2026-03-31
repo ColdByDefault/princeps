@@ -17,12 +17,14 @@ interface KnowledgeTabsProps {
   messages: MessageDictionary;
   initialDocuments: KnowledgeDocumentRecord[];
   initialPersonalInfo: PersonalInfoFields;
+  docLimit: number;
 }
 
 export function KnowledgeTabs({
   messages,
   initialDocuments,
   initialPersonalInfo,
+  docLimit,
 }: KnowledgeTabsProps) {
   const [documents, setDocuments] =
     useState<KnowledgeDocumentRecord[]>(initialDocuments);
@@ -52,6 +54,7 @@ export function KnowledgeTabs({
             messages={messages}
             documents={documents}
             onDocumentsChange={setDocuments}
+            docLimit={docLimit}
           />
         </TabsContent>
 

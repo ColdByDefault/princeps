@@ -11,7 +11,7 @@ import { createChat } from "@/lib/chat/create.logic";
 import { getPlanLimits } from "@/types/billing";
 import { db } from "@/lib/db";
 
-// GET /api/chat — list all chats for the current user, plus the tier-based history limit
+// GET /api/chat — list all chats for the current user, plus the tier-based history and daily limits
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
 
@@ -23,13 +23,21 @@ export async function GET() {
     listChats(session.user.id),
     db.user.findUnique({
       where: { id: session.user.id },
-      select: { tier: true },
+      select: { tier: true, chatsDailyCount: true, chatsDailyDate: true },
     }),
   ]);
 
-  const historyLimit = getPlanLimits(user?.tier ?? "free").chatHistoryTotal;
+  const limits = getPlanLimits(user?.tier ?? "free");
+  const today = new Date().toISOString().slice(0, 10);
+  const dailyUsed =
+    user?.chatsDailyDate === today ? (user.chatsDailyCount ?? 0) : 0;
 
-  return NextResponse.json({ chats, historyLimit });
+  return NextResponse.json({
+    chats,
+    historyLimit: limits.chatHistoryTotal,
+    dailyUsed,
+    dailyLimit: limits.chatsPerDay,
+  });
 }
 
 // POST /api/chat — create a new chat (enforces the 10-chat limit)
