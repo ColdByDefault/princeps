@@ -1,3 +1,10 @@
+## [0.1.19] - 2026-03-31
+
+- feat: update package versions and remove unnecessary eslint directive
+- feat: add presentation overview documents in English and German
+- feat: enhance system prompt with platform capabilities and user interaction guidelines
+- feat: unify chat provider implementation and add Groq support
+
 ## [0.1.18] - 2026-03-31
 
 - chore: remove sensitive environment variable examples from README
