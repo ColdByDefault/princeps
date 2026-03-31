@@ -1,21 +1,234 @@
-## feat/refactor-2 — completed
+﻿# See-Sweet
 
-- [x] greetings messages pop up remove color
-- [x] add cursor-pointer contact and icons colors to pop-ups
-- [x] add cursor-pointer Tasks and icons colors to pop-ups
-- [x] navbar new items translations
-- [x] add cursor-pointer meeting and icons colors to pop-ups
-- [x] add app-settings tab in /settings, and seperate from assistant settings
-- [x] improve user language reference, save in appsettings and db
-- [x] Chat-widget douple progress bar, also check thinking.
-- [x] when calling tools, argue if entities are missing or already exist, e.g. contact already exists, meeting time missing, etc.
-- [x] Ai-briefing => support both languages.
-- [x] fix MeetingList UI
-- [x] App/LLM can generate 24 h Link for Contact/Info Card of the user for none see-sweet users.
-- [x] LLm cant link contacts to meetings.
-- [x] add Meetings eye icon for better UX and view
-- [x] OnboardingWizard.tsx => move to components
-- [x] "/" where are tier and prices on first page before login/sign-up
-- [x] Script (maybe github actions) to update version in package.json after each merge to main
-- [x] Footer issue: some page.tsx take min-h-screen which pushes footer to the bottom, but some dont, which makes the footer look different across pages.
-      Also, when it gets pushed to the bottom, but the page content is not enough to fill the screen, Users will see a big gap between the content and the footer, which looks weird.
+**Version:** 0.1.15
+
+A private AI workspace that functions as a personal executive secretariat — not another generic chat interface. See-Sweet gives individuals the same operational leverage that high-performing executives build around themselves through chiefs of staff: preparation, memory, coordination, and structured follow-through.
+
+---
+
+## Requirements
+
+| Requirement             | Minimum version    |
+| ----------------------- | ------------------ |
+| Node.js                 | 20                 |
+| npm                     | 10                 |
+| Docker & Docker Compose | any recent version |
+| PostgreSQL (via Docker) | 18 with pgvector   |
+| Ollama                  | latest             |
+
+**Ollama models required:**
+
+- `qwen3` (or any `qwen3:*` variant) — chat and notification generation
+- Any Ollama embedding model configured in `OLLAMA_EMBED_MODEL` — knowledge base retrieval
+
+**Optional external services:**
+
+- Google Cloud project with Calendar API enabled — for the Google Calendar integration
+- Stripe account — for billing tiers (infrastructure present, enforcement deferred)
+
+---
+
+## Tech Stack
+
+| Layer            | Technology                                        |
+| ---------------- | ------------------------------------------------- |
+| Framework        | Next.js 16 (App Router)                           |
+| Language         | TypeScript 5                                      |
+| UI               | React 19, Tailwind CSS 4, shadcn/ui               |
+| Auth             | Better Auth (email/password, session-based)       |
+| Database         | PostgreSQL 18 + pgvector                          |
+| ORM              | Prisma 7                                          |
+| AI runtime       | Ollama (local LLM, local embeddings)              |
+| Validation       | Zod 4                                             |
+| Notifications    | Server-Sent Events (SSE)                          |
+| i18n             | Custom flat-key message system (English + German) |
+| Containerization | Docker Compose                                    |
+
+---
+
+## Getting Started
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/ColdByDefault/see-sweet.git
+cd see-sweet
+npm install
+```
+
+### 2. Start the database
+
+```bash
+docker compose up -d
+```
+
+### 3. Configure environment variables
+
+Copy the example and fill in all values:
+
+```bash
+cp .env.example .env
+```
+
+Required variables:
+
+```env
+DATABASE_URL=postgresql://seesweet:yourpassword@localhost:5432/seesweet
+BETTER_AUTH_SECRET=your-secret-here
+BETTER_AUTH_URL=http://localhost:3000
+
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=qwen3:4b
+OLLAMA_EMBED_MODEL=nomic-embed-text
+
+# Optional: Google Calendar integration
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI=http://localhost:3000/api/integrations/google/callback
+
+# Optional: cron job protection
+CRON_SECRET=your-cron-secret
+```
+
+### 4. Run migrations and seed
+
+```bash
+npm run db:migrate
+npm run db:seed
+
+# seed an admin account (optional)
+npm run db:seed-admin
+```
+
+### 5. Start the development server
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+---
+
+## Features
+
+### Authenticated Workspace
+
+Every user operates inside a private, session-gated workspace. Data is hard-scoped to the authenticated user at every layer — no record from one user is ever accessible to another. Authentication is handled by Better Auth with email/password credentials and Prisma-backed sessions.
+
+### AI Chat
+
+A persistent, retrieval-aware assistant backed by a local Ollama LLM. Each conversation is stored in the database and titled automatically from the first message. Users can maintain up to 10 saved chats, rename, delete, and switch between them.
+
+The assistant receives a server-assembled system prompt built from all user data available at request time — contacts, meetings, tasks, decisions, knowledge base chunks, and personal info — so responses are grounded in the user's actual context rather than generic knowledge.
+
+**Thinking mode** lets the model reason before responding. A progress indicator is shown while the model thinks; the raw reasoning is never exposed to the user. Toggle state persists in local storage.
+
+A **floating chat widget** is available on every authenticated page for quick questions without navigating away.
+
+### Notification Inbox
+
+A persistent in-app inbox for LLM-generated and system notifications, delivered in real time via Server-Sent Events. Each notification carries a category, title, and a body generated by the local LLM. Notifications can be read, dismissed, and reviewed. Unread count is shown in the navigation.
+
+### Knowledge Base
+
+Users upload `.txt` or `.md` documents. The file is parsed, chunked, embedded via Ollama, and stored in PostgreSQL with pgvector. No raw file is persisted — only vector chunks. On every chat request, the user's message is embedded and a cosine-similarity search retrieves the most relevant chunks, which are injected into the LLM prompt.
+
+Users also maintain a **Personal Info** record — free-form background context that is always included in the assistant system prompt.
+
+### Contacts
+
+A relationship index. Each contact stores name, role, company, email, phone, notes, tags, and a last-contact date. The assistant is aware of the user's contacts and references them when preparing meeting notes or surfacing context.
+
+A **24-hour shareable card link** lets users share a read-only contact card via a time-limited token URL, with no account required for the recipient.
+
+### Meetings
+
+A meeting log for past and upcoming events. Meetings carry a title, date, duration, location, agenda, participant list (linked to Contacts), status, and a summary field for post-meeting notes. The assistant uses meeting data for briefings and follow-up nudges. Meetings can be imported from Google Calendar.
+
+### Tasks
+
+An open task list with title, notes, status (`open`, `in_progress`, `done`, `cancelled`), priority (`low`, `normal`, `high`, `urgent`), due date, and an optional meeting link. The assistant is aware of open and overdue tasks and references them in daily briefs and planning conversations.
+
+### Decisions
+
+A decision log for recording consequential choices with rationale, outcome, and status (`open`, `decided`, `reversed`). Decisions can be linked to the meeting where they were made. The assistant can surface open decisions and avoid re-litigating resolved reasoning.
+
+### Reports
+
+A structured summary view that aggregates activity across meetings, tasks, and decisions into a readable weekly digest, useful for reviews and status reporting.
+
+### Daily Briefing
+
+An LLM-generated briefing delivered as an in-app notification. The briefing summarises the user's agenda, open tasks, pending decisions, and anything the assistant identifies as worth surfacing. Cadence is user-controlled (off / daily / weekly) from App Settings.
+
+### Proactive Nudges
+
+Automated, opt-out notifications triggered by real data patterns:
+
+- **Overdue task alerts** — fires when tasks are past their due date.
+- **Meeting follow-up prompts** — fires when a meeting has ended but no summary has been captured yet.
+- **Weekly digest** — a Friday summary of decisions, tasks closed, and meetings held during the week.
+
+All nudges respect a minimum cooldown and are individually toggleable from App Settings. Day-of-week targeting is timezone-aware per user.
+
+### Google Calendar Integration
+
+Users connect their Google Calendar via OAuth 2.0 (read-only scope). Once connected, upcoming events within 30 days are imported as Meeting records. Sync runs on demand and on a schedule. Token refresh is automatic; revoked access is detected and cleaned up without silent failures.
+
+### Admin Panel
+
+An internal user management surface accessible only to accounts with the `admin` role. Admins can view all users, change tier assignments (`free`, `pro`, `premium`), and delete accounts.
+
+### Onboarding
+
+A first-run onboarding flow that walks new users through the product before they reach the workspace.
+
+### Settings
+
+**Assistant Settings** — configure assistant name, system prompt override, response style, and advanced Ollama model parameters (temperature, top-p, top-k, context window, repeat penalty).
+
+**App Settings** — configure preferred language (English / German), notification cadences, and Google Calendar integration status.
+
+### Multilingual UI
+
+The entire interface is available in English and German. The active language is stored in user preferences and applied server-side via a cookie-aware locale resolver.
+
+---
+
+## Copyright
+
+Copyright © 2026 Yazan Abo-Ayash (ColdByDefault™). All rights reserved.
+
+See-Sweet is proprietary software. The source code is published for reference and transparency purposes only. No license is granted to use, copy, modify, distribute, sublicense, or deploy this software or any portion of it without explicit written permission from the copyright holder.
+
+See [LICENSE](LICENSE) for the full terms.
+
+---
+
+## Acceptable Use
+
+See-Sweet is a personal productivity tool designed for lawful individual use. By deploying or operating this software you agree not to:
+
+- Use the platform to store, process, or transmit unlawful, harmful, or fraudulent content.
+- Attempt to access, extract, or interfere with another user's data.
+- Reverse-engineer, decompile, or redistribute any part of this codebase without authorization.
+- Use automated tooling to abuse or overload the API, LLM endpoints, or database.
+- Bypass authentication, authorization, or rate-limiting controls.
+
+Violation of these terms may result in account termination and, where applicable, legal action.
+
+---
+
+## Security
+
+Security issues should be reported privately — not in public issues or pull requests.
+
+**Contact:**
+
+- contact@coldbydefault.com
+- abo.ayash.yazan@gmail.com
+
+Include a short description of the issue, the affected area or endpoint, reproduction steps, and expected impact. See [SECURITY.md](SECURITY.md) for the full policy.
+
+Please allow reasonable time for review and remediation before any public disclosure.
