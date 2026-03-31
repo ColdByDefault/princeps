@@ -1,3 +1,7 @@
+## [0.1.18] - 2026-03-31
+
+- chore: remove sensitive environment variable examples from README
+
 ## [0.1.17] - 2026-03-31
 
 - feat: add environment variables for Docker, Better Auth, and OAuth providers in README
