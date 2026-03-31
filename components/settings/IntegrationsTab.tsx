@@ -6,6 +6,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getMessage } from "@/lib/i18n";
@@ -20,9 +21,12 @@ type IntegrationStatus = {
 
 type Props = {
   messages: MessageDictionary;
+  oauthSuccess: string | undefined;
+  oauthError: string | undefined;
 };
 
-export function IntegrationsTab({ messages }: Props) {
+export function IntegrationsTab({ messages, oauthSuccess, oauthError }: Props) {
+  const router = useRouter();
   const [status, setStatus] = useState<IntegrationStatus | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
@@ -32,6 +36,48 @@ export function IntegrationsTab({ messages }: Props) {
       .then((r) => r.json() as Promise<IntegrationStatus>)
       .then((data) => setStatus(data))
       .catch(() => setStatus({ connected: false, integration: null }));
+  }, []);
+
+  // B1: show OAuth result toast once on mount and clean the URL
+  useEffect(() => {
+    if (oauthSuccess === "google_connected") {
+      toast.success(
+        getMessage(
+          messages,
+          "integrations.google.connectSuccess",
+          "Google Calendar connected successfully.",
+        ),
+      );
+      router.replace("/settings/app?tab=integrations");
+    } else if (oauthError === "google_denied") {
+      toast.error(
+        getMessage(
+          messages,
+          "integrations.google.errorDenied",
+          "Google Calendar access was denied.",
+        ),
+      );
+      router.replace("/settings/app?tab=integrations");
+    } else if (oauthError === "google_state_invalid") {
+      toast.error(
+        getMessage(
+          messages,
+          "integrations.google.errorInvalid",
+          "OAuth state was invalid. Please try again.",
+        ),
+      );
+      router.replace("/settings/app?tab=integrations");
+    } else if (oauthError) {
+      toast.error(
+        getMessage(
+          messages,
+          "integrations.google.errorFailed",
+          "Failed to connect Google Calendar. Please try again.",
+        ),
+      );
+      router.replace("/settings/app?tab=integrations");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSync = async () => {

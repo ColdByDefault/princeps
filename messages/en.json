@@ -560,6 +560,10 @@
   "integrations.google.syncSuccess": "Calendar synced successfully.",
   "integrations.google.syncError": "Sync failed. Please try again.",
   "integrations.google.disconnectSuccess": "Google Calendar disconnected.",
+  "integrations.google.connectSuccess": "Google Calendar connected successfully.",
+  "integrations.google.errorDenied": "Google Calendar access was denied.",
+  "integrations.google.errorInvalid": "OAuth state was invalid. Please try again.",
+  "integrations.google.errorFailed": "Failed to connect Google Calendar. Please try again.",
 
   "scheduledNotif.title": "Scheduled Notifications",
   "scheduledNotif.description": "Choose which notifications the assistant sends automatically and how often.",

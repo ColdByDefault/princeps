@@ -559,6 +559,10 @@
   "integrations.google.syncSuccess": "Kalender erfolgreich synchronisiert.",
   "integrations.google.syncError": "Synchronisierung fehlgeschlagen. Bitte erneut versuchen.",
   "integrations.google.disconnectSuccess": "Google Kalender getrennt.",
+  "integrations.google.connectSuccess": "Google Kalender erfolgreich verbunden.",
+  "integrations.google.errorDenied": "Zugriff auf Google Kalender wurde verweigert.",
+  "integrations.google.errorInvalid": "OAuth-Status ungültig. Bitte erneut versuchen.",
+  "integrations.google.errorFailed": "Google Kalender konnte nicht verbunden werden. Bitte erneut versuchen.",
 
   "scheduledNotif.title": "Geplante Benachrichtigungen",
   "scheduledNotif.description": "Wählen, welche Benachrichtigungen der Assistent automatisch sendet und wie häufig.",
