@@ -8,6 +8,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { listMeetings } from "@/lib/meetings/list.logic";
 import { createMeeting } from "@/lib/meetings/create.logic";
+import { MeetingCreateSchema } from "@/lib/meetings/schemas";
+import { zodErrorMessage } from "@/lib/utils";
 
 // GET /api/meetings — list all meetings for the current user
 export async function GET() {
@@ -34,41 +36,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
   }
 
-  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+  const parsed = MeetingCreateSchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "Body must be a JSON object." },
+      { error: zodErrorMessage(parsed.error) },
       { status: 400 },
     );
   }
 
-  const {
-    title,
-    scheduledAt,
-    durationMin,
-    location,
-    agenda,
-    participantContactIds,
-  } = body as Record<string, unknown>;
-
-  if (typeof title !== "string" || title.trim() === "") {
-    return NextResponse.json({ error: "title is required." }, { status: 400 });
-  }
-  if (typeof scheduledAt !== "string" || isNaN(Date.parse(scheduledAt))) {
-    return NextResponse.json(
-      { error: "scheduledAt must be a valid ISO date string." },
-      { status: 400 },
-    );
-  }
-
+  const d = parsed.data;
   const meeting = await createMeeting(session.user.id, {
-    title: title.trim(),
-    scheduledAt: new Date(scheduledAt),
-    durationMin: typeof durationMin === "number" ? durationMin : null,
-    location: typeof location === "string" ? location : null,
-    agenda: typeof agenda === "string" ? agenda : null,
-    participantContactIds: Array.isArray(participantContactIds)
-      ? (participantContactIds as string[])
-      : [],
+    title: d.title.trim(),
+    scheduledAt: new Date(d.scheduledAt),
+    durationMin: d.durationMin ?? null,
+    location: d.location ?? null,
+    agenda: d.agenda ?? null,
+    participantContactIds: d.participantContactIds ?? [],
   });
 
   return NextResponse.json({ meeting }, { status: 201 });

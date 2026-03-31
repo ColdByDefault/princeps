@@ -8,6 +8,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { updateContact } from "@/lib/contacts/update.logic";
 import { deleteContact } from "@/lib/contacts/delete.logic";
+import { ContactUpdateSchema } from "@/lib/contacts/schemas";
+import { zodErrorMessage } from "@/lib/utils";
 
 // PATCH /api/contacts/[id] — update a contact
 export async function PATCH(
@@ -28,35 +30,25 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
   }
 
-  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+  const parsed = ContactUpdateSchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "Body must be a JSON object." },
+      { error: zodErrorMessage(parsed.error) },
       { status: 400 },
     );
   }
 
-  const { name, role, company, email, phone, notes, tags, lastContact } =
-    body as Record<string, unknown>;
-
+  const d = parsed.data;
   const updated = await updateContact(session.user.id, id, {
-    ...(typeof name === "string" && { name: name.trim() }),
-    ...(role !== undefined && { role: typeof role === "string" ? role : null }),
-    ...(company !== undefined && {
-      company: typeof company === "string" ? company : null,
-    }),
-    ...(email !== undefined && {
-      email: typeof email === "string" ? email : null,
-    }),
-    ...(phone !== undefined && {
-      phone: typeof phone === "string" ? phone : null,
-    }),
-    ...(notes !== undefined && {
-      notes: typeof notes === "string" ? notes : null,
-    }),
-    ...(Array.isArray(tags) && { tags: tags as string[] }),
-    ...(lastContact !== undefined && {
-      lastContact:
-        typeof lastContact === "string" ? new Date(lastContact) : null,
+    ...(d.name !== undefined && { name: d.name.trim() }),
+    ...(d.role !== undefined && { role: d.role ?? null }),
+    ...(d.company !== undefined && { company: d.company ?? null }),
+    ...(d.email !== undefined && { email: d.email ?? null }),
+    ...(d.phone !== undefined && { phone: d.phone ?? null }),
+    ...(d.notes !== undefined && { notes: d.notes ?? null }),
+    ...(d.tags !== undefined && { tags: d.tags }),
+    ...(d.lastContact !== undefined && {
+      lastContact: d.lastContact ? new Date(d.lastContact) : null,
     }),
   });
 

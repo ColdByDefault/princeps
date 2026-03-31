@@ -74,6 +74,7 @@ export async function updateMeeting(
     summary: row.summary,
     prepPack: row.prepPack,
     status: row.status,
+    googleEventId: row.googleEventId ?? null,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
     participants: row.participants.map((p) => ({

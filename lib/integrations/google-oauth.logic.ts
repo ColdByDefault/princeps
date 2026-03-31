@@ -9,6 +9,18 @@ import { db } from "@/lib/db";
 
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 
+/**
+ * Thrown when Google returns `invalid_grant` — the user has revoked access
+ * or the refresh token has expired. The Integration row is deleted before
+ * this is thrown, so callers can treat it as a clean disconnect.
+ */
+export class GoogleAuthRevokedError extends Error {
+  constructor(userId: string) {
+    super(`Google Calendar access revoked for user ${userId}`);
+    this.name = "GoogleAuthRevokedError";
+  }
+}
+
 export function getGoogleAuthUrl(state: string): string {
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID!,
@@ -22,9 +34,7 @@ export function getGoogleAuthUrl(state: string): string {
   return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
 }
 
-export async function exchangeGoogleCode(
-  code: string,
-): Promise<{
+export async function exchangeGoogleCode(code: string): Promise<{
   accessToken: string;
   refreshToken: string | null;
   expiresAt: Date;
@@ -77,6 +87,18 @@ export async function refreshGoogleToken(
 
   if (!res.ok) {
     const body = await res.text();
+    let parsed: { error?: string } = {};
+    try {
+      parsed = JSON.parse(body) as { error?: string };
+    } catch {
+      // not JSON — fall through to generic error
+    }
+    if (parsed.error === "invalid_grant") {
+      await db.integration.deleteMany({
+        where: { userId, provider: "google_calendar" },
+      });
+      throw new GoogleAuthRevokedError(userId);
+    }
     throw new Error(`Google token refresh failed: ${body}`);
   }
 
