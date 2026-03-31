@@ -1,3 +1,7 @@
+## [0.1.17] - 2026-03-31
+
+- feat: add environment variables for Docker, Better Auth, and OAuth providers in README
+
 ## [0.1.16] - 2026-03-31
 
 - feat: refactor version bump workflow and update README with project details
