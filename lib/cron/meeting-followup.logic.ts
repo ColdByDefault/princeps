@@ -50,18 +50,25 @@ export async function runMeetingFollowupJob(): Promise<{
         continue;
       }
 
-      // Meetings that ended >2h ago without a summary, within the last 24h
-      const meetings = await db.meeting.findMany({
+      // Meetings that started in the last 24h, without a summary, not cancelled.
+      // We check effective end time in JS so that durationMin is respected.
+      const candidates = await db.meeting.findMany({
         where: {
           userId: user.id,
           status: { not: "cancelled" },
           summary: null,
-          scheduledAt: { gte: oneDayAgo, lt: twoHoursAgo },
+          scheduledAt: { gte: oneDayAgo },
         },
-        select: { title: true },
-        take: 5,
+        select: { title: true, scheduledAt: true, durationMin: true },
+        take: 20,
       });
 
+      // Keep only meetings whose effective end time is > 2 hours ago
+      const meetings = candidates.filter((m) => {
+        const durationMs = (m.durationMin ?? 0) * 60_000;
+        const effectiveEnd = new Date(m.scheduledAt.getTime() + durationMs);
+        return effectiveEnd < twoHoursAgo;
+      });
       if (meetings.length === 0) {
         skipped++;
         continue;
