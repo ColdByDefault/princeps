@@ -43,7 +43,7 @@ import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LanguageToggle } from "@/components/navigation/Navbar";
 import { getMessage } from "@/lib/i18n";
 import { type MessageDictionary } from "@/types/i18n";
-import { type ChatSummary, CHAT_LIMIT } from "@/types/chat";
+import { type ChatSummary } from "@/types/chat";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
@@ -65,6 +65,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [chats, setChats] = useState<ChatSummary[] | null>(null);
+  const [chatHistoryLimit, setChatHistoryLimit] = useState<number>(10);
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [renameTarget, setRenameTarget] = useState<string | null>(null);
@@ -80,8 +81,12 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
     try {
       const res = await fetch("/api/chat");
       if (!res.ok) return;
-      const data = (await res.json()) as { chats: ChatSummary[] };
+      const data = (await res.json()) as {
+        chats: ChatSummary[];
+        historyLimit: number;
+      };
       setChats(data.chats);
+      setChatHistoryLimit(data.historyLimit);
     } catch {
       setChats([]);
       toast.error(
@@ -206,7 +211,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
     );
   };
 
-  const atLimit = (chats?.length ?? 0) >= CHAT_LIMIT;
+  const atLimit = (chats?.length ?? 0) >= chatHistoryLimit;
 
   const handleSignOut = async () => {
     if (isSigningOut) return;

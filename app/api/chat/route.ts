@@ -8,8 +8,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { listChats } from "@/lib/chat/list.logic";
 import { createChat } from "@/lib/chat/create.logic";
+import { getPlanLimits } from "@/types/billing";
+import { db } from "@/lib/db";
 
-// GET /api/chat — list all chats for the current user
+// GET /api/chat — list all chats for the current user, plus the tier-based history limit
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
 
@@ -17,9 +19,17 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const chats = await listChats(session.user.id);
+  const [chats, user] = await Promise.all([
+    listChats(session.user.id),
+    db.user.findUnique({
+      where: { id: session.user.id },
+      select: { tier: true },
+    }),
+  ]);
 
-  return NextResponse.json({ chats });
+  const historyLimit = getPlanLimits(user?.tier ?? "free").chatHistoryTotal;
+
+  return NextResponse.json({ chats, historyLimit });
 }
 
 // POST /api/chat — create a new chat (enforces the 10-chat limit)

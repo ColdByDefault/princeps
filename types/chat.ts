@@ -3,8 +3,6 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
-export const CHAT_LIMIT = 10;
-
 export type ChatSummary = {
   id: string;
   title: string;

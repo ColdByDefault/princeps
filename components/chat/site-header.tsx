@@ -8,7 +8,6 @@
 import { useEffect, useState } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
-import { CHAT_LIMIT } from "@/types/chat";
 import { type ChatSummary } from "@/types/chat";
 
 type StatusData = {
@@ -21,6 +20,7 @@ type StatusData = {
 export function SiteHeader() {
   const [status, setStatus] = useState<StatusData | null>(null);
   const [chatCount, setChatCount] = useState<number | null>(null);
+  const [chatHistoryLimit, setChatHistoryLimit] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -41,8 +41,14 @@ export function SiteHeader() {
       try {
         const res = await fetch("/api/chat");
         if (res.ok) {
-          const data = (await res.json()) as { chats: ChatSummary[] };
-          if (!cancelled) setChatCount(data.chats.length);
+          const data = (await res.json()) as {
+            chats: ChatSummary[];
+            historyLimit: number;
+          };
+          if (!cancelled) {
+            setChatCount(data.chats.length);
+            setChatHistoryLimit(data.historyLimit);
+          }
         }
       } catch {
         // silently ignore
@@ -69,11 +75,11 @@ export function SiteHeader() {
 
       <div className="ml-auto flex items-center gap-2">
         {/* Chat counter */}
-        {chatCount !== null && (
+        {chatCount !== null && chatHistoryLimit !== null && (
           <Badge variant="secondary" className="gap-1 text-xs font-normal">
             <span>Chats</span>
             <span className="font-semibold">
-              {chatCount}/{CHAT_LIMIT}
+              {chatCount}/{chatHistoryLimit}
             </span>
           </Badge>
         )}

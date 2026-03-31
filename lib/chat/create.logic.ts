@@ -6,7 +6,8 @@
 import "server-only";
 
 import { db } from "@/lib/db";
-import { CHAT_LIMIT } from "@/types/chat";
+import { getPlanLimits } from "@/types/billing";
+import { incrementChatDailyCounter } from "@/lib/billing/enforce.logic";
 
 export type CreateChatResult =
   | { ok: true; chatId: string }
@@ -14,9 +15,28 @@ export type CreateChatResult =
   | { ok: false; limitReached: false; error: string };
 
 export async function createChat(userId: string): Promise<CreateChatResult> {
-  const count = await db.chat.count({ where: { userId } });
+  const today = new Date().toISOString().slice(0, 10);
 
-  if (count >= CHAT_LIMIT) {
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: { tier: true, chatsDailyCount: true, chatsDailyDate: true },
+  });
+
+  if (!user) {
+    return { ok: false, limitReached: false, error: "User not found." };
+  }
+
+  const limits = getPlanLimits(user.tier);
+
+  // Check daily creation limit (counts even deleted chats)
+  const dailyCount = user.chatsDailyDate === today ? user.chatsDailyCount : 0;
+  if (dailyCount >= limits.chatsPerDay) {
+    return { ok: false, limitReached: true };
+  }
+
+  // Check total history limit (live count of existing chats)
+  const totalCount = await db.chat.count({ where: { userId } });
+  if (totalCount >= limits.chatHistoryTotal) {
     return { ok: false, limitReached: true };
   }
 
@@ -24,6 +44,8 @@ export async function createChat(userId: string): Promise<CreateChatResult> {
     data: { userId, title: "New chat" },
     select: { id: true },
   });
+
+  await incrementChatDailyCounter(userId);
 
   return { ok: true, chatId: chat.id };
 }
