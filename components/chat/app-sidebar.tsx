@@ -287,18 +287,14 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   isActive={pathname === "/contacts"}
                   tooltip={getMessage(
                     messages,
-                    "contacts.metadata.title",
+                    "shell.nav.contacts",
                     "Contacts",
                   )}
                   className="cursor-pointer"
                 >
                   <Users className="size-4 shrink-0" />
                   <span className="truncate">
-                    {getMessage(
-                      messages,
-                      "contacts.metadata.title",
-                      "Contacts",
-                    )}
+                    {getMessage(messages, "shell.nav.contacts", "Contacts")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -308,18 +304,14 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   isActive={pathname === "/meetings"}
                   tooltip={getMessage(
                     messages,
-                    "meetings.metadata.title",
+                    "shell.nav.meetings",
                     "Meetings",
                   )}
                   className="cursor-pointer"
                 >
                   <CalendarDays className="size-4 shrink-0" />
                   <span className="truncate">
-                    {getMessage(
-                      messages,
-                      "meetings.metadata.title",
-                      "Meetings",
-                    )}
+                    {getMessage(messages, "shell.nav.meetings", "Meetings")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -327,16 +319,12 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                 <SidebarMenuButton
                   render={<Link href="/tasks" />}
                   isActive={pathname === "/tasks"}
-                  tooltip={getMessage(
-                    messages,
-                    "tasks.metadata.title",
-                    "Tasks",
-                  )}
+                  tooltip={getMessage(messages, "shell.nav.tasks", "Tasks")}
                   className="cursor-pointer"
                 >
                   <CheckSquare className="size-4 shrink-0" />
                   <span className="truncate">
-                    {getMessage(messages, "tasks.metadata.title", "Tasks")}
+                    {getMessage(messages, "shell.nav.tasks", "Tasks")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -346,18 +334,14 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   isActive={pathname === "/decisions"}
                   tooltip={getMessage(
                     messages,
-                    "decisions.metadata.title",
+                    "shell.nav.decisions",
                     "Decisions",
                   )}
                   className="cursor-pointer"
                 >
                   <GitFork className="size-4 shrink-0" />
                   <span className="truncate">
-                    {getMessage(
-                      messages,
-                      "decisions.metadata.title",
-                      "Decisions",
-                    )}
+                    {getMessage(messages, "shell.nav.decisions", "Decisions")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>

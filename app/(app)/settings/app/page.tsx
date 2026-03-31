@@ -42,7 +42,7 @@ export default async function AppSettingsPage({
     redirect("/login");
   }
 
-  const { messages } = await getRequestConfig();
+  const { messages, language } = await getRequestConfig();
   const preferences = await getUserPreferences(session.user.id);
   const activeToken = await getActiveShareToken(session.user.id);
   const sp = await searchParams;
@@ -71,7 +71,11 @@ export default async function AppSettingsPage({
       </div>
 
       <div className="rounded-2xl border border-border/70 bg-card/70 p-6 shadow-sm backdrop-blur">
-        <AppSettingsForm initialPreferences={preferences} messages={messages} />
+        <AppSettingsForm
+          initialPreferences={preferences}
+          resolvedLanguage={language}
+          messages={messages}
+        />
       </div>
 
       <div className="mt-6 rounded-2xl border border-border/70 bg-card/70 p-6 shadow-sm backdrop-blur">

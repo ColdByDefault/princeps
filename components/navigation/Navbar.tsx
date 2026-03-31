@@ -141,7 +141,7 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
     {
       href: "/decisions",
       icon: GitFork,
-      label: getMessage(messages, "decisions.metadata.title", "Decisions"),
+      label: getMessage(messages, "shell.nav.decisions", "Decisions"),
     },
     {
       href: "/chat",

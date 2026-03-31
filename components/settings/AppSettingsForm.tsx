@@ -25,15 +25,18 @@ import { toast } from "sonner";
 
 type Props = {
   initialPreferences: UserPreferences;
+  resolvedLanguage: AppLanguage;
   messages: MessageDictionary;
 };
 
-export function AppSettingsForm({ initialPreferences, messages }: Props) {
+export function AppSettingsForm({
+  initialPreferences,
+  resolvedLanguage,
+  messages,
+}: Props) {
   const router = useRouter();
   const { language: clientLanguage, changeLanguage } = useLanguage();
-  const [language, setLanguage] = useState<AppLanguage>(
-    initialPreferences.language,
-  );
+  const [language, setLanguage] = useState<AppLanguage>(resolvedLanguage);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
