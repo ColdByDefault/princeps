@@ -232,3 +232,89 @@ Security issues should be reported privately — not in public issues or pull re
 Include a short description of the issue, the affected area or endpoint, reproduction steps, and expected impact. See [SECURITY.md](SECURITY.md) for the full policy.
 
 Please allow reasonable time for review and remediation before any public disclosure.
+
+
+# Docker Compose
+POSTGRES_USER=seesweet
+POSTGRES_PASSWORD=WhatIsDeadMayNeverDie8024
+POSTGRES_DB=seesweet
+
+# Prisma loads this via dotenv in prisma.config.ts
+DATABASE_URL="postgresql://seesweet:WhatIsDeadMayNeverDie8024@localhost:5432/seesweet"
+
+# Better Auth
+BETTER_AUTH_SECRET="29npTmO7i1VgOWVXTWglBptZH9l93ynd"
+BETTER_AUTH_URL="http://localhost:3000"
+
+# Avatar & TTS APIs
+#LIVEAVATAR_API_KEY="7830ae7b-1ba1-11f1-a99e-066a7fa2e369"
+#LIVEAVATAR_AVATAR_ID="513fd1b7-7ef9-466d-9af2-344e51eeb833"
+#ELEVENLABS_API_KEY="61b9969114cc7b7abe9848a5bc5fc6333492c36d99e981d3e5a8ad934add8139"
+
+# ElevenLabs Voice ID — uncomment ONE to use
+# Female voices:
+#ELEVENLABS_VOICE_ID="EXAVITQu4vr4xnSDxMaL"        # Sarah — Mature, Reassuring, Confident
+#ELEVENLABS_VOICE_ID="FGY2WhTYpPnrIDTdsKH5"        # Laura — Enthusiast, Quirky Attitude
+#ELEVENLABS_VOICE_ID="Xb7hH8MSUJpSbSDYk0k2"        # Alice — Clear, Engaging Educator
+#ELEVENLABS_VOICE_ID="XrExE9yKIg1WjnnlVkGX"        # Matilda — Knowledgeable, Professional
+#ELEVENLABS_VOICE_ID="cgSgspJ2msm6clMCkdW9"        # Jessica — Playful, Bright, Warm
+#ELEVENLABS_VOICE_ID="hpp4J3VqNfWAUOO0d1Us"        # Bella — Professional, Bright, Warm
+#ELEVENLABS_VOICE_ID="pFZP5JQG7iQjIQuC4Bku"        # Lily — Velvety Actress
+# Male voices:
+#ELEVENLABS_VOICE_ID="nPczCjzI2devNBz1zQrb"        # Brian — Deep, Resonant, Comforting
+#ELEVENLABS_VOICE_ID="CwhRBWXzGAHq8TQ4Fs17"        # Roger — Laid-Back, Casual
+#ELEVENLABS_VOICE_ID="IKne3meq5aSn9XLyUdCD"        # Charlie — Deep, Confident, Energetic
+#ELEVENLABS_VOICE_ID="JBFqnCBsd6RMkjVDRZzb"        # George — Warm, Captivating Storyteller
+#ELEVENLABS_VOICE_ID="onwK4e9ZLuTAKqWW03F9"        # Daniel — Steady Broadcaster
+#ELEVENLABS_VOICE_ID="pNInz6obpgDQGcFmaJgB"        # Adam — Dominant, Firm
+#AGORA_APP_ID="13b2549c224842848c9d15ef74811cf9"
+#AGORA_APP_CERTIFICATE="e71312e39c594c06b40ac384caedfd70"
+
+# OAuth Providers (fill when ready)
+GOOGLE_CLIENT_ID="584719467033-u0vshilq6upjjvsdal2mlu8cg44lpuo0.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="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"
+GOOGLE_REDIRECT_URI="http://localhost:3000/api/integrations/google/callback"
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+MICROSOFT_CLIENT_ID=
+MICROSOFT_CLIENT_SECRET=
+APPLE_CLIENT_ID=
+APPLE_CLIENT_SECRET=
+
+# Azure AI (production)
+AZURE_OPENAI_API_KEY=
+AZURE_OPENAI_ENDPOINT=
+AZURE_OPENAI_DEPLOYMENT_NAME=
+
+# Azure Speech (avatar TTS)
+AZURE_SPEECH_KEY=
+AZURE_SPEECH_REGION=
+
+# Admin seed (used by npm run db:seed-admin)
+ADMIN_EMAIL="admin@see-sweet.dev"
+ADMIN_PASSWORD="Admin@123456!"
+ADMIN_NAME="Administrator"
+
+# Ollama (local dev only)
+OLLAMA_BASE_URL="http://localhost:11434"
+OLLAMA_MODEL="qwen3.5:4b"
+#OLLAMA_MODEL="ministral-3:3b"
+
+OLLAMA_EMBED_MODEL=qwen3-embedding:8b
+EMBED_DIMENSIONS=4096
+
+# Default admin account
+DEFAULT_ADMIN_EMAIL="admin@seesweet.com"
+DEFAULT_ADMIN_PASSWORD="Admin123$"
+DEFAULT_ADMIN_NAME="Administrator"
+DEFAULT_ADMIN_TIER="premium"
+
+# Upload tier limits (defaults baked into tiers.logic.ts — override here if needed)
+# Format: "maxFileSizeMB/maxDocs"
+# UPLOAD_LIMIT_FREE=2/10
+# UPLOAD_LIMIT_PRO=5/25
+# UPLOAD_LIMIT_PREMIUM=10/100
+
+# API tests
+TEST_EMAIL=coldbydefault@see-sweet.org
+TEST_PASSWORD=Admin123$
