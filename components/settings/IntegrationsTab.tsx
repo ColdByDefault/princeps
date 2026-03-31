@@ -13,6 +13,17 @@ import { getMessage } from "@/lib/i18n";
 import { type MessageDictionary } from "@/types/i18n";
 import { CalendarDays, RefreshCw, Unplug } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
 type IntegrationStatus = {
@@ -275,31 +286,67 @@ export function IntegrationsTab({ messages, oauthSuccess, oauthError }: Props) {
                       "Sync now",
                     )}
               </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="cursor-pointer text-destructive hover:text-destructive"
-                onClick={() => void handleDisconnect()}
-                disabled={disconnecting}
-                aria-label={getMessage(
-                  messages,
-                  "integrations.google.disconnect",
-                  "Disconnect",
-                )}
-              >
-                <Unplug className="size-3.5 mr-1.5" />
-                {disconnecting
-                  ? getMessage(
-                      messages,
-                      "integrations.google.disconnecting",
-                      "Disconnecting…",
-                    )
-                  : getMessage(
-                      messages,
-                      "integrations.google.disconnect",
-                      "Disconnect",
-                    )}
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger
+                  className="inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-destructive hover:bg-accent hover:text-destructive cursor-pointer disabled:pointer-events-none disabled:opacity-50"
+                  disabled={disconnecting}
+                  aria-label={getMessage(
+                    messages,
+                    "integrations.google.disconnect",
+                    "Disconnect",
+                  )}
+                >
+                  <Unplug className="size-3.5" />
+                  {disconnecting
+                    ? getMessage(
+                        messages,
+                        "integrations.google.disconnecting",
+                        "Disconnecting…",
+                      )
+                    : getMessage(
+                        messages,
+                        "integrations.google.disconnect",
+                        "Disconnect",
+                      )}
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      {getMessage(
+                        messages,
+                        "integrations.google.disconnectConfirmTitle",
+                        "Disconnect Google Calendar?",
+                      )}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {getMessage(
+                        messages,
+                        "integrations.google.disconnectConfirmDescription",
+                        "This will remove the integration and stop syncing events. You can reconnect at any time.",
+                      )}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>
+                      {getMessage(
+                        messages,
+                        "integrations.google.disconnectCancel",
+                        "Cancel",
+                      )}
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => void handleDisconnect()}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {getMessage(
+                        messages,
+                        "integrations.google.disconnectConfirm",
+                        "Disconnect",
+                      )}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </>
           )}
         </div>
