@@ -11,6 +11,7 @@ import { emitNotification } from "@/lib/notifications/emitter";
 import {
   getScheduledNotifPrefsFromRaw,
   alreadyFiredThisWeek,
+  localWeekStart,
 } from "./shared.logic";
 
 /**
@@ -22,19 +23,11 @@ export async function runWeeklyDigestJob(): Promise<{
   skipped: number;
 }> {
   const users = await db.user.findMany({
-    select: { id: true, preferences: true },
+    select: { id: true, timezone: true, preferences: true },
   });
 
   let processed = 0;
   let skipped = 0;
-
-  // Start of current ISO week (Monday UTC)
-  const now = new Date();
-  const day = now.getUTCDay();
-  const diffToMonday = day === 0 ? -6 : 1 - day;
-  const weekStart = new Date(now);
-  weekStart.setUTCDate(now.getUTCDate() + diffToMonday);
-  weekStart.setUTCHours(0, 0, 0, 0);
 
   for (const user of users) {
     try {
@@ -53,6 +46,7 @@ export async function runWeeklyDigestJob(): Promise<{
         continue;
       }
 
+      const weekStart = localWeekStart(new Date(), user.timezone ?? null);
       const [decisionsCount, tasksClosedCount, meetingsCount] =
         await Promise.all([
           db.decision.count({

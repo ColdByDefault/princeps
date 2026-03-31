@@ -13,6 +13,7 @@ import {
   getScheduledNotifPrefsFromRaw,
   alreadyFiredToday,
   alreadyFiredThisWeek,
+  localDayOfWeek,
 } from "./shared.logic";
 
 /**
@@ -45,7 +46,8 @@ export async function runBriefingJob(): Promise<{
       }
 
       const isWeeklyAndNotFriday =
-        prefs.briefing === "weekly" && new Date().getUTCDay() !== 5;
+        prefs.briefing === "weekly" &&
+        localDayOfWeek(new Date(), user.timezone ?? null) !== 5;
       if (isWeeklyAndNotFriday) {
         skipped++;
         continue;
