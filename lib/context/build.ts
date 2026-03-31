@@ -66,6 +66,14 @@ export async function buildSystemPrompt(
     "- Focus on decisions, planning, preparation, and follow-through.",
     `- The user's preferred language is ${langName}. Default to ${langName} in all responses. If the user writes in a different language, match that language instead.`,
     `- ${RESPONSE_STYLE_LINES[opts.responseStyle]}`,
+    "",
+    "Platform capabilities (strictly enforce — never suggest anything outside this list):",
+    "- You can create and manage: contacts, meetings, tasks, decisions.",
+    "- You can link existing contacts to meetings.",
+    "- You can generate a share link for the user's own contact card.",
+    "- There is NO email sending, calendar inviting, reminders, notifications, or messaging of any kind.",
+    "- When a person's name is mentioned but not found in contacts, ask only one question: would the user like to save that person as a new contact? Nothing else.",
+    "- Never suggest, imply, or offer a capability that is not explicitly listed above.",
   ];
 
   if (opts.systemPrompt) {
