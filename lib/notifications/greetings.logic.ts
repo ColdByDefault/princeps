@@ -10,10 +10,22 @@ import { getUserPreferences } from "@/lib/settings/get.logic";
 import { db } from "@/lib/db";
 
 /**
- * Fires a welcome_signup notification after a new user record is created.
- * Intended for use in the Better Auth `user.create.after` database hook.
+ * Called from the Better Auth `user.create.after` hook.
+ * Greeting is intentionally deferred until onboarding is complete
+ * (see `onOnboardingCompleted` below), so this is a no-op.
  */
-export async function onUserCreated(user: {
+export async function onUserCreated(_user: {
+  id: string;
+  name?: string | null;
+}): Promise<void> {
+  // No-op: welcome_signup fires after the onboarding wizard, not on sign-up.
+}
+
+/**
+ * Fires a welcome_signup notification once the onboarding wizard is finished.
+ * Called from POST /api/onboarding/complete after preferences are saved.
+ */
+export async function onOnboardingCompleted(user: {
   id: string;
   name?: string | null;
 }): Promise<void> {

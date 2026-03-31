@@ -14,6 +14,10 @@ import { getUserPreferences } from "@/lib/settings/get.logic";
 import { CHAT_TOOLS, executeToolCall } from "@/lib/chat/tools";
 import type { ActionResult } from "@/lib/chat/tools";
 import { generateAndPushReport } from "@/lib/reports/generate.logic";
+import {
+  checkAndConsumeWidgetChat,
+  incrementWidgetToolCounter,
+} from "@/lib/billing/enforce.logic";
 
 type HistoryEntry = { role: "user" | "assistant"; content: string };
 
@@ -44,6 +48,16 @@ export async function POST(req: Request) {
       },
     );
   }
+
+  // Plan enforcement: check and consume the daily widget chat quota
+  const widgetCheck = await checkAndConsumeWidgetChat(session.user.id);
+  if (!widgetCheck.allowed) {
+    return NextResponse.json(
+      { error: "Daily widget chat limit reached for your plan." },
+      { status: 429 },
+    );
+  }
+  const remainingToolQuota = widgetCheck.remainingToolQuota;
 
   const body = (await req.json()) as {
     message?: unknown;
@@ -113,17 +127,23 @@ export async function POST(req: Request) {
           return;
         }
 
-        if (firstResult.toolCalls.length > 0) {
+        // Trim tool calls to the user's remaining daily tool quota
+        const allowedToolCalls = firstResult.toolCalls.slice(
+          0,
+          remainingToolQuota,
+        );
+
+        if (allowedToolCalls.length > 0) {
           // ── Phase 2: execute tool calls ──────────────────────────────────────
           const toolResultMessages: OllamaMessage[] = [];
           const collectedActions: ActionResult[] = [];
           const assistantWithTools: OllamaMessage = {
             role: "assistant",
             content: firstResult.content,
-            tool_calls: firstResult.toolCalls,
+            tool_calls: allowedToolCalls,
           };
 
-          for (const toolCall of firstResult.toolCalls) {
+          for (const toolCall of allowedToolCalls) {
             const { action, summary } = await executeToolCall(
               session.user.id,
               toolCall,
@@ -140,6 +160,12 @@ export async function POST(req: Request) {
 
             toolResultMessages.push({ role: "tool", content: summary });
           }
+
+          // Increment tool counter (fire-and-forget)
+          void incrementWidgetToolCounter(
+            session.user.id,
+            allowedToolCalls.length,
+          ).catch(() => undefined);
 
           // Fire-and-forget: generate report + notification for this batch
           if (collectedActions.length > 0) {

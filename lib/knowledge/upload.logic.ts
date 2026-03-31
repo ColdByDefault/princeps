@@ -8,12 +8,9 @@ import "server-only";
 import { db } from "@/lib/db";
 import { chunkText } from "@/lib/knowledge/chunk.logic";
 import { embedText } from "@/lib/knowledge/embed.logic";
+import { getPlanLimits } from "@/types/billing";
 
 const MAX_FILE_BYTES = 1_048_576; // 1 MB
-
-// Quota limits — will be tier-configurable in the tier management phase.
-const FREE_MAX_UPLOADS = 5;
-const FREE_MAX_CHARS = 50_000;
 
 export interface UploadResult {
   documentId: string;
@@ -43,24 +40,23 @@ export async function uploadKnowledgeDocument(
 
   const charCount = rawText.length;
 
-  // 1b. Quota check
+  // 1b. Quota check (tier-aware)
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { knowledgeUploadsUsed: true, knowledgeCharsUsed: true },
+    select: {
+      tier: true,
+      knowledgeUploadsUsed: true,
+      knowledgeCharsUsed: true,
+    },
   });
 
   if (!user) throw new UploadError("User not found.", 401);
 
-  if (user.knowledgeUploadsUsed >= FREE_MAX_UPLOADS) {
-    throw new UploadError(
-      "Upload limit reached. Delete an existing document to free space.",
-      429,
-    );
-  }
+  const limits = getPlanLimits(user.tier);
 
-  if (user.knowledgeCharsUsed + charCount > FREE_MAX_CHARS) {
+  if (user.knowledgeUploadsUsed >= limits.knowledgeDocs) {
     throw new UploadError(
-      "Character quota exceeded. Delete an existing document to free space.",
+      "Document limit reached for your plan. Upgrade to upload more.",
       429,
     );
   }

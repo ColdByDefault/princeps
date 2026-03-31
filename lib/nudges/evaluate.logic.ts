@@ -8,6 +8,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import { createNotification } from "@/lib/notifications/create.logic";
 import { emitNotification } from "@/lib/notifications/emitter";
+import { getPlanLimits } from "@/types/billing";
 
 /** Keys stored in User.preferences under "nudgeLastFired" */
 type NudgeState = Record<string, number>; // key → epoch ms
@@ -65,8 +66,11 @@ async function fireNudge(
 export async function evaluateNudges(userId: string): Promise<void> {
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { preferences: true },
+    select: { tier: true, preferences: true },
   });
+
+  // Free tier: nudges are disabled per plan
+  if (!user || !getPlanLimits(user.tier).nudgesEnabled) return;
 
   const prefs =
     user?.preferences && typeof user.preferences === "object"

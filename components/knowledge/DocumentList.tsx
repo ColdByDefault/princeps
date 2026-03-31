@@ -12,6 +12,7 @@ import { NoticePanel } from "@/components/shared";
 import { ConfirmDialog } from "@/components/shared";
 import { useNotice } from "@/components/shared";
 import { getMessage } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 import type { KnowledgeDocumentRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
@@ -19,12 +20,14 @@ interface DocumentListProps {
   messages: MessageDictionary;
   documents: KnowledgeDocumentRecord[];
   onDocumentsChange: (docs: KnowledgeDocumentRecord[]) => void;
+  docLimit: number;
 }
 
 export function DocumentList({
   messages,
   documents,
   onDocumentsChange,
+  docLimit,
 }: DocumentListProps) {
   const { addNotice, removeNotice } = useNotice();
   const [uploading, setUploading] = useState(false);
@@ -157,12 +160,26 @@ export function DocumentList({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-muted-foreground">
-          {documents.length} / 5
+        <span
+          title={getMessage(
+            messages,
+            "knowledge.documents.quotaLabel",
+            "Documents stored",
+          )}
+          className={cn(
+            "rounded px-1.5 py-0.5 text-sm tabular-nums",
+            documents.length >= docLimit
+              ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+              : documents.length >= Math.ceil(docLimit * 0.8)
+                ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                : "text-muted-foreground",
+          )}
+        >
+          {documents.length}&nbsp;/&nbsp;{docLimit}
         </span>
         <Button
           size="sm"
-          disabled={uploading || documents.length >= 5}
+          disabled={uploading || documents.length >= docLimit}
           onClick={() => fileInputRef.current?.click()}
           className="cursor-pointer gap-2"
           aria-label={getMessage(

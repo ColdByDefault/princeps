@@ -6,6 +6,8 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { getPlanLimits } from "@/types/billing";
 import { getRequestConfig } from "@/i18n/request";
 import { listKnowledgeDocuments } from "@/lib/knowledge/list.logic";
 import { getPersonalInfo } from "@/lib/knowledge/personal-info.logic";
@@ -31,10 +33,16 @@ export default async function KnowledgePage() {
 
   const { messages } = await getRequestConfig();
 
-  const [rawDocuments, personalInfoFields] = await Promise.all([
+  const [rawDocuments, personalInfoFields, dbUser] = await Promise.all([
     listKnowledgeDocuments(session.user.id),
     getPersonalInfo(session.user.id),
+    db.user.findUnique({
+      where: { id: session.user.id },
+      select: { tier: true },
+    }),
   ]);
+
+  const docLimit = getPlanLimits(dbUser?.tier ?? "free").knowledgeDocs;
 
   // Serialize dates for client
   const documents = rawDocuments.map((d) => ({
@@ -48,6 +56,7 @@ export default async function KnowledgePage() {
         messages={messages}
         initialDocuments={documents}
         initialPersonalInfo={personalInfoFields ?? {}}
+        docLimit={docLimit}
       />
     </div>
   );

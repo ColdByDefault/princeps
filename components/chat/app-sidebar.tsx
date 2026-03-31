@@ -43,7 +43,7 @@ import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LanguageToggle } from "@/components/navigation/Navbar";
 import { getMessage } from "@/lib/i18n";
 import { type MessageDictionary } from "@/types/i18n";
-import { type ChatSummary, CHAT_LIMIT } from "@/types/chat";
+import { type ChatSummary } from "@/types/chat";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
@@ -65,6 +65,9 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [chats, setChats] = useState<ChatSummary[] | null>(null);
+  const [chatHistoryLimit, setChatHistoryLimit] = useState<number>(10);
+  const [dailyUsed, setDailyUsed] = useState<number>(0);
+  const [dailyLimit, setDailyLimit] = useState<number>(10);
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [renameTarget, setRenameTarget] = useState<string | null>(null);
@@ -80,8 +83,16 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
     try {
       const res = await fetch("/api/chat");
       if (!res.ok) return;
-      const data = (await res.json()) as { chats: ChatSummary[] };
+      const data = (await res.json()) as {
+        chats: ChatSummary[];
+        historyLimit: number;
+        dailyUsed: number;
+        dailyLimit: number;
+      };
       setChats(data.chats);
+      setChatHistoryLimit(data.historyLimit);
+      setDailyUsed(data.dailyUsed ?? 0);
+      setDailyLimit(data.dailyLimit ?? 10);
     } catch {
       setChats([]);
       toast.error(
@@ -206,7 +217,7 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
     );
   };
 
-  const atLimit = (chats?.length ?? 0) >= CHAT_LIMIT;
+  const atLimit = (chats?.length ?? 0) >= chatHistoryLimit;
 
   const handleSignOut = async () => {
     if (isSigningOut) return;
@@ -276,18 +287,14 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   isActive={pathname === "/contacts"}
                   tooltip={getMessage(
                     messages,
-                    "contacts.metadata.title",
+                    "shell.nav.contacts",
                     "Contacts",
                   )}
                   className="cursor-pointer"
                 >
                   <Users className="size-4 shrink-0" />
                   <span className="truncate">
-                    {getMessage(
-                      messages,
-                      "contacts.metadata.title",
-                      "Contacts",
-                    )}
+                    {getMessage(messages, "shell.nav.contacts", "Contacts")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -297,18 +304,14 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   isActive={pathname === "/meetings"}
                   tooltip={getMessage(
                     messages,
-                    "meetings.metadata.title",
+                    "shell.nav.meetings",
                     "Meetings",
                   )}
                   className="cursor-pointer"
                 >
                   <CalendarDays className="size-4 shrink-0" />
                   <span className="truncate">
-                    {getMessage(
-                      messages,
-                      "meetings.metadata.title",
-                      "Meetings",
-                    )}
+                    {getMessage(messages, "shell.nav.meetings", "Meetings")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -316,16 +319,12 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                 <SidebarMenuButton
                   render={<Link href="/tasks" />}
                   isActive={pathname === "/tasks"}
-                  tooltip={getMessage(
-                    messages,
-                    "tasks.metadata.title",
-                    "Tasks",
-                  )}
+                  tooltip={getMessage(messages, "shell.nav.tasks", "Tasks")}
                   className="cursor-pointer"
                 >
                   <CheckSquare className="size-4 shrink-0" />
                   <span className="truncate">
-                    {getMessage(messages, "tasks.metadata.title", "Tasks")}
+                    {getMessage(messages, "shell.nav.tasks", "Tasks")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -335,18 +334,14 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
                   isActive={pathname === "/decisions"}
                   tooltip={getMessage(
                     messages,
-                    "decisions.metadata.title",
+                    "shell.nav.decisions",
                     "Decisions",
                   )}
                   className="cursor-pointer"
                 >
                   <GitFork className="size-4 shrink-0" />
                   <span className="truncate">
-                    {getMessage(
-                      messages,
-                      "decisions.metadata.title",
-                      "Decisions",
-                    )}
+                    {getMessage(messages, "shell.nav.decisions", "Decisions")}
                   </span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -401,6 +396,45 @@ export function AppSidebar({ messages, sessionUser }: AppSidebarProps) {
           </SidebarGroupAction>
 
           <SidebarGroupContent>
+            {!isCollapsed && chats !== null && (
+              <div className="flex items-center gap-1.5 px-2 pb-1.5 pt-0.5">
+                <span
+                  title={getMessage(
+                    messages,
+                    "chat.sidebar.quotaHistoryLabel",
+                    "Saved chats",
+                  )}
+                  className={cn(
+                    "rounded px-1.5 py-0.5 text-xs tabular-nums",
+                    chats.length >= chatHistoryLimit
+                      ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      : chats.length >= Math.ceil(chatHistoryLimit * 0.8)
+                        ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                        : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {chats.length}&nbsp;/&nbsp;{chatHistoryLimit}
+                </span>
+                <span className="text-xs text-muted-foreground/40">·</span>
+                <span
+                  title={getMessage(
+                    messages,
+                    "chat.sidebar.quotaDailyLabel",
+                    "Chats today",
+                  )}
+                  className={cn(
+                    "rounded px-1.5 py-0.5 text-xs tabular-nums",
+                    dailyUsed >= dailyLimit
+                      ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      : dailyUsed >= Math.ceil(dailyLimit * 0.8)
+                        ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                        : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {dailyUsed}&nbsp;/&nbsp;{dailyLimit}
+                </span>
+              </div>
+            )}
             <SidebarMenu>
               {isCollapsed ? (
                 <SidebarMenuItem>

@@ -10,6 +10,7 @@ import { db } from "@/lib/db";
 import type { Prisma } from "@/lib/generated/prisma/client";
 import { isSupportedLanguage } from "@/types/i18n";
 import { DEFAULT_PREFERENCES } from "@/types/settings";
+import { onOnboardingCompleted } from "@/lib/notifications/greetings.logic";
 
 // POST /api/onboarding/complete — mark onboarding done and save wizard choices
 export async function POST(req: Request) {
@@ -47,10 +48,13 @@ export async function POST(req: Request) {
       assistantName.trim().slice(0, 30) || DEFAULT_PREFERENCES.assistantName;
   }
 
-  await db.user.update({
+  const updatedUser = await db.user.update({
     where: { id: session.user.id },
     data: { preferences: merged as Prisma.InputJsonObject },
+    select: { id: true, name: true },
   });
+
+  void onOnboardingCompleted({ id: updatedUser.id, name: updatedUser.name });
 
   const response = NextResponse.json({ ok: true });
   response.cookies.set("ob_done", "1", {

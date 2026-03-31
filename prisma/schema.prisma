@@ -25,6 +25,11 @@ model User {
   tier                 String   @default("free") // "free" | "pro" | "premium"
   knowledgeCharsUsed   Int      @default(0)
   knowledgeUploadsUsed Int      @default(0)
+  chatsDailyCount      Int      @default(0)
+  chatsDailyDate       String? // "YYYY-MM-DD" UTC — reset boundary for chatsDailyCount
+  widgetChatsCount     Int      @default(0)
+  widgetToolsCount     Int      @default(0)
+  widgetCountsDate     String? // "YYYY-MM-DD" UTC — reset boundary for widget counters
   preferences          Json     @default("{}")
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
