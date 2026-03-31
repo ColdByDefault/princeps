@@ -4,7 +4,7 @@
 - [ ] Global search overlay (⌘K) — query contacts, meetings, tasks, decisions, and knowledge chunks in a single shot
 - [x] Show tier-aware quota badges in chat sidebar and knowledge page (history limit, daily count, doc count)
 - [x] Billing/upgrade surface — even a minimal "Current plan: Free · Upgrade" banner so tiers are visible to users
-- [ ] New Users greetings should be delayed until after onboarding completion, not immediately on sign-up.
+- [x] New Users greetings should be delayed until after onboarding completion, not immediately on sign-up.
 
 ## UX
 
