@@ -6,6 +6,7 @@
 import { headers } from "next/headers";
 import { getRequestConfig } from "@/i18n/request";
 import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
 import { Footer, Navbar } from "@/components/navigation";
 import {
   NoticeProvider,
@@ -30,6 +31,15 @@ export default async function AppLayout({
 
   const assistantName = session
     ? (await getUserPreferences(session.user.id)).assistantName
+    : undefined;
+
+  const userTier = session
+    ? ((
+        await db.user.findUnique({
+          where: { id: session.user.id },
+          select: { tier: true },
+        })
+      )?.tier ?? "free")
     : undefined;
 
   return (
@@ -66,6 +76,7 @@ export default async function AppLayout({
                       email: session.user.email ?? null,
                       name: session.user.name ?? null,
                       role: session.user.role ?? null,
+                      tier: userTier ?? null,
                     }
                   : null
               }

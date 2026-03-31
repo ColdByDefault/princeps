@@ -49,8 +49,53 @@ type NavbarProps = {
     email: string | null;
     name: string | null;
     role?: string | null;
+    tier?: string | null;
   } | null;
 };
+
+function PlanBadge({
+  tier,
+  messages,
+}: {
+  tier: string;
+  messages: MessageDictionary;
+}) {
+  const isFree = tier === "free";
+  const label = getMessage(
+    messages,
+    tier === "pro"
+      ? "shell.nav.planPro"
+      : tier === "premium"
+        ? "shell.nav.planPremium"
+        : "shell.nav.planFree",
+    tier,
+  );
+
+  return (
+    <>
+      <span
+        className={cn(
+          "rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide",
+          isFree
+            ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+            : tier === "premium"
+              ? "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
+              : "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
+        )}
+      >
+        {label}
+      </span>
+      {isFree && (
+        <Link
+          href="/settings/app"
+          className="cursor-pointer text-[10px] font-medium text-primary underline-offset-2 hover:underline"
+        >
+          {getMessage(messages, "shell.nav.upgrade", "Upgrade")}
+        </Link>
+      )}
+    </>
+  );
+}
 
 type NavLink = {
   href: string;
@@ -433,8 +478,13 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
               <NotificationPanel messages={messages} />
               <LanguageToggle messages={messages} />
               <ThemeToggle messages={messages} />
-              <div className="rounded-full border border-border/70 bg-background/70 px-3 py-2 text-sm text-muted-foreground backdrop-blur-sm">
-                {userLabel}
+              <div className="flex items-center gap-1.5 rounded-full border border-border/70 bg-background/70 px-3 py-1.5 backdrop-blur-sm">
+                <span className="max-w-27.5 truncate text-xs text-muted-foreground">
+                  {userLabel}
+                </span>
+                {sessionUser.tier && (
+                  <PlanBadge tier={sessionUser.tier} messages={messages} />
+                )}
               </div>
               <Button
                 type="button"
@@ -514,8 +564,15 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
                 <ThemeToggle messages={messages} />
               </div>
 
-              <div className="rounded-2xl border border-border/70 bg-background/70 px-4 py-3 text-sm text-muted-foreground backdrop-blur-sm">
-                {userLabel}
+              <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-background/70 px-4 py-3 backdrop-blur-sm">
+                <span className="truncate text-sm text-muted-foreground">
+                  {userLabel}
+                </span>
+                {sessionUser.tier && (
+                  <div className="ml-3 flex shrink-0 items-center gap-1.5">
+                    <PlanBadge tier={sessionUser.tier} messages={messages} />
+                  </div>
+                )}
               </div>
 
               <Button
