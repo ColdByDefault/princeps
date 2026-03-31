@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { OLLAMA_BASE_URL, OLLAMA_MODEL } from "@/lib/chat/ollama";
+import { callChat } from "@/lib/chat/provider";
 import { SLOT_REGISTRY } from "@/lib/context";
 import { db } from "@/lib/db";
 
@@ -57,27 +57,8 @@ ${context || "(no context available)"}
 
 Write a focused daily brief in 3–5 sentences. Highlight the most important thing they should do or be aware of today — a meeting to prepare for, overdue tasks, or an open decision that needs action. Be direct and actionable. Do not list everything; focus on what matters most. Do not use headers, bullet points, or markdown formatting. Write in plain prose. Write entirely in ${langName}. Respond with plain text only.`;
 
-  const response = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: OLLAMA_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      stream: false,
-      think: false,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      `Ollama returned ${response.status} for briefing generation`,
-    );
-  }
-
-  const json = (await response.json()) as {
-    message?: { content?: string };
-  };
-  const content = (json?.message?.content ?? "").trim();
+  const result = await callChat([{ role: "user", content: prompt }]);
+  const content = result.content.trim();
 
   const record = await db.briefingCache.upsert({
     where: { userId },

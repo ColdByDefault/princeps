@@ -9,6 +9,5 @@ const originalLoad = Module._load;
 
 Module._load = function (request, ...args) {
   if (request === "server-only") return {};
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return originalLoad.apply(this, [request, ...args]);
 };

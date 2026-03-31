@@ -12,7 +12,8 @@ import { CHAT_LIMIT } from "@/types/chat";
 import { type ChatSummary } from "@/types/chat";
 
 type StatusData = {
-  ollama: boolean;
+  provider: string;
+  online: boolean;
   chatModel: string;
   embedModel: string | null;
 };
@@ -77,12 +78,12 @@ export function SiteHeader() {
           </Badge>
         )}
 
-        {/* Ollama status */}
+        {/* Provider status */}
         {status !== null && (
           <Badge variant="secondary" className="gap-1.5 text-xs font-normal">
             <span
               className={
-                status.ollama
+                status.online
                   ? "size-2 rounded-full bg-emerald-500"
                   : "size-2 rounded-full bg-red-500"
               }

@@ -388,7 +388,7 @@ export async function executeToolCall(
       );
     if (unresolvedParticipants.length > 0)
       meetingSummaryParts.push(
-        `the following names were not found in contacts and were skipped: ${unresolvedParticipants.join(", ")} — tell the user`,
+        `the following names were NOT found in contacts and could not be linked: ${unresolvedParticipants.join(", ")}. Inform the user and ask ONLY this: would they like to save ${unresolvedParticipants.length === 1 ? `"${unresolvedParticipants[0]}"` : "these people"} as a new contact? Do not suggest email, invitations, or any other action.`,
       );
 
     return {
