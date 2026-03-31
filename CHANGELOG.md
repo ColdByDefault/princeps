@@ -1,3 +1,16 @@
+## [0.1.16] - 2026-03-31
+
+- feat: refactor version bump workflow and update README with project details
+- feat: add validation schemas for user tier and preferences updates
+- feat: Add UI/UX polish and 24-hour shareable Contact Card link
+- feat: add warning for unset CRON_SECRET environment variable in cron routes
+- feat: refine meeting follow-up logic to accurately filter candidates based on effective end time
+- feat: refactor briefing and digest jobs to use timezone-aware date calculations
+- feat: add confirmation dialog for Google Calendar disconnection and update related messages
+- feat: add skeleton loading state and update sync success message to include event counts
+- feat: enhance Google integration with OAuth success/error handling and update UI messages
+- feat: implement Zod validation schemas for CRUD routes
+
 ## [0.1.15] - 2026-03-30
 
 - docs: add Phase 8 hardening plan for production readiness
