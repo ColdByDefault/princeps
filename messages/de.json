@@ -557,6 +557,7 @@
   "integrations.google.syncNow": "Jetzt synchronisieren",
   "integrations.google.syncing": "Synchronisiert…",
   "integrations.google.syncSuccess": "Kalender erfolgreich synchronisiert.",
+  "integrations.google.syncCount": "{upserted} Ereignisse synchronisiert, {skipped} übersprungen.",
   "integrations.google.syncError": "Synchronisierung fehlgeschlagen. Bitte erneut versuchen.",
   "integrations.google.disconnectSuccess": "Google Kalender getrennt.",
   "integrations.google.connectSuccess": "Google Kalender erfolgreich verbunden.",

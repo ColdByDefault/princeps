@@ -558,6 +558,7 @@
   "integrations.google.syncNow": "Sync now",
   "integrations.google.syncing": "Syncing…",
   "integrations.google.syncSuccess": "Calendar synced successfully.",
+  "integrations.google.syncCount": "{upserted} events synced, {skipped} skipped.",
   "integrations.google.syncError": "Sync failed. Please try again.",
   "integrations.google.disconnectSuccess": "Google Calendar disconnected.",
   "integrations.google.connectSuccess": "Google Calendar connected successfully.",

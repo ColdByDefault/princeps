@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { getMessage } from "@/lib/i18n";
 import { type MessageDictionary } from "@/types/i18n";
 import { CalendarDays, RefreshCw, Unplug } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 type IntegrationStatus = {
@@ -87,18 +88,20 @@ export function IntegrationsTab({ messages, oauthSuccess, oauthError }: Props) {
         method: "POST",
       });
       if (!res.ok) throw new Error();
+      const data = (await res.json()) as { upserted: number; skipped: number };
       // Refresh status to get updated lastSyncedAt
       const updated = await fetch("/api/integrations/google").then(
         (r) => r.json() as Promise<IntegrationStatus>,
       );
       setStatus(updated);
-      toast.success(
-        getMessage(
-          messages,
-          "integrations.google.syncSuccess",
-          "Calendar synced successfully.",
-        ),
-      );
+      const countMsg = getMessage(
+        messages,
+        "integrations.google.syncCount",
+        "{upserted} events synced, {skipped} skipped.",
+      )
+        .replace("{upserted}", String(data.upserted))
+        .replace("{skipped}", String(data.skipped));
+      toast.success(countMsg);
     } catch {
       toast.error(
         getMessage(
@@ -137,6 +140,27 @@ export function IntegrationsTab({ messages, oauthSuccess, oauthError }: Props) {
       setDisconnecting(false);
     }
   };
+
+  if (status === null) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-3 w-64 mt-1.5" />
+        </div>
+        <div className="rounded-xl border border-border/70 bg-card/50 p-5 space-y-4">
+          <div className="flex items-start gap-4">
+            <Skeleton className="size-9 rounded-lg shrink-0" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-36" />
+              <Skeleton className="h-3 w-72" />
+            </div>
+          </div>
+          <Skeleton className="h-8 w-44 rounded-md" />
+        </div>
+      </div>
+    );
+  }
 
   const lastSynced = status?.integration?.lastSyncedAt
     ? new Date(status.integration.lastSyncedAt).toLocaleString()
