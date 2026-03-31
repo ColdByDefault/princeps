@@ -7,12 +7,8 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { buildSystemPrompt } from "@/lib/context/build";
-import {
-  streamOllamaChat,
-  callOllamaChat,
-  type OllamaMessage,
-  type OllamaStreamChunk,
-} from "@/lib/chat/ollama";
+import { callChat, streamChat } from "@/lib/chat/provider";
+import { type OllamaMessage, type OllamaStreamChunk } from "@/lib/chat/ollama";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
 import { getUserPreferences } from "@/lib/settings/get.logic";
 import { CHAT_TOOLS, executeToolCall } from "@/lib/chat/tools";
@@ -103,7 +99,7 @@ export async function POST(req: Request) {
         // ── Non-streaming call with tools ─────────────────────────────────────
         let firstResult;
         try {
-          firstResult = await callOllamaChat(
+          firstResult = await callChat(
             ollamaMessages,
             preferences.ollamaOptions,
             CHAT_TOOLS,
@@ -111,7 +107,8 @@ export async function POST(req: Request) {
         } catch {
           send({
             type: "error",
-            message: "Assistant unavailable. Is Ollama running?",
+            message:
+              "Assistant unavailable. Please check the provider configuration.",
           });
           return;
         }
@@ -163,7 +160,7 @@ export async function POST(req: Request) {
 
           let followUpResponse: Response;
           try {
-            followUpResponse = await streamOllamaChat(
+            followUpResponse = await streamChat(
               followUpMessages,
               false,
               preferences.ollamaOptions,

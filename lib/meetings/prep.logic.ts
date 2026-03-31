@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { OLLAMA_BASE_URL, OLLAMA_MODEL } from "@/lib/chat/ollama";
+import { callChat } from "@/lib/chat/provider";
 import { searchKnowledge } from "@/lib/knowledge/search.logic";
 import { db } from "@/lib/db";
 
@@ -93,25 +93,8 @@ Write a concise meeting prep pack with these sections:
 
 Be direct and actionable. Keep the entire document under 300 words. Use plain markdown only (no HTML).`;
 
-  const response = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: OLLAMA_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      stream: false,
-      think: false,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      `Ollama returned ${response.status} for prep pack generation`,
-    );
-  }
-
-  const json = (await response.json()) as { message?: { content?: string } };
-  const prepPack = (json?.message?.content ?? "").trim();
+  const result = await callChat([{ role: "user", content: prompt }]);
+  const prepPack = result.content.trim();
 
   await db.meeting.update({
     where: { id: meetingId },

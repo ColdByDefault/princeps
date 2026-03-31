@@ -14,12 +14,8 @@ import {
   touchChat,
 } from "@/lib/chat/messages.logic";
 import { setInitialTitle } from "@/lib/chat/create.logic";
-import {
-  streamOllamaChat,
-  callOllamaChat,
-  type OllamaMessage,
-  type OllamaStreamChunk,
-} from "@/lib/chat/ollama";
+import { callChat, streamChat } from "@/lib/chat/provider";
+import { type OllamaMessage, type OllamaStreamChunk } from "@/lib/chat/ollama";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
 import { getUserPreferences } from "@/lib/settings/get.logic";
 import { CHAT_TOOLS, executeToolCall } from "@/lib/chat/tools";
@@ -132,7 +128,7 @@ export async function POST(req: Request, { params }: Params) {
         // ── Phase 1: non-streaming call with tools ────────────────────────────
         // think is intentionally omitted here — thinking mode + streaming +
         // tools is unreliable in Qwen3; the follow-up uses think if set.
-        const firstResult = await callOllamaChat(
+        const firstResult = await callChat(
           ollamaMessages,
           preferences.ollamaOptions,
           CHAT_TOOLS,
@@ -190,7 +186,7 @@ export async function POST(req: Request, { params }: Params) {
 
           let followUpResponse: Response;
           try {
-            followUpResponse = await streamOllamaChat(
+            followUpResponse = await streamChat(
               followUpMessages,
               false, // no think in follow-up
               preferences.ollamaOptions,
@@ -235,7 +231,7 @@ export async function POST(req: Request, { params }: Params) {
         } else {
           // ── No tool calls: stream a second call with think so the user ──────
           // gets real-time output and optional extended reasoning.
-          const streamResponse = await streamOllamaChat(
+          const streamResponse = await streamChat(
             ollamaMessages,
             think,
             preferences.ollamaOptions,

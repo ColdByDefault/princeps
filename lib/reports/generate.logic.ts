@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { OLLAMA_BASE_URL, OLLAMA_MODEL } from "@/lib/chat/ollama";
+import { callChat } from "@/lib/chat/provider";
 import { createReport } from "./create.logic";
 import { createNotification } from "@/lib/notifications/create.logic";
 import { emitNotification } from "@/lib/notifications/emitter";
@@ -43,29 +43,8 @@ Respond with valid JSON only — no markdown, no explanation, no code fence:
 {"summary": "...", "title": "..."}`;
 
   try {
-    const response = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: OLLAMA_MODEL,
-        messages: [{ role: "user", content: systemPrompt }],
-        stream: false,
-        think: false,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error(
-        `[reports] Ollama returned ${response.status} for report generation`,
-      );
-      return;
-    }
-
-    const data = (await response.json()) as {
-      message?: { content?: string };
-    };
-
-    const raw = data.message?.content?.trim() ?? "";
+    const result = await callChat([{ role: "user", content: systemPrompt }]);
+    const raw = result.content.trim();
 
     let parsed: { summary?: string; title?: string };
     try {
