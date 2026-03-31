@@ -15,6 +15,17 @@ const STATE_SECRET = new TextEncoder().encode(
 
 // GET /api/integrations/google/connect — redirect to Google OAuth consent
 export async function GET() {
+  if (
+    !process.env.GOOGLE_CLIENT_ID ||
+    !process.env.GOOGLE_CLIENT_SECRET ||
+    !process.env.GOOGLE_REDIRECT_URI
+  ) {
+    return NextResponse.json(
+      { error: "Google integration is not configured." },
+      { status: 503 },
+    );
+  }
+
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -8,6 +8,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { updateDecision } from "@/lib/decisions/update.logic";
 import { deleteDecision } from "@/lib/decisions/delete.logic";
+import { DecisionUpdateSchema } from "@/lib/decisions/schemas";
+import { zodErrorMessage } from "@/lib/utils";
 
 // PATCH /api/decisions/[id] — update a decision
 export async function PATCH(
@@ -28,31 +30,24 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
   }
 
-  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+  const parsed = DecisionUpdateSchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "Body must be a JSON object." },
+      { error: zodErrorMessage(parsed.error) },
       { status: 400 },
     );
   }
 
-  const { title, rationale, outcome, status, decidedAt, meetingId } =
-    body as Record<string, unknown>;
-
+  const d = parsed.data;
   const updated = await updateDecision(session.user.id, id, {
-    ...(typeof title === "string" && { title: title.trim() }),
-    ...(rationale !== undefined && {
-      rationale: typeof rationale === "string" ? rationale : null,
+    ...(d.title !== undefined && { title: d.title.trim() }),
+    ...(d.rationale !== undefined && { rationale: d.rationale ?? null }),
+    ...(d.outcome !== undefined && { outcome: d.outcome ?? null }),
+    ...(d.status !== undefined && { status: d.status }),
+    ...(d.decidedAt !== undefined && {
+      decidedAt: d.decidedAt ? new Date(d.decidedAt) : null,
     }),
-    ...(outcome !== undefined && {
-      outcome: typeof outcome === "string" ? outcome : null,
-    }),
-    ...(typeof status === "string" && { status }),
-    ...(decidedAt !== undefined && {
-      decidedAt: typeof decidedAt === "string" ? new Date(decidedAt) : null,
-    }),
-    ...(meetingId !== undefined && {
-      meetingId: typeof meetingId === "string" ? meetingId : null,
-    }),
+    ...(d.meetingId !== undefined && { meetingId: d.meetingId ?? null }),
   });
 
   if (!updated) {

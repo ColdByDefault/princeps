@@ -8,6 +8,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { listTasks } from "@/lib/tasks/list.logic";
 import { createTask } from "@/lib/tasks/create.logic";
+import { TaskCreateSchema } from "@/lib/tasks/schemas";
+import { zodErrorMessage } from "@/lib/utils";
 
 // GET /api/tasks — list all tasks for the current user
 export async function GET() {
@@ -34,29 +36,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
   }
 
-  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+  const parsed = TaskCreateSchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "Body must be a JSON object." },
+      { error: zodErrorMessage(parsed.error) },
       { status: 400 },
     );
   }
 
-  const { title, notes, status, priority, dueDate, meetingId } = body as Record<
-    string,
-    unknown
-  >;
-
-  if (typeof title !== "string" || title.trim() === "") {
-    return NextResponse.json({ error: "title is required." }, { status: 400 });
-  }
-
+  const d = parsed.data;
   const task = await createTask(session.user.id, {
-    title: title.trim(),
-    notes: typeof notes === "string" ? notes.trim() || null : null,
-    ...(typeof status === "string" && { status }),
-    ...(typeof priority === "string" && { priority }),
-    dueDate: typeof dueDate === "string" && dueDate ? new Date(dueDate) : null,
-    meetingId: typeof meetingId === "string" ? meetingId : null,
+    title: d.title.trim(),
+    notes: d.notes?.trim() || null,
+    ...(d.status !== undefined && { status: d.status }),
+    ...(d.priority !== undefined && { priority: d.priority }),
+    dueDate: d.dueDate ? new Date(d.dueDate) : null,
+    meetingId: d.meetingId ?? null,
   });
 
   return NextResponse.json({ task }, { status: 201 });

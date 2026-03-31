@@ -8,6 +8,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { updateTask } from "@/lib/tasks/update.logic";
 import { deleteTask } from "@/lib/tasks/delete.logic";
+import { TaskUpdateSchema } from "@/lib/tasks/schemas";
+import { zodErrorMessage } from "@/lib/utils";
 
 // PATCH /api/tasks/[id] — update a task
 export async function PATCH(
@@ -28,32 +30,24 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
   }
 
-  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+  const parsed = TaskUpdateSchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "Body must be a JSON object." },
+      { error: zodErrorMessage(parsed.error) },
       { status: 400 },
     );
   }
 
-  const { title, notes, status, priority, dueDate, meetingId } = body as Record<
-    string,
-    unknown
-  >;
-
+  const d = parsed.data;
   const task = await updateTask(session.user.id, id, {
-    ...(typeof title === "string" && { title: title.trim() }),
-    ...(notes !== undefined && {
-      notes: typeof notes === "string" ? notes.trim() || null : null,
+    ...(d.title !== undefined && { title: d.title.trim() }),
+    ...(d.notes !== undefined && { notes: d.notes?.trim() || null }),
+    ...(d.status !== undefined && { status: d.status }),
+    ...(d.priority !== undefined && { priority: d.priority }),
+    ...(d.dueDate !== undefined && {
+      dueDate: d.dueDate ? new Date(d.dueDate) : null,
     }),
-    ...(typeof status === "string" && { status }),
-    ...(typeof priority === "string" && { priority }),
-    ...(dueDate !== undefined && {
-      dueDate:
-        typeof dueDate === "string" && dueDate ? new Date(dueDate) : null,
-    }),
-    ...(meetingId !== undefined && {
-      meetingId: typeof meetingId === "string" ? meetingId : null,
-    }),
+    ...(d.meetingId !== undefined && { meetingId: d.meetingId ?? null }),
   });
 
   if (!task) {

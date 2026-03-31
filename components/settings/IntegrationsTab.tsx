@@ -6,11 +6,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getMessage } from "@/lib/i18n";
 import { type MessageDictionary } from "@/types/i18n";
 import { CalendarDays, RefreshCw, Unplug } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
 type IntegrationStatus = {
@@ -20,9 +33,12 @@ type IntegrationStatus = {
 
 type Props = {
   messages: MessageDictionary;
+  oauthSuccess: string | undefined;
+  oauthError: string | undefined;
 };
 
-export function IntegrationsTab({ messages }: Props) {
+export function IntegrationsTab({ messages, oauthSuccess, oauthError }: Props) {
+  const router = useRouter();
   const [status, setStatus] = useState<IntegrationStatus | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
@@ -34,6 +50,48 @@ export function IntegrationsTab({ messages }: Props) {
       .catch(() => setStatus({ connected: false, integration: null }));
   }, []);
 
+  // B1: show OAuth result toast once on mount and clean the URL
+  useEffect(() => {
+    if (oauthSuccess === "google_connected") {
+      toast.success(
+        getMessage(
+          messages,
+          "integrations.google.connectSuccess",
+          "Google Calendar connected successfully.",
+        ),
+      );
+      router.replace("/settings/app?tab=integrations");
+    } else if (oauthError === "google_denied") {
+      toast.error(
+        getMessage(
+          messages,
+          "integrations.google.errorDenied",
+          "Google Calendar access was denied.",
+        ),
+      );
+      router.replace("/settings/app?tab=integrations");
+    } else if (oauthError === "google_state_invalid") {
+      toast.error(
+        getMessage(
+          messages,
+          "integrations.google.errorInvalid",
+          "OAuth state was invalid. Please try again.",
+        ),
+      );
+      router.replace("/settings/app?tab=integrations");
+    } else if (oauthError) {
+      toast.error(
+        getMessage(
+          messages,
+          "integrations.google.errorFailed",
+          "Failed to connect Google Calendar. Please try again.",
+        ),
+      );
+      router.replace("/settings/app?tab=integrations");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSync = async () => {
     setSyncing(true);
     try {
@@ -41,18 +99,20 @@ export function IntegrationsTab({ messages }: Props) {
         method: "POST",
       });
       if (!res.ok) throw new Error();
+      const data = (await res.json()) as { upserted: number; skipped: number };
       // Refresh status to get updated lastSyncedAt
       const updated = await fetch("/api/integrations/google").then(
         (r) => r.json() as Promise<IntegrationStatus>,
       );
       setStatus(updated);
-      toast.success(
-        getMessage(
-          messages,
-          "integrations.google.syncSuccess",
-          "Calendar synced successfully.",
-        ),
-      );
+      const countMsg = getMessage(
+        messages,
+        "integrations.google.syncCount",
+        "{upserted} events synced, {skipped} skipped.",
+      )
+        .replace("{upserted}", String(data.upserted))
+        .replace("{skipped}", String(data.skipped));
+      toast.success(countMsg);
     } catch {
       toast.error(
         getMessage(
@@ -91,6 +151,27 @@ export function IntegrationsTab({ messages }: Props) {
       setDisconnecting(false);
     }
   };
+
+  if (status === null) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-3 w-64 mt-1.5" />
+        </div>
+        <div className="rounded-xl border border-border/70 bg-card/50 p-5 space-y-4">
+          <div className="flex items-start gap-4">
+            <Skeleton className="size-9 rounded-lg shrink-0" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-36" />
+              <Skeleton className="h-3 w-72" />
+            </div>
+          </div>
+          <Skeleton className="h-8 w-44 rounded-md" />
+        </div>
+      </div>
+    );
+  }
 
   const lastSynced = status?.integration?.lastSyncedAt
     ? new Date(status.integration.lastSyncedAt).toLocaleString()
@@ -205,31 +286,67 @@ export function IntegrationsTab({ messages }: Props) {
                       "Sync now",
                     )}
               </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="cursor-pointer text-destructive hover:text-destructive"
-                onClick={() => void handleDisconnect()}
-                disabled={disconnecting}
-                aria-label={getMessage(
-                  messages,
-                  "integrations.google.disconnect",
-                  "Disconnect",
-                )}
-              >
-                <Unplug className="size-3.5 mr-1.5" />
-                {disconnecting
-                  ? getMessage(
-                      messages,
-                      "integrations.google.disconnecting",
-                      "Disconnecting…",
-                    )
-                  : getMessage(
-                      messages,
-                      "integrations.google.disconnect",
-                      "Disconnect",
-                    )}
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger
+                  className="inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-destructive hover:bg-accent hover:text-destructive cursor-pointer disabled:pointer-events-none disabled:opacity-50"
+                  disabled={disconnecting}
+                  aria-label={getMessage(
+                    messages,
+                    "integrations.google.disconnect",
+                    "Disconnect",
+                  )}
+                >
+                  <Unplug className="size-3.5" />
+                  {disconnecting
+                    ? getMessage(
+                        messages,
+                        "integrations.google.disconnecting",
+                        "Disconnecting…",
+                      )
+                    : getMessage(
+                        messages,
+                        "integrations.google.disconnect",
+                        "Disconnect",
+                      )}
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      {getMessage(
+                        messages,
+                        "integrations.google.disconnectConfirmTitle",
+                        "Disconnect Google Calendar?",
+                      )}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {getMessage(
+                        messages,
+                        "integrations.google.disconnectConfirmDescription",
+                        "This will remove the integration and stop syncing events. You can reconnect at any time.",
+                      )}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>
+                      {getMessage(
+                        messages,
+                        "integrations.google.disconnectCancel",
+                        "Cancel",
+                      )}
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => void handleDisconnect()}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {getMessage(
+                        messages,
+                        "integrations.google.disconnectConfirm",
+                        "Disconnect",
+                      )}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </>
           )}
         </div>

@@ -31,7 +31,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function AppSettingsPage() {
+export default async function AppSettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
@@ -41,6 +45,10 @@ export default async function AppSettingsPage() {
   const { messages } = await getRequestConfig();
   const preferences = await getUserPreferences(session.user.id);
   const activeToken = await getActiveShareToken(session.user.id);
+  const sp = await searchParams;
+  const oauthSuccess =
+    typeof sp["success"] === "string" ? sp["success"] : undefined;
+  const oauthError = typeof sp["error"] === "string" ? sp["error"] : undefined;
 
   return (
     <div className="mx-auto w-full max-w-2xl px-6 py-8 sm:px-8">
@@ -89,7 +97,11 @@ export default async function AppSettingsPage() {
       </div>
 
       <div className="mt-6 rounded-2xl border border-border/70 bg-card/70 p-6 shadow-sm backdrop-blur">
-        <IntegrationsTab messages={messages} />
+        <IntegrationsTab
+          messages={messages}
+          oauthSuccess={oauthSuccess}
+          oauthError={oauthError}
+        />
       </div>
     </div>
   );

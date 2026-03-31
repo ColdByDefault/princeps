@@ -1,75 +1,80 @@
 name: Version Bump
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    bump:
-        # Skip if this push was itself a version-bump commit from this workflow
-        if: "!startsWith(github.event.head_commit.message, 'chore: bump version')"
-        runs-on: ubuntu-latest
-        permissions:
-            contents: write
+  bump:
+    # Skip if this push was itself a version-bump commit from this workflow
+    if: "!startsWith(github.event.head_commit.message, 'chore: bump version')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-              with:
-                  # Use a token with write access so the push back to main is allowed
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  fetch-depth: 0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Use a token with write access so the push back to main is allowed
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "20"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
-            - name: Bump patch version
-              id: bump
-              run: |
-                  OLD=$(node -p "require('./package.json').version")
-                  npm version patch --no-git-tag-version
-                  NEW=$(node -p "require('./package.json').version")
-                  echo "old=$OLD" >> "$GITHUB_OUTPUT"
-                  echo "new=$NEW" >> "$GITHUB_OUTPUT"
+      - name: Bump patch version
+        id: bump
+        run: |
+          OLD=$(node -p "require('./package.json').version")
+          npm version patch --no-git-tag-version
+          NEW=$(node -p "require('./package.json').version")
+          echo "old=$OLD" >> "$GITHUB_OUTPUT"
+          echo "new=$NEW" >> "$GITHUB_OUTPUT"
 
-            - name: Generate changelog entry
-              run: |
-                  NEW_VERSION="${{ steps.bump.outputs.new }}"
-                  DATE=$(date +%Y-%m-%d)
+      - name: Update version in README
+        run: |
+          NEW_VERSION="${{ steps.bump.outputs.new }}"
+          sed -i "s/^\*\*Version:\*\* .*/\*\*Version:\*\* ${NEW_VERSION}/" README.md
 
-                  # Collect commits since the previous version-bump commit
-                  PREV_BUMP=$(git log --format="%H" --grep="chore: bump version" -1)
-                  if [ -z "$PREV_BUMP" ]; then
-                    COMMITS=$(git log --no-merges --format="- %s" | grep -v "^- chore: bump version" | head -30)
-                  else
-                    COMMITS=$(git log "${PREV_BUMP}..HEAD" --no-merges --format="- %s" | grep -v "^- chore: bump version")
-                  fi
+      - name: Generate changelog entry
+        run: |
+          NEW_VERSION="${{ steps.bump.outputs.new }}"
+          DATE=$(date +%Y-%m-%d)
 
-                  if [ -z "$COMMITS" ]; then
-                    COMMITS="- Minor updates and improvements"
-                  fi
+          # Collect commits since the previous version-bump commit
+          PREV_BUMP=$(git log --format="%H" --grep="chore: bump version" -1)
+          if [ -z "$PREV_BUMP" ]; then
+            COMMITS=$(git log --no-merges --format="- %s" | grep -v "^- chore: bump version" | head -30)
+          else
+            COMMITS=$(git log "${PREV_BUMP}..HEAD" --no-merges --format="- %s" | grep -v "^- chore: bump version")
+          fi
 
-                  # Prepend new entry; create header on first run
-                  if [ ! -f CHANGELOG.md ]; then
-                    echo "# Changelog" > CHANGELOG.md
-                    echo "" >> CHANGELOG.md
-                  fi
+          if [ -z "$COMMITS" ]; then
+            COMMITS="- Minor updates and improvements"
+          fi
 
-                  {
-                    echo "## [${NEW_VERSION}] - ${DATE}"
-                    echo ""
-                    echo "${COMMITS}"
-                    echo ""
-                    cat CHANGELOG.md
-                  } > CHANGELOG.md.new && mv CHANGELOG.md.new CHANGELOG.md
+          # Prepend new entry; create header on first run
+          if [ ! -f CHANGELOG.md ]; then
+            echo "# Changelog" > CHANGELOG.md
+            echo "" >> CHANGELOG.md
+          fi
 
-            - name: Commit and push
-              run: |
-                  git config user.name  "github-actions[bot]"
-                  git config user.email "github-actions[bot]@users.noreply.github.com"
-                  git add package.json CHANGELOG.md
-                  git commit -m "chore: bump version ${{ steps.bump.outputs.old }} → ${{ steps.bump.outputs.new }} [skip ci]"
-                  git push
+          {
+            echo "## [${NEW_VERSION}] - ${DATE}"
+            echo ""
+            echo "${COMMITS}"
+            echo ""
+            cat CHANGELOG.md
+          } > CHANGELOG.md.new && mv CHANGELOG.md.new CHANGELOG.md
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json CHANGELOG.md README.md
+          git commit -m "chore: bump version ${{ steps.bump.outputs.old }} → ${{ steps.bump.outputs.new }} [skip ci]"
+          git push

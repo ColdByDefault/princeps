@@ -13,6 +13,7 @@ import {
   getScheduledNotifPrefsFromRaw,
   alreadyFiredToday,
   alreadyFiredThisWeek,
+  localDayOfWeek,
 } from "./shared.logic";
 
 /**
@@ -32,34 +33,35 @@ export async function runBriefingJob(): Promise<{
   let skipped = 0;
 
   for (const user of users) {
-    const raw =
-      user.preferences && typeof user.preferences === "object"
-        ? (user.preferences as Record<string, unknown>)
-        : {};
-    const prefs = getScheduledNotifPrefsFromRaw(raw);
-
-    if (prefs.briefing === "off") {
-      skipped++;
-      continue;
-    }
-
-    const isWeeklyAndNotFriday =
-      prefs.briefing === "weekly" && new Date().getUTCDay() !== 5;
-    if (isWeeklyAndNotFriday) {
-      skipped++;
-      continue;
-    }
-
-    const dedupCheck =
-      prefs.briefing === "weekly"
-        ? await alreadyFiredThisWeek(user.id, "scheduled_briefing")
-        : await alreadyFiredToday(user.id, "scheduled_briefing");
-    if (dedupCheck) {
-      skipped++;
-      continue;
-    }
-
     try {
+      const raw =
+        user.preferences && typeof user.preferences === "object"
+          ? (user.preferences as Record<string, unknown>)
+          : {};
+      const prefs = getScheduledNotifPrefsFromRaw(raw);
+
+      if (prefs.briefing === "off") {
+        skipped++;
+        continue;
+      }
+
+      const isWeeklyAndNotFriday =
+        prefs.briefing === "weekly" &&
+        localDayOfWeek(new Date(), user.timezone ?? null) !== 5;
+      if (isWeeklyAndNotFriday) {
+        skipped++;
+        continue;
+      }
+
+      const dedupCheck =
+        prefs.briefing === "weekly"
+          ? await alreadyFiredThisWeek(user.id, "scheduled_briefing")
+          : await alreadyFiredToday(user.id, "scheduled_briefing");
+      if (dedupCheck) {
+        skipped++;
+        continue;
+      }
+
       const lang = typeof raw["language"] === "string" ? raw["language"] : "en";
       const { content } = await generateBriefing(
         user.id,
@@ -78,7 +80,8 @@ export async function runBriefingJob(): Promise<{
 
       emitNotification(user.id, notification);
       processed++;
-    } catch {
+    } catch (err) {
+      console.error(`[cron:briefing] User ${user.id} failed:`, err);
       skipped++;
     }
   }

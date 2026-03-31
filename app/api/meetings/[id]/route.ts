@@ -8,6 +8,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { updateMeeting } from "@/lib/meetings/update.logic";
 import { deleteMeeting } from "@/lib/meetings/delete.logic";
+import { MeetingUpdateSchema } from "@/lib/meetings/schemas";
+import { zodErrorMessage } from "@/lib/utils";
 
 // PATCH /api/meetings/[id] — update a meeting
 export async function PATCH(
@@ -28,45 +30,27 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
   }
 
-  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+  const parsed = MeetingUpdateSchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "Body must be a JSON object." },
+      { error: zodErrorMessage(parsed.error) },
       { status: 400 },
     );
   }
 
-  const {
-    title,
-    scheduledAt,
-    durationMin,
-    location,
-    agenda,
-    summary,
-    status,
-    participantContactIds,
-  } = body as Record<string, unknown>;
-
+  const d = parsed.data;
   const updated = await updateMeeting(session.user.id, id, {
-    ...(typeof title === "string" && { title: title.trim() }),
-    ...(typeof scheduledAt === "string" &&
-      !isNaN(Date.parse(scheduledAt)) && {
-        scheduledAt: new Date(scheduledAt),
-      }),
-    ...(durationMin !== undefined && {
-      durationMin: typeof durationMin === "number" ? durationMin : null,
+    ...(d.title !== undefined && { title: d.title.trim() }),
+    ...(d.scheduledAt !== undefined && {
+      scheduledAt: new Date(d.scheduledAt),
     }),
-    ...(location !== undefined && {
-      location: typeof location === "string" ? location : null,
-    }),
-    ...(agenda !== undefined && {
-      agenda: typeof agenda === "string" ? agenda : null,
-    }),
-    ...(summary !== undefined && {
-      summary: typeof summary === "string" ? summary : null,
-    }),
-    ...(typeof status === "string" && { status }),
-    ...(Array.isArray(participantContactIds) && {
-      participantContactIds: participantContactIds as string[],
+    ...(d.durationMin !== undefined && { durationMin: d.durationMin ?? null }),
+    ...(d.location !== undefined && { location: d.location ?? null }),
+    ...(d.agenda !== undefined && { agenda: d.agenda ?? null }),
+    ...(d.summary !== undefined && { summary: d.summary ?? null }),
+    ...(d.status !== undefined && { status: d.status }),
+    ...(d.participantContactIds !== undefined && {
+      participantContactIds: d.participantContactIds,
     }),
   });
 

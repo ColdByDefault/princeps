@@ -8,6 +8,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { getUserPreferences } from "@/lib/settings/get.logic";
 import { updateUserPreferences } from "@/lib/settings/update.logic";
+import { UserPreferencesPatchSchema } from "@/lib/settings/schemas";
+import { zodErrorMessage } from "@/lib/utils";
 import { type UserPreferences } from "@/types/settings";
 
 // GET /api/settings — load current user preferences
@@ -38,13 +40,18 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  if (typeof body !== "object" || body === null || Array.isArray(body)) {
-    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+  const parsed = UserPreferencesPatchSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: zodErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
-  const preferences = body as Partial<UserPreferences>;
-
-  const result = await updateUserPreferences(session.user.id, preferences);
+  const result = await updateUserPreferences(
+    session.user.id,
+    parsed.data as Partial<UserPreferences>,
+  );
 
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 500 });

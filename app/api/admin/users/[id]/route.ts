@@ -7,6 +7,8 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { setUserTier, deleteUser } from "@/lib/admin/user-management.logic";
+import { AdminUserPatchSchema } from "@/lib/admin/schemas";
+import { zodErrorMessage } from "@/lib/utils";
 
 // PATCH /api/admin/users/[id] — set tier
 export async function PATCH(
@@ -26,12 +28,15 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
   }
 
-  const { tier } = body as Record<string, unknown>;
-  if (!["free", "pro", "premium"].includes(tier as string)) {
-    return NextResponse.json({ error: "Invalid tier." }, { status: 400 });
+  const parsed = AdminUserPatchSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: zodErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
-  await setUserTier(id, tier as "free" | "pro" | "premium");
+  await setUserTier(id, parsed.data.tier);
   return NextResponse.json({ ok: true });
 }
 

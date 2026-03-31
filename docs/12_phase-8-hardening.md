@@ -166,28 +166,89 @@ Phase 8 is a focused hardening pass — no new features. Every item below is a k
 
 ---
 
+### Group E — Input Validation (Zod)
+
+Zod v4 is installed in `package.json` but never used. The `.github/instructions/server-data.instructions.md` rule says "validate inputs with Zod-backed helpers in server logic" — this has not been implemented. All CRUD routes currently do ad-hoc `if (!body.title)` checks with no length limits, enum checks, or date format validation.
+
+#### E1 — Zod schemas for CRUD routes
+
+**Problem:** The four core resource routes (`contacts`, `tasks`, `meetings`, `decisions`) accept `req.json()` and perform only presence checks. Problems this causes:
+
+- No string length limit — `title` could be 100,000 chars and will be written to the DB.
+- No enum validation — `task.status` and `task.priority` accept any string; `decision.outcome` accepts any string.
+- No date validation — `scheduledAt` is passed directly to `new Date()` with no `isNaN` check; an invalid date string silently creates a `null` value in Prisma.
+- No numeric bounds — `durationMin` could be negative or exceed 1440.
+- Error shapes are inconsistent across routes (some say `"name is required."`, others say `"title is required."`).
+
+**Fix:** Create a `schemas.ts` file in each `lib/<feature>/` directory containing Zod schemas for the create and update payloads. Import and call `schema.safeParse(body)` in the corresponding route handler. On parse failure, return `400 { error: issues[0].message }` using a shared helper.
+
+**Files to create:**
+
+- `lib/contacts/schemas.ts`
+- `lib/tasks/schemas.ts`
+- `lib/meetings/schemas.ts`
+- `lib/decisions/schemas.ts`
+
+**Files to update:**
+
+- `app/api/contacts/route.ts`, `app/api/contacts/[id]/route.ts`
+- `app/api/tasks/route.ts`, `app/api/tasks/[id]/route.ts`
+- `app/api/meetings/route.ts`, `app/api/meetings/[id]/route.ts`
+- `app/api/decisions/route.ts`, `app/api/decisions/[id]/route.ts`
+
+**Acceptance:** Sending `{ title: "" }`, `{ status: "invalid_value" }`, `{ scheduledAt: "not-a-date" }`, or `{ durationMin: -5 }` all return 400 with a clear message. Sending a `title` longer than 255 chars returns 400. Valid payloads pass through unchanged.
+
+---
+
+#### E2 — Zod schemas for settings and admin routes
+
+**Problem:** `app/api/settings/route.ts` passes the raw JSON body directly to `updateUserPreferences`, which does manual key-by-key checks. `app/api/admin/users/[id]/route.ts` does an `ALLOWED_TIERS.includes(tier)` check but no schema. Neither validates field types or unexpected extra keys.
+
+**Fix:** Add a `lib/settings/schemas.ts` with a partial schema covering all patchable preference keys. Add a `lib/admin/schemas.ts` for the tier-update payload. Use `safeParse` in both routes.
+
+**Files to create:**
+
+- `lib/settings/schemas.ts`
+- `lib/admin/schemas.ts`
+
+**Files to update:**
+
+- `app/api/settings/route.ts`
+- `app/api/admin/users/[id]/route.ts`
+
+**Acceptance:** Sending unknown keys to `PATCH /api/settings` or an unlisted tier to the admin route returns 400 immediately before any DB work.
+
+---
+
 ## Implementation Order
 
-| ID  | Area                  | Priority | Files                                |
-| --- | --------------------- | -------- | ------------------------------------ |
-| A3  | Cron loop isolation   | Highest  | 4 cron logic files                   |
-| A2  | Token revocation      | High     | google-oauth.logic.ts, sync/route.ts |
-| A1  | Sync pagination       | High     | google-calendar.logic.ts             |
-| A4  | Sync N+1 batching     | High     | google-calendar.logic.ts             |
-| B1  | OAuth toast feedback  | High     | settings page, IntegrationsTab       |
-| D1  | Env var guard         | Medium   | connect/route.ts, sync/route.ts      |
-| B2  | Loading skeleton      | Medium   | IntegrationsTab                      |
-| B3  | Sync count toast      | Medium   | IntegrationsTab                      |
-| B4  | Disconnect confirm    | Medium   | IntegrationsTab                      |
-| C1  | Timezone day-of-week  | Medium   | briefing.logic.ts, digest.logic.ts   |
-| C2  | Meeting end-time calc | Medium   | meeting-followup.logic.ts            |
-| D2  | CRON_SECRET warning   | Low      | 4 cron route files                   |
+| ID  | Area                  | Priority | Files                                    |
+| --- | --------------------- | -------- | ---------------------------------------- |
+| A3  | Cron loop isolation   | Highest  | 4 cron logic files                       |
+| A2  | Token revocation      | High     | google-oauth.logic.ts, sync/route.ts     |
+| A1  | Sync pagination       | High     | google-calendar.logic.ts                 |
+| A4  | Sync N+1 batching     | High     | google-calendar.logic.ts                 |
+| B1  | OAuth toast feedback  | High     | settings page, IntegrationsTab           |
+| E1  | Zod CRUD schemas      | High     | lib/{contacts,tasks,meetings,decisions}/ |
+| D1  | Env var guard         | Medium   | connect/route.ts, sync/route.ts          |
+| B2  | Loading skeleton      | Medium   | IntegrationsTab                          |
+| B3  | Sync count toast      | Medium   | IntegrationsTab                          |
+| B4  | Disconnect confirm    | Medium   | IntegrationsTab                          |
+| C1  | Timezone day-of-week  | Medium   | briefing.logic.ts, digest.logic.ts       |
+| C2  | Meeting end-time calc | Medium   | meeting-followup.logic.ts                |
+| E2  | Zod settings/admin    | Medium   | lib/settings/, lib/admin/, 2 route files |
+| D2  | CRON_SECRET warning   | Low      | 4 cron route files                       |
 
 ---
 
 ## Done
 
-_(filled in as items are completed)_
+- **A3** — Cron loop per-user isolation: all 4 jobs now wrap the full per-user block in `try/catch` with `console.error` logging.
+- **A2** — Token revocation: `GoogleAuthRevokedError` class added; `invalid_grant` in `refreshGoogleToken` deletes the Integration row and throws typed error; sync route returns `{ error: "google_revoked", status: 401 }`.
+- **A1** — Sync pagination: `syncGoogleCalendar` loops `nextPageToken` until exhausted, collects all events before upsert.
+- **A4** — Sync N+1 batch: single `findMany({ where: { googleEventId: { in: allIds } } })` replaces per-event `findUnique`; creates via `createMany`, updates via `Promise.all`.
+- **E1** — Zod schemas for CRUD routes: `lib/{contacts,tasks,meetings,decisions}/schemas.ts` created; all 8 POST/PATCH routes updated to use `safeParse`; `zodErrorMessage` helper added to `lib/utils.ts`. Also fixed pre-existing `googleEventId` missing from `MeetingRecord` mapper in create/update logic.
+- Lint: 0 errors. Typecheck: clean. Build: green.
 
 ## Later
 

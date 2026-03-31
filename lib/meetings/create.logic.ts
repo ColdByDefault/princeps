@@ -82,6 +82,7 @@ function toRecord(row: MeetingWithParticipants): MeetingRecord {
     summary: row.summary,
     prepPack: row.prepPack,
     status: row.status,
+    googleEventId: row.googleEventId ?? null,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
     participants: (
