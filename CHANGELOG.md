@@ -1,3 +1,11 @@
+## [0.1.20] - 2026-03-31
+
+- feat: enhance AppSettingsForm and AppSidebar with language support, update navigation labels for consistency
+- feat: implement onboarding completion notification and update user preferences handling
+- feat: add tier-based user information and upgrade prompts in Navbar, update localization for tier labels
+- feat: implement tier-based limits for chat and document usage, including daily quotas and history limits
+- feat: implement tier-based limits for chat and widget usage, including daily quotas and history limits
+
 ## [0.1.19] - 2026-03-31
 
 - feat: update package versions and remove unnecessary eslint directive
