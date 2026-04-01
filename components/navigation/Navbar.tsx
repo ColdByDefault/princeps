@@ -105,7 +105,13 @@ type NavLink = {
 };
 
 const HIDDEN_NAVBAR_PATHS = new Set(["/", "/login", "/sign-up"]);
-const GROUP_HREFS = new Set(["/contacts", "/meetings", "/tasks", "/decisions"]);
+const GROUP_HREFS = new Set([
+  "/contacts",
+  "/meetings",
+  "/tasks",
+  "/decisions",
+  "/knowledge",
+]);
 const SETTINGS_HREFS = new Set([
   "/settings/app",
   "/settings/assistant",
@@ -490,7 +496,7 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
                   "shell.search.trigger",
                   "Search workspace",
                 )}
-                className="cursor-pointer rounded-full border-border/70 bg-background/70 px-3 backdrop-blur-sm"
+                className="cursor-pointer justify-start rounded-full border-border/70 bg-background/70 px-3 min-w-32 min-[1150px]:min-w-52 min-[1280px]:min-w-64 backdrop-blur-sm"
                 onClick={() =>
                   window.dispatchEvent(new Event("global-search:open"))
                 }
@@ -499,7 +505,7 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
                 <span className="text-muted-foreground">
                   {getMessage(messages, "shell.search.triggerLabel", "Search…")}
                 </span>
-                <kbd className="pointer-events-none ml-1 hidden select-none rounded border border-border/70 bg-muted px-1.5 text-[10px] font-mono text-muted-foreground sm:inline-flex">
+                <kbd className="pointer-events-none ml-auto hidden select-none rounded border border-border/70 bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground sm:inline-flex">
                   ⌘K
                 </kbd>
               </Button>
@@ -533,29 +539,50 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
               </Button>
             </div>
 
-            <Button
-              type="button"
-              variant="outline"
-              size="icon-sm"
-              aria-label={getMessage(
-                messages,
-                isMenuOpen ? "shell.nav.closeMenu" : "shell.nav.openMenu",
-                isMenuOpen ? "Close menu" : "Open menu",
-              )}
-              title={getMessage(
-                messages,
-                isMenuOpen ? "shell.nav.closeMenu" : "shell.nav.openMenu",
-                isMenuOpen ? "Close menu" : "Open menu",
-              )}
-              className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm min-[1000px]:hidden"
-              onClick={() => setIsMenuOpen((current) => !current)}
-            >
-              {isMenuOpen ? (
-                <X className="size-4" />
-              ) : (
-                <Menu className="size-4" />
-              )}
-            </Button>
+            <div className="ml-auto flex items-center gap-2 min-[1000px]:hidden">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                aria-label={getMessage(
+                  messages,
+                  "shell.search.trigger",
+                  "Search workspace",
+                )}
+                className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+                onClick={() =>
+                  window.dispatchEvent(new Event("global-search:open"))
+                }
+              >
+                <Search className="size-3.5" />
+                <kbd className="pointer-events-none select-none rounded border border-border/70 bg-muted px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
+                  ⌘K
+                </kbd>
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                aria-label={getMessage(
+                  messages,
+                  isMenuOpen ? "shell.nav.closeMenu" : "shell.nav.openMenu",
+                  isMenuOpen ? "Close menu" : "Open menu",
+                )}
+                title={getMessage(
+                  messages,
+                  isMenuOpen ? "shell.nav.closeMenu" : "shell.nav.openMenu",
+                  isMenuOpen ? "Close menu" : "Open menu",
+                )}
+                className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm"
+                onClick={() => setIsMenuOpen((current) => !current)}
+              >
+                {isMenuOpen ? (
+                  <X className="size-4" />
+                ) : (
+                  <Menu className="size-4" />
+                )}
+              </Button>
+            </div>
           </div>
 
           {isMenuOpen ? (
