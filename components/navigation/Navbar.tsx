@@ -131,6 +131,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       label: getMessage(messages, "shell.nav.knowledge", "Knowledge Base"),
     },
     {
+      href: "/chat",
+      icon: MessageSquare,
+      label: getMessage(messages, "shell.nav.chat", "Chat"),
+    },
+    {
       href: "/contacts",
       icon: ContactRound,
       label: getMessage(messages, "shell.nav.contacts", "Contacts"),
@@ -149,11 +154,6 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/decisions",
       icon: GitFork,
       label: getMessage(messages, "shell.nav.decisions", "Decisions"),
-    },
-    {
-      href: "/chat",
-      icon: MessageSquare,
-      label: getMessage(messages, "shell.nav.chat", "Chat"),
     },
     {
       href: "/settings/app",

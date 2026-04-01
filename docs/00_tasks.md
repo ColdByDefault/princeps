@@ -27,9 +27,13 @@
 - [ ] Meeting follow-up end-time — compute effective end as scheduledAt + durationMin before filtering; currently uses start time as proxy so long meetings trigger follow-up too early (see docs/12_phase-8-hardening.md C2)
 - [ ] Zod schemas for settings and admin routes — lib/settings/schemas.ts and lib/admin/schemas.ts; safeParse in PATCH /api/settings and PATCH /api/admin/users/[id] (see docs/12_phase-8-hardening.md E2)
 
+## Refactoring & Tech Debt
+
+- [ ] Navbar seperation: Navbar & HamburgerMenu components.
+
 ## Features
 
-- [ ] Labels (phase 9) — user-defined reusable labels managed from App Settings first, then linked into meetings, contacts, tasks, decisions, and other records
+- [x] Labels (phase 9) — user-defined reusable labels managed from App Settings first, then linked into meetings, contacts, tasks, decisions, and other records
 - [ ] AI PDF & DOCX knowledge upload — libraries (pdf-parse, mammoth) are installed but only .txt/.md are wired into the ingest pipeline
 - [ ] Meeting transcription / audio upload — upload a recording, get summary + action items written to the meeting record
 - [ ] Email notification delivery — daily digest email as fallback to in-app inbox (cron already generates the content)
