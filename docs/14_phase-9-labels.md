@@ -73,6 +73,7 @@ model Label {
 - Added `lib/labels/` CRUD logic plus normalization helpers and Zod request schemas
 - Added settings-scoped API routes at `app/api/settings/labels` and `app/api/settings/labels/[id]`
 - Added a Labels card to App Settings with create, inline rename, and delete flows
+- Added pointer affordances and tooltips for the labels card action controls
 - Added English and German message keys for the labels settings surface
 - Validated the first pass with `npm run db:generate`, `npm run lint`, `npm run typecheck`, and `npm run build`
 
