@@ -6,6 +6,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { LabelPicker } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,13 +26,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getMessage } from "@/lib/i18n";
-import type { TaskRecord } from "@/types/api";
+import type { LabelOptionRecord, TaskRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface TaskFormProps {
   messages: MessageDictionary;
   open: boolean;
   initial: TaskRecord | null;
+  availableLabels?: LabelOptionRecord[];
   onClose: () => void;
   onSaved: (task: TaskRecord) => void;
 }
@@ -45,6 +47,7 @@ export function TaskForm({
   messages,
   open,
   initial,
+  availableLabels = [],
   onClose,
   onSaved,
 }: TaskFormProps) {
@@ -53,6 +56,7 @@ export function TaskForm({
   const [status, setStatus] = useState("open");
   const [priority, setPriority] = useState("normal");
   const [dueDate, setDueDate] = useState("");
+  const [labelIds, setLabelIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,6 +67,7 @@ export function TaskForm({
       setStatus(initial?.status ?? "open");
       setPriority(initial?.priority ?? "normal");
       setDueDate(toDateInputValue(initial?.dueDate));
+      setLabelIds(initial?.labels.map((label) => label.id) ?? []);
       setError(null);
     }
   }, [open, initial]);
@@ -78,6 +83,7 @@ export function TaskForm({
       status,
       priority,
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+      labelIds,
     };
 
     try {
@@ -237,6 +243,15 @@ export function TaskForm({
               )}
             />
           </div>
+
+          <LabelPicker
+            messages={messages}
+            inputId="task-labels"
+            fieldLabel={getMessage(messages, "tasks.field.labels", "Labels")}
+            availableLabels={availableLabels}
+            selectedLabelIds={labelIds}
+            onChange={setLabelIds}
+          />
 
           {error && <p className="text-destructive text-sm">{error}</p>}
         </div>

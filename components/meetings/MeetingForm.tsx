@@ -6,6 +6,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { LabelPicker } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,7 +27,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getMessage } from "@/lib/i18n";
-import type { ContactRecord, MeetingRecord } from "@/types/api";
+import type {
+  ContactRecord,
+  LabelOptionRecord,
+  MeetingRecord,
+} from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface MeetingFormProps {
@@ -34,6 +39,7 @@ interface MeetingFormProps {
   open: boolean;
   initial: MeetingRecord | null;
   contacts: ContactRecord[];
+  availableLabels?: LabelOptionRecord[];
   onClose: () => void;
   onSaved: (meeting: MeetingRecord) => void;
 }
@@ -49,6 +55,7 @@ export function MeetingForm({
   open,
   initial,
   contacts,
+  availableLabels = [],
   onClose,
   onSaved,
 }: MeetingFormProps) {
@@ -60,6 +67,7 @@ export function MeetingForm({
   const [summary, setSummary] = useState("");
   const [status, setStatus] = useState<string>("upcoming");
   const [participantIds, setParticipantIds] = useState<string[]>([]);
+  const [labelIds, setLabelIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -75,6 +83,7 @@ export function MeetingForm({
       setSummary(initial?.summary ?? "");
       setStatus(initial?.status ?? "upcoming");
       setParticipantIds(initial?.participants.map((p) => p.contactId) ?? []);
+      setLabelIds(initial?.labels.map((label) => label.id) ?? []);
       setError(null);
     }
   }, [open, initial]);
@@ -101,6 +110,7 @@ export function MeetingForm({
       summary: summary.trim() || null,
       status,
       participantContactIds: participantIds,
+      labelIds,
     };
 
     try {
@@ -327,6 +337,15 @@ export function MeetingForm({
               </div>
             </div>
           )}
+
+          <LabelPicker
+            messages={messages}
+            inputId="meeting-labels"
+            fieldLabel={getMessage(messages, "meetings.field.labels", "Labels")}
+            availableLabels={availableLabels}
+            selectedLabelIds={labelIds}
+            onChange={setLabelIds}
+          />
 
           {error && <p className="text-destructive text-sm">{error}</p>}
         </div>

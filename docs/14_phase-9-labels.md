@@ -77,6 +77,12 @@ model Label {
 - Added English and German message keys for the labels settings surface
 - Validated the first pass with `npm run db:generate`, `npm run lint`, `npm run typecheck`, and `npm run build`
 - Started the second-pass feature wiring by adding label selection support to the contact form payload and UI
+- Wired contacts end to end so labels can be loaded, selected, saved, and rendered in the list view
+- Wired meetings end to end so labels can be loaded, selected, saved, and rendered in the list view
+- Wired tasks end to end so labels can be loaded, selected, saved, and rendered in the list view
+- Wired decisions end to end so labels can be loaded, selected, saved, and rendered in the list view
+- Regenerated the Prisma client after the relation schema changes so server logic and generated types matched again
+- Revalidated the multi-feature labels pass with `npm run lint`, `npm run typecheck`, and `npm run build`
 
 ## Later
 
@@ -84,4 +90,5 @@ model Label {
 - Replace per-feature freeform tag arrays where appropriate
 - Add label picker inputs to feature forms and edit dialogs
 - Expose labels to assistant tool flows so the assistant can apply structured labels instead of inventing raw strings
+- Add a real knowledge-label data model and UI flow before attempting labels in the Knowledge Base; the current knowledge surface only supports upload/list/delete documents with no label relation yet
 - Evaluate optional metadata later if needed, such as color, ordering, or archival state

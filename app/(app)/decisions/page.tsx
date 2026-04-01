@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { getRequestConfig } from "@/i18n/request";
 import { listDecisions } from "@/lib/decisions/list.logic";
+import { listLabels } from "@/lib/labels/list.logic";
 import { DecisionsView } from "@/components/decisions";
 import type { Metadata } from "next";
 import { getMessage } from "@/lib/i18n";
@@ -30,7 +31,10 @@ export default async function DecisionsPage() {
 
   const { messages } = await getRequestConfig();
 
-  const rawDecisions = await listDecisions(session.user.id);
+  const [rawDecisions, labels] = await Promise.all([
+    listDecisions(session.user.id),
+    listLabels(session.user.id),
+  ]);
 
   const decisions = rawDecisions.map((d) => ({
     ...d,
@@ -41,7 +45,11 @@ export default async function DecisionsPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col px-6 py-8 sm:px-8 lg:px-10">
-      <DecisionsView messages={messages} initialDecisions={decisions} />
+      <DecisionsView
+        messages={messages}
+        initialDecisions={decisions}
+        availableLabels={labels}
+      />
     </div>
   );
 }

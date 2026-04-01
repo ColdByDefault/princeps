@@ -12,12 +12,13 @@ import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog, useNotice } from "@/components/shared";
 import { getMessage } from "@/lib/i18n";
 import { TaskForm } from "./TaskForm";
-import type { TaskRecord } from "@/types/api";
+import type { LabelOptionRecord, TaskRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface TaskListProps {
   messages: MessageDictionary;
   tasks: TaskRecord[];
+  availableLabels?: LabelOptionRecord[];
   onTasksChange: (tasks: TaskRecord[]) => void;
 }
 
@@ -32,7 +33,12 @@ function priorityVariant(
 
 const STATUS_ORDER = ["open", "in_progress", "done", "cancelled"];
 
-export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
+export function TaskList({
+  messages,
+  tasks,
+  availableLabels = [],
+  onTasksChange,
+}: TaskListProps) {
   const { addNotice } = useNotice();
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<TaskRecord | null>(null);
@@ -129,6 +135,19 @@ export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
                   {task.notes}
                 </p>
               )}
+              {task.labels.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {task.labels.map((label) => (
+                    <Badge
+                      key={label.id}
+                      variant="secondary"
+                      className="text-xs"
+                    >
+                      {label.name}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex shrink-0 gap-1">
               <Button
@@ -199,6 +218,7 @@ export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
         messages={messages}
         open={formOpen}
         initial={editTarget}
+        availableLabels={availableLabels}
         onClose={() => setFormOpen(false)}
         onSaved={(task) => {
           onTasksChange(
