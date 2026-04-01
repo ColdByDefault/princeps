@@ -77,10 +77,14 @@ export default function ThemeToggle({
             variant="outline"
             size="sm"
             aria-label={groupLabel}
-            className="cursor-pointer rounded-full border-border/70 bg-background/70 px-3 backdrop-blur-sm"
+            className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+            title={getMessage(
+              messages,
+              activeOption.labelKey,
+              activeOption.fallback,
+            )}
           >
             <ActiveIcon className="size-3.5" />
-            {getMessage(messages, activeOption.labelKey, activeOption.fallback)}
           </Button>
         }
       />

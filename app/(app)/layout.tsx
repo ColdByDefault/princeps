@@ -12,6 +12,7 @@ import {
   NoticeProvider,
   FloatingNotices,
   LanguageHydrator,
+  GlobalSearch,
 } from "@/components/shared";
 import { NotificationsProvider } from "@/components/notifications";
 import { Toaster } from "@/components/ui/sonner";
@@ -89,6 +90,7 @@ export default async function AppLayout({
         </div>
         <FloatingNotices />
         <Toaster />
+        <GlobalSearch messages={messages} />
         <LanguageHydrator language={language} />
         <ChatWidgetProvider
           authenticated={!!session}

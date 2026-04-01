@@ -1,7 +1,7 @@
 ## UI
 
 - [ ] Model selector dropdown in Assistant Settings — choose provider (Ollama/Groq) and model at runtime without server restart (ties into feat/core-8-llm-providers)
-- [ ] Global search overlay (⌘K) — query contacts, meetings, tasks, decisions, and knowledge chunks in a single shot
+- [x] Global search overlay (⌘K) — query contacts, meetings, tasks, decisions, and knowledge chunks in a single shot
 - [x] Show tier-aware quota badges in chat sidebar and knowledge page (history limit, daily count, doc count)
 - [x] Billing/upgrade surface — even a minimal "Current plan: Free · Upgrade" banner so tiers are visible to users
 - [x] New Users greetings should be delayed until after onboarding completion, not immediately on sign-up.
@@ -10,7 +10,7 @@
 
 - [ ] Social login — GitHub OAuth and Google OAuth for low-friction onboarding (already listed under Providers)
 - [ ] In-app error feedback when a Google token is revoked (invalid_grant) — currently the Integration row silently breaks
-- [ ] Rate-limit / tier-limit errors should surface a user-friendly toast with the specific limit hit, not a generic 429
+- [x] Rate-limit / tier-limit errors should surface a user-friendly toast with the specific limit hit, not a generic 429
 - [ ] OAuth callback result toast — show green/red toast after Google OAuth connect flow; settings page currently shows no feedback after the redirect (see docs/12_phase-8-hardening.md B1)
 - [ ] IntegrationsTab loading skeleton — show pulse skeleton while integration status loads on first render; tab currently flashes empty (see docs/12_phase-8-hardening.md B2)
 - [ ] Sync count toast — show event counts ("12 synced, 3 skipped") in the post-sync success toast instead of a generic message (see docs/12_phase-8-hardening.md B3)
@@ -27,9 +27,13 @@
 - [ ] Meeting follow-up end-time — compute effective end as scheduledAt + durationMin before filtering; currently uses start time as proxy so long meetings trigger follow-up too early (see docs/12_phase-8-hardening.md C2)
 - [ ] Zod schemas for settings and admin routes — lib/settings/schemas.ts and lib/admin/schemas.ts; safeParse in PATCH /api/settings and PATCH /api/admin/users/[id] (see docs/12_phase-8-hardening.md E2)
 
+## Refactoring & Tech Debt
+
+- [ ] Navbar seperation: Navbar & HamburgerMenu components.
+
 ## Features
 
-- [ ] Labels (phase 9) — user-defined reusable labels managed from App Settings first, then linked into meetings, contacts, tasks, decisions, and other records
+- [x] Labels (phase 9) — user-defined reusable labels managed from App Settings first, then linked into meetings, contacts, tasks, decisions, and other records
 - [ ] AI PDF & DOCX knowledge upload — libraries (pdf-parse, mammoth) are installed but only .txt/.md are wired into the ingest pipeline
 - [ ] Meeting transcription / audio upload — upload a recording, get summary + action items written to the meeting record
 - [ ] Email notification delivery — daily digest email as fallback to in-app inbox (cron already generates the content)

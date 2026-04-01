@@ -22,6 +22,7 @@ import {
   LogOut,
   Menu,
   MessageSquare,
+  Search,
   Settings,
   SlidersHorizontal,
   X,
@@ -104,7 +105,13 @@ type NavLink = {
 };
 
 const HIDDEN_NAVBAR_PATHS = new Set(["/", "/login", "/sign-up"]);
-const GROUP_HREFS = new Set(["/contacts", "/meetings", "/tasks", "/decisions"]);
+const GROUP_HREFS = new Set([
+  "/contacts",
+  "/meetings",
+  "/tasks",
+  "/decisions",
+  "/knowledge",
+]);
 const SETTINGS_HREFS = new Set([
   "/settings/app",
   "/settings/assistant",
@@ -122,6 +129,11 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/knowledge",
       icon: FileText,
       label: getMessage(messages, "shell.nav.knowledge", "Knowledge Base"),
+    },
+    {
+      href: "/chat",
+      icon: MessageSquare,
+      label: getMessage(messages, "shell.nav.chat", "Chat"),
     },
     {
       href: "/contacts",
@@ -142,11 +154,6 @@ function getNavLinks(messages: MessageDictionary): NavLink[] {
       href: "/decisions",
       icon: GitFork,
       label: getMessage(messages, "shell.nav.decisions", "Decisions"),
-    },
-    {
-      href: "/chat",
-      icon: MessageSquare,
-      label: getMessage(messages, "shell.nav.chat", "Chat"),
     },
     {
       href: "/settings/app",
@@ -219,10 +226,10 @@ export function LanguageToggle({ messages }: { messages: MessageDictionary }) {
               "shell.language.groupLabel",
               "Language selector",
             )}
-            className="cursor-pointer rounded-full border-border/70 bg-background/70 px-3 backdrop-blur-sm"
+            className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+            title={currentLanguageLabel}
           >
             <Globe className="size-3.5" />
-            {currentLanguageLabel}
           </Button>
         }
       />
@@ -475,64 +482,107 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
             </nav>
 
             <div className="ml-auto hidden items-center gap-2 min-[1000px]:flex">
-              <NotificationPanel messages={messages} />
-              <LanguageToggle messages={messages} />
-              <ThemeToggle messages={messages} />
-              <div className="flex items-center gap-1.5 rounded-full border border-border/70 bg-background/70 px-3 py-1.5 backdrop-blur-sm">
-                <span className="max-w-27.5 truncate text-xs text-muted-foreground">
-                  {userLabel}
-                </span>
-                {sessionUser.tier && (
-                  <PlanBadge tier={sessionUser.tier} messages={messages} />
-                )}
-              </div>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 aria-label={getMessage(
                   messages,
-                  "shell.nav.signOut",
-                  "Sign out",
+                  "shell.search.trigger",
+                  "Search workspace",
                 )}
-                className="cursor-pointer rounded-full border-border/70 bg-background/70 px-3 backdrop-blur-sm"
+                title={getMessage(
+                  messages,
+                  "shell.search.trigger",
+                  "Search workspace",
+                )}
+                className="cursor-pointer justify-start rounded-full border-border/70 bg-background/70 px-3 min-w-32 min-[1150px]:min-w-52 min-[1280px]:min-w-64 backdrop-blur-sm"
+                onClick={() =>
+                  window.dispatchEvent(new Event("global-search:open"))
+                }
+              >
+                <Search className="size-3.5" />
+                <span className="text-muted-foreground">
+                  {getMessage(messages, "shell.search.triggerLabel", "Search…")}
+                </span>
+                <kbd className="pointer-events-none ml-auto hidden select-none rounded border border-border/70 bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground sm:inline-flex">
+                  ⌘K
+                </kbd>
+              </Button>
+              <NotificationPanel messages={messages} />
+              <LanguageToggle messages={messages} />
+              <ThemeToggle messages={messages} />
+              {sessionUser.tier && (
+                <div className="flex items-center rounded-full px-2.5 py-1.5 backdrop-blur-sm">
+                  <PlanBadge tier={sessionUser.tier} messages={messages} />
+                </div>
+              )}
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                aria-label={getMessage(
+                  messages,
+                  isSigningOut ? "shell.nav.signingOut" : "shell.nav.signOut",
+                  isSigningOut ? "Signing out..." : "Sign out",
+                )}
+                title={getMessage(
+                  messages,
+                  isSigningOut ? "shell.nav.signingOut" : "shell.nav.signOut",
+                  isSigningOut ? "Signing out..." : "Sign out",
+                )}
+                className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm"
                 disabled={isSigningOut}
                 onClick={handleSignOut}
               >
                 <LogOut className="size-3.5" />
-                {isSigningOut
-                  ? getMessage(
-                      messages,
-                      "shell.nav.signingOut",
-                      "Signing out...",
-                    )
-                  : getMessage(messages, "shell.nav.signOut", "Sign out")}
               </Button>
             </div>
 
-            <Button
-              type="button"
-              variant="outline"
-              size="icon-sm"
-              aria-label={getMessage(
-                messages,
-                isMenuOpen ? "shell.nav.closeMenu" : "shell.nav.openMenu",
-                isMenuOpen ? "Close menu" : "Open menu",
-              )}
-              title={getMessage(
-                messages,
-                isMenuOpen ? "shell.nav.closeMenu" : "shell.nav.openMenu",
-                isMenuOpen ? "Close menu" : "Open menu",
-              )}
-              className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm min-[1000px]:hidden"
-              onClick={() => setIsMenuOpen((current) => !current)}
-            >
-              {isMenuOpen ? (
-                <X className="size-4" />
-              ) : (
-                <Menu className="size-4" />
-              )}
-            </Button>
+            <div className="ml-auto flex items-center gap-2 min-[1000px]:hidden">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                aria-label={getMessage(
+                  messages,
+                  "shell.search.trigger",
+                  "Search workspace",
+                )}
+                className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+                onClick={() =>
+                  window.dispatchEvent(new Event("global-search:open"))
+                }
+              >
+                <Search className="size-3.5" />
+                <kbd className="pointer-events-none select-none rounded border border-border/70 bg-muted px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
+                  ⌘K
+                </kbd>
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                aria-label={getMessage(
+                  messages,
+                  isMenuOpen ? "shell.nav.closeMenu" : "shell.nav.openMenu",
+                  isMenuOpen ? "Close menu" : "Open menu",
+                )}
+                title={getMessage(
+                  messages,
+                  isMenuOpen ? "shell.nav.closeMenu" : "shell.nav.openMenu",
+                  isMenuOpen ? "Close menu" : "Open menu",
+                )}
+                className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm"
+                onClick={() => setIsMenuOpen((current) => !current)}
+              >
+                {isMenuOpen ? (
+                  <X className="size-4" />
+                ) : (
+                  <Menu className="size-4" />
+                )}
+              </Button>
+            </div>
           </div>
 
           {isMenuOpen ? (
