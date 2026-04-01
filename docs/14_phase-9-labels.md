@@ -69,6 +69,12 @@ model Label {
 
 - Defined Phase 9 as a reusable-label system rather than ad hoc per-feature tags
 - Locked the first-pass scope to user-owned labels plus App Settings CRUD only
+- Added a `Label` Prisma model with `userId`, `name`, `normalizedName`, timestamps, and a unique constraint on `(userId, normalizedName)`
+- Added `lib/labels/` CRUD logic plus normalization helpers and Zod request schemas
+- Added settings-scoped API routes at `app/api/settings/labels` and `app/api/settings/labels/[id]`
+- Added a Labels card to App Settings with create, inline rename, and delete flows
+- Added English and German message keys for the labels settings surface
+- Validated the first pass with `npm run db:generate`, `npm run lint`, `npm run typecheck`, and `npm run build`
 
 ## Later
 

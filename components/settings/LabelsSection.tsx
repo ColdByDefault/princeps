@@ -54,7 +54,8 @@ export function LabelsSection({ initialLabels, messages }: Props) {
         | { error?: string };
 
       if (!res.ok || !("label" in data)) {
-        throw new Error(data.error || "Failed to create label.");
+        const errorMessage = "error" in data ? data.error : undefined;
+        throw new Error(errorMessage || "Failed to create label.");
       }
 
       setLabels((current) => sortLabels([...current, data.label]));
@@ -104,7 +105,8 @@ export function LabelsSection({ initialLabels, messages }: Props) {
         | { error?: string };
 
       if (!res.ok || !("label" in data)) {
-        throw new Error(data.error || "Failed to update label.");
+        const errorMessage = "error" in data ? data.error : undefined;
+        throw new Error(errorMessage || "Failed to update label.");
       }
 
       setLabels((current) =>
