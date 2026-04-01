@@ -141,17 +141,32 @@ export async function POST(req: Request, { params }: Params) {
           send({ type: "thinking" });
         }
 
-        if (firstResult.toolCalls.length > 0) {
-          // ── Phase 2: execute tool calls ──────────────────────────────────────
-          const toolResultMessages: OllamaMessage[] = [];
-          const collectedActions: ActionResult[] = [];
+        // ── Phase 2: agentic tool loop ────────────────────────────────────────
+        // Keep executing tool calls (and re-calling the LLM with tools) until
+        // the model stops requesting tools, then stream the final reply once.
+        // This allows multi-step sequences like: create_label → create_contact
+        // → create_meeting → … without the model stopping after the first tool.
+        let currentResult = firstResult;
+        let currentMessages: OllamaMessage[] = [...ollamaMessages];
+        const collectedActions: ActionResult[] = [];
+        const MAX_TOOL_ROUNDS = 10;
+        let toolRounds = 0;
+
+        while (
+          currentResult.toolCalls.length > 0 &&
+          toolRounds < MAX_TOOL_ROUNDS
+        ) {
+          toolRounds++;
+
           const assistantWithTools: OllamaMessage = {
             role: "assistant",
-            content: firstResult.content,
-            tool_calls: firstResult.toolCalls,
+            content: currentResult.content,
+            tool_calls: currentResult.toolCalls,
           };
 
-          for (const toolCall of firstResult.toolCalls) {
+          const toolResultMessages: OllamaMessage[] = [];
+
+          for (const toolCall of currentResult.toolCalls) {
             const { action, summary } = await executeToolCall(
               session.user.id,
               toolCall,
@@ -169,114 +184,92 @@ export async function POST(req: Request, { params }: Params) {
             toolResultMessages.push({ role: "tool", content: summary });
           }
 
-          // Fire-and-forget: generate report + notification for this batch
-          if (collectedActions.length > 0) {
-            void generateAndPushReport({
-              userId: session.user.id,
-              userName: session.user.name ?? null,
-              locale: preferences.language ?? "en",
-              actions: collectedActions,
-            });
-          }
-
-          // ── Phase 3: stream the follow-up reply ───────────────────────────
-          const followUpMessages: OllamaMessage[] = [
-            ...ollamaMessages,
+          currentMessages = [
+            ...currentMessages,
             assistantWithTools,
             ...toolResultMessages,
           ];
 
-          let followUpResponse: Response;
-          try {
-            followUpResponse = await streamChat(
-              followUpMessages,
-              false, // no think in follow-up
-              preferences.ollamaOptions,
-            );
-          } catch {
-            send({ type: "done" });
-            controller.close();
-            return;
-          }
-
-          const followUpBody = followUpResponse.body;
-          if (followUpBody) {
-            const reader = followUpBody.getReader();
-            const decoder = new TextDecoder();
-            let buffer = "";
-            try {
-              while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split("\n");
-                buffer = lines.pop() ?? "";
-                for (const line of lines) {
-                  if (!line.trim()) continue;
-                  let chunk: OllamaStreamChunk;
-                  try {
-                    chunk = JSON.parse(line) as OllamaStreamChunk;
-                  } catch {
-                    continue;
-                  }
-                  if (chunk.message?.content) {
-                    send({ type: "token", text: chunk.message.content });
-                    assistantContent += chunk.message.content;
-                  }
-                  if (chunk.done) break;
-                }
-              }
-            } finally {
-              reader.releaseLock();
-            }
-          }
-        } else {
-          // ── No tool calls: stream a second call with think so the user ──────
-          // gets real-time output and optional extended reasoning.
-          const streamResponse = await streamChat(
-            ollamaMessages,
-            think,
+          // Re-call the LLM with the updated context to check for more tools
+          currentResult = await callChat(
+            currentMessages,
             preferences.ollamaOptions,
+            CHAT_TOOLS,
           );
+        }
 
-          const streamBody = streamResponse.body;
-          if (streamBody) {
-            const reader = streamBody.getReader();
-            const decoder = new TextDecoder();
-            let buffer = "";
-            let sentThinkingEvent = false;
-            try {
-              while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split("\n");
-                buffer = lines.pop() ?? "";
-                for (const line of lines) {
-                  if (!line.trim()) continue;
-                  let chunk: OllamaStreamChunk;
-                  try {
-                    chunk = JSON.parse(line) as OllamaStreamChunk;
-                  } catch {
-                    continue;
-                  }
-                  if (chunk.message?.thinking) {
-                    if (!sentThinkingEvent) {
-                      send({ type: "thinking" });
-                      sentThinkingEvent = true;
-                    }
-                    thinkingContent += chunk.message.thinking;
-                  }
-                  if (chunk.message?.content) {
-                    send({ type: "token", text: chunk.message.content });
-                    assistantContent += chunk.message.content;
-                  }
-                  if (chunk.done) break;
+        // Fire-and-forget: generate report + notification for all collected actions
+        if (collectedActions.length > 0) {
+          void generateAndPushReport({
+            userId: session.user.id,
+            userName: session.user.name ?? null,
+            locale: preferences.language ?? "en",
+            actions: collectedActions,
+          });
+        }
+
+        const hadToolCalls = toolRounds > 0;
+
+        // ── Phase 3: stream the final reply ──────────────────────────────────
+        // If tools were used, stream from the full tool-result context.
+        // If no tools were used at all, stream from the original messages so
+        // the user still gets real-time output with optional extended reasoning.
+        let finalStreamResponse: Response;
+        try {
+          finalStreamResponse = hadToolCalls
+            ? await streamChat(
+                currentMessages,
+                false,
+                preferences.ollamaOptions,
+              )
+            : await streamChat(
+                ollamaMessages,
+                think,
+                preferences.ollamaOptions,
+              );
+        } catch {
+          send({ type: "done" });
+          controller.close();
+          return;
+        }
+
+        const finalBody = finalStreamResponse.body;
+        if (finalBody) {
+          const reader = finalBody.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+          let sentThinkingEvent = false;
+          try {
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              buffer += decoder.decode(value, { stream: true });
+              const lines = buffer.split("\n");
+              buffer = lines.pop() ?? "";
+              for (const line of lines) {
+                if (!line.trim()) continue;
+                let chunk: OllamaStreamChunk;
+                try {
+                  chunk = JSON.parse(line) as OllamaStreamChunk;
+                } catch {
+                  continue;
                 }
+                if (chunk.message?.thinking) {
+                  if (!sentThinkingEvent) {
+                    send({ type: "thinking" });
+                    sentThinkingEvent = true;
+                  }
+                  thinkingContent += chunk.message.thinking;
+                }
+                if (chunk.message?.content) {
+                  send({ type: "token", text: chunk.message.content });
+                  assistantContent += chunk.message.content;
+                }
+                if (chunk.done) break;
               }
-            } finally {
-              reader.releaseLock();
             }
+          } finally {
+            reader.releaseLock();
           }
         }
       } catch (err) {
