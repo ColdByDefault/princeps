@@ -7,12 +7,9 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { logInteraction } from "@/lib/contacts/log-interaction";
-import {
-  assertOwnedLabelIds,
-  labelOptionSelect,
-  toLabelOptionRecord,
-} from "@/lib/labels/shared.logic";
+import { assertOwnedLabelIds } from "@/lib/labels/shared.logic";
 import type { MeetingRecord } from "./list.logic";
+import { meetingInclude, toMeetingRecord } from "./shared.logic";
 
 export interface UpdateMeetingInput {
   title?: string;
@@ -68,14 +65,7 @@ export async function updateMeeting(
         },
       }),
     },
-    include: {
-      participants: {
-        include: { contact: { select: { id: true, name: true } } },
-      },
-      labelLinks: {
-        include: { label: { select: labelOptionSelect } },
-      },
-    },
+    include: meetingInclude,
   });
 
   if (participantContactIds && participantContactIds.length > 0) {
@@ -84,24 +74,5 @@ export async function updateMeeting(
     }
   }
 
-  return {
-    id: row.id,
-    title: row.title,
-    scheduledAt: row.scheduledAt,
-    durationMin: row.durationMin,
-    location: row.location,
-    agenda: row.agenda,
-    summary: row.summary,
-    prepPack: row.prepPack,
-    status: row.status,
-    googleEventId: row.googleEventId ?? null,
-    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-    participants: row.participants.map((p) => ({
-      id: p.id,
-      contactId: p.contactId,
-      contactName: p.contact.name,
-    })),
-  };
+  return toMeetingRecord(row);
 }

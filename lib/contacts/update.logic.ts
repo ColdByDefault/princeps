@@ -20,7 +20,6 @@ export interface UpdateContactInput {
   email?: string | null;
   phone?: string | null;
   notes?: string | null;
-  tags?: string[];
   labelIds?: string[];
   lastContact?: Date | null;
 }
@@ -69,7 +68,6 @@ export async function updateContact(
 
   return {
     ...row,
-    tags: (row.tags as string[]) ?? [],
     labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
   };
 }

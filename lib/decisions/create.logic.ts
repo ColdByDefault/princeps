@@ -6,12 +6,9 @@
 import "server-only";
 
 import { db } from "@/lib/db";
-import {
-  assertOwnedLabelIds,
-  labelOptionSelect,
-  toLabelOptionRecord,
-} from "@/lib/labels/shared.logic";
+import { assertOwnedLabelIds } from "@/lib/labels/shared.logic";
 import type { DecisionRecord } from "./list.logic";
+import { decisionInclude, toDecisionRecord } from "./shared.logic";
 
 export interface CreateDecisionInput {
   title: string;
@@ -49,23 +46,8 @@ export async function createDecision(
           }
         : {}),
     },
-    include: {
-      labelLinks: {
-        include: { label: { select: labelOptionSelect } },
-      },
-    },
+    include: decisionInclude,
   });
 
-  return {
-    id: row.id,
-    title: row.title,
-    rationale: row.rationale,
-    outcome: row.outcome,
-    status: row.status,
-    decidedAt: row.decidedAt,
-    meetingId: row.meetingId,
-    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-  };
+  return toDecisionRecord(row);
 }

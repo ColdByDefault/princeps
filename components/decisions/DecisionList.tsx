@@ -207,7 +207,13 @@ export function DecisionList({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-sm">
-          {decisions.length} {decisions.length === 1 ? "decision" : "decisions"}
+          {decisions.length === 1
+            ? getMessage(messages, "decisions.count.one", "1 decision")
+            : getMessage(
+                messages,
+                "decisions.count.many",
+                `${decisions.length} decisions`,
+              ).replace("{count}", String(decisions.length))}
         </span>
         <Button size="sm" onClick={openCreate}>
           <CirclePlus className="mr-2 h-4 w-4" />

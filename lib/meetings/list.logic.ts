@@ -7,10 +7,7 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import type { LabelOptionRecord } from "@/types/api";
-import {
-  labelOptionSelect,
-  toLabelOptionRecord,
-} from "@/lib/labels/shared.logic";
+import { meetingInclude, toMeetingRecord } from "./shared.logic";
 
 export interface MeetingParticipantRecord {
   id: string;
@@ -42,34 +39,8 @@ export async function listMeetings(userId: string): Promise<MeetingRecord[]> {
   const rows = await db.meeting.findMany({
     where: { userId },
     orderBy: { scheduledAt: "desc" },
-    include: {
-      participants: {
-        include: { contact: { select: { id: true, name: true } } },
-      },
-      labelLinks: {
-        include: { label: { select: labelOptionSelect } },
-      },
-    },
+    include: meetingInclude,
   });
 
-  return rows.map((r) => ({
-    id: r.id,
-    title: r.title,
-    scheduledAt: r.scheduledAt,
-    durationMin: r.durationMin,
-    location: r.location,
-    agenda: r.agenda,
-    summary: r.summary,
-    prepPack: r.prepPack,
-    status: r.status,
-    googleEventId: r.googleEventId,
-    labels: r.labelLinks.map((link) => toLabelOptionRecord(link.label)),
-    createdAt: r.createdAt,
-    updatedAt: r.updatedAt,
-    participants: r.participants.map((p) => ({
-      id: p.id,
-      contactId: p.contactId,
-      contactName: p.contact.name,
-    })),
-  }));
+  return rows.map(toMeetingRecord);
 }

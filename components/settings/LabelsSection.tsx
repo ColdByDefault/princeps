@@ -427,7 +427,7 @@ export function LabelsSection({ initialLabels, messages }: Props) {
           description={getMessage(
             messages,
             "labels.deleteConfirmBody",
-            "This removes the label from your label library. Feature links come later in the next pass.",
+            "This label will be removed from your library and detached from all linked records.",
           )}
           confirmLabel={getMessage(
             messages,

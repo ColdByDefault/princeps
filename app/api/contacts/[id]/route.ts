@@ -48,7 +48,6 @@ export async function PATCH(
       ...(d.email !== undefined && { email: d.email ?? null }),
       ...(d.phone !== undefined && { phone: d.phone ?? null }),
       ...(d.notes !== undefined && { notes: d.notes ?? null }),
-      ...(d.tags !== undefined && { tags: d.tags }),
       ...(d.labelIds !== undefined && { labelIds: d.labelIds }),
       ...(d.lastContact !== undefined && {
         lastContact: d.lastContact ? new Date(d.lastContact) : null,

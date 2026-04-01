@@ -111,7 +111,13 @@ export function ContactList({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-sm">
-          {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
+          {contacts.length === 1
+            ? getMessage(messages, "contacts.count.one", "1 contact")
+            : getMessage(
+                messages,
+                "contacts.count.many",
+                `${contacts.length} contacts`,
+              ).replace("{count}", String(contacts.length))}
         </span>
         <Button size="sm" onClick={openCreate}>
           <UserPlus className="mr-2 h-4 w-4" />

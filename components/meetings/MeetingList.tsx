@@ -405,7 +405,7 @@ export function MeetingList({
                 messages,
                 "meetings.count.many",
                 `${meetings.length} meetings`,
-              ).replace("{n}", String(meetings.length))}
+              ).replace("{count}", String(meetings.length))}
         </span>
         <Button size="sm" onClick={openCreate}>
           <CalendarPlus className="mr-2 h-4 w-4" />

@@ -54,7 +54,6 @@ export async function POST(req: Request) {
       email: d.email ?? null,
       phone: d.phone ?? null,
       notes: d.notes ?? null,
-      tags: d.tags ?? [],
       labelIds: d.labelIds ?? [],
       lastContact: d.lastContact ? new Date(d.lastContact) : null,
     });

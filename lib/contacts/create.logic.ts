@@ -20,7 +20,6 @@ export interface CreateContactInput {
   email?: string | null;
   phone?: string | null;
   notes?: string | null;
-  tags?: string[];
   labelIds?: string[];
   lastContact?: Date | null;
 }
@@ -43,7 +42,6 @@ export async function createContact(
       email: input.email ?? null,
       phone: input.phone ?? null,
       notes: input.notes ?? null,
-      tags: input.tags ?? [],
       lastContact: input.lastContact ?? null,
       ...(labelIds.length > 0
         ? {
@@ -62,7 +60,6 @@ export async function createContact(
 
   return {
     ...row,
-    tags: (row.tags as string[]) ?? [],
     labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
   };
 }

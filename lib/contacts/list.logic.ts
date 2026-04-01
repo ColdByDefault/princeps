@@ -20,7 +20,6 @@ export interface ContactRecord {
   email: string | null;
   phone: string | null;
   notes: string | null;
-  tags: string[];
   labels: LabelOptionRecord[];
   lastContact: Date | null;
   createdAt: Date;
@@ -43,7 +42,6 @@ export async function listContacts(userId: string): Promise<ContactRecord[]> {
 
   return rows.map((r) => ({
     ...r,
-    tags: (r.tags as string[]) ?? [],
     labels: r.labelLinks.map((link) => toLabelOptionRecord(link.label)),
   }));
 }

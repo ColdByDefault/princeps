@@ -128,7 +128,7 @@ export function TaskList({
                   task.status,
                 )}
                 {task.dueDate &&
-                  ` · due ${new Date(task.dueDate).toLocaleDateString()}`}
+                  ` · ${getMessage(messages, "tasks.due", "due")} ${new Date(task.dueDate).toLocaleDateString()}`}
               </p>
               {task.notes && (
                 <p className="text-muted-foreground text-xs line-clamp-1">
@@ -155,18 +155,26 @@ export function TaskList({
                 size="icon"
                 className="h-7 w-7 cursor-pointer text-muted-foreground hover:text-foreground"
                 onClick={() => openEdit(task)}
+                aria-label={getMessage(
+                  messages,
+                  "tasks.editLabel",
+                  "Edit task",
+                )}
               >
                 <Pencil className="h-3.5 w-3.5" />
-                <span className="sr-only">Edit</span>
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 cursor-pointer text-destructive hover:text-destructive"
                 onClick={() => setDeleteTarget(task.id)}
+                aria-label={getMessage(
+                  messages,
+                  "tasks.deleteTaskLabel",
+                  "Delete task",
+                )}
               >
                 <Trash2 className="h-3.5 w-3.5" />
-                <span className="sr-only">Delete</span>
               </Button>
             </div>
           </li>
@@ -179,7 +187,13 @@ export function TaskList({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-sm">
-          {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+          {tasks.length === 1
+            ? getMessage(messages, "tasks.count.one", "1 task")
+            : getMessage(
+                messages,
+                "tasks.count.many",
+                `${tasks.length} tasks`,
+              ).replace("{count}", String(tasks.length))}
         </span>
         <Button size="sm" onClick={openCreate}>
           <CirclePlus className="mr-2 h-4 w-4" />
@@ -206,7 +220,7 @@ export function TaskList({
           {finished.length > 0 && (
             <div className="space-y-2">
               <h2 className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
-                Finished
+                {getMessage(messages, "tasks.finished", "Finished")}
               </h2>
               {renderList(finished)}
             </div>

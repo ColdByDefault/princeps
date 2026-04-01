@@ -18,6 +18,11 @@ import {
 } from "@/lib/share/types";
 import { db } from "@/lib/db";
 
+function toLabelNames(raw: unknown): string[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  return raw.filter((v): v is string => typeof v === "string");
+}
+
 import {
   type OllamaToolDefinition,
   type OllamaToolCallEntry as OllamaToolCall,
@@ -293,11 +298,7 @@ export async function executeToolCall(
 
     const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
       userId,
-      Array.isArray(a.labelNames)
-        ? (a.labelNames as unknown[]).filter(
-            (labelName): labelName is string => typeof labelName === "string",
-          )
-        : undefined,
+      toLabelNames(a.labelNames),
     );
 
     const record = await createContact(userId, {
@@ -405,11 +406,7 @@ export async function executeToolCall(
 
     const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
       userId,
-      Array.isArray(a.labelNames)
-        ? (a.labelNames as unknown[]).filter(
-            (labelName): labelName is string => typeof labelName === "string",
-          )
-        : undefined,
+      toLabelNames(a.labelNames),
     );
 
     const record = await createMeeting(userId, {
@@ -495,11 +492,7 @@ export async function executeToolCall(
 
     const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
       userId,
-      Array.isArray(a.labelNames)
-        ? (a.labelNames as unknown[]).filter(
-            (labelName): labelName is string => typeof labelName === "string",
-          )
-        : undefined,
+      toLabelNames(a.labelNames),
     );
 
     const record = await createTask(userId, {
@@ -575,11 +568,7 @@ export async function executeToolCall(
 
     const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
       userId,
-      Array.isArray(a.labelNames)
-        ? (a.labelNames as unknown[]).filter(
-            (labelName): labelName is string => typeof labelName === "string",
-          )
-        : undefined,
+      toLabelNames(a.labelNames),
     );
 
     const record = await createDecision(userId, {

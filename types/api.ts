@@ -49,7 +49,6 @@ export interface ContactRecord {
   email: string | null;
   phone: string | null;
   notes: string | null;
-  tags: string[];
   labels: LabelOptionRecord[];
   lastContact: string | null; // ISO string on the client
   createdAt: string; // ISO string on the client

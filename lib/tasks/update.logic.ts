@@ -6,12 +6,9 @@
 import "server-only";
 
 import { db } from "@/lib/db";
-import {
-  assertOwnedLabelIds,
-  labelOptionSelect,
-  toLabelOptionRecord,
-} from "@/lib/labels/shared.logic";
+import { assertOwnedLabelIds } from "@/lib/labels/shared.logic";
 import type { TaskRecord } from "./list.logic";
+import { taskInclude, toTaskRecord } from "./shared.logic";
 
 export interface UpdateTaskInput {
   title?: string;
@@ -49,23 +46,8 @@ export async function updateTask(
         },
       }),
     },
-    include: {
-      labelLinks: {
-        include: { label: { select: labelOptionSelect } },
-      },
-    },
+    include: taskInclude,
   });
 
-  return {
-    id: row.id,
-    title: row.title,
-    notes: row.notes,
-    status: row.status,
-    priority: row.priority,
-    dueDate: row.dueDate,
-    meetingId: row.meetingId,
-    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-  };
+  return toTaskRecord(row);
 }
