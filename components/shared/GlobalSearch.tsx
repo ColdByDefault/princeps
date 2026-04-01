@@ -16,6 +16,7 @@ import {
   Search,
 } from "lucide-react";
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -155,58 +156,60 @@ export function GlobalSearch({ messages }: Props) {
       title={getMessage(messages, "shell.search.title", "Search workspace")}
       description={placeholder}
     >
-      <CommandInput
-        placeholder={placeholder}
-        value={query}
-        onValueChange={setQuery}
-      />
-      <CommandList>
-        {!loading && query.length >= 2 && results.length === 0 && (
-          <CommandEmpty>{noResults}</CommandEmpty>
+      <Command shouldFilter={false}>
+        <CommandInput
+          placeholder={placeholder}
+          value={query}
+          onValueChange={setQuery}
+        />
+        <CommandList>
+          {!loading && query.length >= 2 && results.length === 0 && (
+            <CommandEmpty>{noResults}</CommandEmpty>
+          )}
+          {TYPE_ORDER.filter((t) => (grouped.get(t)?.length ?? 0) > 0).map(
+            (type, idx, arr) => {
+              const items = grouped.get(type)!;
+              const Icon = TYPE_ICON[type];
+              return (
+                <span key={type}>
+                  <CommandGroup heading={groupLabels[type]}>
+                    {items.map((result) => (
+                      <CommandItem
+                        key={result.id}
+                        value={`${result.type}-${result.id}-${result.title}`}
+                        onSelect={() => handleSelect(result)}
+                        className="cursor-pointer"
+                        aria-label={result.title}
+                      >
+                        <Icon className="shrink-0 text-muted-foreground" />
+                        <span className="flex-1 truncate">{result.title}</span>
+                        {result.subtitle && (
+                          <span className="ml-auto shrink-0 text-xs text-muted-foreground">
+                            {result.subtitle}
+                          </span>
+                        )}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                  {idx < arr.length - 1 && <CommandSeparator />}
+                </span>
+              );
+            },
+          )}
+        </CommandList>
+        {query.length < 2 && (
+          <div className="flex items-center gap-1.5 border-t border-border/50 px-3 py-2 text-xs text-muted-foreground">
+            <Search className="size-3 shrink-0" />
+            <span>
+              {getMessage(
+                messages,
+                "shell.search.hint",
+                "Type at least 2 characters to search",
+              )}
+            </span>
+          </div>
         )}
-        {TYPE_ORDER.filter((t) => (grouped.get(t)?.length ?? 0) > 0).map(
-          (type, idx, arr) => {
-            const items = grouped.get(type)!;
-            const Icon = TYPE_ICON[type];
-            return (
-              <span key={type}>
-                <CommandGroup heading={groupLabels[type]}>
-                  {items.map((result) => (
-                    <CommandItem
-                      key={result.id}
-                      value={`${result.type}-${result.id}-${result.title}`}
-                      onSelect={() => handleSelect(result)}
-                      className="cursor-pointer"
-                      aria-label={result.title}
-                    >
-                      <Icon className="shrink-0 text-muted-foreground" />
-                      <span className="flex-1 truncate">{result.title}</span>
-                      {result.subtitle && (
-                        <span className="ml-auto shrink-0 text-xs text-muted-foreground">
-                          {result.subtitle}
-                        </span>
-                      )}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-                {idx < arr.length - 1 && <CommandSeparator />}
-              </span>
-            );
-          },
-        )}
-      </CommandList>
-      {query.length < 2 && (
-        <div className="flex items-center gap-1.5 border-t border-border/50 px-3 py-2 text-xs text-muted-foreground">
-          <Search className="size-3 shrink-0" />
-          <span>
-            {getMessage(
-              messages,
-              "shell.search.hint",
-              "Type at least 2 characters to search",
-            )}
-          </span>
-        </div>
-      )}
+      </Command>
     </CommandDialog>
   );
 }
