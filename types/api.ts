@@ -26,6 +26,7 @@ export interface KnowledgeDocumentRecord {
   id: string;
   name: string;
   charCount: number;
+  labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client
 }
 

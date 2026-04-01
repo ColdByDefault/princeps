@@ -367,6 +367,12 @@
   "knowledge.documents.deleteError": "Could not delete document.",
   "knowledge.documents.chars": "chars",
   "knowledge.documents.quotaLabel": "Documents stored",
+  "knowledge.documents.field.labels": "Labels",
+  "knowledge.documents.editLabels": "Edit document labels",
+  "knowledge.documents.editLabelsTitle": "Document labels",
+  "knowledge.documents.saveLabels": "Save labels",
+  "knowledge.documents.labelsSaved": "Document labels updated.",
+  "knowledge.documents.labelsSaveError": "Failed to update document labels.",
 
   "knowledge.personalInfo.save": "Save",
   "knowledge.personalInfo.saving": "Saving\u2026",

@@ -11,6 +11,7 @@ import { getPlanLimits } from "@/types/billing";
 import { getRequestConfig } from "@/i18n/request";
 import { listKnowledgeDocuments } from "@/lib/knowledge/list.logic";
 import { getPersonalInfo } from "@/lib/knowledge/personal-info.logic";
+import { listLabels } from "@/lib/labels/list.logic";
 import { KnowledgeTabs } from "@/components/knowledge";
 import type { Metadata } from "next";
 import { getMessage } from "@/lib/i18n";
@@ -33,13 +34,14 @@ export default async function KnowledgePage() {
 
   const { messages } = await getRequestConfig();
 
-  const [rawDocuments, personalInfoFields, dbUser] = await Promise.all([
+  const [rawDocuments, personalInfoFields, dbUser, labels] = await Promise.all([
     listKnowledgeDocuments(session.user.id),
     getPersonalInfo(session.user.id),
     db.user.findUnique({
       where: { id: session.user.id },
       select: { tier: true },
     }),
+    listLabels(session.user.id),
   ]);
 
   const docLimit = getPlanLimits(dbUser?.tier ?? "free").knowledgeDocs;
@@ -57,6 +59,7 @@ export default async function KnowledgePage() {
         initialDocuments={documents}
         initialPersonalInfo={personalInfoFields ?? {}}
         docLimit={docLimit}
+        availableLabels={labels}
       />
     </div>
   );

@@ -366,6 +366,12 @@
   "knowledge.documents.deleteError": "Dokument konnte nicht gel\u00f6scht werden.",
   "knowledge.documents.chars": "Zeichen",
   "knowledge.documents.quotaLabel": "Gespeicherte Dokumente",
+  "knowledge.documents.field.labels": "Labels",
+  "knowledge.documents.editLabels": "Dokument-Labels bearbeiten",
+  "knowledge.documents.editLabelsTitle": "Dokument-Labels",
+  "knowledge.documents.saveLabels": "Labels speichern",
+  "knowledge.documents.labelsSaved": "Dokument-Labels aktualisiert.",
+  "knowledge.documents.labelsSaveError": "Dokument-Labels konnten nicht aktualisiert werden.",
 
   "knowledge.personalInfo.save": "Speichern",
   "knowledge.personalInfo.saving": "Wird gespeichert\u2026",

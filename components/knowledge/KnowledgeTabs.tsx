@@ -10,7 +10,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getMessage } from "@/lib/i18n";
 import { DocumentList } from "./DocumentList";
 import { PersonalInfoForm } from "./PersonalInfoForm";
-import type { KnowledgeDocumentRecord, PersonalInfoFields } from "@/types/api";
+import type {
+  KnowledgeDocumentRecord,
+  LabelOptionRecord,
+  PersonalInfoFields,
+} from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface KnowledgeTabsProps {
@@ -18,6 +22,7 @@ interface KnowledgeTabsProps {
   initialDocuments: KnowledgeDocumentRecord[];
   initialPersonalInfo: PersonalInfoFields;
   docLimit: number;
+  availableLabels?: LabelOptionRecord[];
 }
 
 export function KnowledgeTabs({
@@ -25,6 +30,7 @@ export function KnowledgeTabs({
   initialDocuments,
   initialPersonalInfo,
   docLimit,
+  availableLabels = [],
 }: KnowledgeTabsProps) {
   const [documents, setDocuments] =
     useState<KnowledgeDocumentRecord[]>(initialDocuments);
@@ -55,6 +61,7 @@ export function KnowledgeTabs({
             documents={documents}
             onDocumentsChange={setDocuments}
             docLimit={docLimit}
+            availableLabels={availableLabels}
           />
         </TabsContent>
 

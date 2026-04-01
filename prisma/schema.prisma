@@ -157,8 +157,9 @@ model KnowledgeDocument {
   charCount Int // total chars contributed to quota
   createdAt DateTime @default(now())
 
-  user   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  chunks KnowledgeChunk[]
+  user       User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chunks     KnowledgeChunk[]
+  labelLinks LabelOnKnowledgeDocument[]
 
   @@index([userId])
   @@map("knowledge_document")
@@ -382,11 +383,12 @@ model Label {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
   contacts  LabelOnContact[]
   meetings  LabelOnMeeting[]
   tasks     LabelOnTask[]
   decisions LabelOnDecision[]
+  knowledge LabelOnKnowledgeDocument[]
 
   @@unique([userId, normalizedName])
   @@index([userId])
@@ -435,4 +437,15 @@ model LabelOnDecision {
 
   @@id([labelId, decisionId])
   @@map("label_on_decision")
+}
+
+model LabelOnKnowledgeDocument {
+  labelId    String
+  documentId String
+
+  label    Label             @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  document KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@id([labelId, documentId])
+  @@map("label_on_knowledge_document")
 }
