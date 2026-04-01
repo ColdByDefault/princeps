@@ -5,6 +5,7 @@
 
 export { AssistantSettingsForm } from "./AssistantSettingsForm";
 export { AppSettingsForm } from "./AppSettingsForm";
+export { LabelsSection } from "./LabelsSection";
 export { ShareLinkPanel } from "./ShareLinkPanel";
 export { ScheduledNotificationsSection } from "./ScheduledNotificationsSection";
 export { IntegrationsTab } from "./IntegrationsTab";

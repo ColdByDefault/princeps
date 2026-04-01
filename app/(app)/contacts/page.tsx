@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { getRequestConfig } from "@/i18n/request";
 import { listContacts } from "@/lib/contacts/list.logic";
+import { listLabels } from "@/lib/labels/list.logic";
 import { ContactsView } from "./ContactsView";
 import type { Metadata } from "next";
 import { getMessage } from "@/lib/i18n";
@@ -31,6 +32,7 @@ export default async function ContactsPage() {
   const { messages } = await getRequestConfig();
 
   const rawContacts = await listContacts(session.user.id);
+  const labels = await listLabels(session.user.id);
 
   const contacts = rawContacts.map((c) => ({
     ...c,
@@ -41,7 +43,11 @@ export default async function ContactsPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col px-6 py-8 sm:px-8 lg:px-10">
-      <ContactsView messages={messages} initialContacts={contacts} />
+      <ContactsView
+        messages={messages}
+        initialContacts={contacts}
+        availableLabels={labels}
+      />
     </div>
   );
 }

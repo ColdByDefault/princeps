@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { listTasks } from "@/lib/tasks/list.logic";
 import { createTask } from "@/lib/tasks/create.logic";
+import { InvalidLabelSelectionError } from "@/lib/labels/shared.logic";
 import { TaskCreateSchema } from "@/lib/tasks/schemas";
 import { zodErrorMessage } from "@/lib/utils";
 
@@ -45,14 +46,23 @@ export async function POST(req: Request) {
   }
 
   const d = parsed.data;
-  const task = await createTask(session.user.id, {
-    title: d.title.trim(),
-    notes: d.notes?.trim() || null,
-    ...(d.status !== undefined && { status: d.status }),
-    ...(d.priority !== undefined && { priority: d.priority }),
-    dueDate: d.dueDate ? new Date(d.dueDate) : null,
-    meetingId: d.meetingId ?? null,
-  });
+  try {
+    const task = await createTask(session.user.id, {
+      title: d.title.trim(),
+      notes: d.notes?.trim() || null,
+      ...(d.status !== undefined && { status: d.status }),
+      ...(d.priority !== undefined && { priority: d.priority }),
+      dueDate: d.dueDate ? new Date(d.dueDate) : null,
+      meetingId: d.meetingId ?? null,
+      labelIds: d.labelIds ?? [],
+    });
 
-  return NextResponse.json({ task }, { status: 201 });
+    return NextResponse.json({ task }, { status: 201 });
+  } catch (error) {
+    if (error instanceof InvalidLabelSelectionError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    throw error;
+  }
 }

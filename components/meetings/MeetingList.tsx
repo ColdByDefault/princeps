@@ -20,13 +20,18 @@ import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog, useNotice } from "@/components/shared";
 import { getMessage } from "@/lib/i18n";
 import { MeetingForm } from "./MeetingForm";
-import type { ContactRecord, MeetingRecord } from "@/types/api";
+import type {
+  ContactRecord,
+  LabelOptionRecord,
+  MeetingRecord,
+} from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface MeetingListProps {
   messages: MessageDictionary;
   meetings: MeetingRecord[];
   contacts: ContactRecord[];
+  availableLabels?: LabelOptionRecord[];
   onMeetingsChange: (meetings: MeetingRecord[]) => void;
 }
 
@@ -49,6 +54,7 @@ export function MeetingList({
   messages,
   meetings,
   contacts,
+  availableLabels = [],
   onMeetingsChange,
 }: MeetingListProps) {
   const { addNotice } = useNotice();
@@ -194,6 +200,19 @@ export function MeetingList({
                         .map((p) => p.contactName)
                         .join(", ")}
                     </p>
+                  )}
+                  {meeting.labels.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {meeting.labels.map((label) => (
+                        <Badge
+                          key={label.id}
+                          variant="secondary"
+                          className="text-xs"
+                        >
+                          {label.name}
+                        </Badge>
+                      ))}
+                    </div>
                   )}
                 </div>
                 <div className="flex shrink-0 gap-1 items-center">
@@ -386,7 +405,7 @@ export function MeetingList({
                 messages,
                 "meetings.count.many",
                 `${meetings.length} meetings`,
-              ).replace("{n}", String(meetings.length))}
+              ).replace("{count}", String(meetings.length))}
         </span>
         <Button size="sm" onClick={openCreate}>
           <CalendarPlus className="mr-2 h-4 w-4" />
@@ -433,6 +452,7 @@ export function MeetingList({
         open={formOpen}
         initial={editTarget}
         contacts={contacts}
+        availableLabels={availableLabels}
         onClose={() => setFormOpen(false)}
         onSaved={(meeting) => {
           onMeetingsChange(

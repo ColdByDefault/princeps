@@ -8,19 +8,25 @@
 import { useState } from "react";
 import { MeetingList } from "@/components/meetings";
 import { getMessage } from "@/lib/i18n";
-import type { ContactRecord, MeetingRecord } from "@/types/api";
+import type {
+  ContactRecord,
+  LabelOptionRecord,
+  MeetingRecord,
+} from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface MeetingsViewProps {
   messages: MessageDictionary;
   initialMeetings: MeetingRecord[];
   contacts: ContactRecord[];
+  availableLabels?: LabelOptionRecord[];
 }
 
 export function MeetingsView({
   messages,
   initialMeetings,
   contacts,
+  availableLabels = [],
 }: MeetingsViewProps) {
   const [meetings, setMeetings] = useState<MeetingRecord[]>(initialMeetings);
 
@@ -33,6 +39,7 @@ export function MeetingsView({
         messages={messages}
         meetings={meetings}
         contacts={contacts}
+        availableLabels={availableLabels}
         onMeetingsChange={setMeetings}
       />
     </div>

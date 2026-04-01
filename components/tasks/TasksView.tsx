@@ -8,15 +8,20 @@
 import { useState } from "react";
 import { TaskList } from "@/components/tasks";
 import { getMessage } from "@/lib/i18n";
-import type { TaskRecord } from "@/types/api";
+import type { LabelOptionRecord, TaskRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface TasksViewProps {
   messages: MessageDictionary;
   initialTasks: TaskRecord[];
+  availableLabels?: LabelOptionRecord[];
 }
 
-export function TasksView({ messages, initialTasks }: TasksViewProps) {
+export function TasksView({
+  messages,
+  initialTasks,
+  availableLabels = [],
+}: TasksViewProps) {
   const [tasks, setTasks] = useState<TaskRecord[]>(initialTasks);
 
   return (
@@ -24,7 +29,12 @@ export function TasksView({ messages, initialTasks }: TasksViewProps) {
       <h1 className="text-2xl font-semibold tracking-tight">
         {getMessage(messages, "tasks.metadata.title", "Tasks")}
       </h1>
-      <TaskList messages={messages} tasks={tasks} onTasksChange={setTasks} />
+      <TaskList
+        messages={messages}
+        tasks={tasks}
+        availableLabels={availableLabels}
+        onTasksChange={setTasks}
+      />
     </div>
   );
 }

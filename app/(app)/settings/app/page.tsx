@@ -9,13 +9,15 @@ import { SlidersHorizontal } from "lucide-react";
 import { getRequestConfig } from "@/i18n/request";
 import { auth } from "@/lib/auth";
 import { getMessage } from "@/lib/i18n";
+import { listLabels } from "@/lib/labels/list.logic";
 import { getUserPreferences } from "@/lib/settings/get.logic";
 import { getActiveShareToken } from "@/lib/share/get.logic";
 import {
   AppSettingsForm,
-  ShareLinkPanel,
-  ScheduledNotificationsSection,
   IntegrationsTab,
+  LabelsSection,
+  ScheduledNotificationsSection,
+  ShareLinkPanel,
 } from "@/components/settings";
 import type { Metadata } from "next";
 
@@ -44,6 +46,7 @@ export default async function AppSettingsPage({
 
   const { messages, language } = await getRequestConfig();
   const preferences = await getUserPreferences(session.user.id);
+  const labels = await listLabels(session.user.id);
   const activeToken = await getActiveShareToken(session.user.id);
   const sp = await searchParams;
   const oauthSuccess =
@@ -76,6 +79,10 @@ export default async function AppSettingsPage({
           resolvedLanguage={language}
           messages={messages}
         />
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-border/70 bg-card/70 p-6 shadow-sm backdrop-blur">
+        <LabelsSection initialLabels={labels} messages={messages} />
       </div>
 
       <div className="mt-6 rounded-2xl border border-border/70 bg-card/70 p-6 shadow-sm backdrop-blur">

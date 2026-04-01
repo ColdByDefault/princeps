@@ -6,6 +6,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { LabelPicker } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,13 +19,14 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { getMessage } from "@/lib/i18n";
-import type { ContactRecord } from "@/types/api";
+import type { ContactRecord, LabelOptionRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface ContactFormProps {
   messages: MessageDictionary;
   open: boolean;
   initial: ContactRecord | null;
+  availableLabels?: LabelOptionRecord[];
   onClose: () => void;
   onSaved: (contact: ContactRecord) => void;
 }
@@ -33,6 +35,7 @@ export function ContactForm({
   messages,
   open,
   initial,
+  availableLabels = [],
   onClose,
   onSaved,
 }: ContactFormProps) {
@@ -42,7 +45,7 @@ export function ContactForm({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
-  const [tags, setTags] = useState("");
+  const [labelIds, setLabelIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,7 +57,7 @@ export function ContactForm({
       setEmail(initial?.email ?? "");
       setPhone(initial?.phone ?? "");
       setNotes(initial?.notes ?? "");
-      setTags(initial?.tags.join(", ") ?? "");
+      setLabelIds(initial?.labels.map((label) => label.id) ?? []);
       setError(null);
     }
   }, [open, initial]);
@@ -71,10 +74,7 @@ export function ContactForm({
       email: email.trim() || null,
       phone: phone.trim() || null,
       notes: notes.trim() || null,
-      tags: tags
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean),
+      labelIds,
     };
 
     try {
@@ -208,21 +208,14 @@ export function ContactForm({
             </div>
           </div>
 
-          <div className="grid gap-1.5">
-            <Label htmlFor="contact-tags">
-              {getMessage(messages, "contacts.field.tags", "Tags")}
-            </Label>
-            <Input
-              id="contact-tags"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              placeholder={getMessage(
-                messages,
-                "contacts.field.tags.placeholder",
-                "investor, advisor, client",
-              )}
-            />
-          </div>
+          <LabelPicker
+            messages={messages}
+            inputId="contact-labels"
+            fieldLabel={getMessage(messages, "contacts.field.labels", "Labels")}
+            availableLabels={availableLabels}
+            selectedLabelIds={labelIds}
+            onChange={setLabelIds}
+          />
 
           <div className="grid gap-1.5">
             <Label htmlFor="contact-notes">

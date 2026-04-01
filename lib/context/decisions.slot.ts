@@ -16,7 +16,13 @@ export const decisionsSlot: ContextSlot = {
     const [open, closed] = await Promise.all([
       db.decision.findMany({
         where: { userId, status: "open" },
-        select: { title: true, rationale: true, status: true, createdAt: true },
+        select: {
+          title: true,
+          rationale: true,
+          status: true,
+          createdAt: true,
+          labelLinks: { select: { label: { select: { name: true } } } },
+        },
         orderBy: { createdAt: "desc" },
       }),
       db.decision.findMany({
@@ -26,6 +32,7 @@ export const decisionsSlot: ContextSlot = {
           outcome: true,
           status: true,
           decidedAt: true,
+          labelLinks: { select: { label: { select: { name: true } } } },
         },
         orderBy: { decidedAt: "desc" },
         take: 5,
@@ -40,6 +47,8 @@ export const decisionsSlot: ContextSlot = {
       lines.push("Open decisions:");
       for (const d of open) {
         const parts = [`- [open] ${d.title}`];
+        const labels = d.labelLinks.map((link) => link.label.name).join(", ");
+        if (labels) parts.push(`[labels: ${labels}]`);
         if (d.rationale) parts.push(`(${d.rationale})`);
         lines.push(parts.join(" "));
       }
@@ -52,6 +61,8 @@ export const decisionsSlot: ContextSlot = {
           ? d.decidedAt.toISOString().slice(0, 10)
           : "unknown date";
         const parts = [`- [${d.status}] ${d.title}`];
+        const labels = d.labelLinks.map((link) => link.label.name).join(", ");
+        if (labels) parts.push(`[labels: ${labels}]`);
         if (d.outcome) parts.push(`→ ${d.outcome}`);
         parts.push(`(${date})`);
         lines.push(parts.join(" "));

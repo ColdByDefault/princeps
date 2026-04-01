@@ -7,7 +7,9 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { logInteraction } from "@/lib/contacts/log-interaction";
+import { assertOwnedLabelIds } from "@/lib/labels/shared.logic";
 import type { MeetingRecord } from "./list.logic";
+import { meetingInclude, toMeetingRecord } from "./shared.logic";
 
 export interface UpdateMeetingInput {
   title?: string;
@@ -19,6 +21,7 @@ export interface UpdateMeetingInput {
   status?: string;
   /** Replaces the full participant list when provided. */
   participantContactIds?: string[];
+  labelIds?: string[];
 }
 
 /**
@@ -38,7 +41,12 @@ export async function updateMeeting(
 
   if (!existing || existing.userId !== userId) return null;
 
-  const { participantContactIds, ...fields } = input;
+  const labelIds =
+    input.labelIds !== undefined
+      ? await assertOwnedLabelIds(userId, input.labelIds)
+      : undefined;
+
+  const { participantContactIds, labelIds: _labelIds, ...fields } = input;
 
   const row = await db.meeting.update({
     where: { id: meetingId },
@@ -50,12 +58,14 @@ export async function updateMeeting(
           create: participantContactIds.map((contactId) => ({ contactId })),
         },
       }),
+      ...(labelIds !== undefined && {
+        labelLinks: {
+          deleteMany: {},
+          create: labelIds.map((labelId) => ({ labelId })),
+        },
+      }),
     },
-    include: {
-      participants: {
-        include: { contact: { select: { id: true, name: true } } },
-      },
-    },
+    include: meetingInclude,
   });
 
   if (participantContactIds && participantContactIds.length > 0) {
@@ -64,23 +74,5 @@ export async function updateMeeting(
     }
   }
 
-  return {
-    id: row.id,
-    title: row.title,
-    scheduledAt: row.scheduledAt,
-    durationMin: row.durationMin,
-    location: row.location,
-    agenda: row.agenda,
-    summary: row.summary,
-    prepPack: row.prepPack,
-    status: row.status,
-    googleEventId: row.googleEventId ?? null,
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-    participants: row.participants.map((p) => ({
-      id: p.id,
-      contactId: p.contactId,
-      contactName: p.contact.name,
-    })),
-  };
+  return toMeetingRecord(row);
 }

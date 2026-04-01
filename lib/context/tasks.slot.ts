@@ -18,6 +18,9 @@ export const tasksSlot: ContextSlot = {
       where: { userId, status: { in: ["open", "in_progress"] } },
       orderBy: [{ dueDate: "asc" }, { createdAt: "desc" }],
       take: 20, // fetch extra, then re-sort + cap
+      include: {
+        labelLinks: { include: { label: { select: { name: true } } } },
+      },
     });
 
     const sorted = rows
@@ -35,6 +38,8 @@ export const tasksSlot: ContextSlot = {
       const parts = [`- [${t.priority}] ${t.title}`];
       if (t.status === "in_progress") parts.push("(in progress)");
       if (t.dueDate) parts.push(`due ${t.dueDate.toISOString().slice(0, 10)}`);
+      const labels = t.labelLinks.map((link) => link.label.name).join(", ");
+      if (labels) parts.push(`labels: ${labels}`);
       return parts.join(" ");
     });
 

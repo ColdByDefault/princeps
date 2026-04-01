@@ -21,6 +21,7 @@ export const meetingsSlot: ContextSlot = {
         take: 3,
         include: {
           participants: { include: { contact: { select: { name: true } } } },
+          labelLinks: { include: { label: { select: { name: true } } } },
         },
       }),
       db.meeting.findMany({
@@ -29,6 +30,7 @@ export const meetingsSlot: ContextSlot = {
         take: 2,
         include: {
           participants: { include: { contact: { select: { name: true } } } },
+          labelLinks: { include: { label: { select: { name: true } } } },
         },
       }),
     ]);
@@ -42,8 +44,10 @@ export const meetingsSlot: ContextSlot = {
       for (const m of upcoming) {
         const date = m.scheduledAt.toISOString().slice(0, 16).replace("T", " ");
         const names = m.participants.map((p) => p.contact.name).join(", ");
+        const labels = m.labelLinks.map((link) => link.label.name).join(", ");
         const parts = [`- ${m.title} (${date})`];
         if (names) parts.push(`with ${names}`);
+        if (labels) parts.push(`labels: ${labels}`);
         if (m.agenda) parts.push(`agenda: ${m.agenda.slice(0, 100)}`);
         lines.push(parts.join(" · "));
       }
@@ -53,7 +57,9 @@ export const meetingsSlot: ContextSlot = {
       lines.push("Recent:");
       for (const m of recent) {
         const date = m.scheduledAt.toISOString().slice(0, 10);
+        const labels = m.labelLinks.map((link) => link.label.name).join(", ");
         const parts = [`- ${m.title} (${date})`];
+        if (labels) parts.push(`labels: ${labels}`);
         if (m.summary) parts.push(m.summary.slice(0, 150));
         lines.push(parts.join(": "));
       }

@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth";
 import { getRequestConfig } from "@/i18n/request";
 import { listMeetings } from "@/lib/meetings/list.logic";
 import { listContacts } from "@/lib/contacts/list.logic";
+import { listLabels } from "@/lib/labels/list.logic";
 import { MeetingsView } from "@/components/meetings";
 import type { Metadata } from "next";
 import { getMessage } from "@/lib/i18n";
@@ -31,9 +32,10 @@ export default async function MeetingsPage() {
 
   const { messages } = await getRequestConfig();
 
-  const [rawMeetings, rawContacts] = await Promise.all([
+  const [rawMeetings, rawContacts, labels] = await Promise.all([
     listMeetings(session.user.id),
     listContacts(session.user.id),
+    listLabels(session.user.id),
   ]);
 
   const meetings = rawMeetings.map((m) => ({
@@ -57,6 +59,7 @@ export default async function MeetingsPage() {
         messages={messages}
         initialMeetings={meetings}
         contacts={contacts}
+        availableLabels={labels}
       />
     </div>
   );

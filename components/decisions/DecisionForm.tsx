@@ -6,6 +6,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { LabelPicker } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,13 +26,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getMessage } from "@/lib/i18n";
-import type { DecisionRecord } from "@/types/api";
+import type { DecisionRecord, LabelOptionRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface DecisionFormProps {
   messages: MessageDictionary;
   open: boolean;
   initial: DecisionRecord | null;
+  availableLabels?: LabelOptionRecord[];
   onClose: () => void;
   onSaved: (decision: DecisionRecord) => void;
 }
@@ -45,6 +47,7 @@ export function DecisionForm({
   messages,
   open,
   initial,
+  availableLabels = [],
   onClose,
   onSaved,
 }: DecisionFormProps) {
@@ -53,6 +56,7 @@ export function DecisionForm({
   const [outcome, setOutcome] = useState("");
   const [status, setStatus] = useState("open");
   const [decidedAt, setDecidedAt] = useState("");
+  const [labelIds, setLabelIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,6 +67,7 @@ export function DecisionForm({
       setOutcome(initial?.outcome ?? "");
       setStatus(initial?.status ?? "open");
       setDecidedAt(toDateInputValue(initial?.decidedAt));
+      setLabelIds(initial?.labels.map((label) => label.id) ?? []);
       setError(null);
     }
   }, [open, initial]);
@@ -78,6 +83,7 @@ export function DecisionForm({
       outcome: outcome.trim() || null,
       status,
       decidedAt: decidedAt ? new Date(decidedAt).toISOString() : null,
+      labelIds,
     };
 
     const isEdit = !!initial;
@@ -195,17 +201,17 @@ export function DecisionForm({
                 if (v) setStatus(v);
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className="cursor-pointer">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="open">
+                <SelectItem value="open" className="cursor-pointer">
                   {getMessage(messages, "decisions.status.open", "Open")}
                 </SelectItem>
-                <SelectItem value="decided">
+                <SelectItem value="decided" className="cursor-pointer">
                   {getMessage(messages, "decisions.status.decided", "Decided")}
                 </SelectItem>
-                <SelectItem value="reversed">
+                <SelectItem value="reversed" className="cursor-pointer">
                   {getMessage(
                     messages,
                     "decisions.status.reversed",
@@ -229,14 +235,36 @@ export function DecisionForm({
             />
           </div>
 
+          <LabelPicker
+            messages={messages}
+            inputId="decision-labels"
+            fieldLabel={getMessage(
+              messages,
+              "decisions.field.labels",
+              "Labels",
+            )}
+            availableLabels={availableLabels}
+            selectedLabelIds={labelIds}
+            onChange={setLabelIds}
+          />
+
           {error && <p className="text-destructive text-sm">{error}</p>}
         </div>
 
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose} disabled={saving}>
+          <Button
+            variant="ghost"
+            className="cursor-pointer"
+            onClick={onClose}
+            disabled={saving}
+          >
             {getMessage(messages, "decisions.cancel", "Cancel")}
           </Button>
-          <Button onClick={handleSave} disabled={saving || !title.trim()}>
+          <Button
+            className="cursor-pointer"
+            onClick={handleSave}
+            disabled={saving || !title.trim()}
+          >
             {saving
               ? getMessage(messages, "decisions.saving", "Saving…")
               : getMessage(messages, "decisions.save", "Save")}

@@ -6,6 +6,8 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import type { LabelOptionRecord } from "@/types/api";
+import { taskInclude, toTaskRecord } from "./shared.logic";
 
 export interface TaskRecord {
   id: string;
@@ -15,6 +17,7 @@ export interface TaskRecord {
   priority: string; // low | normal | high | urgent
   dueDate: Date | null;
   meetingId: string | null;
+  labels: LabelOptionRecord[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -28,6 +31,7 @@ export async function listTasks(userId: string): Promise<TaskRecord[]> {
   const rows = await db.task.findMany({
     where: { userId },
     orderBy: [{ dueDate: "asc" }, { createdAt: "desc" }],
+    include: taskInclude,
   });
 
   return rows
@@ -36,15 +40,5 @@ export async function listTasks(userId: string): Promise<TaskRecord[]> {
       (a, b) =>
         priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority),
     )
-    .map((r) => ({
-      id: r.id,
-      title: r.title,
-      notes: r.notes,
-      status: r.status,
-      priority: r.priority,
-      dueDate: r.dueDate,
-      meetingId: r.meetingId,
-      createdAt: r.createdAt,
-      updatedAt: r.updatedAt,
-    }));
+    .map(toTaskRecord);
 }

@@ -8,17 +8,19 @@
 import { useState } from "react";
 import { DecisionList } from "@/components/decisions";
 import { getMessage } from "@/lib/i18n";
-import type { DecisionRecord } from "@/types/api";
+import type { DecisionRecord, LabelOptionRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface DecisionsViewProps {
   messages: MessageDictionary;
   initialDecisions: DecisionRecord[];
+  availableLabels?: LabelOptionRecord[];
 }
 
 export function DecisionsView({
   messages,
   initialDecisions,
+  availableLabels = [],
 }: DecisionsViewProps) {
   const [decisions, setDecisions] =
     useState<DecisionRecord[]>(initialDecisions);
@@ -40,6 +42,7 @@ export function DecisionsView({
       <DecisionList
         messages={messages}
         decisions={decisions}
+        availableLabels={availableLabels}
         onDecisionsChange={setDecisions}
       />
     </div>

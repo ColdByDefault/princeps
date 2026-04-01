@@ -69,6 +69,7 @@ export async function buildSystemPrompt(
     "",
     "Platform capabilities (strictly enforce — never suggest anything outside this list):",
     "- You can create and manage: contacts, meetings, tasks, decisions.",
+    "- Those records can use the user's existing structured labels. Reuse existing labels when helpful, and never invent new labels unless the user explicitly asks to create one elsewhere.",
     "- You can link existing contacts to meetings.",
     "- You can generate a share link for the user's own contact card.",
     "- There is NO email sending, calendar inviting, reminders, notifications, or messaging of any kind.",

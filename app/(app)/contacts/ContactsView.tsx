@@ -8,15 +8,20 @@
 import { useState } from "react";
 import { ContactList } from "@/components/contacts";
 import { getMessage } from "@/lib/i18n";
-import type { ContactRecord } from "@/types/api";
+import type { ContactRecord, LabelOptionRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface ContactsViewProps {
   messages: MessageDictionary;
   initialContacts: ContactRecord[];
+  availableLabels?: LabelOptionRecord[];
 }
 
-export function ContactsView({ messages, initialContacts }: ContactsViewProps) {
+export function ContactsView({
+  messages,
+  initialContacts,
+  availableLabels = [],
+}: ContactsViewProps) {
   const [contacts, setContacts] = useState<ContactRecord[]>(initialContacts);
 
   return (
@@ -27,6 +32,7 @@ export function ContactsView({ messages, initialContacts }: ContactsViewProps) {
       <ContactList
         messages={messages}
         contacts={contacts}
+        availableLabels={availableLabels}
         onContactsChange={setContacts}
       />
     </div>

@@ -30,7 +30,7 @@ type Props = {
 };
 
 export function AppSettingsForm({
-  initialPreferences,
+  initialPreferences: _initialPreferences,
   resolvedLanguage,
   messages,
 }: Props) {

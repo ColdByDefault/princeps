@@ -12,12 +12,13 @@ import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog, useNotice } from "@/components/shared";
 import { getMessage } from "@/lib/i18n";
 import { TaskForm } from "./TaskForm";
-import type { TaskRecord } from "@/types/api";
+import type { LabelOptionRecord, TaskRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface TaskListProps {
   messages: MessageDictionary;
   tasks: TaskRecord[];
+  availableLabels?: LabelOptionRecord[];
   onTasksChange: (tasks: TaskRecord[]) => void;
 }
 
@@ -32,7 +33,12 @@ function priorityVariant(
 
 const STATUS_ORDER = ["open", "in_progress", "done", "cancelled"];
 
-export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
+export function TaskList({
+  messages,
+  tasks,
+  availableLabels = [],
+  onTasksChange,
+}: TaskListProps) {
   const { addNotice } = useNotice();
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<TaskRecord | null>(null);
@@ -122,12 +128,25 @@ export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
                   task.status,
                 )}
                 {task.dueDate &&
-                  ` · due ${new Date(task.dueDate).toLocaleDateString()}`}
+                  ` · ${getMessage(messages, "tasks.due", "due")} ${new Date(task.dueDate).toLocaleDateString()}`}
               </p>
               {task.notes && (
                 <p className="text-muted-foreground text-xs line-clamp-1">
                   {task.notes}
                 </p>
+              )}
+              {task.labels.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {task.labels.map((label) => (
+                    <Badge
+                      key={label.id}
+                      variant="secondary"
+                      className="text-xs"
+                    >
+                      {label.name}
+                    </Badge>
+                  ))}
+                </div>
               )}
             </div>
             <div className="flex shrink-0 gap-1">
@@ -136,18 +155,26 @@ export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
                 size="icon"
                 className="h-7 w-7 cursor-pointer text-muted-foreground hover:text-foreground"
                 onClick={() => openEdit(task)}
+                aria-label={getMessage(
+                  messages,
+                  "tasks.editLabel",
+                  "Edit task",
+                )}
               >
                 <Pencil className="h-3.5 w-3.5" />
-                <span className="sr-only">Edit</span>
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7 cursor-pointer text-destructive hover:text-destructive"
                 onClick={() => setDeleteTarget(task.id)}
+                aria-label={getMessage(
+                  messages,
+                  "tasks.deleteTaskLabel",
+                  "Delete task",
+                )}
               >
                 <Trash2 className="h-3.5 w-3.5" />
-                <span className="sr-only">Delete</span>
               </Button>
             </div>
           </li>
@@ -160,7 +187,13 @@ export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-sm">
-          {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+          {tasks.length === 1
+            ? getMessage(messages, "tasks.count.one", "1 task")
+            : getMessage(
+                messages,
+                "tasks.count.many",
+                `${tasks.length} tasks`,
+              ).replace("{count}", String(tasks.length))}
         </span>
         <Button size="sm" onClick={openCreate}>
           <CirclePlus className="mr-2 h-4 w-4" />
@@ -187,7 +220,7 @@ export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
           {finished.length > 0 && (
             <div className="space-y-2">
               <h2 className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
-                Finished
+                {getMessage(messages, "tasks.finished", "Finished")}
               </h2>
               {renderList(finished)}
             </div>
@@ -199,6 +232,7 @@ export function TaskList({ messages, tasks, onTasksChange }: TaskListProps) {
         messages={messages}
         open={formOpen}
         initial={editTarget}
+        availableLabels={availableLabels}
         onClose={() => setFormOpen(false)}
         onSaved={(task) => {
           onTasksChange(

@@ -6,7 +6,9 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import { assertOwnedLabelIds } from "@/lib/labels/shared.logic";
 import type { DecisionRecord } from "./list.logic";
+import { decisionInclude, toDecisionRecord } from "./shared.logic";
 
 export interface UpdateDecisionInput {
   title?: string;
@@ -15,6 +17,7 @@ export interface UpdateDecisionInput {
   status?: string;
   decidedAt?: Date | null;
   meetingId?: string | null;
+  labelIds?: string[];
 }
 
 export async function updateDecision(
@@ -27,20 +30,26 @@ export async function updateDecision(
   });
   if (!existing) return null;
 
+  const labelIds =
+    input.labelIds !== undefined
+      ? await assertOwnedLabelIds(userId, input.labelIds)
+      : undefined;
+
+  const { labelIds: _labelIds, ...fields } = input;
+
   const row = await db.decision.update({
     where: { id: decisionId },
-    data: { ...input },
+    data: {
+      ...fields,
+      ...(labelIds !== undefined && {
+        labelLinks: {
+          deleteMany: {},
+          create: labelIds.map((labelId) => ({ labelId })),
+        },
+      }),
+    },
+    include: decisionInclude,
   });
 
-  return {
-    id: row.id,
-    title: row.title,
-    rationale: row.rationale,
-    outcome: row.outcome,
-    status: row.status,
-    decidedAt: row.decidedAt,
-    meetingId: row.meetingId,
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-  };
+  return toDecisionRecord(row);
 }

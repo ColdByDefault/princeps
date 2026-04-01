@@ -6,19 +6,10 @@
 import "server-only";
 
 import { db } from "@/lib/db";
-import type { Prisma } from "@/lib/generated/prisma/client";
 import { logInteraction } from "@/lib/contacts/log-interaction";
-import type { MeetingParticipantRecord, MeetingRecord } from "./list.logic";
-
-const meetingInclude = {
-  participants: {
-    include: { contact: { select: { id: true, name: true } } },
-  },
-} satisfies Prisma.MeetingInclude;
-
-type MeetingWithParticipants = Prisma.MeetingGetPayload<{
-  include: typeof meetingInclude;
-}>;
+import { assertOwnedLabelIds } from "@/lib/labels/shared.logic";
+import type { MeetingRecord } from "./list.logic";
+import { meetingInclude, toMeetingRecord } from "./shared.logic";
 
 export interface CreateMeetingInput {
   title: string;
@@ -27,6 +18,7 @@ export interface CreateMeetingInput {
   location?: string | null;
   agenda?: string | null;
   participantContactIds?: string[];
+  labelIds?: string[];
 }
 
 /**
@@ -39,6 +31,7 @@ export async function createMeeting(
 ): Promise<MeetingRecord> {
   const hasParticipants =
     input.participantContactIds && input.participantContactIds.length > 0;
+  const labelIds = await assertOwnedLabelIds(userId, input.labelIds);
 
   const row = await db.meeting.create({
     data: {
@@ -58,6 +51,13 @@ export async function createMeeting(
             },
           }
         : {}),
+      ...(labelIds.length > 0
+        ? {
+            labelLinks: {
+              create: labelIds.map((labelId) => ({ labelId })),
+            },
+          }
+        : {}),
     },
     include: meetingInclude,
   });
@@ -68,31 +68,5 @@ export async function createMeeting(
     }
   }
 
-  return toRecord(row);
-}
-
-function toRecord(row: MeetingWithParticipants): MeetingRecord {
-  return {
-    id: row.id,
-    title: row.title,
-    scheduledAt: row.scheduledAt,
-    durationMin: row.durationMin,
-    location: row.location,
-    agenda: row.agenda,
-    summary: row.summary,
-    prepPack: row.prepPack,
-    status: row.status,
-    googleEventId: row.googleEventId ?? null,
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-    participants: (
-      row.participants as MeetingWithParticipants["participants"]
-    ).map(
-      (p): MeetingParticipantRecord => ({
-        id: p.id,
-        contactId: p.contactId,
-        contactName: p.contact.name,
-      }),
-    ),
-  };
+  return toMeetingRecord(row);
 }

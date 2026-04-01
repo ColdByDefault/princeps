@@ -6,7 +6,9 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import { assertOwnedLabelIds } from "@/lib/labels/shared.logic";
 import type { DecisionRecord } from "./list.logic";
+import { decisionInclude, toDecisionRecord } from "./shared.logic";
 
 export interface CreateDecisionInput {
   title: string;
@@ -15,6 +17,7 @@ export interface CreateDecisionInput {
   status?: string;
   decidedAt?: Date | null;
   meetingId?: string | null;
+  labelIds?: string[];
 }
 
 /**
@@ -24,6 +27,8 @@ export async function createDecision(
   userId: string,
   input: CreateDecisionInput,
 ): Promise<DecisionRecord> {
+  const labelIds = await assertOwnedLabelIds(userId, input.labelIds);
+
   const row = await db.decision.create({
     data: {
       userId,
@@ -33,18 +38,16 @@ export async function createDecision(
       status: input.status ?? "open",
       decidedAt: input.decidedAt ?? null,
       meetingId: input.meetingId ?? null,
+      ...(labelIds.length > 0
+        ? {
+            labelLinks: {
+              create: labelIds.map((labelId) => ({ labelId })),
+            },
+          }
+        : {}),
     },
+    include: decisionInclude,
   });
 
-  return {
-    id: row.id,
-    title: row.title,
-    rationale: row.rationale,
-    outcome: row.outcome,
-    status: row.status,
-    decidedAt: row.decidedAt,
-    meetingId: row.meetingId,
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-  };
+  return toDecisionRecord(row);
 }

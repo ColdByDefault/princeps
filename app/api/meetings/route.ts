@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { listMeetings } from "@/lib/meetings/list.logic";
 import { createMeeting } from "@/lib/meetings/create.logic";
+import { InvalidLabelSelectionError } from "@/lib/labels/shared.logic";
 import { MeetingCreateSchema } from "@/lib/meetings/schemas";
 import { zodErrorMessage } from "@/lib/utils";
 
@@ -45,14 +46,23 @@ export async function POST(req: Request) {
   }
 
   const d = parsed.data;
-  const meeting = await createMeeting(session.user.id, {
-    title: d.title.trim(),
-    scheduledAt: new Date(d.scheduledAt),
-    durationMin: d.durationMin ?? null,
-    location: d.location ?? null,
-    agenda: d.agenda ?? null,
-    participantContactIds: d.participantContactIds ?? [],
-  });
+  try {
+    const meeting = await createMeeting(session.user.id, {
+      title: d.title.trim(),
+      scheduledAt: new Date(d.scheduledAt),
+      durationMin: d.durationMin ?? null,
+      location: d.location ?? null,
+      agenda: d.agenda ?? null,
+      participantContactIds: d.participantContactIds ?? [],
+      labelIds: d.labelIds ?? [],
+    });
 
-  return NextResponse.json({ meeting }, { status: 201 });
+    return NextResponse.json({ meeting }, { status: 201 });
+  } catch (error) {
+    if (error instanceof InvalidLabelSelectionError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    throw error;
+  }
 }

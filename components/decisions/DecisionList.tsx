@@ -12,12 +12,13 @@ import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog, useNotice } from "@/components/shared";
 import { getMessage } from "@/lib/i18n";
 import { DecisionForm } from "./DecisionForm";
-import type { DecisionRecord } from "@/types/api";
+import type { DecisionRecord, LabelOptionRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface DecisionListProps {
   messages: MessageDictionary;
   decisions: DecisionRecord[];
+  availableLabels?: LabelOptionRecord[];
   onDecisionsChange: (decisions: DecisionRecord[]) => void;
 }
 
@@ -32,6 +33,7 @@ function statusVariant(
 export function DecisionList({
   messages,
   decisions,
+  availableLabels = [],
   onDecisionsChange,
 }: DecisionListProps) {
   const { addNotice } = useNotice();
@@ -151,13 +153,31 @@ export function DecisionList({
                   {new Date(d.decidedAt).toLocaleDateString()}
                 </p>
               )}
+              {d.labels.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {d.labels.map((label) => (
+                    <Badge
+                      key={label.id}
+                      variant="secondary"
+                      className="text-xs"
+                    >
+                      {label.name}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex shrink-0 gap-1">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-7 w-7 cursor-pointer"
                 onClick={() => openEdit(d)}
+                aria-label={getMessage(
+                  messages,
+                  "decisions.editLabel",
+                  "Edit decision",
+                )}
               >
                 <Pencil className="h-3.5 w-3.5" />
                 <span className="sr-only">Edit</span>
@@ -165,8 +185,13 @@ export function DecisionList({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 text-destructive hover:text-destructive"
+                className="h-7 w-7 cursor-pointer text-destructive hover:text-destructive"
                 onClick={() => setDeleteTarget(d.id)}
+                aria-label={getMessage(
+                  messages,
+                  "decisions.deleteLabel",
+                  "Delete decision",
+                )}
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 <span className="sr-only">Delete</span>
@@ -182,7 +207,13 @@ export function DecisionList({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-sm">
-          {decisions.length} {decisions.length === 1 ? "decision" : "decisions"}
+          {decisions.length === 1
+            ? getMessage(messages, "decisions.count.one", "1 decision")
+            : getMessage(
+                messages,
+                "decisions.count.many",
+                `${decisions.length} decisions`,
+              ).replace("{count}", String(decisions.length))}
         </span>
         <Button size="sm" onClick={openCreate}>
           <CirclePlus className="mr-2 h-4 w-4" />
@@ -222,6 +253,7 @@ export function DecisionList({
         messages={messages}
         open={formOpen}
         initial={editTarget}
+        availableLabels={availableLabels}
         onClose={() => setFormOpen(false)}
         onSaved={handleSaved}
       />

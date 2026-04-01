@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth";
 import { listContacts } from "@/lib/contacts/list.logic";
 import { createContact } from "@/lib/contacts/create.logic";
 import { ContactCreateSchema } from "@/lib/contacts/schemas";
+import { InvalidLabelSelectionError } from "@/lib/labels/shared.logic";
 import { zodErrorMessage } from "@/lib/utils";
 
 // GET /api/contacts — list all contacts for the current user
@@ -45,16 +46,24 @@ export async function POST(req: Request) {
   }
 
   const d = parsed.data;
-  const contact = await createContact(session.user.id, {
-    name: d.name.trim(),
-    role: d.role ?? null,
-    company: d.company ?? null,
-    email: d.email ?? null,
-    phone: d.phone ?? null,
-    notes: d.notes ?? null,
-    tags: d.tags ?? [],
-    lastContact: d.lastContact ? new Date(d.lastContact) : null,
-  });
+  try {
+    const contact = await createContact(session.user.id, {
+      name: d.name.trim(),
+      role: d.role ?? null,
+      company: d.company ?? null,
+      email: d.email ?? null,
+      phone: d.phone ?? null,
+      notes: d.notes ?? null,
+      labelIds: d.labelIds ?? [],
+      lastContact: d.lastContact ? new Date(d.lastContact) : null,
+    });
 
-  return NextResponse.json({ contact }, { status: 201 });
+    return NextResponse.json({ contact }, { status: 201 });
+  } catch (error) {
+    if (error instanceof InvalidLabelSelectionError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    throw error;
+  }
 }

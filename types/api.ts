@@ -26,11 +26,19 @@ export interface KnowledgeDocumentRecord {
   id: string;
   name: string;
   charCount: number;
+  labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client
 }
 
 /** Client-safe shape of the PersonalInfo fields map. */
 export type PersonalInfoFields = Record<string, string | number | null>;
+
+/** Client-safe shape of a lightweight label reference. */
+export interface LabelOptionRecord {
+  id: string;
+  name: string;
+  color: string;
+}
 
 /** Client-safe shape of a Contact record. */
 export interface ContactRecord {
@@ -41,7 +49,7 @@ export interface ContactRecord {
   email: string | null;
   phone: string | null;
   notes: string | null;
-  tags: string[];
+  labels: LabelOptionRecord[];
   lastContact: string | null; // ISO string on the client
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
@@ -66,6 +74,7 @@ export interface MeetingRecord {
   prepPack: string | null;
   status: string; // "upcoming" | "done" | "cancelled"
   googleEventId: string | null;
+  labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
   participants: MeetingParticipantRecord[];
@@ -80,6 +89,7 @@ export interface TaskRecord {
   priority: string; // "low" | "normal" | "high" | "urgent"
   dueDate: string | null; // ISO string on the client
   meetingId: string | null;
+  labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }
@@ -93,6 +103,13 @@ export interface DecisionRecord {
   status: string; // "open" | "decided" | "reversed"
   decidedAt: string | null; // ISO string on the client
   meetingId: string | null;
+  labels: LabelOptionRecord[];
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}
+
+/** Client-safe shape of a Label record. */
+export interface LabelRecord extends LabelOptionRecord {
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }

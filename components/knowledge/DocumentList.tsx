@@ -6,14 +6,25 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { FileText, Trash2, Upload } from "lucide-react";
+import { FileText, Pencil, Trash2, Upload } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { NoticePanel } from "@/components/shared";
-import { ConfirmDialog } from "@/components/shared";
-import { useNotice } from "@/components/shared";
+import {
+  ConfirmDialog,
+  LabelPicker,
+  NoticePanel,
+  useNotice,
+} from "@/components/shared";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { getMessage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import type { KnowledgeDocumentRecord } from "@/types/api";
+import type { KnowledgeDocumentRecord, LabelOptionRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface DocumentListProps {
@@ -21,6 +32,7 @@ interface DocumentListProps {
   documents: KnowledgeDocumentRecord[];
   onDocumentsChange: (docs: KnowledgeDocumentRecord[]) => void;
   docLimit: number;
+  availableLabels?: LabelOptionRecord[];
 }
 
 export function DocumentList({
@@ -28,12 +40,23 @@ export function DocumentList({
   documents,
   onDocumentsChange,
   docLimit,
+  availableLabels = [],
 }: DocumentListProps) {
   const { addNotice, removeNotice } = useNotice();
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [editTarget, setEditTarget] = useState<KnowledgeDocumentRecord | null>(
+    null,
+  );
+  const [labelIds, setLabelIds] = useState<string[]>([]);
+  const [savingLabels, setSavingLabels] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function openLabelEditor(document: KnowledgeDocumentRecord) {
+    setEditTarget(document);
+    setLabelIds(document.labels.map((label) => label.id));
+  }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -155,6 +178,54 @@ export function DocumentList({
     }
   }
 
+  async function handleSaveLabels() {
+    if (!editTarget) return;
+
+    setSavingLabels(true);
+    try {
+      const res = await fetch(`/api/knowledge/documents/${editTarget.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ labelIds }),
+      });
+
+      if (!res.ok) {
+        const data = (await res.json()) as { error?: string };
+        throw new Error(data.error ?? "Failed to update document.");
+      }
+
+      const data = (await res.json()) as { document: KnowledgeDocumentRecord };
+      onDocumentsChange(
+        documents.map((document) =>
+          document.id === data.document.id ? data.document : document,
+        ),
+      );
+      addNotice({
+        type: "success",
+        title: getMessage(
+          messages,
+          "knowledge.documents.labelsSaved",
+          "Document labels updated.",
+        ),
+      });
+      setEditTarget(null);
+    } catch (error) {
+      addNotice({
+        type: "error",
+        title:
+          error instanceof Error
+            ? error.message
+            : getMessage(
+                messages,
+                "knowledge.documents.labelsSaveError",
+                "Failed to update document labels.",
+              ),
+      });
+    } finally {
+      setSavingLabels(false);
+    }
+  }
+
   const deleteDoc = documents.find((d) => d.id === deleteTarget);
 
   return (
@@ -248,25 +319,111 @@ export function DocumentList({
                     {doc.charCount.toLocaleString()}{" "}
                     {getMessage(messages, "knowledge.documents.chars", "chars")}
                   </p>
+                  {doc.labels.length > 0 && (
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {doc.labels.map((label) => (
+                        <Badge
+                          key={label.id}
+                          variant="secondary"
+                          className="text-xs"
+                        >
+                          {label.name}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="cursor-pointer shrink-0 text-muted-foreground hover:text-destructive"
-                onClick={() => setDeleteTarget(doc.id)}
-                aria-label={getMessage(
-                  messages,
-                  "knowledge.documents.deleteConfirm",
-                  "Delete",
-                )}
-              >
-                <Trash2 className="size-4" />
-              </Button>
+              <div className="flex shrink-0 items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="cursor-pointer text-muted-foreground hover:text-foreground"
+                  onClick={() => openLabelEditor(doc)}
+                  aria-label={getMessage(
+                    messages,
+                    "knowledge.documents.editLabels",
+                    "Edit document labels",
+                  )}
+                >
+                  <Pencil className="size-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="cursor-pointer text-muted-foreground hover:text-destructive"
+                  onClick={() => setDeleteTarget(doc.id)}
+                  aria-label={getMessage(
+                    messages,
+                    "knowledge.documents.deleteConfirm",
+                    "Delete",
+                  )}
+                >
+                  <Trash2 className="size-4" />
+                </Button>
+              </div>
             </li>
           ))}
         </ul>
       )}
+
+      <Dialog
+        open={editTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditTarget(null);
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {getMessage(
+                messages,
+                "knowledge.documents.editLabelsTitle",
+                "Document labels",
+              )}
+            </DialogTitle>
+          </DialogHeader>
+
+          <LabelPicker
+            messages={messages}
+            inputId="knowledge-document-labels"
+            fieldLabel={getMessage(
+              messages,
+              "knowledge.documents.field.labels",
+              "Labels",
+            )}
+            availableLabels={availableLabels}
+            selectedLabelIds={labelIds}
+            onChange={setLabelIds}
+          />
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() => setEditTarget(null)}
+              disabled={savingLabels}
+            >
+              {getMessage(messages, "shared.cancel", "Cancel")}
+            </Button>
+            <Button
+              className="cursor-pointer"
+              onClick={() => void handleSaveLabels()}
+              disabled={savingLabels || !editTarget}
+            >
+              {savingLabels
+                ? getMessage(messages, "shared.saving", "Saving…")
+                : getMessage(
+                    messages,
+                    "knowledge.documents.saveLabels",
+                    "Save labels",
+                  )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <ConfirmDialog
         open={!!deleteTarget}

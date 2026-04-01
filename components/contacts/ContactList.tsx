@@ -13,12 +13,13 @@ import {
   Trash2,
   UserPlus,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/shared";
 import { useNotice } from "@/components/shared";
 import { getMessage } from "@/lib/i18n";
 import { ContactForm } from "./ContactForm";
-import type { ContactRecord } from "@/types/api";
+import type { ContactRecord, LabelOptionRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface Interaction {
@@ -31,12 +32,14 @@ interface Interaction {
 interface ContactListProps {
   messages: MessageDictionary;
   contacts: ContactRecord[];
+  availableLabels?: LabelOptionRecord[];
   onContactsChange: (contacts: ContactRecord[]) => void;
 }
 
 export function ContactList({
   messages,
   contacts,
+  availableLabels = [],
   onContactsChange,
 }: ContactListProps) {
   const { addNotice } = useNotice();
@@ -108,7 +111,13 @@ export function ContactList({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-sm">
-          {contacts.length} {contacts.length === 1 ? "contact" : "contacts"}
+          {contacts.length === 1
+            ? getMessage(messages, "contacts.count.one", "1 contact")
+            : getMessage(
+                messages,
+                "contacts.count.many",
+                `${contacts.length} contacts`,
+              ).replace("{count}", String(contacts.length))}
         </span>
         <Button size="sm" onClick={openCreate}>
           <UserPlus className="mr-2 h-4 w-4" />
@@ -161,15 +170,12 @@ export function ContactList({
                           .join(" · ")}
                       </p>
                     )}
-                    {contact.tags.length > 0 && (
+                    {contact.labels.length > 0 && (
                       <div className="mt-1 flex flex-wrap gap-1">
-                        {contact.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="bg-muted rounded px-1.5 py-0.5 text-xs"
-                          >
-                            {tag}
-                          </span>
+                        {contact.labels.map((label) => (
+                          <Badge key={label.id} variant="secondary">
+                            {label.name}
+                          </Badge>
                         ))}
                       </div>
                     )}
@@ -262,6 +268,7 @@ export function ContactList({
         messages={messages}
         open={formOpen}
         initial={editTarget}
+        availableLabels={availableLabels}
         onClose={() => setFormOpen(false)}
         onSaved={(contact) => {
           if (editTarget) {

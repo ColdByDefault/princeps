@@ -6,6 +6,11 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import {
+  labelOptionSelect,
+  toLabelOptionRecord,
+  assertOwnedLabelIds,
+} from "@/lib/labels/shared.logic";
 import type { ContactRecord } from "./list.logic";
 
 export interface CreateContactInput {
@@ -15,7 +20,7 @@ export interface CreateContactInput {
   email?: string | null;
   phone?: string | null;
   notes?: string | null;
-  tags?: string[];
+  labelIds?: string[];
   lastContact?: Date | null;
 }
 
@@ -26,6 +31,8 @@ export async function createContact(
   userId: string,
   input: CreateContactInput,
 ): Promise<ContactRecord> {
+  const labelIds = await assertOwnedLabelIds(userId, input.labelIds);
+
   const row = await db.contact.create({
     data: {
       userId,
@@ -35,10 +42,24 @@ export async function createContact(
       email: input.email ?? null,
       phone: input.phone ?? null,
       notes: input.notes ?? null,
-      tags: input.tags ?? [],
       lastContact: input.lastContact ?? null,
+      ...(labelIds.length > 0
+        ? {
+            labelLinks: {
+              create: labelIds.map((labelId) => ({ labelId })),
+            },
+          }
+        : {}),
+    },
+    include: {
+      labelLinks: {
+        include: { label: { select: labelOptionSelect } },
+      },
     },
   });
 
-  return { ...row, tags: (row.tags as string[]) ?? [] };
+  return {
+    ...row,
+    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
+  };
 }

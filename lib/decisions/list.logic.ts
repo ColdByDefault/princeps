@@ -6,6 +6,8 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import type { LabelOptionRecord } from "@/types/api";
+import { decisionInclude, toDecisionRecord } from "./shared.logic";
 
 export interface DecisionRecord {
   id: string;
@@ -15,6 +17,7 @@ export interface DecisionRecord {
   status: string; // open | decided | reversed
   decidedAt: Date | null;
   meetingId: string | null;
+  labels: LabelOptionRecord[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,17 +29,8 @@ export async function listDecisions(userId: string): Promise<DecisionRecord[]> {
   const rows = await db.decision.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
+    include: decisionInclude,
   });
 
-  return rows.map((r) => ({
-    id: r.id,
-    title: r.title,
-    rationale: r.rationale,
-    outcome: r.outcome,
-    status: r.status,
-    decidedAt: r.decidedAt,
-    meetingId: r.meetingId,
-    createdAt: r.createdAt,
-    updatedAt: r.updatedAt,
-  }));
+  return rows.map(toDecisionRecord);
 }
