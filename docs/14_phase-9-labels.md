@@ -90,3 +90,97 @@ model Label {
 ## Later
 
 - Evaluate optional metadata later if needed, such as color, ordering, or archival state
+
+## Branch File List
+
+Branch compared: `feat/improvment-1-2` vs `main`
+
+### Added
+
+- `app/api/settings/labels/[id]/route.ts`
+- `app/api/settings/labels/route.ts`
+- `components/settings/LabelsSection.tsx`
+- `components/shared/LabelPicker.tsx`
+- `docs/14_phase-9-labels.md`
+- `lib/context/labels.slot.ts`
+- `lib/knowledge/update.logic.ts`
+- `lib/labels/create.logic.ts`
+- `lib/labels/delete.logic.ts`
+- `lib/labels/list.logic.ts`
+- `lib/labels/normalize.ts`
+- `lib/labels/schemas.ts`
+- `lib/labels/shared.logic.ts`
+- `lib/labels/update.logic.ts`
+- `prisma/migrations/20260401120000_add_labels/migration.sql`
+- `prisma/migrations/20260401124500_add_label_relations/migration.sql`
+- `prisma/migrations/20260401170000_add_knowledge_document_label_relations/migration.sql`
+
+### Modified
+
+- `app/(app)/contacts/ContactsView.tsx`
+- `app/(app)/contacts/page.tsx`
+- `app/(app)/decisions/page.tsx`
+- `app/(app)/knowledge/page.tsx`
+- `app/(app)/meetings/page.tsx`
+- `app/(app)/settings/app/page.tsx`
+- `app/(app)/tasks/page.tsx`
+- `app/api/contacts/[id]/route.ts`
+- `app/api/contacts/route.ts`
+- `app/api/decisions/[id]/route.ts`
+- `app/api/decisions/route.ts`
+- `app/api/knowledge/documents/[id]/route.ts`
+- `app/api/meetings/[id]/route.ts`
+- `app/api/meetings/route.ts`
+- `app/api/tasks/[id]/route.ts`
+- `app/api/tasks/route.ts`
+- `components/contacts/ContactForm.tsx`
+- `components/contacts/ContactList.tsx`
+- `components/decisions/DecisionForm.tsx`
+- `components/decisions/DecisionList.tsx`
+- `components/decisions/DecisionsView.tsx`
+- `components/knowledge/DocumentList.tsx`
+- `components/knowledge/KnowledgeTabs.tsx`
+- `components/meetings/MeetingForm.tsx`
+- `components/meetings/MeetingList.tsx`
+- `components/meetings/MeetingsView.tsx`
+- `components/settings/AppSettingsForm.tsx`
+- `components/settings/index.ts`
+- `components/shared/index.ts`
+- `components/tasks/TaskForm.tsx`
+- `components/tasks/TaskList.tsx`
+- `components/tasks/TasksView.tsx`
+- `docs/00_tasks.md`
+- `lib/chat/tools.ts`
+- `lib/contacts/create.logic.ts`
+- `lib/contacts/list.logic.ts`
+- `lib/contacts/schemas.ts`
+- `lib/contacts/update.logic.ts`
+- `lib/context/build.ts`
+- `lib/context/contacts.slot.ts`
+- `lib/context/decisions.slot.ts`
+- `lib/context/index.ts`
+- `lib/context/meetings.slot.ts`
+- `lib/context/tasks.slot.ts`
+- `lib/decisions/create.logic.ts`
+- `lib/decisions/list.logic.ts`
+- `lib/decisions/schemas.ts`
+- `lib/decisions/update.logic.ts`
+- `lib/knowledge/list.logic.ts`
+- `lib/meetings/create.logic.ts`
+- `lib/meetings/list.logic.ts`
+- `lib/meetings/schemas.ts`
+- `lib/meetings/update.logic.ts`
+- `lib/tasks/create.logic.ts`
+- `lib/tasks/list.logic.ts`
+- `lib/tasks/schemas.ts`
+- `lib/tasks/update.logic.ts`
+- `messages/de.json`
+- `messages/en.json`
+- `prisma/schema.prisma`
+- `types/api.ts`
+
+### Other Branch File Changes
+
+- `docs/15_tier-enforcement.md` renamed to `docs/13_phase-8-tier-enforcement.md`
+- `docs/13_presentation-overview.md` deleted
+- `docs/14_presentation-overview-de.md` deleted
