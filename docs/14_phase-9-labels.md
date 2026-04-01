@@ -76,6 +76,7 @@ model Label {
 - Added pointer affordances and tooltips for the labels card action controls
 - Added English and German message keys for the labels settings surface
 - Validated the first pass with `npm run db:generate`, `npm run lint`, `npm run typecheck`, and `npm run build`
+- Started the second-pass feature wiring by adding label selection support to the contact form payload and UI
 
 ## Later
 

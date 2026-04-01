@@ -18,7 +18,7 @@ import { ConfirmDialog } from "@/components/shared";
 import { useNotice } from "@/components/shared";
 import { getMessage } from "@/lib/i18n";
 import { ContactForm } from "./ContactForm";
-import type { ContactRecord } from "@/types/api";
+import type { ContactRecord, LabelOptionRecord } from "@/types/api";
 import type { MessageDictionary } from "@/types/i18n";
 
 interface Interaction {
@@ -31,12 +31,14 @@ interface Interaction {
 interface ContactListProps {
   messages: MessageDictionary;
   contacts: ContactRecord[];
+  availableLabels?: LabelOptionRecord[];
   onContactsChange: (contacts: ContactRecord[]) => void;
 }
 
 export function ContactList({
   messages,
   contacts,
+  availableLabels = [],
   onContactsChange,
 }: ContactListProps) {
   const { addNotice } = useNotice();
@@ -262,6 +264,7 @@ export function ContactList({
         messages={messages}
         open={formOpen}
         initial={editTarget}
+        availableLabels={availableLabels}
         onClose={() => setFormOpen(false)}
         onSaved={(contact) => {
           if (editTarget) {
