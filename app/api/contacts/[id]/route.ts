@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth";
 import { updateContact } from "@/lib/contacts/update.logic";
 import { deleteContact } from "@/lib/contacts/delete.logic";
 import { ContactUpdateSchema } from "@/lib/contacts/schemas";
+import { InvalidLabelSelectionError } from "@/lib/labels/shared.logic";
 import { zodErrorMessage } from "@/lib/utils";
 
 // PATCH /api/contacts/[id] — update a contact
@@ -39,24 +40,36 @@ export async function PATCH(
   }
 
   const d = parsed.data;
-  const updated = await updateContact(session.user.id, id, {
-    ...(d.name !== undefined && { name: d.name.trim() }),
-    ...(d.role !== undefined && { role: d.role ?? null }),
-    ...(d.company !== undefined && { company: d.company ?? null }),
-    ...(d.email !== undefined && { email: d.email ?? null }),
-    ...(d.phone !== undefined && { phone: d.phone ?? null }),
-    ...(d.notes !== undefined && { notes: d.notes ?? null }),
-    ...(d.tags !== undefined && { tags: d.tags }),
-    ...(d.lastContact !== undefined && {
-      lastContact: d.lastContact ? new Date(d.lastContact) : null,
-    }),
-  });
+  try {
+    const updated = await updateContact(session.user.id, id, {
+      ...(d.name !== undefined && { name: d.name.trim() }),
+      ...(d.role !== undefined && { role: d.role ?? null }),
+      ...(d.company !== undefined && { company: d.company ?? null }),
+      ...(d.email !== undefined && { email: d.email ?? null }),
+      ...(d.phone !== undefined && { phone: d.phone ?? null }),
+      ...(d.notes !== undefined && { notes: d.notes ?? null }),
+      ...(d.tags !== undefined && { tags: d.tags }),
+      ...(d.labelIds !== undefined && { labelIds: d.labelIds }),
+      ...(d.lastContact !== undefined && {
+        lastContact: d.lastContact ? new Date(d.lastContact) : null,
+      }),
+    });
 
-  if (!updated) {
-    return NextResponse.json({ error: "Contact not found." }, { status: 404 });
+    if (!updated) {
+      return NextResponse.json(
+        { error: "Contact not found." },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ contact: updated });
+  } catch (error) {
+    if (error instanceof InvalidLabelSelectionError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    throw error;
   }
-
-  return NextResponse.json({ contact: updated });
 }
 
 // DELETE /api/contacts/[id] — delete a contact

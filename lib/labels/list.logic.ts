@@ -7,21 +7,12 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import type { LabelRecord } from "@/types/api";
-
-type LabelRow = Awaited<ReturnType<typeof db.label.findFirst>>;
-
-export function toLabelRecord(row: NonNullable<LabelRow>): LabelRecord {
-  return {
-    id: row.id,
-    name: row.name,
-    createdAt: row.createdAt.toISOString(),
-    updatedAt: row.updatedAt.toISOString(),
-  };
-}
+import { labelRecordSelect, toLabelRecord } from "./shared.logic";
 
 export async function listLabels(userId: string): Promise<LabelRecord[]> {
   const rows = await db.label.findMany({
     where: { userId },
+    select: labelRecordSelect,
     orderBy: [{ normalizedName: "asc" }, { createdAt: "asc" }],
   });
 

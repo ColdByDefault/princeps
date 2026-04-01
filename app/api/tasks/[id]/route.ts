@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { updateTask } from "@/lib/tasks/update.logic";
 import { deleteTask } from "@/lib/tasks/delete.logic";
+import { InvalidLabelSelectionError } from "@/lib/labels/shared.logic";
 import { TaskUpdateSchema } from "@/lib/tasks/schemas";
 import { zodErrorMessage } from "@/lib/utils";
 
@@ -39,22 +40,31 @@ export async function PATCH(
   }
 
   const d = parsed.data;
-  const task = await updateTask(session.user.id, id, {
-    ...(d.title !== undefined && { title: d.title.trim() }),
-    ...(d.notes !== undefined && { notes: d.notes?.trim() || null }),
-    ...(d.status !== undefined && { status: d.status }),
-    ...(d.priority !== undefined && { priority: d.priority }),
-    ...(d.dueDate !== undefined && {
-      dueDate: d.dueDate ? new Date(d.dueDate) : null,
-    }),
-    ...(d.meetingId !== undefined && { meetingId: d.meetingId ?? null }),
-  });
+  try {
+    const task = await updateTask(session.user.id, id, {
+      ...(d.title !== undefined && { title: d.title.trim() }),
+      ...(d.notes !== undefined && { notes: d.notes?.trim() || null }),
+      ...(d.status !== undefined && { status: d.status }),
+      ...(d.priority !== undefined && { priority: d.priority }),
+      ...(d.dueDate !== undefined && {
+        dueDate: d.dueDate ? new Date(d.dueDate) : null,
+      }),
+      ...(d.meetingId !== undefined && { meetingId: d.meetingId ?? null }),
+      ...(d.labelIds !== undefined && { labelIds: d.labelIds }),
+    });
 
-  if (!task) {
-    return NextResponse.json({ error: "Not found." }, { status: 404 });
+    if (!task) {
+      return NextResponse.json({ error: "Not found." }, { status: 404 });
+    }
+
+    return NextResponse.json({ task });
+  } catch (error) {
+    if (error instanceof InvalidLabelSelectionError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    throw error;
   }
-
-  return NextResponse.json({ task });
 }
 
 // DELETE /api/tasks/[id] — delete a task

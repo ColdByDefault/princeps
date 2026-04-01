@@ -6,6 +6,11 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import type { LabelOptionRecord } from "@/types/api";
+import {
+  labelOptionSelect,
+  toLabelOptionRecord,
+} from "@/lib/labels/shared.logic";
 
 export interface TaskRecord {
   id: string;
@@ -15,6 +20,7 @@ export interface TaskRecord {
   priority: string; // low | normal | high | urgent
   dueDate: Date | null;
   meetingId: string | null;
+  labels: LabelOptionRecord[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -28,6 +34,11 @@ export async function listTasks(userId: string): Promise<TaskRecord[]> {
   const rows = await db.task.findMany({
     where: { userId },
     orderBy: [{ dueDate: "asc" }, { createdAt: "desc" }],
+    include: {
+      labelLinks: {
+        include: { label: { select: labelOptionSelect } },
+      },
+    },
   });
 
   return rows
@@ -44,6 +55,7 @@ export async function listTasks(userId: string): Promise<TaskRecord[]> {
       priority: r.priority,
       dueDate: r.dueDate,
       meetingId: r.meetingId,
+      labels: r.labelLinks.map((link) => toLabelOptionRecord(link.label)),
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
     }));

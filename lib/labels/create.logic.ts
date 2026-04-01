@@ -9,7 +9,7 @@ import { Prisma } from "@/lib/generated/prisma/client";
 import { db } from "@/lib/db";
 import type { LabelRecord } from "@/types/api";
 import { normalizeLabelName, sanitizeLabelName } from "./normalize";
-import { toLabelRecord } from "./list.logic";
+import { labelRecordSelect, toLabelRecord } from "./shared.logic";
 
 export type CreateLabelResult =
   | { ok: true; label: LabelRecord }
@@ -24,6 +24,7 @@ export async function createLabel(
 
   try {
     const row = await db.label.create({
+      select: labelRecordSelect,
       data: {
         userId,
         name: sanitizedName,

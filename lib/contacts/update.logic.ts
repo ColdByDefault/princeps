@@ -6,6 +6,11 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import {
+  labelOptionSelect,
+  toLabelOptionRecord,
+  assertOwnedLabelIds,
+} from "@/lib/labels/shared.logic";
 import type { ContactRecord } from "./list.logic";
 
 export interface UpdateContactInput {
@@ -16,6 +21,7 @@ export interface UpdateContactInput {
   phone?: string | null;
   notes?: string | null;
   tags?: string[];
+  labelIds?: string[];
   lastContact?: Date | null;
 }
 
@@ -36,10 +42,34 @@ export async function updateContact(
 
   if (!existing || existing.userId !== userId) return null;
 
+  const labelIds =
+    input.labelIds !== undefined
+      ? await assertOwnedLabelIds(userId, input.labelIds)
+      : undefined;
+
+  const { labelIds: _labelIds, ...fields } = input;
+
   const row = await db.contact.update({
     where: { id: contactId },
-    data: input,
+    data: {
+      ...fields,
+      ...(labelIds !== undefined && {
+        labelLinks: {
+          deleteMany: {},
+          create: labelIds.map((labelId) => ({ labelId })),
+        },
+      }),
+    },
+    include: {
+      labelLinks: {
+        include: { label: { select: labelOptionSelect } },
+      },
+    },
   });
 
-  return { ...row, tags: (row.tags as string[]) ?? [] };
+  return {
+    ...row,
+    tags: (row.tags as string[]) ?? [],
+    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
+  };
 }

@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { updateMeeting } from "@/lib/meetings/update.logic";
 import { deleteMeeting } from "@/lib/meetings/delete.logic";
+import { InvalidLabelSelectionError } from "@/lib/labels/shared.logic";
 import { MeetingUpdateSchema } from "@/lib/meetings/schemas";
 import { zodErrorMessage } from "@/lib/utils";
 
@@ -39,26 +40,40 @@ export async function PATCH(
   }
 
   const d = parsed.data;
-  const updated = await updateMeeting(session.user.id, id, {
-    ...(d.title !== undefined && { title: d.title.trim() }),
-    ...(d.scheduledAt !== undefined && {
-      scheduledAt: new Date(d.scheduledAt),
-    }),
-    ...(d.durationMin !== undefined && { durationMin: d.durationMin ?? null }),
-    ...(d.location !== undefined && { location: d.location ?? null }),
-    ...(d.agenda !== undefined && { agenda: d.agenda ?? null }),
-    ...(d.summary !== undefined && { summary: d.summary ?? null }),
-    ...(d.status !== undefined && { status: d.status }),
-    ...(d.participantContactIds !== undefined && {
-      participantContactIds: d.participantContactIds,
-    }),
-  });
+  try {
+    const updated = await updateMeeting(session.user.id, id, {
+      ...(d.title !== undefined && { title: d.title.trim() }),
+      ...(d.scheduledAt !== undefined && {
+        scheduledAt: new Date(d.scheduledAt),
+      }),
+      ...(d.durationMin !== undefined && {
+        durationMin: d.durationMin ?? null,
+      }),
+      ...(d.location !== undefined && { location: d.location ?? null }),
+      ...(d.agenda !== undefined && { agenda: d.agenda ?? null }),
+      ...(d.summary !== undefined && { summary: d.summary ?? null }),
+      ...(d.status !== undefined && { status: d.status }),
+      ...(d.participantContactIds !== undefined && {
+        participantContactIds: d.participantContactIds,
+      }),
+      ...(d.labelIds !== undefined && { labelIds: d.labelIds }),
+    });
 
-  if (!updated) {
-    return NextResponse.json({ error: "Meeting not found." }, { status: 404 });
+    if (!updated) {
+      return NextResponse.json(
+        { error: "Meeting not found." },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ meeting: updated });
+  } catch (error) {
+    if (error instanceof InvalidLabelSelectionError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    throw error;
   }
-
-  return NextResponse.json({ meeting: updated });
 }
 
 // DELETE /api/meetings/[id] — delete a meeting

@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { updateDecision } from "@/lib/decisions/update.logic";
 import { deleteDecision } from "@/lib/decisions/delete.logic";
+import { InvalidLabelSelectionError } from "@/lib/labels/shared.logic";
 import { DecisionUpdateSchema } from "@/lib/decisions/schemas";
 import { zodErrorMessage } from "@/lib/utils";
 
@@ -39,22 +40,31 @@ export async function PATCH(
   }
 
   const d = parsed.data;
-  const updated = await updateDecision(session.user.id, id, {
-    ...(d.title !== undefined && { title: d.title.trim() }),
-    ...(d.rationale !== undefined && { rationale: d.rationale ?? null }),
-    ...(d.outcome !== undefined && { outcome: d.outcome ?? null }),
-    ...(d.status !== undefined && { status: d.status }),
-    ...(d.decidedAt !== undefined && {
-      decidedAt: d.decidedAt ? new Date(d.decidedAt) : null,
-    }),
-    ...(d.meetingId !== undefined && { meetingId: d.meetingId ?? null }),
-  });
+  try {
+    const updated = await updateDecision(session.user.id, id, {
+      ...(d.title !== undefined && { title: d.title.trim() }),
+      ...(d.rationale !== undefined && { rationale: d.rationale ?? null }),
+      ...(d.outcome !== undefined && { outcome: d.outcome ?? null }),
+      ...(d.status !== undefined && { status: d.status }),
+      ...(d.decidedAt !== undefined && {
+        decidedAt: d.decidedAt ? new Date(d.decidedAt) : null,
+      }),
+      ...(d.meetingId !== undefined && { meetingId: d.meetingId ?? null }),
+      ...(d.labelIds !== undefined && { labelIds: d.labelIds }),
+    });
 
-  if (!updated) {
-    return NextResponse.json({ error: "Not found." }, { status: 404 });
+    if (!updated) {
+      return NextResponse.json({ error: "Not found." }, { status: 404 });
+    }
+
+    return NextResponse.json({ decision: updated });
+  } catch (error) {
+    if (error instanceof InvalidLabelSelectionError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    throw error;
   }
-
-  return NextResponse.json({ decision: updated });
 }
 
 // DELETE /api/decisions/[id] — delete a decision

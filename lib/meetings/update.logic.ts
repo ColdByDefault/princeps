@@ -7,6 +7,11 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { logInteraction } from "@/lib/contacts/log-interaction";
+import {
+  assertOwnedLabelIds,
+  labelOptionSelect,
+  toLabelOptionRecord,
+} from "@/lib/labels/shared.logic";
 import type { MeetingRecord } from "./list.logic";
 
 export interface UpdateMeetingInput {
@@ -19,6 +24,7 @@ export interface UpdateMeetingInput {
   status?: string;
   /** Replaces the full participant list when provided. */
   participantContactIds?: string[];
+  labelIds?: string[];
 }
 
 /**
@@ -38,7 +44,12 @@ export async function updateMeeting(
 
   if (!existing || existing.userId !== userId) return null;
 
-  const { participantContactIds, ...fields } = input;
+  const labelIds =
+    input.labelIds !== undefined
+      ? await assertOwnedLabelIds(userId, input.labelIds)
+      : undefined;
+
+  const { participantContactIds, labelIds: _labelIds, ...fields } = input;
 
   const row = await db.meeting.update({
     where: { id: meetingId },
@@ -50,10 +61,19 @@ export async function updateMeeting(
           create: participantContactIds.map((contactId) => ({ contactId })),
         },
       }),
+      ...(labelIds !== undefined && {
+        labelLinks: {
+          deleteMany: {},
+          create: labelIds.map((labelId) => ({ labelId })),
+        },
+      }),
     },
     include: {
       participants: {
         include: { contact: { select: { id: true, name: true } } },
+      },
+      labelLinks: {
+        include: { label: { select: labelOptionSelect } },
       },
     },
   });
@@ -75,6 +95,7 @@ export async function updateMeeting(
     prepPack: row.prepPack,
     status: row.status,
     googleEventId: row.googleEventId ?? null,
+    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
     participants: row.participants.map((p) => ({

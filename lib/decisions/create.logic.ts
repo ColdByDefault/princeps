@@ -6,6 +6,11 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import {
+  assertOwnedLabelIds,
+  labelOptionSelect,
+  toLabelOptionRecord,
+} from "@/lib/labels/shared.logic";
 import type { DecisionRecord } from "./list.logic";
 
 export interface CreateDecisionInput {
@@ -15,6 +20,7 @@ export interface CreateDecisionInput {
   status?: string;
   decidedAt?: Date | null;
   meetingId?: string | null;
+  labelIds?: string[];
 }
 
 /**
@@ -24,6 +30,8 @@ export async function createDecision(
   userId: string,
   input: CreateDecisionInput,
 ): Promise<DecisionRecord> {
+  const labelIds = await assertOwnedLabelIds(userId, input.labelIds);
+
   const row = await db.decision.create({
     data: {
       userId,
@@ -33,6 +41,18 @@ export async function createDecision(
       status: input.status ?? "open",
       decidedAt: input.decidedAt ?? null,
       meetingId: input.meetingId ?? null,
+      ...(labelIds.length > 0
+        ? {
+            labelLinks: {
+              create: labelIds.map((labelId) => ({ labelId })),
+            },
+          }
+        : {}),
+    },
+    include: {
+      labelLinks: {
+        include: { label: { select: labelOptionSelect } },
+      },
     },
   });
 
@@ -44,6 +64,7 @@ export async function createDecision(
     status: row.status,
     decidedAt: row.decidedAt,
     meetingId: row.meetingId,
+    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };

@@ -2,11 +2,9 @@ import { z } from "zod";
 
 const MEETING_STATUS = ["upcoming", "done", "cancelled"] as const;
 
-const dateString = z
-  .string()
-  .refine((s) => !isNaN(Date.parse(s)), {
-    message: "Must be a valid date string.",
-  });
+const dateString = z.string().refine((s) => !isNaN(Date.parse(s)), {
+  message: "Must be a valid date string.",
+});
 
 export const MeetingCreateSchema = z.object({
   title: z.string().min(1, "title is required.").max(255),
@@ -20,6 +18,7 @@ export const MeetingCreateSchema = z.object({
   location: z.string().max(500).nullish(),
   agenda: z.string().max(10000).nullish(),
   participantContactIds: z.array(z.string()).optional(),
+  labelIds: z.array(z.string()).optional(),
 });
 
 export const MeetingUpdateSchema = z.object({
@@ -31,4 +30,5 @@ export const MeetingUpdateSchema = z.object({
   summary: z.string().max(20000).nullish(),
   status: z.enum(MEETING_STATUS).optional(),
   participantContactIds: z.array(z.string()).optional(),
+  labelIds: z.array(z.string()).optional(),
 });

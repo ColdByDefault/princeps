@@ -8,11 +8,19 @@ import "server-only";
 import { db } from "@/lib/db";
 import type { Prisma } from "@/lib/generated/prisma/client";
 import { logInteraction } from "@/lib/contacts/log-interaction";
+import {
+  assertOwnedLabelIds,
+  labelOptionSelect,
+  toLabelOptionRecord,
+} from "@/lib/labels/shared.logic";
 import type { MeetingParticipantRecord, MeetingRecord } from "./list.logic";
 
 const meetingInclude = {
   participants: {
     include: { contact: { select: { id: true, name: true } } },
+  },
+  labelLinks: {
+    include: { label: { select: labelOptionSelect } },
   },
 } satisfies Prisma.MeetingInclude;
 
@@ -27,6 +35,7 @@ export interface CreateMeetingInput {
   location?: string | null;
   agenda?: string | null;
   participantContactIds?: string[];
+  labelIds?: string[];
 }
 
 /**
@@ -39,6 +48,7 @@ export async function createMeeting(
 ): Promise<MeetingRecord> {
   const hasParticipants =
     input.participantContactIds && input.participantContactIds.length > 0;
+  const labelIds = await assertOwnedLabelIds(userId, input.labelIds);
 
   const row = await db.meeting.create({
     data: {
@@ -55,6 +65,13 @@ export async function createMeeting(
               create: input.participantContactIds!.map((contactId) => ({
                 contactId,
               })),
+            },
+          }
+        : {}),
+      ...(labelIds.length > 0
+        ? {
+            labelLinks: {
+              create: labelIds.map((labelId) => ({ labelId })),
             },
           }
         : {}),
@@ -83,6 +100,7 @@ function toRecord(row: MeetingWithParticipants): MeetingRecord {
     prepPack: row.prepPack,
     status: row.status,
     googleEventId: row.googleEventId ?? null,
+    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
     participants: (

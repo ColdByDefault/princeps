@@ -6,6 +6,11 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import {
+  assertOwnedLabelIds,
+  labelOptionSelect,
+  toLabelOptionRecord,
+} from "@/lib/labels/shared.logic";
 import type { TaskRecord } from "./list.logic";
 
 export interface CreateTaskInput {
@@ -15,12 +20,15 @@ export interface CreateTaskInput {
   priority?: string;
   dueDate?: Date | null;
   meetingId?: string | null;
+  labelIds?: string[];
 }
 
 export async function createTask(
   userId: string,
   input: CreateTaskInput,
 ): Promise<TaskRecord> {
+  const labelIds = await assertOwnedLabelIds(userId, input.labelIds);
+
   const row = await db.task.create({
     data: {
       userId,
@@ -30,6 +38,18 @@ export async function createTask(
       priority: input.priority ?? "normal",
       dueDate: input.dueDate ?? null,
       meetingId: input.meetingId ?? null,
+      ...(labelIds.length > 0
+        ? {
+            labelLinks: {
+              create: labelIds.map((labelId) => ({ labelId })),
+            },
+          }
+        : {}),
+    },
+    include: {
+      labelLinks: {
+        include: { label: { select: labelOptionSelect } },
+      },
     },
   });
 
@@ -41,6 +61,7 @@ export async function createTask(
     priority: row.priority,
     dueDate: row.dueDate,
     meetingId: row.meetingId,
+    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };

@@ -6,6 +6,11 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import type { LabelOptionRecord } from "@/types/api";
+import {
+  labelOptionSelect,
+  toLabelOptionRecord,
+} from "@/lib/labels/shared.logic";
 
 export interface MeetingParticipantRecord {
   id: string;
@@ -24,6 +29,7 @@ export interface MeetingRecord {
   prepPack: string | null;
   status: string;
   googleEventId: string | null;
+  labels: LabelOptionRecord[];
   createdAt: Date;
   updatedAt: Date;
   participants: MeetingParticipantRecord[];
@@ -40,6 +46,9 @@ export async function listMeetings(userId: string): Promise<MeetingRecord[]> {
       participants: {
         include: { contact: { select: { id: true, name: true } } },
       },
+      labelLinks: {
+        include: { label: { select: labelOptionSelect } },
+      },
     },
   });
 
@@ -54,6 +63,7 @@ export async function listMeetings(userId: string): Promise<MeetingRecord[]> {
     prepPack: r.prepPack,
     status: r.status,
     googleEventId: r.googleEventId,
+    labels: r.labelLinks.map((link) => toLabelOptionRecord(link.label)),
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
     participants: r.participants.map((p) => ({

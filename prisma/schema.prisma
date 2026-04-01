@@ -212,6 +212,7 @@ model Contact {
   user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   meetings     MeetingParticipant[]
   interactions ContactInteraction[]
+  labelLinks   LabelOnContact[]
 
   @@index([userId])
   @@map("contact")
@@ -251,6 +252,7 @@ model Meeting {
   participants MeetingParticipant[]
   tasks        Task[]
   decisions    Decision[]
+  labelLinks   LabelOnMeeting[]
 
   @@index([userId])
   @@map("meeting")
@@ -299,6 +301,7 @@ model Task {
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  labelLinks LabelOnTask[]
 
   @@index([userId])
   @@map("task")
@@ -320,6 +323,7 @@ model Decision {
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  labelLinks LabelOnDecision[]
 
   @@index([userId])
   @@map("decision")
@@ -373,13 +377,62 @@ model Label {
   id             String   @id @default(cuid())
   userId         String
   name           String
+  color          String   @default("#6366f1")
   normalizedName String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contacts  LabelOnContact[]
+  meetings  LabelOnMeeting[]
+  tasks     LabelOnTask[]
+  decisions LabelOnDecision[]
 
   @@unique([userId, normalizedName])
   @@index([userId])
   @@map("label")
+}
+
+model LabelOnContact {
+  labelId   String
+  contactId String
+
+  label   Label   @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@id([labelId, contactId])
+  @@map("label_on_contact")
+}
+
+model LabelOnMeeting {
+  labelId   String
+  meetingId String
+
+  label   Label   @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@id([labelId, meetingId])
+  @@map("label_on_meeting")
+}
+
+model LabelOnTask {
+  labelId String
+  taskId  String
+
+  label Label @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  task  Task  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@id([labelId, taskId])
+  @@map("label_on_task")
+}
+
+model LabelOnDecision {
+  labelId    String
+  decisionId String
+
+  label    Label    @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  decision Decision @relation(fields: [decisionId], references: [id], onDelete: Cascade)
+
+  @@id([labelId, decisionId])
+  @@map("label_on_decision")
 }

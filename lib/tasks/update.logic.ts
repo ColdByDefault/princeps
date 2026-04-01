@@ -6,6 +6,11 @@
 import "server-only";
 
 import { db } from "@/lib/db";
+import {
+  assertOwnedLabelIds,
+  labelOptionSelect,
+  toLabelOptionRecord,
+} from "@/lib/labels/shared.logic";
 import type { TaskRecord } from "./list.logic";
 
 export interface UpdateTaskInput {
@@ -15,6 +20,7 @@ export interface UpdateTaskInput {
   priority?: string;
   dueDate?: Date | null;
   meetingId?: string | null;
+  labelIds?: string[];
 }
 
 export async function updateTask(
@@ -25,9 +31,29 @@ export async function updateTask(
   const existing = await db.task.findFirst({ where: { id: taskId, userId } });
   if (!existing) return null;
 
+  const labelIds =
+    input.labelIds !== undefined
+      ? await assertOwnedLabelIds(userId, input.labelIds)
+      : undefined;
+
+  const { labelIds: _labelIds, ...fields } = input;
+
   const row = await db.task.update({
     where: { id: taskId },
-    data: { ...input },
+    data: {
+      ...fields,
+      ...(labelIds !== undefined && {
+        labelLinks: {
+          deleteMany: {},
+          create: labelIds.map((labelId) => ({ labelId })),
+        },
+      }),
+    },
+    include: {
+      labelLinks: {
+        include: { label: { select: labelOptionSelect } },
+      },
+    },
   });
 
   return {
@@ -38,6 +64,7 @@ export async function updateTask(
     priority: row.priority,
     dueDate: row.dueDate,
     meetingId: row.meetingId,
+    labels: row.labelLinks.map((link) => toLabelOptionRecord(link.label)),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
