@@ -11,16 +11,28 @@
 
 Introduce user-owned labels that work as reusable badges across the workspace. A label is a lightweight classification primitive such as `private`, `Company X`, or `Project Y` that the user defines once and then reuses across features.
 
-### Scope for this pass
+### Scope
 
-This first pass is intentionally narrow:
+#### Pass 1 — standalone labels
 
 - Add a dedicated `Label` Prisma model owned by `User`
 - Add CRUD logic for labels
 - Add labels management UI inside App Settings
-- Keep labels standalone for now
 
-This pass does **not** attach labels to contacts, meetings, tasks, decisions, knowledge, or chat records yet.
+#### Pass 2 — feature wiring
+
+- Wire labels into contacts, meetings, tasks, decisions, and knowledge documents via join tables
+- Add a shared `LabelPicker` component for form-level selection
+- Expose labels to the assistant context and chat creation tools
+- Replace the legacy freeform `tags` column on contacts with structured labels
+
+#### Pass 3 — audit cleanup
+
+- Fix stale i18n copy, hardcoded UI strings, and accessibility gaps
+- Extract duplicated row-mapping helpers into `shared.logic.ts` per feature
+- Extract duplicated `labelNames` filtering into a helper in `tools.ts`
+- Remove dead `tags` plumbing from contacts (schema, types, logic, API routes)
+- Drop the `tags` column from the Prisma `Contact` model
 
 ### Product rules
 
@@ -86,101 +98,18 @@ model Label {
 - Exposed labels to assistant context and creation tool flows so the assistant can see available labels and apply existing labels by name
 - Regenerated the Prisma client after the relation schema changes so server logic and generated types matched again
 - Revalidated the multi-feature labels pass with `npm run lint`, `npm run typecheck`, and `npm run build`
+- Fixed stale `labels.deleteConfirmBody` i18n copy that still referenced a future pass (en + de)
+- Replaced hardcoded count strings in `TaskList`, `DecisionList`, and `ContactList` with i18n keys
+- Added `aria-label` attributes to `TaskList` edit/delete icon buttons for screen readers
+- Unified the count placeholder convention to `{count}` across `MeetingList` and i18n files
+- Extracted `toMeetingRecord`, `toTaskRecord`, and `toDecisionRecord` into `shared.logic.ts` files to remove duplicated row-mapping across create/update/list logic
+- Extracted `toLabelNames()` helper in `lib/chat/tools.ts` to replace four identical inline filter blocks
+- Removed dead `tags` field from `ContactRecord`, `ContactCreateSchema`, `ContactUpdateSchema`, create/update/list logic, and API routes
+- Dropped the `Contact.tags` column from the Prisma schema and added migration `20260401180000_drop_contact_tags`
+- Regenerated the Prisma client after dropping the tags column
+- Revalidated the audit-cleanup pass with `npm run lint`, `npm run typecheck`, and `npm run build`
 
 ## Later
 
 - Evaluate optional metadata later if needed, such as color, ordering, or archival state
 
-## Branch File List
-
-Branch compared: `feat/improvment-1-2` vs `main`
-
-### Added
-
-- `app/api/settings/labels/[id]/route.ts`
-- `app/api/settings/labels/route.ts`
-- `components/settings/LabelsSection.tsx`
-- `components/shared/LabelPicker.tsx`
-- `docs/14_phase-9-labels.md`
-- `lib/context/labels.slot.ts`
-- `lib/knowledge/update.logic.ts`
-- `lib/labels/create.logic.ts`
-- `lib/labels/delete.logic.ts`
-- `lib/labels/list.logic.ts`
-- `lib/labels/normalize.ts`
-- `lib/labels/schemas.ts`
-- `lib/labels/shared.logic.ts`
-- `lib/labels/update.logic.ts`
-- `prisma/migrations/20260401120000_add_labels/migration.sql`
-- `prisma/migrations/20260401124500_add_label_relations/migration.sql`
-- `prisma/migrations/20260401170000_add_knowledge_document_label_relations/migration.sql`
-
-### Modified
-
-- `app/(app)/contacts/ContactsView.tsx`
-- `app/(app)/contacts/page.tsx`
-- `app/(app)/decisions/page.tsx`
-- `app/(app)/knowledge/page.tsx`
-- `app/(app)/meetings/page.tsx`
-- `app/(app)/settings/app/page.tsx`
-- `app/(app)/tasks/page.tsx`
-- `app/api/contacts/[id]/route.ts`
-- `app/api/contacts/route.ts`
-- `app/api/decisions/[id]/route.ts`
-- `app/api/decisions/route.ts`
-- `app/api/knowledge/documents/[id]/route.ts`
-- `app/api/meetings/[id]/route.ts`
-- `app/api/meetings/route.ts`
-- `app/api/tasks/[id]/route.ts`
-- `app/api/tasks/route.ts`
-- `components/contacts/ContactForm.tsx`
-- `components/contacts/ContactList.tsx`
-- `components/decisions/DecisionForm.tsx`
-- `components/decisions/DecisionList.tsx`
-- `components/decisions/DecisionsView.tsx`
-- `components/knowledge/DocumentList.tsx`
-- `components/knowledge/KnowledgeTabs.tsx`
-- `components/meetings/MeetingForm.tsx`
-- `components/meetings/MeetingList.tsx`
-- `components/meetings/MeetingsView.tsx`
-- `components/settings/AppSettingsForm.tsx`
-- `components/settings/index.ts`
-- `components/shared/index.ts`
-- `components/tasks/TaskForm.tsx`
-- `components/tasks/TaskList.tsx`
-- `components/tasks/TasksView.tsx`
-- `docs/00_tasks.md`
-- `lib/chat/tools.ts`
-- `lib/contacts/create.logic.ts`
-- `lib/contacts/list.logic.ts`
-- `lib/contacts/schemas.ts`
-- `lib/contacts/update.logic.ts`
-- `lib/context/build.ts`
-- `lib/context/contacts.slot.ts`
-- `lib/context/decisions.slot.ts`
-- `lib/context/index.ts`
-- `lib/context/meetings.slot.ts`
-- `lib/context/tasks.slot.ts`
-- `lib/decisions/create.logic.ts`
-- `lib/decisions/list.logic.ts`
-- `lib/decisions/schemas.ts`
-- `lib/decisions/update.logic.ts`
-- `lib/knowledge/list.logic.ts`
-- `lib/meetings/create.logic.ts`
-- `lib/meetings/list.logic.ts`
-- `lib/meetings/schemas.ts`
-- `lib/meetings/update.logic.ts`
-- `lib/tasks/create.logic.ts`
-- `lib/tasks/list.logic.ts`
-- `lib/tasks/schemas.ts`
-- `lib/tasks/update.logic.ts`
-- `messages/de.json`
-- `messages/en.json`
-- `prisma/schema.prisma`
-- `types/api.ts`
-
-### Other Branch File Changes
-
-- `docs/15_tier-enforcement.md` renamed to `docs/13_phase-8-tier-enforcement.md`
-- `docs/13_presentation-overview.md` deleted
-- `docs/14_presentation-overview-de.md` deleted
