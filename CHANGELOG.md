@@ -1,3 +1,14 @@
+## [0.1.23] - 2026-04-01
+
+- feat: update Node.js version matrix to only include 22.x
+- feat: improve error handling and user feedback for rate limits in chat components
+- feat: add Chat link to Navbar for improved navigation
+- feat: enhance Navbar component with improved button styling and layout adjustments
+- feat: enhance GlobalSearch component with Command dialog for improved user experience
+- feat: update NotificationPanel button styling for improved accessibility and visual consistency
+- feat: improve button styling and accessibility in Navbar and ThemeToggle components
+- feat: add global search functionality with API integration
+
 ## [0.1.22] - 2026-04-01
 
 - Add Node.js CI workflow for testing and building
