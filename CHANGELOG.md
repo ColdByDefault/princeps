@@ -1,3 +1,24 @@
+## [0.1.21] - 2026-04-01
+
+- feat: remove tags from Contact model and related migration; streamline label management integration
+- feat: remove tags from contacts and update related logic; enhance localization for counts in contacts, meetings, and tasks
+- feat: add label management features including CRUD operations, UI components, and API endpoints
+- feat: replace freeform tags with structured labels in ContactForm and ContactList; update context and logic for label management
+- feat: implement label management for knowledge documents, including fetching, updating, and UI integration
+- feat: integrate label selection support across decisions, meetings, and tasks
+- feat: add label display in ContactList and update localization for labels
+- feat: add label fetching to ContactsPage and pass availableLabels to ContactsView
+- feat: add availableLabels prop to ContactsView and ContactList components for label selection support
+- feat: add label management functionality across contacts, meetings, tasks, and decisions
+- feat: add tooltips and pointer affordances for labels card action controls in App Settings
+- feat: integrate Tooltip component for enhanced user interaction in LabelsSection
+- refactor: rename initialPreferences prop for clarity in AppSettingsForm component fix: improve error handling in LabelsSection for create and update operations docs: update Phase 9 documentation with new Label model and CRUD logic details
+- feat: add LabelsSection component with CRUD functionality for labels and integrate into AppSettingsPage
+- feat: add CRUD functionality for labels with create, update, delete, and list operations
+- feat: implement CRUD operations for labels with PATCH and DELETE endpoints
+- feat: implement user-defined labels with CRUD functionality and update schema
+- feat: add tier enforcement documentation for plan limits and enforcement status
+
 ## [0.1.20] - 2026-03-31
 
 - feat: enhance AppSettingsForm and AppSidebar with language support, update navigation labels for consistency
