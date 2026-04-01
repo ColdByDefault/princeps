@@ -220,10 +220,10 @@ export function LanguageToggle({ messages }: { messages: MessageDictionary }) {
               "shell.language.groupLabel",
               "Language selector",
             )}
-            className="cursor-pointer rounded-full border-border/70 bg-background/70 px-3 backdrop-blur-sm"
+            className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+            title={currentLanguageLabel}
           >
             <Globe className="size-3.5" />
-            {currentLanguageLabel}
           </Button>
         }
       />
@@ -506,35 +506,30 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
               <NotificationPanel messages={messages} />
               <LanguageToggle messages={messages} />
               <ThemeToggle messages={messages} />
-              <div className="flex items-center gap-1.5 rounded-full border border-border/70 bg-background/70 px-3 py-1.5 backdrop-blur-sm">
-                <span className="max-w-27.5 truncate text-xs text-muted-foreground">
-                  {userLabel}
-                </span>
-                {sessionUser.tier && (
+              {sessionUser.tier && (
+                <div className="flex items-center rounded-full px-2.5 py-1.5 backdrop-blur-sm">
                   <PlanBadge tier={sessionUser.tier} messages={messages} />
-                )}
-              </div>
+                </div>
+              )}
               <Button
                 type="button"
                 variant="outline"
-                size="sm"
+                size="icon-sm"
                 aria-label={getMessage(
                   messages,
-                  "shell.nav.signOut",
-                  "Sign out",
+                  isSigningOut ? "shell.nav.signingOut" : "shell.nav.signOut",
+                  isSigningOut ? "Signing out..." : "Sign out",
                 )}
-                className="cursor-pointer rounded-full border-border/70 bg-background/70 px-3 backdrop-blur-sm"
+                title={getMessage(
+                  messages,
+                  isSigningOut ? "shell.nav.signingOut" : "shell.nav.signOut",
+                  isSigningOut ? "Signing out..." : "Sign out",
+                )}
+                className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm"
                 disabled={isSigningOut}
                 onClick={handleSignOut}
               >
                 <LogOut className="size-3.5" />
-                {isSigningOut
-                  ? getMessage(
-                      messages,
-                      "shell.nav.signingOut",
-                      "Signing out...",
-                    )
-                  : getMessage(messages, "shell.nav.signOut", "Sign out")}
               </Button>
             </div>
 
