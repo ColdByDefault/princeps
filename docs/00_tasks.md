@@ -1,7 +1,7 @@
 ## UI
 
 - [ ] Model selector dropdown in Assistant Settings — choose provider (Ollama/Groq) and model at runtime without server restart (ties into feat/core-8-llm-providers)
-- [ ] Global search overlay (⌘K) — query contacts, meetings, tasks, decisions, and knowledge chunks in a single shot
+- [x] Global search overlay (⌘K) — query contacts, meetings, tasks, decisions, and knowledge chunks in a single shot
 - [x] Show tier-aware quota badges in chat sidebar and knowledge page (history limit, daily count, doc count)
 - [x] Billing/upgrade surface — even a minimal "Current plan: Free · Upgrade" banner so tiers are visible to users
 - [x] New Users greetings should be delayed until after onboarding completion, not immediately on sign-up.

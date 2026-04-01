@@ -22,6 +22,7 @@ import {
   LogOut,
   Menu,
   MessageSquare,
+  Search,
   Settings,
   SlidersHorizontal,
   X,
@@ -475,6 +476,33 @@ export default function Navbar({ messages, sessionUser }: NavbarProps) {
             </nav>
 
             <div className="ml-auto hidden items-center gap-2 min-[1000px]:flex">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                aria-label={getMessage(
+                  messages,
+                  "shell.search.trigger",
+                  "Search workspace",
+                )}
+                title={getMessage(
+                  messages,
+                  "shell.search.trigger",
+                  "Search workspace",
+                )}
+                className="cursor-pointer rounded-full border-border/70 bg-background/70 px-3 backdrop-blur-sm"
+                onClick={() =>
+                  window.dispatchEvent(new Event("global-search:open"))
+                }
+              >
+                <Search className="size-3.5" />
+                <span className="text-muted-foreground">
+                  {getMessage(messages, "shell.search.triggerLabel", "Search…")}
+                </span>
+                <kbd className="pointer-events-none ml-1 hidden select-none rounded border border-border/70 bg-muted px-1.5 text-[10px] font-mono text-muted-foreground sm:inline-flex">
+                  ⌘K
+                </kbd>
+              </Button>
               <NotificationPanel messages={messages} />
               <LanguageToggle messages={messages} />
               <ThemeToggle messages={messages} />

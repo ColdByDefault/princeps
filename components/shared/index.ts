@@ -15,3 +15,4 @@ export { ConfirmDialog } from "./ConfirmDialog";
 export { LabelPicker } from "./LabelPicker";
 export { SettingsDialog } from "./SettingsDialog";
 export { LanguageHydrator } from "./LanguageHydrator";
+export { GlobalSearch } from "./GlobalSearch";
