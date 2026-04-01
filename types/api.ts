@@ -96,3 +96,11 @@ export interface DecisionRecord {
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }
+
+/** Client-safe shape of a Label record. */
+export interface LabelRecord {
+  id: string;
+  name: string;
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}

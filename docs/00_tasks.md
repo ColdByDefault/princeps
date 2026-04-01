@@ -29,6 +29,7 @@
 
 ## Features
 
+- [ ] Labels (phase 9) — user-defined reusable labels managed from App Settings first, then linked into meetings, contacts, tasks, decisions, and other records
 - [ ] AI PDF & DOCX knowledge upload — libraries (pdf-parse, mammoth) are installed but only .txt/.md are wired into the ingest pipeline
 - [ ] Meeting transcription / audio upload — upload a recording, get summary + action items written to the meeting record
 - [ ] Email notification delivery — daily digest email as fallback to in-app inbox (cron already generates the content)
