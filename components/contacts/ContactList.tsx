@@ -13,6 +13,7 @@ import {
   Trash2,
   UserPlus,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/shared";
 import { useNotice } from "@/components/shared";
@@ -172,6 +173,15 @@ export function ContactList({
                           >
                             {tag}
                           </span>
+                        ))}
+                      </div>
+                    )}
+                    {contact.labels.length > 0 && (
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {contact.labels.map((label) => (
+                          <Badge key={label.id} variant="secondary">
+                            {label.name}
+                          </Badge>
                         ))}
                       </div>
                     )}
