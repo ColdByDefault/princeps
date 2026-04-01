@@ -164,18 +164,6 @@ export function ContactList({
                           .join(" · ")}
                       </p>
                     )}
-                    {contact.tags.length > 0 && (
-                      <div className="mt-1 flex flex-wrap gap-1">
-                        {contact.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="bg-muted rounded px-1.5 py-0.5 text-xs"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
                     {contact.labels.length > 0 && (
                       <div className="mt-1 flex flex-wrap gap-1">
                         {contact.labels.map((label) => (

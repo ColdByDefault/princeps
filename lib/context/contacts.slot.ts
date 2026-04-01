@@ -19,8 +19,8 @@ export const contactsSlot: ContextSlot = {
         name: true,
         role: true,
         company: true,
-        tags: true,
         lastContact: true,
+        labelLinks: { select: { label: { select: { name: true } } } },
       },
       orderBy: [{ lastContact: "desc" }, { name: "asc" }],
       take: 20,
@@ -44,8 +44,8 @@ export const contactsSlot: ContextSlot = {
         const parts: string[] = [c.name];
         if (c.role) parts.push(c.role);
         if (c.company) parts.push(c.company);
-        const tags = (c.tags as string[]) ?? [];
-        if (tags.length > 0) parts.push(`[${tags.join(", ")}]`);
+        const labels = c.labelLinks.map((link) => link.label.name);
+        if (labels.length > 0) parts.push(`labels: ${labels.join(", ")}`);
         if (c.lastContact)
           parts.push(
             `last contact: ${c.lastContact.toISOString().slice(0, 10)}`,

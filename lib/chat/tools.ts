@@ -11,6 +11,7 @@ import { updateMeeting } from "@/lib/meetings/update.logic";
 import { createTask } from "@/lib/tasks/create.logic";
 import { createDecision } from "@/lib/decisions/create.logic";
 import { createShareToken } from "@/lib/share/create.logic";
+import { resolveOwnedLabelIdsByNames } from "@/lib/labels/shared.logic";
 import {
   SHAREABLE_FIELD_KEYS,
   type ShareableFieldKey,
@@ -63,10 +64,11 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
             type: "string",
             description: "Free-form notes about the contact.",
           },
-          tags: {
+          labelNames: {
             type: "array",
             items: { type: "string" },
-            description: "Tags for categorizing the contact.",
+            description:
+              "Names of existing user labels to apply to the contact. Only use labels that already exist.",
           },
         },
         required: ["name"],
@@ -109,6 +111,12 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
             description:
               "Names of existing contacts to add as participants. Only include names the user explicitly mentioned.",
           },
+          labelNames: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Names of existing user labels to apply to the meeting. Only use labels that already exist.",
+          },
         },
         required: ["title", "scheduledAt"],
       },
@@ -139,6 +147,12 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
           dueDate: {
             type: "string",
             description: "ISO 8601 date-time string for the due date.",
+          },
+          labelNames: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Names of existing user labels to apply to the task. Only use labels that already exist.",
           },
         },
         required: ["title"],
@@ -174,6 +188,12 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
           decidedAt: {
             type: "string",
             description: "ISO 8601 date string for when the decision was made.",
+          },
+          labelNames: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Names of existing user labels to apply to the decision. Only use labels that already exist.",
           },
         },
         required: ["title"],
@@ -248,7 +268,7 @@ export async function executeToolCall(
       email?: unknown;
       phone?: unknown;
       notes?: unknown;
-      tags?: unknown;
+      labelNames?: unknown;
     };
 
     if (typeof a.name !== "string" || !a.name.trim()) {
@@ -271,6 +291,15 @@ export async function executeToolCall(
       };
     }
 
+    const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
+      userId,
+      Array.isArray(a.labelNames)
+        ? (a.labelNames as unknown[]).filter(
+            (labelName): labelName is string => typeof labelName === "string",
+          )
+        : undefined,
+    );
+
     const record = await createContact(userId, {
       name: a.name.trim(),
       role: typeof a.role === "string" ? a.role : null,
@@ -278,19 +307,24 @@ export async function executeToolCall(
       email: typeof a.email === "string" ? a.email : null,
       phone: typeof a.phone === "string" ? a.phone : null,
       notes: typeof a.notes === "string" ? a.notes : null,
-      tags: Array.isArray(a.tags)
-        ? (a.tags as unknown[]).filter(
-            (t): t is string => typeof t === "string",
-          )
-        : [],
+      labelIds,
     });
+
+    const summary =
+      unresolvedNames.length > 0
+        ? JSON.stringify({
+            id: record.id,
+            name: record.name,
+            unresolvedLabels: unresolvedNames,
+          })
+        : JSON.stringify({ id: record.id, name: record.name });
 
     return {
       action: {
         name: "create_contact",
         record: record as unknown as Record<string, unknown>,
       },
-      summary: JSON.stringify({ id: record.id, name: record.name }),
+      summary,
     };
   }
 
@@ -302,6 +336,7 @@ export async function executeToolCall(
       location?: unknown;
       agenda?: unknown;
       participantNames?: unknown;
+      labelNames?: unknown;
     };
 
     if (typeof a.title !== "string" || !a.title.trim()) {
@@ -368,6 +403,15 @@ export async function executeToolCall(
       }
     }
 
+    const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
+      userId,
+      Array.isArray(a.labelNames)
+        ? (a.labelNames as unknown[]).filter(
+            (labelName): labelName is string => typeof labelName === "string",
+          )
+        : undefined,
+    );
+
     const record = await createMeeting(userId, {
       title: a.title.trim(),
       scheduledAt,
@@ -376,6 +420,7 @@ export async function executeToolCall(
       location: typeof a.location === "string" ? a.location : null,
       agenda: typeof a.agenda === "string" ? a.agenda : null,
       participantContactIds,
+      labelIds,
     });
 
     const linkedNames = record.participants.map((p) => p.contactName);
@@ -389,6 +434,10 @@ export async function executeToolCall(
     if (unresolvedParticipants.length > 0)
       meetingSummaryParts.push(
         `the following names were NOT found in contacts and could not be linked: ${unresolvedParticipants.join(", ")}. Inform the user and ask ONLY this: would they like to save ${unresolvedParticipants.length === 1 ? `"${unresolvedParticipants[0]}"` : "these people"} as a new contact? Do not suggest email, invitations, or any other action.`,
+      );
+    if (unresolvedNames.length > 0)
+      meetingSummaryParts.push(
+        `the following labels do not exist and were not applied: ${unresolvedNames.join(", ")}`,
       );
 
     return {
@@ -406,6 +455,7 @@ export async function executeToolCall(
       notes?: unknown;
       priority?: unknown;
       dueDate?: unknown;
+      labelNames?: unknown;
     };
 
     if (typeof a.title !== "string" || !a.title.trim()) {
@@ -443,19 +493,38 @@ export async function executeToolCall(
     const dueDate =
       dueDateRaw && !isNaN(dueDateRaw.getTime()) ? dueDateRaw : null;
 
+    const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
+      userId,
+      Array.isArray(a.labelNames)
+        ? (a.labelNames as unknown[]).filter(
+            (labelName): labelName is string => typeof labelName === "string",
+          )
+        : undefined,
+    );
+
     const record = await createTask(userId, {
       title: a.title.trim(),
       notes: typeof a.notes === "string" ? a.notes : null,
       priority,
       dueDate,
+      labelIds,
     });
+
+    const summary =
+      unresolvedNames.length > 0
+        ? JSON.stringify({
+            id: record.id,
+            title: record.title,
+            unresolvedLabels: unresolvedNames,
+          })
+        : JSON.stringify({ id: record.id, title: record.title });
 
     return {
       action: {
         name: "create_task",
         record: record as unknown as Record<string, unknown>,
       },
-      summary: JSON.stringify({ id: record.id, title: record.title }),
+      summary,
     };
   }
 
@@ -466,6 +535,7 @@ export async function executeToolCall(
       outcome?: unknown;
       status?: unknown;
       decidedAt?: unknown;
+      labelNames?: unknown;
     };
 
     if (typeof a.title !== "string" || !a.title.trim()) {
@@ -503,20 +573,39 @@ export async function executeToolCall(
     const decidedAt =
       decidedAtRaw && !isNaN(decidedAtRaw.getTime()) ? decidedAtRaw : null;
 
+    const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
+      userId,
+      Array.isArray(a.labelNames)
+        ? (a.labelNames as unknown[]).filter(
+            (labelName): labelName is string => typeof labelName === "string",
+          )
+        : undefined,
+    );
+
     const record = await createDecision(userId, {
       title: a.title.trim(),
       rationale: typeof a.rationale === "string" ? a.rationale : null,
       outcome: typeof a.outcome === "string" ? a.outcome : null,
       status,
       decidedAt,
+      labelIds,
     });
+
+    const summary =
+      unresolvedNames.length > 0
+        ? JSON.stringify({
+            id: record.id,
+            title: record.title,
+            unresolvedLabels: unresolvedNames,
+          })
+        : JSON.stringify({ id: record.id, title: record.title });
 
     return {
       action: {
         name: "create_decision",
         record: record as unknown as Record<string, unknown>,
       },
-      summary: JSON.stringify({ id: record.id, title: record.title }),
+      summary,
     };
   }
 

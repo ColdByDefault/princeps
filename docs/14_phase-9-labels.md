@@ -82,13 +82,11 @@ model Label {
 - Wired tasks end to end so labels can be loaded, selected, saved, and rendered in the list view
 - Wired decisions end to end so labels can be loaded, selected, saved, and rendered in the list view
 - Wired knowledge documents end to end so labels can be loaded, assigned, updated, and rendered in the document list
+- Replaced the contact UI's leftover freeform tag usage with labels as the structured classification surface
+- Exposed labels to assistant context and creation tool flows so the assistant can see available labels and apply existing labels by name
 - Regenerated the Prisma client after the relation schema changes so server logic and generated types matched again
 - Revalidated the multi-feature labels pass with `npm run lint`, `npm run typecheck`, and `npm run build`
 
 ## Later
 
-- Add label relations to contacts, meetings, tasks, decisions, and knowledge records
-- Replace per-feature freeform tag arrays where appropriate
-- Add label picker inputs to feature forms and edit dialogs
-- Expose labels to assistant tool flows so the assistant can apply structured labels instead of inventing raw strings
 - Evaluate optional metadata later if needed, such as color, ordering, or archival state

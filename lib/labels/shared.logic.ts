@@ -8,6 +8,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import type { Prisma } from "@/lib/generated/prisma/client";
 import type { LabelOptionRecord, LabelRecord } from "@/types/api";
+import { normalizeLabelName, sanitizeLabelName } from "./normalize";
 
 export const labelRecordSelect = {
   id: true,
@@ -76,4 +77,55 @@ export async function assertOwnedLabelIds(
   }
 
   return uniqueLabelIds;
+}
+
+export async function resolveOwnedLabelIdsByNames(
+  userId: string,
+  labelNames: string[] | undefined,
+): Promise<{ labelIds: string[]; unresolvedNames: string[] }> {
+  const sanitizedNames = (labelNames ?? [])
+    .filter((labelName): labelName is string => typeof labelName === "string")
+    .map(sanitizeLabelName)
+    .filter(Boolean);
+
+  if (sanitizedNames.length === 0) {
+    return { labelIds: [], unresolvedNames: [] };
+  }
+
+  const normalizedToOriginal = new Map<string, string>();
+  for (const labelName of sanitizedNames) {
+    const normalizedName = normalizeLabelName(labelName);
+    if (!normalizedToOriginal.has(normalizedName)) {
+      normalizedToOriginal.set(normalizedName, labelName);
+    }
+  }
+
+  const rows = await db.label.findMany({
+    where: {
+      userId,
+      normalizedName: { in: [...normalizedToOriginal.keys()] },
+    },
+    select: {
+      id: true,
+      normalizedName: true,
+    },
+  });
+
+  const idByNormalizedName = new Map(
+    rows.map((row) => [row.normalizedName, row.id]),
+  );
+
+  const labelIds: string[] = [];
+  const unresolvedNames: string[] = [];
+
+  for (const [normalizedName, originalName] of normalizedToOriginal) {
+    const labelId = idByNormalizedName.get(normalizedName);
+    if (labelId) {
+      labelIds.push(labelId);
+    } else {
+      unresolvedNames.push(originalName);
+    }
+  }
+
+  return { labelIds, unresolvedNames };
 }

@@ -45,7 +45,6 @@ export function ContactForm({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
-  const [tags, setTags] = useState("");
   const [labelIds, setLabelIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +57,6 @@ export function ContactForm({
       setEmail(initial?.email ?? "");
       setPhone(initial?.phone ?? "");
       setNotes(initial?.notes ?? "");
-      setTags(initial?.tags.join(", ") ?? "");
       setLabelIds(initial?.labels.map((label) => label.id) ?? []);
       setError(null);
     }
@@ -76,10 +74,6 @@ export function ContactForm({
       email: email.trim() || null,
       phone: phone.trim() || null,
       notes: notes.trim() || null,
-      tags: tags
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean),
       labelIds,
     };
 
@@ -212,22 +206,6 @@ export function ContactForm({
                 )}
               />
             </div>
-          </div>
-
-          <div className="grid gap-1.5">
-            <Label htmlFor="contact-tags">
-              {getMessage(messages, "contacts.field.tags", "Tags")}
-            </Label>
-            <Input
-              id="contact-tags"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              placeholder={getMessage(
-                messages,
-                "contacts.field.tags.placeholder",
-                "investor, advisor, client",
-              )}
-            />
           </div>
 
           <LabelPicker

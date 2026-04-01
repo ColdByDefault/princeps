@@ -6,6 +6,7 @@
 import "server-only";
 
 import { personalInfoSlot } from "./personal-info.slot";
+import { labelsSlot } from "./labels.slot";
 import { knowledgeSlot } from "./knowledge.slot";
 import { contactsSlot } from "./contacts.slot";
 import { meetingsSlot } from "./meetings.slot";
@@ -34,6 +35,7 @@ export interface ContextSlot {
  */
 export const SLOT_REGISTRY: ContextSlot[] = [
   personalInfoSlot,
+  labelsSlot,
   knowledgeSlot,
   contactsSlot,
   meetingsSlot,
