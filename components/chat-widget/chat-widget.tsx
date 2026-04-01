@@ -127,8 +127,18 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
         body: JSON.stringify({ message: text, history: history.slice(0, -1) }),
       });
 
-      if (!res.ok || !res.body) {
-        throw new Error("Request failed");
+      if (!res.ok) {
+        let errMsg = "Something went wrong. Please try again.";
+        try {
+          const errBody = (await res.json()) as { error?: string };
+          if (errBody.error) errMsg = errBody.error;
+        } catch {
+          // ignore — body not parseable
+        }
+        throw new Error(errMsg);
+      }
+      if (!res.body) {
+        throw new Error("Something went wrong. Please try again.");
       }
 
       const reader = res.body.getReader();
@@ -204,14 +214,18 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
           }
         }
       }
-    } catch {
+    } catch (err) {
+      const errorText =
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.";
       if (firstToken) {
         // No message was added yet — insert one with the error text
         setMessages((prev) => [
           ...prev,
           {
             id: assistantId,
-            text: "Something went wrong. Please try again.",
+            text: errorText,
             sender: "assistant",
             time: getTime(),
           },
@@ -219,9 +233,7 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
       } else {
         setMessages((prev) =>
           prev.map((m) =>
-            m.id === assistantId
-              ? { ...m, text: "Something went wrong. Please try again." }
-              : m,
+            m.id === assistantId ? { ...m, text: errorText } : m,
           ),
         );
       }

@@ -127,7 +127,17 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
         body: JSON.stringify({ message: text, think }),
       });
 
-      if (!response.ok || !response.body) {
+      if (!response.ok) {
+        let errMsg: string | undefined;
+        try {
+          const errBody = (await response.json()) as { error?: string };
+          errMsg = errBody.error;
+        } catch {
+          // ignore — body not parseable
+        }
+        throw new Error(errMsg ?? "Stream failed");
+      }
+      if (!response.body) {
         throw new Error("Stream failed");
       }
 
@@ -205,15 +215,22 @@ export function ChatWindow({ chatId, initialMessages, messages }: Props) {
           }
         }
       }
-    } catch {
+    } catch (err) {
       // Remove the placeholder on error
       setMsgs((prev) => prev.filter((m) => m.id !== assistantId));
+      const specificMsg =
+        err instanceof Error &&
+        err.message !== "Stream failed" &&
+        err.message !== "Stream error"
+          ? err.message
+          : undefined;
       toast.error(
-        getMessage(
-          messages,
-          "chat.error.send",
-          "Failed to send message. Please try again.",
-        ),
+        specificMsg ??
+          getMessage(
+            messages,
+            "chat.error.send",
+            "Failed to send message. Please try again.",
+          ),
       );
     } finally {
       inFlightRef.current = false;

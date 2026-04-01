@@ -41,7 +41,9 @@ export async function POST(req: Request) {
 
   if (!rateLimit.allowed) {
     return NextResponse.json(
-      { error: "Too many requests" },
+      {
+        error: `You're sending messages too quickly. Please wait ${rateLimit.retryAfterSeconds}s before trying again.`,
+      },
       {
         status: 429,
         headers: { "Retry-After": String(rateLimit.retryAfterSeconds) },

@@ -10,7 +10,7 @@
 
 - [ ] Social login — GitHub OAuth and Google OAuth for low-friction onboarding (already listed under Providers)
 - [ ] In-app error feedback when a Google token is revoked (invalid_grant) — currently the Integration row silently breaks
-- [ ] Rate-limit / tier-limit errors should surface a user-friendly toast with the specific limit hit, not a generic 429
+- [x] Rate-limit / tier-limit errors should surface a user-friendly toast with the specific limit hit, not a generic 429
 - [ ] OAuth callback result toast — show green/red toast after Google OAuth connect flow; settings page currently shows no feedback after the redirect (see docs/12_phase-8-hardening.md B1)
 - [ ] IntegrationsTab loading skeleton — show pulse skeleton while integration status loads on first render; tab currently flashes empty (see docs/12_phase-8-hardening.md B2)
 - [ ] Sync count toast — show event counts ("12 synced, 3 skipped") in the post-sync success toast instead of a generic message (see docs/12_phase-8-hardening.md B3)
