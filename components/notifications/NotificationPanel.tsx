@@ -31,7 +31,7 @@ export function NotificationPanel({ messages }: Props) {
     <Sheet>
       <SheetTrigger
         aria-label={getMessage(messages, "notifications.bell", "Notifications")}
-        className="relative inline-flex size-9 cursor-pointer items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        className="relative inline-flex size-8 cursor-pointer items-center justify-center rounded-full border border-border/70 bg-background/70 text-sm font-medium backdrop-blur-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
       >
         <Bell className="size-4" />
         {unreadCount > 0 && (
