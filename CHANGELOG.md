@@ -1,3 +1,7 @@
+## [0.1.22] - 2026-04-01
+
+- Add Node.js CI workflow for testing and building
+
 ## [0.1.21] - 2026-04-01
 
 - feat: remove tags from Contact model and related migration; streamline label management integration
