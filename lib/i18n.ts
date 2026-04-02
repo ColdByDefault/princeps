@@ -1,14 +1,10 @@
 /**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault. All Rights Reserved.
+ *
+ * Re-exports from next-intl so feature code imports from a single path.
+ * Server components:  import { getTranslations } from "@/lib/i18n";
+ * Client components:  import { useTranslations } from "next-intl";
  */
 
-import { type MessageDictionary } from "@/types/i18n";
-
-export function getMessage(
-  messages: MessageDictionary,
-  key: string,
-  fallback: string,
-): string {
-  return messages[key] ?? fallback;
-}
+export { getTranslations, getLocale } from "next-intl/server";
