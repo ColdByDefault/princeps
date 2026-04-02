@@ -129,3 +129,58 @@ export async function resolveOwnedLabelIdsByNames(
 
   return { labelIds, unresolvedNames };
 }
+
+/**
+ * Like resolveOwnedLabelIdsByNames but auto-creates any label that doesn't
+ * exist yet. Never returns unresolvedNames. Used by chat tool handlers so the
+ * LLM can freely pass any label name without needing a separate create_label
+ * tool call first.
+ */
+export async function resolveOrCreateLabelIdsByNames(
+  userId: string,
+  labelNames: string[] | undefined,
+): Promise<string[]> {
+  const sanitizedNames = (labelNames ?? [])
+    .filter((n): n is string => typeof n === "string")
+    .map(sanitizeLabelName)
+    .filter(Boolean);
+
+  if (sanitizedNames.length === 0) return [];
+
+  const normalizedToSanitized = new Map<string, string>();
+  for (const n of sanitizedNames) {
+    const key = normalizeLabelName(n);
+    if (!normalizedToSanitized.has(key)) normalizedToSanitized.set(key, n);
+  }
+
+  const existing = await db.label.findMany({
+    where: {
+      userId,
+      normalizedName: { in: [...normalizedToSanitized.keys()] },
+    },
+    select: { id: true, normalizedName: true },
+  });
+
+  const idByNorm = new Map(existing.map((r) => [r.normalizedName, r.id]));
+  const labelIds: string[] = [];
+
+  for (const [normalized, displayName] of normalizedToSanitized) {
+    const existingId = idByNorm.get(normalized);
+    if (existingId) {
+      labelIds.push(existingId);
+    } else {
+      // upsert to handle race conditions
+      const created = await db.label.upsert({
+        where: {
+          userId_normalizedName: { userId, normalizedName: normalized },
+        },
+        create: { userId, name: displayName, normalizedName: normalized },
+        update: {},
+        select: { id: true },
+      });
+      labelIds.push(created.id);
+    }
+  }
+
+  return labelIds;
+}

@@ -11,7 +11,8 @@ import { updateMeeting } from "@/lib/meetings/update.logic";
 import { createTask } from "@/lib/tasks/create.logic";
 import { createDecision } from "@/lib/decisions/create.logic";
 import { createShareToken } from "@/lib/share/create.logic";
-import { resolveOwnedLabelIdsByNames } from "@/lib/labels/shared.logic";
+import { createLabel } from "@/lib/labels/create.logic";
+import { resolveOrCreateLabelIdsByNames } from "@/lib/labels/shared.logic";
 import {
   SHAREABLE_FIELD_KEYS,
   type ShareableFieldKey,
@@ -35,6 +36,7 @@ export type { OllamaToolDefinition, OllamaToolCall };
 export type ActionResult = {
   /** Matches one of the tool function names */
   name:
+    | "create_label"
     | "create_contact"
     | "create_meeting"
     | "create_task"
@@ -51,9 +53,27 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
   {
     type: "function",
     function: {
+      name: "create_label",
+      description:
+        "Creates a new label that can be applied to contacts, meetings, tasks, and decisions. When the user's request needs labels that do not yet exist, call this tool for EACH missing label without asking for confirmation — create all of them up front, then immediately continue with the remaining steps (contacts, meetings, tasks, decisions, etc.). Never pause to ask the user whether to create a label; just do it. IMPORTANT: a label name is required. Do not create duplicate labels — if a label already exists, skip calling this tool for it and use the name directly.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: {
+            type: "string",
+            description: "The name of the label to create (required).",
+          },
+        },
+        required: ["name"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
       name: "create_contact",
       description:
-        "Creates a new contact in the user's contact list. Use when the user asks you to add or save a person as a contact. IMPORTANT: the contact's full name is required. If the user has not provided a name, ask for it before calling this tool. Do not guess or invent a name.",
+        "Creates a new contact in the user's contact list. Use when the user asks you to add or save a person as a contact. IMPORTANT: the contact's full name is required. If the user has not provided a name, ask for it before calling this tool. Do not guess or invent a name. After calling this tool, immediately continue with any remaining tool calls the user's request requires — do NOT stop and summarize until all tools have been called.",
       parameters: {
         type: "object",
         properties: {
@@ -73,7 +93,7 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Names of existing user labels to apply to the contact. Only use labels that already exist.",
+              "Label names to apply to the contact. Any name is accepted — labels will be created automatically if they do not exist yet.",
           },
         },
         required: ["name"],
@@ -85,7 +105,7 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
     function: {
       name: "create_meeting",
       description:
-        "Creates a new meeting in the user's meeting log. Use when the user asks you to schedule, add, or log a meeting. IMPORTANT: both a title and a scheduled date/time are required. If either is missing and cannot be confidently inferred from context, ask the user for the missing information before calling this tool. Do not invent a time. Optionally include participant names if the user mentions specific contacts who will attend.",
+        "Creates a new meeting in the user's meeting log. Use when the user asks you to schedule, add, or log a meeting. IMPORTANT: both a title and a scheduled date/time are required. If either is missing and cannot be confidently inferred from context, ask the user for the missing information before calling this tool. Do not invent a time. Optionally include participant names if the user mentions specific contacts who will attend. After calling this tool, immediately continue with any remaining tool calls the user's request requires — do NOT stop and summarize until all tools have been called.",
       parameters: {
         type: "object",
         properties: {
@@ -120,7 +140,7 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Names of existing user labels to apply to the meeting. Only use labels that already exist.",
+              "Label names to apply to the meeting. Any name is accepted — labels will be created automatically if they do not exist yet.",
           },
         },
         required: ["title", "scheduledAt"],
@@ -157,7 +177,7 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Names of existing user labels to apply to the task. Only use labels that already exist.",
+              "Label names to apply to the task. Any name is accepted — labels will be created automatically if they do not exist yet.",
           },
         },
         required: ["title"],
@@ -198,7 +218,7 @@ export const CHAT_TOOLS: OllamaToolDefinition[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Names of existing user labels to apply to the decision. Only use labels that already exist.",
+              "Label names to apply to the decision. Any name is accepted — labels will be created automatically if they do not exist yet.",
           },
         },
         required: ["title"],
@@ -265,6 +285,35 @@ export async function executeToolCall(
 ): Promise<{ action: ActionResult | null; summary: string }> {
   const { name, arguments: args } = toolCall.function;
 
+  if (name === "create_label") {
+    const a = args as { name?: unknown };
+
+    if (typeof a.name !== "string" || !a.name.trim()) {
+      return {
+        action: null,
+        summary:
+          "Label creation failed: no name was provided. Tell the user that a label name is required and ask them for it.",
+      };
+    }
+
+    const result = await createLabel(userId, a.name.trim());
+
+    if (!result.ok) {
+      return {
+        action: null,
+        summary: `A label named "${a.name.trim()}" already exists. Tell the user this label already exists and use it directly when applying labels to items.`,
+      };
+    }
+
+    return {
+      action: {
+        name: "create_label",
+        record: result.label as unknown as Record<string, unknown>,
+      },
+      summary: `Label "${result.label.name}" created (id: ${result.label.id}). Continue immediately with all remaining steps from the user's request — do not pause or ask for confirmation.`,
+    };
+  }
+
   if (name === "create_contact") {
     const a = args as {
       name?: unknown;
@@ -296,7 +345,7 @@ export async function executeToolCall(
       };
     }
 
-    const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
+    const labelIds = await resolveOrCreateLabelIdsByNames(
       userId,
       toLabelNames(a.labelNames),
     );
@@ -311,14 +360,7 @@ export async function executeToolCall(
       labelIds,
     });
 
-    const summary =
-      unresolvedNames.length > 0
-        ? JSON.stringify({
-            id: record.id,
-            name: record.name,
-            unresolvedLabels: unresolvedNames,
-          })
-        : JSON.stringify({ id: record.id, name: record.name });
+    const summary = JSON.stringify({ id: record.id, name: record.name });
 
     return {
       action: {
@@ -404,7 +446,7 @@ export async function executeToolCall(
       }
     }
 
-    const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
+    const labelIds = await resolveOrCreateLabelIdsByNames(
       userId,
       toLabelNames(a.labelNames),
     );
@@ -431,10 +473,6 @@ export async function executeToolCall(
     if (unresolvedParticipants.length > 0)
       meetingSummaryParts.push(
         `the following names were NOT found in contacts and could not be linked: ${unresolvedParticipants.join(", ")}. Inform the user and ask ONLY this: would they like to save ${unresolvedParticipants.length === 1 ? `"${unresolvedParticipants[0]}"` : "these people"} as a new contact? Do not suggest email, invitations, or any other action.`,
-      );
-    if (unresolvedNames.length > 0)
-      meetingSummaryParts.push(
-        `the following labels do not exist and were not applied: ${unresolvedNames.join(", ")}`,
       );
 
     return {
@@ -490,7 +528,7 @@ export async function executeToolCall(
     const dueDate =
       dueDateRaw && !isNaN(dueDateRaw.getTime()) ? dueDateRaw : null;
 
-    const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
+    const labelIds = await resolveOrCreateLabelIdsByNames(
       userId,
       toLabelNames(a.labelNames),
     );
@@ -503,14 +541,7 @@ export async function executeToolCall(
       labelIds,
     });
 
-    const summary =
-      unresolvedNames.length > 0
-        ? JSON.stringify({
-            id: record.id,
-            title: record.title,
-            unresolvedLabels: unresolvedNames,
-          })
-        : JSON.stringify({ id: record.id, title: record.title });
+    const summary = JSON.stringify({ id: record.id, title: record.title });
 
     return {
       action: {
@@ -566,7 +597,7 @@ export async function executeToolCall(
     const decidedAt =
       decidedAtRaw && !isNaN(decidedAtRaw.getTime()) ? decidedAtRaw : null;
 
-    const { labelIds, unresolvedNames } = await resolveOwnedLabelIdsByNames(
+    const labelIds = await resolveOrCreateLabelIdsByNames(
       userId,
       toLabelNames(a.labelNames),
     );
@@ -580,14 +611,7 @@ export async function executeToolCall(
       labelIds,
     });
 
-    const summary =
-      unresolvedNames.length > 0
-        ? JSON.stringify({
-            id: record.id,
-            title: record.title,
-            unresolvedLabels: unresolvedNames,
-          })
-        : JSON.stringify({ id: record.id, title: record.title });
+    const summary = JSON.stringify({ id: record.id, title: record.title });
 
     return {
       action: {
