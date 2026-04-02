@@ -235,11 +235,3 @@ Please allow reasonable time for review and remediation before any public disclo
 
 
 
-Create Meeting:
-   - title: "Project Sync"
-   - date: "2024-07-01T10:00:00Z"
-   - duration: 60
-   - location: "Zoom"
-   - agenda: "Discuss project milestones and blockers"
-   - participants: ["Alice Smith", "Bob Johnson"]
-   - Label: "VIP"
