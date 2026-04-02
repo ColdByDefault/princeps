@@ -35,6 +35,8 @@ yarn-error.log*
 
 # prisma
 lib/generated/
+/app/generated/prisma
+prisma/generated
 
 # vercel
 .vercel
@@ -43,4 +45,3 @@ lib/generated/
 *.tsbuildinfo
 next-env.d.ts
 
-/app/generated/prisma

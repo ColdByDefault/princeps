@@ -8,3 +8,5 @@
     - **New** Hooks:
         - guard-shadcn.ts (block edits to Shadcn components and enforce npx shadcn add for new components, unless explicitly bypassed in prompt)
     - Fixed node.js.yml.
+
+- Refactored /prisma/schema.prisma to remove unused models and fields, and to better reflect the current database schema.
