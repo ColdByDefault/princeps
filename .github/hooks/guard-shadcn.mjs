@@ -1,7 +1,8 @@
 // Guard: block edits to components/ui/ (Shadcn source files)
 import { readFileSync } from "fs";
 
-const input = JSON.parse(readFileSync("/dev/stdin", "utf8"));
+const stdinBuffer = readFileSync(process.stdin.fd);
+const input = JSON.parse(stdinBuffer.toString("utf8"));
 const toolName = input.toolName || "";
 const filePath = input.toolInput?.filePath || input.toolInput?.path || "";
 
