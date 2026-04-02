@@ -5,11 +5,65 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  output   = "./generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────
+
+enum UserRole {
+  user
+  admin
+}
+
+enum UserTier {
+  free
+  pro
+  premium
+}
+
+enum MessageRole {
+  user
+  assistant
+}
+
+enum NotificationSource {
+  assistant
+  system
+}
+
+enum TaskStatus {
+  open
+  in_progress
+  done
+  cancelled
+}
+
+enum TaskPriority {
+  low
+  normal
+  high
+  urgent
+}
+
+enum DecisionStatus {
+  open
+  decided
+  reversed
+}
+
+enum MeetingStatus {
+  upcoming
+  done
+  cancelled
+}
+
+enum InteractionSource {
+  meeting
+  task
 }
 
 // ─── Better Auth tables ───────────────────────────────────
@@ -21,15 +75,10 @@ model User {
   emailVerified        Boolean  @default(false)
   image                String?
   timezone             String   @default("UTC")
-  role                 String   @default("user") // "user" | "admin"
-  tier                 String   @default("free") // "free" | "pro" | "premium"
+  role                 UserRole @default(user)
+  tier                 UserTier @default(free)
   knowledgeCharsUsed   Int      @default(0)
   knowledgeUploadsUsed Int      @default(0)
-  chatsDailyCount      Int      @default(0)
-  chatsDailyDate       String? // "YYYY-MM-DD" UTC — reset boundary for chatsDailyCount
-  widgetChatsCount     Int      @default(0)
-  widgetToolsCount     Int      @default(0)
-  widgetCountsDate     String? // "YYYY-MM-DD" UTC — reset boundary for widget counters
   preferences          Json     @default("{}")
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
@@ -50,6 +99,7 @@ model User {
   shareTokens        ShareToken[]
   integrations       Integration[]
   labels             Label[]
+  usageCounter       UsageCounter?
 
   @@map("user")
 }
@@ -116,15 +166,16 @@ model Chat {
 }
 
 model ChatMessage {
-  id        String   @id @default(cuid())
+  id        String      @id @default(cuid())
   chatId    String
-  role      String // "user" | "assistant"
+  role      MessageRole
   content   String
   thinking  String? // stored for audit; never rendered in the UI
-  createdAt DateTime @default(now())
+  createdAt DateTime    @default(now())
 
   chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
 
+  @@index([chatId])
   @@map("chat_message")
 }
 
@@ -134,7 +185,7 @@ model Notification {
   id        String   @id @default(cuid())
   userId    String
   category  String // e.g. "welcome_signup" | "welcome_login" | "system" | "token_limit"
-  source    String   @default("assistant") // "assistant" | "system"
+  source    NotificationSource @default(assistant)
   title     String
   body      String
   read      Boolean  @default(false)
@@ -219,15 +270,16 @@ model Contact {
 }
 
 model ContactInteraction {
-  id        String   @id @default(cuid())
+  id        String            @id @default(cuid())
   contactId String
-  source    String // "meeting" | "task"
+  source    InteractionSource
   sourceId  String
-  createdAt DateTime @default(now())
+  createdAt DateTime          @default(now())
 
   contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
 
   @@index([contactId])
+  @@index([sourceId])
   @@map("contact_interaction")
 }
 
@@ -243,7 +295,7 @@ model Meeting {
   agenda        String?
   summary       String?
   prepPack      String?
-  status        String   @default("upcoming") // upcoming | done | cancelled
+  status        MeetingStatus @default(upcoming)
   googleEventId String?  @unique
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -292,18 +344,19 @@ model Task {
   userId    String
   title     String
   notes     String?
-  status    String    @default("open") // open | in_progress | done | cancelled
-  priority  String    @default("normal") // low | normal | high | urgent
+  status    TaskStatus   @default(open)
+  priority  TaskPriority @default(normal)
   dueDate   DateTime?
   meetingId String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
   labelLinks LabelOnTask[]
 
   @@index([userId])
+  @@index([meetingId])
   @@map("task")
 }
 
@@ -315,17 +368,18 @@ model Decision {
   title     String
   rationale String?
   outcome   String?
-  status    String    @default("open") // open | decided | reversed
+  status    DecisionStatus @default(open)
   decidedAt DateTime?
   meetingId String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
   labelLinks LabelOnDecision[]
 
   @@index([userId])
+  @@index([meetingId])
   @@map("decision")
 }
 
@@ -340,6 +394,20 @@ model BriefingCache {
   @@map("briefing_cache")
 }
 
+model UsageCounter {
+  id               String  @id @default(cuid())
+  userId           String  @unique
+  chatsDailyCount  Int     @default(0)
+  chatsDailyDate   String? // "YYYY-MM-DD" UTC — reset boundary for chatsDailyCount
+  widgetChatsCount Int     @default(0)
+  widgetToolsCount Int     @default(0)
+  widgetCountsDate String? // "YYYY-MM-DD" UTC — reset boundary for widget counters
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("usage_counter")
+}
+
 model ShareToken {
   id        String   @id @default(cuid())
   userId    String
@@ -351,6 +419,7 @@ model ShareToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([expiresAt])
   @@map("share_token")
 }
 

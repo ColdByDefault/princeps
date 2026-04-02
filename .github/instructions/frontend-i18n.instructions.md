@@ -1,106 +1,82 @@
-<!--
- * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
- -->
-
 ---
-
 description: "Use when working on pages, components, layout, navigation, frontend UX, or localization in See-Sweet. Covers App Router page patterns, UI conventions, and i18n requirements."
 name: "See-Sweet Frontend And I18n"
 applyTo: "app/**/\*.tsx, components/**, messages/**, hooks/**, i18n/\*\*"
-
 ---
 
 # See-Sweet Frontend And I18n
 
 ## Page And Component Structure
 
-- Use server pages for session checks, metadata, and initial data assembly.
-- Use client components for interactivity, local state, and browser APIs.
-- Keep page components focused on composition and data flow; move business rules into `lib/<feature>/`.
-- Prefer `@/*` imports and keep new files aligned with the repo's existing header comment style.
+- Server pages handle auth, metadata, and initial data assembly. Pass serialized props (ISO strings, plain objects) to client components.
+- Client components handle interactivity, local state, and browser APIs. Keep them focused on JSX rendering — extract hooks, state, and API calls into `components/<feature>/logic/`.
+- Move business rules into `lib/<feature>/`, not into page or component files.
+- Use `@/*` path imports.
+
+## Hydration
+
+- Never use `typeof window !== "undefined"` checks or `useEffect` + `useState` mounted flags for hydration guards.
+- Use `useSyncExternalStore(() => () => {}, () => true, () => false)` for client-only rendering gates.
+- Ensure server-rendered HTML matches client initial render. If a value depends on the browser (locale, viewport, etc.), defer it to a client component or read it from a prop passed by the server.
+- Do not use `suppressHydrationWarning` unless it is on a leaf element displaying a truly volatile value (e.g., a live timestamp).
 
 ## UI Direction
 
-- Preserve the current visual language: layered cards, rounded surfaces, subtle gradients, and feature-specific layouts.
-- Do not flatten the app into generic dashboard scaffolding.
-- Prefer existing `components/ui` primitives before creating new low-level controls, but keep the established custom feature layouts where they already exist.
-- Use `npx shadcn@latest add...` to add missing Shadcn UI components instead of writing them, also NEVER EVER touch the shadcn/ui source code, if you need to adjust the styling of a shadcn/ui component, ask for approvment first.
-- If any component doesnt exist inside ui/, npm add shadcn/ui <component> like `npx shadcn@latest add button`.
-- Use Colored Icons, Badges, Tags, and similar components for status indicators, but avoid adding new ones if the existing set is sufficient.
-- Always add cursor-pointer to interactive elements and use the `aria-label` attribute for accessibility on non-text controls.
+- Visual language: layered cards, rounded surfaces, subtle gradients, feature-specific layouts. Do not flatten into generic dashboard scaffolding.
+- Use existing `components/ui` primitives first. Add missing Shadcn UI components via `npx shadcn@latest add <component>`. Never edit Shadcn source files in `components/ui/` — ask for approval first if styling changes are needed.
+- Use colored icons, badges, and tags for status indicators. Do not add new indicator types if the existing set covers the use case.
 
-## Shared Components (`components/shared/`)
+## Interactive Element Rules
 
-These are project-level UI primitives shared across features. Import from `@/components/shared`.
+- Every button, link, and clickable element must have `cursor-pointer`.
+- Every non-text interactive control (icon buttons, toggles, close buttons) must have an `aria-label` with localized text.
+- Every input field must have a `placeholder` with localized text.
+- Apply tooltips on icon-only buttons, abbreviated labels, and any control where the purpose is not obvious from text alone. Use the Shadcn `Tooltip` component.
 
-- **`NoticePanel`** — inline static notice for forms, error states, and empty states. No context required. All text props must be localized by the caller.
-  - `title` (required), `message` (optional), `onDismiss` (optional), `dismissLabel` (optional — accessible label for the dismiss button, pass a translated string).
+## Feedback & Notices
 
-  ```tsx
-  <NoticePanel
-    type="error"
-    title={getMessage(messages, "feature.save.errorTitle", "Save failed")}
-    message={error}
-    dismissLabel={getMessage(messages, "shared.dismiss", "Dismiss")}
-    onDismiss={() => setError(null)}
-  />
-  ```
+Every user-facing action (create, update, delete, upload, generate, etc.) must show feedback:
 
-  Types: `"success" | "error" | "warning" | "info" | "neutral" | "loading"`
+- **Success** — toast or floating notice confirming the action.
+- **Error** — toast, floating notice, or inline `NoticePanel` with the error message.
+- **Loading/Progress** — loading spinner, skeleton, or loading notice while the action is in progress.
 
-- **`FloatingNotices`** + **`useNotice`** — imperative floating notices (bottom-right). Provider is already mounted globally in the root layout. All text passed to `addNotice` must be localized by the caller.
-  - `dismissLabel` is optional — pass a translated string if screen-reader accessibility in the active locale matters.
+**Toast & notice styling**: background follows the app theme (dark/light). No colorful backgrounds. Only the icon inside the notice carries the status color (green check, red X, yellow warning, blue info).
 
-  ```tsx
-  const { addNotice, removeNotice } = useNotice();
-  addNotice({
-    type: "success",
-    title: getMessage(messages, "feature.save.success", "Saved"),
-    message: getMessage(messages, "feature.save.successBody", ""),
-    dismissLabel: getMessage(messages, "shared.dismiss", "Dismiss"),
-  });
-  // Loading pattern: const id = addNotice({ type: "loading", title: "..." }); then removeNotice(id)
-  ```
+### Shared Components — `components/shared/`
 
-- **`ConfirmDialog`** — reusable confirm/destructive dialog. `confirmLabel` and `cancelLabel` are required — always pass localized strings. Pass `confirmClassName` for destructive button styling.
+Import from `@/components/shared`.
 
-  ```tsx
-  <ConfirmDialog
-    open={open}
-    onOpenChange={setOpen}
-    title={getMessage(messages, "feature.delete.title", "Delete")}
-    description={getMessage(messages, "feature.delete.description", "")}
-    confirmLabel={getMessage(messages, "shared.confirm.delete", "Delete")}
-    cancelLabel={getMessage(messages, "shared.cancel", "Cancel")}
-    confirmClassName="bg-destructive text-white hover:bg-destructive/90"
-    onConfirm={handleDelete}
-  />
-  ```
+- **`NoticePanel`** — inline static notice for form-level feedback, error states, and empty states.
+  - Types: `"success" | "error" | "warning" | "info" | "neutral" | "loading"`
+  - All text props must be localized by the caller.
 
-- **Sonner `toast`** — for lightweight transient feedback (toaster is already globally mounted).
+- **`FloatingNotices`** + **`useNotice`** — imperative floating notices (bottom-right). Provider is mounted globally.
+  - Loading pattern: `const id = addNotice({ type: "loading", title: "..." }); ... removeNotice(id);`
+
+- **`ConfirmDialog`** — for all destructive or irreversible actions. `confirmLabel` and `cancelLabel` are required, always localized.
+
+- **Sonner `toast`** — lightweight transient feedback.
   ```tsx
   import { toast } from "sonner";
-  toast.success("Done") /
-    toast.error("Failed") /
-    toast.promise(promise, { loading, success, error });
+  toast.success(t("feature.saved"));
+  toast.error(t("feature.saveFailed"));
+  toast.promise(promise, { loading, success, error });
   ```
 
-**Guideline**: use `NoticePanel` for form-level feedback, `useNotice` / `toast` for app-level transient feedback, `ConfirmDialog` for all destructive or irreversible confirmation flows.
+**When to use which**: `NoticePanel` for inline form feedback. `toast` / `useNotice` for transient app-level feedback. `ConfirmDialog` for destructive confirmation flows.
 
 ## Base UI Conventions
 
-- In this repo, Base UI composition uses the `render` prop instead of Radix `asChild` on dialog triggers, dialog close controls, and similar primitives.
-- Guard `Select` value handlers because they can receive `null`.
-- For client-only hydration guards, prefer the existing `useSyncExternalStore` pattern instead of mounted flags set in effects.
+- Base UI composition uses the `render` prop (not Radix `asChild`) on dialog triggers, close controls, and similar primitives.
+- Guard `Select` value handlers — they can receive `null`.
 
 ## Internationalization
 
-- Do not hardcode user-facing copy in pages, components, dialogs, form labels, placeholders, buttons, empty states, or notices.
-- Add every new UI string to both `messages/en.json` and `messages/de.json`.
-- Keep message keys flat and namespaced, following the existing `feature.section.item` pattern.
-- German is the default locale. New features must work correctly even when no language has been selected yet.
-- Use ü-ä-ö-ß characters in German messages instead of ue-ae-oe-ss.
-- Use `getRequestConfig()` in server code when localized messages are needed.
-- Use `getMessage()` for localized copy lookup.
-- Keep logs, validation errors, and other technical text in English unless they appear in Frontend or the task explicitly requires localization.
+- Uses `next-intl` with middleware-based locale detection. German is the default, English is the second locale.
+- Do not hardcode user-facing copy anywhere — pages, components, dialogs, labels, placeholders, buttons, empty states, notices, tooltips.
+- Add every new UI string to both `messages/de.json` and `messages/en.json`.
+- Message keys are flat and namespaced: `feature.section.item`.
+- Use ü-ä-ö-ß in German messages (not ue-ae-oe-ss).
+- Use `useTranslations()` from `next-intl` in client components and `getTranslations()` in server code.
+- Keep logs, validation errors, and technical text in English. In-app user-facing notices (success, error, etc.) are always localized.

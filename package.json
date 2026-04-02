@@ -35,13 +35,6 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "postinstall": "prisma generate",
-    "db:migrate": "prisma migrate deploy",
-    "db:generate": "prisma generate",
-    "db:push": "prisma db push",
-    "db:seed": "tsx --require ./scripts/seed-preload.cjs prisma/seed.ts",
-    "db:seed-admin": "tsx --require ./scripts/seed-preload.cjs prisma/seed-admin.ts",
-    "db:seed-demo": "tsx --require ./scripts/seed-preload.cjs prisma/seed-demo.ts",
     "db:reset": "prisma migrate reset --force"
   },
   "dependencies": {
