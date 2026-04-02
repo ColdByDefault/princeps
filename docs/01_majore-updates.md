@@ -1,3 +1,5 @@
+# Major Updates 1
+
 - /.github
     - Refactored global instructions => /.github/copilot-instructions.md
     - Refactored all 3 instructions => /.github/instructions/*.instructions.md
@@ -10,3 +12,8 @@
     - Fixed node.js.yml.
 
 - Refactored /prisma/schema.prisma to remove unused models and fields, and to better reflect the current database schema.
+- Removed all APIs and related code (controllers, services, routes, etc.)
+
+
+# Major Updates 2
+- Language and i18nternationalization (i18n).

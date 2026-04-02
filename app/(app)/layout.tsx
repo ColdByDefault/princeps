@@ -4,7 +4,7 @@
  */
 
 import { headers } from "next/headers";
-import { getRequestConfig } from "@/i18n/request";
+import { getLocale } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Footer, Navbar } from "@/components/navigation";
@@ -18,21 +18,17 @@ import { NotificationsProvider } from "@/components/notifications";
 import { Toaster } from "@/components/ui/sonner";
 import { ChatWidgetProvider } from "@/components/chat-widget/ChatWidgetProvider";
 import { NudgeTrigger } from "@/components/nudges/NudgeTrigger";
-import { getUserPreferences } from "@/lib/settings/get.logic";
+import type { AppLanguage } from "@/types/i18n";
 
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { language, messages } = await getRequestConfig();
+  const locale = (await getLocale()) as AppLanguage;
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
-  const assistantName = session
-    ? (await getUserPreferences(session.user.id)).assistantName
-    : undefined;
 
   const userTier = session
     ? ((
@@ -70,7 +66,6 @@ export default async function AppLayout({
           />
           <main className="relative flex flex-1 flex-col overflow-hidden">
             <Navbar
-              messages={messages}
               sessionUser={
                 session?.user
                   ? {
@@ -84,18 +79,15 @@ export default async function AppLayout({
             />
             <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
               <div className="flex-1">{children}</div>
-              <Footer messages={messages} />
+              <Footer />
             </div>
           </main>
         </div>
         <FloatingNotices />
         <Toaster />
-        <GlobalSearch messages={messages} />
-        <LanguageHydrator language={language} />
-        <ChatWidgetProvider
-          authenticated={!!session}
-          assistantName={assistantName}
-        />
+        <GlobalSearch />
+        <LanguageHydrator language={locale} />
+        <ChatWidgetProvider authenticated={!!session} />
         <NudgeTrigger authenticated={!!session} />
       </NotificationsProvider>
     </NoticeProvider>
