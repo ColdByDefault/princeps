@@ -1,3 +1,16 @@
+## [0.1.25] - 2026-04-02
+
+- Remove localization strings and delete seed preload script
+- feat: remove outdated database seed files and related scripts for improved clarity
+- feat: update .gitignore and refactor prisma schema to improve organization and add new enums
+- fix: update stdin reading method in guard-shadcn hook for improved compatibility
+- feat: refactor documentation structure and remove outdated files; add new agents and hooks
+- feat: remove outdated Google Calendar setup and hardening documentation
+- fix: clean up formatting in Node.js CI workflow
+- feat: add agents for exploring, feature implementation, and code reviewing; implement guard for Shadcn source files
+- feat: remove postinstall script for prisma generate
+- feat: update documentation for workspace instructions, frontend i18n, main repo overview, and server data handling
+
 ## [0.1.24] - 2026-04-02
 
 - feat: add meeting creation details to README and remove upgrade link from Navbar
