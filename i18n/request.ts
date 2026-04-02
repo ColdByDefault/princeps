@@ -8,7 +8,6 @@ import { cookies, headers } from "next/headers";
 import {
   DEFAULT_LANGUAGE,
   LANGUAGE_COOKIE_NAME,
-  SUPPORTED_LANGUAGES,
   isSupportedLanguage,
 } from "@/types/i18n";
 
@@ -36,8 +35,12 @@ export default getRequestConfig(async () => {
     locale = getLanguageFromHeader(headerStore.get("accept-language"));
   }
 
+  const messageModule = (await import(`@/messages/${locale}.json`)) as {
+    default: Record<string, unknown>;
+  };
+
   return {
     locale,
-    messages: (await import(`@/messages/${locale}.json`)).default,
+    messages: messageModule.default,
   };
 });
