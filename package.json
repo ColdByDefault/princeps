@@ -35,7 +35,6 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "postinstall": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
