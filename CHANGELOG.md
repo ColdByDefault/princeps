@@ -1,3 +1,8 @@
+## [0.1.24] - 2026-04-02
+
+- feat: add meeting creation details to README and remove upgrade link from Navbar
+- feat: enhance tool handling and label management in chat components
+
 ## [0.1.23] - 2026-04-01
 
 - feat: update Node.js version matrix to only include 22.x
