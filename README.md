@@ -232,3 +232,14 @@ Security issues should be reported privately — not in public issues or pull re
 Include a short description of the issue, the affected area or endpoint, reproduction steps, and expected impact. See [SECURITY.md](SECURITY.md) for the full policy.
 
 Please allow reasonable time for review and remediation before any public disclosure.
+
+
+
+Create Meeting:
+   - title: "Project Sync"
+   - date: "2024-07-01T10:00:00Z"
+   - duration: 60
+   - location: "Zoom"
+   - agenda: "Discuss project milestones and blockers"
+   - participants: ["Alice Smith", "Bob Johnson"]
+   - Label: "VIP"

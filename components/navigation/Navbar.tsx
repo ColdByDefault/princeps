@@ -86,14 +86,6 @@ function PlanBadge({
       >
         {label}
       </span>
-      {isFree && (
-        <Link
-          href="/settings/app"
-          className="cursor-pointer text-[10px] font-medium text-primary underline-offset-2 hover:underline"
-        >
-          {getMessage(messages, "shell.nav.upgrade", "Upgrade")}
-        </Link>
-      )}
     </>
   );
 }
