@@ -54,12 +54,7 @@
 - Redesigned Tier-System see => `docs/02_tier-system.md`
 - **New** tier-tracking UI in Settings → Usage Tab, showing live counters for chats/day, messages/month, tokens/month, with progress bars relative to plan limits.
 
-- still to do:
-  - [ ] Improve Sidebar-Footer
-  - [ ] Empty Chats cant be renamed, deleted
-  - [ ] Add rules for Username (no spaces, unique, etc.) and enforce in Auth routes
-  - [ ] Add `index.ts` files where missing for better import paths and encapsulation.
-  - [ ] Adjust the imports in `providers.ts`
+
 
 # Major Updates 5
 ---
@@ -71,9 +66,14 @@
 
 
 
-
-# next
-
+# to do:
+  - [ ] Improve Sidebar-Footer
+  - [ ] Empty Chats cant be renamed, deleted
+  - [ ] Add rules for Username (no spaces, unique, etc.) and enforce in Auth routes
+  - [ ] Add `index.ts` files where missing for better import paths and encapsulation.
+  - [ ] Adjust the imports in `providers.ts`
+  - [ ] What happen if i keep creating new chats and delete them? What if i do so, and then kept only 5 Chats saved but no monthly tokens left? check all these scenarios and make sure the UX is good and the user is properly informed about limits, etc.
+# plan
 - [ ] Refactor Chat-Widget
 - [x] Add first feature, CRUD + and register to LLM Tools
 - [ ] Document first feature for reference in future features

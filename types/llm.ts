@@ -8,11 +8,16 @@
 
 // ─── Message / Chat ───────────────────────────────────────
 
-export type LLMMessageRole = "system" | "user" | "assistant";
+export type LLMMessageRole = "system" | "user" | "assistant" | "tool";
 
 export interface LLMMessage {
   role: LLMMessageRole;
-  content: string;
+  /** Null only on assistant messages that contain tool_calls and no text. */
+  content: string | null;
+  /** Populated when the assistant is requesting tool calls (role: "assistant"). */
+  tool_calls?: LLMToolCall[];
+  /** Required when role is "tool" — references the tool_call id being answered. */
+  tool_call_id?: string;
 }
 
 /** Base options accepted by every provider's callChat / streamChat. */
