@@ -58,6 +58,22 @@
       "hide": "Passwort ausblenden"
     }
   },
+  "theme": {
+    "selector": {
+      "groupLabel": "Designauswahl",
+      "light": "Helles Design",
+      "dark": "Dunkles Design",
+      "system": "Systemdesign",
+      "current": "Aktiv"
+    }
+  },
+  "loading": {
+    "workspace": {
+      "badge": "Arbeitsbereich wird vorbereitet",
+      "title": "Dein Arbeitsbereich wird geladen.",
+      "body": "Sitzung wird geprüft, aktueller Kontext wird geladen und die nächste Ansicht wird vorbereitet."
+    }
+  },
   "error": {
     "global": {
       "badge": "Fehlerbehebung",

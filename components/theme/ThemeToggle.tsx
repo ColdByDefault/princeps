@@ -8,6 +8,7 @@
 import { useSyncExternalStore } from "react";
 import { LaptopMinimal, Moon, Sun, type LucideIcon } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,42 +16,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getMessage } from "@/lib/i18n";
-import { type MessageDictionary } from "@/types/i18n";
 
 type ThemeOption = {
   value: "light" | "dark" | "system";
   icon: LucideIcon;
-  labelKey: string;
-  fallback: string;
+  labelKey: "selector.light" | "selector.dark" | "selector.system";
 };
 
 const options: ReadonlyArray<ThemeOption> = [
-  {
-    value: "light",
-    icon: Sun,
-    labelKey: "theme.selector.light",
-    fallback: "Light theme",
-  },
-  {
-    value: "dark",
-    icon: Moon,
-    labelKey: "theme.selector.dark",
-    fallback: "Dark theme",
-  },
-  {
-    value: "system",
-    icon: LaptopMinimal,
-    labelKey: "theme.selector.system",
-    fallback: "System theme",
-  },
+  { value: "light", icon: Sun, labelKey: "selector.light" },
+  { value: "dark", icon: Moon, labelKey: "selector.dark" },
+  { value: "system", icon: LaptopMinimal, labelKey: "selector.system" },
 ];
 
-export default function ThemeToggle({
-  messages,
-}: {
-  messages: MessageDictionary;
-}) {
+export default function ThemeToggle() {
+  const t = useTranslations("theme");
   const { theme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
     () => () => {},
@@ -59,11 +39,7 @@ export default function ThemeToggle({
   );
   const activeTheme = mounted ? (theme ?? "system") : "system";
 
-  const groupLabel = getMessage(
-    messages,
-    "theme.selector.groupLabel",
-    "Theme selector",
-  );
+  const groupLabel = t("selector.groupLabel");
   const activeOption =
     options.find((option) => option.value === activeTheme) ?? options[2];
   const ActiveIcon = activeOption.icon;
@@ -78,11 +54,7 @@ export default function ThemeToggle({
             size="sm"
             aria-label={groupLabel}
             className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
-            title={getMessage(
-              messages,
-              activeOption.labelKey,
-              activeOption.fallback,
-            )}
+            title={t(activeOption.labelKey)}
           >
             <ActiveIcon className="size-3.5" />
           </Button>
@@ -93,7 +65,7 @@ export default function ThemeToggle({
         className="min-w-40 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
       >
         {options.map((option) => {
-          const label = getMessage(messages, option.labelKey, option.fallback);
+          const label = t(option.labelKey);
 
           return (
             <DropdownMenuItem
@@ -108,7 +80,7 @@ export default function ThemeToggle({
                 </span>
                 {activeTheme === option.value ? (
                   <span className="text-xs text-muted-foreground">
-                    {getMessage(messages, "theme.selector.current", "Current")}
+                    {t("selector.current")}
                   </span>
                 ) : null}
               </span>

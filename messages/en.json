@@ -58,6 +58,22 @@
       "hide": "Hide password"
     }
   },
+  "theme": {
+    "selector": {
+      "groupLabel": "Theme selector",
+      "light": "Light theme",
+      "dark": "Dark theme",
+      "system": "System theme",
+      "current": "Current"
+    }
+  },
+  "loading": {
+    "workspace": {
+      "badge": "Preparing workspace",
+      "title": "Loading your workspace.",
+      "body": "Checking your session, pulling current context, and preparing the next view."
+    }
+  },
   "error": {
     "global": {
       "badge": "Application recovery",
