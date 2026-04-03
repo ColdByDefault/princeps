@@ -61,6 +61,16 @@ export interface ProviderHealthStatus {
   error: string | null;
 }
 
+// ─── Settings / Status ────────────────────────────────────
+
+export type ActiveProvider = "openAi" | "ollama" | "groq";
+
+/** Serialisable status payload returned by the provider-status API. */
+export interface ProviderStatusPayload {
+  provider: ActiveProvider;
+  health: ProviderHealthStatus;
+}
+
 // ─── Test ─────────────────────────────────────────────────
 
 export interface ProviderTestResult {

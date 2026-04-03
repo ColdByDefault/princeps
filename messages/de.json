@@ -87,11 +87,44 @@
       "goLogin": "Zur Anmeldung"
     }
   },
+  "settings": {
+    "metadata": {
+      "title": "Einstellungen",
+      "description": "Verwalte Erscheinungsbild und KI-Anbieter deines Arbeitsbereichs."
+    },
+    "tabs": {
+      "appearance": "Erscheinungsbild",
+      "provider": "KI-Anbieter"
+    },
+    "appearance": {
+      "themeTitle": "Design",
+      "themeDescription": "Wähle zwischen hellem, dunklem oder systembasiertem Design.",
+      "languageTitle": "Sprache",
+      "languageDescription": "Wähle die Anzeigesprache deines Arbeitsbereichs."
+    },
+    "provider": {
+      "title": "Aktiver KI-Anbieter",
+      "description": "Verbindungsstatus des konfigurierten LLM-Anbieters.",
+      "providerLabel": "Anbieter",
+      "versionLabel": "Version",
+      "modelsLabel": "Verfügbare Modelle",
+      "statusLabel": "Status",
+      "statusConnected": "Verbunden",
+      "statusDisconnected": "Nicht verbunden",
+      "refresh": "Aktualisieren",
+      "refreshing": "Wird aktualisiert…",
+      "noModels": "Keine Modelle gefunden",
+      "nameOpenAi": "OpenAI",
+      "nameOllama": "Ollama (lokal)",
+      "nameGroq": "Groq"
+    }
+  },
   "shell": {
     "nav": {
       "brand": "See-Sweet",
       "home": "Arbeitsbereich",
       "chat": "Chat",
+      "settings": "Einstellungen",
       "userFallback": "Arbeitsbereich-Nutzer",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…",
