@@ -41,6 +41,7 @@ app/api/<feature>/
 ## Coding Standards
 
 - Every input field has a localized `placeholder`.
+- ShadcnUI components are used where possible for consistency.
 - Every button/clickable has `cursor-pointer`.
 - Every non-text control has `aria-label` with localized text.
 - Icon-only buttons get tooltips.

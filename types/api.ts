@@ -33,6 +33,19 @@ export interface KnowledgeDocumentRecord {
 /** Client-safe shape of the PersonalInfo fields map. */
 export type PersonalInfoFields = Record<string, string | number | null>;
 
+/** Client-safe shape of a Task record. */
+export interface TaskRecord {
+  id: string;
+  title: string;
+  notes: string | null;
+  status: "open" | "in_progress" | "done" | "cancelled";
+  priority: "low" | "normal" | "high" | "urgent";
+  dueDate: string | null; // ISO string
+  meetingId: string | null;
+  createdAt: string; // ISO string
+  updatedAt: string; // ISO string
+}
+
 /** Client-safe shape of a lightweight label reference. */
 export interface LabelOptionRecord {
   id: string;

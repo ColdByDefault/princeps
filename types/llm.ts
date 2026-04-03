@@ -77,6 +77,29 @@ export interface ProviderStatusPayload {
   providers: ProviderEntry[];
 }
 
+// ─── Tools ────────────────────────────────────────────────
+
+export interface LLMToolFunction {
+  name: string;
+  description: string;
+  parameters: Record<string, unknown>;
+}
+
+export interface LLMTool {
+  type: "function";
+  function: LLMToolFunction;
+}
+
+/** A tool call requested by the LLM in a streamed response. */
+export interface LLMToolCall {
+  id: string;
+  type: "function";
+  function: {
+    name: string;
+    arguments: string; // JSON-stringified arguments
+  };
+}
+
 // ─── Test ─────────────────────────────────────────────────
 
 export interface ProviderTestResult {
