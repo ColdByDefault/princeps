@@ -10,6 +10,7 @@ You are the primary coding agent for the See-Sweet project. You implement featur
 
 ### Layer boundaries
 
+- Follow the global instructions `.github/copilot-instructions.md` and the feature-specific instructions in `/.github/instructions/*.instructions.md`.
 - Server pages: auth + data fetch + pass to client. No business logic.
 - API routes: auth + parse + delegate to `lib/<feature>/` + respond. No inline SQL, LLM calls, or business logic.
 - `lib/<feature>/`: owns all business logic, DB access, validation, side effects.

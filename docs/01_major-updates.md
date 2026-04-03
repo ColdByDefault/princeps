@@ -72,8 +72,9 @@
 
 # next
 
-- Refactor Chat-Widget
-- Add first feature, CRUD + slots
-- Add Notifications System
-- Introduce Labels System => Global Labels created from app-settings can be used to label chats, tasks, etc. These labels can have a name, color, and LLM can use them as well as creating new ones.
-- Add dynamic loading.tsx messages, or generalize it a bit. (currently it shows "Preparing Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.)
+- [ ] Refactor Chat-Widget
+- [x] Add first feature, CRUD + slots
+- [ ] Document first feature for reference in future features
+- [ ] Add Notifications System
+- [ ] Introduce Labels System => Global Labels created from app-settings can be used to label chats, tasks, etc. These labels can have a name, color, and LLM can use them as well as creating new ones.
+- [ ] Add dynamic loading.tsx messages, or generalize it a bit. (currently it shows "Preparing Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.)
