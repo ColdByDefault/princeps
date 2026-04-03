@@ -1,3 +1,15 @@
+## [0.1.30] - 2026-04-03
+
+- feat: update task dialogs to include visual hints for required and optional fields
+- feat: refactor task mutation logic for improved efficiency and error handling
+- feat: implement monthly tool call limits and update usage tracking for tool calls
+- feat: enhance LLM tool integration by adding support for tool calls and updating message structure
+- feat: update CreateTaskDialog to ensure proper button semantics and improve DialogTrigger usage
+- feat: enhance LLM tool integration and improve task management UI with tooltips
+- feat: update documentation for feature agent and major updates checklist
+- feat: refactor task-related components and logic for improved clarity and performance
+- feat: add task management features including task creation, editing, and deletion
+
 ## [0.1.29] - 2026-04-03
 
 - feat: add documentation for i18n system, LLM provider abstraction, auth refactor, and tier system redesign
