@@ -40,7 +40,6 @@
        - `provider-test.ts`
   - `lib/llm-providers/provider.ts` (active provider dispatcher)
   - `types/llm.ts`
-
 - Refactored App-Settings
 
 # Major Updates 4
@@ -48,6 +47,8 @@
 - Refactored /Chat and chat-settings dialog.
 - Added Groq provider (API-based, similar to OpenAI), models filter in UI is intentionally hardcoded, Groq API doesn't query available models from API, it sends all models back. 
 - Added Simple `lib/context/build.ts`
+- Improved Tier System and interduced new "Enterprise" tier
+- **NEW** Tokens controls for LLM usages
 
 
 - still to do:
@@ -60,5 +61,4 @@
 - Refactor Chat-Widget
 - Add first feature, CRUD + slots 
 - Add Notifications System
-- Unifide all toaster under a single provider with consistent UI and API
 - Add dynamic loading.tsx messages, or generelize it a bit. (cuurent it shows "Prepering Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.)

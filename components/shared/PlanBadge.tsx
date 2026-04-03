@@ -15,7 +15,9 @@ export function PlanBadge({ tier }: { tier: string }) {
       ? t("planPro")
       : tier === "premium"
         ? t("planPremium")
-        : t("planFree");
+        : tier === "enterprise"
+          ? t("planEnterprise")
+          : t("planFree");
 
   return (
     <span
@@ -25,7 +27,9 @@ export function PlanBadge({ tier }: { tier: string }) {
           ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
           : tier === "premium"
             ? "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
-            : "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
+            : tier === "enterprise"
+              ? "bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
+              : "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
       )}
     >
       {label}

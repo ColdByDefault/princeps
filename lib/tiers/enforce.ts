@@ -201,6 +201,89 @@ export async function getChatHistoryLimit(userId: string): Promise<number> {
   return getPlanLimits(tier).chatHistoryTotal;
 }
 
+// ─── Monthly quota helpers ────────────────────────────────
+
+function currentMonth(): string {
+  return new Date().toISOString().slice(0, 7); // "YYYY-MM"
+}
+
+// ─── Monthly limits (messages + tokens) ──────────────────
+
+/**
+ * Checks whether the user is within their monthly message and token budgets.
+ * Increments the message counter on success. Token counter is updated
+ * separately via accumulateTokens() after the assistant response completes.
+ *
+ * Also handles the monthly reset: when a new month is detected, both counters
+ * are zeroed before the new count is written.
+ */
+export async function enforceMonthlyLimits(
+  userId: string,
+): Promise<EnforceResult> {
+  const [tier, counter] = await Promise.all([
+    getUserTier(userId),
+    getOrCreateCounter(userId),
+  ]);
+
+  const limits = getPlanLimits(tier);
+  const month = currentMonth();
+  const stale = counter.monthlyResetDate !== month;
+
+  const currentMessages = stale ? 0 : counter.messageMonthlyCount;
+  const currentTokens = stale ? 0 : counter.tokenMonthlyCount;
+
+  if (currentMessages >= limits.messagesPerMonth) {
+    return {
+      allowed: false,
+      reason: "Monthly message limit reached for your plan.",
+    };
+  }
+
+  if (currentTokens >= limits.tokensPerMonth) {
+    return {
+      allowed: false,
+      reason: "Monthly token budget exhausted for your plan.",
+    };
+  }
+
+  await db.usageCounter.update({
+    where: { userId },
+    data: {
+      messageMonthlyCount: currentMessages + 1,
+      // Zero out tokens on a new month before accumulation starts
+      tokenMonthlyCount: stale ? 0 : currentTokens,
+      monthlyResetDate: month,
+    },
+  });
+
+  return { allowed: true };
+}
+
+// ─── Token accumulation ───────────────────────────────────
+
+/**
+ * Adds approximate token usage to the monthly counter after a response completes.
+ * Uses the 1 token ≈ 4 characters heuristic — no cost calculation is performed.
+ *
+ * This is non-critical. Call it fire-and-forget (.catch(() => {})).
+ * The row is guaranteed to exist at this point because enforceMonthlyLimits()
+ * already called getOrCreateCounter() earlier in the same request.
+ */
+export async function accumulateTokens(
+  userId: string,
+  userMessageChars: number,
+  assistantResponseChars: number,
+): Promise<void> {
+  const approxTokens = Math.ceil(
+    (userMessageChars + assistantResponseChars) / 4,
+  );
+
+  await db.usageCounter.update({
+    where: { userId },
+    data: { tokenMonthlyCount: { increment: approxTokens } },
+  });
+}
+
 // ─── Response factory ─────────────────────────────────────
 
 /**

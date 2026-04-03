@@ -22,6 +22,7 @@ import {
 import { setInitialTitle } from "@/lib/chat/create.logic";
 import { streamChat } from "@/lib/llm-providers/provider";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
+import { enforceMonthlyLimits, accumulateTokens } from "@/lib/tiers";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 import { buildSystemPrompt } from "@/lib/context/build";
 import type { LLMMessage, LLMChatOptions } from "@/types/llm";
@@ -80,6 +81,12 @@ export async function POST(req: Request, { params }: Params) {
     return NextResponse.json({ error: "Chat not found" }, { status: 404 });
   }
 
+  // Enforce monthly message + token budget before touching the LLM
+  const monthlyCheck = await enforceMonthlyLimits(session.user.id);
+  if (!monthlyCheck.allowed) {
+    return NextResponse.json({ error: monthlyCheck.reason }, { status: 429 });
+  }
+
   // Persist user message immediately
   await saveUserMessage(chatId, userMessage);
 
@@ -131,6 +138,12 @@ export async function POST(req: Request, { params }: Params) {
         if (assistantContent) {
           await saveAssistantMessage(chatId, assistantContent);
           await touchChat(chatId);
+          // Fire-and-forget — non-critical, must not block the response
+          accumulateTokens(
+            session.user.id,
+            userMessage.length,
+            assistantContent.length,
+          ).catch(() => {});
         }
         send({ type: "done" });
         controller.close();

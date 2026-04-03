@@ -134,7 +134,8 @@
       "closeMenu": "Menü schließen",
       "planFree": "Free",
       "planPro": "Pro",
-      "planPremium": "Premium"
+      "planPremium": "Premium",
+      "planEnterprise": "Enterprise"
     },
     "language": {
       "groupLabel": "Sprachauswahl",
