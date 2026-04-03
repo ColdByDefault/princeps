@@ -1,3 +1,7 @@
+## [0.1.29] - 2026-04-03
+
+- feat: add documentation for i18n system, LLM provider abstraction, auth refactor, and tier system redesign
+
 ## [0.1.28] - 2026-04-03
 
 - feat: document major updates and refactor i18n, LLM provider, and auth systems in new markdown files
