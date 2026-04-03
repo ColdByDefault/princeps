@@ -95,7 +95,8 @@
     "tabs": {
       "appearance": "Appearance",
       "provider": "AI Provider",
-      "usage": "Usage"
+      "usage": "Usage",
+      "labels": "Labels"
     },
     "appearance": {
       "themeTitle": "Theme",
@@ -288,5 +289,42 @@
     "deleteLabel": "Delete",
     "markDoneLabel": "Mark as done",
     "reopenLabel": "Reopen"
+  },
+  "labels": {
+    "title": "Labels",
+    "description": "Global labels for tasks, contacts, and other records.",
+    "newLabel": "New label",
+    "empty": "No labels yet.",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Label name",
+      "color": "Color"
+    },
+    "createDialog": {
+      "heading": "New label",
+      "submit": "Create",
+      "submitting": "Creating…",
+      "success": "Label created.",
+      "error": "Failed to create label.",
+      "duplicateError": "A label with this name already exists."
+    },
+    "editDialog": {
+      "heading": "Edit label",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "success": "Label saved.",
+      "error": "Failed to save label.",
+      "duplicateError": "A label with this name already exists."
+    },
+    "deleteDialog": {
+      "title": "Delete this label?",
+      "description": "The label will be removed from all linked records.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Label deleted.",
+      "error": "Failed to delete label."
+    },
+    "editLabel": "Edit",
+    "deleteLabel": "Delete"
   }
 }

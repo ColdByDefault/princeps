@@ -9,13 +9,15 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AppearanceTab } from "./AppearanceTab";
+import { LabelsTab } from "./LabelsTab";
 import { ProviderTab } from "./ProviderTab";
 import { UsageTab } from "./UsageTab";
 import type { ProviderStatusPayload } from "@/types/llm";
 import type { UsageSummary } from "@/types/billing";
+import type { LabelRecord } from "@/types/api";
 
 const COOKIE_KEY = "settings-tab";
-const VALID_TABS = ["appearance", "provider", "usage"] as const;
+const VALID_TABS = ["appearance", "provider", "usage", "labels"] as const;
 type SettingsTab = (typeof VALID_TABS)[number];
 
 function setTabCookie(tab: SettingsTab) {
@@ -26,12 +28,14 @@ type SettingsShellProps = {
   initialStatus: ProviderStatusPayload;
   initialTab: string;
   initialUsage: UsageSummary;
+  initialLabels: LabelRecord[];
 };
 
 export function SettingsShell({
   initialStatus,
   initialTab,
   initialUsage,
+  initialLabels,
 }: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
   const safeInitial: SettingsTab = VALID_TABS.includes(
@@ -61,6 +65,9 @@ export function SettingsShell({
         <TabsTrigger value="usage" className="flex-1">
           {t("usage")}
         </TabsTrigger>
+        <TabsTrigger value="labels" className="flex-1">
+          {t("labels")}
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="appearance" className="mt-6 w-full">
@@ -73,6 +80,10 @@ export function SettingsShell({
 
       <TabsContent value="usage" className="mt-6 w-full">
         <UsageTab usage={initialUsage} />
+      </TabsContent>
+
+      <TabsContent value="labels" className="mt-6 w-full">
+        <LabelsTab initialLabels={initialLabels} />
       </TabsContent>
     </Tabs>
   );

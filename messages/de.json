@@ -95,7 +95,8 @@
     "tabs": {
       "appearance": "Erscheinungsbild",
       "provider": "KI-Anbieter",
-      "usage": "Nutzung"
+      "usage": "Nutzung",
+      "labels": "Labels"
     },
     "appearance": {
       "themeTitle": "Design",
@@ -288,5 +289,42 @@
     "deleteLabel": "Löschen",
     "markDoneLabel": "Als erledigt markieren",
     "reopenLabel": "Wiedereröffnen"
+  },
+  "labels": {
+    "title": "Labels",
+    "description": "Globale Labels für Aufgaben, Kontakte und weitere Einträge.",
+    "newLabel": "Neues Label",
+    "empty": "Noch keine Labels.",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Label-Name",
+      "color": "Farbe"
+    },
+    "createDialog": {
+      "heading": "Neues Label",
+      "submit": "Erstellen",
+      "submitting": "Wird erstellt…",
+      "success": "Label erstellt.",
+      "error": "Label konnte nicht erstellt werden.",
+      "duplicateError": "Ein Label mit diesem Namen existiert bereits."
+    },
+    "editDialog": {
+      "heading": "Label bearbeiten",
+      "submit": "Speichern",
+      "submitting": "Wird gespeichert…",
+      "success": "Label gespeichert.",
+      "error": "Label konnte nicht gespeichert werden.",
+      "duplicateError": "Ein Label mit diesem Namen existiert bereits."
+    },
+    "deleteDialog": {
+      "title": "Label löschen?",
+      "description": "Das Label wird von allen verknüpften Einträgen entfernt.",
+      "confirm": "Löschen",
+      "cancel": "Abbrechen",
+      "success": "Label gelöscht.",
+      "error": "Label konnte nicht gelöscht werden."
+    },
+    "editLabel": "Bearbeiten",
+    "deleteLabel": "Löschen"
   }
 }

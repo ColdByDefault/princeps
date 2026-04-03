@@ -59,10 +59,13 @@
 # Major Updates 5
 ---
 
-- Build first feature **Tasks** according to new architecture (see `lib/` structure in instructions). This will be a simple CRUD feature with some slots for the LLM context.
+- Build first feature **Tasks** according to new architecture (see `lib/` structure in instructions). This will be a simple CRUD feature with slots for the LLM context.
 
 
+# Major Updates 6
+---
 
+- Refactore Labels System.
 
 
 
@@ -80,6 +83,6 @@
   - [ ] Tasks Filter exist but the task missing the category field, so the filter does not work, add category to task and wire it up to filter.
 # plan
 - [ ] Refactor Chat-Widget to use new architecture and patterns (chat steam, tools, awareness of LLM provider, etc.)
-- [ ] Add Notifications System
-- [ ] Introduce Labels System => Global Labels created from app-settings can be used to label chats, tasks, etc. These labels can have a name, color, and LLM can use them as well as creating new ones.
+- [ ] LLM system prompt and general behavior.
+- [ ] Add Notifications System (Basic system notifications "tokens usage limit readched", "new features available", "new updates", etc. Secondly, real-time LLM-generated notifications, e.g. login, signup, reports of tool usage, or important events in the app, etc.)
 - [ ] Add dynamic loading.tsx messages, or generalize it a bit. (currently it shows "Preparing Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.), use `components\shared\LoadingRing.tsx`
