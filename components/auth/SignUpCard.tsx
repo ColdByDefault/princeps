@@ -8,42 +8,41 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import {
-  ArrowRight,
-  Brain,
-  Eye,
-  EyeOff,
-  FolderKanban,
-  Sparkles,
-} from "lucide-react";
-import {
-  AuthShell,
-  AUTH_PROVIDERS,
-  getAuthMessage,
-  OAuthProviderButtonGroup,
-  type AuthProvider,
-} from "@/components/auth/shared";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { AuthShell } from "@/components/auth/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
-import { type MessageDictionary } from "@/types/i18n";
+import { authClient } from "@/lib/auth/auth-client";
+import { signUpSchema } from "@/lib/auth/auth-schemas";
 
-export default function SignUpCard({
-  messages,
-}: {
-  messages: MessageDictionary;
-}) {
+export default function SignUpCard() {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+
+    const result = signUpSchema.safeParse({
+      name,
+      email,
+      password,
+      confirmPassword,
+    });
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      return;
+    }
+
     setLoading(true);
 
     const { error: authError } = await authClient.signUp.email({
@@ -54,10 +53,7 @@ export default function SignUpCard({
     });
 
     if (authError) {
-      setError(
-        authError.message ??
-          getAuthMessage(messages, "auth.signUp.errorFallback"),
-      );
+      setError(authError.message ?? t("signUp.errorFallback"));
       setLoading(false);
       return;
     }
@@ -66,43 +62,15 @@ export default function SignUpCard({
     router.refresh();
   }
 
-  async function handleOAuth(provider: AuthProvider) {
-    await authClient.signIn.social({ provider, callbackURL: "/home" });
-  }
-
   return (
     <AuthShell
-      badge={getAuthMessage(messages, "auth.signUp.badge")}
-      brandName={getAuthMessage(messages, "auth.brandName")}
-      heroBody={getAuthMessage(messages, "auth.signUp.heroBody")}
-      heroPanelClassName="bg-background"
-      heroPoints={[
-        {
-          body: getAuthMessage(messages, "auth.signUp.point.fastBody"),
-          icon: Sparkles,
-          title: getAuthMessage(messages, "auth.signUp.point.fast"),
-        },
-        {
-          body: getAuthMessage(messages, "auth.signUp.point.organizedBody"),
-          icon: FolderKanban,
-          title: getAuthMessage(messages, "auth.signUp.point.organized"),
-        },
-        {
-          body: getAuthMessage(messages, "auth.signUp.point.controlBody"),
-          icon: Brain,
-          title: getAuthMessage(messages, "auth.signUp.point.control"),
-        },
-      ]}
-      heroTitle={getAuthMessage(messages, "auth.signUp.heroTitle")}
+      title={t("signUp.title")}
+      subtitle={t("signUp.subtitle")}
       form={
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-          suppressHydrationWarning
-        >
-          <div className="space-y-2" suppressHydrationWarning>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
-              {getAuthMessage(messages, "auth.signUp.nameLabel")}
+              {t("signUp.nameLabel")}
             </label>
             <Input
               id="name"
@@ -111,17 +79,14 @@ export default function SignUpCard({
               required
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder={getAuthMessage(
-                messages,
-                "auth.signUp.namePlaceholder",
-              )}
+              placeholder={t("signUp.namePlaceholder")}
               className="h-11 rounded-xl bg-background/80"
             />
           </div>
 
-          <div className="space-y-2" suppressHydrationWarning>
+          <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              {getAuthMessage(messages, "auth.signUp.emailLabel")}
+              {t("signUp.emailLabel")}
             </label>
             <Input
               id="email"
@@ -130,17 +95,14 @@ export default function SignUpCard({
               required
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder={getAuthMessage(
-                messages,
-                "auth.signUp.emailPlaceholder",
-              )}
+              placeholder={t("signUp.emailPlaceholder")}
               className="h-11 rounded-xl bg-background/80"
             />
           </div>
 
-          <div className="space-y-2" suppressHydrationWarning>
+          <div className="space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
-              {getAuthMessage(messages, "auth.signUp.passwordLabel")}
+              {t("signUp.passwordLabel")}
             </label>
             <div className="relative">
               <Input
@@ -151,27 +113,51 @@ export default function SignUpCard({
                 minLength={8}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                placeholder={getAuthMessage(
-                  messages,
-                  "auth.signUp.passwordPlaceholder",
-                )}
+                placeholder={t("signUp.passwordPlaceholder")}
                 className="h-11 rounded-xl bg-background/80 pr-11"
               />
               <button
                 type="button"
-                aria-label={getAuthMessage(
-                  messages,
-                  showPassword ? "auth.password.hide" : "auth.password.show",
-                )}
+                aria-label={t(showPassword ? "password.hide" : "password.show")}
                 aria-pressed={showPassword}
-                title={getAuthMessage(
-                  messages,
-                  showPassword ? "auth.password.hide" : "auth.password.show",
-                )}
                 onClick={() => setShowPassword((current) => !current)}
                 className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
               >
                 {showPassword ? (
+                  <EyeOff className="size-4" />
+                ) : (
+                  <Eye className="size-4" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="confirmPassword" className="text-sm font-medium">
+              {t("signUp.confirmPasswordLabel")}
+            </label>
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                autoComplete="new-password"
+                required
+                minLength={8}
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                placeholder={t("signUp.confirmPasswordPlaceholder")}
+                className="h-11 rounded-xl bg-background/80 pr-11"
+              />
+              <button
+                type="button"
+                aria-label={t(
+                  showConfirmPassword ? "password.hide" : "password.show",
+                )}
+                aria-pressed={showConfirmPassword}
+                onClick={() => setShowConfirmPassword((current) => !current)}
+                className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
+              >
+                {showConfirmPassword ? (
                   <EyeOff className="size-4" />
                 ) : (
                   <Eye className="size-4" />
@@ -187,31 +173,19 @@ export default function SignUpCard({
             disabled={loading}
             className="h-11 w-full cursor-pointer rounded-xl"
           >
-            {loading
-              ? getAuthMessage(messages, "auth.signUp.submitting")
-              : getAuthMessage(messages, "auth.signUp.submit")}
+            {loading ? t("signUp.submitting") : t("signUp.submit")}
             <ArrowRight className="size-4" />
           </Button>
         </form>
       }
-      oauthSection={
-        <OAuthProviderButtonGroup
-          dividerLabel={getAuthMessage(messages, "auth.signUp.oauthDivider")}
-          messages={messages}
-          onProviderSelect={handleOAuth}
-          providers={AUTH_PROVIDERS}
-        />
-      }
-      subtitle={getAuthMessage(messages, "auth.signUp.subtitle")}
-      title={getAuthMessage(messages, "auth.signUp.title")}
       footer={
         <p className="text-center text-sm text-muted-foreground">
-          {getAuthMessage(messages, "auth.signUp.switchPrompt")}{" "}
+          {t("signUp.switchPrompt")}{" "}
           <Link
             href="/login"
             className="cursor-pointer font-medium text-foreground hover:text-primary"
           >
-            {getAuthMessage(messages, "auth.signUp.switchLink")}
+            {t("signUp.switchLink")}
           </Link>
         </p>
       }

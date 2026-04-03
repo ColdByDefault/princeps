@@ -7,50 +7,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import VersionDisplay from "@/components/VersionDisplay";
-import { getMessage } from "@/lib/i18n";
-import { type MessageDictionary } from "@/types/i18n";
 
 const HIDDEN_FOOTER_PATHS = new Set(["/login", "/sign-up"]);
-
-type FooterProps = {
-  messages: MessageDictionary;
-};
 
 type FooterLink = {
   href: string;
   label: string;
 };
-
-function getWorkspaceLinks(messages: MessageDictionary): FooterLink[] {
-  return [
-    {
-      href: "/home",
-      label: getMessage(messages, "shell.nav.home", "Workspace"),
-    },
-  ];
-}
-
-function getPolicyLinks(messages: MessageDictionary): FooterLink[] {
-  return [
-    {
-      href: "/privacy-policy",
-      label: getMessage(
-        messages,
-        "shell.footer.privacyPolicy",
-        "Privacy policy",
-      ),
-    },
-    {
-      href: "/terms-of-use",
-      label: getMessage(messages, "shell.footer.termsOfUse", "Terms of use"),
-    },
-    {
-      href: "/security",
-      label: getMessage(messages, "shell.footer.security", "Security"),
-    },
-  ];
-}
 
 function FooterColumn({
   title,
@@ -79,31 +44,31 @@ function FooterColumn({
   );
 }
 
-export default function Footer({ messages }: FooterProps) {
+export default function Footer() {
+  const t = useTranslations("shell");
   const pathname = usePathname();
 
   if (HIDDEN_FOOTER_PATHS.has(pathname) || pathname.startsWith("/chat")) {
     return null;
   }
 
-  const workspaceLinks = getWorkspaceLinks(messages);
-  const policyLinks = getPolicyLinks(messages);
+  const workspaceLinks: FooterLink[] = [
+    { href: "/home", label: t("nav.home") },
+  ];
+  const policyLinks: FooterLink[] = [
+    { href: "/privacy-policy", label: t("footer.privacyPolicy") },
+    { href: "/terms-of-use", label: t("footer.termsOfUse") },
+    { href: "/security", label: t("footer.security") },
+  ];
 
   return (
     <footer className="px-4 pb-6 sm:px-6 lg:px-8">
       <div className="mx-auto mt-8 max-w-7xl rounded-[2rem] border border-black/8 bg-white/42 px-6 py-5 backdrop-blur-xl dark:border-white/10 dark:bg-black/28">
         <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-start">
-          <FooterColumn
-            title={getMessage(messages, "shell.footer.workspace", "Workspace")}
-            links={workspaceLinks}
-          />
+          <FooterColumn title={t("footer.workspace")} links={workspaceLinks} />
 
           <FooterColumn
-            title={getMessage(
-              messages,
-              "shell.footer.placeholderLinks",
-              "Policies",
-            )}
+            title={t("footer.placeholderLinks")}
             links={policyLinks}
           />
 
@@ -111,18 +76,14 @@ export default function Footer({ messages }: FooterProps) {
             <div className="flex items-center gap-2 lg:justify-end">
               <VersionDisplay
                 className="block text-sm text-muted-foreground"
-                titleLabel={getMessage(
-                  messages,
-                  "shell.footer.versionTitle",
-                  "Application version",
-                )}
+                titleLabel={t("footer.versionTitle")}
               />
               <span className="inline-flex items-center rounded-full bg-amber-500/10 px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.18em] text-amber-700 uppercase dark:text-amber-300">
-                {getMessage(messages, "shell.footer.beta", "Beta")}
+                {t("footer.beta")}
               </span>
             </div>
             <p className="text-sm text-muted-foreground mt-auto">
-              {getMessage(messages, "shell.footer.copyright", "Copyright")}
+              {t("footer.copyright")}
             </p>
           </div>
         </div>

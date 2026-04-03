@@ -8,30 +8,16 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import {
-  ArrowRight,
-  Eye,
-  EyeOff,
-  ShieldCheck,
-  SlidersHorizontal,
-} from "lucide-react";
-import {
-  AuthShell,
-  AUTH_PROVIDERS,
-  getAuthMessage,
-  OAuthProviderButtonGroup,
-  type AuthProvider,
-} from "@/components/auth/shared";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { AuthShell } from "@/components/auth/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
-import { type MessageDictionary } from "@/types/i18n";
+import { authClient } from "@/lib/auth/auth-client";
+import { signInSchema } from "@/lib/auth/auth-schemas";
 
-export default function LoginCard({
-  messages,
-}: {
-  messages: MessageDictionary;
-}) {
+export default function LoginCard() {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,6 +28,13 @@ export default function LoginCard({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+
+    const result = signInSchema.safeParse({ email, password });
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      return;
+    }
+
     setLoading(true);
 
     const { error: authError } = await authClient.signIn.email({
@@ -51,10 +44,7 @@ export default function LoginCard({
     });
 
     if (authError) {
-      setError(
-        authError.message ??
-          getAuthMessage(messages, "auth.login.errorFallback"),
-      );
+      setError(authError.message ?? t("login.errorFallback"));
       setLoading(false);
       return;
     }
@@ -63,38 +53,15 @@ export default function LoginCard({
     router.refresh();
   }
 
-  async function handleOAuth(provider: AuthProvider) {
-    await authClient.signIn.social({ provider, callbackURL: "/home" });
-  }
-
   return (
     <AuthShell
-      badge={getAuthMessage(messages, "auth.login.badge")}
-      brandName={getAuthMessage(messages, "auth.brandName")}
-      heroBody={getAuthMessage(messages, "auth.login.heroBody")}
-      heroPanelClassName="bg-linear-to-br from-primary/12 via-background to-background"
-      heroPoints={[
-        {
-          body: getAuthMessage(messages, "auth.login.point.privateBody"),
-          icon: ShieldCheck,
-          title: getAuthMessage(messages, "auth.login.point.private"),
-        },
-        {
-          body: getAuthMessage(messages, "auth.login.point.controlBody"),
-          icon: SlidersHorizontal,
-          title: getAuthMessage(messages, "auth.login.point.control"),
-        },
-      ]}
-      heroTitle={getAuthMessage(messages, "auth.login.heroTitle")}
+      title={t("login.title")}
+      subtitle={t("login.subtitle")}
       form={
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-          suppressHydrationWarning
-        >
-          <div className="space-y-2" suppressHydrationWarning>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              {getAuthMessage(messages, "auth.login.emailLabel")}
+              {t("login.emailLabel")}
             </label>
             <Input
               id="email"
@@ -103,17 +70,14 @@ export default function LoginCard({
               required
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder={getAuthMessage(
-                messages,
-                "auth.login.emailPlaceholder",
-              )}
+              placeholder={t("login.emailPlaceholder")}
               className="h-11 rounded-xl bg-background/80"
             />
           </div>
 
-          <div className="space-y-2" suppressHydrationWarning>
+          <div className="space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
-              {getAuthMessage(messages, "auth.login.passwordLabel")}
+              {t("login.passwordLabel")}
             </label>
             <div className="relative">
               <Input
@@ -123,23 +87,13 @@ export default function LoginCard({
                 required
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                placeholder={getAuthMessage(
-                  messages,
-                  "auth.login.passwordPlaceholder",
-                )}
+                placeholder={t("login.passwordPlaceholder")}
                 className="h-11 rounded-xl bg-background/80 pr-11"
               />
               <button
                 type="button"
-                aria-label={getAuthMessage(
-                  messages,
-                  showPassword ? "auth.password.hide" : "auth.password.show",
-                )}
+                aria-label={t(showPassword ? "password.hide" : "password.show")}
                 aria-pressed={showPassword}
-                title={getAuthMessage(
-                  messages,
-                  showPassword ? "auth.password.hide" : "auth.password.show",
-                )}
                 onClick={() => setShowPassword((current) => !current)}
                 className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
               >
@@ -159,31 +113,19 @@ export default function LoginCard({
             disabled={loading}
             className="h-11 w-full cursor-pointer rounded-xl"
           >
-            {loading
-              ? getAuthMessage(messages, "auth.login.submitting")
-              : getAuthMessage(messages, "auth.login.submit")}
+            {loading ? t("login.submitting") : t("login.submit")}
             <ArrowRight className="size-4" />
           </Button>
         </form>
       }
-      oauthSection={
-        <OAuthProviderButtonGroup
-          dividerLabel={getAuthMessage(messages, "auth.login.oauthDivider")}
-          messages={messages}
-          onProviderSelect={handleOAuth}
-          providers={AUTH_PROVIDERS}
-        />
-      }
-      subtitle={getAuthMessage(messages, "auth.login.subtitle")}
-      title={getAuthMessage(messages, "auth.login.title")}
       footer={
         <p className="text-center text-sm text-muted-foreground">
-          {getAuthMessage(messages, "auth.login.switchPrompt")}{" "}
+          {t("login.switchPrompt")}{" "}
           <Link
             href="/sign-up"
             className="cursor-pointer font-medium text-foreground hover:text-primary"
           >
-            {getAuthMessage(messages, "auth.login.switchLink")}
+            {t("login.switchLink")}
           </Link>
         </p>
       }

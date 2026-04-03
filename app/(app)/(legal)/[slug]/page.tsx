@@ -3,11 +3,7 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
-import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getRequestConfig } from "@/i18n/request";
-import { getMessage } from "@/lib/i18n";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
 
 const legalPages = {
   "privacy-policy": {
@@ -39,31 +35,6 @@ function isLegalSlug(value: string): value is LegalSlug {
   return value in legalPages;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-
-  if (!isLegalSlug(slug)) {
-    return {};
-  }
-
-  const { language, messages } = await getRequestConfig();
-  const page = legalPages[slug];
-
-  return defineSEO({
-    title: getMessage(messages, page.metadataTitleKey, "Policy"),
-    description: getMessage(
-      messages,
-      page.descriptionKey,
-      "Policy information",
-    ),
-    path: page.path,
-    locale: getSeoLocale(language),
-  });
-}
 
 export default async function LegalPlaceholderPage({
   params,

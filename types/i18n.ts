@@ -11,12 +11,6 @@ export const DEFAULT_LANGUAGE: AppLanguage = "de";
 export const LANGUAGE_COOKIE_NAME = "akhiil-language";
 export const LANGUAGE_STORAGE_KEY = "akhiil-language";
 
-export type MessageDictionary = Record<string, string>;
-
-export type MessageModule = {
-  default: MessageDictionary;
-};
-
 export function isSupportedLanguage(
   value: string | null | undefined,
 ): value is AppLanguage {

@@ -3,9 +3,8 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
+import { getTranslations } from "next-intl/server";
 import { Sparkles } from "lucide-react";
-import { getRequestConfig } from "@/i18n/request";
-import { getMessage } from "@/lib/i18n";
 
 function SkeletonBlock({ className }: { className: string }) {
   return (
@@ -14,7 +13,7 @@ function SkeletonBlock({ className }: { className: string }) {
 }
 
 export default async function Loading() {
-  const { messages } = await getRequestConfig();
+  const t = await getTranslations("loading");
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col px-6 py-8 sm:px-8 lg:px-10">
@@ -22,27 +21,15 @@ export default async function Loading() {
         <div className="space-y-5">
           <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm text-muted-foreground">
             <Sparkles className="size-4 text-primary" />
-            {getMessage(
-              messages,
-              "loading.workspace.badge",
-              "Preparing workspace",
-            )}
+            {t("workspace.badge")}
           </div>
 
           <div className="space-y-3">
             <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-              {getMessage(
-                messages,
-                "loading.workspace.title",
-                "Loading your workspace.",
-              )}
+              {t("workspace.title")}
             </h1>
             <p className="max-w-3xl text-lg leading-8 text-muted-foreground">
-              {getMessage(
-                messages,
-                "loading.workspace.body",
-                "Checking your session, pulling current context, and preparing the next view.",
-              )}
+              {t("workspace.body")}
             </p>
           </div>
 

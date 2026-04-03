@@ -5,10 +5,4 @@
 
 export { default as LoginCard } from "./LoginCard";
 export { default as SignUpCard } from "./SignUpCard";
-export {
-  AUTH_PROVIDERS,
-  AuthShell,
-  getAuthMessage,
-  OAuthProviderButtonGroup,
-  type AuthProvider,
-} from "./shared";
+export { AuthShell } from "./shared";

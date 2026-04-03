@@ -94,6 +94,7 @@ export const uploadRateLimiter = new InMemoryRateLimiter(5 * 60_000, 10);
 export const writeRateLimiter = new InMemoryRateLimiter(60_000, 30);
 export const briefingRateLimiter = new InMemoryRateLimiter(60 * 60_000, 5);
 export const prepRateLimiter = new InMemoryRateLimiter(60 * 60_000, 10);
+export const authRateLimiter = new InMemoryRateLimiter(60_000, 10);
 
 export function getRateLimitIdentifier(
   req: Request,

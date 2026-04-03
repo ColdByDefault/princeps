@@ -1,5 +1,5 @@
 ## [0.1.25] - 2026-04-02
-
+## MAJOR REFACTORE
 - Remove localization strings and delete seed preload script
 - feat: remove outdated database seed files and related scripts for improved clarity
 - feat: update .gitignore and refactor prisma schema to improve organization and add new enums

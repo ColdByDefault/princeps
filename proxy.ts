@@ -5,6 +5,11 @@
  */
 
 import { type NextRequest, NextResponse } from "next/server";
+import {
+  DEFAULT_LANGUAGE,
+  LANGUAGE_COOKIE_NAME,
+  isSupportedLanguage,
+} from "@/types/i18n";
 
 const publicRoutes = [
   "/",
@@ -16,7 +21,7 @@ const publicRoutes = [
 ];
 const authRoutes = ["/login", "/sign-up"];
 // Routes that should not trigger the onboarding redirect
-const onboardingBypassRoutes = ["/onboarding", "/api/onboarding"];
+/* const onboardingBypassRoutes = ["/onboarding", "/api/onboarding"]; */
 
 function matchesRoute(pathname: string, route: string) {
   if (route === "/") {
@@ -55,7 +60,7 @@ export default async function proxy(req: NextRequest) {
   // Onboarding gate — redirect authenticated users who haven't completed
   // onboarding. The ob_done cookie is set by /api/onboarding/complete and
   // /api/onboarding/confirm (for users who completed before the cookie existed).
-  const isOnboardingBypass = onboardingBypassRoutes.some((route) =>
+/*   const isOnboardingBypass = onboardingBypassRoutes.some((route) =>
     matchesRoute(pathname, route),
   );
   if (isAuthenticated && !isOnboardingBypass) {
@@ -65,10 +70,29 @@ export default async function proxy(req: NextRequest) {
       url.pathname = "/onboarding";
       return NextResponse.redirect(url);
     }
-  }
+  } */
 
   // Admin guard — role check happens server-side in the page
   // (cookie only carries session token, not role; page does the DB check)
+
+  // Seed language cookie on first visit so i18n/request.ts has a stable locale
+  const hasLanguageCookie = req.cookies.has(LANGUAGE_COOKIE_NAME);
+  if (!hasLanguageCookie) {
+    const acceptLanguage = req.headers.get("accept-language") ?? "";
+    const preferred = acceptLanguage
+      .split(",")
+      .map((p) => p.trim().split(";")[0]?.toLowerCase().slice(0, 2) ?? "")
+      .find((c) => isSupportedLanguage(c));
+
+    const locale = preferred ?? DEFAULT_LANGUAGE;
+    const response = NextResponse.next();
+    response.cookies.set(LANGUAGE_COOKIE_NAME, locale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
+    return response;
+  }
 
   return NextResponse.next();
 }

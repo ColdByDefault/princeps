@@ -18,14 +18,11 @@ type Props = {
 };
 
 /**
- * Sets the language cookie and localStorage from the server-resolved language
- * on first mount, if no client cookie is present yet — e.g. after a fresh
- * login or cookie clearance. Fires the custom event so useLanguage updates.
+ * Ensures the language cookie and localStorage are in sync with the
+ * server-resolved locale on first mount (e.g. after cookie clearance).
  */
 export function LanguageHydrator({ language }: Props) {
   useEffect(() => {
-    if (typeof document === "undefined") return;
-
     const cookie = document.cookie
       .split("; ")
       .find((c) => c.startsWith(`${LANGUAGE_COOKIE_NAME}=`));
@@ -33,16 +30,10 @@ export function LanguageHydrator({ language }: Props) {
       ? decodeURIComponent(cookie.split("=")[1] ?? "")
       : null;
 
-    // Only hydrate if no valid cookie exists yet
     if (!isSupportedLanguage(cookieValue)) {
       document.cookie = `${LANGUAGE_COOKIE_NAME}=${encodeURIComponent(language)}; path=/; max-age=31536000; samesite=lax`;
       document.documentElement.lang = language;
       window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-      window.dispatchEvent(
-        new CustomEvent<AppLanguage>("akhiil-language-change", {
-          detail: language,
-        }),
-      );
     }
   }, [language]);
 
