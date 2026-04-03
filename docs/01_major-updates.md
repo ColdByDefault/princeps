@@ -60,7 +60,6 @@
 ---
 
 - Build first feature **Tasks** according to new architecture (see `lib/` structure in instructions). This will be a simple CRUD feature with slots for the LLM context.
-> open question: LLM can call the tools to create, but can it update (edit)? Labels too?
 
 # Major Updates 6
 ---
