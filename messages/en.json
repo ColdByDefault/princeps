@@ -253,7 +253,8 @@
       "notesPlaceholder": "Optional notes\u2026",
       "priority": "Priority",
       "dueDate": "Due date",
-      "status": "Status"
+      "status": "Status",
+      "optional": "Optional"
     },
     "createDialog": {
       "heading": "New task",

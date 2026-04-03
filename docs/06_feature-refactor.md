@@ -401,6 +401,36 @@ const [title, setTitle] = useState(task?.title ?? "");  // ✅ no useEffect
 - Destructive actions (delete) must use `AlertDialog` for confirmation, not a plain click handler.
 - All status/priority indicators use colored badges, not text alone.
 
+### Form input conventions
+
+The Zod schema (`lib/<feature>/schemas.ts`) is the source of truth for required vs. optional fields. The UI must reflect this visually.
+
+**Required field** — add a red asterisk after the label text, hidden from screen readers:
+
+```tsx
+<Label htmlFor="task-title">
+  {t("fields.title")}
+  <span aria-hidden="true" className="ml-0.5 text-destructive">
+    *
+  </span>
+</Label>
+```
+
+**Optional field** — add a muted `(Optional)` hint after the label text:
+
+```tsx
+<Label htmlFor="task-notes">
+  {t("fields.notes")}
+  <span className="ml-1 text-xs font-normal text-muted-foreground">
+    ({t("fields.optional")})
+  </span>
+</Label>
+```
+
+Add `"optional": "Optional"` (EN) / `"optional": "Optional"` (DE) under the `fields` key in both message files. No i18n key is needed for the asterisk itself.
+
+Fields with a guaranteed non-empty default (e.g. a `<select>` with a pre-selected value at all times) do not need an optional hint.
+
 ---
 
 ## 7. Server Page — `app/(app)/<feature>/page.tsx`

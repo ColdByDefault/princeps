@@ -77,10 +77,9 @@
   - [ ] Add missing navigations to sidebar.
   - [ ] Add refresh buttons to settings pages to reflect changes immediately without needing a full page refresh.
   - [ ] Add UI errors when try to navigate to protected routes (e.g. chat) while not authenticated, or when hitting rate limits, etc.
-  - [ ] Tasks Inputs: check what optional and what required, and add proper UI hints (e.g. placeholder text, asterisk for required fields, etc.) then apply to `06_feature-refactor.md` for general pattern.
+  - [ ] Tasks Filter exist but the task missing the category field, so the filter does not work, add category to task and wire it up to filter.
 # plan
-- [ ] Refactor Chat-Widget
-- [x] Add first feature, CRUD + and register to LLM Tools + context (Tasks) + tier limits + fully documentated in `docs/`.
+- [ ] Refactor Chat-Widget to use new architecture and patterns (chat steam, tools, awareness of LLM provider, etc.)
 - [ ] Add Notifications System
 - [ ] Introduce Labels System => Global Labels created from app-settings can be used to label chats, tasks, etc. These labels can have a name, color, and LLM can use them as well as creating new ones.
 - [ ] Add dynamic loading.tsx messages, or generalize it a bit. (currently it shows "Preparing Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.), use `components\shared\LoadingRing.tsx`

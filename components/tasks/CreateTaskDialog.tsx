@@ -79,7 +79,12 @@ export function CreateTaskDialog({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="task-title">{t("fields.title")}</Label>
+            <Label htmlFor="task-title">
+              {t("fields.title")}
+              <span aria-hidden="true" className="ml-0.5 text-destructive">
+                *
+              </span>
+            </Label>
             <Input
               id="task-title"
               value={title}
@@ -91,7 +96,12 @@ export function CreateTaskDialog({
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="task-notes">{t("fields.notes")}</Label>
+            <Label htmlFor="task-notes">
+              {t("fields.notes")}
+              <span className="ml-1 text-xs font-normal text-muted-foreground">
+                ({t("fields.optional")})
+              </span>
+            </Label>
             <Textarea
               id="task-notes"
               value={notes}
@@ -104,7 +114,12 @@ export function CreateTaskDialog({
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="task-priority">{t("fields.priority")}</Label>
+              <Label htmlFor="task-priority">
+                {t("fields.priority")}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">
+                  ({t("fields.optional")})
+                </span>
+              </Label>
               <Select
                 value={priority}
                 onValueChange={(v) => v !== null && setPriority(v)}
@@ -126,7 +141,12 @@ export function CreateTaskDialog({
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="task-due">{t("fields.dueDate")}</Label>
+              <Label htmlFor="task-due">
+                {t("fields.dueDate")}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">
+                  ({t("fields.optional")})
+                </span>
+              </Label>
               <Input
                 id="task-due"
                 type="date"

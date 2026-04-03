@@ -83,7 +83,12 @@ export function EditTaskDialog({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="edit-task-title">{t("fields.title")}</Label>
+            <Label htmlFor="edit-task-title">
+              {t("fields.title")}
+              <span aria-hidden="true" className="ml-0.5 text-destructive">
+                *
+              </span>
+            </Label>
             <Input
               id="edit-task-title"
               value={title}
@@ -95,7 +100,12 @@ export function EditTaskDialog({
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="edit-task-notes">{t("fields.notes")}</Label>
+            <Label htmlFor="edit-task-notes">
+              {t("fields.notes")}
+              <span className="ml-1 text-xs font-normal text-muted-foreground">
+                ({t("fields.optional")})
+              </span>
+            </Label>
             <Textarea
               id="edit-task-notes"
               value={notes}
@@ -108,7 +118,12 @@ export function EditTaskDialog({
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="edit-task-priority">{t("fields.priority")}</Label>
+              <Label htmlFor="edit-task-priority">
+                {t("fields.priority")}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">
+                  ({t("fields.optional")})
+                </span>
+              </Label>
               <Select
                 value={priority}
                 onValueChange={(v) => v !== null && setPriority(v)}
@@ -157,7 +172,12 @@ export function EditTaskDialog({
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="edit-task-due">{t("fields.dueDate")}</Label>
+            <Label htmlFor="edit-task-due">
+              {t("fields.dueDate")}
+              <span className="ml-1 text-xs font-normal text-muted-foreground">
+                ({t("fields.optional")})
+              </span>
+            </Label>
             <Input
               id="edit-task-due"
               type="date"
