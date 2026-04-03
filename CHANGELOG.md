@@ -1,3 +1,19 @@
+## [0.1.27] - 2026-04-03
+
+- feat: improve code readability in ProviderTab and SettingsShell components with consistent formatting
+- feat: enhance SettingsPage and ProviderTab with cookie management and improved provider status handling
+- feat: update SettingsPage layout to ensure full-width display
+- feat: refactor AppearanceTab and ProviderTab for improved layout and structure
+- feat: enhance language management by adding preferred language support and refining cookie handling
+- feat: refine OpenAI health check to filter and display only accessible chat and embedding models
+- feat: implement user preferences management with theme and language support
+- feat: simplify button labels in theme selector and clean up Navbar imports
+- feat: enhance AppLayout with session management and improved structure
+- feat: add settings page with appearance and provider management, including provider status API
+- feat: add LLM provider dispatcher and update major updates documentation
+- feat: refactor LLM provider structure, consolidate health checks, and add OpenAI support
+- feat: implement Ollama provider with chat, embedding, and health check functionalities
+
 ## [0.1.26] - 2026-04-03
 
 - refactor: enhance Auth routes with ZOD validations and improve enforcement handling in lib/tiers
