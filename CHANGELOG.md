@@ -1,3 +1,26 @@
+## [0.1.26] - 2026-04-03
+
+- refactor: enhance Auth routes with ZOD validations and improve enforcement handling in lib/tiers
+- refactor: add copyright headers to new and existing files, and update plan limits export in billing types
+- refactor: restructure authentication logic and components, implement ZOD validations, and enhance user experience with password confirmation
+- feat: implement desktop and mobile navigation components with internationalization support
+- refactor: simplify footer component by removing message dictionary and using translations for labels
+- refactor: remove unused chat API routes, update theme toggle for new translation system, and enhance loading messages with internationalization
+- refactor: streamline legal page metadata generation and enhance global error handling with new translations
+- refactor: update layout and authentication pages for improved responsiveness and session handling
+- refactor: remove databaseHooks from auth configuration
+- refactor: replace getMessage with getMsg in error handling components
+- Refactor authentication components to use new translation system
+- refactor: remove NoticeProvider and FloatingNotices component
+- refactor: remove ShareLinkPanel and related components
+- refactor: optimize message module import in request configuration
+- feat: integrate next-intl for language management and simplify LanguageHydrator logic
+- feat: remove deprecated cron jobs and notification logic
+- chore: add next-intl dependency to package.json
+- fix: remove redundant line in security policy section of README
+- refactor: remove deprecated admin pages, user management logic, and related schemas
+- refactor: remove notification, report, share, and task logic files
+
 ## [0.1.25] - 2026-04-02
 ## MAJOR REFACTORE
 - Remove localization strings and delete seed preload script
