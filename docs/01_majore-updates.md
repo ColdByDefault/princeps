@@ -50,9 +50,14 @@
 - Added Simple `lib/context/build.ts`
 
 
+- still to do:
+   - [ ] Improve Sidebar-Footer
+   - [ ] Empty Chats cant be renamed, deleted
+
 
 # next
 - Refactor Chat-Widget
 - Add first feature, CRUD + slots 
 - Add Notifications System
 - Unifide all toaster under a single provider with consistent UI and API
+- Add dynamic loading.tsx messages, or generelize it a bit. (cuurent it shows "Prepering Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.)

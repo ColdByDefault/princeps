@@ -39,6 +39,7 @@ export default async function ChatIdPage({ params }: Props) {
           name: session.user.name ?? null,
           email: session.user.email ?? null,
         }}
+        tier={session.user.tier ?? "free"}
       />
       <SidebarInset className="min-h-0">
         <SiteHeader />

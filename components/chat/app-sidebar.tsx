@@ -54,6 +54,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { PlanBadge } from "@/components/shared";
 import { type ChatSummary } from "@/types/chat";
 
 type AppSidebarProps = {
@@ -61,9 +62,10 @@ type AppSidebarProps = {
     name: string | null;
     email: string | null;
   } | null;
+  tier?: string | null;
 };
 
-export function AppSidebar({ sessionUser }: AppSidebarProps) {
+export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
   const t = useTranslations("chat");
   const pathname = usePathname();
   const router = useRouter();
@@ -383,6 +385,11 @@ export function AppSidebar({ sessionUser }: AppSidebarProps) {
 
       {/* Footer */}
       <SidebarFooter>
+        {!isCollapsed && tier && (
+          <div className="px-2 pb-0 pt-1">
+            <PlanBadge tier={tier} />
+          </div>
+        )}
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
