@@ -73,6 +73,7 @@ export interface ProviderEntry {
 /** Serialisable status payload returned by the provider-status API. */
 export interface ProviderStatusPayload {
   active: ActiveProvider;
+  activeModel: string;
   providers: ProviderEntry[];
 }
 

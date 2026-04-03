@@ -94,7 +94,8 @@
     },
     "tabs": {
       "appearance": "Erscheinungsbild",
-      "provider": "KI-Anbieter"
+      "provider": "KI-Anbieter",
+      "usage": "Nutzung"
     },
     "appearance": {
       "themeTitle": "Design",
@@ -119,6 +120,15 @@
       "nameGroq": "Groq",
       "activeLabel": "Aktiv",
       "notAvailable": "Nicht verfügbar"
+    },
+    "usage": {
+      "planLabel": "Aktueller Plan",
+      "resetLabel": "Monatliche Zurücksetzung",
+      "resetUnknown": "Noch nicht erfasst",
+      "messagesTitle": "Nachrichten diesen Monat",
+      "tokensTitle": "Ungefähre Token diesen Monat",
+      "chatsTitle": "Gespeicherte Chats",
+      "chatsNote": "Dieses Limit wird nie zurückgesetzt — lösche Chats, um Platz freizugeben."
     }
   },
   "shell": {
@@ -134,7 +144,8 @@
       "closeMenu": "Menü schließen",
       "planFree": "Free",
       "planPro": "Pro",
-      "planPremium": "Premium"
+      "planPremium": "Premium",
+      "planEnterprise": "Enterprise"
     },
     "language": {
       "groupLabel": "Sprachauswahl",
@@ -153,6 +164,56 @@
       "versionTitle": "Anwendungsversion",
       "beta": "Beta",
       "copyright": "© 2026 ColdByDefault"
+    }
+  },
+  "chat": {
+    "sidebar": {
+      "navGroup": "Navigation",
+      "navHome": "Arbeitsbereich",
+      "title": "Chats",
+      "newChat": "Neuer Chat",
+      "empty": "Noch keine Chats.",
+      "rename": "Umbenennen",
+      "renamePlaceholder": "Chat-Titel",
+      "delete": "Löschen",
+      "deleteTitle": "Diesen Chat löschen?",
+      "deleteDescription": "Dieser Chat und alle dazugehörigen Nachrichten werden dauerhaft gelöscht.",
+      "deleteConfirm": "Löschen",
+      "deleteCancel": "Abbrechen",
+      "deleteSuccess": "Chat gelöscht.",
+      "renameSuccess": "Chat umbenannt.",
+      "limitReached": "Lösche einen Chat, um einen neuen zu erstellen.",
+      "pendingEmpty": "Schreibe zuerst — leere Chats werden nicht gespeichert.",
+      "actions": "Chat-Aktionen",
+      "userFallback": "Arbeitsbereich-Nutzer",
+      "signOut": "Abmelden",
+      "signingOut": "Wird abgemeldet…"
+    },
+    "empty": {
+      "title": "Gespräch starten",
+      "body": "Sende eine Nachricht, um zu beginnen."
+    },
+    "input": {
+      "placeholder": "Frag mich etwas…",
+      "send": "Nachricht senden"
+    },
+    "error": {
+      "send": "Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
+      "create": "Chat konnte nicht erstellt werden.",
+      "delete": "Chat konnte nicht gelöscht werden.",
+      "rename": "Chat konnte nicht umbenannt werden."
+    },
+    "settings": {
+      "tooltipLabel": "Chat-Einstellungen",
+      "title": "Chat-Einstellungen",
+      "description": "Diese Einstellungen gelten für alle KI-Anbieter.",
+      "temperature": "Temperatur",
+      "temperatureDescription": "Steuert die Zufälligkeit. Niedriger = fokussierter, höher = kreativer.",
+      "timeout": "Anfrage-Timeout",
+      "timeoutDescription": "Maximale Wartezeit auf eine Antwort (in Sekunden).",
+      "timeoutUnit": "s",
+      "reset": "Auf Standardwerte zurücksetzen",
+      "save": "Änderungen speichern"
     }
   }
 }

@@ -32,6 +32,10 @@ export const auth = betterAuth({
         type: "string",
         defaultValue: "user",
       },
+      tier: {
+        type: "string",
+        defaultValue: "free",
+      },
     },
   },
 });

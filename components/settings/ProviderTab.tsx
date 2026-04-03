@@ -6,10 +6,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@/components/ui/collapsible";
 import type { ActiveProvider, ProviderStatusPayload } from "@/types/llm";
 
 // ─── Helpers ──────────────────────────────────────────────
@@ -80,7 +85,10 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
             <div className="flex items-center gap-2">
               <p className="text-sm font-medium">{providerLabel(provider)}</p>
               {provider === status.active && (
-                <Badge variant="outline" className="text-xs">
+                <Badge
+                  variant="outline"
+                  className="text-xs bg-green-600/10 text-green-700 border-green-500/20"
+                >
                   {t("activeLabel")}
                 </Badge>
               )}
@@ -114,26 +122,31 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
 
           {/* Models */}
           {health.models.length > 0 && (
-            <div className="space-y-1.5">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                {t("modelsLabel")}
-              </p>
-              <div className="divide-y divide-border/60 rounded-lg border border-border/60">
-                {health.models.map((model) => (
-                  <div
-                    key={model.name}
-                    className="flex items-center justify-between px-3 py-2"
-                  >
-                    <span className="text-sm font-mono">{model.name}</span>
-                    {model.size !== null && (
-                      <span className="text-xs text-muted-foreground">
-                        {formatBytes(model.size)}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <Collapsible>
+              <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wide hover:text-foreground transition-colors">
+                <span>
+                  {t("modelsLabel")} ({health.models.length})
+                </span>
+                <ChevronDown className="size-3.5 shrink-0 transition-transform duration-200 group-data-panel-open:rotate-180" />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-1.5">
+                <div className="divide-y divide-border/60 rounded-lg border border-border/60">
+                  {health.models.map((model) => (
+                    <div
+                      key={model.name}
+                      className="flex items-center justify-between px-3 py-2"
+                    >
+                      <span className="text-sm font-mono">{model.name}</span>
+                      {model.size !== null && (
+                        <span className="text-xs text-muted-foreground">
+                          {formatBytes(model.size)}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
           )}
         </div>
       ))}

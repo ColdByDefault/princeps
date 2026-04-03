@@ -94,7 +94,8 @@
     },
     "tabs": {
       "appearance": "Appearance",
-      "provider": "AI Provider"
+      "provider": "AI Provider",
+      "usage": "Usage"
     },
     "appearance": {
       "themeTitle": "Theme",
@@ -119,6 +120,15 @@
       "nameGroq": "Groq",
       "activeLabel": "Active",
       "notAvailable": "Not available"
+    },
+    "usage": {
+      "planLabel": "Current plan",
+      "resetLabel": "Monthly reset",
+      "resetUnknown": "Not tracked yet",
+      "messagesTitle": "Messages this month",
+      "tokensTitle": "Approx. tokens this month",
+      "chatsTitle": "Saved chats",
+      "chatsNote": "This limit never resets — delete chats to free up space."
     }
   },
   "shell": {
@@ -134,7 +144,8 @@
       "closeMenu": "Close menu",
       "planFree": "Free",
       "planPro": "Pro",
-      "planPremium": "Premium"
+      "planPremium": "Premium",
+      "planEnterprise": "Enterprise"
     },
     "language": {
       "groupLabel": "Language selector",
@@ -153,6 +164,56 @@
       "versionTitle": "Application version",
       "beta": "Beta",
       "copyright": "© 2026 ColdByDefault"
+    }
+  },
+  "chat": {
+    "sidebar": {
+      "navGroup": "Navigation",
+      "navHome": "Workspace",
+      "title": "Chats",
+      "newChat": "New chat",
+      "empty": "No chats yet.",
+      "rename": "Rename",
+      "renamePlaceholder": "Chat title",
+      "delete": "Delete",
+      "deleteTitle": "Delete this chat?",
+      "deleteDescription": "This will permanently delete this chat and all its messages.",
+      "deleteConfirm": "Delete",
+      "deleteCancel": "Cancel",
+      "deleteSuccess": "Chat deleted.",
+      "renameSuccess": "Chat renamed.",
+      "limitReached": "Delete a chat to create a new one.",
+      "pendingEmpty": "Start chatting first — empty chats are not saved.",
+      "actions": "Chat actions",
+      "userFallback": "Workspace user",
+      "signOut": "Sign out",
+      "signingOut": "Signing out…"
+    },
+    "empty": {
+      "title": "Start a conversation",
+      "body": "Send a message to begin."
+    },
+    "input": {
+      "placeholder": "Ask anything…",
+      "send": "Send message"
+    },
+    "error": {
+      "send": "Failed to send message. Please try again.",
+      "create": "Failed to create chat.",
+      "delete": "Failed to delete chat.",
+      "rename": "Failed to rename chat."
+    },
+    "settings": {
+      "tooltipLabel": "Chat settings",
+      "title": "Chat Settings",
+      "description": "These settings apply to all AI providers.",
+      "temperature": "Temperature",
+      "temperatureDescription": "Controls randomness. Lower = more focused, higher = more creative.",
+      "timeout": "Request Timeout",
+      "timeoutDescription": "Maximum time to wait for a response (in seconds).",
+      "timeoutUnit": "s",
+      "reset": "Reset to defaults",
+      "save": "Save changes"
     }
   }
 }

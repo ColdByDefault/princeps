@@ -10,10 +10,12 @@ import { useTranslations } from "next-intl";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AppearanceTab } from "./AppearanceTab";
 import { ProviderTab } from "./ProviderTab";
+import { UsageTab } from "./UsageTab";
 import type { ProviderStatusPayload } from "@/types/llm";
+import type { UsageSummary } from "@/types/billing";
 
 const COOKIE_KEY = "settings-tab";
-const VALID_TABS = ["appearance", "provider"] as const;
+const VALID_TABS = ["appearance", "provider", "usage"] as const;
 type SettingsTab = (typeof VALID_TABS)[number];
 
 function setTabCookie(tab: SettingsTab) {
@@ -23,11 +25,13 @@ function setTabCookie(tab: SettingsTab) {
 type SettingsShellProps = {
   initialStatus: ProviderStatusPayload;
   initialTab: string;
+  initialUsage: UsageSummary;
 };
 
 export function SettingsShell({
   initialStatus,
   initialTab,
+  initialUsage,
 }: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
   const safeInitial: SettingsTab = VALID_TABS.includes(
@@ -54,6 +58,9 @@ export function SettingsShell({
         <TabsTrigger value="provider" className="flex-1">
           {t("provider")}
         </TabsTrigger>
+        <TabsTrigger value="usage" className="flex-1">
+          {t("usage")}
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="appearance" className="mt-6 w-full">
@@ -62,6 +69,10 @@ export function SettingsShell({
 
       <TabsContent value="provider" className="mt-6 w-full">
         <ProviderTab initialStatus={initialStatus} />
+      </TabsContent>
+
+      <TabsContent value="usage" className="mt-6 w-full">
+        <UsageTab usage={initialUsage} />
       </TabsContent>
     </Tabs>
   );

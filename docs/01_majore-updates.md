@@ -28,15 +28,38 @@
 
 - LLM providers:
   - `lib/llm-providers/ollama/*`
-       - `ollama.ts`
-        - `ollama-settings.ts`
-        - `ollama-embedding.ts`
+    - `ollama.ts`
+    - `ollama-settings.ts`
+    - `ollama-embedding.ts`
   - `lib/llm-providers/openai/*`
-       - `openai.ts`
-        - `openai-settings.ts`
-        - `openai-embedding.ts`
+    - `openai.ts`
+    - `openai-settings.ts`
+    - `openai-embedding.ts`
   - `lib/llm-providers/shared/*`
-       - `provider-health.ts`
-       - `provider-test.ts`
+    - `provider-health.ts`
+    - `provider-test.ts`
   - `lib/llm-providers/provider.ts` (active provider dispatcher)
   - `types/llm.ts`
+- Refactored App-Settings
+
+# Major Updates 4
+
+- Refactored /Chat and chat-settings dialog.
+- Added Groq provider (API-based, similar to OpenAI), models filter in UI is intentionally hardcoded, Groq API doesn't query available models from API, it sends all models back.
+- Added Simple `lib/context/build.ts`
+- Redesigned Tier-System see => `docs/02_tier-system.md`
+- **New** tier-tracking UI in Settings → Usage Tab, showing live counters for chats/day, messages/month, tokens/month, with progress bars relative to plan limits.
+
+- still to do:
+  - [ ] Improve Sidebar-Footer
+  - [x] Empty Chats cant be renamed, deleted
+  - [x] Add theme and language toggles to sidebar header or footer
+  - [ ] Add rules for Username (no spaces, unique, etc.) and enforce in Auth routes
+  - [ ] Document all previouse Refactores and updates in this changelog file. => Main: i18n syste (language refrences), tier system (new limits, new enforcement logic, new error handling), LLM provider abstraction (new provider interface, new Ollama provider, refactored chat route to use provider abstraction), Auth refactor (ZOD validation, rate limiting, password confirmation)
+
+# next
+
+- Refactor Chat-Widget
+- Add first feature, CRUD + slots
+- Add Notifications System
+- Add dynamic loading.tsx messages, or generelize it a bit. (cuurent it shows "Prepering Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.)
