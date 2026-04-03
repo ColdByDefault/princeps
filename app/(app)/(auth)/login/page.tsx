@@ -5,8 +5,11 @@
  */
 
 import { type Metadata } from "next";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { LoginCard } from "@/components/auth";
 import { getTranslations, getLocale } from "@/lib/i18n";
+import { auth } from "@/lib/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { isSupportedLanguage, DEFAULT_LANGUAGE } from "@/types/i18n";
 
@@ -23,6 +26,9 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (session) redirect("/home");
+
   return <LoginCard />;
 }
