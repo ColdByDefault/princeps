@@ -11,12 +11,9 @@ export async function deleteTask(
   taskId: string,
   userId: string,
 ): Promise<{ ok: boolean }> {
-  const existing = await db.task.findFirst({ where: { id: taskId, userId } });
-
-  if (!existing) {
-    return { ok: false };
-  }
-
-  await db.task.delete({ where: { id: taskId } });
-  return { ok: true };
+  // Single round-trip: delete only if the row belongs to this user.
+  const { count } = await db.task.deleteMany({
+    where: { id: taskId, userId },
+  });
+  return { ok: count > 0 };
 }

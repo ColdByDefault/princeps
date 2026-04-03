@@ -48,7 +48,7 @@ export function TasksShell({ initialTasks }: TasksShellProps) {
     updateTask,
     toggleDone,
     deleteTask,
-  } = useTaskMutations(tasks, setTasks, {
+  } = useTaskMutations(setTasks, {
     createSuccess: t("createDialog.success"),
     createError: t("createDialog.error"),
     updateSuccess: t("editDialog.success"),
