@@ -47,6 +47,8 @@
       "emailPlaceholder": "you@example.com",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "••••••••",
       "submit": "Create account",
       "submitting": "Creating account...",
       "errorFallback": "Sign up failed. Please try again.",

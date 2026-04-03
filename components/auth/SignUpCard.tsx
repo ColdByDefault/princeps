@@ -13,7 +13,8 @@ import { useTranslations } from "next-intl";
 import { AuthShell } from "@/components/auth/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
+import { signUpSchema } from "@/lib/auth/auth-schemas";
 
 export default function SignUpCard() {
   const t = useTranslations("auth");
@@ -21,13 +22,27 @@ export default function SignUpCard() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+
+    const result = signUpSchema.safeParse({
+      name,
+      email,
+      password,
+      confirmPassword,
+    });
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      return;
+    }
+
     setLoading(true);
 
     const { error: authError } = await authClient.signUp.email({
@@ -109,6 +124,40 @@ export default function SignUpCard() {
                 className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
               >
                 {showPassword ? (
+                  <EyeOff className="size-4" />
+                ) : (
+                  <Eye className="size-4" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="confirmPassword" className="text-sm font-medium">
+              {t("signUp.confirmPasswordLabel")}
+            </label>
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                autoComplete="new-password"
+                required
+                minLength={8}
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                placeholder={t("signUp.confirmPasswordPlaceholder")}
+                className="h-11 rounded-xl bg-background/80 pr-11"
+              />
+              <button
+                type="button"
+                aria-label={t(
+                  showConfirmPassword ? "password.hide" : "password.show",
+                )}
+                aria-pressed={showConfirmPassword}
+                onClick={() => setShowConfirmPassword((current) => !current)}
+                className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
+              >
+                {showConfirmPassword ? (
                   <EyeOff className="size-4" />
                 ) : (
                   <Eye className="size-4" />

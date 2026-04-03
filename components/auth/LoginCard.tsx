@@ -13,7 +13,8 @@ import { useTranslations } from "next-intl";
 import { AuthShell } from "@/components/auth/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
+import { signInSchema } from "@/lib/auth/auth-schemas";
 
 export default function LoginCard() {
   const t = useTranslations("auth");
@@ -27,6 +28,13 @@ export default function LoginCard() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+
+    const result = signInSchema.safeParse({ email, password });
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      return;
+    }
+
     setLoading(true);
 
     const { error: authError } = await authClient.signIn.email({

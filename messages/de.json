@@ -47,6 +47,8 @@
       "emailPlaceholder": "du@beispiel.de",
       "passwordLabel": "Passwort",
       "passwordPlaceholder": "••••••••",
+      "confirmPasswordLabel": "Passwort bestätigen",
+      "confirmPasswordPlaceholder": "••••••••",
       "submit": "Konto erstellen",
       "submitting": "Wird erstellt …",
       "errorFallback": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",

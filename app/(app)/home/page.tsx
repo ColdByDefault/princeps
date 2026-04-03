@@ -6,7 +6,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import type { AppLanguage } from "@/types/i18n";
 

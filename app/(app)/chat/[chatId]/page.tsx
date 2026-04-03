@@ -5,21 +5,16 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 
 type Props = { params: Promise<{ chatId: string }> };
 
-export default async function ChatIdPage({ }: Props) {
+export default async function ChatIdPage({}: Props) {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
     redirect("/login");
   }
 
-
-  return (
-    <div>
-
-    </div>
-  );
+  return <div></div>;
 }

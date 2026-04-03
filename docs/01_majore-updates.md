@@ -19,3 +19,6 @@
 - Language and i18nternationalization (i18n).
 - Replaced the custom `getMessage()` / flat `MessageDictionary` system with `next-intl`. Cookie-based locale detection is seeded in middleware (`proxy.ts`), resolved in `i18n/request.ts`, and provided app-wide via `NextIntlClientProvider` in the root layout. Message files (`messages/de.json`, `messages/en.json`) now use nested keys by namespace (e.g. `common`, `auth`, `nav`, `errors`).
 - Decoupled i18n from DB user preferences (`lib/settings/`) — locale resolution is now cookie → Accept-Language → `"de"` default. DB-backed preference sync will be re-wired when the settings feature is rebuilt.
+- Applied new i18n settings to global UI (error, auth, nav)
+- Refactored `Navbar.tsx` to split desktop and mobile into separate components.
+- Refactored Auth routes and components to use ZOD validations, wire rate limiting, and improve UX for MVP (Password confirmation)
