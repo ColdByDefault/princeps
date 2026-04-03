@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -72,7 +72,7 @@ export function CreateTaskDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<span />}>{children}</DialogTrigger>
+      <DialogTrigger render={children as React.ReactElement} />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t("createDialog.heading")}</DialogTitle>
