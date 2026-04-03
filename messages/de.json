@@ -63,9 +63,9 @@
   "theme": {
     "selector": {
       "groupLabel": "Designauswahl",
-      "light": "Helles Design",
-      "dark": "Dunkles Design",
-      "system": "Systemdesign",
+      "light": "Helles",
+      "dark": "Dunkles",
+      "system": "System",
       "current": "Aktiv"
     }
   },

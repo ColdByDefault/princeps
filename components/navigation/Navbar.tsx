@@ -6,7 +6,7 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutDashboard, MessageSquare, Settings } from "lucide-react";
+import { LayoutDashboard, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -47,7 +47,6 @@ export default function Navbar({ sessionUser }: NavbarProps) {
 
   const navLinks = [
     { href: "/home", icon: LayoutDashboard, label: t("nav.home") },
-    { href: "/chat", icon: MessageSquare, label: t("nav.chat") },
     { href: "/settings", icon: Settings, label: t("nav.settings") },
   ];
 

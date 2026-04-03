@@ -6,7 +6,7 @@
 "use client";
 
 import Link from "next/link";
-import { LogOut, Search, type LucideIcon } from "lucide-react";
+import { LogOut, type LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
@@ -93,7 +93,7 @@ export default function NavbarDesktop({
       </nav>
 
       <div className="ml-auto hidden items-center gap-2 min-[1000px]:flex">
-        <Button
+{/*         <Button
           type="button"
           variant="outline"
           size="sm"
@@ -109,7 +109,7 @@ export default function NavbarDesktop({
           <kbd className="pointer-events-none ml-auto hidden select-none rounded border border-border/70 bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground sm:inline-flex">
             ⌘K
           </kbd>
-        </Button>
+        </Button> */}
         <LanguageToggle />
         <ThemeToggle />
         {tier && (

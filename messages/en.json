@@ -63,9 +63,9 @@
   "theme": {
     "selector": {
       "groupLabel": "Theme selector",
-      "light": "Light theme",
-      "dark": "Dark theme",
-      "system": "System theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
       "current": "Current"
     }
   },

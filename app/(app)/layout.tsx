@@ -18,7 +18,7 @@ export default async function AppLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar sessionUser={sessionUser} />
-      <main className="flex flex-1 flex-col">{children}</main>
+      <main className="flex-1 flex-col">{children}</main>
       <Footer />
     </div>
   );
