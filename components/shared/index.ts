@@ -4,3 +4,4 @@
  */
 
 export { LanguageHydrator } from "./LanguageHydrator";
+export { LanguageToggle } from "./LanguageToggle";

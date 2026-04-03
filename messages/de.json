@@ -87,7 +87,25 @@
   },
   "shell": {
     "nav": {
-      "home": "Arbeitsbereich"
+      "brand": "See-Sweet",
+      "home": "Arbeitsbereich",
+      "chat": "Chat",
+      "userFallback": "Arbeitsbereich-Nutzer",
+      "signOut": "Abmelden",
+      "signingOut": "Wird abgemeldet…",
+      "openMenu": "Menü öffnen",
+      "closeMenu": "Menü schließen",
+      "planFree": "Free",
+      "planPro": "Pro",
+      "planPremium": "Premium"
+    },
+    "language": {
+      "groupLabel": "Sprachauswahl",
+      "current": "Aktiv"
+    },
+    "search": {
+      "trigger": "Arbeitsbereich durchsuchen",
+      "triggerLabel": "Suchen…"
     },
     "footer": {
       "workspace": "Arbeitsbereich",
