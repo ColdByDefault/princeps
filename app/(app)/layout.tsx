@@ -4,9 +4,6 @@
  */
 
 
-import {
-  NoticeProvider,
-} from "@/components/shared";
 
 export default async function AppLayout({
   children,
@@ -15,8 +12,8 @@ export default async function AppLayout({
 }) {
 
   return (
-    <NoticeProvider>
+    <div>
       {children}
-    </NoticeProvider>
+    </div>
   );
 }
