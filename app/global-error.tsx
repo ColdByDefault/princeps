@@ -154,11 +154,7 @@ export default function GlobalError({
                         className="h-11 cursor-pointer rounded-xl px-4"
                       >
                         <RefreshCw className="size-4" />
-                        {getMsg(
-                          messages,
-                          "error.global.retry",
-                          "Try again",
-                        )}
+                        {getMsg(messages, "error.global.retry", "Try again")}
                       </Button>
 
                       <Link

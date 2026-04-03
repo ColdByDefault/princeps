@@ -71,22 +71,18 @@ export default function Error({
         <div className="space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase backdrop-blur-sm">
             <AlertTriangle className="size-3.5 text-destructive" />
-            {getMessage(messages, "error.global.badge", "Application recovery")}
+            {getMsg(messages, "error.global.badge", "Application recovery")}
           </div>
 
           <div className="space-y-3">
             <p className="text-xs font-semibold tracking-[0.28em] text-muted-foreground uppercase">
-              {getMessage(messages, "auth.brandName", "See-Sweet")}
+              {getMsg(messages, "landing.brandName", "See-Sweet")}
             </p>
             <h1 className="max-w-2xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-              {getMessage(
-                messages,
-                "error.global.title",
-                "Something went wrong.",
-              )}
+              {getMsg(messages, "error.global.title", "Something went wrong.")}
             </h1>
             <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-              {getMessage(
+              {getMsg(
                 messages,
                 "error.global.body",
                 "The workspace hit an unexpected problem. Try again, or return to a stable page.",
@@ -94,7 +90,7 @@ export default function Error({
             </p>
             {error.digest ? (
               <p className="text-sm text-muted-foreground">
-                {getMessage(messages, "error.global.reference", "Reference")}
+                {getMsg(messages, "error.global.reference", "Reference")}
                 {": "}
                 <span className="font-mono text-foreground">
                   {error.digest}
@@ -110,7 +106,7 @@ export default function Error({
               className="h-11 cursor-pointer rounded-xl px-4"
             >
               <RefreshCw className="size-4" />
-              {getMessage(messages, "error.global.retry", "Try again")}
+              {getMsg(messages, "error.global.retry", "Try again")}
             </Button>
 
             <Link
@@ -121,7 +117,7 @@ export default function Error({
               )}
             >
               <Home className="size-4" />
-              {getMessage(messages, "error.global.goHome", "Open workspace")}
+              {getMsg(messages, "error.global.goHome", "Open workspace")}
             </Link>
           </div>
         </div>
