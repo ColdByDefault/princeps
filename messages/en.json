@@ -94,7 +94,8 @@
     },
     "tabs": {
       "appearance": "Appearance",
-      "provider": "AI Provider"
+      "provider": "AI Provider",
+      "usage": "Usage"
     },
     "appearance": {
       "themeTitle": "Theme",
@@ -119,6 +120,15 @@
       "nameGroq": "Groq",
       "activeLabel": "Active",
       "notAvailable": "Not available"
+    },
+    "usage": {
+      "planLabel": "Current plan",
+      "resetLabel": "Monthly reset",
+      "resetUnknown": "Not tracked yet",
+      "messagesTitle": "Messages this month",
+      "tokensTitle": "Approx. tokens this month",
+      "chatsTitle": "Saved chats",
+      "chatsNote": "This limit never resets — delete chats to free up space."
     }
   },
   "shell": {

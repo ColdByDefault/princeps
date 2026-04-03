@@ -10,6 +10,7 @@ import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { getProviderStatus } from "@/lib/settings/provider-status.logic";
+import { getUserUsage } from "@/lib/settings/usage.logic";
 import { SettingsShell } from "@/components/settings";
 import type { AppLanguage } from "@/types/i18n";
 
@@ -34,13 +35,20 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const initialStatus = await getProviderStatus();
+  const [initialStatus, initialUsage] = await Promise.all([
+    getProviderStatus(),
+    getUserUsage(session.user.id),
+  ]);
   const cookieStore = await cookies();
   const initialTab = cookieStore.get("settings-tab")?.value ?? "appearance";
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6">
-      <SettingsShell initialStatus={initialStatus} initialTab={initialTab} />
+      <SettingsShell
+        initialStatus={initialStatus}
+        initialTab={initialTab}
+        initialUsage={initialUsage}
+      />
     </div>
   );
 }

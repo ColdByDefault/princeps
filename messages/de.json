@@ -94,7 +94,8 @@
     },
     "tabs": {
       "appearance": "Erscheinungsbild",
-      "provider": "KI-Anbieter"
+      "provider": "KI-Anbieter",
+      "usage": "Nutzung"
     },
     "appearance": {
       "themeTitle": "Design",
@@ -119,6 +120,15 @@
       "nameGroq": "Groq",
       "activeLabel": "Aktiv",
       "notAvailable": "Nicht verfügbar"
+    },
+    "usage": {
+      "planLabel": "Aktueller Plan",
+      "resetLabel": "Monatliche Zurücksetzung",
+      "resetUnknown": "Noch nicht erfasst",
+      "messagesTitle": "Nachrichten diesen Monat",
+      "tokensTitle": "Ungefähre Token diesen Monat",
+      "chatsTitle": "Gespeicherte Chats",
+      "chatsNote": "Dieses Limit wird nie zurückgesetzt — lösche Chats, um Platz freizugeben."
     }
   },
   "shell": {

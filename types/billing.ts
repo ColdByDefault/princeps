@@ -85,3 +85,22 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
 export function getPlanLimits(tier: Tier): PlanLimits {
   return PLAN_LIMITS[tier] ?? PLAN_LIMITS.free;
 }
+
+// ─── Usage summary ────────────────────────────────────────
+
+/**
+ * Snapshot of a user's current quota consumption.
+ * Produced server-side by lib/settings/usage.logic.ts and passed as a prop
+ * to the Settings Usage tab. Safe to cross the server/client boundary.
+ */
+export interface UsageSummary {
+  tier: Tier;
+  messagesUsed: number;
+  messagesLimit: number;
+  tokensUsed: number;
+  tokensLimit: number;
+  chatsStored: number;
+  chatsLimit: number;
+  /** "YYYY-MM" string of the current billing month, or null if never tracked. */
+  monthlyResetDate: string | null;
+}
