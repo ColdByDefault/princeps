@@ -53,6 +53,7 @@
 - still to do:
    - [ ] Improve Sidebar-Footer
    - [ ] Empty Chats cant be renamed, deleted
+   - [ ] Add theme and language toggles to sidebar header or footer
 
 
 # next

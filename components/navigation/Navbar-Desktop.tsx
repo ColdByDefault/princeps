@@ -84,13 +84,14 @@ export default function NavbarDesktop({
             ⌘K
           </kbd>
         </Button> */}
-        <LanguageToggle />
-        <ThemeToggle />
+
         {tier && (
           <div className="flex items-center rounded-full px-2.5 py-1.5 backdrop-blur-sm">
             <PlanBadge tier={tier} />
           </div>
         )}
+        <LanguageToggle />
+        <ThemeToggle />
         <Button
           type="button"
           variant="outline"
