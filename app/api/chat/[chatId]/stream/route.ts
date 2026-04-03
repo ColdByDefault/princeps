@@ -24,7 +24,7 @@ import { streamChat } from "@/lib/llm-providers/provider";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 import { buildSystemPrompt } from "@/lib/context/build";
-import type { LLMMessage } from "@/types/llm";
+import type { LLMMessage, LLMChatOptions } from "@/types/llm";
 
 type Params = { params: Promise<{ chatId: string }> };
 
@@ -51,13 +51,26 @@ export async function POST(req: Request, { params }: Params) {
     );
   }
 
-  const body = (await req.json()) as { message?: unknown };
+  const body = (await req.json()) as {
+    message?: unknown;
+    temperature?: unknown;
+    timeoutMs?: unknown;
+  };
 
   if (typeof body.message !== "string" || !body.message.trim()) {
     return NextResponse.json({ error: "Invalid message" }, { status: 400 });
   }
 
   const userMessage = body.message.trim();
+
+  const chatOptions: LLMChatOptions = {
+    ...(typeof body.temperature === "number" && {
+      temperature: Math.min(2, Math.max(0, body.temperature)),
+    }),
+    ...(typeof body.timeoutMs === "number" && {
+      timeoutMs: Math.min(120_000, Math.max(5_000, body.timeoutMs)),
+    }),
+  };
   const { chatId } = await params;
 
   // Verify ownership and load history
@@ -105,7 +118,7 @@ export async function POST(req: Request, { params }: Params) {
       let assistantContent = "";
 
       try {
-        for await (const token of streamChat(llmMessages)) {
+        for await (const token of streamChat(llmMessages, chatOptions)) {
           send({ type: "token", text: token });
           assistantContent += token;
         }

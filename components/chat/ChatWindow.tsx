@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { type ChatMessageData } from "@/types/chat";
+import { useChatSettings } from "@/hooks/use-chat-settings";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -41,6 +42,7 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
   const inFlightRef = useRef(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { settings } = useChatSettings();
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -75,7 +77,11 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
       const response = await fetch(`/api/chat/${chatId}/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
+        body: JSON.stringify({
+          message: text,
+          temperature: settings.temperature,
+          timeoutMs: settings.timeoutMs,
+        }),
       });
 
       if (!response.ok || !response.body) {
@@ -122,7 +128,12 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
             setMsgs((prev) =>
               prev.map((m) =>
                 m.id === assistantId && "streaming" in m
-                  ? { id: m.id, role: m.role, content: m.content, createdAt: m.createdAt }
+                  ? {
+                      id: m.id,
+                      role: m.role,
+                      content: m.content,
+                      createdAt: m.createdAt,
+                    }
                   : m,
               ),
             );
@@ -209,11 +220,12 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
 
 function MessageBubble({ msg }: { msg: LiveMessage }) {
   const isUser = msg.role === "user";
-  const isStreamingEmpty =
-    "streaming" in msg && msg.streaming && !msg.content;
+  const isStreamingEmpty = "streaming" in msg && msg.streaming && !msg.content;
 
   return (
-    <div className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}>
+    <div
+      className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}
+    >
       <div
         className={cn(
           "max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",

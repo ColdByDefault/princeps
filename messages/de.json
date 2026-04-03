@@ -191,6 +191,18 @@
       "create": "Chat konnte nicht erstellt werden.",
       "delete": "Chat konnte nicht gelöscht werden.",
       "rename": "Chat konnte nicht umbenannt werden."
+    },
+    "settings": {
+      "tooltipLabel": "Chat-Einstellungen",
+      "title": "Chat-Einstellungen",
+      "description": "Diese Einstellungen gelten für alle KI-Anbieter.",
+      "temperature": "Temperatur",
+      "temperatureDescription": "Steuert die Zufälligkeit. Niedriger = fokussierter, höher = kreativer.",
+      "timeout": "Anfrage-Timeout",
+      "timeoutDescription": "Maximale Wartezeit auf eine Antwort (in Sekunden).",
+      "timeoutUnit": "s",
+      "reset": "Auf Standardwerte zurücksetzen",
+      "save": "Änderungen speichern"
     }
   }
 }

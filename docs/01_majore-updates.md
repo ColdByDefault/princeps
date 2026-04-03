@@ -45,6 +45,14 @@
 
 # Major Updates 4
 
-- Refactored /Chat
+- Refactored /Chat and chat-settings dialog.
 - Added Groq provider (API-based, similar to OpenAI), models filter in UI is intentionally hardcoded, Groq API doesn't query available models from API, it sends all models back. 
 - Added Simple `lib/context/build.ts`
+
+
+
+# next
+- Refactor Chat-Widget
+- Add first feature, CRUD + slots 
+- Add Notifications System
+- Unifide all toaster under a single provider with consistent UI and API

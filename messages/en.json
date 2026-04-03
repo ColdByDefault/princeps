@@ -191,6 +191,18 @@
       "create": "Failed to create chat.",
       "delete": "Failed to delete chat.",
       "rename": "Failed to rename chat."
+    },
+    "settings": {
+      "tooltipLabel": "Chat settings",
+      "title": "Chat Settings",
+      "description": "These settings apply to all AI providers.",
+      "temperature": "Temperature",
+      "temperatureDescription": "Controls randomness. Lower = more focused, higher = more creative.",
+      "timeout": "Request Timeout",
+      "timeoutDescription": "Maximum time to wait for a response (in seconds).",
+      "timeoutUnit": "s",
+      "reset": "Reset to defaults",
+      "save": "Save changes"
     }
   }
 }
