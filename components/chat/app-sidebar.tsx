@@ -329,6 +329,7 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
                           <DropdownMenuContent side="right" align="start">
                             <DropdownMenuItem
                               className="cursor-pointer"
+                              disabled={chat.messageCount === 0}
                               onClick={() => {
                                 setRenameTarget(chat.id);
                                 setRenameValue(chat.title);
@@ -339,6 +340,7 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               className="cursor-pointer text-destructive focus:text-destructive"
+                              disabled={chat.messageCount === 0}
                               onClick={() => setDeleteTarget(chat.id)}
                             >
                               <Trash2 className="mr-2 size-3.5" />

@@ -52,9 +52,8 @@
 
 - still to do:
   - [ ] Improve Sidebar-Footer
-  - [ ] Empty Chats cant be renamed, deleted
+  - [x] Empty Chats cant be renamed, deleted
   - [x] Add theme and language toggles to sidebar header or footer
-       - Show the icons when sidebar is collabsed
   - [ ] Add rules for Username (no spaces, unique, etc.) and enforce in Auth routes
   - [ ] Document all previouse Refactores and updates in this changelog file. => Main: i18n syste (language refrences), tier system (new limits, new enforcement logic, new error handling), LLM provider abstraction (new provider interface, new Ollama provider, refactored chat route to use provider abstraction), Auth refactor (ZOD validation, rate limiting, password confirmation)
 

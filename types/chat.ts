@@ -8,6 +8,7 @@ export type ChatSummary = {
   title: string;
   createdAt: string;
   updatedAt: string;
+  messageCount: number;
 };
 
 export type ChatMessageData = {
