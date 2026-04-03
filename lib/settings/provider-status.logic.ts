@@ -9,42 +9,37 @@ import {
   checkOllamaHealth,
   checkOpenAIHealth,
 } from "@/lib/llm-providers/shared/provider-health";
-import type { ProviderHealthStatus } from "@/types/llm";
-
-// ─── Types ────────────────────────────────────────────────
-
-export type ActiveProvider = "openAi" | "ollama" | "groq";
-
-export interface ProviderStatusResult {
-  provider: ActiveProvider;
-  health: ProviderHealthStatus;
-}
+import type {
+  ActiveProvider,
+  ProviderHealthStatus,
+  ProviderStatusPayload,
+} from "@/types/llm";
 
 // ─── Logic ────────────────────────────────────────────────
 
-export async function getProviderStatus(): Promise<ProviderStatusResult> {
+export async function getProviderStatus(): Promise<ProviderStatusPayload> {
   const raw = process.env.CHAT_PROVIDER ?? "openAi";
-  const provider: ActiveProvider =
+  const active: ActiveProvider =
     raw === "openAi" || raw === "ollama" || raw === "groq" ? raw : "openAi";
 
-  let health: ProviderHealthStatus;
+  const [openAiHealth, ollamaHealth] = await Promise.all([
+    checkOpenAIHealth(),
+    checkOllamaHealth(),
+  ]);
 
-  switch (provider) {
-    case "openAi":
-      health = await checkOpenAIHealth();
-      break;
-    case "ollama":
-      health = await checkOllamaHealth();
-      break;
-    case "groq":
-      health = {
-        connected: false,
-        version: null,
-        models: [],
-        error: "Groq provider is not yet implemented.",
-      };
-      break;
-  }
+  const groqHealth: ProviderHealthStatus = {
+    connected: false,
+    version: null,
+    models: [],
+    error: null,
+  };
 
-  return { provider, health };
+  return {
+    active,
+    providers: [
+      { provider: "openAi", health: openAiHealth },
+      { provider: "ollama", health: ollamaHealth },
+      { provider: "groq", health: groqHealth },
+    ],
+  };
 }

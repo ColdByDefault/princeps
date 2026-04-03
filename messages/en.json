@@ -116,7 +116,9 @@
       "noModels": "No models found",
       "nameOpenAi": "OpenAI",
       "nameOllama": "Ollama (local)",
-      "nameGroq": "Groq"
+      "nameGroq": "Groq",
+      "activeLabel": "Active",
+      "notAvailable": "Not available"
     }
   },
   "shell": {

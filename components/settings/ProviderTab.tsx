@@ -10,7 +10,7 @@ import { RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { ProviderStatusPayload } from "@/types/llm";
+import type { ActiveProvider, ProviderStatusPayload } from "@/types/llm";
 
 // ─── Helpers ──────────────────────────────────────────────
 
@@ -42,16 +42,12 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
     });
   };
 
-  const providerName =
-    status.provider === "openAi"
-      ? t("nameOpenAi")
-      : status.provider === "ollama"
-        ? t("nameOllama")
-        : t("nameGroq");
+  const providerLabel = (p: ActiveProvider) =>
+    p === "openAi" ? t("nameOpenAi") : p === "ollama" ? t("nameOllama") : t("nameGroq");
 
   return (
     <div className="divide-y divide-border/60">
-      {/* Header */}
+      {/* Section header */}
       <div className="flex items-center justify-between gap-4 pb-4">
         <div className="space-y-0.5">
           <p className="text-sm font-medium">{t("title")}</p>
@@ -65,80 +61,73 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
           disabled={isPending}
           onClick={handleRefresh}
         >
-          <RefreshCw
-            className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
-          />
+          <RefreshCw className={`size-3.5 ${isPending ? "animate-spin" : ""}`} />
           {isPending ? t("refreshing") : t("refresh")}
         </Button>
       </div>
 
-      {/* Provider + Status */}
-      <div className="grid grid-cols-2 gap-3 py-4 sm:grid-cols-4">
-        <div className="space-y-1">
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            {t("providerLabel")}
-          </p>
-          <p className="text-sm font-medium">{providerName}</p>
-        </div>
+      {/* One row per provider */}
+      {status.providers.map(({ provider, health }) => (
+        <div key={provider} className="space-y-3 py-4">
+          {/* Name row */}
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium">{providerLabel(provider)}</p>
+              {provider === status.active && (
+                <Badge variant="outline" className="text-xs">
+                  {t("activeLabel")}
+                </Badge>
+              )}
+            </div>
+            <Badge
+              className={
+                health.connected
+                  ? "text-xs border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-400"
+                  : "text-xs border-destructive/20 bg-destructive/10 text-destructive"
+              }
+            >
+              {health.connected ? t("statusConnected") : t("statusDisconnected")}
+            </Badge>
+          </div>
 
-        <div className="space-y-1">
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            {t("statusLabel")}
-          </p>
-          <Badge
-            variant={status.health.connected ? "default" : "destructive"}
-            className="text-xs"
-          >
-            {status.health.connected
-              ? t("statusConnected")
-              : t("statusDisconnected")}
-          </Badge>
-        </div>
+          {/* Version */}
+          {health.version && (
+            <p className="text-xs text-muted-foreground font-mono">v{health.version}</p>
+          )}
 
-        {status.health.version && (
-          <div className="space-y-1">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              {t("versionLabel")}
+          {/* Error */}
+          {health.error && (
+            <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              {health.error}
             </p>
-            <p className="text-sm font-mono">{status.health.version}</p>
-          </div>
-        )}
-      </div>
+          )}
 
-      {/* Error */}
-      {status.health.error && (
-        <div className="py-4">
-          <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
-            {status.health.error}
-          </p>
-        </div>
-      )}
-
-      {/* Models */}
-      <div className="space-y-2 py-4">
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-          {t("modelsLabel")}
-        </p>
-        {status.health.models.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t("noModels")}</p>
-        ) : (
-          <div className="divide-y divide-border/60 rounded-lg border border-border/60">
-            {status.health.models.map((model) => (
-              <div
-                key={model.name}
-                className="flex items-center justify-between px-3 py-2"
-              >
-                <span className="text-sm font-mono">{model.name}</span>
-                {model.size !== null && (
-                  <span className="text-xs text-muted-foreground">
-                    {formatBytes(model.size)}
-                  </span>
-                )}
+          {/* Models */}
+          {health.models.length > 0 && (
+            <div className="space-y-1.5">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                {t("modelsLabel")}
+              </p>
+              <div className="divide-y divide-border/60 rounded-lg border border-border/60">
+                {health.models.map((model) => (
+                  <div
+                    key={model.name}
+                    className="flex items-center justify-between px-3 py-2"
+                  >
+                    <span className="text-sm font-mono">{model.name}</span>
+                    {model.size !== null && (
+                      <span className="text-xs text-muted-foreground">
+                        {formatBytes(model.size)}
+                      </span>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
+

@@ -65,10 +65,15 @@ export interface ProviderHealthStatus {
 
 export type ActiveProvider = "openAi" | "ollama" | "groq";
 
-/** Serialisable status payload returned by the provider-status API. */
-export interface ProviderStatusPayload {
+export interface ProviderEntry {
   provider: ActiveProvider;
   health: ProviderHealthStatus;
+}
+
+/** Serialisable status payload returned by the provider-status API. */
+export interface ProviderStatusPayload {
+  active: ActiveProvider;
+  providers: ProviderEntry[];
 }
 
 // ─── Test ─────────────────────────────────────────────────

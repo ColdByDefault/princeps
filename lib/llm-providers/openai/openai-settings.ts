@@ -75,9 +75,7 @@ export class OpenAIProviderError extends Error {
 export function getOpenAISettings(): OpenAISettings {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    throw new OpenAIProviderError(
-      "OPENAI_API_KEY is not set. Add it to your .env file.",
-    );
+    throw new OpenAIProviderError("OpenAI API key is not configured.");
   }
 
   return {

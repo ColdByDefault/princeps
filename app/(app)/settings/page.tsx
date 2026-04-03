@@ -4,6 +4,7 @@
  */
 
 import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
@@ -34,10 +35,12 @@ export default async function SettingsPage() {
   }
 
   const initialStatus = await getProviderStatus();
+  const cookieStore = await cookies();
+  const initialTab = cookieStore.get("settings-tab")?.value ?? "appearance";
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6">
-      <SettingsShell initialStatus={initialStatus} />
+      <SettingsShell initialStatus={initialStatus} initialTab={initialTab} />
     </div>
   );
 }
