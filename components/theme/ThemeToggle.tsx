@@ -71,7 +71,14 @@ export default function ThemeToggle() {
             <DropdownMenuItem
               key={option.value}
               className="cursor-pointer rounded-xl"
-              onClick={() => setTheme(option.value)}
+              onClick={() => {
+                setTheme(option.value);
+                void fetch("/api/settings", {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ theme: option.value }),
+                });
+              }}
             >
               <span className="flex w-full items-center justify-between gap-3">
                 <span className="inline-flex items-center gap-2">
