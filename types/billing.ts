@@ -23,6 +23,8 @@ export interface PlanLimits {
   widgetChatsPerDay: number;
   /** Max widget tool calls per calendar day. */
   widgetToolsPerDay: number;
+  /** Max LLM tool calls (function calls) per calendar month in main chat. */
+  toolCallsPerMonth: number;
   /** Whether proactive nudge notifications are active. */
   nudgesEnabled: boolean;
 }
@@ -44,6 +46,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     tokensPerMonth: 125_000,
     widgetChatsPerDay: 30,
     widgetToolsPerDay: 5,
+    toolCallsPerMonth: 50,
     nudgesEnabled: false,
   },
   pro: {
@@ -54,6 +57,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     tokensPerMonth: 400_000,
     widgetChatsPerDay: 60,
     widgetToolsPerDay: 25,
+    toolCallsPerMonth: 200,
     nudgesEnabled: true,
   },
   premium: {
@@ -64,6 +68,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     tokensPerMonth: 1_000_000,
     widgetChatsPerDay: 120,
     widgetToolsPerDay: 50,
+    toolCallsPerMonth: 500,
     nudgesEnabled: true,
   },
   enterprise: {
@@ -74,6 +79,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     tokensPerMonth: 3_000_000,
     widgetChatsPerDay: 300,
     widgetToolsPerDay: 100,
+    toolCallsPerMonth: 2_000,
     nudgesEnabled: true,
   },
 };
@@ -101,6 +107,8 @@ export interface UsageSummary {
   tokensLimit: number;
   chatsStored: number;
   chatsLimit: number;
+  toolCallsUsed: number;
+  toolCallsLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

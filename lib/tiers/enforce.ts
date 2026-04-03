@@ -284,6 +284,45 @@ export async function accumulateTokens(
   });
 }
 
+// ─── Tool call monthly limit ──────────────────────────────
+
+/**
+ * Checks whether the user is within their monthly tool call budget.
+ * Increments the counter by the number of tool calls being invoked.
+ *
+ * Call this before executing tool calls in the stream.
+ * Uses the same monthly reset boundary as messages/tokens.
+ */
+export async function enforceToolCallsMonthly(
+  userId: string,
+  count = 1,
+): Promise<EnforceResult> {
+  const [tier, counter] = await Promise.all([
+    getUserTier(userId),
+    getOrCreateCounter(userId),
+  ]);
+
+  const limits = getPlanLimits(tier);
+  const month = currentMonth();
+  const stale = counter.monthlyResetDate !== month;
+
+  const currentTools = stale ? 0 : counter.toolMonthlyCount;
+
+  if (currentTools + count > limits.toolCallsPerMonth) {
+    return {
+      allowed: false,
+      reason: "Monthly tool call limit reached for your plan.",
+    };
+  }
+
+  await db.usageCounter.update({
+    where: { userId },
+    data: { toolMonthlyCount: currentTools + count },
+  });
+
+  return { allowed: true };
+}
+
 // ─── Response factory ─────────────────────────────────────
 
 /**

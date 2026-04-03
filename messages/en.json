@@ -128,7 +128,8 @@
       "messagesTitle": "Messages this month",
       "tokensTitle": "Approx. tokens this month",
       "chatsTitle": "Saved chats",
-      "chatsNote": "This limit never resets — delete chats to free up space."
+      "chatsNote": "This limit never resets — delete chats to free up space.",
+      "toolCallsTitle": "AI tool calls this month"
     }
   },
   "shell": {

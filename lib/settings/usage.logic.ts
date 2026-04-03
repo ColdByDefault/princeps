@@ -20,6 +20,7 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
       select: {
         messageMonthlyCount: true,
         tokenMonthlyCount: true,
+        toolMonthlyCount: true,
         monthlyResetDate: true,
       },
     }),
@@ -36,6 +37,8 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     tokensLimit: limits.tokensPerMonth,
     chatsStored,
     chatsLimit: limits.chatHistoryTotal,
+    toolCallsUsed: counter?.toolMonthlyCount ?? 0,
+    toolCallsLimit: limits.toolCallsPerMonth,
     // Default to the current month when the counter has never been written —
     // counters are at 0 so the current month is already the correct boundary.
     monthlyResetDate:

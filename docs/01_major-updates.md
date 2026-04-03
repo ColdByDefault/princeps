@@ -73,10 +73,12 @@
   - [ ] Add `index.ts` files where missing for better import paths and encapsulation.
   - [ ] Adjust the imports in `providers.ts`
   - [ ] What happen if i keep creating new chats and delete them? What if i do so, and then kept only 5 Chats saved but no monthly tokens left? check all these scenarios and make sure the UX is good and the user is properly informed about limits, etc.
+  - [ ] Add Markdown support for system prompts in chat settings.
+  - [ ] Add missing navigations to sidebar.
 # plan
 - [ ] Refactor Chat-Widget
-- [x] Add first feature, CRUD + and register to LLM Tools
+- [x] Add first feature, CRUD + and register to LLM Tools + context (Tasks) + tier limits
 - [ ] Document first feature for reference in future features
 - [ ] Add Notifications System
 - [ ] Introduce Labels System => Global Labels created from app-settings can be used to label chats, tasks, etc. These labels can have a name, color, and LLM can use them as well as creating new ones.
-- [ ] Add dynamic loading.tsx messages, or generalize it a bit. (currently it shows "Preparing Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.)
+- [ ] Add dynamic loading.tsx messages, or generalize it a bit. (currently it shows "Preparing Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.), use `components\shared\LoadingRing.tsx`

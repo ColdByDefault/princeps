@@ -22,7 +22,11 @@ import {
 import { setInitialTitle } from "@/lib/chat/create.logic";
 import { streamChat } from "@/lib/llm-providers/provider";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
-import { enforceMonthlyLimits, accumulateTokens } from "@/lib/tiers";
+import {
+  enforceMonthlyLimits,
+  accumulateTokens,
+  enforceToolCallsMonthly,
+} from "@/lib/tiers";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 import { buildSystemPrompt } from "@/lib/context/build";
 import { TOOL_REGISTRY } from "@/lib/tools/registry";
@@ -143,6 +147,19 @@ export async function POST(req: Request, { params }: Params) {
         // If the LLM requested tool calls, execute them and do a second pass
         // so the LLM can produce a text response after seeing the results.
         if (toolCalls.length > 0) {
+          // Gate on monthly tool call budget before executing
+          const toolCheck = await enforceToolCallsMonthly(
+            session.user.id,
+            toolCalls.length,
+          );
+          if (!toolCheck.allowed) {
+            send({
+              type: "error",
+              message: toolCheck.reason ?? "Tool call limit reached.",
+            });
+            return;
+          }
+
           const followUp: LLMMessage[] = [...llmMessages];
 
           // Append the assistant's tool_calls turn (OpenAI requires this in history)
