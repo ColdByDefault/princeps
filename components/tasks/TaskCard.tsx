@@ -22,6 +22,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { TaskRecord } from "@/types/api";
 
 const PRIORITY_COLORS: Record<string, string> = {
@@ -68,19 +74,31 @@ export function TaskCard({
       )}
     >
       {/* Done toggle */}
-      <button
-        type="button"
-        aria-label={isDone ? t("reopenLabel") : t("markDoneLabel")}
-        title={isDone ? t("reopenLabel") : t("markDoneLabel")}
-        className="mt-0.5 cursor-pointer shrink-0 text-muted-foreground transition-colors hover:text-primary"
-        onClick={() => onToggleDone(task)}
-      >
-        {isDone ? (
-          <CheckCircle2 className="size-5 text-green-500" />
-        ) : (
-          <Circle className="size-5" />
-        )}
-      </button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                aria-label={isDone ? t("reopenLabel") : t("markDoneLabel")}
+                className="mt-0.5 size-7 cursor-pointer shrink-0 text-muted-foreground hover:text-primary"
+                onClick={() => onToggleDone(task)}
+              />
+            }
+          >
+            {isDone ? (
+              <CheckCircle2 className="size-5 text-green-500" />
+            ) : (
+              <Circle className="size-5" />
+            )}
+          </TooltipTrigger>
+          <TooltipContent>
+            {isDone ? t("reopenLabel") : t("markDoneLabel")}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       {/* Content */}
       <div className="min-w-0 flex-1">

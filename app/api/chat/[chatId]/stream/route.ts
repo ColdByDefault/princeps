@@ -25,6 +25,8 @@ import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
 import { enforceMonthlyLimits, accumulateTokens } from "@/lib/tiers";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 import { buildSystemPrompt } from "@/lib/context/build";
+import { TOOL_REGISTRY } from "@/lib/tools/registry";
+import { executeToolCall } from "@/lib/tools/executor";
 import type { LLMMessage, LLMChatOptions } from "@/types/llm";
 
 type Params = { params: Promise<{ chatId: string }> };
@@ -71,6 +73,7 @@ export async function POST(req: Request, { params }: Params) {
     ...(typeof body.timeoutMs === "number" && {
       timeoutMs: Math.min(120_000, Math.max(5_000, body.timeoutMs)),
     }),
+    tools: TOOL_REGISTRY,
   };
   const { chatId } = await params;
 
@@ -125,9 +128,19 @@ export async function POST(req: Request, { params }: Params) {
       let assistantContent = "";
 
       try {
-        for await (const token of streamChat(llmMessages, chatOptions)) {
-          send({ type: "token", text: token });
-          assistantContent += token;
+        for await (const chunk of streamChat(llmMessages, chatOptions)) {
+          if (typeof chunk === "string") {
+            send({ type: "token", text: chunk });
+            assistantContent += chunk;
+          } else {
+            // Tool call — execute and emit action event
+            const result = await executeToolCall(session.user.id, chunk);
+            send({
+              type: "action",
+              name: chunk.function.name,
+              record: result.ok ? (result.data as Record<string, unknown>) : {},
+            });
+          }
         }
       } catch (err) {
         send({

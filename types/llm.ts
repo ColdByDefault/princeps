@@ -28,6 +28,8 @@ export interface LLMChatOptions {
   contextLength?: number;
   /** Request timeout in ms. */
   timeoutMs?: number;
+  /** Tools the LLM can call (OpenAI function-calling format). */
+  tools?: LLMTool[];
 }
 
 export interface LLMChatResult {

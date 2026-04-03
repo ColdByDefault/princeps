@@ -6,7 +6,12 @@
 import "server-only";
 
 import { getGroqSettings, GroqProviderError } from "./groq-settings";
-import type { LLMMessage, LLMChatOptions, LLMChatResult } from "@/types/llm";
+import type {
+  LLMMessage,
+  LLMChatOptions,
+  LLMChatResult,
+  LLMToolCall,
+} from "@/types/llm";
 
 // ─── Public Types (re-exported aliases for this provider) ─
 
@@ -33,7 +38,15 @@ interface GroqChatApiResponse {
 
 interface GroqStreamChunk {
   choices: Array<{
-    delta: { content?: string };
+    delta: {
+      content?: string;
+      tool_calls?: Array<{
+        index: number;
+        id?: string;
+        type?: string;
+        function?: { name?: string; arguments?: string };
+      }>;
+    };
     finish_reason: string | null;
   }>;
 }
@@ -108,7 +121,7 @@ export async function callChat(
 export async function* streamChat(
   messages: LLMMessage[],
   options?: LLMChatOptions,
-): AsyncGenerator<string> {
+): AsyncGenerator<string | LLMToolCall> {
   const settings = getGroqSettings();
 
   const response = await fetch(`${settings.baseUrl}/chat/completions`, {
@@ -120,6 +133,7 @@ export async function* streamChat(
       temperature: options?.temperature ?? settings.temperature,
       max_tokens: options?.contextLength ?? settings.maxTokens,
       stream: true,
+      ...(options?.tools?.length && { tools: options.tools }),
     }),
     signal: AbortSignal.timeout(options?.timeoutMs ?? settings.timeoutMs),
   });
@@ -140,6 +154,11 @@ export async function* streamChat(
   const decoder = new TextDecoder();
   let buffer = "";
 
+  const toolCallAccum: Record<
+    number,
+    { id: string; name: string; args: string }
+  > = {};
+
   try {
     while (true) {
       const { done, value } = await reader.read();
@@ -148,7 +167,7 @@ export async function* streamChat(
       buffer += decoder.decode(value, { stream: true });
       // SSE events are separated by "\n\n"
       const events = buffer.split("\n\n");
-      buffer = events.pop() ?? ""; // keep the last partial event
+      buffer = events.pop() ?? "";
 
       for (const event of events) {
         const dataLine = event
@@ -161,8 +180,40 @@ export async function* streamChat(
         if (payload === "[DONE]") return;
 
         const chunk = JSON.parse(payload) as GroqStreamChunk;
-        const delta = chunk.choices[0]?.delta?.content;
-        if (delta) yield delta;
+        const choice = chunk.choices[0];
+        if (!choice) continue;
+
+        if (choice.delta.content) {
+          yield choice.delta.content;
+        }
+
+        for (const tc of choice.delta.tool_calls ?? []) {
+          if (!toolCallAccum[tc.index]) {
+            toolCallAccum[tc.index] = {
+              id: tc.id ?? "",
+              name: tc.function?.name ?? "",
+              args: "",
+            };
+          } else {
+            if (tc.id) toolCallAccum[tc.index].id = tc.id;
+            if (tc.function?.name)
+              toolCallAccum[tc.index].name += tc.function.name;
+          }
+          if (tc.function?.arguments) {
+            toolCallAccum[tc.index].args += tc.function.arguments;
+          }
+        }
+
+        if (choice.finish_reason === "tool_calls") {
+          for (const accum of Object.values(toolCallAccum)) {
+            const toolCall: LLMToolCall = {
+              id: accum.id,
+              type: "function",
+              function: { name: accum.name, arguments: accum.args },
+            };
+            yield toolCall;
+          }
+        }
       }
     }
   } finally {

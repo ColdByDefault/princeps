@@ -58,6 +58,8 @@
   - [ ] Improve Sidebar-Footer
   - [ ] Empty Chats cant be renamed, deleted
   - [ ] Add rules for Username (no spaces, unique, etc.) and enforce in Auth routes
+  - [ ] Add `index.ts` files where missing for better import paths and encapsulation.
+  - [ ] Adjust the imports in `providers.ts`
 
 # Major Updates 5
 ---
@@ -73,7 +75,7 @@
 # next
 
 - [ ] Refactor Chat-Widget
-- [x] Add first feature, CRUD + slots
+- [x] Add first feature, CRUD + and register to LLM Tools
 - [ ] Document first feature for reference in future features
 - [ ] Add Notifications System
 - [ ] Introduce Labels System => Global Labels created from app-settings can be used to label chats, tasks, etc. These labels can have a name, color, and LLM can use them as well as creating new ones.

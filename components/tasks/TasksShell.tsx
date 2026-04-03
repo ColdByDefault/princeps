@@ -111,21 +111,19 @@ export function TasksShell({ initialTasks }: TasksShellProps) {
       {/* Filter tabs */}
       <div className="mb-4 flex flex-wrap gap-1.5">
         {FILTERS.map((f) => (
-          <button
+          <Button
             key={f.key}
             type="button"
+            variant={filter === f.key ? "default" : "outline"}
+            size="sm"
             onClick={() => setFilter(f.key)}
-            className={`cursor-pointer rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
-              filter === f.key
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border bg-background text-muted-foreground hover:text-foreground"
-            }`}
+            className="cursor-pointer rounded-full px-3 text-xs"
           >
             {f.label}
             {f.key === "all"
               ? ` (${tasks.length})`
               : ` (${tasks.filter((t) => t.status === f.key).length})`}
-          </button>
+          </Button>
         ))}
       </div>
 
