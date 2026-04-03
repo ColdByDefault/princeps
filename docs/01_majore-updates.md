@@ -40,3 +40,5 @@
        - `provider-test.ts`
   - `lib/llm-providers/provider.ts` (active provider dispatcher)
   - `types/llm.ts`
+
+- Refactored App-Settings
