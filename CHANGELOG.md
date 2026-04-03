@@ -1,3 +1,19 @@
+## [0.1.28] - 2026-04-03
+
+- feat: document major updates and refactor i18n, LLM provider, and auth systems in new markdown files
+- feat: add theme and language toggles to AppSidebar with collapsed state support and update documentation
+- feat: enhance AppSidebar with disabled state for empty chats and update documentation for major changes
+- feat: add theme and language toggles to AppSidebar and update tier system documentation
+- feat: update UsageTab component to replace ProgressLabel with a styled paragraph and adjust monthlyResetDate logic in usage retrieval
+- feat: implement usage tracking in settings with new UsageTab component and update tier system limits
+- feat: enhance tier system with new "Enterprise" tier and implement monthly message/token limits
+- feat: add theme and language toggles to Navbar and update Toaster icon colors
+- feat: add PlanBadge component and integrate tier display in Navbar and Sidebar
+- feat: add chat settings management with temperature and timeout options, update provider status logic, and enhance chat functionality
+- feat(groq): implement Groq provider with chat and embedding functionalities, add health check, and update documentation
+- feat(chat): implement chat functionality with create, delete, and rename features
+- feat: refactor App-Settings and update documentation in major updates
+
 ## [0.1.27] - 2026-04-03
 
 - feat: improve code readability in ProviderTab and SettingsShell components with consistent formatting
