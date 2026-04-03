@@ -393,7 +393,16 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
             <PlanBadge tier={tier} />
           </div>
         )}
-        {!isCollapsed && (
+        {isCollapsed ? (
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <ThemeToggle collapsed />
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <LanguageToggle collapsed />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        ) : (
           <div className="flex items-center gap-1 px-2 pb-1">
             <ThemeToggle />
             <LanguageToggle />

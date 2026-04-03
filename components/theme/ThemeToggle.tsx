@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SidebarMenuButton } from "@/components/ui/sidebar";
 
 type ThemeOption = {
   value: "light" | "dark" | "system";
@@ -29,7 +30,11 @@ const options: ReadonlyArray<ThemeOption> = [
   { value: "system", icon: LaptopMinimal, labelKey: "selector.system" },
 ];
 
-export default function ThemeToggle() {
+export default function ThemeToggle({
+  collapsed = false,
+}: {
+  collapsed?: boolean;
+}) {
   const t = useTranslations("theme");
   const { theme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
@@ -48,16 +53,25 @@ export default function ThemeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            aria-label={groupLabel}
-            className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
-            title={t(activeOption.labelKey)}
-          >
-            <ActiveIcon className="size-3.5" />
-          </Button>
+          collapsed ? (
+            <SidebarMenuButton
+              className="cursor-pointer"
+              tooltip={t(activeOption.labelKey)}
+            >
+              <ActiveIcon className="size-3.5" />
+            </SidebarMenuButton>
+          ) : (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              aria-label={groupLabel}
+              className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+              title={t(activeOption.labelKey)}
+            >
+              <ActiveIcon className="size-3.5" />
+            </Button>
+          )
         }
       />
       <DropdownMenuContent

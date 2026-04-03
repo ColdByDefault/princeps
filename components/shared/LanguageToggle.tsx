@@ -15,10 +15,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { useLanguage } from "@/hooks/use-language";
 import { type AppLanguage } from "@/types/i18n";
 
-export function LanguageToggle() {
+export function LanguageToggle({ collapsed = false }: { collapsed?: boolean }) {
   const t = useTranslations("shell.language");
   const router = useRouter();
   const { language, changeLanguage } = useLanguage();
@@ -38,16 +39,25 @@ export function LanguageToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            aria-label={t("groupLabel")}
-            className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
-            title={language.toUpperCase()}
-          >
-            <Globe className="size-3.5" />
-          </Button>
+          collapsed ? (
+            <SidebarMenuButton
+              className="cursor-pointer"
+              tooltip={t("groupLabel")}
+            >
+              <Globe className="size-3.5" />
+            </SidebarMenuButton>
+          ) : (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              aria-label={t("groupLabel")}
+              className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+              title={language.toUpperCase()}
+            >
+              <Globe className="size-3.5" />
+            </Button>
+          )
         }
       />
       <DropdownMenuContent
