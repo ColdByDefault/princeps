@@ -28,4 +28,15 @@
 
 - LLM providers:
   - `lib/llm-providers/ollama/*`
-       - `ollama.ts` - 
+       - `ollama.ts`
+        - `ollama-settings.ts`
+        - `ollama-embedding.ts`
+  - `lib/llm-providers/openai/*`
+       - `openai.ts`
+        - `openai-settings.ts`
+        - `openai-embedding.ts`
+  - `lib/llm-providers/shared/*`
+       - `provider-health.ts`
+       - `provider-test.ts`
+  - `lib/llm-providers/provider.ts` (active provider dispatcher)
+  - `types/llm.ts`
