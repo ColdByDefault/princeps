@@ -25,15 +25,22 @@ type SettingsShellProps = {
   initialTab: string;
 };
 
-export function SettingsShell({ initialStatus, initialTab }: SettingsShellProps) {
+export function SettingsShell({
+  initialStatus,
+  initialTab,
+}: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
-  const safeInitial: SettingsTab = VALID_TABS.includes(initialTab as SettingsTab)
+  const safeInitial: SettingsTab = VALID_TABS.includes(
+    initialTab as SettingsTab,
+  )
     ? (initialTab as SettingsTab)
     : "appearance";
   const [activeTab, setActiveTab] = useState<SettingsTab>(safeInitial);
 
   const handleTabChange = (tab: string) => {
-    const safe = VALID_TABS.includes(tab as SettingsTab) ? (tab as SettingsTab) : "appearance";
+    const safe = VALID_TABS.includes(tab as SettingsTab)
+      ? (tab as SettingsTab)
+      : "appearance";
     setActiveTab(safe);
     setTabCookie(safe);
   };

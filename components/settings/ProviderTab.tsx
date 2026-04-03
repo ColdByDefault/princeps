@@ -43,7 +43,11 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
   };
 
   const providerLabel = (p: ActiveProvider) =>
-    p === "openAi" ? t("nameOpenAi") : p === "ollama" ? t("nameOllama") : t("nameGroq");
+    p === "openAi"
+      ? t("nameOpenAi")
+      : p === "ollama"
+        ? t("nameOllama")
+        : t("nameGroq");
 
   return (
     <div className="divide-y divide-border/60">
@@ -61,7 +65,9 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
           disabled={isPending}
           onClick={handleRefresh}
         >
-          <RefreshCw className={`size-3.5 ${isPending ? "animate-spin" : ""}`} />
+          <RefreshCw
+            className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
+          />
           {isPending ? t("refreshing") : t("refresh")}
         </Button>
       </div>
@@ -86,13 +92,17 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
                   : "text-xs border-destructive/20 bg-destructive/10 text-destructive"
               }
             >
-              {health.connected ? t("statusConnected") : t("statusDisconnected")}
+              {health.connected
+                ? t("statusConnected")
+                : t("statusDisconnected")}
             </Badge>
           </div>
 
           {/* Version */}
           {health.version && (
-            <p className="text-xs text-muted-foreground font-mono">v{health.version}</p>
+            <p className="text-xs text-muted-foreground font-mono">
+              v{health.version}
+            </p>
           )}
 
           {/* Error */}
@@ -130,4 +140,3 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
     </div>
   );
 }
-
