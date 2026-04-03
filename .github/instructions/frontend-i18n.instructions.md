@@ -69,6 +69,10 @@ Import from `@/components/shared`.
 ## Base UI Conventions
 
 - Base UI composition uses the `render` prop (not Radix `asChild`) on dialog triggers, close controls, and similar primitives.
+- `DialogTrigger`, `TooltipTrigger`, and similar Base UI primitives that have `nativeButton={true}` (the default) **must** receive a native `<button>`-producing element via `render`. Never use `render={<span />}` — it removes native button semantics and causes a runtime warning.
+  - To use a Shadcn `Button` as the trigger: `<DialogTrigger render={<Button ...props />}>content</DialogTrigger>`
+  - To use an externally-provided element as the trigger: `<DialogTrigger render={children as React.ReactElement} />` (children already contains its own content)
+  - The trigger props (onClick, aria-haspopup, aria-expanded, etc.) are merged in by Base UI via element cloning.
 - Guard `Select` value handlers — they can receive `null`.
 
 ## Internationalization

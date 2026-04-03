@@ -8,11 +8,16 @@
 
 // ─── Message / Chat ───────────────────────────────────────
 
-export type LLMMessageRole = "system" | "user" | "assistant";
+export type LLMMessageRole = "system" | "user" | "assistant" | "tool";
 
 export interface LLMMessage {
   role: LLMMessageRole;
-  content: string;
+  /** Null only on assistant messages that contain tool_calls and no text. */
+  content: string | null;
+  /** Populated when the assistant is requesting tool calls (role: "assistant"). */
+  tool_calls?: LLMToolCall[];
+  /** Required when role is "tool" — references the tool_call id being answered. */
+  tool_call_id?: string;
 }
 
 /** Base options accepted by every provider's callChat / streamChat. */
@@ -28,6 +33,8 @@ export interface LLMChatOptions {
   contextLength?: number;
   /** Request timeout in ms. */
   timeoutMs?: number;
+  /** Tools the LLM can call (OpenAI function-calling format). */
+  tools?: LLMTool[];
 }
 
 export interface LLMChatResult {
@@ -75,6 +82,29 @@ export interface ProviderStatusPayload {
   active: ActiveProvider;
   activeModel: string;
   providers: ProviderEntry[];
+}
+
+// ─── Tools ────────────────────────────────────────────────
+
+export interface LLMToolFunction {
+  name: string;
+  description: string;
+  parameters: Record<string, unknown>;
+}
+
+export interface LLMTool {
+  type: "function";
+  function: LLMToolFunction;
+}
+
+/** A tool call requested by the LLM in a streamed response. */
+export interface LLMToolCall {
+  id: string;
+  type: "function";
+  function: {
+    name: string;
+    arguments: string; // JSON-stringified arguments
+  };
 }
 
 // ─── Test ─────────────────────────────────────────────────

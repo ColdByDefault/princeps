@@ -99,6 +99,11 @@ export function UsageTab({ usage }: UsageTabProps) {
           limit={usage.chatsLimit}
           note={t("chatsNote")}
         />
+        <QuotaRow
+          label={t("toolCallsTitle")}
+          used={usage.toolCallsUsed}
+          limit={usage.toolCallsLimit}
+        />
       </div>
 
       {/* Reset footer */}

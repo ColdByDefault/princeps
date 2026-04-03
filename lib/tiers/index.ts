@@ -9,6 +9,7 @@ export {
   enforceWidgetChats,
   enforceWidgetTools,
   enforceMonthlyLimits,
+  enforceToolCallsMonthly,
   accumulateTokens,
   getChatHistoryLimit,
   createTierLimitResponse,

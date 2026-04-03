@@ -128,7 +128,8 @@
       "messagesTitle": "Nachrichten diesen Monat",
       "tokensTitle": "Ungefähre Token diesen Monat",
       "chatsTitle": "Gespeicherte Chats",
-      "chatsNote": "Dieses Limit wird nie zurückgesetzt — lösche Chats, um Platz freizugeben."
+      "chatsNote": "Dieses Limit wird nie zurückgesetzt — lösche Chats, um Platz freizugeben.",
+      "toolCallsTitle": "KI-Werkzeugaufrufe diesen Monat"
     }
   },
   "shell": {
@@ -136,6 +137,7 @@
       "brand": "See-Sweet",
       "home": "Arbeitsbereich",
       "chat": "Chat",
+      "tasks": "Aufgaben",
       "settings": "Einstellungen",
       "userFallback": "Arbeitsbereich-Nutzer",
       "signOut": "Abmelden",
@@ -215,5 +217,76 @@
       "reset": "Auf Standardwerte zurücksetzen",
       "save": "Änderungen speichern"
     }
+  },
+  "tasks": {
+    "metadata": {
+      "title": "Aufgaben",
+      "description": "Verwalte deine Aufgaben."
+    },
+    "pageTitle": "Aufgaben",
+    "newTask": "Neue Aufgabe",
+    "empty": "Noch keine Aufgaben.",
+    "emptyFiltered": "Keine Aufgaben mit diesem Status.",
+    "filter": {
+      "all": "Alle",
+      "open": "Offen",
+      "inProgress": "In Bearbeitung",
+      "done": "Erledigt",
+      "cancelled": "Abgebrochen"
+    },
+    "priority": {
+      "low": "Niedrig",
+      "normal": "Normal",
+      "high": "Hoch",
+      "urgent": "Dringend"
+    },
+    "status": {
+      "open": "Offen",
+      "inProgress": "In Bearbeitung",
+      "done": "Erledigt",
+      "cancelled": "Abgebrochen"
+    },
+    "fields": {
+      "title": "Titel",
+      "titlePlaceholder": "Aufgabentitel",
+      "notes": "Notizen",
+      "notesPlaceholder": "Optionale Notizen\u2026",
+      "priority": "Priorität",
+      "dueDate": "F\u00e4lligkeitsdatum",
+      "status": "Status",
+      "optional": "Optional"
+    },
+    "createDialog": {
+      "heading": "Neue Aufgabe",
+      "submit": "Erstellen",
+      "submitting": "Wird erstellt\u2026",
+      "success": "Aufgabe erstellt.",
+      "error": "Aufgabe konnte nicht erstellt werden."
+    },
+    "editDialog": {
+      "heading": "Aufgabe bearbeiten",
+      "submit": "Speichern",
+      "submitting": "Wird gespeichert\u2026",
+      "success": "Aufgabe gespeichert.",
+      "error": "Aufgabe konnte nicht gespeichert werden."
+    },
+    "deleteDialog": {
+      "title": "Aufgabe löschen?",
+      "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirm": "Löschen",
+      "cancel": "Abbrechen",
+      "success": "Aufgabe gelöscht.",
+      "error": "Aufgabe konnte nicht gelöscht werden."
+    },
+    "complete": {
+      "success": "Als erledigt markiert.",
+      "reopen": "Aufgabe wiedereröffnet.",
+      "error": "Aufgabe konnte nicht aktualisiert werden."
+    },
+    "actionsLabel": "Aufgabenaktionen",
+    "editLabel": "Bearbeiten",
+    "deleteLabel": "Löschen",
+    "markDoneLabel": "Als erledigt markieren",
+    "reopenLabel": "Wiedereröffnen"
   }
 }

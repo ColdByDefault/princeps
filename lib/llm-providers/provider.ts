@@ -19,7 +19,12 @@ import * as ollama from "@/lib/llm-providers/ollama/ollama";
 import * as ollamaEmbed from "@/lib/llm-providers/ollama/ollama-embedding";
 import * as openai from "@/lib/llm-providers/openai/openai";
 import * as openaiEmbed from "@/lib/llm-providers/openai/openai-embedding";
-import type { LLMChatOptions, LLMChatResult, LLMMessage } from "@/types/llm";
+import type {
+  LLMChatOptions,
+  LLMChatResult,
+  LLMMessage,
+  LLMToolCall,
+} from "@/types/llm";
 
 // ─── Provider Resolution ──────────────────────────────────
 
@@ -66,7 +71,7 @@ export async function callChat(
 export async function* streamChat(
   messages: LLMMessage[],
   options?: LLMChatOptions,
-): AsyncGenerator<string> {
+): AsyncGenerator<string | LLMToolCall> {
   const provider = getProvider();
 
   switch (provider) {

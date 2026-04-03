@@ -5,6 +5,8 @@
 
 import "server-only";
 
+import { tasksSlot } from "@/lib/context/tasks.slot";
+
 /**
  * A context slot contributes one labeled section to the LLM system prompt.
  * Return null to omit the section entirely.
@@ -22,4 +24,4 @@ export interface ContextSlot {
  * Ordered list of all active context slots.
  * Add slots here as features are built.
  */
-export const SLOT_REGISTRY: ContextSlot[] = [];
+export const SLOT_REGISTRY: ContextSlot[] = [tasksSlot];

@@ -22,10 +22,16 @@ import {
 import { setInitialTitle } from "@/lib/chat/create.logic";
 import { streamChat } from "@/lib/llm-providers/provider";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
-import { enforceMonthlyLimits, accumulateTokens } from "@/lib/tiers";
+import {
+  enforceMonthlyLimits,
+  accumulateTokens,
+  enforceToolCallsMonthly,
+} from "@/lib/tiers";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 import { buildSystemPrompt } from "@/lib/context/build";
-import type { LLMMessage, LLMChatOptions } from "@/types/llm";
+import { TOOL_REGISTRY } from "@/lib/tools/registry";
+import { executeToolCall } from "@/lib/tools/executor";
+import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
 
 type Params = { params: Promise<{ chatId: string }> };
 
@@ -71,6 +77,7 @@ export async function POST(req: Request, { params }: Params) {
     ...(typeof body.timeoutMs === "number" && {
       timeoutMs: Math.min(120_000, Math.max(5_000, body.timeoutMs)),
     }),
+    tools: TOOL_REGISTRY,
   };
   const { chatId } = await params;
 
@@ -125,9 +132,68 @@ export async function POST(req: Request, { params }: Params) {
       let assistantContent = "";
 
       try {
-        for await (const token of streamChat(llmMessages, chatOptions)) {
-          send({ type: "token", text: token });
-          assistantContent += token;
+        const toolCalls: LLMToolCall[] = [];
+
+        // First LLM pass — collect tokens and any tool call requests
+        for await (const chunk of streamChat(llmMessages, chatOptions)) {
+          if (typeof chunk === "string") {
+            send({ type: "token", text: chunk });
+            assistantContent += chunk;
+          } else {
+            toolCalls.push(chunk);
+          }
+        }
+
+        // If the LLM requested tool calls, execute them and do a second pass
+        // so the LLM can produce a text response after seeing the results.
+        if (toolCalls.length > 0) {
+          // Gate on monthly tool call budget before executing
+          const toolCheck = await enforceToolCallsMonthly(
+            session.user.id,
+            toolCalls.length,
+          );
+          if (!toolCheck.allowed) {
+            send({
+              type: "error",
+              message: toolCheck.reason ?? "Tool call limit reached.",
+            });
+            return;
+          }
+
+          const followUp: LLMMessage[] = [...llmMessages];
+
+          // Append the assistant's tool_calls turn (OpenAI requires this in history)
+          followUp.push({
+            role: "assistant",
+            content: null,
+            tool_calls: toolCalls,
+          });
+
+          // Execute each tool, emit the action event, append the tool result
+          for (const toolCall of toolCalls) {
+            const result = await executeToolCall(session.user.id, toolCall);
+            send({
+              type: "action",
+              name: toolCall.function.name,
+              record: result.ok ? (result.data as Record<string, unknown>) : {},
+            });
+            followUp.push({
+              role: "tool",
+              tool_call_id: toolCall.id,
+              content: result.ok
+                ? JSON.stringify(result.data)
+                : `Error: ${result.error}`,
+            });
+          }
+
+          // Second LLM pass — no tools to avoid infinite loops
+          const { tools: _tools, ...baseOptions } = chatOptions;
+          for await (const chunk of streamChat(followUp, baseOptions)) {
+            if (typeof chunk === "string") {
+              send({ type: "token", text: chunk });
+              assistantContent += chunk;
+            }
+          }
         }
       } catch (err) {
         send({

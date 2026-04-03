@@ -6,7 +6,12 @@
 import "server-only";
 
 import { getOpenAISettings, OpenAIProviderError } from "./openai-settings";
-import type { LLMMessage, LLMChatOptions, LLMChatResult } from "@/types/llm";
+import type {
+  LLMMessage,
+  LLMChatOptions,
+  LLMChatResult,
+  LLMToolCall,
+} from "@/types/llm";
 
 // ─── Public Types (re-exported aliases for this provider) ─
 
@@ -33,7 +38,15 @@ interface OpenAIChatApiResponse {
 
 interface OpenAIStreamChunk {
   choices: Array<{
-    delta: { content?: string };
+    delta: {
+      content?: string;
+      tool_calls?: Array<{
+        index: number;
+        id?: string;
+        type?: string;
+        function?: { name?: string; arguments?: string };
+      }>;
+    };
     finish_reason: string | null;
   }>;
 }
@@ -107,7 +120,7 @@ export async function callChat(
 export async function* streamChat(
   messages: LLMMessage[],
   options?: LLMChatOptions,
-): AsyncGenerator<string> {
+): AsyncGenerator<string | LLMToolCall> {
   const settings = getOpenAISettings();
 
   const response = await fetch(`${settings.baseUrl}/chat/completions`, {
@@ -119,6 +132,7 @@ export async function* streamChat(
       temperature: options?.temperature ?? settings.temperature,
       max_tokens: options?.contextLength ?? settings.maxTokens,
       stream: true,
+      ...(options?.tools?.length && { tools: options.tools }),
     }),
     signal: AbortSignal.timeout(options?.timeoutMs ?? settings.timeoutMs),
   });
@@ -139,18 +153,22 @@ export async function* streamChat(
   const decoder = new TextDecoder();
   let buffer = "";
 
+  // Accumulate tool call fragments: keyed by index
+  const toolCallAccum: Record<
+    number,
+    { id: string; name: string; args: string }
+  > = {};
+
   try {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
 
       buffer += decoder.decode(value, { stream: true });
-      // SSE events are separated by "\n\n"
       const events = buffer.split("\n\n");
-      buffer = events.pop() ?? ""; // keep the last partial event
+      buffer = events.pop() ?? "";
 
       for (const event of events) {
-        // Each event may contain multiple "data: ..." lines; take the last data line
         const dataLine = event
           .split("\n")
           .filter((l) => l.startsWith("data: "))
@@ -161,8 +179,43 @@ export async function* streamChat(
         if (payload === "[DONE]") return;
 
         const chunk = JSON.parse(payload) as OpenAIStreamChunk;
-        const delta = chunk.choices[0]?.delta?.content;
-        if (delta) yield delta;
+        const choice = chunk.choices[0];
+        if (!choice) continue;
+
+        // Content token
+        if (choice.delta.content) {
+          yield choice.delta.content;
+        }
+
+        // Accumulate tool call fragments
+        for (const tc of choice.delta.tool_calls ?? []) {
+          if (!toolCallAccum[tc.index]) {
+            toolCallAccum[tc.index] = {
+              id: tc.id ?? "",
+              name: tc.function?.name ?? "",
+              args: "",
+            };
+          } else {
+            if (tc.id) toolCallAccum[tc.index].id = tc.id;
+            if (tc.function?.name)
+              toolCallAccum[tc.index].name += tc.function.name;
+          }
+          if (tc.function?.arguments) {
+            toolCallAccum[tc.index].args += tc.function.arguments;
+          }
+        }
+
+        // When the model finishes with tool_calls, yield each assembled call
+        if (choice.finish_reason === "tool_calls") {
+          for (const accum of Object.values(toolCallAccum)) {
+            const toolCall: LLMToolCall = {
+              id: accum.id,
+              type: "function",
+              function: { name: accum.name, arguments: accum.args },
+            };
+            yield toolCall;
+          }
+        }
       }
     }
   } finally {
