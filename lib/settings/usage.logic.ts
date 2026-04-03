@@ -36,6 +36,9 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     tokensLimit: limits.tokensPerMonth,
     chatsStored,
     chatsLimit: limits.chatHistoryTotal,
-    monthlyResetDate: counter?.monthlyResetDate ?? null,
+    // Default to the current month when the counter has never been written —
+    // counters are at 0 so the current month is already the correct boundary.
+    monthlyResetDate:
+      counter?.monthlyResetDate ?? new Date().toISOString().slice(0, 7),
   };
 }

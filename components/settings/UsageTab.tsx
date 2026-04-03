@@ -6,7 +6,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ProgressLabel } from "@/components/ui/progress";
 import { PlanBadge } from "@/components/shared";
 import type { UsageSummary } from "@/types/billing";
 
@@ -43,7 +42,7 @@ function QuotaRow({ label, used, limit, note }: QuotaRowProps) {
   return (
     <div className="space-y-2 py-4">
       <div className="flex items-center justify-between">
-        <ProgressLabel>{label}</ProgressLabel>
+        <p className="text-sm font-medium">{label}</p>
         <span className="text-sm text-muted-foreground tabular-nums ml-auto">
           {fmt(used)} / {fmt(limit)}
         </span>
