@@ -42,3 +42,9 @@
   - `types/llm.ts`
 
 - Refactored App-Settings
+
+# Major Updates 4
+
+- Refactored /Chat
+- Added Groq provider (API-based, similar to OpenAI), models filter in UI is intentionally hardcoded, Groq API doesn't query available models from API, it sends all models back. 
+- Added Simple `lib/context/build.ts`

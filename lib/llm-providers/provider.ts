@@ -8,11 +8,13 @@
  * Supported values for CHAT_PROVIDER:
  *   "openAi"  — OpenAI API (default)
  *   "ollama"  — Ollama local server
- *   "groq"    — Groq API (not yet implemented)
+ *   "groq"    — Groq API
  */
 
 import "server-only";
 
+import * as groq from "@/lib/llm-providers/groq/groq";
+import * as groqEmbed from "@/lib/llm-providers/groq/groq-embedding";
 import * as ollama from "@/lib/llm-providers/ollama/ollama";
 import * as ollamaEmbed from "@/lib/llm-providers/ollama/ollama-embedding";
 import * as openai from "@/lib/llm-providers/openai/openai";
@@ -53,7 +55,7 @@ export async function callChat(
     case "ollama":
       return ollama.callChat(messages, options);
     case "groq":
-      throw new Error("Groq provider is not yet implemented.");
+      return groq.callChat(messages, options);
   }
 }
 
@@ -75,7 +77,8 @@ export async function* streamChat(
       yield* ollama.streamChat(messages, options);
       break;
     case "groq":
-      throw new Error("Groq provider is not yet implemented.");
+      yield* groq.streamChat(messages, options);
+      break;
   }
 }
 
@@ -94,7 +97,7 @@ export async function embed(text: string): Promise<number[]> {
     case "ollama":
       return ollamaEmbed.embed(text);
     case "groq":
-      throw new Error("Groq provider is not yet implemented.");
+      return groqEmbed.embed(text);
   }
 }
 
@@ -110,6 +113,6 @@ export async function embedBatch(texts: string[]): Promise<number[][]> {
     case "ollama":
       return ollamaEmbed.embedBatch(texts);
     case "groq":
-      throw new Error("Groq provider is not yet implemented.");
+      return groqEmbed.embedBatch(texts);
   }
 }

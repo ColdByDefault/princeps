@@ -8,12 +8,9 @@ import "server-only";
 import {
   checkOllamaHealth,
   checkOpenAIHealth,
+  checkGroqHealth,
 } from "@/lib/llm-providers/shared/provider-health";
-import type {
-  ActiveProvider,
-  ProviderHealthStatus,
-  ProviderStatusPayload,
-} from "@/types/llm";
+import type { ActiveProvider, ProviderStatusPayload } from "@/types/llm";
 
 // ─── Logic ────────────────────────────────────────────────
 
@@ -22,17 +19,11 @@ export async function getProviderStatus(): Promise<ProviderStatusPayload> {
   const active: ActiveProvider =
     raw === "openAi" || raw === "ollama" || raw === "groq" ? raw : "openAi";
 
-  const [openAiHealth, ollamaHealth] = await Promise.all([
+  const [openAiHealth, ollamaHealth, groqHealth] = await Promise.all([
     checkOpenAIHealth(),
     checkOllamaHealth(),
+    checkGroqHealth(),
   ]);
-
-  const groqHealth: ProviderHealthStatus = {
-    connected: false,
-    version: null,
-    models: [],
-    error: null,
-  };
 
   return {
     active,
