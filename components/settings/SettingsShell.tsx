@@ -6,12 +6,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AppearanceTab } from "./AppearanceTab";
 import { ProviderTab } from "./ProviderTab";
 import type { ProviderStatusPayload } from "@/types/llm";
@@ -24,17 +19,21 @@ export function SettingsShell({ initialStatus }: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
 
   return (
-    <Tabs defaultValue="appearance">
-      <TabsList>
-        <TabsTrigger value="appearance">{t("appearance")}</TabsTrigger>
-        <TabsTrigger value="provider">{t("provider")}</TabsTrigger>
+    <Tabs defaultValue="appearance" className="w-full">
+      <TabsList className="w-full">
+        <TabsTrigger value="appearance" className="flex-1">
+          {t("appearance")}
+        </TabsTrigger>
+        <TabsTrigger value="provider" className="flex-1">
+          {t("provider")}
+        </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="appearance" className="mt-6">
+      <TabsContent value="appearance" className="mt-6 w-full">
         <AppearanceTab />
       </TabsContent>
 
-      <TabsContent value="provider" className="mt-6">
+      <TabsContent value="provider" className="mt-6 w-full">
         <ProviderTab initialStatus={initialStatus} />
       </TabsContent>
     </Tabs>
