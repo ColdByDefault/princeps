@@ -6,33 +6,15 @@
 import "server-only";
 
 import { getOllamaSettings, OllamaProviderError } from "./ollama-settings";
+import type { LLMMessage, LLMChatOptions, LLMChatResult } from "@/types/llm";
 
-// ─── Public Types ─────────────────────────────────────────
+// ─── Public Types (re-exported aliases for this provider) ─
 
-export type OllamaMessageRole = "system" | "user" | "assistant";
-
-export interface OllamaMessage {
-  role: OllamaMessageRole;
-  content: string;
-}
-
-export interface OllamaChatOptions {
-  /** Override the configured chat model for this request. */
-  model?: string;
-  /** Sampling temperature (0–1). Defaults to settings. */
-  temperature?: number;
-  /** Context window size in tokens. Defaults to settings. */
-  contextLength?: number;
-  /** Request timeout in ms. Defaults to settings. */
-  timeoutMs?: number;
-}
-
-export interface OllamaChatResult {
-  content: string;
-  model: string;
-  promptTokens: number;
-  completionTokens: number;
-}
+export type {
+  LLMMessage as OllamaMessage,
+  LLMChatOptions as OllamaChatOptions,
+  LLMChatResult as OllamaChatResult,
+};
 
 // ─── Internal API Shapes ──────────────────────────────────
 
@@ -58,9 +40,9 @@ interface OllamaChatStreamChunk {
  * Throws `OllamaProviderError` on non-2xx responses.
  */
 export async function callChat(
-  messages: OllamaMessage[],
-  options?: OllamaChatOptions,
-): Promise<OllamaChatResult> {
+  messages: LLMMessage[],
+  options?: LLMChatOptions,
+): Promise<LLMChatResult> {
   const settings = getOllamaSettings();
 
   const response = await fetch(`${settings.baseUrl}/api/chat`, {
@@ -106,8 +88,8 @@ export async function callChat(
  * }
  */
 export async function* streamChat(
-  messages: OllamaMessage[],
-  options?: OllamaChatOptions,
+  messages: LLMMessage[],
+  options?: LLMChatOptions,
 ): AsyncGenerator<string> {
   const settings = getOllamaSettings();
 

@@ -1,23 +1,23 @@
 // ─── Provider ─────────────────────────────────────────────
-export { callChat, streamChat } from "./ollama";
+export { callChat, streamChat } from "./openai";
 export type {
-  OllamaMessage,
-  OllamaChatOptions,
-  OllamaChatResult,
-} from "./ollama";
+  OpenAIMessage,
+  OpenAIChatOptions,
+  OpenAIChatResult,
+} from "./openai";
 
 // ─── Embedding ────────────────────────────────────────────
-export { embed, embedBatch } from "./ollama-embedding";
+export { embed, embedBatch } from "./openai-embedding";
 
 // ─── Settings ─────────────────────────────────────────────
 export {
-  getOllamaSettings,
-  OllamaProviderError,
-  OLLAMA_CHAT_MODELS,
-  OLLAMA_EMBEDDING_MODELS,
-} from "./ollama-settings";
+  getOpenAISettings,
+  OpenAIProviderError,
+  OPENAI_CHAT_MODELS,
+  OPENAI_EMBEDDING_MODELS,
+} from "./openai-settings";
 export type {
-  OllamaSettings,
-  OllamaChatModel,
-  OllamaEmbeddingModel,
-} from "./ollama-settings";
+  OpenAISettings,
+  OpenAIChatModel,
+  OpenAIEmbeddingModel,
+} from "./openai-settings";
