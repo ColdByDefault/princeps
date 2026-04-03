@@ -9,7 +9,11 @@
 import "server-only";
 
 import { getOllamaSettings } from "../ollama/ollama-settings";
-import { getOpenAISettings } from "../openai/openai-settings";
+import {
+  getOpenAISettings,
+  OPENAI_CHAT_MODELS,
+  OPENAI_EMBEDDING_MODELS,
+} from "../openai/openai-settings";
 import type { ProviderHealthStatus, ProviderModelInfo } from "@/types/llm";
 
 // ─── Internal Shapes ──────────────────────────────────────
@@ -117,18 +121,18 @@ export async function checkOpenAIHealth(): Promise<ProviderHealthStatus> {
 
     const { data } = (await response.json()) as OpenAIModelsResponse;
 
-    // Surface only GPT and embedding models — the full list is 100+ entries
-    const relevant = data
-      .filter(
-        (m) =>
-          m.id.startsWith("gpt-") ||
-          m.id.startsWith("text-embedding-") ||
-          m.id.startsWith("o1") ||
-          m.id.startsWith("o3"),
-      )
-      .sort((a, b) => a.id.localeCompare(b.id))
-      .map<ProviderModelInfo>((m) => ({
-        name: m.id,
+    const activeIds = new Set([
+      ...OPENAI_CHAT_MODELS,
+      ...OPENAI_EMBEDDING_MODELS,
+    ]);
+
+    // Show only the curated models that the key actually has access to
+    const liveIds = new Set(data.map((m) => m.id));
+    const relevant = [...activeIds]
+      .filter((id) => liveIds.has(id))
+      .sort()
+      .map<ProviderModelInfo>((id) => ({
+        name: id,
         size: null,
         modifiedAt: null,
       }));
