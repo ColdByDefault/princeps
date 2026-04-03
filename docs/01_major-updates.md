@@ -56,8 +56,11 @@
   - [x] Add theme and language toggles to sidebar header or footer
     - [x] Show the icons when sidebar is collabsed
   - [ ] Add rules for Username (no spaces, unique, etc.) and enforce in Auth routes
-  - [ ] Document all previouse Refactores and updates in this changelog file. => Main: i18n syste (language refrences), tier system (new limits, new enforcement logic, new error handling), LLM provider abstraction (new provider interface, new Ollama provider, refactored chat route to use provider abstraction), Auth refactor (ZOD validation, rate limiting, password confirmation)
-  Each doc file must follow the name rulse: `01_major-updates.md`, `02_tier-system.md`, etc. and be placed in the `docs/` folder.
+  - [x] Document all previous refactors and updates.
+    - `docs/02_tier-system.md` — tier system (limits, enforcement logic, error handling)
+    - `docs/03_i18n-system.md` — i18n system (locale resolution, message structure, rules)
+    - `docs/04_llm-providers.md` — LLM provider abstraction (dispatcher, providers, type contracts)
+    - `docs/05_auth-refactor.md` — Auth refactor (Zod validation, rate limiting, password confirmation)
 
 # next
 
