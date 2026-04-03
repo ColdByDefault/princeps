@@ -255,6 +255,7 @@
       "priority": "Priority",
       "dueDate": "Due date",
       "status": "Status",
+      "labels": "Labels",
       "optional": "Optional"
     },
     "createDialog": {

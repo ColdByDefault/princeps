@@ -10,6 +10,7 @@ export const createTaskSchema = z.object({
   notes: z.string().max(4000).optional(),
   priority: z.enum(["low", "normal", "high", "urgent"]).optional(),
   dueDate: z.string().datetime({ offset: true }).optional().nullable(),
+  labelIds: z.array(z.string()).optional(),
 });
 
 export const updateTaskSchema = z.object({
@@ -18,6 +19,7 @@ export const updateTaskSchema = z.object({
   status: z.enum(["open", "in_progress", "done", "cancelled"]).optional(),
   priority: z.enum(["low", "normal", "high", "urgent"]).optional(),
   dueDate: z.string().datetime({ offset: true }).optional().nullable(),
+  labelIds: z.array(z.string()).optional(),
 });
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;

@@ -39,6 +39,12 @@ export const TOOL_REGISTRY: LLMTool[] = [
             description:
               "Optional ISO 8601 due date (e.g. 2026-04-10T00:00:00Z).",
           },
+          labelNames: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              'Optional list of label names to attach. Labels that don\'t exist yet will be created automatically. Use the exact name (e.g. "private", "work").',
+          },
         },
         required: ["title"],
       },
@@ -109,8 +115,37 @@ export const TOOL_REGISTRY: LLMTool[] = [
             type: "string",
             enum: ["open", "in_progress", "done", "cancelled"],
           },
+          labelNames: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Replaces all current labels on the task with the given names. Missing labels are created automatically. Pass an empty array to remove all labels.",
+          },
         },
         required: ["taskId"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "create_label",
+      description:
+        "Create a new global label. Use this when the user asks to add or create a label. Labels can then be attached to tasks and other records.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: {
+            type: "string",
+            description: "Label name (required, max 50 characters).",
+          },
+          color: {
+            type: "string",
+            description:
+              "Hex color code (e.g. #6366f1). Defaults to #6366f1 if omitted.",
+          },
+        },
+        required: ["name"],
       },
     },
   },

@@ -8,7 +8,10 @@ import "server-only";
 import { createTask } from "@/lib/tasks/create.logic";
 import { listTasks } from "@/lib/tasks/list.logic";
 import { updateTask } from "@/lib/tasks/update.logic";
+import { createLabel } from "@/lib/labels/create.logic";
 import { createTaskSchema, updateTaskSchema } from "@/lib/tasks/schemas";
+import { createLabelSchema } from "@/lib/labels/schemas";
+import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
 import type { LLMToolCall } from "@/types/llm";
 
 export type ActionResult =
@@ -34,7 +37,15 @@ export async function executeToolCall(
   const name = toolCall.function.name;
 
   if (name === "create_task") {
-    const parsed = createTaskSchema.safeParse(args);
+    // Resolve label names → IDs (creates missing labels automatically) before validation.
+    const labelNames = Array.isArray(args.labelNames)
+      ? (args.labelNames as string[])
+      : [];
+    const labelIds = labelNames.length
+      ? await resolveOrCreateLabelIdsByNames(userId, labelNames)
+      : undefined;
+
+    const parsed = createTaskSchema.safeParse({ ...args, labelIds });
     if (!parsed.success) {
       return {
         ok: false,
@@ -76,8 +87,20 @@ export async function executeToolCall(
     if (typeof args.taskId !== "string") {
       return { ok: false, error: "update_task requires taskId." };
     }
+    // Resolve label names → IDs before validation.
+    const labelNames = Array.isArray(args.labelNames)
+      ? (args.labelNames as string[])
+      : undefined;
+    const labelIds =
+      labelNames !== undefined
+        ? await resolveOrCreateLabelIdsByNames(userId, labelNames)
+        : undefined;
+
     const { taskId, ...rest } = args;
-    const parsed = updateTaskSchema.safeParse(rest);
+    const parsed = updateTaskSchema.safeParse({
+      ...rest,
+      ...(labelIds !== undefined ? { labelIds } : {}),
+    });
     if (!parsed.success) {
       return {
         ok: false,
@@ -92,6 +115,26 @@ export async function executeToolCall(
       };
     }
     return { ok: true, data: result.task };
+  }
+
+  if (name === "create_label") {
+    const parsed = createLabelSchema.safeParse(args);
+    if (!parsed.success) {
+      return {
+        ok: false,
+        error: parsed.error.issues[0]?.message ?? "Invalid create_label input.",
+      };
+    }
+    const result = await createLabel(userId, parsed.data);
+    if (!result.ok) {
+      return {
+        ok: false,
+        error: result.duplicate
+          ? "A label with that name already exists."
+          : "Failed to create label.",
+      };
+    }
+    return { ok: true, data: result.label };
   }
 
   return { ok: false, error: `Unknown tool: ${name}` };

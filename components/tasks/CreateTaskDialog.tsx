@@ -7,6 +7,7 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,6 +27,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import type { LabelOptionRecord } from "@/types/api";
 
 type CreateTaskDialogProps = {
   onSubmit: (input: {
@@ -33,14 +35,17 @@ type CreateTaskDialogProps = {
     notes?: string;
     priority?: string;
     dueDate?: string | null;
+    labelIds?: string[];
   }) => Promise<boolean>;
   creating: boolean;
+  availableLabels: LabelOptionRecord[];
   children: React.ReactNode;
 };
 
 export function CreateTaskDialog({
   onSubmit,
   creating,
+  availableLabels,
   children,
 }: CreateTaskDialogProps) {
   const t = useTranslations("tasks");
@@ -49,6 +54,13 @@ export function CreateTaskDialog({
   const [notes, setNotes] = useState("");
   const [priority, setPriority] = useState("normal");
   const [dueDate, setDueDate] = useState("");
+  const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>([]);
+
+  function toggleLabel(id: string) {
+    setSelectedLabelIds((prev) =>
+      prev.includes(id) ? prev.filter((l) => l !== id) : [...prev, id],
+    );
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -59,6 +71,7 @@ export function CreateTaskDialog({
       ...(notes.trim() && { notes: notes.trim() }),
       priority,
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+      ...(selectedLabelIds.length && { labelIds: selectedLabelIds }),
     });
 
     if (ok) {
@@ -67,6 +80,7 @@ export function CreateTaskDialog({
       setNotes("");
       setPriority("normal");
       setDueDate("");
+      setSelectedLabelIds([]);
     }
   }
 
@@ -157,6 +171,46 @@ export function CreateTaskDialog({
               />
             </div>
           </div>
+
+          {availableLabels.length > 0 && (
+            <div className="space-y-1.5">
+              <Label>
+                {t("fields.labels")}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">
+                  ({t("fields.optional")})
+                </span>
+              </Label>
+              <div className="flex flex-wrap gap-1.5">
+                {availableLabels.map((label) => {
+                  const selected = selectedLabelIds.includes(label.id);
+                  return (
+                    <button
+                      key={label.id}
+                      type="button"
+                      onClick={() => toggleLabel(label.id)}
+                      aria-label={label.name}
+                      aria-pressed={selected}
+                      className={cn(
+                        "inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
+                        selected
+                          ? "border-transparent text-white"
+                          : "border-border bg-muted/40 text-muted-foreground hover:text-foreground",
+                      )}
+                      style={selected ? { backgroundColor: label.color } : {}}
+                    >
+                      <span
+                        className="size-1.5 rounded-full shrink-0"
+                        style={{
+                          backgroundColor: selected ? "white" : label.color,
+                        }}
+                      />
+                      {label.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <DialogFooter>
             <Button

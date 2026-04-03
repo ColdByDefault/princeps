@@ -60,12 +60,12 @@
 ---
 
 - Build first feature **Tasks** according to new architecture (see `lib/` structure in instructions). This will be a simple CRUD feature with slots for the LLM context.
-
+> open question: LLM can call the tools to create, but can it update (edit)? Labels too?
 
 # Major Updates 6
 ---
 
-- Refactore Labels System.
+- Refactore Labels System, included in settings, features, and LLM-awareness.
 
 
 
@@ -81,6 +81,8 @@
   - [ ] Add refresh buttons to settings pages to reflect changes immediately without needing a full page refresh.
   - [ ] Add UI errors when try to navigate to protected routes (e.g. chat) while not authenticated, or when hitting rate limits, etc.
   - [ ] Tasks Filter exist but the task missing the category field, so the filter does not work, add category to task and wire it up to filter.
+  - [ ] Update Token Usages to show usages of calling tools, not only the count of the calls.
+  - [ ] is LLM aware of time-zone and date?
 # plan
 - [ ] Refactor Chat-Widget to use new architecture and patterns (chat steam, tools, awareness of LLM provider, etc.)
 - [ ] LLM system prompt and general behavior.

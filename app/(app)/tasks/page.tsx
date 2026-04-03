@@ -9,6 +9,7 @@ import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { listTasks } from "@/lib/tasks/list.logic";
+import { listLabels } from "@/lib/labels/list.logic";
 import { TasksShell } from "@/components/tasks";
 import type { AppLanguage } from "@/types/i18n";
 
@@ -31,7 +32,10 @@ export default async function TasksPage() {
     redirect("/login");
   }
 
-  const tasks = await listTasks(session.user.id);
+  const [tasks, labels] = await Promise.all([
+    listTasks(session.user.id),
+    listLabels(session.user.id),
+  ]);
 
-  return <TasksShell initialTasks={tasks} />;
+  return <TasksShell initialTasks={tasks} availableLabels={labels} />;
 }

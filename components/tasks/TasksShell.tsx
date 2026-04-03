@@ -23,15 +23,16 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useTaskMutations } from "./logic/useTaskMutations";
-import type { TaskRecord } from "@/types/api";
+import type { LabelOptionRecord, TaskRecord } from "@/types/api";
 
 type Filter = "all" | "open" | "in_progress" | "done" | "cancelled";
 
 type TasksShellProps = {
   initialTasks: TaskRecord[];
+  availableLabels: LabelOptionRecord[];
 };
 
-export function TasksShell({ initialTasks }: TasksShellProps) {
+export function TasksShell({ initialTasks, availableLabels }: TasksShellProps) {
   const t = useTranslations("tasks");
   const [tasks, setTasks] = useState<TaskRecord[]>(initialTasks);
   const [filter, setFilter] = useState<Filter>("all");
@@ -95,7 +96,11 @@ export function TasksShell({ initialTasks }: TasksShellProps) {
         <h1 className="text-2xl font-semibold tracking-tight">
           {t("pageTitle")}
         </h1>
-        <CreateTaskDialog onSubmit={createTask} creating={creating}>
+        <CreateTaskDialog
+          onSubmit={createTask}
+          creating={creating}
+          availableLabels={availableLabels}
+        >
           <Button
             type="button"
             size="sm"
@@ -134,7 +139,11 @@ export function TasksShell({ initialTasks }: TasksShellProps) {
             {filter === "all" ? t("empty") : t("emptyFiltered")}
           </p>
           {filter === "all" && (
-            <CreateTaskDialog onSubmit={createTask} creating={creating}>
+            <CreateTaskDialog
+              onSubmit={createTask}
+              creating={creating}
+              availableLabels={availableLabels}
+            >
               <Button
                 type="button"
                 variant="outline"
@@ -171,6 +180,7 @@ export function TasksShell({ initialTasks }: TasksShellProps) {
         onOpenChange={setEditOpen}
         onSubmit={updateTask}
         updating={!!updating}
+        availableLabels={availableLabels}
       />
 
       {/* Delete confirmation */}

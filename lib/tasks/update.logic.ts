@@ -33,6 +33,12 @@ export async function updateTask(
         ...(input.dueDate !== undefined && {
           dueDate: input.dueDate ? new Date(input.dueDate) : null,
         }),
+        ...(input.labelIds !== undefined && {
+          labelLinks: {
+            deleteMany: {},
+            create: input.labelIds.map((labelId) => ({ labelId })),
+          },
+        }),
       },
       select: TASK_SELECT,
     })
