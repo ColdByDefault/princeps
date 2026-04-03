@@ -14,20 +14,30 @@ import { Toaster } from "@/components/ui/sonner";
 import { buttonVariants, Button } from "@/components/ui/button";
 import deMessages from "@/messages/de.json";
 import enMessages from "@/messages/en.json";
-import { getMessage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import {
   DEFAULT_LANGUAGE,
   isSupportedLanguage,
   type AppLanguage,
-  type MessageDictionary,
 } from "@/types/i18n";
 import "./globals.css";
 
-const messagesByLanguage: Record<AppLanguage, MessageDictionary> = {
-  de: deMessages as MessageDictionary,
-  en: enMessages as MessageDictionary,
+type Messages = typeof deMessages;
+
+const messagesByLanguage: Record<AppLanguage, Messages> = {
+  de: deMessages,
+  en: enMessages,
 };
+
+function getMsg(messages: Messages, key: string, fallback: string): string {
+  const parts = key.split(".");
+  let node: unknown = messages;
+  for (const part of parts) {
+    if (node == null || typeof node !== "object") return fallback;
+    node = (node as Record<string, unknown>)[part];
+  }
+  return typeof node === "string" ? node : fallback;
+}
 
 const emptySubscribe = () => () => {};
 
@@ -97,7 +107,7 @@ export default function GlobalError({
                   <div className="space-y-6">
                     <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs font-semibold tracking-[0.22em] text-muted-foreground uppercase backdrop-blur-sm">
                       <AlertTriangle className="size-3.5 text-destructive" />
-                      {getMessage(
+                      {getMsg(
                         messages,
                         "error.global.badge",
                         "Application recovery",
@@ -106,17 +116,17 @@ export default function GlobalError({
 
                     <div className="space-y-3">
                       <p className="text-xs font-semibold tracking-[0.28em] text-muted-foreground uppercase">
-                        {getMessage(messages, "auth.brandName", "See-Sweet")}
+                        {getMsg(messages, "landing.brandName", "See-Sweet")}
                       </p>
                       <h1 className="max-w-2xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-                        {getMessage(
+                        {getMsg(
                           messages,
                           "error.global.title",
                           "Something went wrong.",
                         )}
                       </h1>
                       <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-                        {getMessage(
+                        {getMsg(
                           messages,
                           "error.global.body",
                           "The workspace hit an unexpected problem. Try again, or return to a stable page.",
@@ -124,7 +134,7 @@ export default function GlobalError({
                       </p>
                       {error.digest ? (
                         <p className="text-sm text-muted-foreground">
-                          {getMessage(
+                          {getMsg(
                             messages,
                             "error.global.reference",
                             "Reference",
@@ -144,7 +154,7 @@ export default function GlobalError({
                         className="h-11 cursor-pointer rounded-xl px-4"
                       >
                         <RefreshCw className="size-4" />
-                        {getMessage(
+                        {getMsg(
                           messages,
                           "error.global.retry",
                           "Try again",
@@ -159,7 +169,7 @@ export default function GlobalError({
                         )}
                       >
                         <Home className="size-4" />
-                        {getMessage(
+                        {getMsg(
                           messages,
                           "error.global.goHome",
                           "Open workspace",
@@ -174,7 +184,7 @@ export default function GlobalError({
                         )}
                       >
                         <LogIn className="size-4" />
-                        {getMessage(
+                        {getMsg(
                           messages,
                           "error.global.goLogin",
                           "Open sign in",

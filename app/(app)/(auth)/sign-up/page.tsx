@@ -5,27 +5,23 @@
 
 import { type Metadata } from "next";
 import { SignUpCard } from "@/components/auth";
-import { getRequestConfig } from "@/i18n/request";
-import { getMessage } from "@/lib/i18n";
+import { getTranslations, getLocale } from "@/lib/i18n";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
+import { isSupportedLanguage, DEFAULT_LANGUAGE } from "@/types/i18n";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { language, messages } = await getRequestConfig();
+  const t = await getTranslations("auth");
+  const rawLocale = await getLocale();
+  const locale = isSupportedLanguage(rawLocale) ? rawLocale : DEFAULT_LANGUAGE;
 
   return defineSEO({
-    title: getMessage(messages, "auth.signUp.metadata.title", "Create Account"),
-    description: getMessage(
-      messages,
-      "auth.signUp.metadata.description",
-      "Create your See-Sweet workspace and start shaping your assistant.",
-    ),
+    title: t("signUp.metadata.title"),
+    description: t("signUp.metadata.description"),
     path: "/sign-up",
-    locale: getSeoLocale(language),
+    locale: getSeoLocale(locale),
   });
 }
 
-export default async function SignUpPage() {
-  const { messages } = await getRequestConfig();
-
-  return <SignUpCard messages={messages} />;
+export default function SignUpPage() {
+  return <SignUpCard />;
 }

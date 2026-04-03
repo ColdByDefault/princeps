@@ -15,5 +15,65 @@
       "description": "Your workspace"
     },
     "welcome": "Welcome back"
+  },
+  "auth": {
+    "login": {
+      "metadata": {
+        "title": "Sign In",
+        "description": "Sign in to your See-Sweet workspace."
+      },
+      "title": "Welcome back",
+      "subtitle": "Sign in with your email and password.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "errorFallback": "Sign in failed. Please try again.",
+      "switchPrompt": "Don't have an account?",
+      "switchLink": "Create account"
+    },
+    "signUp": {
+      "metadata": {
+        "title": "Create Account",
+        "description": "Create your See-Sweet workspace."
+      },
+      "title": "Create an account",
+      "subtitle": "Sign up with your email address.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Your name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Create account",
+      "submitting": "Creating account...",
+      "errorFallback": "Sign up failed. Please try again.",
+      "switchPrompt": "Already have an account?",
+      "switchLink": "Sign in"
+    },
+    "password": {
+      "show": "Show password",
+      "hide": "Hide password"
+    }
+  },
+  "error": {
+    "global": {
+      "badge": "Application recovery",
+      "title": "Something went wrong.",
+      "body": "The workspace hit an unexpected problem. Try again, or return to a stable page.",
+      "reference": "Reference",
+      "retry": "Try again",
+      "goHome": "Open workspace",
+      "goLogin": "Open sign in"
+    }
+  },
+  "shell": {
+    "footer": {
+      "versionTitle": "Application version",
+      "beta": "Beta",
+      "copyright": "© 2026 ColdByDefault"
+    }
   }
 }

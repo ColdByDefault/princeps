@@ -1,10 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/db";
-import {
-  onUserCreated,
-  onSessionCreated,
-} from "@/lib/notifications/greetings.logic";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -14,27 +10,6 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-
-  // Re-enable social providers here once the environment includes the
-  // corresponding client IDs and secrets.
-  // socialProviders: {
-  //   google: {
-  //     clientId: process.env.GOOGLE_CLIENT_ID!,
-  //     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-  //   },
-  //   github: {
-  //     clientId: process.env.GITHUB_CLIENT_ID!,
-  //     clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-  //   },
-  //   microsoft: {
-  //     clientId: process.env.MICROSOFT_CLIENT_ID!,
-  //     clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
-  //   },
-  //   apple: {
-  //     clientId: process.env.APPLE_CLIENT_ID!,
-  //     clientSecret: process.env.APPLE_CLIENT_SECRET!,
-  //   },
-  // },
 
   session: {
     expiresIn: 60 * 60 * 24 * 3, // 3 days

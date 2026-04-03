@@ -15,5 +15,65 @@
       "description": "Dein Arbeitsbereich"
     },
     "welcome": "Willkommen zurück"
+  },
+  "auth": {
+    "login": {
+      "metadata": {
+        "title": "Anmelden",
+        "description": "Melde dich in deinem See-Sweet-Arbeitsbereich an."
+      },
+      "title": "Willkommen zurück",
+      "subtitle": "Melde dich mit deiner E-Mail-Adresse und deinem Passwort an.",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "du@beispiel.de",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Anmelden",
+      "submitting": "Wird angemeldet …",
+      "errorFallback": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
+      "switchPrompt": "Noch kein Konto?",
+      "switchLink": "Konto erstellen"
+    },
+    "signUp": {
+      "metadata": {
+        "title": "Konto erstellen",
+        "description": "Erstelle deinen See-Sweet-Arbeitsbereich."
+      },
+      "title": "Konto erstellen",
+      "subtitle": "Registriere dich mit deiner E-Mail-Adresse.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Dein Name",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "du@beispiel.de",
+      "passwordLabel": "Passwort",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Konto erstellen",
+      "submitting": "Wird erstellt …",
+      "errorFallback": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",
+      "switchPrompt": "Bereits ein Konto?",
+      "switchLink": "Anmelden"
+    },
+    "password": {
+      "show": "Passwort anzeigen",
+      "hide": "Passwort ausblenden"
+    }
+  },
+  "error": {
+    "global": {
+      "badge": "Fehlerbehebung",
+      "title": "Etwas ist schiefgelaufen.",
+      "body": "Der Arbeitsbereich hat ein unerwartetes Problem festgestellt. Bitte versuche es erneut oder kehre zu einer stabilen Seite zurück.",
+      "reference": "Referenz",
+      "retry": "Erneut versuchen",
+      "goHome": "Zum Arbeitsbereich",
+      "goLogin": "Zur Anmeldung"
+    }
+  },
+  "shell": {
+    "footer": {
+      "versionTitle": "Anwendungsversion",
+      "beta": "Beta",
+      "copyright": "© 2026 ColdByDefault"
+    }
   }
 }

@@ -11,19 +11,29 @@ import { useEffect, useSyncExternalStore } from "react";
 import { buttonVariants, Button } from "@/components/ui/button";
 import deMessages from "@/messages/de.json";
 import enMessages from "@/messages/en.json";
-import { getMessage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import {
   DEFAULT_LANGUAGE,
   isSupportedLanguage,
   type AppLanguage,
-  type MessageDictionary,
 } from "@/types/i18n";
 
-const messagesByLanguage: Record<AppLanguage, MessageDictionary> = {
-  de: deMessages as MessageDictionary,
-  en: enMessages as MessageDictionary,
+type Messages = typeof deMessages;
+
+const messagesByLanguage: Record<AppLanguage, Messages> = {
+  de: deMessages,
+  en: enMessages,
 };
+
+function getMsg(messages: Messages, key: string, fallback: string): string {
+  const parts = key.split(".");
+  let node: unknown = messages;
+  for (const part of parts) {
+    if (node == null || typeof node !== "object") return fallback;
+    node = (node as Record<string, unknown>)[part];
+  }
+  return typeof node === "string" ? node : fallback;
+}
 
 const emptySubscribe = () => () => {};
 
