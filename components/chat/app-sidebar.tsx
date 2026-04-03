@@ -54,7 +54,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { PlanBadge } from "@/components/shared";
+import { LanguageToggle, PlanBadge } from "@/components/shared";
+import { ThemeToggle } from "@/components/theme";
 import { type ChatSummary } from "@/types/chat";
 
 type AppSidebarProps = {
@@ -388,6 +389,12 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
         {!isCollapsed && tier && (
           <div className="px-2 pb-0 pt-1">
             <PlanBadge tier={tier} />
+          </div>
+        )}
+        {!isCollapsed && (
+          <div className="flex items-center gap-1 px-2 pb-1">
+            <ThemeToggle />
+            <LanguageToggle />
           </div>
         )}
         <SidebarMenu>
