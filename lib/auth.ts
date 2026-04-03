@@ -32,19 +32,6 @@ export const auth = betterAuth({
       },
     },
   },
-
-  databaseHooks: {
-    user: {
-      create: {
-        after: onUserCreated,
-      },
-    },
-    session: {
-      create: {
-        after: onSessionCreated,
-      },
-    },
-  },
 });
 
 export type Session = typeof auth.$Infer.Session;
