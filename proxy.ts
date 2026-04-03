@@ -60,7 +60,7 @@ export default async function proxy(req: NextRequest) {
   // Onboarding gate — redirect authenticated users who haven't completed
   // onboarding. The ob_done cookie is set by /api/onboarding/complete and
   // /api/onboarding/confirm (for users who completed before the cookie existed).
-/*   const isOnboardingBypass = onboardingBypassRoutes.some((route) =>
+  /*   const isOnboardingBypass = onboardingBypassRoutes.some((route) =>
     matchesRoute(pathname, route),
   );
   if (isAuthenticated && !isOnboardingBypass) {
@@ -75,9 +75,12 @@ export default async function proxy(req: NextRequest) {
   // Admin guard — role check happens server-side in the page
   // (cookie only carries session token, not role; page does the DB check)
 
-  // Seed language cookie on first visit so i18n/request.ts has a stable locale
+  // Seed language cookie on first visit for unauthenticated users only.
+  // Authenticated users without a language cookie are handled by i18n/request.ts
+  // which falls back to their DB preference, then LanguageHydrator re-seeds
+  // the cookie client-side so subsequent requests use the fast cookie path.
   const hasLanguageCookie = req.cookies.has(LANGUAGE_COOKIE_NAME);
-  if (!hasLanguageCookie) {
+  if (!hasLanguageCookie && !isAuthenticated) {
     const acceptLanguage = req.headers.get("accept-language") ?? "";
     const preferred = acceptLanguage
       .split(",")

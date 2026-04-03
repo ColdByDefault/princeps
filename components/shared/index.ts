@@ -5,3 +5,4 @@
 
 export { LanguageHydrator } from "./LanguageHydrator";
 export { LanguageToggle } from "./LanguageToggle";
+export { ThemeHydrator } from "./ThemeHydrator";

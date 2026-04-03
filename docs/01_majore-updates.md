@@ -23,3 +23,20 @@
 - Refactored `Navbar.tsx` to split desktop and mobile into separate components.
 - Refactored Auth routes and components to use ZOD validations, wire rate limiting, and improve UX for MVP (Password confirmation)
 - Refactored `lib/tiers/enforce.ts` to return structured `{ allowed: boolean, reason?: string }` instead of throwing responses directly. This allows for more flexible handling of enforcement in different contexts (e.g. API routes vs. UI components) and better separation of concerns. Updated all calls to `enforceLimits()` accordingly.
+
+# Major Updates 3
+
+- LLM providers:
+  - `lib/llm-providers/ollama/*`
+       - `ollama.ts`
+        - `ollama-settings.ts`
+        - `ollama-embedding.ts`
+  - `lib/llm-providers/openai/*`
+       - `openai.ts`
+        - `openai-settings.ts`
+        - `openai-embedding.ts`
+  - `lib/llm-providers/shared/*`
+       - `provider-health.ts`
+       - `provider-test.ts`
+  - `lib/llm-providers/provider.ts` (active provider dispatcher)
+  - `types/llm.ts`

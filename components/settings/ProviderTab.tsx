@@ -1,0 +1,142 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
+ */
+
+"use client";
+
+import { useState, useTransition } from "react";
+import { RefreshCw } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import type { ActiveProvider, ProviderStatusPayload } from "@/types/llm";
+
+// ─── Helpers ──────────────────────────────────────────────
+
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return "0 B";
+  const units = ["B", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
+}
+
+// ─── Component ────────────────────────────────────────────
+
+type ProviderTabProps = {
+  initialStatus: ProviderStatusPayload;
+};
+
+export function ProviderTab({ initialStatus }: ProviderTabProps) {
+  const t = useTranslations("settings.provider");
+  const [status, setStatus] = useState<ProviderStatusPayload>(initialStatus);
+  const [isPending, startTransition] = useTransition();
+
+  const handleRefresh = () => {
+    startTransition(async () => {
+      const res = await fetch("/api/settings/provider-status");
+      if (res.ok) {
+        const updated = (await res.json()) as ProviderStatusPayload;
+        setStatus(updated);
+      }
+    });
+  };
+
+  const providerLabel = (p: ActiveProvider) =>
+    p === "openAi"
+      ? t("nameOpenAi")
+      : p === "ollama"
+        ? t("nameOllama")
+        : t("nameGroq");
+
+  return (
+    <div className="divide-y divide-border/60">
+      {/* Section header */}
+      <div className="flex items-center justify-between gap-4 pb-4">
+        <div className="space-y-0.5">
+          <p className="text-sm font-medium">{t("title")}</p>
+          <p className="text-sm text-muted-foreground">{t("description")}</p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="cursor-pointer shrink-0 rounded-full border-border/70"
+          disabled={isPending}
+          onClick={handleRefresh}
+        >
+          <RefreshCw
+            className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
+          />
+          {isPending ? t("refreshing") : t("refresh")}
+        </Button>
+      </div>
+
+      {/* One row per provider */}
+      {status.providers.map(({ provider, health }) => (
+        <div key={provider} className="space-y-3 py-4">
+          {/* Name row */}
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium">{providerLabel(provider)}</p>
+              {provider === status.active && (
+                <Badge variant="outline" className="text-xs">
+                  {t("activeLabel")}
+                </Badge>
+              )}
+            </div>
+            <Badge
+              className={
+                health.connected
+                  ? "text-xs border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-400"
+                  : "text-xs border-destructive/20 bg-destructive/10 text-destructive"
+              }
+            >
+              {health.connected
+                ? t("statusConnected")
+                : t("statusDisconnected")}
+            </Badge>
+          </div>
+
+          {/* Version */}
+          {health.version && (
+            <p className="text-xs text-muted-foreground font-mono">
+              v{health.version}
+            </p>
+          )}
+
+          {/* Error */}
+          {health.error && (
+            <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              {health.error}
+            </p>
+          )}
+
+          {/* Models */}
+          {health.models.length > 0 && (
+            <div className="space-y-1.5">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                {t("modelsLabel")}
+              </p>
+              <div className="divide-y divide-border/60 rounded-lg border border-border/60">
+                {health.models.map((model) => (
+                  <div
+                    key={model.name}
+                    className="flex items-center justify-between px-3 py-2"
+                  >
+                    <span className="text-sm font-mono">{model.name}</span>
+                    {model.size !== null && (
+                      <span className="text-xs text-muted-foreground">
+                        {formatBytes(model.size)}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}

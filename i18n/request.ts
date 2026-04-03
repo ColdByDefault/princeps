@@ -10,6 +10,8 @@ import {
   LANGUAGE_COOKIE_NAME,
   isSupportedLanguage,
 } from "@/types/i18n";
+import { auth } from "@/lib/auth/auth";
+import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 
 function getLanguageFromHeader(value: string | null) {
   if (!value) return DEFAULT_LANGUAGE;
@@ -24,6 +26,7 @@ function getLanguageFromHeader(value: string | null) {
 
 export default getRequestConfig(async () => {
   const cookieStore = await cookies();
+  const headerStore = await headers();
   const cookieLanguage = cookieStore.get(LANGUAGE_COOKIE_NAME)?.value;
 
   let locale = DEFAULT_LANGUAGE;
@@ -31,8 +34,32 @@ export default getRequestConfig(async () => {
   if (isSupportedLanguage(cookieLanguage)) {
     locale = cookieLanguage;
   } else {
-    const headerStore = await headers();
-    locale = getLanguageFromHeader(headerStore.get("accept-language"));
+    // Cookie is absent (e.g. fresh browser after wipe) — try to restore from DB
+    // for authenticated users so the correct language is used immediately.
+    const sessionCookie =
+      cookieStore.get("better-auth.session_token")?.value ??
+      cookieStore.get("__Secure-better-auth.session_token")?.value;
+
+    let resolvedFromDb = false;
+
+    if (sessionCookie) {
+      try {
+        const session = await auth.api.getSession({ headers: headerStore });
+        if (session?.user?.id) {
+          const prefs = await getUserPreferences(session.user.id);
+          if (prefs.language) {
+            locale = prefs.language;
+            resolvedFromDb = true;
+          }
+        }
+      } catch {
+        // DB unavailable — fall through to Accept-Language
+      }
+    }
+
+    if (!resolvedFromDb) {
+      locale = getLanguageFromHeader(headerStore.get("accept-language"));
+    }
   }
 
   const messageModule = (await import(`@/messages/${locale}.json`)) as {

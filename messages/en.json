@@ -63,9 +63,9 @@
   "theme": {
     "selector": {
       "groupLabel": "Theme selector",
-      "light": "Light theme",
-      "dark": "Dark theme",
-      "system": "System theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
       "current": "Current"
     }
   },
@@ -87,11 +87,46 @@
       "goLogin": "Open sign in"
     }
   },
+  "settings": {
+    "metadata": {
+      "title": "Settings",
+      "description": "Manage the appearance and AI provider for your workspace."
+    },
+    "tabs": {
+      "appearance": "Appearance",
+      "provider": "AI Provider"
+    },
+    "appearance": {
+      "themeTitle": "Theme",
+      "themeDescription": "Choose between light, dark, or system-based theme.",
+      "languageTitle": "Language",
+      "languageDescription": "Choose the display language for your workspace."
+    },
+    "provider": {
+      "title": "Active AI Provider",
+      "description": "Connection status for the configured LLM provider.",
+      "providerLabel": "Provider",
+      "versionLabel": "Version",
+      "modelsLabel": "Available Models",
+      "statusLabel": "Status",
+      "statusConnected": "Connected",
+      "statusDisconnected": "Disconnected",
+      "refresh": "Refresh",
+      "refreshing": "Refreshing…",
+      "noModels": "No models found",
+      "nameOpenAi": "OpenAI",
+      "nameOllama": "Ollama (local)",
+      "nameGroq": "Groq",
+      "activeLabel": "Active",
+      "notAvailable": "Not available"
+    }
+  },
   "shell": {
     "nav": {
       "brand": "See-Sweet",
       "home": "Workspace",
       "chat": "Chat",
+      "settings": "Settings",
       "userFallback": "Workspace user",
       "signOut": "Sign out",
       "signingOut": "Signing out…",
