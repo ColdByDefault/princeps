@@ -154,5 +154,43 @@
       "beta": "Beta",
       "copyright": "© 2026 ColdByDefault"
     }
+  },
+  "chat": {
+    "sidebar": {
+      "navGroup": "Navigation",
+      "navHome": "Arbeitsbereich",
+      "title": "Chats",
+      "newChat": "Neuer Chat",
+      "empty": "Noch keine Chats.",
+      "rename": "Umbenennen",
+      "renamePlaceholder": "Chat-Titel",
+      "delete": "Löschen",
+      "deleteTitle": "Diesen Chat löschen?",
+      "deleteDescription": "Dieser Chat und alle dazugehörigen Nachrichten werden dauerhaft gelöscht.",
+      "deleteConfirm": "Löschen",
+      "deleteCancel": "Abbrechen",
+      "deleteSuccess": "Chat gelöscht.",
+      "renameSuccess": "Chat umbenannt.",
+      "limitReached": "Lösche einen Chat, um einen neuen zu erstellen.",
+      "pendingEmpty": "Schreibe zuerst — leere Chats werden nicht gespeichert.",
+      "actions": "Chat-Aktionen",
+      "userFallback": "Arbeitsbereich-Nutzer",
+      "signOut": "Abmelden",
+      "signingOut": "Wird abgemeldet…"
+    },
+    "empty": {
+      "title": "Gespräch starten",
+      "body": "Sende eine Nachricht, um zu beginnen."
+    },
+    "input": {
+      "placeholder": "Frag mich etwas…",
+      "send": "Nachricht senden"
+    },
+    "error": {
+      "send": "Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
+      "create": "Chat konnte nicht erstellt werden.",
+      "delete": "Chat konnte nicht gelöscht werden.",
+      "rename": "Chat konnte nicht umbenannt werden."
+    }
   }
 }

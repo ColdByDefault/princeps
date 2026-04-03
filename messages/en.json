@@ -154,5 +154,43 @@
       "beta": "Beta",
       "copyright": "© 2026 ColdByDefault"
     }
+  },
+  "chat": {
+    "sidebar": {
+      "navGroup": "Navigation",
+      "navHome": "Workspace",
+      "title": "Chats",
+      "newChat": "New chat",
+      "empty": "No chats yet.",
+      "rename": "Rename",
+      "renamePlaceholder": "Chat title",
+      "delete": "Delete",
+      "deleteTitle": "Delete this chat?",
+      "deleteDescription": "This will permanently delete this chat and all its messages.",
+      "deleteConfirm": "Delete",
+      "deleteCancel": "Cancel",
+      "deleteSuccess": "Chat deleted.",
+      "renameSuccess": "Chat renamed.",
+      "limitReached": "Delete a chat to create a new one.",
+      "pendingEmpty": "Start chatting first — empty chats are not saved.",
+      "actions": "Chat actions",
+      "userFallback": "Workspace user",
+      "signOut": "Sign out",
+      "signingOut": "Signing out…"
+    },
+    "empty": {
+      "title": "Start a conversation",
+      "body": "Send a message to begin."
+    },
+    "input": {
+      "placeholder": "Ask anything…",
+      "send": "Send message"
+    },
+    "error": {
+      "send": "Failed to send message. Please try again.",
+      "create": "Failed to create chat.",
+      "delete": "Failed to delete chat.",
+      "rename": "Failed to rename chat."
+    }
   }
 }

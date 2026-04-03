@@ -38,7 +38,7 @@ export default async function AppLayout({
       />
       <ThemeHydrator theme={preferredTheme} />
       <Navbar sessionUser={sessionUser} />
-      <main className="flex flex-1 flex-col">{children}</main>
+      <main className="flex flex-1 min-h-0 flex-col">{children}</main>
       <Footer />
     </div>
   );
