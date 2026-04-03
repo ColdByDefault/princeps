@@ -27,7 +27,7 @@ export async function GET(req: Request) {
     ? (statusParam as TaskStatus)
     : undefined;
 
-  const tasks = await listTasks(session.user.id, { status });
+  const tasks = await listTasks(session.user.id, status ? { status } : {});
   return NextResponse.json({ tasks });
 }
 

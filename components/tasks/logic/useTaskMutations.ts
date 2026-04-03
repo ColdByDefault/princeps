@@ -73,9 +73,7 @@ export function useTaskMutations(
       });
       if (!res.ok) throw new Error();
       const data = (await res.json()) as { task: TaskRecord };
-      setTasks((prev) =>
-        prev.map((t) => (t.id === taskId ? data.task : t)),
-      );
+      setTasks((prev) => prev.map((t) => (t.id === taskId ? data.task : t)));
       toast.success(t.updateSuccess);
       return true;
     } catch {

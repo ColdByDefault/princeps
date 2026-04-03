@@ -6,7 +6,12 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutDashboard, MessageSquare, Settings, CheckSquare } from "lucide-react";
+import {
+  LayoutDashboard,
+  MessageSquare,
+  Settings,
+  CheckSquare,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";

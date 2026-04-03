@@ -5,7 +5,13 @@
 
 "use client";
 
-import { CheckCircle2, Circle, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  CheckCircle2,
+  Circle,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -19,9 +25,11 @@ import {
 import type { TaskRecord } from "@/types/api";
 
 const PRIORITY_COLORS: Record<string, string> = {
-  urgent: "text-red-500 border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950/30",
+  urgent:
+    "text-red-500 border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950/30",
   high: "text-orange-500 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/30",
-  normal: "text-blue-500 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30",
+  normal:
+    "text-blue-500 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30",
   low: "text-muted-foreground border-border bg-muted/40",
 };
 
@@ -109,17 +117,19 @@ export function TaskCard({
 
       {/* Actions */}
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label={t("actionsLabel")}
-            title={t("actionsLabel")}
-            className="size-7 cursor-pointer shrink-0 text-muted-foreground"
-          >
-            <MoreHorizontal className="size-4" />
-          </Button>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={t("actionsLabel")}
+              title={t("actionsLabel")}
+              className="size-7 cursor-pointer shrink-0 text-muted-foreground"
+            />
+          }
+        >
+          <MoreHorizontal className="size-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem

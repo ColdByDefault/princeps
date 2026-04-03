@@ -17,6 +17,11 @@ export const TASK_SELECT = {
   meetingId: true,
   createdAt: true,
   updatedAt: true,
+  labelLinks: {
+    select: {
+      label: { select: { id: true, name: true, color: true } },
+    },
+  },
 } as const;
 
 type TaskRow = {
@@ -29,6 +34,7 @@ type TaskRow = {
   meetingId: string | null;
   createdAt: Date;
   updatedAt: Date;
+  labelLinks: { label: { id: string; name: string; color: string } }[];
 };
 
 export function toTaskRecord(row: TaskRow): TaskRecord {
@@ -36,10 +42,11 @@ export function toTaskRecord(row: TaskRow): TaskRecord {
     id: row.id,
     title: row.title,
     notes: row.notes,
-    status: row.status as TaskRecord["status"],
-    priority: row.priority as TaskRecord["priority"],
+    status: row.status,
+    priority: row.priority,
     dueDate: row.dueDate?.toISOString() ?? null,
     meetingId: row.meetingId,
+    labels: row.labelLinks.map((l) => l.label),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };

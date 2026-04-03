@@ -8,10 +8,7 @@ import "server-only";
 import { createTask } from "@/lib/tasks/create.logic";
 import { listTasks } from "@/lib/tasks/list.logic";
 import { updateTask } from "@/lib/tasks/update.logic";
-import {
-  createTaskSchema,
-  updateTaskSchema,
-} from "@/lib/tasks/schemas";
+import { createTaskSchema, updateTaskSchema } from "@/lib/tasks/schemas";
 import type { LLMToolCall } from "@/types/llm";
 
 export type ActionResult =
@@ -49,12 +46,7 @@ export async function executeToolCall(
   }
 
   if (name === "list_tasks") {
-    const validStatuses = [
-      "open",
-      "in_progress",
-      "done",
-      "cancelled",
-    ] as const;
+    const validStatuses = ["open", "in_progress", "done", "cancelled"] as const;
     type TaskStatus = (typeof validStatuses)[number];
     const status =
       typeof args.status === "string" &&
@@ -62,7 +54,7 @@ export async function executeToolCall(
         ? (args.status as TaskStatus)
         : undefined;
 
-    const tasks = await listTasks(userId, { status });
+    const tasks = await listTasks(userId, status ? { status } : {});
     return { ok: true, data: tasks };
   }
 

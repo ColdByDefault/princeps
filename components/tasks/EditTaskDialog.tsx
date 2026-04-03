@@ -144,9 +144,13 @@ export function EditTaskDialog({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="open">{t("status.open")}</SelectItem>
-                  <SelectItem value="in_progress">{t("status.inProgress")}</SelectItem>
+                  <SelectItem value="in_progress">
+                    {t("status.inProgress")}
+                  </SelectItem>
                   <SelectItem value="done">{t("status.done")}</SelectItem>
-                  <SelectItem value="cancelled">{t("status.cancelled")}</SelectItem>
+                  <SelectItem value="cancelled">
+                    {t("status.cancelled")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -170,9 +174,7 @@ export function EditTaskDialog({
               disabled={updating || !title.trim()}
               className="cursor-pointer"
             >
-              {updating
-                ? t("editDialog.submitting")
-                : t("editDialog.submit")}
+              {updating ? t("editDialog.submitting") : t("editDialog.submit")}
             </Button>
           </DialogFooter>
         </form>

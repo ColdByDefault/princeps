@@ -56,7 +56,7 @@ export function CreateTaskDialog({
 
     const ok = await onSubmit({
       title: title.trim(),
-      notes: notes.trim() || undefined,
+      ...(notes.trim() && { notes: notes.trim() }),
       priority,
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
     });
@@ -118,13 +118,9 @@ export function CreateTaskDialog({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="low">{t("priority.low")}</SelectItem>
-                  <SelectItem value="normal">
-                    {t("priority.normal")}
-                  </SelectItem>
+                  <SelectItem value="normal">{t("priority.normal")}</SelectItem>
                   <SelectItem value="high">{t("priority.high")}</SelectItem>
-                  <SelectItem value="urgent">
-                    {t("priority.urgent")}
-                  </SelectItem>
+                  <SelectItem value="urgent">{t("priority.urgent")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
