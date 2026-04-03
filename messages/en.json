@@ -86,7 +86,15 @@
     }
   },
   "shell": {
+    "nav": {
+      "home": "Workspace"
+    },
     "footer": {
+      "workspace": "Workspace",
+      "placeholderLinks": "Policies",
+      "privacyPolicy": "Privacy policy",
+      "termsOfUse": "Terms of use",
+      "security": "Security",
       "versionTitle": "Application version",
       "beta": "Beta",
       "copyright": "© 2026 ColdByDefault"
