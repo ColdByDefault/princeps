@@ -1,0 +1,19 @@
+{
+  "landing": {
+    "metadata": {
+      "title": "See-Sweet",
+      "description": "Private executive secretariat for focused operators."
+    },
+    "brandName": "See-Sweet",
+    "tagline": "Your digital chief of staff",
+    "login": "Sign in",
+    "signUp": "Create account"
+  },
+  "home": {
+    "metadata": {
+      "title": "Home",
+      "description": "Your workspace"
+    },
+    "welcome": "Welcome back"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "landing": {
+    "metadata": {
+      "title": "See-Sweet",
+      "description": "Privates Chefsekretariat für fokussierte Entscheider."
+    },
+    "brandName": "See-Sweet",
+    "tagline": "Dein digitales Chefsekretariat",
+    "login": "Anmelden",
+    "signUp": "Konto erstellen"
+  },
+  "home": {
+    "metadata": {
+      "title": "Startseite",
+      "description": "Dein Arbeitsbereich"
+    },
+    "welcome": "Willkommen zurück"
+  }
+}
