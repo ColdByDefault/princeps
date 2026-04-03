@@ -22,3 +22,4 @@
 - Applied new i18n settings to global UI (error, auth, nav)
 - Refactored `Navbar.tsx` to split desktop and mobile into separate components.
 - Refactored Auth routes and components to use ZOD validations, wire rate limiting, and improve UX for MVP (Password confirmation)
+- Refactored `lib/tiers/enforce.ts` to return structured `{ allowed: boolean, reason?: string }` instead of throwing responses directly. This allows for more flexible handling of enforcement in different contexts (e.g. API routes vs. UI components) and better separation of concerns. Updated all calls to `enforceLimits()` accordingly.
