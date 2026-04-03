@@ -1,3 +1,8 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
+ */ 
+
 import { z } from "zod";
 
 export const signUpSchema = z

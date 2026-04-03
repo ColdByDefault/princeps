@@ -20,7 +20,7 @@ export interface PlanLimits {
   nudgesEnabled: boolean;
 }
 
-const PLAN_LIMITS: Record<Tier, PlanLimits> = {
+export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
   free: {
     knowledgeDocs: 3,
     chatHistoryTotal: 10,
@@ -48,9 +48,9 @@ const PLAN_LIMITS: Record<Tier, PlanLimits> = {
 };
 
 /**
- * Returns the plan limits for the given tier string.
- * Falls back to `free` if the tier is unrecognised.
+ * Returns the plan limits for the given tier.
+ * Falls back to `free` as a runtime safety net.
  */
-export function getPlanLimits(tier: string): PlanLimits {
-  return PLAN_LIMITS[(tier as Tier) in PLAN_LIMITS ? (tier as Tier) : "free"];
+export function getPlanLimits(tier: Tier): PlanLimits {
+  return PLAN_LIMITS[tier] ?? PLAN_LIMITS.free;
 }

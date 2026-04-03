@@ -12,7 +12,7 @@
   - Fixed node.js.yml.
 
 - Refactored /prisma/schema.prisma to remove unused models and fields, and to better reflect the current database schema.
-- Removed all APIs and related code (controllers, services, routes, etc.)
+- Removed all APIs and related code (controllers, services, routes, etc.) for all features except Auth, Settings, and i18n. These will be re-built with the new architecture as needed.
 
 # Major Updates 2
 
