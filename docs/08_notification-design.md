@@ -241,3 +241,4 @@ No new secrets. Open-Meteo requires no API key.
    - Messages from LLM should be calculated and added to right token usage category.
    - Users can enable/disable this system in settings.
    - add declaration that notifications consume tokens in the same way as chats, so users are aware of the cost implications.
+   - do i need env var?
