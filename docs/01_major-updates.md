@@ -66,3 +66,8 @@
 ---
 
 - Refactored Labels System, included in settings, features, and LLM-awareness.
+
+# Major Updates 6
+---
+
+- enhcements
