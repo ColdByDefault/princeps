@@ -13,7 +13,7 @@
 
 # Priority
 
-- [ ] What happen if i keep creating new chats and delete them? What if i do so, and then kept only 5 Chats saved but no monthly tokens left? check all these scenarios and make sure the UX is good and the user is properly informed about limits, etc.
+- [x] What happen if i keep creating new chats and delete them? What if i do so, and then kept only 5 Chats saved but no monthly tokens left? check all these scenarios and make sure the UX is good and the user is properly informed about limits, etc. => see `docs/08_chat-control.md`
 - [ ] Update Token Usages to show usages of calling tools, not only the count of the calls.
 - [x] Add rules for Username (no spaces, unique, etc.) and enforce in Auth routes
 - [x] can the LLM update/edit Labels or only create new ones?
