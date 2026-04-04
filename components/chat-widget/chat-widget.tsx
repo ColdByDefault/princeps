@@ -6,12 +6,22 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send, Minus, Bot, ChevronDown, CheckCircle2 } from "lucide-react";
+import {
+  X,
+  Send,
+  Minus,
+  Bot,
+  ChevronDown,
+  CheckCircle2,
+  Plus,
+} from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface ChatWidgetProps {
   assistantName?: string | undefined;
+  userId: string;
 }
 
 interface Message {
@@ -40,14 +50,20 @@ function getTime() {
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
+export function ChatWidget({
+  assistantName = "Atlas",
+  userId,
+}: ChatWidgetProps) {
+  const t = useTranslations("chatWidget");
+  const STORAGE_KEY = `see-sweet:widget:${userId}`;
+
   const [open, setOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [thinking, setThinking] = useState(false);
   const [progress, setProgress] = useState(0);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [mounted, setMounted] = useState(false);
+  const [sessionLoaded, setSessionLoaded] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -55,8 +71,21 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
   const messagesRef = useRef<Message[]>([]);
   messagesRef.current = messages;
 
-  // Hydration-safe init
+  // Load session from sessionStorage (keyed by userId — isolates sessions per user)
   useEffect(() => {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored) as Message[];
+        if (parsed.length > 0) {
+          setMessages(parsed);
+          setSessionLoaded(true);
+          return;
+        }
+      } catch {
+        // fall through to fresh greeting
+      }
+    }
     setMessages([
       {
         id: 1,
@@ -65,13 +94,20 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
         time: getTime(),
       },
     ]);
-    setMounted(true);
-  }, [assistantName]);
+    setSessionLoaded(true);
+  }, [STORAGE_KEY, assistantName]);
+
+  // Persist messages to sessionStorage whenever they change
+  useEffect(() => {
+    if (!sessionLoaded) return;
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+  }, [messages, sessionLoaded, STORAGE_KEY]);
 
   // Scroll to latest message
   useEffect(() => {
-    if (mounted) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, thinking, mounted]);
+    if (sessionLoaded)
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, thinking, sessionLoaded]);
 
   // Focus input when opened
   useEffect(() => {
@@ -89,6 +125,19 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
     }, 180);
     return () => clearInterval(id);
   }, [thinking]);
+
+  // Clear session and restart with a fresh greeting
+  const startNewChat = useCallback(() => {
+    sessionStorage.removeItem(STORAGE_KEY);
+    setMessages([
+      {
+        id: 1,
+        text: `Hi! I'm ${assistantName}, your personal assistant. How can I help you today?`,
+        sender: "assistant",
+        time: getTime(),
+      },
+    ]);
+  }, [STORAGE_KEY, assistantName]);
 
   const send = useCallback(async () => {
     const text = input.trim();
@@ -187,12 +236,14 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
             }
           } else if (event.type === "action") {
             const actionNameMap: Record<string, string> = {
-              create_contact: "Contact created",
-              create_meeting: "Meeting created",
               create_task: "Task created",
-              create_decision: "Decision logged",
-              link_contact_to_meeting: "Contacts linked to meeting",
-              generate_share_link: "Share link generated",
+              list_tasks: "Tasks retrieved",
+              complete_task: "Task completed",
+              update_task: "Task updated",
+              create_label: "Label created",
+              list_labels: "Labels retrieved",
+              update_label: "Label updated",
+              delete_label: "Label deleted",
             };
             const label = actionNameMap[event.name] ?? event.name;
             const record = event.record as { name?: string; title?: string };
@@ -291,6 +342,15 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
 
           <div className="flex items-center gap-0.5">
             <button
+              onClick={startNewChat}
+              disabled={thinking}
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-primary-foreground disabled:opacity-40"
+              aria-label={t("newChat")}
+              title={t("newChat")}
+            >
+              <Plus className="h-4 w-4" />
+            </button>
+            <button
               onClick={() => setMinimized(true)}
               className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-primary-foreground"
               aria-label="Minimize"
@@ -309,7 +369,7 @@ export function ChatWidget({ assistantName = "Atlas" }: ChatWidgetProps) {
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto bg-muted/20 px-4 py-4">
-          {!mounted ? (
+          {!sessionLoaded ? (
             <div className="flex h-full items-center justify-center">
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
             </div>

@@ -131,6 +131,7 @@ export async function enforceWidgetChats(
  */
 export async function enforceWidgetTools(
   userId: string,
+  count = 1,
 ): Promise<EnforceResult> {
   const [tier, counter] = await Promise.all([
     getUserTier(userId),
@@ -143,7 +144,7 @@ export async function enforceWidgetTools(
 
   const currentCount = stale ? 0 : counter.widgetToolsCount;
 
-  if (currentCount >= limits.widgetToolsPerDay) {
+  if (currentCount + count > limits.widgetToolsPerDay) {
     return {
       allowed: false,
       reason: "Daily widget tool call limit reached for your plan.",
@@ -153,7 +154,7 @@ export async function enforceWidgetTools(
   await db.usageCounter.update({
     where: { userId },
     data: {
-      widgetToolsCount: currentCount + 1,
+      widgetToolsCount: currentCount + count,
       // Reset the chats counter too when the day has rolled over
       widgetChatsCount: stale ? 0 : counter.widgetChatsCount,
       widgetCountsDate: today,

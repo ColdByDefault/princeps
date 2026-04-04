@@ -144,6 +144,9 @@
       "toolCallsNote": "Token-Verbrauch durch Werkzeugaufrufe ist in den ungefähren Token oben enthalten."
     }
   },
+  "chatWidget": {
+    "newChat": "Neuer Chat"
+  },
   "shell": {
     "nav": {
       "brand": "See-Sweet",

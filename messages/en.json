@@ -144,6 +144,9 @@
       "toolCallsNote": "Tool call input/output is included in your approximate token count above."
     }
   },
+  "chatWidget": {
+    "newChat": "New Chat"
+  },
   "shell": {
     "nav": {
       "brand": "See-Sweet",

@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth/auth";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 import { Navbar, Footer } from "@/components/navigation";
 import { LanguageHydrator, ThemeHydrator } from "@/components/shared";
+import { ChatWidgetProvider } from "@/components/chat-widget/ChatWidgetProvider";
 import type { AppLanguage } from "@/types/i18n";
 
 export default async function AppLayout({
@@ -40,6 +41,10 @@ export default async function AppLayout({
       <Navbar sessionUser={sessionUser} />
       <main className="flex flex-1 min-h-0 flex-col">{children}</main>
       <Footer />
+      <ChatWidgetProvider
+        authenticated={!!sessionUser}
+        userId={sessionUser?.id ?? ""}
+      />
     </div>
   );
 }
