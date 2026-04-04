@@ -24,45 +24,46 @@ export function useNotifications() {
 
   // Initial load + greeting (greeting fires at most once per browser tab session)
   useEffect(() => {
+    async function fetchNotifications() {
+      try {
+        const res = await fetch("/api/notifications");
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          notifications: NotificationRecord[];
+        };
+        setNotifications(data.notifications);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function fireGreeting() {
+      try {
+        const res = await fetch("/api/notifications/greeting", {
+          method: "POST",
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          created: boolean;
+          notification: NotificationRecord | null;
+        };
+        if (data.created && data.notification) {
+          setNotifications((prev) => [data.notification!, ...prev]);
+          toast(data.notification.title, {
+            description: data.notification.body,
+          });
+        }
+      } catch {
+        // Non-critical — greeting failure is silent
+      }
+    }
+
     void fetchNotifications();
     if (!sessionStorage.getItem(GREETING_SESSION_KEY)) {
       sessionStorage.setItem(GREETING_SESSION_KEY, "1");
       void fireGreeting();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  async function fetchNotifications() {
-    try {
-      const res = await fetch("/api/notifications");
-      if (!res.ok) return;
-      const data = (await res.json()) as {
-        notifications: NotificationRecord[];
-      };
-      setNotifications(data.notifications);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function fireGreeting() {
-    try {
-      const res = await fetch("/api/notifications/greeting", {
-        method: "POST",
-      });
-      if (!res.ok) return;
-      const data = (await res.json()) as {
-        created: boolean;
-        notification: NotificationRecord | null;
-      };
-      if (data.created && data.notification) {
-        setNotifications((prev) => [data.notification!, ...prev]);
-        toast(data.notification.title, { description: data.notification.body });
-      }
-    } catch {
-      // Non-critical — greeting failure is silent
-    }
-  }
 
   const markRead = useCallback(async (id: string) => {
     // Optimistic
@@ -86,7 +87,13 @@ export function useNotifications() {
       await fetch(`/api/notifications/${id}`, { method: "DELETE" });
     } catch {
       // Revert on failure
-      void fetchNotifications();
+      const res = await fetch("/api/notifications");
+      if (res.ok) {
+        const data = (await res.json()) as {
+          notifications: NotificationRecord[];
+        };
+        setNotifications(data.notifications);
+      }
     }
   }, []);
 
@@ -95,7 +102,14 @@ export function useNotifications() {
     try {
       await fetch("/api/notifications", { method: "DELETE" });
     } catch {
-      void fetchNotifications();
+      // Revert on failure
+      const res = await fetch("/api/notifications");
+      if (res.ok) {
+        const data = (await res.json()) as {
+          notifications: NotificationRecord[];
+        };
+        setNotifications(data.notifications);
+      }
     }
   }, []);
 
