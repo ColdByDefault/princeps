@@ -1,3 +1,10 @@
+## [0.1.34] - 2026-04-04
+
+- feat: refactor useNotifications hook to streamline notification fetching and greeting logic
+- feat: implement user preferences for notifications and add daily greeting feature
+- feat: update notification design with cost implications and environment variable query
+- feat: implement notification system with weather integration
+
 ## [0.1.33] - 2026-04-04
 
 - feat: update task list and major updates documentation for clarity and organization
