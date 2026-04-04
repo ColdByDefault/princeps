@@ -206,4 +206,17 @@ export const TOOL_REGISTRY: LLMTool[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "get_user_info",
+      description:
+        "Retrieve the current user's profile information: name, username, email, plan tier, role, timezone, and account creation date. Use this when the user asks about their own account, profile, or plan details.",
+      parameters: {
+        type: "object",
+        properties: {},
+        required: [],
+      },
+    },
+  },
 ];
