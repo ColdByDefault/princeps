@@ -1,3 +1,20 @@
+## [0.1.31] - 2026-04-04
+
+- feat: update task documentation for chat management scenarios and add new chat control use cases
+- feat: refactor tool execution and add handler files for tasks and labels
+- feat: implement label management functions including listing, updating, and deleting labels
+- feat: enhance loading components with dynamic messages and new loading states
+- feat: reorder settings tabs for improved navigation and update task documentation
+- feat: enhance login functionality with callback support and UI updates
+- feat: add refresh functionality to Labels and Usage tabs with corresponding UI updates
+- feat: add username field to sign-up schema and update validation rules
+- feat: add username field to user model and update sign-up functionality
+- refactor: reorganize tasks documentation into structured sections for better clarity
+- feat: add Labels System documentation and outline tasks for future improvements
+- feat: add initial feature outline for Tasks with CRUD capabilities
+- feat: integrate labels management into task creation and editing workflows
+- feat: implement labels management system with create, update, and delete functionalities
+
 ## [0.1.30] - 2026-04-03
 
 - feat: update task dialogs to include visual hints for required and optional fields
