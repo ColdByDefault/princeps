@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LanguageToggle, PlanBadge } from "@/components/shared";
+import { NotificationBell } from "@/components/notifications";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type NavLink = {
@@ -61,6 +62,7 @@ export function NavbarMobileBar({
           ⌘K
         </kbd>
       </Button> */}
+      <NotificationBell />
       <Button
         type="button"
         variant="outline"

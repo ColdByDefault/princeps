@@ -1,10 +1,23 @@
+# features
+
+- [ ] Tools:
+   - [ ] Meetings
+   - [ ] Goals
+   - [ ] Contacts
+   - [ ] Decisions
+   - [ ] Notes
+   - [ ] Briefings
+   - [ ] Tools-usage Reports
+   - [ ] Calendar 
+
+
 # UI/UX
 
 - [ ] Improve Sidebar-Footer
 - [ ] TasksList UI needs improvment.
 - [ ] Add Markdown support for system prompts in chat settings.
 - [ ] Global UI/UX checks.
-- [ ] Colorful ring on avatar icon in navbar to reflect the current plan/tier of the user (e.g. free, pro, enterprise, etc.)
+- [ ] Colorful ring on avatar icon in navbar to reflect the current plan/tier of the user (e.g. free, pro, enterprise, etc.) instead of badge in navbar (keep original shared badge component)
 
 # Priority
 

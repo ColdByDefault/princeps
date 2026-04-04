@@ -19,6 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { NotificationBell } from "@/components/notifications";
 
 type NavLink = {
   href: string;
@@ -99,6 +100,7 @@ export default function NavbarDesktop({
             <PlanBadge tier={tier} />
           </div>
         )}
+        <NotificationBell />
         <LanguageToggle />
         <ThemeToggle />
         <TooltipProvider>

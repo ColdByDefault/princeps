@@ -14,7 +14,24 @@
       "title": "Home",
       "description": "Your workspace"
     },
-    "welcome": "Welcome back"
+    "welcome": "Welcome back",
+    "weather": {
+      "location": "Location",
+      "noWeather": "Weather unavailable"
+    }
+  },
+  "notifications": {
+    "title": "Messages",
+    "empty": "No new messages",
+    "emptyHint": "Your assistant will reach out here.",
+    "clearAll": "Clear all",
+    "bell": {
+      "ariaLabel": "Open messages",
+      "unread": "{count} unread"
+    },
+    "deleteOne": {
+      "ariaLabel": "Delete message"
+    }
   },
   "auth": {
     "login": {

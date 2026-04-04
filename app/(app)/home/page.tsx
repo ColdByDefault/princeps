@@ -8,6 +8,8 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
+import { fetchWeather } from "@/lib/weather/fetch";
+import { HomeShell } from "@/components/home";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -31,11 +33,8 @@ export default async function HomePage() {
     redirect("/login");
   }
 
-  const t = await getTranslations("home");
+  const timezone = session.user.timezone ?? "UTC";
+  const weather = await fetchWeather(timezone);
 
-  return (
-    <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-16">
-      <p className="text-lg text-muted-foreground">{t("welcome")}</p>
-    </div>
-  );
+  return <HomeShell weather={weather} />;
 }
