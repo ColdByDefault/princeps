@@ -9,12 +9,13 @@ import { db } from "@/lib/db";
 import { getPlanLimits, type Tier, type UsageSummary } from "@/types/billing";
 
 export async function getUserUsage(userId: string): Promise<UsageSummary> {
-  const [user, chatsStored, counter] = await Promise.all([
+  const [user, chatsStored, knowledgeDocsStored, counter] = await Promise.all([
     db.user.findUniqueOrThrow({
       where: { id: userId },
-      select: { tier: true },
+      select: { tier: true, knowledgeCharsUsed: true },
     }),
     db.chat.count({ where: { userId } }),
+    db.knowledgeDocument.count({ where: { userId } }),
     db.usageCounter.findUnique({
       where: { userId },
       select: {
@@ -39,8 +40,10 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     chatsLimit: limits.chatHistoryTotal,
     toolCallsUsed: counter?.toolMonthlyCount ?? 0,
     toolCallsLimit: limits.toolCallsPerMonth,
-    // Default to the current month when the counter has never been written —
-    // counters are at 0 so the current month is already the correct boundary.
+    knowledgeDocsStored,
+    knowledgeDocsLimit: limits.knowledgeDocs,
+    knowledgeCharsUsed: user.knowledgeCharsUsed,
+    knowledgeCharsLimit: limits.knowledgeLifetimeChars,
     monthlyResetDate:
       counter?.monthlyResetDate ?? new Date().toISOString().slice(0, 7),
   };

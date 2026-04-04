@@ -8,6 +8,17 @@ export type Tier = "free" | "pro" | "premium" | "enterprise";
 export interface PlanLimits {
   /** Max total knowledge documents stored at once (no monthly reset). */
   knowledgeDocs: number;
+  /**
+   * Max single file size in bytes (enforced before parsing).
+   * Prevents huge files from consuming the lifetime chars budget in one shot.
+   */
+  knowledgeFileSizeBytes: number;
+  /**
+   * Max cumulative characters ever processed by the knowledge pipeline.
+   * This counter NEVER decrements when documents are deleted —
+   * it is the primary anti-bypass gate (delete → re-upload stays counted).
+   */
+  knowledgeLifetimeChars: number;
   /** Max total chats stored at once (no monthly reset). */
   chatHistoryTotal: number;
   /** Max new chats created per calendar day — spam burst guard only. */
@@ -40,6 +51,8 @@ export interface PlanLimits {
 export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
   free: {
     knowledgeDocs: 3,
+    knowledgeFileSizeBytes: 500_000, // 500 KB
+    knowledgeLifetimeChars: 75_000, // ~18 750 tokens
     chatHistoryTotal: 10,
     chatsPerDay: 3,
     messagesPerMonth: 75,
@@ -51,6 +64,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
   },
   pro: {
     knowledgeDocs: 25,
+    knowledgeFileSizeBytes: 2_000_000, // 2 MB
+    knowledgeLifetimeChars: 500_000, // ~125 000 tokens
     chatHistoryTotal: 25,
     chatsPerDay: 5,
     messagesPerMonth: 250,
@@ -62,6 +77,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
   },
   premium: {
     knowledgeDocs: 50,
+    knowledgeFileSizeBytes: 5_000_000, // 5 MB
+    knowledgeLifetimeChars: 2_000_000, // ~500 000 tokens
     chatHistoryTotal: 50,
     chatsPerDay: 10,
     messagesPerMonth: 650,
@@ -73,6 +90,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
   },
   enterprise: {
     knowledgeDocs: 200,
+    knowledgeFileSizeBytes: 20_000_000, // 20 MB
+    knowledgeLifetimeChars: 10_000_000, // ~2 500 000 tokens
     chatHistoryTotal: 200,
     chatsPerDay: 20,
     messagesPerMonth: 2_000,
@@ -109,6 +128,14 @@ export interface UsageSummary {
   chatsLimit: number;
   toolCallsUsed: number;
   toolCallsLimit: number;
+  /** Current count of knowledge documents at rest. */
+  knowledgeDocsStored: number;
+  /** Plan maximum for knowledge documents at rest. */
+  knowledgeDocsLimit: number;
+  /** Lifetime characters ever processed by the knowledge pipeline (never decrements). */
+  knowledgeCharsUsed: number;
+  /** Plan maximum for lifetime knowledge characters. */
+  knowledgeCharsLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

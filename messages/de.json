@@ -141,7 +141,11 @@
       "chatsTitle": "Gespeicherte Chats",
       "chatsNote": "Dieses Limit wird nie zurückgesetzt — lösche Chats, um Platz freizugeben.",
       "toolCallsTitle": "KI-Werkzeugaufrufe diesen Monat",
-      "toolCallsNote": "Token-Verbrauch durch Werkzeugaufrufe ist in den ungefähren Token oben enthalten."
+      "toolCallsNote": "Token-Verbrauch durch Werkzeugaufrufe ist in den ungefähren Token oben enthalten.",
+      "knowledgeDocsTitle": "Wissensdokumente (gespeichert)",
+      "knowledgeDocsNote": "Anzahl der aktuell gespeicherten Dokumente.",
+      "knowledgeCharsTitle": "Wissens-Textumfang (gesamt)",
+      "knowledgeCharsNote": "Kumulativer Zeichenumfang aller bisher verarbeiteten Dokumente — sinkt nicht beim Löschen."
     }
   },
   "chatWidget": {
@@ -151,6 +155,7 @@
     "nav": {
       "brand": "See-Sweet",
       "home": "Arbeitsbereich",
+      "knowledge": "Wissensbasis",
       "chat": "Chat",
       "tasks": "Aufgaben",
       "settings": "Einstellungen",
@@ -443,5 +448,39 @@
     },
     "yes": "Ja",
     "no": "Nein"
+  },
+  "knowledge": {
+    "metadata": {
+      "title": "Wissensbasis",
+      "description": "Lade Dokumente hoch, die der Assistent als Kontext verwenden soll."
+    },
+    "pageTitle": "Wissensbasis",
+    "pageDescription": "Lade Text- oder Markdown-Dateien hoch. Der Assistent nutzt diese Dokumente als Kontext für deine Anfragen.",
+    "uploadSection": "Dokument hochladen",
+    "documentsSection": "Dokumente",
+    "approxTokens": "≈{count} Token gesamt",
+    "emptyTitle": "Noch keine Dokumente",
+    "emptyDescription": "Lade eine .txt- oder .md-Datei hoch, damit der Assistent sie als Wissensquelle nutzen kann.",
+    "dropZoneTitle": "Datei ablegen oder klicken",
+    "dropZoneSubtitle": ".txt und .md Dateien werden unterstützt",
+    "dropZoneAriaLabel": "Datei für Upload ablegen",
+    "clearFileAriaLabel": "Ausgewählte Datei entfernen",
+    "uploadButton": "Hochladen & indexieren",
+    "uploadingLabel": "Wird verarbeitet…",
+    "uploadButtonAriaLabel": "Datei hochladen und indexieren",
+    "uploadSuccess": "Dokument erfolgreich indexiert.",
+    "uploadError": "Upload fehlgeschlagen. Bitte versuche es erneut.",
+    "uploadProviderError": "Der Embedding-Anbieter ist nicht verfügbar. Bitte überprüfe deine Einstellungen.",
+    "uploadLimitError": "Plan-Limit erreicht. Lösche Dokumente oder wechsle deinen Plan.",
+    "deleteSuccess": "Dokument gelöscht.",
+    "deleteError": "Löschen fehlgeschlagen.",
+    "deleteTooltip": "Dokument löschen",
+    "deleteAriaLabel": "Dokument \"{name}\" löschen",
+    "deleteDialog": {
+      "title": "Dokument löschen?",
+      "description": "Das Dokument \"{name}\" und alle seine Textbausteine werden dauerhaft gelöscht. Der verarbeitete Textumfang bleibt in deinem Kontingent angerechnet.",
+      "confirm": "Löschen",
+      "cancel": "Abbrechen"
+    }
   }
 }

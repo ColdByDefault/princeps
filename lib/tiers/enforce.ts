@@ -168,8 +168,63 @@ export async function enforceWidgetTools(
 
 /**
  * Checks whether the user is allowed to upload another knowledge document.
+ * Enforces three independent limits:
+ *
+ *  1. `knowledgeDocs`        — maximum documents stored at rest (current count).
+ *  2. `knowledgeFileSizeBytes` — maximum size of the file being uploaded.
+ *  3. `knowledgeLifetimeChars` — lifetime chars ever processed (NEVER decremented,
+ *     so delete-then-re-upload does not bypass the quota).
+ *
+ * Does NOT increment counters — the caller (createKnowledgeDocument) handles that
+ * inside a transaction after the document is successfully persisted.
+ */
+export async function enforceKnowledgeUpload(
+  userId: string,
+  fileSizeBytes: number,
+  newCharCount: number,
+): Promise<EnforceResult> {
+  const [tier, docCount, user] = await Promise.all([
+    getUserTier(userId),
+    db.knowledgeDocument.count({ where: { userId } }),
+    db.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: { knowledgeCharsUsed: true },
+    }),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (docCount >= limits.knowledgeDocs) {
+    return {
+      allowed: false,
+      reason: "Knowledge document limit reached for your plan.",
+    };
+  }
+
+  if (fileSizeBytes > limits.knowledgeFileSizeBytes) {
+    const maxMB = (limits.knowledgeFileSizeBytes / 1_000_000).toFixed(1);
+    return {
+      allowed: false,
+      reason: `File exceeds the ${maxMB} MB limit for your plan.`,
+    };
+  }
+
+  if (user.knowledgeCharsUsed + newCharCount > limits.knowledgeLifetimeChars) {
+    return {
+      allowed: false,
+      reason:
+        "Lifetime knowledge character quota exhausted for your plan. Uploading more content is not possible on your current plan.",
+    };
+  }
+
+  return { allowed: true };
+}
+
+/**
+ * Checks whether the user is allowed to upload another knowledge document.
  * This is a slot limit (count-at-rest), not a daily counter —
  * no increment is performed here. The caller must create the document on success.
+ * @deprecated Use enforceKnowledgeUpload() which checks all three limits.
  */
 export async function enforceKnowledgeDocs(
   userId: string,

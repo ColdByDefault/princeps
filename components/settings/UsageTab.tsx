@@ -141,6 +141,18 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           limit={usage.toolCallsLimit}
           note={t("toolCallsNote")}
         />
+        <QuotaRow
+          label={t("knowledgeDocsTitle")}
+          used={usage.knowledgeDocsStored}
+          limit={usage.knowledgeDocsLimit}
+          note={t("knowledgeDocsNote")}
+        />
+        <QuotaRow
+          label={t("knowledgeCharsTitle")}
+          used={usage.knowledgeCharsUsed}
+          limit={usage.knowledgeCharsLimit}
+          note={t("knowledgeCharsNote")}
+        />
       </div>
 
       {/* Reset footer */}

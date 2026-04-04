@@ -12,6 +12,7 @@ import {
   Settings,
   CheckSquare,
   CreditCard,
+  BrainCircuit,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -69,6 +70,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
   const navLinks = [
     { href: "/home", icon: LayoutDashboard, label: t("nav.home") },
     { href: "/chat", icon: MessageSquare, label: t("nav.chat") },
+    { href: "/knowledge", icon: BrainCircuit, label: t("nav.knowledge") },
     { href: "/tasks", icon: CheckSquare, label: t("nav.tasks") },
     { href: "/settings", icon: Settings, label: t("nav.settings") },
     { href: "/pricing", icon: CreditCard, label: t("nav.pricing") },

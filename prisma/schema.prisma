@@ -223,7 +223,7 @@ model KnowledgeChunk {
   documentId String
   userId     String
   content    String
-  embedding  Unsupported("vector(4096)")?
+  embedding  Unsupported("vector(1536)")?
   chunkIndex Int
   createdAt  DateTime                     @default(now())
 
