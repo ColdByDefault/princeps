@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
+  CheckSquare,
   ChevronUp,
   LayoutDashboard,
   LogOut,
@@ -224,6 +225,17 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
                 >
                   <LayoutDashboard className="size-4 shrink-0" />
                   <span className="truncate">{t("sidebar.navHome")}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/tasks" />}
+                  isActive={pathname === "/tasks"}
+                  tooltip="Tasks"
+                  className="cursor-pointer"
+                >
+                  <CheckSquare className="size-4 shrink-0" />
+                  <span className="truncate">Tasks</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
