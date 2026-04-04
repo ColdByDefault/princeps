@@ -130,6 +130,15 @@ export function TaskCard({
               {formatDue(task.dueDate)}
             </span>
           )}
+          {task.labels.map((label) => (
+            <span
+              key={label.id}
+              className="inline-flex h-5 items-center rounded-full px-2 text-[10px] font-medium text-white"
+              style={{ backgroundColor: label.color }}
+            >
+              {label.name}
+            </span>
+          ))}
         </div>
       </div>
 

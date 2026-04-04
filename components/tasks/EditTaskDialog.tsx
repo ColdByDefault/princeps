@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,7 +26,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import type { TaskRecord } from "@/types/api";
+import type { LabelOptionRecord, TaskRecord } from "@/types/api";
 
 type EditTaskDialogProps = {
   task: TaskRecord | null;
@@ -39,9 +40,11 @@ type EditTaskDialogProps = {
       status: string;
       priority: string;
       dueDate: string | null;
+      labelIds: string[];
     }>,
   ) => Promise<boolean>;
   updating: boolean;
+  availableLabels: LabelOptionRecord[];
 };
 
 export function EditTaskDialog({
@@ -50,6 +53,7 @@ export function EditTaskDialog({
   onOpenChange,
   onSubmit,
   updating,
+  availableLabels,
 }: EditTaskDialogProps) {
   const t = useTranslations("tasks");
   const [title, setTitle] = useState(task?.title ?? "");
@@ -59,6 +63,15 @@ export function EditTaskDialog({
   const [dueDate, setDueDate] = useState(
     task?.dueDate ? task.dueDate.slice(0, 10) : "",
   );
+  const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>(
+    task?.labels.map((l) => l.id) ?? [],
+  );
+
+  function toggleLabel(id: string) {
+    setSelectedLabelIds((prev) =>
+      prev.includes(id) ? prev.filter((l) => l !== id) : [...prev, id],
+    );
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -70,6 +83,7 @@ export function EditTaskDialog({
       priority,
       status,
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+      labelIds: selectedLabelIds,
     });
 
     if (ok) onOpenChange(false);
@@ -187,6 +201,46 @@ export function EditTaskDialog({
               placeholder={t("fields.dueDate")}
             />
           </div>
+
+          {availableLabels.length > 0 && (
+            <div className="space-y-1.5">
+              <Label>
+                {t("fields.labels")}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">
+                  ({t("fields.optional")})
+                </span>
+              </Label>
+              <div className="flex flex-wrap gap-1.5">
+                {availableLabels.map((label) => {
+                  const selected = selectedLabelIds.includes(label.id);
+                  return (
+                    <button
+                      key={label.id}
+                      type="button"
+                      onClick={() => toggleLabel(label.id)}
+                      aria-label={label.name}
+                      aria-pressed={selected}
+                      className={cn(
+                        "inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
+                        selected
+                          ? "border-transparent text-white"
+                          : "border-border bg-muted/40 text-muted-foreground hover:text-foreground",
+                      )}
+                      style={selected ? { backgroundColor: label.color } : {}}
+                    >
+                      <span
+                        className="size-1.5 rounded-full shrink-0"
+                        style={{
+                          backgroundColor: selected ? "white" : label.color,
+                        }}
+                      />
+                      {label.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <DialogFooter>
             <Button

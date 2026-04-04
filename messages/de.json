@@ -31,6 +31,7 @@
       "submit": "Anmelden",
       "submitting": "Wird angemeldet …",
       "errorFallback": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
+      "redirectNotice": "Bitte melde dich an, um fortzufahren.",
       "switchPrompt": "Noch kein Konto?",
       "switchLink": "Konto erstellen"
     },
@@ -43,6 +44,8 @@
       "subtitle": "Registriere dich mit deiner E-Mail-Adresse.",
       "nameLabel": "Name",
       "namePlaceholder": "Dein Name",
+      "usernameLabel": "Benutzername",
+      "usernamePlaceholder": "benutzername_123",
       "emailLabel": "E-Mail",
       "emailPlaceholder": "du@beispiel.de",
       "passwordLabel": "Passwort",
@@ -74,7 +77,10 @@
       "badge": "Arbeitsbereich wird vorbereitet",
       "title": "Dein Arbeitsbereich wird geladen.",
       "body": "Sitzung wird geprüft, aktueller Kontext wird geladen und die nächste Ansicht wird vorbereitet."
-    }
+    },
+    "chat": "Chat wird geladen...",
+    "tasks": "Aufgaben werden geladen...",
+    "settings": "Einstellungen werden geladen..."
   },
   "error": {
     "global": {
@@ -95,7 +101,8 @@
     "tabs": {
       "appearance": "Erscheinungsbild",
       "provider": "KI-Anbieter",
-      "usage": "Nutzung"
+      "usage": "Nutzung",
+      "labels": "Labels"
     },
     "appearance": {
       "themeTitle": "Design",
@@ -122,6 +129,10 @@
       "notAvailable": "Nicht verfügbar"
     },
     "usage": {
+      "title": "Nutzung & Kontingente",
+      "description": "Deine aktuelle Plannutzung für diesen Abrechnungszeitraum.",
+      "refresh": "Aktualisieren",
+      "refreshing": "Wird aktualisiert…",
       "planLabel": "Aktueller Plan",
       "resetLabel": "Monatliche Zurücksetzung",
       "resetUnknown": "Noch nicht erfasst",
@@ -254,6 +265,7 @@
       "priority": "Priorität",
       "dueDate": "F\u00e4lligkeitsdatum",
       "status": "Status",
+      "labels": "Labels",
       "optional": "Optional"
     },
     "createDialog": {
@@ -288,5 +300,44 @@
     "deleteLabel": "Löschen",
     "markDoneLabel": "Als erledigt markieren",
     "reopenLabel": "Wiedereröffnen"
+  },
+  "labels": {
+    "title": "Labels",
+    "description": "Globale Labels für Aufgaben, Kontakte und weitere Einträge.",
+    "newLabel": "Neues Label",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert…",
+    "empty": "Noch keine Labels.",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Label-Name",
+      "color": "Farbe"
+    },
+    "createDialog": {
+      "heading": "Neues Label",
+      "submit": "Erstellen",
+      "submitting": "Wird erstellt…",
+      "success": "Label erstellt.",
+      "error": "Label konnte nicht erstellt werden.",
+      "duplicateError": "Ein Label mit diesem Namen existiert bereits."
+    },
+    "editDialog": {
+      "heading": "Label bearbeiten",
+      "submit": "Speichern",
+      "submitting": "Wird gespeichert…",
+      "success": "Label gespeichert.",
+      "error": "Label konnte nicht gespeichert werden.",
+      "duplicateError": "Ein Label mit diesem Namen existiert bereits."
+    },
+    "deleteDialog": {
+      "title": "Label löschen?",
+      "description": "Das Label wird von allen verknüpften Einträgen entfernt.",
+      "confirm": "Löschen",
+      "cancel": "Abbrechen",
+      "success": "Label gelöscht.",
+      "error": "Label konnte nicht gelöscht werden."
+    },
+    "editLabel": "Bearbeiten",
+    "deleteLabel": "Löschen"
   }
 }

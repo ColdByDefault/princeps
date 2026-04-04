@@ -72,6 +72,7 @@ enum InteractionSource {
 model User {
   id                   String   @id @default(cuid())
   name                 String?
+  username             String?  @unique
   email                String   @unique
   emailVerified        Boolean  @default(false)
   image                String?

@@ -1,0 +1,21 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
+ */
+
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth/auth";
+import { getUserUsage } from "@/lib/settings/usage.logic";
+
+// GET /api/settings/usage — return current usage summary for the authed user
+export async function GET() {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const usage = await getUserUsage(session.user.id);
+  return NextResponse.json(usage);
+}

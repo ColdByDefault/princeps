@@ -31,6 +31,7 @@
       "submit": "Sign in",
       "submitting": "Signing in...",
       "errorFallback": "Sign in failed. Please try again.",
+      "redirectNotice": "Please sign in to continue.",
       "switchPrompt": "Don't have an account?",
       "switchLink": "Create account"
     },
@@ -43,6 +44,8 @@
       "subtitle": "Sign up with your email address.",
       "nameLabel": "Name",
       "namePlaceholder": "Your name",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "username_123",
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "passwordLabel": "Password",
@@ -74,7 +77,10 @@
       "badge": "Preparing workspace",
       "title": "Loading your workspace.",
       "body": "Checking your session, pulling current context, and preparing the next view."
-    }
+    },
+    "chat": "Loading chat...",
+    "tasks": "Loading tasks...",
+    "settings": "Loading settings..."
   },
   "error": {
     "global": {
@@ -95,7 +101,8 @@
     "tabs": {
       "appearance": "Appearance",
       "provider": "AI Provider",
-      "usage": "Usage"
+      "usage": "Usage",
+      "labels": "Labels"
     },
     "appearance": {
       "themeTitle": "Theme",
@@ -122,6 +129,10 @@
       "notAvailable": "Not available"
     },
     "usage": {
+      "title": "Usage & Quotas",
+      "description": "Your current plan usage for this billing period.",
+      "refresh": "Refresh",
+      "refreshing": "Refreshing…",
       "planLabel": "Current plan",
       "resetLabel": "Monthly reset",
       "resetUnknown": "Not tracked yet",
@@ -254,6 +265,7 @@
       "priority": "Priority",
       "dueDate": "Due date",
       "status": "Status",
+      "labels": "Labels",
       "optional": "Optional"
     },
     "createDialog": {
@@ -288,5 +300,44 @@
     "deleteLabel": "Delete",
     "markDoneLabel": "Mark as done",
     "reopenLabel": "Reopen"
+  },
+  "labels": {
+    "title": "Labels",
+    "description": "Global labels for tasks, contacts, and other records.",
+    "newLabel": "New label",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…",
+    "empty": "No labels yet.",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Label name",
+      "color": "Color"
+    },
+    "createDialog": {
+      "heading": "New label",
+      "submit": "Create",
+      "submitting": "Creating…",
+      "success": "Label created.",
+      "error": "Failed to create label.",
+      "duplicateError": "A label with this name already exists."
+    },
+    "editDialog": {
+      "heading": "Edit label",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "success": "Label saved.",
+      "error": "Failed to save label.",
+      "duplicateError": "A label with this name already exists."
+    },
+    "deleteDialog": {
+      "title": "Delete this label?",
+      "description": "The label will be removed from all linked records.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Label deleted.",
+      "error": "Failed to delete label."
+    },
+    "editLabel": "Edit",
+    "deleteLabel": "Delete"
   }
 }

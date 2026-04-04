@@ -10,10 +10,10 @@ Auth is powered by **Better Auth** with a Prisma/PostgreSQL adapter. The refacto
 
 All auth inputs are validated with Zod before any DB or auth library call.
 
-| Schema         | Fields                                         | Key rules                                                               |
-| -------------- | ---------------------------------------------- | ----------------------------------------------------------------------- |
-| `signUpSchema` | `name`, `email`, `password`, `confirmPassword` | name 2–100 chars; valid email; password ≥ 8 chars; passwords must match |
-| `signInSchema` | `email`, `password`                            | valid email; password ≥ 8 chars                                         |
+| Schema         | Fields                                                     | Key rules                                                                                                                      |
+| -------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `signUpSchema` | `name`, `username`, `email`, `password`, `confirmPassword` | name 2–100 chars; username 3–30 chars, alphanumeric/underscore/dot only; valid email; password ≥ 8 chars; passwords must match |
+| `signInSchema` | `email`, `password`                                        | valid email; password ≥ 8 chars                                                                                                |
 
 ---
 
@@ -43,20 +43,23 @@ Rate limiters are instantiated per-route at module level (singleton per process)
 | Session expiry     | 3 days                                                                      |
 | Session refresh    | Refresh if older than 1 day                                                 |
 | Custom user fields | `timezone` (UTC), `preferences` (JSON string), `role` (user), `tier` (free) |
+| Plugins            | `username` — enforces uniqueness, 3–30 chars, alphanumeric/underscore/dot   |
+
+The `username` plugin intercepts `/sign-up/email` server-side to validate length, character rules, and uniqueness before the user record is created. It also adds a `username` field (unique, nullable) to the `user` table and exposes a `/sign-in/username` endpoint for future use.
 
 ---
 
 ## Key Files
 
-| File                             | Role                                           |
-| -------------------------------- | ---------------------------------------------- |
-| `lib/auth/auth.ts`               | Better Auth instance + session/user config     |
-| `lib/auth/auth-schemas.ts`       | Zod schemas for sign-up and sign-in            |
-| `lib/auth/auth-client.ts`        | Client-side Better Auth helpers                |
-| `lib/security.ts`                | `InMemoryRateLimiter`                          |
-| `app/api/auth/[...all]/route.ts` | Better Auth catch-all handler                  |
-| `components/auth/LoginCard.tsx`  | Sign-in form                                   |
-| `components/auth/SignUpCard.tsx` | Sign-up form (includes confirm-password field) |
+| File                             | Role                                                         |
+| -------------------------------- | ------------------------------------------------------------ |
+| `lib/auth/auth.ts`               | Better Auth instance + session/user config + username plugin |
+| `lib/auth/auth-schemas.ts`       | Zod schemas for sign-up and sign-in                          |
+| `lib/auth/auth-client.ts`        | Client-side Better Auth helpers (includes `usernameClient`)  |
+| `lib/security.ts`                | `InMemoryRateLimiter`                                        |
+| `app/api/auth/[...all]/route.ts` | Better Auth catch-all handler                                |
+| `components/auth/LoginCard.tsx`  | Sign-in form                                                 |
+| `components/auth/SignUpCard.tsx` | Sign-up form (includes username + confirm-password fields)   |
 
 ---
 

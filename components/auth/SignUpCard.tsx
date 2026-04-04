@@ -20,6 +20,7 @@ export default function SignUpCard() {
   const t = useTranslations("auth");
   const router = useRouter();
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,6 +35,7 @@ export default function SignUpCard() {
 
     const result = signUpSchema.safeParse({
       name,
+      username,
       email,
       password,
       confirmPassword,
@@ -47,6 +49,7 @@ export default function SignUpCard() {
 
     const { error: authError } = await authClient.signUp.email({
       name,
+      username,
       email,
       password,
       callbackURL: "/home",
@@ -80,6 +83,22 @@ export default function SignUpCard() {
               value={name}
               onChange={(event) => setName(event.target.value)}
               placeholder={t("signUp.namePlaceholder")}
+              className="h-11 rounded-xl bg-background/80"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="username" className="text-sm font-medium">
+              {t("signUp.usernameLabel")}
+            </label>
+            <Input
+              id="username"
+              type="text"
+              autoComplete="username"
+              required
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              placeholder={t("signUp.usernamePlaceholder")}
               className="h-11 rounded-xl bg-background/80"
             />
           </div>
