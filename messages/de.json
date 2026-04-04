@@ -162,7 +162,8 @@
       "planFree": "Free",
       "planPro": "Pro",
       "planPremium": "Premium",
-      "planEnterprise": "Enterprise"
+      "planEnterprise": "Enterprise",
+      "profile": "Mein Profil"
     },
     "language": {
       "groupLabel": "Sprachauswahl",
@@ -343,5 +344,19 @@
     },
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen"
+  },
+  "profile": {
+    "metadata": {
+      "title": "Profil",
+      "description": "Dein Kontoprofil."
+    },
+    "title": "Profil",
+    "name": "Name",
+    "username": "Benutzername",
+    "email": "E-Mail",
+    "plan": "Aktueller Plan",
+    "memberSince": "Mitglied seit",
+    "timezone": "Zeitzone",
+    "notSet": "Nicht gesetzt"
   }
 }

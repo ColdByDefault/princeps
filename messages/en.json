@@ -162,7 +162,8 @@
       "planFree": "Free",
       "planPro": "Pro",
       "planPremium": "Premium",
-      "planEnterprise": "Enterprise"
+      "planEnterprise": "Enterprise",
+      "profile": "My profile"
     },
     "language": {
       "groupLabel": "Language selector",
@@ -343,5 +344,19 @@
     },
     "editLabel": "Edit",
     "deleteLabel": "Delete"
+  },
+  "profile": {
+    "metadata": {
+      "title": "Profile",
+      "description": "Your account profile."
+    },
+    "title": "Profile",
+    "name": "Name",
+    "username": "Username",
+    "email": "Email",
+    "plan": "Current plan",
+    "memberSince": "Member since",
+    "timezone": "Timezone",
+    "notSet": "Not set"
   }
 }

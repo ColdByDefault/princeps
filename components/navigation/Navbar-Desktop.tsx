@@ -11,6 +11,13 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LanguageToggle, PlanBadge } from "@/components/shared";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 type NavLink = {
@@ -23,6 +30,7 @@ type NavbarDesktopProps = {
   navLinks: NavLink[];
   pathname: string;
   tier?: string | null | undefined;
+  userInitials: string;
   isSigningOut: boolean;
   onSignOut: () => void;
 };
@@ -36,6 +44,7 @@ export default function NavbarDesktop({
   navLinks,
   pathname,
   tier,
+  userInitials,
   isSigningOut,
   onSignOut,
 }: NavbarDesktopProps) {
@@ -92,6 +101,30 @@ export default function NavbarDesktop({
         )}
         <LanguageToggle />
         <ThemeToggle />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon-sm"
+                  aria-label={t("nav.profile")}
+                  className="cursor-pointer rounded-full border-border/70 bg-background/70 p-0 backdrop-blur-sm"
+                  nativeButton={false}
+                  render={<Link href="/profile" />}
+                />
+              }
+            >
+              <Avatar className="size-7">
+                <AvatarFallback className="bg-primary/10 text-primary text-[11px] font-semibold">
+                  {userInitials}
+                </AvatarFallback>
+              </Avatar>
+            </TooltipTrigger>
+            <TooltipContent>{t("nav.profile")}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <Button
           type="button"
           variant="outline"

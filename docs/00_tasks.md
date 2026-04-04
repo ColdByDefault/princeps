@@ -32,3 +32,4 @@
 - [ ] Allow sign-In with username/password -[ ] Add Cuurent Plan (tier) and other plans in settings (somewhere) and allow users to upgrade/downgrade their plans (but only UI for now, no actual payment integration, etc.)
 - [ ] Add Notifications System (Basic system notifications "tokens usage limit reached", "new features available", "new updates", etc. Secondly, real-time LLM-generated notifications, e.g. login, signup, reports of tool usage, or important events in the app, etc.)
 - [ ] Interduce new feature as feature and tool.
+- [ ] Show available plans in new route /pricing. 

@@ -35,6 +35,21 @@ type NavbarProps = {
   } | null;
 };
 
+function getInitials(
+  name: string | null | undefined,
+  email: string | null | undefined,
+): string {
+  if (name?.trim()) {
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return parts[0][0].toUpperCase();
+  }
+  if (email) return email[0].toUpperCase();
+  return "U";
+}
+
 export default function Navbar({ sessionUser }: NavbarProps) {
   const t = useTranslations("shell");
   const pathname = usePathname();
@@ -59,6 +74,8 @@ export default function Navbar({ sessionUser }: NavbarProps) {
 
   const userLabel =
     sessionUser?.name?.trim() || sessionUser?.email || t("nav.userFallback");
+
+  const userInitials = getInitials(sessionUser?.name, sessionUser?.email);
 
   const handleSignOut = async () => {
     if (isSigningOut) return;
@@ -87,6 +104,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
               navLinks={navLinks}
               pathname={pathname}
               tier={sessionUser.tier}
+              userInitials={userInitials}
               isSigningOut={isSigningOut}
               onSignOut={handleSignOut}
             />
@@ -101,6 +119,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
               pathname={pathname}
               tier={sessionUser.tier}
               userLabel={userLabel}
+              userInitials={userInitials}
               isSigningOut={isSigningOut}
               onSignOut={handleSignOut}
             />
