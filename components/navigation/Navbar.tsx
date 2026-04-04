@@ -23,6 +23,7 @@ import {
   NavbarMobilePanel,
 } from "@/components/navigation/Navbar-Mobile";
 import { authClient } from "@/lib/auth/auth-client";
+import { GREETING_SESSION_KEY } from "@/hooks/use-notifications";
 
 export { LanguageToggle } from "@/components/shared";
 
@@ -89,6 +90,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
       setIsSigningOut(false);
       return;
     }
+    sessionStorage.removeItem(GREETING_SESSION_KEY);
     router.replace("/login");
     router.refresh();
   };

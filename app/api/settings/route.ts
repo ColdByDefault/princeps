@@ -27,8 +27,15 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const { language, theme } = body as Record<string, unknown>;
-  const patch: { language?: AppLanguage; theme?: string } = {};
+  const { language, theme, notificationsEnabled } = body as Record<
+    string,
+    unknown
+  >;
+  const patch: {
+    language?: AppLanguage;
+    theme?: string;
+    notificationsEnabled?: boolean;
+  } = {};
 
   if (isSupportedLanguage(language as string)) {
     patch.language = language as AppLanguage;
@@ -38,6 +45,9 @@ export async function PATCH(req: Request) {
     ["light", "dark", "system"].includes(theme)
   ) {
     patch.theme = theme;
+  }
+  if (typeof notificationsEnabled === "boolean") {
+    patch.notificationsEnabled = notificationsEnabled;
   }
 
   if (Object.keys(patch).length === 0) {

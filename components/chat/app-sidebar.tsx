@@ -58,6 +58,7 @@ import { cn } from "@/lib/utils";
 import { LanguageToggle, PlanBadge } from "@/components/shared";
 import { ThemeToggle } from "@/components/theme";
 import { type ChatSummary } from "@/types/chat";
+import { GREETING_SESSION_KEY } from "@/hooks/use-notifications";
 
 type AppSidebarProps = {
   sessionUser: {
@@ -198,6 +199,7 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
       setIsSigningOut(false);
       return;
     }
+    sessionStorage.removeItem(GREETING_SESSION_KEY);
     router.replace("/login");
     router.refresh();
   };

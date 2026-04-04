@@ -14,7 +14,24 @@
       "title": "Startseite",
       "description": "Dein Arbeitsbereich"
     },
-    "welcome": "Willkommen zurück"
+    "welcome": "Willkommen zurück",
+    "weather": {
+      "location": "Standort",
+      "noWeather": "Kein Wetter verfügbar"
+    }
+  },
+  "notifications": {
+    "title": "Nachrichten",
+    "empty": "Keine neuen Nachrichten",
+    "emptyHint": "Dein Assistent meldet sich hier.",
+    "clearAll": "Alle löschen",
+    "bell": {
+      "ariaLabel": "Nachrichten öffnen",
+      "unread": "{count} ungelesen"
+    },
+    "deleteOne": {
+      "ariaLabel": "Nachricht löschen"
+    }
   },
   "auth": {
     "login": {
@@ -102,7 +119,10 @@
       "themeTitle": "Design",
       "themeDescription": "Wähle zwischen hellem, dunklem oder systembasiertem Design.",
       "languageTitle": "Sprache",
-      "languageDescription": "Wähle die Anzeigesprache deines Arbeitsbereichs."
+      "languageDescription": "Wähle die Anzeigesprache deines Arbeitsbereichs.",
+      "notificationsTitle": "Tägliche Begrüßung",
+      "notificationsDescription": "Erhalte täglich eine persönliche Begrüßung von deinem Assistenten.",
+      "notificationsDisclaimer": "Begrüßungen verbrauchen dein monatliches Token-Kontingent."
     },
     "provider": {
       "title": "Aktiver KI-Anbieter",
