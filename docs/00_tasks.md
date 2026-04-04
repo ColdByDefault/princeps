@@ -37,4 +37,4 @@
   - [ ] Read/write google calender.
   - [ ] Create JIRA tickets.
   - [ ] Send Emails.
-- [ ]
+- [ ] Allow sign-In with username/password 

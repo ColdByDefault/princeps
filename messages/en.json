@@ -31,6 +31,7 @@
       "submit": "Sign in",
       "submitting": "Signing in...",
       "errorFallback": "Sign in failed. Please try again.",
+      "redirectNotice": "Please sign in to continue.",
       "switchPrompt": "Don't have an account?",
       "switchLink": "Create account"
     },

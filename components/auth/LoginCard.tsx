@@ -6,9 +6,9 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Info } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { AuthShell } from "@/components/auth/shared";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,8 @@ import { signInSchema } from "@/lib/auth/auth-schemas";
 export default function LoginCard() {
   const t = useTranslations("auth");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +42,7 @@ export default function LoginCard() {
     const { error: authError } = await authClient.signIn.email({
       email,
       password,
-      callbackURL: "/home",
+      callbackURL: callbackUrl ?? "/home",
     });
 
     if (authError) {
@@ -49,7 +51,7 @@ export default function LoginCard() {
       return;
     }
 
-    router.push("/home");
+    router.push(callbackUrl ?? "/home");
     router.refresh();
   }
 
@@ -59,6 +61,13 @@ export default function LoginCard() {
       subtitle={t("login.subtitle")}
       form={
         <form onSubmit={handleSubmit} className="space-y-4">
+          {callbackUrl ? (
+            <div className="flex items-start gap-2 rounded-lg border border-border bg-muted/50 px-3 py-2.5 text-sm text-muted-foreground">
+              <Info className="mt-0.5 size-4 shrink-0" />
+              <span>{t("login.redirectNotice")}</span>
+            </div>
+          ) : null}
+
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
               {t("login.emailLabel")}

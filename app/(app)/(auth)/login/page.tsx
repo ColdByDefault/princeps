@@ -7,6 +7,7 @@
 import { type Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { LoginCard } from "@/components/auth";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
@@ -30,5 +31,9 @@ export default async function LoginPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (session) redirect("/home");
 
-  return <LoginCard />;
+  return (
+    <Suspense>
+      <LoginCard />
+    </Suspense>
+  );
 }
