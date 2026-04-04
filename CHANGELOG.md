@@ -1,3 +1,11 @@
+## [0.1.33] - 2026-04-04
+
+- feat: update task list and major updates documentation for clarity and organization
+- feat: refactor loading components and update translations for chat loading
+- feat: add knowledge search functionality with cosine similarity
+- feat: implement knowledge management features
+- feat: update layer boundaries section to clarify source of truth for feature development
+
 ## [0.1.32] - 2026-04-04
 
 - feat: add missing navigation items to sidebar and refine UI/UX tasks
