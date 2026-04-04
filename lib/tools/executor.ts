@@ -9,9 +9,15 @@ import { createTask } from "@/lib/tasks/create.logic";
 import { listTasks } from "@/lib/tasks/list.logic";
 import { updateTask } from "@/lib/tasks/update.logic";
 import { createLabel } from "@/lib/labels/create.logic";
+import { updateLabel } from "@/lib/labels/update.logic";
+import { deleteLabel } from "@/lib/labels/delete.logic";
+import { listLabels } from "@/lib/labels/list.logic";
 import { createTaskSchema, updateTaskSchema } from "@/lib/tasks/schemas";
-import { createLabelSchema } from "@/lib/labels/schemas";
-import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
+import { createLabelSchema, updateLabelSchema } from "@/lib/labels/schemas";
+import {
+  resolveOrCreateLabelIdsByNames,
+  resolveLabelIdByName,
+} from "@/lib/tools/resolvers";
 import type { LLMToolCall } from "@/types/llm";
 
 export type ActionResult =
@@ -135,6 +141,64 @@ export async function executeToolCall(
       };
     }
     return { ok: true, data: result.label };
+  }
+
+  if (name === "list_labels") {
+    const labels = await listLabels(userId);
+    return { ok: true, data: labels };
+  }
+
+  if (name === "update_label") {
+    if (typeof args.labelName !== "string") {
+      return { ok: false, error: "update_label requires labelName." };
+    }
+    const labelId = await resolveLabelIdByName(userId, args.labelName);
+    if (!labelId) {
+      return {
+        ok: false,
+        error: `Label "${args.labelName}" not found.`,
+      };
+    }
+    const parsed = updateLabelSchema.safeParse({
+      ...(args.newName !== undefined ? { name: args.newName } : {}),
+      ...(args.color !== undefined ? { color: args.color } : {}),
+    });
+    if (!parsed.success) {
+      return {
+        ok: false,
+        error: parsed.error.issues[0]?.message ?? "Invalid update_label input.",
+      };
+    }
+    const result = await updateLabel(labelId, userId, parsed.data);
+    if (!result.ok) {
+      return {
+        ok: false,
+        error: result.notFound
+          ? "Label not found."
+          : result.duplicate
+            ? `A label named "${args.newName}" already exists.`
+            : "Failed to update label.",
+      };
+    }
+    return { ok: true, data: result.label };
+  }
+
+  if (name === "delete_label") {
+    if (typeof args.labelName !== "string") {
+      return { ok: false, error: "delete_label requires labelName." };
+    }
+    const labelId = await resolveLabelIdByName(userId, args.labelName);
+    if (!labelId) {
+      return {
+        ok: false,
+        error: `Label "${args.labelName}" not found.`,
+      };
+    }
+    const result = await deleteLabel(labelId, userId);
+    if (!result.ok) {
+      return { ok: false, error: "Failed to delete label." };
+    }
+    return { ok: true, data: { deleted: true, labelName: args.labelName } };
   }
 
   return { ok: false, error: `Unknown tool: ${name}` };

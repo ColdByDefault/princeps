@@ -149,4 +149,61 @@ export const TOOL_REGISTRY: LLMTool[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "list_labels",
+      description:
+        "Retrieve all labels the user has created. Use this when the user asks what labels exist, or before updating or deleting a label by name.",
+      parameters: {
+        type: "object",
+        properties: {},
+        required: [],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "update_label",
+      description:
+        "Rename or recolor an existing label. Use when the user asks to rename, edit, or change the color of a label.",
+      parameters: {
+        type: "object",
+        properties: {
+          labelName: {
+            type: "string",
+            description: "The current name of the label to update.",
+          },
+          newName: {
+            type: "string",
+            description: "New name for the label (optional).",
+          },
+          color: {
+            type: "string",
+            description: "New hex color code, e.g. #f43f5e (optional).",
+          },
+        },
+        required: ["labelName"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "delete_label",
+      description:
+        "Delete an existing label and remove it from all tasks it is attached to. Use when the user asks to remove or delete a label.",
+      parameters: {
+        type: "object",
+        properties: {
+          labelName: {
+            type: "string",
+            description: "The name of the label to delete.",
+          },
+        },
+        required: ["labelName"],
+      },
+    },
+  },
 ];

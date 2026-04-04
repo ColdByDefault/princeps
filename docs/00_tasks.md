@@ -9,13 +9,14 @@
 - [x] Add dynamic loading.tsx messages, or generalize it a bit. (currently it shows "Preparing Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats..."), use `components\shared\LoadingRing.tsx`
 - [ ] Add Markdown support for system prompts in chat settings.
 - [x] Re-order App-Settings Tabs.
+- [ ] Show somewhere a catalog of availble tools, and how to use for users.
 
 # Priority
 
 - [ ] What happen if i keep creating new chats and delete them? What if i do so, and then kept only 5 Chats saved but no monthly tokens left? check all these scenarios and make sure the UX is good and the user is properly informed about limits, etc.
 - [ ] Update Token Usages to show usages of calling tools, not only the count of the calls.
 - [x] Add rules for Username (no spaces, unique, etc.) and enforce in Auth routes
-- [ ] can the LLM update/edit Labels or only create new ones?
+- [x] can the LLM update/edit Labels or only create new ones?
 - [ ] LLM can call tools, but does it check duplications? for example, Task is existing, and LLM calls the tool to create the same task again, or similar task? should we check for that? if so, how? (e.g. check for similar titles, or check for similar content in the description, etc.)
 
 # Plan

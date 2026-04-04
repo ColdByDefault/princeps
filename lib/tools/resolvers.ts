@@ -9,6 +9,20 @@ import { createLabel } from "@/lib/labels/create.logic";
 import { listLabels } from "@/lib/labels/list.logic";
 
 /**
+ * Resolves a single label name to its ID for the given user.
+ * Returns null if no matching label is found (does NOT create).
+ */
+export async function resolveLabelIdByName(
+  userId: string,
+  name: string,
+): Promise<string | null> {
+  const existing = await listLabels(userId);
+  const normalized = name.trim().toLowerCase();
+  const found = existing.find((l) => l.name.toLowerCase() === normalized);
+  return found?.id ?? null;
+}
+
+/**
  * Given a list of label names, returns their IDs.
  * Creates any label that does not yet exist (with the default color).
  * Returns a deduplicated array of label IDs.
