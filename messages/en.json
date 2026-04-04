@@ -77,7 +77,10 @@
       "badge": "Preparing workspace",
       "title": "Loading your workspace.",
       "body": "Checking your session, pulling current context, and preparing the next view."
-    }
+    },
+    "chat": "Loading chat...",
+    "tasks": "Loading tasks...",
+    "settings": "Loading settings..."
   },
   "error": {
     "global": {
