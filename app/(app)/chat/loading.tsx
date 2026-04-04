@@ -16,8 +16,8 @@ export default async function Loading() {
   const t = await getTranslations("loading");
 
   return (
-    <div className="flex h-full flex-col px-4 py-6 sm:px-6">
-      <div className="flex justify-center mb-8">
+    <div className="flex flex-1 flex-col px-4 py-6 sm:px-6">
+      <div className="mb-8 flex justify-center">
         <LoadingRing message={t("chat")} />
       </div>
 

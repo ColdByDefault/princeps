@@ -73,14 +73,8 @@
     }
   },
   "loading": {
-    "workspace": {
-      "badge": "Preparing workspace",
-      "title": "Loading your workspace.",
-      "body": "Checking your session, pulling current context, and preparing the next view."
-    },
-    "chat": "Loading chat...",
-    "tasks": "Loading tasks...",
-    "settings": "Loading settings..."
+    "generic": "Loading...",
+    "chat": "Loading chat..."
   },
   "error": {
     "global": {
@@ -141,7 +135,11 @@
       "chatsTitle": "Saved chats",
       "chatsNote": "This limit never resets — delete chats to free up space.",
       "toolCallsTitle": "AI tool calls this month",
-      "toolCallsNote": "Tool call input/output is included in your approximate token count above."
+      "toolCallsNote": "Tool call input/output is included in your approximate token count above.",
+      "knowledgeDocsTitle": "Knowledge documents (stored)",
+      "knowledgeDocsNote": "Number of documents currently stored.",
+      "knowledgeCharsTitle": "Knowledge text volume (lifetime)",
+      "knowledgeCharsNote": "Cumulative character count of all processed uploads — does not decrease on delete."
     }
   },
   "chatWidget": {
@@ -152,6 +150,7 @@
       "brand": "See-Sweet",
       "home": "Workspace",
       "chat": "Chat",
+      "knowledge": "Knowledge Base",
       "tasks": "Tasks",
       "settings": "Settings",
       "pricing": "Plans",
@@ -443,5 +442,39 @@
     },
     "yes": "Yes",
     "no": "No"
+  },
+  "knowledge": {
+    "metadata": {
+      "title": "Knowledge Base",
+      "description": "Upload documents for the assistant to use as context."
+    },
+    "pageTitle": "Knowledge Base",
+    "pageDescription": "Upload text or markdown files. The assistant uses these documents as context for your queries.",
+    "uploadSection": "Upload document",
+    "documentsSection": "Documents",
+    "approxTokens": "≈{count} tokens total",
+    "emptyTitle": "No documents yet",
+    "emptyDescription": "Upload a .txt or .md file so the assistant can use it as a knowledge source.",
+    "dropZoneTitle": "Drop a file or click to browse",
+    "dropZoneSubtitle": ".txt and .md files are supported",
+    "dropZoneAriaLabel": "Drop zone for file upload",
+    "clearFileAriaLabel": "Remove selected file",
+    "uploadButton": "Upload & index",
+    "uploadingLabel": "Processing…",
+    "uploadButtonAriaLabel": "Upload and index file",
+    "uploadSuccess": "Document indexed successfully.",
+    "uploadError": "Upload failed. Please try again.",
+    "uploadProviderError": "Embedding provider unavailable. Check your provider settings.",
+    "uploadLimitError": "Plan limit reached. Delete documents or upgrade your plan.",
+    "deleteSuccess": "Document deleted.",
+    "deleteError": "Delete failed.",
+    "deleteTooltip": "Delete document",
+    "deleteAriaLabel": "Delete document \u201c{name}\u201d",
+    "deleteDialog": {
+      "title": "Delete document?",
+      "description": "\u201c{name}\u201d and all its text chunks will be permanently deleted. The processed character count will remain in your quota.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    }
   }
 }

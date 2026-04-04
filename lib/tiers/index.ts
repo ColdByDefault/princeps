@@ -6,6 +6,7 @@
 export {
   enforceChatsPerDay,
   enforceKnowledgeDocs,
+  enforceKnowledgeUpload,
   enforceWidgetChats,
   enforceWidgetTools,
   enforceMonthlyLimits,
