@@ -154,6 +154,7 @@
       "chat": "Chat",
       "tasks": "Aufgaben",
       "settings": "Einstellungen",
+      "pricing": "Pläne",
       "userFallback": "Arbeitsbereich-Nutzer",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…",
@@ -414,5 +415,33 @@
     "memberSince": "Mitglied seit",
     "timezone": "Zeitzone",
     "notSet": "Nicht gesetzt"
+  },
+  "pricing": {
+    "metadata": {
+      "title": "Pläne",
+      "description": "Verfügbare Pläne und Kontingente für See-Sweet."
+    },
+    "pageTitle": "Pläne & Kontingente",
+    "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",
+    "currentPlan": "Aktueller Plan",
+    "planNames": {
+      "free": "Free",
+      "pro": "Pro",
+      "premium": "Premium",
+      "enterprise": "Enterprise"
+    },
+    "limits": {
+      "messagesPerMonth": "Nachrichten pro Monat",
+      "tokensPerMonth": "Token pro Monat (ca.)",
+      "chatsPerDay": "Neue Chats pro Tag",
+      "chatHistoryTotal": "Gespeicherte Chats",
+      "knowledgeDocs": "Wissensdokumente",
+      "toolCallsPerMonth": "KI-Werkzeugaufrufe pro Monat",
+      "widgetChatsPerDay": "Widget-Chats pro Tag",
+      "widgetToolsPerDay": "Widget-Werkzeugaufrufe pro Tag",
+      "nudgesEnabled": "Proaktive Hinweise"
+    },
+    "yes": "Ja",
+    "no": "Nein"
   }
 }

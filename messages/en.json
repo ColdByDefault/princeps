@@ -154,6 +154,7 @@
       "chat": "Chat",
       "tasks": "Tasks",
       "settings": "Settings",
+      "pricing": "Plans",
       "userFallback": "Workspace user",
       "signOut": "Sign out",
       "signingOut": "Signing out…",
@@ -414,5 +415,33 @@
     "memberSince": "Member since",
     "timezone": "Timezone",
     "notSet": "Not set"
+  },
+  "pricing": {
+    "metadata": {
+      "title": "Plans",
+      "description": "Available plans and quotas for See-Sweet."
+    },
+    "pageTitle": "Plans & Quotas",
+    "pageSubtitle": "Your current plan and all available options.",
+    "currentPlan": "Current plan",
+    "planNames": {
+      "free": "Free",
+      "pro": "Pro",
+      "premium": "Premium",
+      "enterprise": "Enterprise"
+    },
+    "limits": {
+      "messagesPerMonth": "Messages per month",
+      "tokensPerMonth": "Approx. tokens per month",
+      "chatsPerDay": "New chats per day",
+      "chatHistoryTotal": "Saved chats",
+      "knowledgeDocs": "Knowledge documents",
+      "toolCallsPerMonth": "AI tool calls per month",
+      "widgetChatsPerDay": "Widget chats per day",
+      "widgetToolsPerDay": "Widget tool calls per day",
+      "nudgesEnabled": "Proactive nudges"
+    },
+    "yes": "Yes",
+    "no": "No"
   }
 }

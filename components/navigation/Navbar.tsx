@@ -11,6 +11,7 @@ import {
   MessageSquare,
   Settings,
   CheckSquare,
+  CreditCard,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -70,6 +71,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
     { href: "/chat", icon: MessageSquare, label: t("nav.chat") },
     { href: "/tasks", icon: CheckSquare, label: t("nav.tasks") },
     { href: "/settings", icon: Settings, label: t("nav.settings") },
+    { href: "/pricing", icon: CreditCard, label: t("nav.pricing") },
   ];
 
   const userLabel =
