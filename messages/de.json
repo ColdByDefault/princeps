@@ -43,6 +43,8 @@
       "subtitle": "Registriere dich mit deiner E-Mail-Adresse.",
       "nameLabel": "Name",
       "namePlaceholder": "Dein Name",
+      "usernameLabel": "Benutzername",
+      "usernamePlaceholder": "benutzername_123",
       "emailLabel": "E-Mail",
       "emailPlaceholder": "du@beispiel.de",
       "passwordLabel": "Passwort",

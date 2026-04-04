@@ -43,6 +43,8 @@
       "subtitle": "Sign up with your email address.",
       "nameLabel": "Name",
       "namePlaceholder": "Your name",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "username_123",
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "passwordLabel": "Password",

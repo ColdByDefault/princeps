@@ -1,7 +1,7 @@
 /**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault. All Rights Reserved.
- */ 
+ */
 
 import { z } from "zod";
 
@@ -11,6 +11,14 @@ export const signUpSchema = z
       .string()
       .min(2, "Name must be at least 2 characters.")
       .max(100, "Name must be at most 100 characters."),
+    username: z
+      .string()
+      .min(3, "Username must be at least 3 characters.")
+      .max(30, "Username must be at most 30 characters.")
+      .regex(
+        /^[a-zA-Z0-9_.]+$/,
+        "Username can only contain letters, numbers, underscores, and dots.",
+      ),
     email: z.string().email("Please enter a valid email address."),
     password: z.string().min(8, "Password must be at least 8 characters."),
     confirmPassword: z.string(),

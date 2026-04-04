@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -66,18 +66,6 @@ export function EditTaskDialog({
   const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>(
     task?.labels.map((l) => l.id) ?? [],
   );
-
-  // Sync state when the task prop changes (different task opened for edit)
-  useEffect(() => {
-    if (task) {
-      setTitle(task.title);
-      setNotes(task.notes ?? "");
-      setPriority(task.priority);
-      setStatus(task.status);
-      setDueDate(task.dueDate ? task.dueDate.slice(0, 10) : "");
-      setSelectedLabelIds(task.labels.map((l) => l.id));
-    }
-  }, [task]);
 
   function toggleLabel(id: string) {
     setSelectedLabelIds((prev) =>
