@@ -100,7 +100,7 @@
     },
     "tabs": {
       "appearance": "Erscheinungsbild",
-      "provider": "KI-Anbieter",
+      "provider": "KI",
       "usage": "Nutzung",
       "labels": "Labels"
     },
@@ -344,6 +344,62 @@
     },
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen"
+  },
+  "tools": {
+    "title": "Verfügbare Werkzeuge",
+    "description": "Formulierungen, mit denen du die einzelnen Werkzeuge aktivieren kannst.",
+    "groups": {
+      "tasks": "Aufgaben",
+      "labels": "Labels",
+      "profile": "Profil"
+    },
+    "catalog": {
+      "create_task": {
+        "label": "Aufgabe erstellen",
+        "what": "Erstellt eine neue Aufgabe mit optionaler Priorität, Fälligkeitsdatum und Labels.",
+        "example": "\"Aufgabe hinzufügen: Q2-Bericht prüfen, hohe Priorität, fällig Freitag\""
+      },
+      "list_tasks": {
+        "label": "Aufgaben anzeigen",
+        "what": "Zeigt deine Aufgaben an, optional gefiltert nach Status.",
+        "example": "\"Welche offenen Aufgaben habe ich?\" oder \"Zeige alle dringenden Aufgaben\""
+      },
+      "complete_task": {
+        "label": "Aufgabe abschließen",
+        "what": "Markiert eine Aufgabe als erledigt.",
+        "example": "\"Markiere die Bericht-Aufgabe als erledigt\""
+      },
+      "update_task": {
+        "label": "Aufgabe bearbeiten",
+        "what": "Ändert Titel, Notizen, Priorität, Fälligkeitsdatum, Status oder Labels einer Aufgabe.",
+        "example": "\"Setze die Bericht-Aufgabe auf dringend und verschiebe das Datum auf Montag\""
+      },
+      "create_label": {
+        "label": "Label erstellen",
+        "what": "Erstellt ein neues globales Label mit optionaler Farbe.",
+        "example": "\"Erstelle ein Label namens Arbeit in Blau\""
+      },
+      "list_labels": {
+        "label": "Labels anzeigen",
+        "what": "Listet alle deine Labels auf.",
+        "example": "\"Welche Labels habe ich?\""
+      },
+      "update_label": {
+        "label": "Label bearbeiten",
+        "what": "Benennt ein Label um oder ändert seine Farbe.",
+        "example": "\"Benenne das Label Arbeit in Professionell um\""
+      },
+      "delete_label": {
+        "label": "Label löschen",
+        "what": "Löscht ein Label und entfernt es von allen verknüpften Einträgen.",
+        "example": "\"Lösche das Label namens Alt\""
+      },
+      "get_user_info": {
+        "label": "Meine Infos abrufen",
+        "what": "Gibt deine Profildaten zurück: Name, E-Mail, Plan, Zeitzone und Mitglied seit.",
+        "example": "\"Welchen Plan habe ich?\" oder \"Zeige meine Profilinfos\""
+      }
+    }
   },
   "profile": {
     "metadata": {
