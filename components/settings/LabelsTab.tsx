@@ -6,7 +6,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Pencil, Trash2, Plus, Tag } from "lucide-react";
+import { Pencil, Trash2, Plus, Tag, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -107,6 +107,21 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
   // Delete dialog
   const [deletingLabel, setDeletingLabel] = useState<LabelRecord | null>(null);
   const [isPendingDelete, startDelete] = useTransition();
+
+  // Refresh
+  const [isPendingRefresh, startRefresh] = useTransition();
+
+  function handleRefresh() {
+    startRefresh(async () => {
+      const res = await fetch("/api/labels");
+      if (res.ok) {
+        const { labels: updated } = (await res.json()) as {
+          labels: LabelRecord[];
+        };
+        setLabels(updated);
+      }
+    });
+  }
 
   // ── Create ────────────────────────────────────────────────────────────────
 
@@ -211,17 +226,33 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
           <p className="text-sm font-medium">{t("title")}</p>
           <p className="text-sm text-muted-foreground">{t("description")}</p>
         </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="cursor-pointer shrink-0 rounded-full border-border/70"
-          onClick={openCreate}
-          aria-label={t("newLabel")}
-        >
-          <Plus className="size-3.5" />
-          {t("newLabel")}
-        </Button>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="cursor-pointer rounded-full border-border/70"
+            disabled={isPendingRefresh}
+            onClick={handleRefresh}
+            aria-label={t("refresh")}
+          >
+            <RefreshCw
+              className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
+            />
+            {isPendingRefresh ? t("refreshing") : t("refresh")}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="cursor-pointer shrink-0 rounded-full border-border/70"
+            onClick={openCreate}
+            aria-label={t("newLabel")}
+          >
+            <Plus className="size-3.5" />
+            {t("newLabel")}
+          </Button>
+        </div>
       </div>
 
       {/* Labels list */}

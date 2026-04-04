@@ -5,7 +5,10 @@
 
 "use client";
 
+import { useState, useTransition } from "react";
+import { RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import { PlanBadge } from "@/components/shared";
 import type { UsageSummary } from "@/types/billing";
 
@@ -62,8 +65,20 @@ type UsageTabProps = {
   usage: UsageSummary;
 };
 
-export function UsageTab({ usage }: UsageTabProps) {
+export function UsageTab({ usage: initialUsage }: UsageTabProps) {
   const t = useTranslations("settings.usage");
+  const [usage, setUsage] = useState<UsageSummary>(initialUsage);
+  const [isPending, startTransition] = useTransition();
+
+  function handleRefresh() {
+    startTransition(async () => {
+      const res = await fetch("/api/settings/usage");
+      if (res.ok) {
+        const updated = (await res.json()) as UsageSummary;
+        setUsage(updated);
+      }
+    });
+  }
 
   const resetLabel = usage.monthlyResetDate
     ? `${usage.monthlyResetDate}`
@@ -71,6 +86,27 @@ export function UsageTab({ usage }: UsageTabProps) {
 
   return (
     <div className="space-y-2">
+      {/* Section header */}
+      <div className="flex items-center justify-between gap-4 pb-4">
+        <div className="space-y-0.5">
+          <p className="text-sm font-medium">{t("title")}</p>
+          <p className="text-sm text-muted-foreground">{t("description")}</p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="cursor-pointer shrink-0 rounded-full border-border/70"
+          disabled={isPending}
+          onClick={handleRefresh}
+        >
+          <RefreshCw
+            className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
+          />
+          {isPending ? t("refreshing") : t("refresh")}
+        </Button>
+      </div>
+
       {/* Plan header */}
       <div className="flex items-center justify-between py-4">
         <p className="text-sm font-medium text-muted-foreground">

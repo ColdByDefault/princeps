@@ -125,6 +125,10 @@
       "notAvailable": "Nicht verfügbar"
     },
     "usage": {
+      "title": "Nutzung & Kontingente",
+      "description": "Deine aktuelle Plannutzung für diesen Abrechnungszeitraum.",
+      "refresh": "Aktualisieren",
+      "refreshing": "Wird aktualisiert…",
       "planLabel": "Aktueller Plan",
       "resetLabel": "Monatliche Zurücksetzung",
       "resetUnknown": "Noch nicht erfasst",
@@ -297,6 +301,8 @@
     "title": "Labels",
     "description": "Globale Labels für Aufgaben, Kontakte und weitere Einträge.",
     "newLabel": "Neues Label",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert…",
     "empty": "Noch keine Labels.",
     "fields": {
       "name": "Name",

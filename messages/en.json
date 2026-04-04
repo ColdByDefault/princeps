@@ -125,6 +125,10 @@
       "notAvailable": "Not available"
     },
     "usage": {
+      "title": "Usage & Quotas",
+      "description": "Your current plan usage for this billing period.",
+      "refresh": "Refresh",
+      "refreshing": "Refreshing…",
       "planLabel": "Current plan",
       "resetLabel": "Monthly reset",
       "resetUnknown": "Not tracked yet",
@@ -297,6 +301,8 @@
     "title": "Labels",
     "description": "Global labels for tasks, contacts, and other records.",
     "newLabel": "New label",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…",
     "empty": "No labels yet.",
     "fields": {
       "name": "Name",
