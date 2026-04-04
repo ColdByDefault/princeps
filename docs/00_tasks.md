@@ -17,7 +17,7 @@
 - [ ] Update Token Usages to show usages of calling tools, not only the count of the calls.
 - [x] Add rules for Username (no spaces, unique, etc.) and enforce in Auth routes
 - [x] can the LLM update/edit Labels or only create new ones?
-- [ ] LLM can call tools, but does it check duplications? for example, Task is existing, and LLM calls the tool to create the same task again, or similar task? should we check for that? if so, how? (e.g. check for similar titles, or check for similar content in the description, etc.)
+- [x] LLM can call tools, but does it check duplications? for example, Task is existing, and LLM calls the tool to create the same task again, or similar task? should we check for that? if so, how? (e.g. check for similar titles, or check for similar content in the description, etc.)
 
 # Plan
 

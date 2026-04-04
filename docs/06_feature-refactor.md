@@ -14,7 +14,11 @@ A complete feature in See-Sweet spans six layers:
 prisma/schema.prisma          ← 1. Data model
 lib/<feature>/                ← 2. Server logic (Zod + DB)
 app/api/<feature>/            ← 3. REST API routes
-lib/tools/                    ← 4. LLM tool definitions + executor
+lib/tools/                    ← 4. LLM tool definitions + handler + executor
+  registry.ts                 ←    tool schemas
+  types.ts                    ←    ActionResult + ToolHandler types
+  handlers/<feature>.handler.ts ←  feature-specific tool logic (one file per feature)
+  executor.ts                 ←    thin dispatcher — never edited for new features
 lib/context/<feature>.slot.ts ← 5. LLM system prompt context slot
 components/<feature>/         ← 6. UI components + client hook
 app/(app)/<feature>/page.tsx  ← 7. Server page (auth + data)
@@ -203,41 +207,57 @@ Good tool descriptions are critical — the LLM reads them to decide which tool 
 
 ### `executor.ts`
 
-Exports `executeToolCall(userId, toolCall): Promise<ActionResult>`.
+Thin dispatcher — **never add feature logic here**. Exports `executeToolCall(userId, toolCall): Promise<ActionResult>`.
 
-- Parse `toolCall.function.arguments` with `JSON.parse` (it's a string from the LLM).
-- Validate with the matching Zod schema via `safeParse`.
-- Dispatch to the correct `lib/<feature>/` logic.
-- Return `{ ok: true, data }` or `{ ok: false, error }`.
+```
+lib/tools/
+  types.ts                      ← ActionResult + ToolHandler types
+  registry.ts                   ← tool schemas (OpenAI format)
+  resolvers.ts                  ← shared name→ID helpers
+  executor.ts                   ← ≤50 lines: parses args, looks up handler, calls it
+  handlers/
+    tasks.handler.ts            ← all task tool cases
+    labels.handler.ts           ← all label tool cases
+    <feature>.handler.ts        ← add one file per new feature
+```
+
+**To add a new feature's tools:**
+
+1. Create `lib/tools/handlers/<feature>.handler.ts` — export a `featureHandlers` record mapping tool names to handler functions.
+2. Spread it into `HANDLERS` in `executor.ts` — that's the only change needed there.
 
 ```ts
+// types.ts
 export type ActionResult =
   | { ok: true; data: unknown }
   | { ok: false; error: string };
-
-export async function executeToolCall(
+export type ToolHandler = (
   userId: string,
-  toolCall: LLMToolCall,
-): Promise<ActionResult> {
-  let args: Record<string, unknown>;
-  try {
-    args = JSON.parse(toolCall.function.arguments);
-  } catch {
-    return { ok: false, error: "Invalid JSON arguments." };
-  }
+  args: Record<string, unknown>,
+) => Promise<ActionResult>;
 
-  if (toolCall.function.name === "create_task") {
-    const parsed = createTaskSchema.safeParse(args);
-    if (!parsed.success)
-      return {
-        ok: false,
-        error: parsed.error.issues[0]?.message ?? "Invalid input.",
-      };
-    return { ok: true, data: await createTask(userId, parsed.data) };
-  }
-  // ... other tools
+// executor.ts — stays ≤50 lines forever
+const HANDLERS = {
+  ...taskHandlers,
+  ...labelHandlers,
+  // ...meetingHandlers  ← just add this line for a new feature
+};
+
+export async function executeToolCall(userId, toolCall): Promise<ActionResult> {
+  const args = JSON.parse(toolCall.function.arguments);
+  const handler = HANDLERS[toolCall.function.name];
+  if (!handler)
+    return { ok: false, error: `Unknown tool: ${toolCall.function.name}` };
+  return handler(userId, args);
 }
 ```
+
+Each `*.handler.ts`:
+
+- Is `"server-only"`.
+- Imports only from its own `lib/<feature>/` layer.
+- Validates with matching Zod schema via `safeParse`.
+- Returns `{ ok: true, data }` or `{ ok: false, error }`.
 
 ### How tools flow through the LLM stream
 

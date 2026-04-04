@@ -22,8 +22,10 @@ applyTo: "app/api/**, lib/**, prisma/**, proxy.ts"
 ## Tools — `lib/tools/`
 
 - `registry.ts` — every tool the LLM can call, defined in OpenAI function-calling schema format.
-- `executor.ts` — `executeToolCall(userId, toolCall)` entry point. Validates required fields, resolves human-readable names to IDs (via `resolvers.ts`), checks for duplicates, delegates to the appropriate `lib/<feature>/create.logic.ts` or `update.logic.ts`, and returns a structured `ActionResult`.
-- `resolvers.ts` — `resolveContactIdsByNames()`, `resolveOrCreateLabelIdsByNames()`, and similar shared resolution helpers.
+- `types.ts` — `ActionResult` and `ToolHandler` types shared across all handler files.
+- `executor.ts` — thin dispatcher: parses JSON args, looks up the handler by tool name, calls it. **Never add feature logic here.** Adding a new feature = spread its handler map into `HANDLERS` and done.
+- `handlers/<feature>.handler.ts` — one file per feature domain. Owns validation (Zod `safeParse`), name→ID resolution, duplicate checks, and delegation to `lib/<feature>/` logic. Returns `ActionResult`.
+- `resolvers.ts` — shared name→ID helpers (`resolveOrCreateLabelIdsByNames`, `resolveLabelIdByName`, etc.) used across handler files.
 - Tools are feature-agnostic. Chat, cron, webhooks, and future agents all consume the same executor.
 
 ## LLM Provider — `lib/llm/`

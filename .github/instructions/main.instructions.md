@@ -38,8 +38,11 @@ name: "See-Sweet Repo Overview"
 
 - Standalone orchestration layer, not owned by any feature.
 - `registry.ts` — tool definitions in OpenAI function-calling schema format.
-- `executor.ts` — `executeToolCall(userId, toolCall)` dispatcher. Resolves names→IDs, deduplicates, delegates to `lib/<feature>/` logic, returns structured results.
-- `resolvers.ts` — shared name→ID resolution helpers (contacts by name, labels by name with auto-create).
+- `types.ts` — `ActionResult` and `ToolHandler` shared types.
+- `executor.ts` — thin dispatcher: parses JSON args, looks up handler by name, calls it. Never modified for new features.
+- `handlers/<feature>.handler.ts` — one file per feature domain. Owns validation, name→ID resolution, duplicate checks, and delegation to `lib/<feature>/` logic.
+- `resolvers.ts` — shared name→ID resolution helpers (labels by name with auto-create, etc.).
+- Adding a new feature's tools: create `handlers/<feature>.handler.ts`, spread into `HANDLERS` in `executor.ts`. Done.
 - Any surface can invoke tools: chat, cron, webhooks, future agents.
 
 ### LLM Provider — `lib/llm/`

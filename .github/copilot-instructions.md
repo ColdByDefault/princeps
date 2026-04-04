@@ -37,13 +37,18 @@ app/api/<feature>/                     API routes — thin handlers that delegat
 ```
 lib/tools/                             Orchestration layer — feature-agnostic
   registry.ts                          Tool definitions (OpenAI function-calling schemas)
-  executor.ts                          executeToolCall() dispatcher
+  types.ts                             ActionResult + ToolHandler shared types
+  executor.ts                          Thin dispatcher — looks up handler by name, calls it
   resolvers.ts                         Shared name→ID resolution (contacts, labels)
+  handlers/
+    tasks.handler.ts                   All task tool logic
+    labels.handler.ts                  All label tool logic
+    <feature>.handler.ts               One file per feature domain
 ```
 
 - Any surface can execute tools: chat, cron, webhooks, future agents.
 - Chat is just another feature that talks to the LLM and passes tool calls to `lib/tools/`.
-- Adding a new tool never requires touching chat code.
+- Adding a new feature's tools = create one `handlers/<feature>.handler.ts`, spread it into `HANDLERS` in `executor.ts`. No other file changes.
 
 ### LLM integration
 
