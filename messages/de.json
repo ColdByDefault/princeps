@@ -73,14 +73,8 @@
     }
   },
   "loading": {
-    "workspace": {
-      "badge": "Arbeitsbereich wird vorbereitet",
-      "title": "Dein Arbeitsbereich wird geladen.",
-      "body": "Sitzung wird geprüft, aktueller Kontext wird geladen und die nächste Ansicht wird vorbereitet."
-    },
-    "chat": "Chat wird geladen...",
-    "tasks": "Aufgaben werden geladen...",
-    "settings": "Einstellungen werden geladen..."
+    "generic": "Wird geladen...",
+    "chat": "Chat wird geladen..."
   },
   "error": {
     "global": {
