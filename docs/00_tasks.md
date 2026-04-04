@@ -4,11 +4,11 @@
 - [ ] Add missing navigations to sidebar.
 - [x] Empty Chats cant be renamed, deleted
 - [x] Add refresh buttons to settings pages to reflect changes immediately without needing a full page refresh.
-- [ ] Add UI errors when try to navigate to protected routes (e.g. chat) while not authenticated, or when hitting rate limits, etc.
+- [x] Add UI errors when try to navigate to protected routes (e.g. chat) while not authenticated, or when hitting rate limits, etc.
 - [ ] TasksList UI needs improvment.
 - [ ] Add dynamic loading.tsx messages, or generalize it a bit. (currently it shows "Preparing Workspace..." on every loading state, but it could be more dynamic, e.g. "Loading chats...", etc.), use `components\shared\LoadingRing.tsx`
 - [ ] Add Markdown support for system prompts in chat settings.
-- [ ] Re-order App-Settings Tabs.
+- [x] Re-order App-Settings Tabs.
 
 # Priority
 
@@ -37,4 +37,4 @@
   - [ ] Read/write google calender.
   - [ ] Create JIRA tickets.
   - [ ] Send Emails.
-- [ ] Allow sign-In with username/password 
+- [ ] Allow sign-In with username/password
