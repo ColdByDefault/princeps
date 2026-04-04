@@ -77,10 +77,10 @@ WMO code → label/emoji mapping is a small static lookup in `fetch.ts`.
 
 Five files. All `import "server-only"`.
 
-### `schemas.ts`
+### `shared.logic.ts`
 
-No user-created inputs — notifications are created by the system/LLM only.
-Exports `listNotificationsSchema` (query params: `limit`, `dismissed`).
+Exports `NOTIFICATION_SELECT`, `toNotificationRecord()`, `findTodayGreeting(userId)`, and `todayUtc()`.
+`findTodayGreeting` queries by `metadata->>'date'` to support the dedup check without loading the full record.
 
 ### `list.logic.ts`
 
@@ -88,7 +88,8 @@ Exports `listNotificationsSchema` (query params: `limit`, `dismissed`).
 
 ### `mark-read.logic.ts`
 
-`markRead(userId, id)` — sets `read: true`. Verifies ownership.
+`markNotificationRead(userId, id)` — sets `read: true`. Verifies ownership.
+`markAllNotificationsRead(userId)` — bulk update.
 
 ### `delete.logic.ts`
 
@@ -99,13 +100,17 @@ Exports `listNotificationsSchema` (query params: `limit`, `dismissed`).
 
 `generateDailyGreeting(userId)` — the core logic:
 
-1. Load user `name`, `timezone`, open task count.
-2. **Deduplication check**: query `Notification` where `userId`, `category = "daily_greeting"`, and `metadata->>'date' = today_utc`. If found, return early. Skip if `FORCE_GREETING=true` in env (dev override).
-3. Fetch `WeatherSnapshot` via `lib/weather/fetch.ts`.
-4. Build a short LLM prompt with: user name, local time, weather, open tasks count. Ask for a brief warm personal greeting (2–3 sentences max, no bullet points).
-5. Call `callChat()` from `lib/llm-providers/provider.ts` with the prompt.
-6. Store result as `Notification` with `category: "daily_greeting"`, `source: "assistant"`, `metadata: { date, weather }`.
-7. Return the created notification.
+1. Load user `name`, `timezone`, `preferences`, and open task count.
+2. **Opt-out check**: if `preferences.notificationsEnabled === false`, return `{ created: false, notification: null }` immediately. Defaults to `true` if unset.
+3. **Deduplication check**: query `Notification` where `userId`, `category = "daily_greeting"`, and `metadata->>'date' = today_utc`. If found, return early. Skip if `FORCE_GREETING=true` in env (dev override).
+4. Fetch `WeatherSnapshot` via `lib/weather/fetch.ts`.
+5. Build a short LLM prompt with: user name, local time, weather, open task count. The system prompt explicitly instructs the LLM to **address the user by their first name**.
+6. Call `callChat()` from `lib/llm-providers/provider.ts`.
+7. **Token tracking**: call `accumulateTokens(userId, promptLength, responseLength)` to increment `UsageCounter.tokenMonthlyCount` — greetings count against the user's monthly quota the same way chat messages do.
+8. Store result as `Notification` with `category: "daily_greeting"`, `source: "assistant"`, `metadata: { date, weather }`.
+9. Return the created notification.
+
+**To change greeting content / tone**, edit the `systemPrompt` and `userPrompt` arrays in `greeting.logic.ts`. No other files need changing.
 
 ---
 
@@ -121,7 +126,7 @@ Auth → `deleteAllNotifications(userId)` → `204`.
 
 ### `[id]/route.ts` — `PATCH`
 
-Auth → parse id → `markRead(userId, id)` → return updated record.
+Auth → parse id → `markNotificationRead(userId, id)` → return updated record.
 
 ### `[id]/route.ts` — `DELETE`
 
@@ -136,12 +141,10 @@ Auth → `generateDailyGreeting(userId)` → return `{ created: boolean, notific
 
 ## Hook — `hooks/use-notifications.ts`
 
-Already exists (empty file). Will implement:
-
 - `notifications` — state array
 - `unreadCount` — derived
 - `loading`
-- `triggerGreeting()` — POST `/api/notifications/greeting` on mount (once per session via `useRef` guard)
+- `triggerGreeting()` — POST `/api/notifications/greeting` on mount (once per session via `useRef` guard). When a new greeting is created, shows a **Sonner toast** with the greeting title and body.
 - `markRead(id)` — PATCH, optimistic update
 - `deleteOne(id)` — DELETE, optimistic remove
 - `deleteAll()` — DELETE bulk, clear state
@@ -152,24 +155,24 @@ Already exists (empty file). Will implement:
 
 ### `NotificationBell.tsx`
 
-- Bell icon (Lucide `Bell`) in the Navbar.
+- Bell icon (Lucide `Bell`) in the Navbar (Desktop + Mobile).
 - Red dot badge showing unread count (hidden when 0).
 - Clicking opens the Shadcn `Sheet` (right side).
-- Calls `triggerGreeting()` from the hook on mount — so the greeting fires when the user first lands anywhere in the authenticated layout.
+- Calls `triggerGreeting()` from the hook on mount — so the greeting fires when the user first loads any authenticated page.
 
 ### `NotificationDrawer.tsx`
 
 - Shadcn `Sheet` with `side="right"`.
 - Header: "Notifications" + "Clear all" button.
 - Scrollable list of `NotificationItem` components.
-- Empty state: a short message when no notifications exist.
+- Empty state message when no notifications exist.
+- Marks all unread as read when the drawer opens.
 
 ### `NotificationItem.tsx`
 
 - Renders `title`, `body`, relative timestamp.
-- Mark-read on first view (triggered when drawer opens via `markRead`).
-- Individual delete button (X icon, `cursor-pointer`, `aria-label`).
-- Unread indicator: subtle left border or dot.
+- Unread indicator: left border `border-l-primary/60`.
+- Individual delete button (X icon, `cursor-pointer`, `aria-label`). Opacity hidden until hover.
 
 ### `index.ts`
 
@@ -181,14 +184,30 @@ Barrel export.
 
 ### Server page
 
-- Fetch `WeatherSnapshot` server-side (import from `lib/weather/fetch.ts`).
-- Pass to `HomeShell` as prop. On fetch error, pass `null` — weather is non-critical.
+- Computes a **static time-based greeting title** server-side (`buildGreetingTitle`) based on local hour + user language. Example: "Good morning, Max!" / "Guten Abend, Anna!".
+- Fetches `WeatherSnapshot` server-side. On error, passes `null` — weather is non-critical.
+- Passes `greetingTitle` and `weather` as props to `HomeShell`.
 
 ### `components/home/HomeShell.tsx`
 
+- Displays the static time-based greeting (no LLM dependency on this page).
 - Displays weather widget: emoji + temperature + condition label + location.
-- Shows today's greeting from the notification store (pulled from hook).
-- Replaces the current placeholder `{t("welcome")}`.
+- **Does not import `useNotifications`.** The LLM greeting body lives only in the notification drawer.
+
+---
+
+## User Settings — Notifications Toggle
+
+Users can enable or disable daily greetings in **Settings → Appearance**.
+
+Implementation chain:
+
+- `UserPreferences.notificationsEnabled: boolean | null` — in `lib/settings/user-preferences.logic.ts`
+- PATCH `/api/settings` accepts `notificationsEnabled: boolean`
+- `components/settings/AppearanceTab.tsx` — Switch toggle with title, description, and a disclaimer: _"Greetings use your monthly token quota."_
+- `app/(app)/settings/page.tsx` reads `initialPrefs.notificationsEnabled ?? true` and passes down via `SettingsShell` → `AppearanceTab`
+
+Disabling sets `preferences.notificationsEnabled = false` in the DB. `greeting.logic.ts` checks this before doing any LLM work.
 
 ---
 
@@ -196,34 +215,22 @@ Barrel export.
 
 New namespace `notifications` in both `messages/de.json` and `messages/en.json`.
 
-Keys needed:
+Implemented keys:
 
 ```
 notifications.title
 notifications.empty
 notifications.clearAll
-notifications.clearAll.confirm
 notifications.deleteOne.ariaLabel
 notifications.bell.ariaLabel
-notifications.unread         (e.g. "{{count}} unread")
-home.weather.feels           (optional "Feels like...")
 home.weather.location
+home.weather.noWeather
+settings.appearance.notificationsTitle
+settings.appearance.notificationsDescription
+settings.appearance.notificationsDisclaimer
 ```
 
-LLM-generated greeting bodies are **not translated** — they are generated directly in the user's preferred language by the LLM prompt.
-
----
-
-## Build Order
-
-1. `lib/weather/timezone-coords.ts` + `fetch.ts`
-2. `lib/notifications/` — all 5 files
-3. `app/api/notifications/` — all routes
-4. `hooks/use-notifications.ts`
-5. `components/notifications/` — Bell + Drawer + Item
-6. Wire bell into `app/(app)/layout.tsx` (authenticated layout)
-7. `components/home/HomeShell.tsx` + update `app/(app)/home/page.tsx`
-8. i18n strings — both locales
+LLM-generated greeting bodies are **not translated** — they are generated directly in the user's preferred language by the LLM prompt instructions.
 
 ---
 
@@ -235,10 +242,3 @@ FORCE_GREETING=true   # bypasses the once-per-day dedup check
 ```
 
 No new secrets. Open-Meteo requires no API key.
-
-
->Open Questions:
-   - Messages from LLM should be calculated and added to right token usage category.
-   - Users can enable/disable this system in settings.
-   - add declaration that notifications consume tokens in the same way as chats, so users are aware of the cost implications.
-   - do i need env var?

@@ -11,6 +11,7 @@ import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { getProviderStatus } from "@/lib/settings/provider-status.logic";
 import { getUserUsage } from "@/lib/settings/usage.logic";
+import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 import { listLabels } from "@/lib/labels/list.logic";
 import { SettingsShell } from "@/components/settings";
 import type { AppLanguage } from "@/types/i18n";
@@ -36,11 +37,13 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const [initialStatus, initialUsage, initialLabels] = await Promise.all([
-    getProviderStatus(),
-    getUserUsage(session.user.id),
-    listLabels(session.user.id),
-  ]);
+  const [initialStatus, initialUsage, initialLabels, initialPrefs] =
+    await Promise.all([
+      getProviderStatus(),
+      getUserUsage(session.user.id),
+      listLabels(session.user.id),
+      getUserPreferences(session.user.id),
+    ]);
   const cookieStore = await cookies();
   const initialTab = cookieStore.get("settings-tab")?.value ?? "appearance";
 
@@ -51,6 +54,7 @@ export default async function SettingsPage() {
         initialTab={initialTab}
         initialUsage={initialUsage}
         initialLabels={initialLabels}
+        initialNotificationsEnabled={initialPrefs.notificationsEnabled ?? true}
       />
     </div>
   );

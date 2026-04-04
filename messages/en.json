@@ -119,7 +119,10 @@
       "themeTitle": "Theme",
       "themeDescription": "Choose between light, dark, or system-based theme.",
       "languageTitle": "Language",
-      "languageDescription": "Choose the display language for your workspace."
+      "languageDescription": "Choose the display language for your workspace.",
+      "notificationsTitle": "Daily Greeting",
+      "notificationsDescription": "Receive a daily personal greeting from your assistant.",
+      "notificationsDisclaimer": "Greetings use your monthly token quota."
     },
     "provider": {
       "title": "Active AI Provider",

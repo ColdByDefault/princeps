@@ -9,6 +9,7 @@ import { db } from "@/lib/db";
 import { callChat } from "@/lib/llm-providers/provider";
 import { fetchWeather } from "@/lib/weather/fetch";
 import { listTasks } from "@/lib/tasks/list.logic";
+import { accumulateTokens } from "@/lib/tiers/enforce";
 import {
   NOTIFICATION_SELECT,
   toNotificationRecord,
@@ -51,10 +52,14 @@ export async function generateDailyGreeting(
   const timezone = user.timezone ?? "UTC";
   const name = user.name ?? "there";
 
-  // Derive language from stored preferences
+  // Derive language + preferences
   const prefs = (user.preferences ?? {}) as Record<string, unknown>;
   const lang = typeof prefs.language === "string" ? prefs.language : "de";
   const langName = lang === "de" ? "German" : "English";
+
+  // Respect user opt-out — notificationsEnabled defaults to true if unset
+  const notificationsEnabled = prefs.notificationsEnabled !== false;
+  if (!notificationsEnabled) return { created: false, notification: null };
 
   // Local time description
   const now = new Date();
@@ -84,7 +89,8 @@ export async function generateDailyGreeting(
   const systemPrompt = [
     `You are the private executive assistant for ${name}.`,
     `Respond only in ${langName}.`,
-    "Write a brief, warm, personal greeting (2–3 sentences maximum). Do not use bullet points, headers, or lists.",
+    `Address the user directly by their first name: ${name}.`,
+    "Write a brief, personal greeting (1-2 sentences maximum). Do not use bullet points, headers, or lists.",
     "Sound like a thoughtful human assistant, not a corporate chatbot. Be natural and genuine.",
     "Do not mention that you are an AI. Do not offer to help — this is just a greeting.",
   ].join("\n");
@@ -104,6 +110,13 @@ export async function generateDailyGreeting(
       { role: "user", content: userPrompt },
     ]);
     greetingBody = result.content?.trim() ?? "";
+
+    // Accumulate token usage — greeting counts against monthly quota same as chat
+    await accumulateTokens(
+      userId,
+      systemPrompt.length + userPrompt.length,
+      greetingBody.length,
+    );
   } catch {
     return { created: false, notification: null };
   }

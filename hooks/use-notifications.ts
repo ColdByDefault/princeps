@@ -5,19 +5,31 @@
 
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 import type { NotificationRecord } from "@/types/api";
+
+// sessionStorage key used to deduplicate the greeting call within a browser tab session.
+// sessionStorage survives page refreshes but is cleared when the tab is closed.
+// It is also synchronous, so the second NotificationBell instance (desktop + mobile both
+// render the bell) sees the flag on the very same render cycle and skips the API call.
+// Exported so logout handlers can clear it when the auth session ends.
+export const GREETING_SESSION_KEY = "ss-greeting-fired";
 
 export function useNotifications() {
   const [notifications, setNotifications] = useState<NotificationRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const greetingFired = useRef(false);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  // Initial load
+  // Initial load + greeting (greeting fires at most once per browser tab session)
   useEffect(() => {
     void fetchNotifications();
+    if (!sessionStorage.getItem(GREETING_SESSION_KEY)) {
+      sessionStorage.setItem(GREETING_SESSION_KEY, "1");
+      void fireGreeting();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function fetchNotifications() {
@@ -33,10 +45,7 @@ export function useNotifications() {
     }
   }
 
-  const triggerGreeting = useCallback(async () => {
-    if (greetingFired.current) return;
-    greetingFired.current = true;
-
+  async function fireGreeting() {
     try {
       const res = await fetch("/api/notifications/greeting", {
         method: "POST",
@@ -48,11 +57,12 @@ export function useNotifications() {
       };
       if (data.created && data.notification) {
         setNotifications((prev) => [data.notification!, ...prev]);
+        toast(data.notification.title, { description: data.notification.body });
       }
     } catch {
       // Non-critical — greeting failure is silent
     }
-  }, []);
+  }
 
   const markRead = useCallback(async (id: string) => {
     // Optimistic
@@ -93,7 +103,6 @@ export function useNotifications() {
     notifications,
     unreadCount,
     loading,
-    triggerGreeting,
     markRead,
     deleteOne,
     deleteAll,

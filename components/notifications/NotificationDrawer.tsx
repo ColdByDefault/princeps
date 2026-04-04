@@ -39,7 +39,7 @@ export function NotificationDrawer({
         side="right"
         className="flex flex-col w-full sm:max-w-sm p-0"
       >
-        <SheetHeader className="flex flex-row items-center justify-between px-4 py-3 border-b border-border/50">
+        <SheetHeader className="flex flex-row items-center justify-start px-4 py-3 border-b border-border/50">
           <SheetTitle className="text-base font-semibold">
             {t("title")}
           </SheetTitle>

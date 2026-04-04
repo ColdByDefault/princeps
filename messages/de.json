@@ -119,7 +119,10 @@
       "themeTitle": "Design",
       "themeDescription": "Wähle zwischen hellem, dunklem oder systembasiertem Design.",
       "languageTitle": "Sprache",
-      "languageDescription": "Wähle die Anzeigesprache deines Arbeitsbereichs."
+      "languageDescription": "Wähle die Anzeigesprache deines Arbeitsbereichs.",
+      "notificationsTitle": "Tägliche Begrüßung",
+      "notificationsDescription": "Erhalte täglich eine persönliche Begrüßung von deinem Assistenten.",
+      "notificationsDisclaimer": "Begrüßungen verbrauchen dein monatliches Token-Kontingent."
     },
     "provider": {
       "title": "Aktiver KI-Anbieter",

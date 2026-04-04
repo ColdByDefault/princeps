@@ -29,6 +29,7 @@ type SettingsShellProps = {
   initialTab: string;
   initialUsage: UsageSummary;
   initialLabels: LabelRecord[];
+  initialNotificationsEnabled: boolean;
 };
 
 export function SettingsShell({
@@ -36,6 +37,7 @@ export function SettingsShell({
   initialTab,
   initialUsage,
   initialLabels,
+  initialNotificationsEnabled,
 }: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
   const safeInitial: SettingsTab = VALID_TABS.includes(
@@ -71,7 +73,9 @@ export function SettingsShell({
       </TabsList>
 
       <TabsContent value="appearance" className="mt-6 w-full">
-        <AppearanceTab />
+        <AppearanceTab
+          initialNotificationsEnabled={initialNotificationsEnabled}
+        />
       </TabsContent>
 
       <TabsContent value="labels" className="mt-6 w-full">

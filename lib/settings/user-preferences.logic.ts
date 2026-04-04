@@ -8,12 +8,14 @@ import "server-only";
 import { cache } from "react";
 import { db } from "@/lib/db";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
+import type { Prisma } from "@/prisma/generated/prisma/client";
 
 // ─── Types ────────────────────────────────────────────────
 
 export interface UserPreferences {
   language: AppLanguage | null;
   theme: string | null;
+  notificationsEnabled: boolean | null;
 }
 
 // ─── Internal helpers ─────────────────────────────────────
@@ -42,7 +44,12 @@ function parsePreferences(raw: unknown): UserPreferences {
       ? rawTheme
       : null;
 
-  return { language, theme };
+  const notificationsEnabled =
+    typeof obj.notificationsEnabled === "boolean"
+      ? obj.notificationsEnabled
+      : null;
+
+  return { language, theme, notificationsEnabled };
 }
 
 // ─── Queries ──────────────────────────────────────────────
@@ -58,7 +65,8 @@ export const getUserPreferences = cache(
       select: { preferences: true },
     });
 
-    if (!user) return { language: null, theme: null };
+    if (!user)
+      return { language: null, theme: null, notificationsEnabled: null };
     return parsePreferences(user.preferences);
   },
 );
@@ -71,14 +79,22 @@ export async function updateUserPreferences(
 ): Promise<void> {
   const current = await getUserPreferences(userId);
 
-  const next: Record<string, string> = {};
   const merged = { ...current, ...patch };
+  const next: Record<string, unknown> = {};
 
   if (merged.language) next.language = merged.language;
   if (merged.theme) next.theme = merged.theme;
+  if (
+    merged.notificationsEnabled !== null &&
+    merged.notificationsEnabled !== undefined
+  ) {
+    next.notificationsEnabled = merged.notificationsEnabled;
+  }
 
   await db.user.update({
     where: { id: userId },
-    data: { preferences: next },
+    data: {
+      preferences: next as unknown as Prisma.InputJsonValue,
+    },
   });
 }
