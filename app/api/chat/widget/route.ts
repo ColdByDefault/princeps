@@ -2,27 +2,30 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  *
- * POST /api/chat/[chatId]/stream
- * Body: { message: string }
+ * POST /api/chat/widget
+ * Body: { message: string; history: Array<{role: "user"|"assistant"; content: string}> }
  * Response: text/event-stream
  *   data: {"type":"token","text":"…"}
  *   data: {"type":"done"}
  *   data: {"type":"error","message":"…"}
+ *   data: {"type":"action","name":"…","record":{…}}
+ *
+ * Mirrors the main chat stream route but without DB persistence.
+ * Widget conversations live in the client's sessionStorage only — they are
+ * not counted toward saved-chat limits.  All shared monthly quotas
+ * (messages, tokens, tool calls) are enforced identically to main chat.
+ * An additional daily widget-specific gate (enforceWidgetChats /
+ * enforceWidgetTools) applies on top.
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import {
-  getChatMessages,
-  saveUserMessage,
-  saveAssistantMessage,
-  touchChat,
-} from "@/lib/chat/messages.logic";
-import { setInitialTitle } from "@/lib/chat/create.logic";
 import { streamChat } from "@/lib/llm-providers/provider";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
 import {
+  enforceWidgetChats,
+  enforceWidgetTools,
   enforceMonthlyLimits,
   accumulateTokens,
   enforceToolCallsMonthly,
@@ -33,16 +36,14 @@ import { TOOL_REGISTRY } from "@/lib/tools/registry";
 import { executeToolCall } from "@/lib/tools/executor";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
 
-type Params = { params: Promise<{ chatId: string }> };
-
-export async function POST(req: Request, { params }: Params) {
+export async function POST(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Rate limiting
+  // Rate limiting — shared limiter with main chat
   const identifier = getRateLimitIdentifier(req, session.user.id);
   const rateLimit = chatRateLimiter.check(identifier);
 
@@ -60,8 +61,7 @@ export async function POST(req: Request, { params }: Params) {
 
   const body = (await req.json()) as {
     message?: unknown;
-    temperature?: unknown;
-    timeoutMs?: unknown;
+    history?: unknown;
   };
 
   if (typeof body.message !== "string" || !body.message.trim()) {
@@ -70,39 +70,34 @@ export async function POST(req: Request, { params }: Params) {
 
   const userMessage = body.message.trim();
 
-  const chatOptions: LLMChatOptions = {
-    ...(typeof body.temperature === "number" && {
-      temperature: Math.min(2, Math.max(0, body.temperature)),
-    }),
-    ...(typeof body.timeoutMs === "number" && {
-      timeoutMs: Math.min(120_000, Math.max(5_000, body.timeoutMs)),
-    }),
-    tools: TOOL_REGISTRY,
-  };
-  const { chatId } = await params;
+  // Validate and sanitise the history array sent from the client
+  const rawHistory = Array.isArray(body.history) ? body.history : [];
+  const history: Array<{ role: "user" | "assistant"; content: string }> = (
+    rawHistory as unknown[]
+  )
+    .filter(
+      (h): h is { role: "user" | "assistant"; content: string } =>
+        typeof h === "object" &&
+        h !== null &&
+        ((h as Record<string, unknown>).role === "user" ||
+          (h as Record<string, unknown>).role === "assistant") &&
+        typeof (h as Record<string, unknown>).content === "string",
+    )
+    // Cap history depth to avoid runaway context
+    .slice(-40);
 
-  // Verify ownership and load history
-  const chatData = await getChatMessages(chatId, session.user.id);
-
-  if (!chatData) {
-    return NextResponse.json({ error: "Chat not found" }, { status: 404 });
+  // Widget-specific daily gate
+  const widgetCheck = await enforceWidgetChats(session.user.id);
+  if (!widgetCheck.allowed) {
+    return NextResponse.json({ error: widgetCheck.reason }, { status: 429 });
   }
 
-  // Enforce monthly message + token budget before touching the LLM
+  // Shared monthly message + token budget (same pool as main chat)
   const monthlyCheck = await enforceMonthlyLimits(session.user.id);
   if (!monthlyCheck.allowed) {
     return NextResponse.json({ error: monthlyCheck.reason }, { status: 429 });
   }
 
-  // Persist user message immediately
-  await saveUserMessage(chatId, userMessage);
-
-  // Auto-title on first message
-  if (chatData.messages.length === 0) {
-    await setInitialTitle(chatId, userMessage);
-  }
-
-  // Build message array for LLM
   const prefs = await getUserPreferences(session.user.id);
 
   const systemMessage = await buildSystemPrompt(session.user.id, userMessage, {
@@ -111,12 +106,13 @@ export async function POST(req: Request, { params }: Params) {
 
   const llmMessages: LLMMessage[] = [
     systemMessage,
-    ...chatData.messages.map((m) => ({
-      role: m.role as "user" | "assistant",
-      content: m.content,
-    })),
+    ...history,
     { role: "user" as const, content: userMessage },
   ];
+
+  const chatOptions: LLMChatOptions = {
+    tools: TOOL_REGISTRY,
+  };
 
   // Stream response as SSE
   const stream = new ReadableStream({
@@ -146,9 +142,21 @@ export async function POST(req: Request, { params }: Params) {
         }
 
         // If the LLM requested tool calls, execute them and do a second pass
-        // so the LLM can produce a text response after seeing the results.
         if (toolCalls.length > 0) {
-          // Gate on monthly tool call budget before executing
+          // Widget-specific daily tool gate
+          const widgetToolCheck = await enforceWidgetTools(
+            session.user.id,
+            toolCalls.length,
+          );
+          if (!widgetToolCheck.allowed) {
+            send({
+              type: "error",
+              message: widgetToolCheck.reason ?? "Tool call limit reached.",
+            });
+            return;
+          }
+
+          // Shared monthly tool budget
           const toolCheck = await enforceToolCallsMonthly(
             session.user.id,
             toolCalls.length,
@@ -163,20 +171,17 @@ export async function POST(req: Request, { params }: Params) {
 
           const followUp: LLMMessage[] = [...llmMessages];
 
-          // Append the assistant's tool_calls turn (OpenAI requires this in history)
           followUp.push({
             role: "assistant",
             content: null,
             tool_calls: toolCalls,
           });
 
-          // Execute each tool, emit the action event, append the tool result
           for (const toolCall of toolCalls) {
             const result = await executeToolCall(session.user.id, toolCall);
             const resultContent = result.ok
               ? JSON.stringify(result.data)
               : `Error: ${result.error}`;
-            // Accumulate chars for approximate token accounting
             toolCallChars +=
               (toolCall.function.arguments?.length ?? 0) + resultContent.length;
             send({
@@ -207,8 +212,6 @@ export async function POST(req: Request, { params }: Params) {
         });
       } finally {
         if (assistantContent) {
-          await saveAssistantMessage(chatId, assistantContent);
-          await touchChat(chatId);
           // Fire-and-forget — non-critical, must not block the response
           accumulateTokens(
             session.user.id,

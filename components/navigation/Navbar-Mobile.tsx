@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LanguageToggle, PlanBadge } from "@/components/shared";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type NavLink = {
   href: string;
@@ -29,6 +30,7 @@ export type NavbarMobilePanelProps = {
   pathname: string;
   tier?: string | null | undefined;
   userLabel: string;
+  userInitials: string;
   isSigningOut: boolean;
   onSignOut: () => void;
 };
@@ -79,6 +81,7 @@ export function NavbarMobilePanel({
   pathname,
   tier,
   userLabel,
+  userInitials,
   isSigningOut,
   onSignOut,
 }: NavbarMobilePanelProps) {
@@ -111,16 +114,27 @@ export function NavbarMobilePanel({
         <ThemeToggle />
       </div>
 
-      <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-background/70 px-4 py-3 backdrop-blur-sm">
+      <Button
+        type="button"
+        variant="outline"
+        className="cursor-pointer w-full justify-start gap-3 rounded-2xl border-border/70 bg-background/70 px-4 py-3 h-auto backdrop-blur-sm"
+        nativeButton={false}
+        render={<Link href="/profile" />}
+      >
+        <Avatar className="size-7 shrink-0">
+          <AvatarFallback className="bg-primary/10 text-primary text-[11px] font-semibold">
+            {userInitials}
+          </AvatarFallback>
+        </Avatar>
         <span className="truncate text-sm text-muted-foreground">
           {userLabel}
         </span>
         {tier && (
-          <div className="ml-3 flex shrink-0 items-center gap-1.5">
+          <div className="ml-auto flex shrink-0 items-center gap-1.5">
             <PlanBadge tier={tier} />
           </div>
         )}
-      </div>
+      </Button>
 
       <Button
         type="button"

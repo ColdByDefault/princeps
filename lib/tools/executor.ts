@@ -7,6 +7,7 @@ import "server-only";
 
 import { taskHandlers } from "@/lib/tools/handlers/tasks.handler";
 import { labelHandlers } from "@/lib/tools/handlers/labels.handler";
+import { profileHandlers } from "@/lib/tools/handlers/profile.handler";
 import type { LLMToolCall } from "@/types/llm";
 import type { ActionResult } from "@/lib/tools/types";
 
@@ -23,6 +24,7 @@ const HANDLERS: Record<
 > = {
   ...taskHandlers,
   ...labelHandlers,
+  ...profileHandlers,
 };
 
 /**

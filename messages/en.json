@@ -100,7 +100,7 @@
     },
     "tabs": {
       "appearance": "Appearance",
-      "provider": "AI Provider",
+      "provider": "AI",
       "usage": "Usage",
       "labels": "Labels"
     },
@@ -140,8 +140,12 @@
       "tokensTitle": "Approx. tokens this month",
       "chatsTitle": "Saved chats",
       "chatsNote": "This limit never resets — delete chats to free up space.",
-      "toolCallsTitle": "AI tool calls this month"
+      "toolCallsTitle": "AI tool calls this month",
+      "toolCallsNote": "Tool call input/output is included in your approximate token count above."
     }
+  },
+  "chatWidget": {
+    "newChat": "New Chat"
   },
   "shell": {
     "nav": {
@@ -150,6 +154,7 @@
       "chat": "Chat",
       "tasks": "Tasks",
       "settings": "Settings",
+      "pricing": "Plans",
       "userFallback": "Workspace user",
       "signOut": "Sign out",
       "signingOut": "Signing out…",
@@ -158,7 +163,8 @@
       "planFree": "Free",
       "planPro": "Pro",
       "planPremium": "Premium",
-      "planEnterprise": "Enterprise"
+      "planEnterprise": "Enterprise",
+      "profile": "My profile"
     },
     "language": {
       "groupLabel": "Language selector",
@@ -339,5 +345,103 @@
     },
     "editLabel": "Edit",
     "deleteLabel": "Delete"
+  },
+  "tools": {
+    "title": "Available Tools",
+    "description": "Phrases you can say to the assistant to trigger each capability.",
+    "groups": {
+      "tasks": "Tasks",
+      "labels": "Labels",
+      "profile": "Profile"
+    },
+    "catalog": {
+      "create_task": {
+        "label": "Create Task",
+        "what": "Creates a new task with optional priority, due date, and labels.",
+        "example": "\"Add a task: review the Q2 report, high priority, due Friday\""
+      },
+      "list_tasks": {
+        "label": "List Tasks",
+        "what": "Retrieves your tasks, optionally filtered by status.",
+        "example": "\"What tasks do I have open?\" or \"Show me all urgent tasks\""
+      },
+      "complete_task": {
+        "label": "Complete Task",
+        "what": "Marks a task as done.",
+        "example": "\"Mark the Q2 report task as done\""
+      },
+      "update_task": {
+        "label": "Update Task",
+        "what": "Changes a task's title, notes, priority, due date, status, or labels.",
+        "example": "\"Change the report task to urgent and move the due date to Monday\""
+      },
+      "create_label": {
+        "label": "Create Label",
+        "what": "Creates a new global label with an optional color.",
+        "example": "\"Create a label called Work in blue\""
+      },
+      "list_labels": {
+        "label": "List Labels",
+        "what": "Lists all your labels.",
+        "example": "\"What labels do I have?\""
+      },
+      "update_label": {
+        "label": "Update Label",
+        "what": "Renames or recolors an existing label.",
+        "example": "\"Rename the Work label to Professional\""
+      },
+      "delete_label": {
+        "label": "Delete Label",
+        "what": "Deletes a label and removes it from all attached records.",
+        "example": "\"Delete the label called Old\""
+      },
+      "get_user_info": {
+        "label": "Get My Info",
+        "what": "Returns your profile details: name, email, plan, timezone, and member since date.",
+        "example": "\"What plan am I on?\" or \"Show me my profile info\""
+      }
+    }
+  },
+  "profile": {
+    "metadata": {
+      "title": "Profile",
+      "description": "Your account profile."
+    },
+    "title": "Profile",
+    "name": "Name",
+    "username": "Username",
+    "email": "Email",
+    "plan": "Current plan",
+    "memberSince": "Member since",
+    "timezone": "Timezone",
+    "notSet": "Not set"
+  },
+  "pricing": {
+    "metadata": {
+      "title": "Plans",
+      "description": "Available plans and quotas for See-Sweet."
+    },
+    "pageTitle": "Plans & Quotas",
+    "pageSubtitle": "Your current plan and all available options.",
+    "currentPlan": "Current plan",
+    "planNames": {
+      "free": "Free",
+      "pro": "Pro",
+      "premium": "Premium",
+      "enterprise": "Enterprise"
+    },
+    "limits": {
+      "messagesPerMonth": "Messages per month",
+      "tokensPerMonth": "Approx. tokens per month",
+      "chatsPerDay": "New chats per day",
+      "chatHistoryTotal": "Saved chats",
+      "knowledgeDocs": "Knowledge documents",
+      "toolCallsPerMonth": "AI tool calls per month",
+      "widgetChatsPerDay": "Widget chats per day",
+      "widgetToolsPerDay": "Widget tool calls per day",
+      "nudgesEnabled": "Proactive nudges"
+    },
+    "yes": "Yes",
+    "no": "No"
   }
 }

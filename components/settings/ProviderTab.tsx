@@ -10,6 +10,7 @@ import { RefreshCw, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import {
   Collapsible,
   CollapsibleTrigger,
@@ -26,6 +27,20 @@ function formatBytes(bytes: number): string {
   return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
 }
 
+// ─── Tool catalog ─────────────────────────────────────────
+
+const TOOL_GROUPS: { key: string; tools: string[] }[] = [
+  {
+    key: "tasks",
+    tools: ["create_task", "list_tasks", "complete_task", "update_task"],
+  },
+  {
+    key: "labels",
+    tools: ["create_label", "list_labels", "update_label", "delete_label"],
+  },
+  { key: "profile", tools: ["get_user_info"] },
+];
+
 // ─── Component ────────────────────────────────────────────
 
 type ProviderTabProps = {
@@ -34,6 +49,7 @@ type ProviderTabProps = {
 
 export function ProviderTab({ initialStatus }: ProviderTabProps) {
   const t = useTranslations("settings.provider");
+  const tTools = useTranslations("tools");
   const [status, setStatus] = useState<ProviderStatusPayload>(initialStatus);
   const [isPending, startTransition] = useTransition();
 
@@ -55,101 +71,161 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
         : t("nameGroq");
 
   return (
-    <div className="divide-y divide-border/60">
-      {/* Section header */}
-      <div className="flex items-center justify-between gap-4 pb-4">
-        <div className="space-y-0.5">
-          <p className="text-sm font-medium">{t("title")}</p>
-          <p className="text-sm text-muted-foreground">{t("description")}</p>
-        </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="cursor-pointer shrink-0 rounded-full border-border/70"
-          disabled={isPending}
-          onClick={handleRefresh}
-        >
-          <RefreshCw
-            className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
-          />
-          {isPending ? t("refreshing") : t("refresh")}
-        </Button>
-      </div>
-
-      {/* One row per provider */}
-      {status.providers.map(({ provider, health }) => (
-        <div key={provider} className="space-y-3 py-4">
-          {/* Name row */}
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-medium">{providerLabel(provider)}</p>
-              {provider === status.active && (
-                <Badge
-                  variant="outline"
-                  className="text-xs bg-green-600/10 text-green-700 border-green-500/20"
-                >
-                  {t("activeLabel")}
-                </Badge>
-              )}
+    <div className="space-y-2">
+      {/* ── AI Provider section ───────────────────── */}
+      <Collapsible defaultOpen>
+        <div className="flex items-center justify-between gap-4 py-2">
+          <CollapsibleTrigger className="group flex flex-1 cursor-pointer items-center justify-between gap-2 text-left">
+            <div className="space-y-0.5">
+              <p className="text-sm font-medium">{t("title")}</p>
+              <p className="text-sm text-muted-foreground">
+                {t("description")}
+              </p>
             </div>
-            <Badge
-              className={
-                health.connected
-                  ? "text-xs border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-400"
-                  : "text-xs border-destructive/20 bg-destructive/10 text-destructive"
-              }
-            >
-              {health.connected
-                ? t("statusConnected")
-                : t("statusDisconnected")}
-            </Badge>
-          </div>
+            <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-panel-open:rotate-180" />
+          </CollapsibleTrigger>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="cursor-pointer shrink-0 rounded-full border-border/70"
+            disabled={isPending}
+            onClick={handleRefresh}
+          >
+            <RefreshCw
+              className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
+            />
+            {isPending ? t("refreshing") : t("refresh")}
+          </Button>
+        </div>
 
-          {/* Version */}
-          {health.version && (
-            <p className="text-xs text-muted-foreground font-mono">
-              v{health.version}
-            </p>
-          )}
-
-          {/* Error */}
-          {health.error && (
-            <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {health.error}
-            </p>
-          )}
-
-          {/* Models */}
-          {health.models.length > 0 && (
-            <Collapsible>
-              <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wide hover:text-foreground transition-colors">
-                <span>
-                  {t("modelsLabel")} ({health.models.length})
-                </span>
-                <ChevronDown className="size-3.5 shrink-0 transition-transform duration-200 group-data-panel-open:rotate-180" />
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-1.5">
-                <div className="divide-y divide-border/60 rounded-lg border border-border/60">
-                  {health.models.map((model) => (
-                    <div
-                      key={model.name}
-                      className="flex items-center justify-between px-3 py-2"
+        <CollapsibleContent className="space-y-1 pb-2">
+          {status.providers.map(({ provider, health }) => (
+            <Collapsible key={provider}>
+              <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg px-3 py-2.5 hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium">
+                    {providerLabel(provider)}
+                  </p>
+                  {provider === status.active && (
+                    <Badge
+                      variant="outline"
+                      className="text-xs bg-green-600/10 text-green-700 border-green-500/20"
                     >
-                      <span className="text-sm font-mono">{model.name}</span>
-                      {model.size !== null && (
-                        <span className="text-xs text-muted-foreground">
-                          {formatBytes(model.size)}
+                      {t("activeLabel")}
+                    </Badge>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    className={
+                      health.connected
+                        ? "text-xs border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-400"
+                        : "text-xs border-destructive/20 bg-destructive/10 text-destructive"
+                    }
+                  >
+                    {health.connected
+                      ? t("statusConnected")
+                      : t("statusDisconnected")}
+                  </Badge>
+                  <ChevronDown className="size-3.5 shrink-0 text-muted-foreground transition-transform duration-200 group-data-panel-open:rotate-180" />
+                </div>
+              </CollapsibleTrigger>
+
+              <CollapsibleContent className="px-3 pb-3 space-y-3">
+                {health.version && (
+                  <p className="text-xs text-muted-foreground font-mono pt-1">
+                    v{health.version}
+                  </p>
+                )}
+                {health.error && (
+                  <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                    {health.error}
+                  </p>
+                )}
+                {health.models.length > 0 && (
+                  <div>
+                    <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      {t("modelsLabel")} ({health.models.length})
+                    </p>
+                    <div className="divide-y divide-border/60 rounded-lg border border-border/60">
+                      {health.models.map((model) => (
+                        <div
+                          key={model.name}
+                          className="flex items-center justify-between px-3 py-2"
+                        >
+                          <span className="text-sm font-mono">
+                            {model.name}
+                          </span>
+                          {model.size !== null && (
+                            <span className="text-xs text-muted-foreground">
+                              {formatBytes(model.size)}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CollapsibleContent>
+            </Collapsible>
+          ))}
+        </CollapsibleContent>
+      </Collapsible>
+
+      <Separator />
+
+      {/* ── Tools Catalog ─────────────────────────── */}
+      <Collapsible defaultOpen>
+        <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 py-2 text-left">
+          <div className="space-y-0.5">
+            <p className="text-sm font-medium">{tTools("title")}</p>
+            <p className="text-sm text-muted-foreground">
+              {tTools("description")}
+            </p>
+          </div>
+          <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-panel-open:rotate-180" />
+        </CollapsibleTrigger>
+
+        <CollapsibleContent className="space-y-4 pb-2 pt-3">
+          {TOOL_GROUPS.map((group) => (
+            <Collapsible key={group.key} defaultOpen>
+              <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 pb-1.5">
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">
+                  {tTools(`groups.${group.key}`)}
+                </p>
+                <ChevronDown className="size-3.5 shrink-0 text-muted-foreground transition-transform duration-200 group-data-panel-open:rotate-180" />
+              </CollapsibleTrigger>
+
+              <CollapsibleContent>
+                <div className="divide-y divide-border/60 rounded-xl border border-border/60">
+                  {group.tools.map((toolName) => (
+                    <div key={toolName} className="space-y-1 px-4 py-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge
+                          variant="outline"
+                          className="font-mono text-xs text-muted-foreground"
+                        >
+                          {toolName}
+                        </Badge>
+                        <span className="text-sm font-medium">
+                          {tTools(`catalog.${toolName}.label`)}
                         </span>
-                      )}
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {tTools(`catalog.${toolName}.what`)}
+                      </p>
+                      <p className="text-xs italic text-muted-foreground/70">
+                        {tTools(`catalog.${toolName}.example`)}
+                      </p>
                     </div>
                   ))}
                 </div>
               </CollapsibleContent>
             </Collapsible>
-          )}
-        </div>
-      ))}
+          ))}
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }

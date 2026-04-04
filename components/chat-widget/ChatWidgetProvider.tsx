@@ -12,6 +12,7 @@ const EXCLUDED_PATHS = ["/", "/login", "/sign-up"];
 
 interface ChatWidgetProviderProps {
   authenticated: boolean;
+  userId: string;
   assistantName?: string | undefined;
 }
 
@@ -21,6 +22,7 @@ interface ChatWidgetProviderProps {
  */
 export function ChatWidgetProvider({
   authenticated,
+  userId,
   assistantName,
 }: ChatWidgetProviderProps) {
   const pathname = usePathname();
@@ -29,5 +31,5 @@ export function ChatWidgetProvider({
   if (EXCLUDED_PATHS.includes(pathname)) return null;
   if (pathname === "/chat" || pathname.startsWith("/chat/")) return null;
 
-  return <ChatWidget assistantName={assistantName} />;
+  return <ChatWidget assistantName={assistantName} userId={userId} />;
 }

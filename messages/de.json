@@ -100,7 +100,7 @@
     },
     "tabs": {
       "appearance": "Erscheinungsbild",
-      "provider": "KI-Anbieter",
+      "provider": "KI",
       "usage": "Nutzung",
       "labels": "Labels"
     },
@@ -140,8 +140,12 @@
       "tokensTitle": "Ungefähre Token diesen Monat",
       "chatsTitle": "Gespeicherte Chats",
       "chatsNote": "Dieses Limit wird nie zurückgesetzt — lösche Chats, um Platz freizugeben.",
-      "toolCallsTitle": "KI-Werkzeugaufrufe diesen Monat"
+      "toolCallsTitle": "KI-Werkzeugaufrufe diesen Monat",
+      "toolCallsNote": "Token-Verbrauch durch Werkzeugaufrufe ist in den ungefähren Token oben enthalten."
     }
+  },
+  "chatWidget": {
+    "newChat": "Neuer Chat"
   },
   "shell": {
     "nav": {
@@ -150,6 +154,7 @@
       "chat": "Chat",
       "tasks": "Aufgaben",
       "settings": "Einstellungen",
+      "pricing": "Pläne",
       "userFallback": "Arbeitsbereich-Nutzer",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…",
@@ -158,7 +163,8 @@
       "planFree": "Free",
       "planPro": "Pro",
       "planPremium": "Premium",
-      "planEnterprise": "Enterprise"
+      "planEnterprise": "Enterprise",
+      "profile": "Mein Profil"
     },
     "language": {
       "groupLabel": "Sprachauswahl",
@@ -339,5 +345,103 @@
     },
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen"
+  },
+  "tools": {
+    "title": "Verfügbare Werkzeuge",
+    "description": "Formulierungen, mit denen du die einzelnen Werkzeuge aktivieren kannst.",
+    "groups": {
+      "tasks": "Aufgaben",
+      "labels": "Labels",
+      "profile": "Profil"
+    },
+    "catalog": {
+      "create_task": {
+        "label": "Aufgabe erstellen",
+        "what": "Erstellt eine neue Aufgabe mit optionaler Priorität, Fälligkeitsdatum und Labels.",
+        "example": "\"Aufgabe hinzufügen: Q2-Bericht prüfen, hohe Priorität, fällig Freitag\""
+      },
+      "list_tasks": {
+        "label": "Aufgaben anzeigen",
+        "what": "Zeigt deine Aufgaben an, optional gefiltert nach Status.",
+        "example": "\"Welche offenen Aufgaben habe ich?\" oder \"Zeige alle dringenden Aufgaben\""
+      },
+      "complete_task": {
+        "label": "Aufgabe abschließen",
+        "what": "Markiert eine Aufgabe als erledigt.",
+        "example": "\"Markiere die Bericht-Aufgabe als erledigt\""
+      },
+      "update_task": {
+        "label": "Aufgabe bearbeiten",
+        "what": "Ändert Titel, Notizen, Priorität, Fälligkeitsdatum, Status oder Labels einer Aufgabe.",
+        "example": "\"Setze die Bericht-Aufgabe auf dringend und verschiebe das Datum auf Montag\""
+      },
+      "create_label": {
+        "label": "Label erstellen",
+        "what": "Erstellt ein neues globales Label mit optionaler Farbe.",
+        "example": "\"Erstelle ein Label namens Arbeit in Blau\""
+      },
+      "list_labels": {
+        "label": "Labels anzeigen",
+        "what": "Listet alle deine Labels auf.",
+        "example": "\"Welche Labels habe ich?\""
+      },
+      "update_label": {
+        "label": "Label bearbeiten",
+        "what": "Benennt ein Label um oder ändert seine Farbe.",
+        "example": "\"Benenne das Label Arbeit in Professionell um\""
+      },
+      "delete_label": {
+        "label": "Label löschen",
+        "what": "Löscht ein Label und entfernt es von allen verknüpften Einträgen.",
+        "example": "\"Lösche das Label namens Alt\""
+      },
+      "get_user_info": {
+        "label": "Meine Infos abrufen",
+        "what": "Gibt deine Profildaten zurück: Name, E-Mail, Plan, Zeitzone und Mitglied seit.",
+        "example": "\"Welchen Plan habe ich?\" oder \"Zeige meine Profilinfos\""
+      }
+    }
+  },
+  "profile": {
+    "metadata": {
+      "title": "Profil",
+      "description": "Dein Kontoprofil."
+    },
+    "title": "Profil",
+    "name": "Name",
+    "username": "Benutzername",
+    "email": "E-Mail",
+    "plan": "Aktueller Plan",
+    "memberSince": "Mitglied seit",
+    "timezone": "Zeitzone",
+    "notSet": "Nicht gesetzt"
+  },
+  "pricing": {
+    "metadata": {
+      "title": "Pläne",
+      "description": "Verfügbare Pläne und Kontingente für See-Sweet."
+    },
+    "pageTitle": "Pläne & Kontingente",
+    "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",
+    "currentPlan": "Aktueller Plan",
+    "planNames": {
+      "free": "Free",
+      "pro": "Pro",
+      "premium": "Premium",
+      "enterprise": "Enterprise"
+    },
+    "limits": {
+      "messagesPerMonth": "Nachrichten pro Monat",
+      "tokensPerMonth": "Token pro Monat (ca.)",
+      "chatsPerDay": "Neue Chats pro Tag",
+      "chatHistoryTotal": "Gespeicherte Chats",
+      "knowledgeDocs": "Wissensdokumente",
+      "toolCallsPerMonth": "KI-Werkzeugaufrufe pro Monat",
+      "widgetChatsPerDay": "Widget-Chats pro Tag",
+      "widgetToolsPerDay": "Widget-Werkzeugaufrufe pro Tag",
+      "nudgesEnabled": "Proaktive Hinweise"
+    },
+    "yes": "Ja",
+    "no": "Nein"
   }
 }
