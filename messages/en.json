@@ -140,7 +140,8 @@
       "tokensTitle": "Approx. tokens this month",
       "chatsTitle": "Saved chats",
       "chatsNote": "This limit never resets — delete chats to free up space.",
-      "toolCallsTitle": "AI tool calls this month"
+      "toolCallsTitle": "AI tool calls this month",
+      "toolCallsNote": "Tool call input/output is included in your approximate token count above."
     }
   },
   "shell": {

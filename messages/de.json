@@ -140,7 +140,8 @@
       "tokensTitle": "Ungefähre Token diesen Monat",
       "chatsTitle": "Gespeicherte Chats",
       "chatsNote": "Dieses Limit wird nie zurückgesetzt — lösche Chats, um Platz freizugeben.",
-      "toolCallsTitle": "KI-Werkzeugaufrufe diesen Monat"
+      "toolCallsTitle": "KI-Werkzeugaufrufe diesen Monat",
+      "toolCallsNote": "Token-Verbrauch durch Werkzeugaufrufe ist in den ungefähren Token oben enthalten."
     }
   },
   "shell": {

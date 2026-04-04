@@ -139,6 +139,7 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           label={t("toolCallsTitle")}
           used={usage.toolCallsUsed}
           limit={usage.toolCallsLimit}
+          note={t("toolCallsNote")}
         />
       </div>
 

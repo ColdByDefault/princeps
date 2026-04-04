@@ -130,6 +130,7 @@ export async function POST(req: Request, { params }: Params) {
       };
 
       let assistantContent = "";
+      let toolCallChars = 0;
 
       try {
         const toolCalls: LLMToolCall[] = [];
@@ -172,6 +173,12 @@ export async function POST(req: Request, { params }: Params) {
           // Execute each tool, emit the action event, append the tool result
           for (const toolCall of toolCalls) {
             const result = await executeToolCall(session.user.id, toolCall);
+            const resultContent = result.ok
+              ? JSON.stringify(result.data)
+              : `Error: ${result.error}`;
+            // Accumulate chars for approximate token accounting
+            toolCallChars +=
+              (toolCall.function.arguments?.length ?? 0) + resultContent.length;
             send({
               type: "action",
               name: toolCall.function.name,
@@ -180,9 +187,7 @@ export async function POST(req: Request, { params }: Params) {
             followUp.push({
               role: "tool",
               tool_call_id: toolCall.id,
-              content: result.ok
-                ? JSON.stringify(result.data)
-                : `Error: ${result.error}`,
+              content: resultContent,
             });
           }
 
@@ -209,6 +214,7 @@ export async function POST(req: Request, { params }: Params) {
             session.user.id,
             userMessage.length,
             assistantContent.length,
+            toolCallChars,
           ).catch(() => {});
         }
         send({ type: "done" });
