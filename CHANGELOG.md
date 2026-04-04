@@ -1,3 +1,15 @@
+## [0.1.32] - 2026-04-04
+
+- feat: add missing navigation items to sidebar and refine UI/UX tasks
+- feat: add tasks navigation to sidebar and update task documentation
+- feat: implement pricing page and associated components with localization support
+- feat: add tools catalog with descriptions and examples for available tools
+- feat: add user profile handler and tool for retrieving user information
+- feat: add profile page and user avatar components with initial rendering logic
+- feat: update task documentation and enhance system prompt with available tools and behavior rules
+- feat: integrate chat widget functionality and enhance user experience with new chat features
+- feat: enhance token accounting and update usage notes in settings
+
 ## [0.1.31] - 2026-04-04
 
 - feat: update task documentation for chat management scenarios and add new chat control use cases
