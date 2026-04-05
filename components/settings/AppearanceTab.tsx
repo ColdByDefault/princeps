@@ -9,8 +9,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import ThemeToggle from "@/components/theme/ThemeToggle";
-import { LanguageToggle } from "@/components/shared";
-import { Switch } from "@/components/ui/switch";
+import { LanguageToggle, CustomToggle } from "@/components/shared";
 import {
   Select,
   SelectContent,
@@ -206,15 +205,13 @@ export function AppearanceTab({
             {t("notificationsDisclaimer")}
           </p>
         </div>
-        <Switch
+        <CustomToggle
           checked={notificationsEnabled}
           onCheckedChange={handleNotificationsToggle}
           disabled={savingNotifications}
           aria-label={t("notificationsTitle")}
-          className="cursor-pointer"
         />
       </div>
     </div>
   );
 }
-
