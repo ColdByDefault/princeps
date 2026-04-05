@@ -20,6 +20,7 @@
 - [ ] Colorful ring on avatar icon in navbar to reflect the current plan/tier of the user (e.g. free, pro, enterprise, etc.) instead of badge in navbar (keep original shared badge component)
 - [ ] Use `CustomeToggle.tsx` instead of shadcnUI toggle (e.g. for notifications toggle in settings).
 - [ ] Tooltips for Navbar icons.
+- [ ] Add `index.ts` everywhere in components, libs, etc. for better imports.
 
 # Priority
 

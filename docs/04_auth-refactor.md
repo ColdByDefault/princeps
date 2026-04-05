@@ -1,5 +1,8 @@
 # Auth Refactor
 
+
+> Important: This document is a work in progress and may not reflect the final implementation. It is intended to provide an overview of the new auth system architecture and key files, but details are subject to change as development progresses. Please refer to the latest codebase for the most up-to-date information.
+
 ## Overview
 
 Auth is powered by **Better Auth** with a Prisma/PostgreSQL adapter. The refactor added Zod validation, in-memory rate limiting, and a password-confirmation step to the sign-up flow.
