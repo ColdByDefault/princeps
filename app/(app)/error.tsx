@@ -76,7 +76,7 @@ export default function Error({
 
           <div className="space-y-3">
             <p className="text-xs font-semibold tracking-[0.28em] text-muted-foreground uppercase">
-              {getMsg(messages, "landing.brandName", "See-Sweet")}
+              {getMsg(messages, "landing.brandName", "C-Sweet")}
             </p>
             <h1 className="max-w-2xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
               {getMsg(messages, "error.global.title", "Something went wrong.")}

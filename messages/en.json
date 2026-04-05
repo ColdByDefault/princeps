@@ -1,10 +1,10 @@
 {
   "landing": {
     "metadata": {
-      "title": "See-Sweet",
+      "title": "C-Sweet",
       "description": "Private executive secretariat for focused operators."
     },
-    "brandName": "See-Sweet",
+    "brandName": "C-Sweet",
     "tagline": "Your digital chief of staff",
     "login": "Sign in",
     "signUp": "Create account"
@@ -37,7 +37,7 @@
     "login": {
       "metadata": {
         "title": "Sign In",
-        "description": "Sign in to your See-Sweet workspace."
+        "description": "Sign in to your C-Sweet workspace."
       },
       "title": "Welcome back",
       "subtitle": "Sign in with your email and password.",
@@ -55,7 +55,7 @@
     "signUp": {
       "metadata": {
         "title": "Create Account",
-        "description": "Create your See-Sweet workspace."
+        "description": "Create your C-Sweet workspace."
       },
       "title": "Create an account",
       "subtitle": "Sign up with your email address.",
@@ -179,7 +179,7 @@
   },
   "shell": {
     "nav": {
-      "brand": "See-Sweet",
+      "brand": "C-Sweet",
       "home": "Workspace",
       "chat": "Chat",
       "knowledge": "Knowledge Base",
@@ -503,7 +503,7 @@
   "pricing": {
     "metadata": {
       "title": "Plans",
-      "description": "Available plans and quotas for See-Sweet."
+      "description": "Available plans and quotas for C-Sweet."
     },
     "pageTitle": "Plans & Quotas",
     "pageSubtitle": "Your current plan and all available options.",

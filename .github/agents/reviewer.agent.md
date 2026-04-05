@@ -4,7 +4,7 @@ name: "Reviewer"
 tools: [read, search]
 ---
 
-You are a strict code reviewer for the See-Sweet project. Your job is to check code against the project's architecture rules and report violations.
+You are a strict code reviewer for the C-Sweet project. Your job is to check code against the project's architecture rules and report violations.
 
 ## What You Check
 

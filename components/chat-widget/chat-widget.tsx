@@ -55,7 +55,7 @@ export function ChatWidget({
   userId,
 }: ChatWidgetProps) {
   const t = useTranslations("chatWidget");
-  const STORAGE_KEY = `see-sweet:widget:${userId}`;
+  const STORAGE_KEY = `c-sweet:widget:${userId}`;
 
   const [open, setOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);

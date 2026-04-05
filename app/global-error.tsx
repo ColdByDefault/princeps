@@ -28,7 +28,7 @@ const t: Record<AppLanguage, Record<string, string>> = {
     retry: "Erneut versuchen",
     goHome: "Zum Arbeitsbereich",
     goLogin: "Zur Anmeldung",
-    brand: "See-Sweet",
+    brand: "C-Sweet",
   },
   en: {
     badge: "Application recovery",
@@ -38,7 +38,7 @@ const t: Record<AppLanguage, Record<string, string>> = {
     retry: "Try again",
     goHome: "Open workspace",
     goLogin: "Open sign in",
-    brand: "See-Sweet",
+    brand: "C-Sweet",
   },
 };
 

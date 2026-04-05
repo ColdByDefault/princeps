@@ -1,10 +1,10 @@
 {
   "landing": {
     "metadata": {
-      "title": "See-Sweet",
+      "title": "C-Sweet",
       "description": "Privates Chefsekretariat für fokussierte Entscheider."
     },
-    "brandName": "See-Sweet",
+    "brandName": "C-Sweet",
     "tagline": "Dein digitales Chefsekretariat",
     "login": "Anmelden",
     "signUp": "Konto erstellen"
@@ -37,7 +37,7 @@
     "login": {
       "metadata": {
         "title": "Anmelden",
-        "description": "Melde dich in deinem See-Sweet-Arbeitsbereich an."
+        "description": "Melde dich in deinem C-Sweet-Arbeitsbereich an."
       },
       "title": "Willkommen zurück",
       "subtitle": "Melde dich mit deiner E-Mail-Adresse und deinem Passwort an.",
@@ -55,7 +55,7 @@
     "signUp": {
       "metadata": {
         "title": "Konto erstellen",
-        "description": "Erstelle deinen See-Sweet-Arbeitsbereich."
+        "description": "Erstelle deinen C-Sweet-Arbeitsbereich."
       },
       "title": "Konto erstellen",
       "subtitle": "Registriere dich mit deiner E-Mail-Adresse.",
@@ -179,7 +179,7 @@
   },
   "shell": {
     "nav": {
-      "brand": "See-Sweet",
+      "brand": "C-Sweet",
       "home": "Arbeitsbereich",
       "knowledge": "Wissensbasis",
       "chat": "Chat",
@@ -503,7 +503,7 @@
   "pricing": {
     "metadata": {
       "title": "Pläne",
-      "description": "Verfügbare Pläne und Kontingente für See-Sweet."
+      "description": "Verfügbare Pläne und Kontingente für C-Sweet."
     },
     "pageTitle": "Pläne & Kontingente",
     "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",

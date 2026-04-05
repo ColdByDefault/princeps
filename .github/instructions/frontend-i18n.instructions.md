@@ -1,10 +1,10 @@
 ---
-description: "Use when working on pages, components, layout, navigation, frontend UX, or localization in See-Sweet. Covers App Router page patterns, UI conventions, and i18n requirements."
-name: "See-Sweet Frontend And I18n"
+description: "Use when working on pages, components, layout, navigation, frontend UX, or localization in C-Sweet. Covers App Router page patterns, UI conventions, and i18n requirements."
+name: "C-Sweet Frontend And I18n"
 applyTo: "app/**/\*.tsx, components/**, messages/**, hooks/**, i18n/\*\*"
 ---
 
-# See-Sweet Frontend And I18n
+# C-Sweet Frontend And I18n
 
 ## Page And Component Structure
 
