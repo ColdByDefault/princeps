@@ -1,3 +1,13 @@
+## [0.1.36] - 2026-04-05
+
+- feat: update settings tab to include assistant and improve provider label localization
+- feat: add Assistant settings tab with customizable name, tone, address style, and response length
+- feat: implement CustomToggle component for improved toggle functionality in settings
+- feat: enhance navigation and settings with contact management features
+- feat: rename project references from See-Sweet to C-Sweet across documentation and codebase
+- feat(weather): enhance weather fetching with location support
+- feat: add timezone selection and management features in user settings
+
 ## [0.1.35] - 2026-04-05
 
 - feat: add task to group elements in Navbar Desktop for improved UI organization
