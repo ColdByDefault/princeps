@@ -295,6 +295,7 @@
     },
     "error": {
       "send": "Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
+      "providerUnavailable": "KI-Anbieter ist nicht verfügbar oder nicht konfiguriert.",
       "create": "Chat konnte nicht erstellt werden.",
       "delete": "Chat konnte nicht gelöscht werden.",
       "rename": "Chat konnte nicht umbenannt werden."
@@ -390,6 +391,8 @@
       "description": "Verwalte deine beruflichen Kontakte."
     },
     "pageTitle": "Kontakte",
+    "countSingular": "1 Kontakt",
+    "countPlural": "{count} Kontakte",
     "newContact": "Neuer Kontakt",
     "empty": "Noch keine Kontakte.",
     "fields": {

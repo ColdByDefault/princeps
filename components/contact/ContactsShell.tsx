@@ -62,13 +62,20 @@ export function ContactsShell({
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {t("pageTitle")}
-        </h1>
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("pageTitle")}
+          </h1>
+          <p className="text-muted-foreground mt-1 text-sm">
+            {contacts.length === 1
+              ? t("countSingular")
+              : t("countPlural", { count: contacts.length })}
+          </p>
+        </div>
         <Button
           onClick={() => setCreateOpen(true)}
-          className="cursor-pointer"
+          className="cursor-pointer shrink-0"
           disabled={creating}
           aria-label={t("newContact")}
         >

@@ -294,6 +294,7 @@
       "send": "Send message"
     },
     "error": {
+      "providerUnavailable": "AI provider is not available or not configured.",
       "send": "Failed to send message. Please try again.",
       "create": "Failed to create chat.",
       "delete": "Failed to delete chat.",
@@ -390,6 +391,8 @@
       "description": "Manage your professional contacts."
     },
     "pageTitle": "Contacts",
+    "countSingular": "1 contact",
+    "countPlural": "{count} contacts",
     "newContact": "New contact",
     "empty": "No contacts yet.",
     "fields": {
