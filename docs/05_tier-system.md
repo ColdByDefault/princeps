@@ -1,5 +1,8 @@
 ### Tier system redesign
 
+
+> Important: This document is a work in progress and may not reflect the final implementation. It is intended to provide an overview of the new i18n system architecture and key files, but details are subject to change as development progresses. Please refer to the latest codebase for the most up-to-date information.
+    
 **Four tiers:** `free` | `pro` | `premium` | `enterprise`
 
 **Limit model — two independent axes:**

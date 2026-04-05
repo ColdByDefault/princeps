@@ -159,7 +159,9 @@
       "knowledgeDocsTitle": "Knowledge documents (stored)",
       "knowledgeDocsNote": "Number of documents currently stored.",
       "knowledgeCharsTitle": "Knowledge text volume (lifetime)",
-      "knowledgeCharsNote": "Cumulative character count of all processed uploads — does not decrease on delete."
+      "knowledgeCharsNote": "Cumulative character count of all processed uploads — does not decrease on delete.",
+      "contactsTitle": "Contacts (stored)",
+      "contactsNote": "Number of contacts currently stored."
     }
   },
   "chatWidget": {
@@ -172,6 +174,7 @@
       "chat": "Chat",
       "knowledge": "Knowledge Base",
       "tasks": "Tasks",
+      "contacts": "Contacts",
       "settings": "Settings",
       "pricing": "Plans",
       "userFallback": "Workspace user",
@@ -325,6 +328,58 @@
     "deleteLabel": "Delete",
     "markDoneLabel": "Mark as done",
     "reopenLabel": "Reopen"
+  },
+  "contacts": {
+    "metadata": {
+      "title": "Contacts",
+      "description": "Manage your professional contacts."
+    },
+    "pageTitle": "Contacts",
+    "newContact": "New contact",
+    "empty": "No contacts yet.",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Jane Doe",
+      "role": "Role",
+      "rolePlaceholder": "Software Engineer",
+      "company": "Company",
+      "companyPlaceholder": "Acme Inc.",
+      "email": "Email",
+      "emailPlaceholder": "jane@example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "+1 (555) 123-4567",
+      "notes": "Notes",
+      "notesPlaceholder": "Optional notes…",
+      "lastContact": "Last contact",
+      "labels": "Labels",
+      "optional": "Optional"
+    },
+    "createDialog": {
+      "heading": "New contact",
+      "submit": "Create",
+      "submitting": "Creating…",
+      "success": "Contact created.",
+      "error": "Failed to create contact."
+    },
+    "editDialog": {
+      "heading": "Edit contact",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "success": "Contact saved.",
+      "error": "Failed to save contact."
+    },
+    "deleteDialog": {
+      "title": "Delete this contact?",
+      "description": "This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Contact deleted.",
+      "error": "Failed to delete contact."
+    },
+    "actionsLabel": "Contact actions",
+    "editLabel": "Edit",
+    "deleteLabel": "Delete",
+    "lastContactLabel": "Last contact"
   },
   "labels": {
     "title": "Labels",

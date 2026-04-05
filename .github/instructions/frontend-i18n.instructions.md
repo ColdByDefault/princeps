@@ -69,6 +69,25 @@ Import from `@/components/shared`.
 ## Base UI Conventions
 
 - Base UI composition uses the `render` prop (not Radix `asChild`) on dialog triggers, close controls, and similar primitives.
+- **Never nest a `<Button>` (or any element that renders a `<button>`) as a direct child of a Base UI trigger.** Base UI triggers (`DropdownMenuTrigger`, `DialogTrigger`, `TooltipTrigger`, etc.) already render a `<button>` themselves. Wrapping them with a `<Button>` child creates a `<button>` inside a `<button>`, which is invalid HTML and causes a hydration error.
+  - ✅ **Correct** — pass `<Button>` via the `render` prop so Base UI merges the props onto it:
+    ```tsx
+    <DropdownMenuTrigger
+      render={
+        <Button variant="ghost" size="icon" aria-label={t("actionsLabel")} />
+      }
+    >
+      <MoreHorizontal className="size-4" />
+    </DropdownMenuTrigger>
+    ```
+  - ❌ **Wrong** — `<Button>` child renders a `<button>` nested inside the trigger `<button>`:
+    ```tsx
+    <DropdownMenuTrigger>
+      <Button variant="ghost" size="icon">
+        <MoreHorizontal />
+      </Button>
+    </DropdownMenuTrigger>
+    ```
 - `DialogTrigger`, `TooltipTrigger`, and similar Base UI primitives that have `nativeButton={true}` (the default) **must** receive a native `<button>`-producing element via `render`. Never use `render={<span />}` — it removes native button semantics and causes a runtime warning.
   - To use a Shadcn `Button` as the trigger: `<DialogTrigger render={<Button ...props />}>content</DialogTrigger>`
   - To use an externally-provided element as the trigger: `<DialogTrigger render={children as React.ReactElement} />` (children already contains its own content)

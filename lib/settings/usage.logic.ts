@@ -9,23 +9,25 @@ import { db } from "@/lib/db";
 import { getPlanLimits, type Tier, type UsageSummary } from "@/types/billing";
 
 export async function getUserUsage(userId: string): Promise<UsageSummary> {
-  const [user, chatsStored, knowledgeDocsStored, counter] = await Promise.all([
-    db.user.findUniqueOrThrow({
-      where: { id: userId },
-      select: { tier: true, knowledgeCharsUsed: true },
-    }),
-    db.chat.count({ where: { userId } }),
-    db.knowledgeDocument.count({ where: { userId } }),
-    db.usageCounter.findUnique({
-      where: { userId },
-      select: {
-        messageMonthlyCount: true,
-        tokenMonthlyCount: true,
-        toolMonthlyCount: true,
-        monthlyResetDate: true,
-      },
-    }),
-  ]);
+  const [user, chatsStored, knowledgeDocsStored, contactsStored, counter] =
+    await Promise.all([
+      db.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { tier: true, knowledgeCharsUsed: true },
+      }),
+      db.chat.count({ where: { userId } }),
+      db.knowledgeDocument.count({ where: { userId } }),
+      db.contact.count({ where: { userId } }),
+      db.usageCounter.findUnique({
+        where: { userId },
+        select: {
+          messageMonthlyCount: true,
+          tokenMonthlyCount: true,
+          toolMonthlyCount: true,
+          monthlyResetDate: true,
+        },
+      }),
+    ]);
 
   const tier = user.tier as Tier;
   const limits = getPlanLimits(tier);
@@ -44,6 +46,8 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     knowledgeDocsLimit: limits.knowledgeDocs,
     knowledgeCharsUsed: user.knowledgeCharsUsed,
     knowledgeCharsLimit: limits.knowledgeLifetimeChars,
+    contactsStored,
+    contactsLimit: limits.contactsMax,
     monthlyResetDate:
       counter?.monthlyResetDate ?? new Date().toISOString().slice(0, 7),
   };

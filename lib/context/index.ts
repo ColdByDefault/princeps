@@ -8,6 +8,7 @@ import "server-only";
 import { tasksSlot } from "@/lib/context/tasks.slot";
 import { labelsSlot } from "@/lib/context/labels.slot";
 import { knowledgeSlot } from "@/lib/context/knowledge.slot";
+import { contactsSlot } from "@/lib/context/contacts.slot";
 
 /**
  * A context slot contributes one labeled section to the LLM system prompt.
@@ -30,4 +31,5 @@ export const SLOT_REGISTRY: ContextSlot[] = [
   tasksSlot,
   labelsSlot,
   knowledgeSlot,
+  contactsSlot,
 ];

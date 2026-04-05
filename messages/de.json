@@ -159,7 +159,9 @@
       "knowledgeDocsTitle": "Wissensdokumente (gespeichert)",
       "knowledgeDocsNote": "Anzahl der aktuell gespeicherten Dokumente.",
       "knowledgeCharsTitle": "Wissens-Textumfang (gesamt)",
-      "knowledgeCharsNote": "Kumulativer Zeichenumfang aller bisher verarbeiteten Dokumente — sinkt nicht beim Löschen."
+      "knowledgeCharsNote": "Kumulativer Zeichenumfang aller bisher verarbeiteten Dokumente — sinkt nicht beim Löschen.",
+      "contactsTitle": "Kontakte (gespeichert)",
+      "contactsNote": "Anzahl der aktuell gespeicherten Kontakte."
     }
   },
   "chatWidget": {
@@ -172,6 +174,7 @@
       "knowledge": "Wissensbasis",
       "chat": "Chat",
       "tasks": "Aufgaben",
+      "contacts": "Kontakte",
       "settings": "Einstellungen",
       "pricing": "Pläne",
       "userFallback": "Arbeitsbereich-Nutzer",
@@ -325,6 +328,58 @@
     "deleteLabel": "Löschen",
     "markDoneLabel": "Als erledigt markieren",
     "reopenLabel": "Wiedereröffnen"
+  },
+  "contacts": {
+    "metadata": {
+      "title": "Kontakte",
+      "description": "Verwalte deine beruflichen Kontakte."
+    },
+    "pageTitle": "Kontakte",
+    "newContact": "Neuer Kontakt",
+    "empty": "Noch keine Kontakte.",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Jane Doe",
+      "role": "Rolle",
+      "rolePlaceholder": "Software Engineer",
+      "company": "Unternehmen",
+      "companyPlaceholder": "Acme GmbH",
+      "email": "E-Mail",
+      "emailPlaceholder": "jane@beispiel.de",
+      "phone": "Telefon",
+      "phonePlaceholder": "+49 (0)89 123456",
+      "notes": "Notizen",
+      "notesPlaceholder": "Optionale Notizen\u2026",
+      "lastContact": "Letzter Kontakt",
+      "labels": "Labels",
+      "optional": "Optional"
+    },
+    "createDialog": {
+      "heading": "Neuer Kontakt",
+      "submit": "Erstellen",
+      "submitting": "Wird erstellt\u2026",
+      "success": "Kontakt erstellt.",
+      "error": "Kontakt konnte nicht erstellt werden."
+    },
+    "editDialog": {
+      "heading": "Kontakt bearbeiten",
+      "submit": "Speichern",
+      "submitting": "Wird gespeichert\u2026",
+      "success": "Kontakt gespeichert.",
+      "error": "Kontakt konnte nicht gespeichert werden."
+    },
+    "deleteDialog": {
+      "title": "Diesen Kontakt löschen?",
+      "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirm": "Löschen",
+      "cancel": "Abbrechen",
+      "success": "Kontakt gelöscht.",
+      "error": "Kontakt konnte nicht gelöscht werden."
+    },
+    "actionsLabel": "Kontaktaktionen",
+    "editLabel": "Bearbeiten",
+    "deleteLabel": "Löschen",
+    "lastContactLabel": "Letzter Kontakt"
   },
   "labels": {
     "title": "Labels",
