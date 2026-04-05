@@ -435,6 +435,7 @@
       "error": "Kontakt konnte nicht gelöscht werden."
     },
     "actionsLabel": "Kontaktaktionen",
+    "viewLabel": "Ansehen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen",
     "lastContactLabel": "Letzter Kontakt"

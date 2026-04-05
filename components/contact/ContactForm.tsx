@@ -189,11 +189,23 @@ export function ContactForm({
         <Textarea
           id="contact-notes"
           value={notes}
-          onChange={(e) => setNotes(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length <= 250) setNotes(e.target.value);
+          }}
           placeholder={t("fields.notesPlaceholder")}
           rows={3}
           className="resize-none"
+          maxLength={250}
+          aria-label={t("fields.notes")}
         />
+        <p
+          className={cn(
+            "text-right text-xs",
+            notes.length >= 230 ? "text-destructive" : "text-muted-foreground",
+          )}
+        >
+          {notes.length}/250
+        </p>
       </div>
 
       {availableLabels.length > 0 && (
@@ -258,4 +270,3 @@ export function ContactForm({
     </form>
   );
 }
-

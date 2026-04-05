@@ -4,6 +4,7 @@
  */
 
 export * from "./ContactCard";
+export * from "./ContactDetailDialog";
 export * from "./ContactForm";
 export * from "./ContactDialog";
 export * from "./ContactList";

@@ -13,6 +13,7 @@ import {
   Mail,
   Phone,
   CalendarDays,
+  Eye,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
@@ -34,6 +35,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+
+import { ContactDetailDialog } from "./ContactDetailDialog";
 
 const AVATAR_COLORS = [
   "bg-blue-500",
@@ -71,6 +74,7 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
   const t = useTranslations("contacts");
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showDetailDialog, setShowDetailDialog] = useState(false);
 
   async function handleDelete() {
     setIsDeleting(true);
@@ -95,7 +99,16 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
 
   return (
     <>
-      <div className="group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/40">
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label={t("viewLabel", { name: contact.name })}
+        className="group flex cursor-pointer items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/40"
+        onClick={() => setShowDetailDialog(true)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") setShowDetailDialog(true);
+        }}
+      >
         {/* Avatar */}
         <div
           className={cn(
@@ -123,6 +136,7 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
             <a
               href={`mailto:${contact.email}`}
               className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-sm transition-colors"
+              onClick={(e) => e.stopPropagation()}
             >
               <Mail className="size-3.5 shrink-0" />
               <span className="truncate">{contact.email}</span>
@@ -136,6 +150,7 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
             <a
               href={`tel:${contact.phone}`}
               className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-sm transition-colors"
+              onClick={(e) => e.stopPropagation()}
             >
               <Phone className="size-3.5 shrink-0" />
               <span className="truncate">{contact.phone}</span>
@@ -144,8 +159,8 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
         </div>
 
         {/* Labels */}
-        <div className="hidden w-40 shrink-0 items-center gap-1 overflow-hidden xl:flex">
-          {contact.labels.map((label) => (
+        <div className="hidden w-40 shrink-0 items-center gap-1 xl:flex">
+          {contact.labels.slice(0, 2).map((label) => (
             <span
               key={label.id}
               className="inline-flex h-5 shrink-0 items-center rounded-full px-2 text-[10px] font-medium"
@@ -158,6 +173,11 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
               {label.name}
             </span>
           ))}
+          {contact.labels.length > 2 && (
+            <span className="text-muted-foreground inline-flex h-5 shrink-0 items-center rounded-full border border-border px-2 text-[10px] font-medium">
+              +{contact.labels.length - 2}
+            </span>
+          )}
         </div>
 
         {/* Last contact date */}
@@ -171,7 +191,7 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
         </div>
 
         {/* Actions */}
-        <div className="ml-auto shrink-0">
+        <div className="ml-auto shrink-0" onClick={(e) => e.stopPropagation()}>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -186,6 +206,13 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
               <MoreHorizontal className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => setShowDetailDialog(true)}
+                className="cursor-pointer"
+              >
+                <Eye className="mr-2 size-4" />
+                {t("viewLabel")}
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => onEdit(contact)}
                 className="cursor-pointer"
@@ -204,6 +231,13 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
           </DropdownMenu>
         </div>
       </div>
+
+      <ContactDetailDialog
+        contact={contact}
+        open={showDetailDialog}
+        onOpenChange={setShowDetailDialog}
+        onEdit={onEdit}
+      />
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
