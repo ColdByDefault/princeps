@@ -99,7 +99,6 @@ export function ChatWidget({
       },
     ]);
     setSessionLoaded(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [STORAGE_KEY]);
 
   // Keep greeting in sync whenever the name prop changes (e.g. after the
