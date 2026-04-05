@@ -1,3 +1,12 @@
+## [0.1.35] - 2026-04-05
+
+- feat: add task to group elements in Navbar Desktop for improved UI organization
+- feat: implement contact management features including create, update, delete, and list functionalities with tier limits
+- feat: update frontend i18n instructions to prevent nesting buttons within Base UI triggers
+- feat: add contact management components including ContactPage, ContactCard, ContactDialog, ContactForm, ContactList, and ContactsShell with localization support
+- feat: implement contact management API with create, update, delete, and list functionalities
+- feat: add work-in-progress notes to documentation for i18n system, LLM provider, auth refactor, tier system, and notification design
+
 ## [0.1.34] - 2026-04-04
 
 - feat: refactor useNotifications hook to streamline notification fetching and greeting logic
