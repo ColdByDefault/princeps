@@ -24,10 +24,12 @@ export default async function AppLayout({
 
   let preferredTheme: string | null = null;
   let preferredLanguage: AppLanguage | null = null;
+  let preferredAssistantName: string | null = null;
   if (sessionUser?.id) {
     const prefs = await getUserPreferences(sessionUser.id);
     preferredTheme = prefs.theme;
     preferredLanguage = prefs.language;
+    preferredAssistantName = prefs.assistantName;
   }
 
   return (
@@ -44,6 +46,7 @@ export default async function AppLayout({
       <ChatWidgetProvider
         authenticated={!!sessionUser}
         userId={sessionUser?.id ?? ""}
+        assistantName={preferredAssistantName ?? undefined}
       />
     </div>
   );

@@ -12,6 +12,27 @@ import { VALID_TIMEZONES } from "@/lib/weather/timezone-list";
 import { VALID_LOCATIONS } from "@/lib/weather/location-list";
 import type { Prisma } from "@/prisma/generated/prisma/client";
 
+export const ASSISTANT_TONES = [
+  "professional",
+  "friendly",
+  "casual",
+  "witty",
+  "motivational",
+  "concise",
+] as const;
+export type AssistantTone = (typeof ASSISTANT_TONES)[number];
+
+export const ADDRESS_STYLES = [
+  "firstname",
+  "formal_male",
+  "formal_female",
+  "informal",
+] as const;
+export type AddressStyle = (typeof ADDRESS_STYLES)[number];
+
+export const RESPONSE_LENGTHS = ["brief", "balanced", "detailed"] as const;
+export type ResponseLength = (typeof RESPONSE_LENGTHS)[number];
+
 // ─── Types ────────────────────────────────────────────────
 
 export interface UserPreferences {
@@ -19,6 +40,10 @@ export interface UserPreferences {
   theme: string | null;
   notificationsEnabled: boolean | null;
   location: string | null;
+  assistantName: string | null;
+  assistantTone: AssistantTone | null;
+  addressStyle: AddressStyle | null;
+  responseLength: ResponseLength | null;
 }
 
 // ─── Internal helpers ─────────────────────────────────────
@@ -57,7 +82,37 @@ function parsePreferences(raw: unknown): UserPreferences {
       ? obj.location
       : null;
 
-  return { language, theme, notificationsEnabled, location };
+  const assistantName =
+    typeof obj.assistantName === "string" && obj.assistantName.trim().length > 0
+      ? obj.assistantName.trim().slice(0, 32)
+      : null;
+
+  const assistantTone = ASSISTANT_TONES.includes(
+    obj.assistantTone as AssistantTone,
+  )
+    ? (obj.assistantTone as AssistantTone)
+    : null;
+
+  const addressStyle = ADDRESS_STYLES.includes(obj.addressStyle as AddressStyle)
+    ? (obj.addressStyle as AddressStyle)
+    : null;
+
+  const responseLength = RESPONSE_LENGTHS.includes(
+    obj.responseLength as ResponseLength,
+  )
+    ? (obj.responseLength as ResponseLength)
+    : null;
+
+  return {
+    language,
+    theme,
+    notificationsEnabled,
+    location,
+    assistantName,
+    assistantTone,
+    addressStyle,
+    responseLength,
+  };
 }
 
 // ─── Queries ──────────────────────────────────────────────
@@ -79,6 +134,10 @@ export const getUserPreferences = cache(
         theme: null,
         notificationsEnabled: null,
         location: null,
+        assistantName: null,
+        assistantTone: null,
+        addressStyle: null,
+        responseLength: null,
       };
     return parsePreferences(user.preferences);
   },
@@ -104,7 +163,10 @@ export async function updateUserPreferences(
     next.notificationsEnabled = merged.notificationsEnabled;
   }
   if (merged.location) next.location = merged.location;
-
+  if (merged.assistantName) next.assistantName = merged.assistantName;
+  if (merged.assistantTone) next.assistantTone = merged.assistantTone;
+  if (merged.addressStyle) next.addressStyle = merged.addressStyle;
+  if (merged.responseLength) next.responseLength = merged.responseLength;
   await db.user.update({
     where: { id: userId },
     data: {

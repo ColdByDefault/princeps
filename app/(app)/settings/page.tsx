@@ -62,6 +62,10 @@ export default async function SettingsPage() {
         initialNotificationsEnabled={initialPrefs.notificationsEnabled ?? true}
         initialTimezone={userRow?.timezone ?? "UTC"}
         initialLocation={initialPrefs.location ?? null}
+        initialAssistantName={initialPrefs.assistantName ?? null}
+        initialAssistantTone={initialPrefs.assistantTone ?? null}
+        initialAddressStyle={initialPrefs.addressStyle ?? null}
+        initialResponseLength={initialPrefs.responseLength ?? null}
       />
     </div>
   );
