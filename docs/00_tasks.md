@@ -24,7 +24,7 @@
 - [ ] Update Tools-List in AI tab in Settings to match the actual tools we have in the system.
 - [ ] Open the available Tool-list collapseble shouldnt trigger the childern to open too / maybe make the parent available tools not collapsible and just show the children as collapsible.
 - [ ] Contact Page UI 
-- [ ] 
+- [ ] Start grouping elements in Navbar Desktop
 - [ ] 
 - [ ] 
 - [ ] 
