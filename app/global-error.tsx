@@ -6,7 +6,7 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangle, Home, LogIn, RefreshCw } from "lucide-react";
+import { AlertTriangle, Home, RefreshCw } from "lucide-react";
 import { useEffect, useSyncExternalStore } from "react";
 import { ThemeProvider } from "@/components/theme";
 import { Toaster } from "@/components/ui/sonner";
@@ -152,17 +152,6 @@ export default function GlobalError({
                     >
                       <Home className="size-4" />
                       {m.goHome}
-                    </Link>
-
-                    <Link
-                      href="/login"
-                      className={cn(
-                        buttonVariants({ variant: "ghost", size: "lg" }),
-                        "h-11 cursor-pointer rounded-xl px-4",
-                      )}
-                    >
-                      <LogIn className="size-4" />
-                      {m.goLogin}
                     </Link>
                   </div>
                 </div>

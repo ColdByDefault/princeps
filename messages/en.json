@@ -196,7 +196,11 @@
       "planPro": "Pro",
       "planPremium": "Premium",
       "planEnterprise": "Enterprise",
-      "profile": "My profile"
+      "profile": "My profile",
+      "apps": "Apps",
+      "meetings": "Meetings",
+      "decisions": "Decisions",
+      "comingSoon": "Coming soon"
     },
     "language": {
       "groupLabel": "Language selector",
@@ -436,7 +440,8 @@
     "groups": {
       "tasks": "Tasks",
       "labels": "Labels",
-      "profile": "Profile"
+      "profile": "Profile",
+      "contacts": "Contacts"
     },
     "catalog": {
       "create_task": {
@@ -483,6 +488,26 @@
         "label": "Get My Info",
         "what": "Returns your profile details: name, email, plan, timezone, and member since date.",
         "example": "\"What plan am I on?\" or \"Show me my profile info\""
+      },
+      "create_contact": {
+        "label": "Create Contact",
+        "what": "Creates a new contact with optional role, company, email, phone, notes, and labels.",
+        "example": "\"Add a contact: Jane Doe, CEO at Acme, jane@acme.com\""
+      },
+      "list_contacts": {
+        "label": "List Contacts",
+        "what": "Retrieves all your contacts with their details and IDs.",
+        "example": "\"Show me all my contacts\" or \"Who are my contacts?\""
+      },
+      "update_contact": {
+        "label": "Update Contact",
+        "what": "Updates an existing contact's details or labels.",
+        "example": "\"Update Jane's phone number to +1-555-0100\""
+      },
+      "delete_contact": {
+        "label": "Delete Contact",
+        "what": "Permanently deletes a contact.",
+        "example": "\"Delete the contact Jane Doe\""
       }
     }
   },

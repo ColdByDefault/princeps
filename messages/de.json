@@ -196,7 +196,11 @@
       "planPro": "Pro",
       "planPremium": "Premium",
       "planEnterprise": "Enterprise",
-      "profile": "Mein Profil"
+      "profile": "Mein Profil",
+      "apps": "Apps",
+      "meetings": "Meetings",
+      "decisions": "Entscheidungen",
+      "comingSoon": "Bald verfügbar"
     },
     "language": {
       "groupLabel": "Sprachauswahl",
@@ -436,7 +440,8 @@
     "groups": {
       "tasks": "Aufgaben",
       "labels": "Labels",
-      "profile": "Profil"
+      "profile": "Profil",
+      "contacts": "Kontakte"
     },
     "catalog": {
       "create_task": {
@@ -483,6 +488,26 @@
         "label": "Meine Infos abrufen",
         "what": "Gibt deine Profildaten zurück: Name, E-Mail, Plan, Zeitzone und Mitglied seit.",
         "example": "\"Welchen Plan habe ich?\" oder \"Zeige meine Profilinfos\""
+      },
+      "create_contact": {
+        "label": "Kontakt erstellen",
+        "what": "Erstellt einen neuen Kontakt mit optionaler Rolle, Firma, E-Mail, Telefon, Notizen und Labels.",
+        "example": "\"Kontakt hinzufügen: Jana Müller, CEO bei Acme, jana@acme.de\""
+      },
+      "list_contacts": {
+        "label": "Kontakte anzeigen",
+        "what": "Zeigt alle deine Kontakte mit Details und IDs an.",
+        "example": "\"Zeige alle meine Kontakte\" oder \"Wer sind meine Kontakte?\""
+      },
+      "update_contact": {
+        "label": "Kontakt bearbeiten",
+        "what": "Aktualisiert die Details oder Labels eines bestehenden Kontakts.",
+        "example": "\"Aktualisiere Janas Telefonnummer auf +49-555-0100\""
+      },
+      "delete_contact": {
+        "label": "Kontakt löschen",
+        "what": "Löscht einen Kontakt dauerhaft.",
+        "example": "\"Lösche den Kontakt Jana Müller\""
       }
     }
   },
