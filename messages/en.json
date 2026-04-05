@@ -282,6 +282,11 @@
       "pendingEmpty": "Start chatting first — empty chats are not saved.",
       "actions": "Chat actions",
       "userFallback": "Workspace user",
+      "navTasks": "Tasks",
+      "navKnowledge": "Knowledge Base",
+      "navContacts": "Contacts",
+      "navSettings": "Settings",
+      "profile": "My profile",
       "signOut": "Sign out",
       "signingOut": "Signing out…"
     },

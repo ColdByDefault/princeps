@@ -282,6 +282,11 @@
       "pendingEmpty": "Schreibe zuerst — leere Chats werden nicht gespeichert.",
       "actions": "Chat-Aktionen",
       "userFallback": "Arbeitsbereich-Nutzer",
+      "navTasks": "Aufgaben",
+      "navKnowledge": "Wissensbasis",
+      "navContacts": "Kontakte",
+      "navSettings": "Einstellungen",
+      "profile": "Mein Profil",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…"
     },
