@@ -31,7 +31,7 @@ export function ContactsShell({
   const [editContact, setEditContact] = useState<ContactRecord | null>(null);
   const [editOpen, setEditOpen] = useState(false);
 
-  const { creating, updating, createContact, updateContact, deleteContact } =
+  const { creating, createContact, updateContact, deleteContact } =
     useContactMutations(setContacts, {
       createSuccess: t("createDialog.success"),
       createError: t("createDialog.error"),

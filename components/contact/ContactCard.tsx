@@ -95,15 +95,18 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
           )}
           <CardAction>
             <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  className="cursor-pointer"
-                  aria-label={t("actionsLabel")}
-                >
-                  <MoreHorizontal className="size-4" />
-                </Button>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    className="cursor-pointer"
+                    aria-label={t("actionsLabel")}
+                    title={t("actionsLabel")}
+                  />
+                }
+              >
+                <MoreHorizontal className="size-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem

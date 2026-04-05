@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth/auth";
 import { listContacts } from "@/lib/contact/list.logic";
 import { createContact } from "@/lib/contact/create.logic";
 import { createContactSchema } from "@/lib/contact/schemas";
+import { enforceContactsMax, createTierLimitResponse } from "@/lib/tiers";
 
 // GET /api/contact — list all contacts for the current user
 export async function GET() {
@@ -28,6 +29,11 @@ export async function POST(req: Request) {
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const gate = await enforceContactsMax(session.user.id);
+  if (!gate.allowed) {
+    return createTierLimitResponse(gate.reason);
   }
 
   const body = (await req.json()) as unknown;

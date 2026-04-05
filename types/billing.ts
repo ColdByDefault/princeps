@@ -36,6 +36,8 @@ export interface PlanLimits {
   widgetToolsPerDay: number;
   /** Max LLM tool calls (function calls) per calendar month in main chat. */
   toolCallsPerMonth: number;
+  /** Max total contacts stored at once (no monthly reset). */
+  contactsMax: number;
   /** Whether proactive nudge notifications are active. */
   nudgesEnabled: boolean;
 }
@@ -60,6 +62,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetChatsPerDay: 30,
     widgetToolsPerDay: 5,
     toolCallsPerMonth: 50,
+    contactsMax: 10,
     nudgesEnabled: false,
   },
   pro: {
@@ -73,6 +76,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetChatsPerDay: 60,
     widgetToolsPerDay: 25,
     toolCallsPerMonth: 200,
+    contactsMax: 25,
     nudgesEnabled: true,
   },
   premium: {
@@ -86,6 +90,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetChatsPerDay: 120,
     widgetToolsPerDay: 50,
     toolCallsPerMonth: 500,
+    contactsMax: 50,
     nudgesEnabled: true,
   },
   enterprise: {
@@ -99,6 +104,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetChatsPerDay: 300,
     widgetToolsPerDay: 100,
     toolCallsPerMonth: 2_000,
+    contactsMax: 100,
     nudgesEnabled: true,
   },
 };
@@ -136,6 +142,10 @@ export interface UsageSummary {
   knowledgeCharsUsed: number;
   /** Plan maximum for lifetime knowledge characters. */
   knowledgeCharsLimit: number;
+  /** Current count of contacts at rest. */
+  contactsStored: number;
+  /** Plan maximum for contacts at rest. */
+  contactsLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

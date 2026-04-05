@@ -380,6 +380,33 @@ export async function enforceToolCallsMonthly(
   return { allowed: true };
 }
 
+// ─── Contacts limit ───────────────────────────────────────
+
+/**
+ * Checks whether the user is allowed to create another contact.
+ * This is a count-at-rest limit (no monthly reset) —
+ * no counter is incremented here. The caller creates the contact on success.
+ */
+export async function enforceContactsMax(
+  userId: string,
+): Promise<EnforceResult> {
+  const [tier, count] = await Promise.all([
+    getUserTier(userId),
+    db.contact.count({ where: { userId } }),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (count >= limits.contactsMax) {
+    return {
+      allowed: false,
+      reason: "Contact limit reached for your plan.",
+    };
+  }
+
+  return { allowed: true };
+}
+
 // ─── Response factory ─────────────────────────────────────
 
 /**

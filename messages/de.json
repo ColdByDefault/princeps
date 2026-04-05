@@ -159,7 +159,9 @@
       "knowledgeDocsTitle": "Wissensdokumente (gespeichert)",
       "knowledgeDocsNote": "Anzahl der aktuell gespeicherten Dokumente.",
       "knowledgeCharsTitle": "Wissens-Textumfang (gesamt)",
-      "knowledgeCharsNote": "Kumulativer Zeichenumfang aller bisher verarbeiteten Dokumente — sinkt nicht beim Löschen."
+      "knowledgeCharsNote": "Kumulativer Zeichenumfang aller bisher verarbeiteten Dokumente — sinkt nicht beim Löschen.",
+      "contactsTitle": "Kontakte (gespeichert)",
+      "contactsNote": "Anzahl der aktuell gespeicherten Kontakte."
     }
   },
   "chatWidget": {

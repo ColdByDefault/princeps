@@ -153,6 +153,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           limit={usage.knowledgeCharsLimit}
           note={t("knowledgeCharsNote")}
         />
+        <QuotaRow
+          label={t("contactsTitle")}
+          used={usage.contactsStored}
+          limit={usage.contactsLimit}
+          note={t("contactsNote")}
+        />
       </div>
 
       {/* Reset footer */}

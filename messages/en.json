@@ -159,7 +159,9 @@
       "knowledgeDocsTitle": "Knowledge documents (stored)",
       "knowledgeDocsNote": "Number of documents currently stored.",
       "knowledgeCharsTitle": "Knowledge text volume (lifetime)",
-      "knowledgeCharsNote": "Cumulative character count of all processed uploads — does not decrease on delete."
+      "knowledgeCharsNote": "Cumulative character count of all processed uploads — does not decrease on delete.",
+      "contactsTitle": "Contacts (stored)",
+      "contactsNote": "Number of contacts currently stored."
     }
   },
   "chatWidget": {

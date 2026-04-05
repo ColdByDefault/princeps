@@ -11,6 +11,7 @@ export {
   enforceWidgetTools,
   enforceMonthlyLimits,
   enforceToolCallsMonthly,
+  enforceContactsMax,
   accumulateTokens,
   getChatHistoryLimit,
   createTierLimitResponse,
