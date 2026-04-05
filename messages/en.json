@@ -1,10 +1,10 @@
 {
   "landing": {
     "metadata": {
-      "title": "See-Sweet",
+      "title": "C-Sweet",
       "description": "Private executive secretariat for focused operators."
     },
-    "brandName": "See-Sweet",
+    "brandName": "C-Sweet",
     "tagline": "Your digital chief of staff",
     "login": "Sign in",
     "signUp": "Create account"
@@ -37,7 +37,7 @@
     "login": {
       "metadata": {
         "title": "Sign In",
-        "description": "Sign in to your See-Sweet workspace."
+        "description": "Sign in to your C-Sweet workspace."
       },
       "title": "Welcome back",
       "subtitle": "Sign in with your email and password.",
@@ -55,7 +55,7 @@
     "signUp": {
       "metadata": {
         "title": "Create Account",
-        "description": "Create your See-Sweet workspace."
+        "description": "Create your C-Sweet workspace."
       },
       "title": "Create an account",
       "subtitle": "Sign up with your email address.",
@@ -111,15 +111,26 @@
     },
     "tabs": {
       "appearance": "Appearance",
-      "provider": "AI",
+      "provider": "Providers",
       "usage": "Usage",
-      "labels": "Labels"
+      "labels": "Labels",
+      "assistant": "Assistant"
     },
     "appearance": {
       "themeTitle": "Theme",
       "themeDescription": "Choose between light, dark, or system-based theme.",
       "languageTitle": "Language",
       "languageDescription": "Choose the display language for your workspace.",
+      "locationTitle": "Location",
+      "locationDescription": "Choose your city for accurate weather display.",
+      "locationPlaceholder": "Select city",
+      "locationSaved": "Location saved.",
+      "locationSaveFailed": "Failed to save location.",
+      "timezoneTitle": "Timezone",
+      "timezoneDescription": "Choose your timezone — affects weather and daily greetings.",
+      "timezonePlaceholder": "Select timezone",
+      "timezoneSaved": "Timezone saved.",
+      "timezoneSaveFailed": "Failed to save timezone.",
       "notificationsTitle": "Daily Greeting",
       "notificationsDescription": "Receive a daily personal greeting from your assistant.",
       "notificationsDisclaimer": "Greetings use your monthly token quota."
@@ -162,6 +173,45 @@
       "knowledgeCharsNote": "Cumulative character count of all processed uploads — does not decrease on delete.",
       "contactsTitle": "Contacts (stored)",
       "contactsNote": "Number of contacts currently stored."
+    },
+    "assistant": {
+      "pageDescription": "Personalize how your assistant looks, speaks, and interacts with you.",
+      "nameTitle": "Assistant Name",
+      "nameDescription": "Give your assistant a name you'd like to use.",
+      "namePlaceholder": "e.g. Alex, Nova…",
+      "nameSaved": "Assistant name saved.",
+      "nameSaveFailed": "Failed to save assistant name.",
+      "toneTitle": "Personality & Tone",
+      "toneDescription": "Choose the communication style of your assistant.",
+      "toneProfessional": "Professional",
+      "toneFriendly": "Friendly & Warm",
+      "toneCasual": "Casual & Relaxed",
+      "toneWitty": "Witty & Playful",
+      "toneMotivational": "Motivational",
+      "toneConcise": "Brief & Direct",
+      "toneSaved": "Tone saved.",
+      "toneSaveFailed": "Failed to save tone.",
+      "addressTitle": "How to Address You",
+      "addressDescription": "Choose how your assistant refers to you in conversation.",
+      "addressFirstname": "First name",
+      "addressFormalMale": "Mr. Surname",
+      "addressFormalFemale": "Mrs. / Ms. Surname",
+      "addressInformal": "Casual (no title)",
+      "addressSaved": "Address style saved.",
+      "addressSaveFailed": "Failed to save address style.",
+      "lengthTitle": "Response Length",
+      "lengthDescription": "Set the preferred verbosity of assistant responses.",
+      "lengthBrief": "Brief",
+      "lengthBalanced": "Balanced",
+      "lengthDetailed": "Detailed",
+      "lengthSaved": "Response length saved.",
+      "lengthSaveFailed": "Failed to save response length.",
+      "proactivityTitle": "Proactivity Level",
+      "proactivityDescription": "How often the assistant proactively offers suggestions and follow-ups.",
+      "comingSoon": "Coming soon",
+      "toneSelectPlaceholder": "Select tone",
+      "addressSelectPlaceholder": "Select address style",
+      "lengthSelectPlaceholder": "Select length"
     }
   },
   "chatWidget": {
@@ -169,7 +219,7 @@
   },
   "shell": {
     "nav": {
-      "brand": "See-Sweet",
+      "brand": "C-Sweet",
       "home": "Workspace",
       "chat": "Chat",
       "knowledge": "Knowledge Base",
@@ -186,7 +236,11 @@
       "planPro": "Pro",
       "planPremium": "Premium",
       "planEnterprise": "Enterprise",
-      "profile": "My profile"
+      "profile": "My profile",
+      "apps": "Apps",
+      "meetings": "Meetings",
+      "decisions": "Decisions",
+      "comingSoon": "Coming soon"
     },
     "language": {
       "groupLabel": "Language selector",
@@ -426,7 +480,8 @@
     "groups": {
       "tasks": "Tasks",
       "labels": "Labels",
-      "profile": "Profile"
+      "profile": "Profile",
+      "contacts": "Contacts"
     },
     "catalog": {
       "create_task": {
@@ -473,6 +528,26 @@
         "label": "Get My Info",
         "what": "Returns your profile details: name, email, plan, timezone, and member since date.",
         "example": "\"What plan am I on?\" or \"Show me my profile info\""
+      },
+      "create_contact": {
+        "label": "Create Contact",
+        "what": "Creates a new contact with optional role, company, email, phone, notes, and labels.",
+        "example": "\"Add a contact: Jane Doe, CEO at Acme, jane@acme.com\""
+      },
+      "list_contacts": {
+        "label": "List Contacts",
+        "what": "Retrieves all your contacts with their details and IDs.",
+        "example": "\"Show me all my contacts\" or \"Who are my contacts?\""
+      },
+      "update_contact": {
+        "label": "Update Contact",
+        "what": "Updates an existing contact's details or labels.",
+        "example": "\"Update Jane's phone number to +1-555-0100\""
+      },
+      "delete_contact": {
+        "label": "Delete Contact",
+        "what": "Permanently deletes a contact.",
+        "example": "\"Delete the contact Jane Doe\""
       }
     }
   },
@@ -493,7 +568,7 @@
   "pricing": {
     "metadata": {
       "title": "Plans",
-      "description": "Available plans and quotas for See-Sweet."
+      "description": "Available plans and quotas for C-Sweet."
     },
     "pageTitle": "Plans & Quotas",
     "pageSubtitle": "Your current plan and all available options.",

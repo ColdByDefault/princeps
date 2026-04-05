@@ -1,10 +1,10 @@
 {
   "landing": {
     "metadata": {
-      "title": "See-Sweet",
+      "title": "C-Sweet",
       "description": "Privates Chefsekretariat für fokussierte Entscheider."
     },
-    "brandName": "See-Sweet",
+    "brandName": "C-Sweet",
     "tagline": "Dein digitales Chefsekretariat",
     "login": "Anmelden",
     "signUp": "Konto erstellen"
@@ -37,7 +37,7 @@
     "login": {
       "metadata": {
         "title": "Anmelden",
-        "description": "Melde dich in deinem See-Sweet-Arbeitsbereich an."
+        "description": "Melde dich in deinem C-Sweet-Arbeitsbereich an."
       },
       "title": "Willkommen zurück",
       "subtitle": "Melde dich mit deiner E-Mail-Adresse und deinem Passwort an.",
@@ -55,7 +55,7 @@
     "signUp": {
       "metadata": {
         "title": "Konto erstellen",
-        "description": "Erstelle deinen See-Sweet-Arbeitsbereich."
+        "description": "Erstelle deinen C-Sweet-Arbeitsbereich."
       },
       "title": "Konto erstellen",
       "subtitle": "Registriere dich mit deiner E-Mail-Adresse.",
@@ -111,15 +111,26 @@
     },
     "tabs": {
       "appearance": "Erscheinungsbild",
-      "provider": "KI",
+      "provider": "Anbieter",
       "usage": "Nutzung",
-      "labels": "Labels"
+      "labels": "Labels",
+      "assistant": "Assistent"
     },
     "appearance": {
       "themeTitle": "Design",
       "themeDescription": "Wähle zwischen hellem, dunklem oder systembasiertem Design.",
       "languageTitle": "Sprache",
       "languageDescription": "Wähle die Anzeigesprache deines Arbeitsbereichs.",
+      "locationTitle": "Standort",
+      "locationDescription": "Wähle deine Stadt für genaue Wetteranzeigen.",
+      "locationPlaceholder": "Stadt auswählen",
+      "locationSaved": "Standort gespeichert.",
+      "locationSaveFailed": "Standort konnte nicht gespeichert werden.",
+      "timezoneTitle": "Zeitzone",
+      "timezoneDescription": "Wähle deine Zeitzone — beeinflusst Wetter und tägliche Grüße.",
+      "timezonePlaceholder": "Zeitzone auswählen",
+      "timezoneSaved": "Zeitzone gespeichert.",
+      "timezoneSaveFailed": "Zeitzone konnte nicht gespeichert werden.",
       "notificationsTitle": "Tägliche Begrüßung",
       "notificationsDescription": "Erhalte täglich eine persönliche Begrüßung von deinem Assistenten.",
       "notificationsDisclaimer": "Begrüßungen verbrauchen dein monatliches Token-Kontingent."
@@ -162,6 +173,45 @@
       "knowledgeCharsNote": "Kumulativer Zeichenumfang aller bisher verarbeiteten Dokumente — sinkt nicht beim Löschen.",
       "contactsTitle": "Kontakte (gespeichert)",
       "contactsNote": "Anzahl der aktuell gespeicherten Kontakte."
+    },
+    "assistant": {
+      "pageDescription": "Passe an, wie dein Assistent spricht und mit dir interagiert.",
+      "nameTitle": "Assistentenname",
+      "nameDescription": "Gib deinem Assistenten einen bevorzugten Namen.",
+      "namePlaceholder": "z. B. Alex, Nova…",
+      "nameSaved": "Assistentenname gespeichert.",
+      "nameSaveFailed": "Assistentenname konnte nicht gespeichert werden.",
+      "toneTitle": "Persönlichkeit & Ton",
+      "toneDescription": "Wähle den Kommunikationsstil deines Assistenten.",
+      "toneProfessional": "Professionell",
+      "toneFriendly": "Freundlich & Herzlich",
+      "toneCasual": "Locker & Entspannt",
+      "toneWitty": "Witzig & Verspielt",
+      "toneMotivational": "Motivierend",
+      "toneConcise": "Knapp & Direkt",
+      "toneSaved": "Ton gespeichert.",
+      "toneSaveFailed": "Ton konnte nicht gespeichert werden.",
+      "addressTitle": "Anredestil",
+      "addressDescription": "Wie soll dich dein Assistent im Gespräch ansprechen?",
+      "addressFirstname": "Vorname",
+      "addressFormalMale": "Herr + Nachname",
+      "addressFormalFemale": "Frau + Nachname",
+      "addressInformal": "Locker (kein Titel)",
+      "addressSaved": "Anredestil gespeichert.",
+      "addressSaveFailed": "Anredestil konnte nicht gespeichert werden.",
+      "lengthTitle": "Antwortlänge",
+      "lengthDescription": "Lege die bevorzugte Ausführlichkeit der Antworten fest.",
+      "lengthBrief": "Kurz",
+      "lengthBalanced": "Ausgewogen",
+      "lengthDetailed": "Ausführlich",
+      "lengthSaved": "Antwortlänge gespeichert.",
+      "lengthSaveFailed": "Antwortlänge konnte nicht gespeichert werden.",
+      "proactivityTitle": "Proaktivitätsniveau",
+      "proactivityDescription": "Wie oft der Assistent eigenständig Vorschläge und Nachfragen macht.",
+      "comingSoon": "Bald verfügbar",
+      "toneSelectPlaceholder": "Ton auswählen",
+      "addressSelectPlaceholder": "Anredestil auswählen",
+      "lengthSelectPlaceholder": "Länge auswählen"
     }
   },
   "chatWidget": {
@@ -169,7 +219,7 @@
   },
   "shell": {
     "nav": {
-      "brand": "See-Sweet",
+      "brand": "C-Sweet",
       "home": "Arbeitsbereich",
       "knowledge": "Wissensbasis",
       "chat": "Chat",
@@ -186,7 +236,11 @@
       "planPro": "Pro",
       "planPremium": "Premium",
       "planEnterprise": "Enterprise",
-      "profile": "Mein Profil"
+      "profile": "Mein Profil",
+      "apps": "Apps",
+      "meetings": "Meetings",
+      "decisions": "Entscheidungen",
+      "comingSoon": "Bald verfügbar"
     },
     "language": {
       "groupLabel": "Sprachauswahl",
@@ -426,7 +480,8 @@
     "groups": {
       "tasks": "Aufgaben",
       "labels": "Labels",
-      "profile": "Profil"
+      "profile": "Profil",
+      "contacts": "Kontakte"
     },
     "catalog": {
       "create_task": {
@@ -473,6 +528,26 @@
         "label": "Meine Infos abrufen",
         "what": "Gibt deine Profildaten zurück: Name, E-Mail, Plan, Zeitzone und Mitglied seit.",
         "example": "\"Welchen Plan habe ich?\" oder \"Zeige meine Profilinfos\""
+      },
+      "create_contact": {
+        "label": "Kontakt erstellen",
+        "what": "Erstellt einen neuen Kontakt mit optionaler Rolle, Firma, E-Mail, Telefon, Notizen und Labels.",
+        "example": "\"Kontakt hinzufügen: Jana Müller, CEO bei Acme, jana@acme.de\""
+      },
+      "list_contacts": {
+        "label": "Kontakte anzeigen",
+        "what": "Zeigt alle deine Kontakte mit Details und IDs an.",
+        "example": "\"Zeige alle meine Kontakte\" oder \"Wer sind meine Kontakte?\""
+      },
+      "update_contact": {
+        "label": "Kontakt bearbeiten",
+        "what": "Aktualisiert die Details oder Labels eines bestehenden Kontakts.",
+        "example": "\"Aktualisiere Janas Telefonnummer auf +49-555-0100\""
+      },
+      "delete_contact": {
+        "label": "Kontakt löschen",
+        "what": "Löscht einen Kontakt dauerhaft.",
+        "example": "\"Lösche den Kontakt Jana Müller\""
       }
     }
   },
@@ -493,7 +568,7 @@
   "pricing": {
     "metadata": {
       "title": "Pläne",
-      "description": "Verfügbare Pläne und Kontingente für See-Sweet."
+      "description": "Verfügbare Pläne und Kontingente für C-Sweet."
     },
     "pageTitle": "Pläne & Kontingente",
     "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",

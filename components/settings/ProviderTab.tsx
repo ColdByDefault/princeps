@@ -39,6 +39,15 @@ const TOOL_GROUPS: { key: string; tools: string[] }[] = [
     tools: ["create_label", "list_labels", "update_label", "delete_label"],
   },
   { key: "profile", tools: ["get_user_info"] },
+  {
+    key: "contacts",
+    tools: [
+      "create_contact",
+      "list_contacts",
+      "update_contact",
+      "delete_contact",
+    ],
+  },
 ];
 
 // ─── Component ────────────────────────────────────────────
@@ -176,20 +185,17 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
       <Separator />
 
       {/* ── Tools Catalog ─────────────────────────── */}
-      <Collapsible defaultOpen>
-        <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 py-2 text-left">
-          <div className="space-y-0.5">
-            <p className="text-sm font-medium">{tTools("title")}</p>
-            <p className="text-sm text-muted-foreground">
-              {tTools("description")}
-            </p>
-          </div>
-          <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-panel-open:rotate-180" />
-        </CollapsibleTrigger>
+      <div className="py-2">
+        <div className="space-y-0.5 pb-3">
+          <p className="text-sm font-medium">{tTools("title")}</p>
+          <p className="text-sm text-muted-foreground">
+            {tTools("description")}
+          </p>
+        </div>
 
-        <CollapsibleContent className="space-y-4 pb-2 pt-3">
+        <div className="space-y-4 pb-2">
           {TOOL_GROUPS.map((group) => (
-            <Collapsible key={group.key} defaultOpen>
+            <Collapsible key={group.key}>
               <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 pb-1.5">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">
                   {tTools(`groups.${group.key}`)}
@@ -224,8 +230,8 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
               </CollapsibleContent>
             </Collapsible>
           ))}
-        </CollapsibleContent>
-      </Collapsible>
+        </div>
+      </div>
     </div>
   );
 }

@@ -6,7 +6,17 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { updateUserPreferences } from "@/lib/settings/user-preferences.logic";
+import {
+  updateUserPreferences,
+  updateUserTimezone,
+  updateUserLocation,
+  ASSISTANT_TONES,
+  ADDRESS_STYLES,
+  RESPONSE_LENGTHS,
+  type AssistantTone,
+  type AddressStyle,
+  type ResponseLength,
+} from "@/lib/settings/user-preferences.logic";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
 
 export async function PATCH(req: Request) {
@@ -27,14 +37,25 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const { language, theme, notificationsEnabled } = body as Record<
-    string,
-    unknown
-  >;
+  const {
+    language,
+    theme,
+    notificationsEnabled,
+    timezone,
+    location,
+    assistantName,
+    assistantTone,
+    addressStyle,
+    responseLength,
+  } = body as Record<string, unknown>;
   const patch: {
     language?: AppLanguage;
     theme?: string;
     notificationsEnabled?: boolean;
+    assistantName?: string | null;
+    assistantTone?: AssistantTone;
+    addressStyle?: AddressStyle;
+    responseLength?: ResponseLength;
   } = {};
 
   if (isSupportedLanguage(language as string)) {
@@ -49,11 +70,69 @@ export async function PATCH(req: Request) {
   if (typeof notificationsEnabled === "boolean") {
     patch.notificationsEnabled = notificationsEnabled;
   }
+  // assistantName: null clears it, non-empty string sets it
+  if (assistantName === null) {
+    patch.assistantName = null;
+  } else if (
+    typeof assistantName === "string" &&
+    assistantName.trim().length > 0
+  ) {
+    patch.assistantName = assistantName.trim().slice(0, 32);
+  }
+  if (
+    typeof assistantTone === "string" &&
+    ASSISTANT_TONES.includes(assistantTone as AssistantTone)
+  ) {
+    patch.assistantTone = assistantTone as AssistantTone;
+  }
+  if (
+    typeof addressStyle === "string" &&
+    ADDRESS_STYLES.includes(addressStyle as AddressStyle)
+  ) {
+    patch.addressStyle = addressStyle as AddressStyle;
+  }
+  if (
+    typeof responseLength === "string" &&
+    RESPONSE_LENGTHS.includes(responseLength as ResponseLength)
+  ) {
+    patch.responseLength = responseLength as ResponseLength;
+  }
 
-  if (Object.keys(patch).length === 0) {
+  const hasPreferencePatch = Object.keys(patch).length > 0;
+
+  if (
+    !hasPreferencePatch &&
+    typeof timezone !== "string" &&
+    typeof location !== "string"
+  ) {
     return NextResponse.json({ ok: true });
   }
 
-  await updateUserPreferences(session.user.id, patch);
+  if (hasPreferencePatch) {
+    await updateUserPreferences(session.user.id, patch);
+  }
+
+  if (typeof timezone === "string") {
+    try {
+      await updateUserTimezone(session.user.id, timezone);
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid timezone value." },
+        { status: 400 },
+      );
+    }
+  }
+
+  if (typeof location === "string") {
+    try {
+      await updateUserLocation(session.user.id, location);
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid location value." },
+        { status: 400 },
+      );
+    }
+  }
+
   return NextResponse.json({ ok: true });
 }

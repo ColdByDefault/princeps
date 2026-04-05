@@ -6,7 +6,14 @@
 "use client";
 
 import Link from "next/link";
-import { LogOut, type LucideIcon } from "lucide-react";
+import {
+  LogOut,
+  LayoutGrid,
+  ChevronDown,
+  CalendarDays,
+  Scale,
+  type LucideIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
@@ -18,6 +25,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { NotificationBell } from "@/components/notifications";
 
@@ -41,6 +57,14 @@ function isActivePath(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+const GROUPED_HREFS = new Set(["/tasks", "/contact"]);
+const AFTER_DROPDOWN_HREFS = new Set(["/settings", "/pricing"]);
+
+const placeholderItems = [
+  { key: "meetings", icon: CalendarDays },
+  { key: "decisions", icon: Scale },
+] as const;
+
 export default function NavbarDesktop({
   navLinks,
   pathname,
@@ -51,10 +75,100 @@ export default function NavbarDesktop({
 }: NavbarDesktopProps) {
   const t = useTranslations("shell");
 
+  const flatLinks = navLinks.filter((l) => !GROUPED_HREFS.has(l.href));
+  const beforeLinks = flatLinks.filter(
+    (l) => !AFTER_DROPDOWN_HREFS.has(l.href),
+  );
+  const afterLinks = flatLinks.filter((l) => AFTER_DROPDOWN_HREFS.has(l.href));
+  const groupedLinks = navLinks.filter((l) => GROUPED_HREFS.has(l.href));
+  const isGroupActive = groupedLinks.some((l) =>
+    isActivePath(pathname, l.href),
+  );
+
   return (
     <>
       <nav className="hidden min-[1000px]:flex min-[1000px]:items-center min-[1000px]:gap-2">
-        {navLinks.map((link) => {
+        {beforeLinks.map((link) => {
+          const Icon = link.icon;
+          const isActive = isActivePath(pathname, link.href);
+          return (
+            <Button
+              key={link.href}
+              variant={isActive ? "secondary" : "ghost"}
+              size="sm"
+              className={cn(
+                "cursor-pointer rounded-full bg-transparent px-3",
+                isActive && "shadow-sm",
+              )}
+              nativeButton={false}
+              render={<Link href={link.href} />}
+            >
+              <Icon className="size-3.5" />
+              {link.label}
+            </Button>
+          );
+        })}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                type="button"
+                variant={isGroupActive ? "secondary" : "ghost"}
+                size="sm"
+                className={cn(
+                  "cursor-pointer rounded-full bg-transparent px-3",
+                  isGroupActive && "shadow-sm",
+                )}
+              />
+            }
+          >
+            <LayoutGrid className="size-3.5" />
+            {t("nav.apps")}
+            <ChevronDown className="size-3" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            side="bottom"
+            align="start"
+            className="min-w-44 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
+          >
+            <DropdownMenuGroup>
+              {groupedLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = isActivePath(pathname, link.href);
+                return (
+                  <DropdownMenuItem
+                    key={link.href}
+                    className={cn(
+                      "cursor-pointer rounded-xl",
+                      isActive && "bg-accent text-accent-foreground",
+                    )}
+                    render={<Link href={link.href} />}
+                  >
+                    <Icon className="size-3.5" />
+                    {link.label}
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>{t("nav.comingSoon")}</DropdownMenuLabel>
+              {placeholderItems.map(({ key, icon: Icon }) => (
+                <DropdownMenuItem
+                  key={key}
+                  disabled
+                  className="rounded-xl opacity-50"
+                >
+                  <Icon className="size-3.5" />
+                  {t(`nav.${key}`)}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {afterLinks.map((link) => {
           const Icon = link.icon;
           const isActive = isActivePath(pathname, link.href);
           return (

@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
+import { db } from "@/lib/db";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { getProviderStatus } from "@/lib/settings/provider-status.logic";
 import { getUserUsage } from "@/lib/settings/usage.logic";
@@ -37,12 +38,16 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const [initialStatus, initialUsage, initialLabels, initialPrefs] =
+  const [initialStatus, initialUsage, initialLabels, initialPrefs, userRow] =
     await Promise.all([
       getProviderStatus(),
       getUserUsage(session.user.id),
       listLabels(session.user.id),
       getUserPreferences(session.user.id),
+      db.user.findUnique({
+        where: { id: session.user.id },
+        select: { timezone: true },
+      }),
     ]);
   const cookieStore = await cookies();
   const initialTab = cookieStore.get("settings-tab")?.value ?? "appearance";
@@ -55,6 +60,12 @@ export default async function SettingsPage() {
         initialUsage={initialUsage}
         initialLabels={initialLabels}
         initialNotificationsEnabled={initialPrefs.notificationsEnabled ?? true}
+        initialTimezone={userRow?.timezone ?? "UTC"}
+        initialLocation={initialPrefs.location ?? null}
+        initialAssistantName={initialPrefs.assistantName ?? null}
+        initialAssistantTone={initialPrefs.assistantTone ?? null}
+        initialAddressStyle={initialPrefs.addressStyle ?? null}
+        initialResponseLength={initialPrefs.responseLength ?? null}
       />
     </div>
   );

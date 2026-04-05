@@ -1,13 +1,13 @@
 ---
-description: "High-level repo architecture, layer responsibilities, and cross-cutting rules for See-Sweet."
-name: "See-Sweet Repo Overview"
+description: "High-level repo architecture, layer responsibilities, and cross-cutting rules for C-Sweet."
+name: "C-Sweet Repo Overview"
 ---
 
-# See-Sweet Repo Overview
+# C-Sweet Repo Overview
 
 ## Product Intent
 
-- See-Sweet is a private executive secretariat, not a generic chatbot.
+- C-Sweet is a private executive secretariat, not a generic chatbot.
 - Prioritize workflows around preparation, memory, decisions, coordination, and follow-through.
 - Favor features that increase user leverage inside a personal authenticated workspace.
 - Core shape: user-scoped data, retrieval-backed assistant, configurable behavior, multilingual UI (German default + English), structured workspace flows.

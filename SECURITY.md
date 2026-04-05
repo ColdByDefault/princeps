@@ -2,9 +2,9 @@
 
 ## Overview
 
-This policy describes how security issues should be reported for See-Sweet.
+This policy describes how security issues should be reported for C-Sweet.
 
-See-Sweet handles authenticated chat, personal knowledge entries, uploaded documents, and assistant configuration. Any issue affecting account access, stored user data, API protection, document handling, or model/provider configuration should be treated as security-relevant.
+C-Sweet handles authenticated chat, personal knowledge entries, uploaded documents, and assistant configuration. Any issue affecting account access, stored user data, API protection, document handling, or model/provider configuration should be treated as security-relevant.
 
 ## Supported Versions
 

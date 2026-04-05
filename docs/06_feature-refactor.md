@@ -8,7 +8,7 @@
 
 ## Overview of the Full Stack
 
-A complete feature in See-Sweet spans six layers:
+A complete feature in C-Sweet spans six layers:
 
 ```
 prisma/schema.prisma          ← 1. Data model

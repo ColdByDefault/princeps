@@ -1,8 +1,8 @@
-﻿# See-Sweet
+﻿# C-Sweet
 
 **Version:** 0.1.35
 
-A private AI workspace that functions as a personal executive secretariat — not another generic chat interface. See-Sweet gives individuals the same operational leverage that high-performing executives build around themselves through chiefs of staff: preparation, memory, coordination, and structured follow-through.
+A private AI workspace that functions as a personal executive secretariat — not another generic chat interface. C-Sweet gives individuals the same operational leverage that high-performing executives build around themselves through chiefs of staff: preparation, memory, coordination, and structured follow-through.
 
 ---
 
@@ -51,8 +51,8 @@ A private AI workspace that functions as a personal executive secretariat — no
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/ColdByDefault/see-sweet.git
-cd see-sweet
+git clone https://github.com/ColdByDefault/C-sweet.git
+cd C-sweet
 npm install
 ```
 
@@ -200,7 +200,7 @@ The entire interface is available in English and German. The active language is 
 
 Copyright © 2026 Yazan Abo-Ayash (ColdByDefault™). All rights reserved.
 
-See-Sweet is proprietary software. The source code is published for reference and transparency purposes only. No license is granted to use, copy, modify, distribute, sublicense, or deploy this software or any portion of it without explicit written permission from the copyright holder.
+C-Sweet is proprietary software. The source code is published for reference and transparency purposes only. No license is granted to use, copy, modify, distribute, sublicense, or deploy this software or any portion of it without explicit written permission from the copyright holder.
 
 See [LICENSE](LICENSE) for the full terms.
 
@@ -208,7 +208,7 @@ See [LICENSE](LICENSE) for the full terms.
 
 ## Acceptable Use
 
-See-Sweet is a personal productivity tool designed for lawful individual use. By deploying or operating this software you agree not to:
+C-Sweet is a personal productivity tool designed for lawful individual use. By deploying or operating this software you agree not to:
 
 - Use the platform to store, process, or transmit unlawful, harmful, or fraudulent content.
 - Attempt to access, extract, or interfere with another user's data.

@@ -9,15 +9,27 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AppearanceTab } from "./AppearanceTab";
+import { AssistantTab } from "./AssistantTab";
 import { LabelsTab } from "./LabelsTab";
 import { ProviderTab } from "./ProviderTab";
 import { UsageTab } from "./UsageTab";
 import type { ProviderStatusPayload } from "@/types/llm";
 import type { UsageSummary } from "@/types/billing";
 import type { LabelRecord } from "@/types/api";
+import type {
+  AssistantTone,
+  AddressStyle,
+  ResponseLength,
+} from "@/lib/settings/user-preferences.logic";
 
 const COOKIE_KEY = "settings-tab";
-const VALID_TABS = ["appearance", "labels", "usage", "provider"] as const;
+const VALID_TABS = [
+  "appearance",
+  "labels",
+  "usage",
+  "provider",
+  "assistant",
+] as const;
 type SettingsTab = (typeof VALID_TABS)[number];
 
 function setTabCookie(tab: SettingsTab) {
@@ -30,6 +42,12 @@ type SettingsShellProps = {
   initialUsage: UsageSummary;
   initialLabels: LabelRecord[];
   initialNotificationsEnabled: boolean;
+  initialTimezone: string;
+  initialLocation: string | null;
+  initialAssistantName: string | null;
+  initialAssistantTone: AssistantTone | null;
+  initialAddressStyle: AddressStyle | null;
+  initialResponseLength: ResponseLength | null;
 };
 
 export function SettingsShell({
@@ -38,6 +56,12 @@ export function SettingsShell({
   initialUsage,
   initialLabels,
   initialNotificationsEnabled,
+  initialTimezone,
+  initialLocation,
+  initialAssistantName,
+  initialAssistantTone,
+  initialAddressStyle,
+  initialResponseLength,
 }: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
   const safeInitial: SettingsTab = VALID_TABS.includes(
@@ -61,6 +85,9 @@ export function SettingsShell({
         <TabsTrigger value="appearance" className="flex-1">
           {t("appearance")}
         </TabsTrigger>
+        <TabsTrigger value="assistant" className="flex-1">
+          {t("assistant")}
+        </TabsTrigger>
         <TabsTrigger value="labels" className="flex-1">
           {t("labels")}
         </TabsTrigger>
@@ -75,6 +102,8 @@ export function SettingsShell({
       <TabsContent value="appearance" className="mt-6 w-full">
         <AppearanceTab
           initialNotificationsEnabled={initialNotificationsEnabled}
+          initialTimezone={initialTimezone}
+          initialLocation={initialLocation}
         />
       </TabsContent>
 
@@ -88,6 +117,15 @@ export function SettingsShell({
 
       <TabsContent value="provider" className="mt-6 w-full">
         <ProviderTab initialStatus={initialStatus} />
+      </TabsContent>
+
+      <TabsContent value="assistant" className="mt-6 w-full">
+        <AssistantTab
+          initialAssistantName={initialAssistantName}
+          initialAssistantTone={initialAssistantTone}
+          initialAddressStyle={initialAddressStyle}
+          initialResponseLength={initialResponseLength}
+        />
       </TabsContent>
     </Tabs>
   );

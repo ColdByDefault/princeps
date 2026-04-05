@@ -6,7 +6,7 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangle, Home, LogIn, RefreshCw } from "lucide-react";
+import { AlertTriangle, Home, RefreshCw } from "lucide-react";
 import { useEffect, useSyncExternalStore } from "react";
 import { ThemeProvider } from "@/components/theme";
 import { Toaster } from "@/components/ui/sonner";
@@ -28,7 +28,7 @@ const t: Record<AppLanguage, Record<string, string>> = {
     retry: "Erneut versuchen",
     goHome: "Zum Arbeitsbereich",
     goLogin: "Zur Anmeldung",
-    brand: "See-Sweet",
+    brand: "C-Sweet",
   },
   en: {
     badge: "Application recovery",
@@ -38,7 +38,7 @@ const t: Record<AppLanguage, Record<string, string>> = {
     retry: "Try again",
     goHome: "Open workspace",
     goLogin: "Open sign in",
-    brand: "See-Sweet",
+    brand: "C-Sweet",
   },
 };
 
@@ -152,17 +152,6 @@ export default function GlobalError({
                     >
                       <Home className="size-4" />
                       {m.goHome}
-                    </Link>
-
-                    <Link
-                      href="/login"
-                      className={cn(
-                        buttonVariants({ variant: "ghost", size: "lg" }),
-                        "h-11 cursor-pointer rounded-xl px-4",
-                      )}
-                    >
-                      <LogIn className="size-4" />
-                      {m.goLogin}
                     </Link>
                   </div>
                 </div>

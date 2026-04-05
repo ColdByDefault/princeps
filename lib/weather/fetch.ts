@@ -6,6 +6,7 @@
 import "server-only";
 
 import { getCoordsForTimezone } from "./timezone-coords";
+import { getCoordsForLocation } from "./location-coords";
 
 export interface WeatherSnapshot {
   temperatureCelsius: number;
@@ -60,14 +61,19 @@ interface OpenMeteoResponse {
 }
 
 /**
- * Fetches current weather from Open-Meteo for a given IANA timezone.
- * Derives coordinates server-side — no user IP or identifier is sent externally.
+ * Fetches current weather from Open-Meteo.
+ * Prefers `locationKey` (city-level precision) when provided; falls back to
+ * deriving coords from the user's IANA `timezone`.
+ * No user IP or identifier is ever sent externally.
  * Returns null on any network or parse error (weather is non-critical).
  */
 export async function fetchWeather(
   timezone: string,
+  locationKey?: string | null,
 ): Promise<WeatherSnapshot | null> {
-  const coords = getCoordsForTimezone(timezone);
+  const coords = locationKey
+    ? getCoordsForLocation(locationKey)
+    : getCoordsForTimezone(timezone);
 
   const url = new URL("https://api.open-meteo.com/v1/forecast");
   url.searchParams.set("latitude", String(coords.lat));

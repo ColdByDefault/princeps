@@ -72,9 +72,11 @@ export default async function HomePage() {
     unknown
   >;
   const lang = typeof prefs.language === "string" ? prefs.language : "de";
+  const locationKey =
+    typeof prefs.location === "string" ? prefs.location : null;
   const name = session.user.name ?? "";
 
-  const [weather] = await Promise.all([fetchWeather(timezone)]);
+  const [weather] = await Promise.all([fetchWeather(timezone, locationKey)]);
 
   const greetingTitle = buildGreetingTitle(name || "there", timezone, lang);
 
