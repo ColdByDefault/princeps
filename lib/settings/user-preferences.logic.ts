@@ -9,6 +9,7 @@ import { cache } from "react";
 import { db } from "@/lib/db";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
 import { VALID_TIMEZONES } from "@/lib/weather/timezone-list";
+import { VALID_LOCATIONS } from "@/lib/weather/location-list";
 import type { Prisma } from "@/prisma/generated/prisma/client";
 
 // ─── Types ────────────────────────────────────────────────
@@ -17,6 +18,7 @@ export interface UserPreferences {
   language: AppLanguage | null;
   theme: string | null;
   notificationsEnabled: boolean | null;
+  location: string | null;
 }
 
 // ─── Internal helpers ─────────────────────────────────────
@@ -50,7 +52,12 @@ function parsePreferences(raw: unknown): UserPreferences {
       ? obj.notificationsEnabled
       : null;
 
-  return { language, theme, notificationsEnabled };
+  const location =
+    typeof obj.location === "string" && VALID_LOCATIONS.has(obj.location)
+      ? obj.location
+      : null;
+
+  return { language, theme, notificationsEnabled, location };
 }
 
 // ─── Queries ──────────────────────────────────────────────
@@ -67,7 +74,12 @@ export const getUserPreferences = cache(
     });
 
     if (!user)
-      return { language: null, theme: null, notificationsEnabled: null };
+      return {
+        language: null,
+        theme: null,
+        notificationsEnabled: null,
+        location: null,
+      };
     return parsePreferences(user.preferences);
   },
 );
@@ -91,6 +103,7 @@ export async function updateUserPreferences(
   ) {
     next.notificationsEnabled = merged.notificationsEnabled;
   }
+  if (merged.location) next.location = merged.location;
 
   await db.user.update({
     where: { id: userId },
@@ -98,6 +111,21 @@ export async function updateUserPreferences(
       preferences: next as unknown as Prisma.InputJsonValue,
     },
   });
+}
+
+/**
+ * Updates the user's location preference (city key for weather).
+ * Only accepts valid keys from the known location list.
+ */
+export async function updateUserLocation(
+  userId: string,
+  location: string,
+): Promise<void> {
+  if (!VALID_LOCATIONS.has(location)) {
+    throw new Error("Invalid location value.");
+  }
+  const current = await getUserPreferences(userId);
+  await updateUserPreferences(userId, { ...current, location });
 }
 
 /**

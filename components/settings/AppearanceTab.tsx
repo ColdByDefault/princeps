@@ -20,19 +20,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TIMEZONE_OPTIONS } from "@/lib/weather/timezone-list";
 import {
-  TIMEZONE_OPTIONS_BY_REGION,
-  TIMEZONE_REGIONS,
-} from "@/lib/weather/timezone-list";
+  LOCATION_OPTIONS_BY_COUNTRY,
+  LOCATION_COUNTRIES,
+} from "@/lib/weather/location-list";
 
 type AppearanceTabProps = {
   initialNotificationsEnabled: boolean;
   initialTimezone: string;
+  initialLocation: string | null;
 };
 
 export function AppearanceTab({
   initialNotificationsEnabled,
   initialTimezone,
+  initialLocation,
 }: AppearanceTabProps) {
   const t = useTranslations("settings.appearance");
   const [notificationsEnabled, setNotificationsEnabled] = useState(
@@ -41,6 +44,8 @@ export function AppearanceTab({
   const [savingNotifications, setSavingNotifications] = useState(false);
   const [timezone, setTimezone] = useState(initialTimezone);
   const [savingTimezone, setSavingTimezone] = useState(false);
+  const [location, setLocation] = useState(initialLocation ?? "");
+  const [savingLocation, setSavingLocation] = useState(false);
 
   async function handleNotificationsToggle(checked: boolean) {
     setSavingNotifications(true);
@@ -78,6 +83,28 @@ export function AppearanceTab({
     }
   }
 
+  async function handleLocationChange(value: string | null) {
+    if (!value) return;
+    setLocation(value);
+    setSavingLocation(true);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ location: value }),
+      });
+      if (!res.ok) {
+        toast.error(t("locationSaveFailed"));
+      } else {
+        toast.success(t("locationSaved"));
+      }
+    } catch {
+      toast.error(t("locationSaveFailed"));
+    } finally {
+      setSavingLocation(false);
+    }
+  }
+
   return (
     <div className="divide-y divide-border/60">
       <div className="flex items-center justify-between gap-4 py-4">
@@ -102,6 +129,43 @@ export function AppearanceTab({
 
       <div className="flex items-start justify-between gap-4 py-4">
         <div className="space-y-0.5">
+          <p className="text-sm font-medium">{t("locationTitle")}</p>
+          <p className="text-sm text-muted-foreground">
+            {t("locationDescription")}
+          </p>
+        </div>
+        <Select
+          value={location}
+          onValueChange={handleLocationChange}
+          disabled={savingLocation}
+        >
+          <SelectTrigger
+            className="w-48 cursor-pointer"
+            aria-label={t("locationTitle")}
+          >
+            <SelectValue placeholder={t("locationPlaceholder")} />
+          </SelectTrigger>
+          <SelectContent className="max-h-72">
+            {LOCATION_COUNTRIES.map((country) => (
+              <SelectGroup key={country}>
+                <SelectLabel>{country}</SelectLabel>
+                {LOCATION_OPTIONS_BY_COUNTRY[country]?.map((opt) => (
+                  <SelectItem
+                    key={opt.value}
+                    value={opt.value}
+                    className="cursor-pointer"
+                  >
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex items-start justify-between gap-4 py-4">
+        <div className="space-y-0.5">
           <p className="text-sm font-medium">{t("timezoneTitle")}</p>
           <p className="text-sm text-muted-foreground">
             {t("timezoneDescription")}
@@ -113,25 +177,20 @@ export function AppearanceTab({
           disabled={savingTimezone}
         >
           <SelectTrigger
-            className="w-48 cursor-pointer"
+            className="w-64 cursor-pointer"
             aria-label={t("timezoneTitle")}
           >
             <SelectValue placeholder={t("timezonePlaceholder")} />
           </SelectTrigger>
           <SelectContent className="max-h-72">
-            {TIMEZONE_REGIONS.map((region) => (
-              <SelectGroup key={region}>
-                <SelectLabel>{region}</SelectLabel>
-                {TIMEZONE_OPTIONS_BY_REGION[region]?.map((opt) => (
-                  <SelectItem
-                    key={opt.value}
-                    value={opt.value}
-                    className="cursor-pointer"
-                  >
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
+            {TIMEZONE_OPTIONS.map((opt) => (
+              <SelectItem
+                key={opt.value}
+                value={opt.value}
+                className="cursor-pointer"
+              >
+                {opt.label}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -158,3 +217,4 @@ export function AppearanceTab({
     </div>
   );
 }
+

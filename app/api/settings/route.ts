@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth/auth";
 import {
   updateUserPreferences,
   updateUserTimezone,
+  updateUserLocation,
 } from "@/lib/settings/user-preferences.logic";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
 
@@ -30,10 +31,8 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const { language, theme, notificationsEnabled, timezone } = body as Record<
-    string,
-    unknown
-  >;
+  const { language, theme, notificationsEnabled, timezone, location } =
+    body as Record<string, unknown>;
   const patch: {
     language?: AppLanguage;
     theme?: string;
@@ -55,7 +54,11 @@ export async function PATCH(req: Request) {
 
   const hasPreferencePatch = Object.keys(patch).length > 0;
 
-  if (!hasPreferencePatch && typeof timezone !== "string") {
+  if (
+    !hasPreferencePatch &&
+    typeof timezone !== "string" &&
+    typeof location !== "string"
+  ) {
     return NextResponse.json({ ok: true });
   }
 
@@ -69,6 +72,17 @@ export async function PATCH(req: Request) {
     } catch {
       return NextResponse.json(
         { error: "Invalid timezone value." },
+        { status: 400 },
+      );
+    }
+  }
+
+  if (typeof location === "string") {
+    try {
+      await updateUserLocation(session.user.id, location);
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid location value." },
         { status: 400 },
       );
     }

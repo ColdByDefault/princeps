@@ -30,9 +30,6 @@
 - [ ] Contact Page UI 
 - [ ] Start grouping elements in Navbar Desktop
 - [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
 
 # Priority
 
@@ -48,5 +45,4 @@
 
 # Open Questions
 
-- [ ] Can users changes their location or timezone? and if yes, how does it affect the weather system, notifications, etc?
-- [ ] Do tools consume tools-count or only tokens when they are `get` only requests?
+- [ ]

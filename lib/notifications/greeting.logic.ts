@@ -56,6 +56,8 @@ export async function generateDailyGreeting(
   const prefs = (user.preferences ?? {}) as Record<string, unknown>;
   const lang = typeof prefs.language === "string" ? prefs.language : "de";
   const langName = lang === "de" ? "German" : "English";
+  const locationKey =
+    typeof prefs.location === "string" ? prefs.location : null;
 
   // Respect user opt-out — notificationsEnabled defaults to true if unset
   const notificationsEnabled = prefs.notificationsEnabled !== false;
@@ -71,7 +73,7 @@ export async function generateDailyGreeting(
   });
 
   // Weather (non-critical — proceed without it if unavailable)
-  const weather = await fetchWeather(timezone);
+  const weather = await fetchWeather(timezone, locationKey);
   const weatherLine = weather
     ? `Current weather in ${weather.location}: ${weather.conditionEmoji} ${weather.conditionLabel}, ${weather.temperatureCelsius}°C.`
     : null;
