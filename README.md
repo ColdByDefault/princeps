@@ -1,6 +1,6 @@
 ﻿# C-Sweet
 
-**Version:** 0.1.36
+**Version:** 0.1.37
 
 A private AI workspace that functions as a personal executive secretariat — not another generic chat interface. C-Sweet gives individuals the same operational leverage that high-performing executives build around themselves through chiefs of staff: preparation, memory, coordination, and structured follow-through.
 

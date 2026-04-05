@@ -1,3 +1,14 @@
+## [0.1.37] - 2026-04-05
+
+- fix: update tasks documentation with detailed tool features and improve UI/UX items
+- feat: enhance AppSidebar with new navigation items and tooltips; localize sidebar labels in English and German
+- feat: integrate tooltips for Navbar components and enhance avatar icon with tier indication
+- fix: remove eslint-disable comment for improved code quality in ChatWidget component
+- feat: add ContactDetailDialog component for enhanced contact view; update ContactCard to integrate detail dialog and improve UI/UX; limit notes input to 250 characters in ContactForm with character count display; localize view label in English and German
+- feat: enhance ContactCard and ContactList components with improved UI/UX; add avatar initials and color, update loading skeletons, and localize contact count messages
+- feat: implement user preferences fetching and update assistant name in chat widget; add re-login notice in settings
+- feat: enhance TabsContent component with keepMounted prop for improved performance and visibility
+
 ## [0.1.36] - 2026-04-05
 
 - feat: update settings tab to include assistant and improve provider label localization
