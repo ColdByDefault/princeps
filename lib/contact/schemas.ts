@@ -16,7 +16,7 @@ export const createContactSchema = z.object({
     .nullable()
     .or(z.literal("")),
   phone: z.string().max(30, "Phone number is too long").optional().nullable(),
-  notes: z.string().max(5000, "Notes are too long").optional().nullable(),
+  notes: z.string().max(250, "Notes are too long").optional().nullable(),
   lastContact: z.coerce.date().optional().nullable(),
   labelIds: z.array(z.string()).optional(),
 });

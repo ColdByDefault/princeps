@@ -35,20 +35,16 @@ export function ContactList({
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="flex flex-col gap-4 rounded-xl border p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex flex-col gap-2">
-                <Skeleton className="h-5 w-32" />
-                <Skeleton className="h-4 w-48" />
-              </div>
-              <Skeleton className="size-8 rounded-md" />
+      <div className="divide-y rounded-xl border">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="flex items-center gap-4 px-4 py-3">
+            <Skeleton className="size-9 rounded-full shrink-0" />
+            <div className="w-48 shrink-0 flex flex-col gap-1.5">
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-3 w-20" />
             </div>
-            <div className="flex flex-col gap-2">
-              <Skeleton className="h-4 w-40" />
-              <Skeleton className="h-4 w-36" />
-            </div>
+            <Skeleton className="hidden sm:block h-4 flex-1" />
+            <Skeleton className="hidden lg:block h-4 w-28" />
           </div>
         ))}
       </div>
@@ -70,7 +66,7 @@ export function ContactList({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="divide-y rounded-xl border overflow-hidden">
       {contacts.map((contact) => (
         <ContactCard
           key={contact.id}

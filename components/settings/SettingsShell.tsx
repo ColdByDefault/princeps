@@ -99,7 +99,11 @@ export function SettingsShell({
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="appearance" className="mt-6 w-full">
+      <TabsContent
+        keepMounted
+        value="appearance"
+        className="mt-6 w-full data-hidden:hidden"
+      >
         <AppearanceTab
           initialNotificationsEnabled={initialNotificationsEnabled}
           initialTimezone={initialTimezone}
@@ -107,19 +111,35 @@ export function SettingsShell({
         />
       </TabsContent>
 
-      <TabsContent value="labels" className="mt-6 w-full">
+      <TabsContent
+        keepMounted
+        value="labels"
+        className="mt-6 w-full data-hidden:hidden"
+      >
         <LabelsTab initialLabels={initialLabels} />
       </TabsContent>
 
-      <TabsContent value="usage" className="mt-6 w-full">
+      <TabsContent
+        keepMounted
+        value="usage"
+        className="mt-6 w-full data-hidden:hidden"
+      >
         <UsageTab usage={initialUsage} />
       </TabsContent>
 
-      <TabsContent value="provider" className="mt-6 w-full">
+      <TabsContent
+        keepMounted
+        value="provider"
+        className="mt-6 w-full data-hidden:hidden"
+      >
         <ProviderTab initialStatus={initialStatus} />
       </TabsContent>
 
-      <TabsContent value="assistant" className="mt-6 w-full">
+      <TabsContent
+        keepMounted
+        value="assistant"
+        className="mt-6 w-full data-hidden:hidden"
+      >
         <AssistantTab
           initialAssistantName={initialAssistantName}
           initialAssistantTone={initialAssistantTone}

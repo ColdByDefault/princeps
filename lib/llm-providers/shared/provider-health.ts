@@ -75,11 +75,20 @@ export async function checkOllamaHealth(): Promise<ProviderHealthStatus> {
       error: null,
     };
   } catch (err) {
+    const msg =
+      err instanceof Error &&
+      (err.message.toLowerCase() === "fetch failed" ||
+        err.message.toLowerCase().includes("econnrefused") ||
+        err.message.toLowerCase().includes("network"))
+        ? "Ollama is not running or not reachable."
+        : err instanceof Error
+          ? err.message
+          : "Unknown error";
     return {
       connected: false,
       version: null,
       models: [],
-      error: err instanceof Error ? err.message : "Unknown error",
+      error: msg,
     };
   }
 }

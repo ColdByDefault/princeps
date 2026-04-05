@@ -211,7 +211,8 @@
       "comingSoon": "Coming soon",
       "toneSelectPlaceholder": "Select tone",
       "addressSelectPlaceholder": "Select address style",
-      "lengthSelectPlaceholder": "Select length"
+      "lengthSelectPlaceholder": "Select length",
+      "reloginNotice": "Some changes (e.g. assistant name in the chat widget) take effect after your next login."
     }
   },
   "chatWidget": {
@@ -281,6 +282,11 @@
       "pendingEmpty": "Start chatting first — empty chats are not saved.",
       "actions": "Chat actions",
       "userFallback": "Workspace user",
+      "navTasks": "Tasks",
+      "navKnowledge": "Knowledge Base",
+      "navContacts": "Contacts",
+      "navSettings": "Settings",
+      "profile": "My profile",
       "signOut": "Sign out",
       "signingOut": "Signing out…"
     },
@@ -293,6 +299,7 @@
       "send": "Send message"
     },
     "error": {
+      "providerUnavailable": "AI provider is not available or not configured.",
       "send": "Failed to send message. Please try again.",
       "create": "Failed to create chat.",
       "delete": "Failed to delete chat.",
@@ -389,6 +396,8 @@
       "description": "Manage your professional contacts."
     },
     "pageTitle": "Contacts",
+    "countSingular": "1 contact",
+    "countPlural": "{count} contacts",
     "newContact": "New contact",
     "empty": "No contacts yet.",
     "fields": {
@@ -431,6 +440,7 @@
       "error": "Failed to delete contact."
     },
     "actionsLabel": "Contact actions",
+    "viewLabel": "View",
     "editLabel": "Edit",
     "deleteLabel": "Delete",
     "lastContactLabel": "Last contact"

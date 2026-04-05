@@ -17,6 +17,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type ThemeOption = {
   value: "light" | "dark" | "system";
@@ -50,65 +56,75 @@ export default function ThemeToggle({
   const ActiveIcon = activeOption.icon;
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          collapsed ? (
-            <SidebarMenuButton
-              className="cursor-pointer"
-              tooltip={t(activeOption.labelKey)}
-            >
-              <ActiveIcon className="size-3.5" />
-            </SidebarMenuButton>
-          ) : (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              aria-label={groupLabel}
-              className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
-              title={t(activeOption.labelKey)}
-            >
-              <ActiveIcon className="size-3.5" />
-            </Button>
-          )
-        }
-      />
-      <DropdownMenuContent
-        align="end"
-        className="min-w-40 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
-      >
-        {options.map((option) => {
-          const label = t(option.labelKey);
+    <TooltipProvider>
+      <Tooltip>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              collapsed ? (
+                <SidebarMenuButton
+                  className="cursor-pointer"
+                  tooltip={t(activeOption.labelKey)}
+                >
+                  <ActiveIcon className="size-3.5" />
+                </SidebarMenuButton>
+              ) : (
+                <TooltipTrigger
+                  render={
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      aria-label={groupLabel}
+                      className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+                    />
+                  }
+                >
+                  <ActiveIcon className="size-3.5" />
+                </TooltipTrigger>
+              )
+            }
+          />
+          <DropdownMenuContent
+            align="end"
+            className="min-w-40 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
+          >
+            {options.map((option) => {
+              const label = t(option.labelKey);
 
-          return (
-            <DropdownMenuItem
-              key={option.value}
-              className="cursor-pointer rounded-xl"
-              onClick={() => {
-                setTheme(option.value);
-                void fetch("/api/settings", {
-                  method: "PATCH",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ theme: option.value }),
-                });
-              }}
-            >
-              <span className="flex w-full items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-2">
-                  <option.icon className="size-3.5" />
-                  {label}
-                </span>
-                {activeTheme === option.value ? (
-                  <span className="text-xs text-muted-foreground">
-                    {t("selector.current")}
+              return (
+                <DropdownMenuItem
+                  key={option.value}
+                  className="cursor-pointer rounded-xl"
+                  onClick={() => {
+                    setTheme(option.value);
+                    void fetch("/api/settings", {
+                      method: "PATCH",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ theme: option.value }),
+                    });
+                  }}
+                >
+                  <span className="flex w-full items-center justify-between gap-3">
+                    <span className="inline-flex items-center gap-2">
+                      <option.icon className="size-3.5" />
+                      {label}
+                    </span>
+                    {activeTheme === option.value ? (
+                      <span className="text-xs text-muted-foreground">
+                        {t("selector.current")}
+                      </span>
+                    ) : null}
                   </span>
-                ) : null}
-              </span>
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        {!collapsed && (
+          <TooltipContent>{t(activeOption.labelKey)}</TooltipContent>
+        )}
+      </Tooltip>
+    </TooltipProvider>
   );
 }

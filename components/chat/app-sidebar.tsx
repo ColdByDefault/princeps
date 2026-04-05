@@ -18,8 +18,11 @@ import {
   MoreHorizontal,
   Pencil,
   Plus,
+  Settings,
   Trash2,
   User,
+  Users,
+  BrainCircuit,
 } from "lucide-react";
 import {
   Sidebar,
@@ -41,6 +44,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -233,11 +237,44 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
                 <SidebarMenuButton
                   render={<Link href="/tasks" />}
                   isActive={pathname === "/tasks"}
-                  tooltip="Tasks"
+                  tooltip={t("sidebar.navTasks")}
                   className="cursor-pointer"
                 >
                   <CheckSquare className="size-4 shrink-0" />
-                  <span className="truncate">Tasks</span>
+                  <span className="truncate">{t("sidebar.navTasks")}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/knowledge" />}
+                  isActive={pathname.startsWith("/knowledge")}
+                  tooltip={t("sidebar.navKnowledge")}
+                  className="cursor-pointer"
+                >
+                  <BrainCircuit className="size-4 shrink-0" />
+                  <span className="truncate">{t("sidebar.navKnowledge")}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/contact" />}
+                  isActive={pathname.startsWith("/contact")}
+                  tooltip={t("sidebar.navContacts")}
+                  className="cursor-pointer"
+                >
+                  <Users className="size-4 shrink-0" />
+                  <span className="truncate">{t("sidebar.navContacts")}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/settings" />}
+                  isActive={pathname.startsWith("/settings")}
+                  tooltip={t("sidebar.navSettings")}
+                  className="cursor-pointer"
+                >
+                  <Settings className="size-4 shrink-0" />
+                  <span className="truncate">{t("sidebar.navSettings")}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -402,11 +439,6 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
 
       {/* Footer */}
       <SidebarFooter>
-        {!isCollapsed && tier && (
-          <div className="px-2 pb-0 pt-1">
-            <PlanBadge tier={tier} />
-          </div>
-        )}
         {isCollapsed ? (
           <SidebarMenu>
             <SidebarMenuItem>
@@ -432,9 +464,11 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
                   <User className="size-4 shrink-0" />
                 ) : (
                   <>
+                    {" "}
                     <div className="flex flex-1 flex-col leading-none text-left overflow-hidden">
-                      <span className="font-medium text-sm truncate">
-                        {userLabel}
+                      <span className="flex items-center gap-1.5 font-medium text-sm truncate">
+                        <span className="truncate">{userLabel}</span>
+                        {tier && <PlanBadge tier={tier} />}
                       </span>
                       {sessionUser?.email && (
                         <span className="text-xs text-sidebar-foreground/60 truncate">
@@ -447,6 +481,14 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
                 )}
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" align="end" className="w-56">
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  render={<Link href="/profile" />}
+                >
+                  <User className="mr-2 size-4" />
+                  {t("sidebar.profile")}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="cursor-pointer text-destructive focus:text-destructive"
                   disabled={isSigningOut}

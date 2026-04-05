@@ -268,6 +268,9 @@ export function AssistantTab({
           ))}
         </div>
       </div>
+
+      {/* Re-login notice */}
+      <p className="pt-4 text-xs text-muted-foreground">{t("reloginNotice")}</p>
     </div>
   );
 }

@@ -211,7 +211,8 @@
       "comingSoon": "Bald verfügbar",
       "toneSelectPlaceholder": "Ton auswählen",
       "addressSelectPlaceholder": "Anredestil auswählen",
-      "lengthSelectPlaceholder": "Länge auswählen"
+      "lengthSelectPlaceholder": "Länge auswählen",
+      "reloginNotice": "Einige Änderungen (z. B. der Assistentenname im Chat-Widget) werden erst nach dem nächsten Login wirksam."
     }
   },
   "chatWidget": {
@@ -281,6 +282,11 @@
       "pendingEmpty": "Schreibe zuerst — leere Chats werden nicht gespeichert.",
       "actions": "Chat-Aktionen",
       "userFallback": "Arbeitsbereich-Nutzer",
+      "navTasks": "Aufgaben",
+      "navKnowledge": "Wissensbasis",
+      "navContacts": "Kontakte",
+      "navSettings": "Einstellungen",
+      "profile": "Mein Profil",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…"
     },
@@ -294,6 +300,7 @@
     },
     "error": {
       "send": "Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
+      "providerUnavailable": "KI-Anbieter ist nicht verfügbar oder nicht konfiguriert.",
       "create": "Chat konnte nicht erstellt werden.",
       "delete": "Chat konnte nicht gelöscht werden.",
       "rename": "Chat konnte nicht umbenannt werden."
@@ -389,6 +396,8 @@
       "description": "Verwalte deine beruflichen Kontakte."
     },
     "pageTitle": "Kontakte",
+    "countSingular": "1 Kontakt",
+    "countPlural": "{count} Kontakte",
     "newContact": "Neuer Kontakt",
     "empty": "Noch keine Kontakte.",
     "fields": {
@@ -431,6 +440,7 @@
       "error": "Kontakt konnte nicht gelöscht werden."
     },
     "actionsLabel": "Kontaktaktionen",
+    "viewLabel": "Ansehen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen",
     "lastContactLabel": "Letzter Kontakt"
