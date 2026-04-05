@@ -17,7 +17,7 @@ import {
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
-import { LanguageToggle, PlanBadge } from "@/components/shared";
+import { LanguageToggle } from "@/components/shared";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Tooltip,
@@ -51,6 +51,20 @@ type NavbarDesktopProps = {
   isSigningOut: boolean;
   onSignOut: () => void;
 };
+
+function getTierRingClass(tier?: string | null) {
+  if (!tier) return "border border-border/70";
+  const colorMap: Record<string, string> = {
+    free: "ring-amber-400 dark:ring-amber-500",
+    pro: "ring-violet-500 dark:ring-violet-400",
+    premium: "ring-purple-500 dark:ring-purple-400",
+    enterprise: "ring-sky-500 dark:ring-sky-400",
+  };
+  return cn(
+    "ring-2 ring-offset-1 ring-offset-background border-transparent",
+    colorMap[tier] ?? "ring-violet-500",
+  );
+}
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/home") return pathname === href;
@@ -209,11 +223,6 @@ export default function NavbarDesktop({
           </kbd>
         </Button> */}
 
-        {tier && (
-          <div className="flex items-center rounded-full px-2.5 py-1.5 backdrop-blur-sm">
-            <PlanBadge tier={tier} />
-          </div>
-        )}
         <NotificationBell />
         <LanguageToggle />
         <ThemeToggle />
@@ -226,7 +235,10 @@ export default function NavbarDesktop({
                   variant="outline"
                   size="icon-sm"
                   aria-label={t("nav.profile")}
-                  className="cursor-pointer rounded-full border-border/70 bg-background/70 p-0 backdrop-blur-sm"
+                  className={cn(
+                    "cursor-pointer rounded-full bg-background/70 p-0 backdrop-blur-sm",
+                    getTierRingClass(tier),
+                  )}
                   nativeButton={false}
                   render={<Link href="/profile" />}
                 />
@@ -241,18 +253,30 @@ export default function NavbarDesktop({
             <TooltipContent>{t("nav.profile")}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        <Button
-          type="button"
-          variant="outline"
-          size="icon-sm"
-          aria-label={isSigningOut ? t("nav.signingOut") : t("nav.signOut")}
-          title={isSigningOut ? t("nav.signingOut") : t("nav.signOut")}
-          className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm"
-          disabled={isSigningOut}
-          onClick={onSignOut}
-        >
-          <LogOut className="size-3.5" />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon-sm"
+                  aria-label={
+                    isSigningOut ? t("nav.signingOut") : t("nav.signOut")
+                  }
+                  className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm"
+                  disabled={isSigningOut}
+                  onClick={onSignOut}
+                />
+              }
+            >
+              <LogOut className="size-3.5" />
+            </TooltipTrigger>
+            <TooltipContent>
+              {isSigningOut ? t("nav.signingOut") : t("nav.signOut")}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </>
   );

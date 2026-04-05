@@ -21,8 +21,6 @@
 - [ ] TasksList UI needs improvment.
 - [ ] Add Markdown support for system prompts in chat settings.
 - [ ] Global UI/UX checks.
-- [ ] Colorful ring on avatar icon in navbar to reflect the current plan/tier of the user (e.g. free, pro, enterprise, etc.) instead of badge in navbar (keep original shared badge component)
-- [ ] Tooltips for Navbar icons.
 - [ ] Add `index.ts` everywhere in components, libs, etc. for better imports.
 
 # Priority
