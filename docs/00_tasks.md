@@ -3,13 +3,17 @@
 - [ ] Tools:
    - [ ] Meetings
    - [ ] Goals
-   - [ ] Contacts
+   - [x] Contacts
    - [ ] Decisions
    - [ ] Notes
    - [ ] Briefings
    - [ ] Tools-usage Reports
    - [ ] Calendar 
+   - [ ] Rich Document Support (PDF, Word, Excel, etc.)
 - [ ] User Profile Settings: Allow Users to change their name/username, email, passowrd, etc (we discusse what to allow and what not.)
+- [ ] Slash Commands in Chat: Allow power users to bypass conversational pleasantries. Typing /task Buy plane tickets or /decision Go with the standard tier
+- [ ] Extend the LLM-awareness => LLM isn't just able to call tools, or see contexts, but also can link stuff together, e.g. link a contact to a meeting, or link a note to a decision, etc. it must be all-almighty knowledge.
+
 
 # UI/UX
 

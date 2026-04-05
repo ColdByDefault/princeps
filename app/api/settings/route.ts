@@ -6,7 +6,10 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { updateUserPreferences } from "@/lib/settings/user-preferences.logic";
+import {
+  updateUserPreferences,
+  updateUserTimezone,
+} from "@/lib/settings/user-preferences.logic";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
 
 export async function PATCH(req: Request) {
@@ -27,7 +30,7 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const { language, theme, notificationsEnabled } = body as Record<
+  const { language, theme, notificationsEnabled, timezone } = body as Record<
     string,
     unknown
   >;
@@ -50,10 +53,26 @@ export async function PATCH(req: Request) {
     patch.notificationsEnabled = notificationsEnabled;
   }
 
-  if (Object.keys(patch).length === 0) {
+  const hasPreferencePatch = Object.keys(patch).length > 0;
+
+  if (!hasPreferencePatch && typeof timezone !== "string") {
     return NextResponse.json({ ok: true });
   }
 
-  await updateUserPreferences(session.user.id, patch);
+  if (hasPreferencePatch) {
+    await updateUserPreferences(session.user.id, patch);
+  }
+
+  if (typeof timezone === "string") {
+    try {
+      await updateUserTimezone(session.user.id, timezone);
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid timezone value." },
+        { status: 400 },
+      );
+    }
+  }
+
   return NextResponse.json({ ok: true });
 }

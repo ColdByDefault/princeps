@@ -30,6 +30,7 @@ type SettingsShellProps = {
   initialUsage: UsageSummary;
   initialLabels: LabelRecord[];
   initialNotificationsEnabled: boolean;
+  initialTimezone: string;
 };
 
 export function SettingsShell({
@@ -38,6 +39,7 @@ export function SettingsShell({
   initialUsage,
   initialLabels,
   initialNotificationsEnabled,
+  initialTimezone,
 }: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
   const safeInitial: SettingsTab = VALID_TABS.includes(
@@ -75,6 +77,7 @@ export function SettingsShell({
       <TabsContent value="appearance" className="mt-6 w-full">
         <AppearanceTab
           initialNotificationsEnabled={initialNotificationsEnabled}
+          initialTimezone={initialTimezone}
         />
       </TabsContent>
 

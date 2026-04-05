@@ -120,6 +120,11 @@
       "themeDescription": "Wähle zwischen hellem, dunklem oder systembasiertem Design.",
       "languageTitle": "Sprache",
       "languageDescription": "Wähle die Anzeigesprache deines Arbeitsbereichs.",
+      "timezoneTitle": "Zeitzone",
+      "timezoneDescription": "Wähle deine Zeitzone — beeinflusst Wetter und tägliche Grüße.",
+      "timezonePlaceholder": "Zeitzone auswählen",
+      "timezoneSaved": "Zeitzone gespeichert.",
+      "timezoneSaveFailed": "Zeitzone konnte nicht gespeichert werden.",
       "notificationsTitle": "Tägliche Begrüßung",
       "notificationsDescription": "Erhalte täglich eine persönliche Begrüßung von deinem Assistenten.",
       "notificationsDisclaimer": "Begrüßungen verbrauchen dein monatliches Token-Kontingent."

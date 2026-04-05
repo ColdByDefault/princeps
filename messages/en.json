@@ -120,6 +120,11 @@
       "themeDescription": "Choose between light, dark, or system-based theme.",
       "languageTitle": "Language",
       "languageDescription": "Choose the display language for your workspace.",
+      "timezoneTitle": "Timezone",
+      "timezoneDescription": "Choose your timezone — affects weather and daily greetings.",
+      "timezonePlaceholder": "Select timezone",
+      "timezoneSaved": "Timezone saved.",
+      "timezoneSaveFailed": "Failed to save timezone.",
       "notificationsTitle": "Daily Greeting",
       "notificationsDescription": "Receive a daily personal greeting from your assistant.",
       "notificationsDisclaimer": "Greetings use your monthly token quota."

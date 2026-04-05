@@ -8,6 +8,7 @@ import "server-only";
 import { cache } from "react";
 import { db } from "@/lib/db";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
+import { VALID_TIMEZONES } from "@/lib/weather/timezone-list";
 import type { Prisma } from "@/prisma/generated/prisma/client";
 
 // ─── Types ────────────────────────────────────────────────
@@ -96,5 +97,23 @@ export async function updateUserPreferences(
     data: {
       preferences: next as unknown as Prisma.InputJsonValue,
     },
+  });
+}
+
+/**
+ * Updates the user's timezone field directly on the User row.
+ * Only accepts valid IANA keys from the known timezone list.
+ */
+export async function updateUserTimezone(
+  userId: string,
+  timezone: string,
+): Promise<void> {
+  if (!VALID_TIMEZONES.has(timezone)) {
+    throw new Error("Invalid timezone value.");
+  }
+
+  await db.user.update({
+    where: { id: userId },
+    data: { timezone },
   });
 }
