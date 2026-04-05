@@ -85,6 +85,9 @@ export function SettingsShell({
         <TabsTrigger value="appearance" className="flex-1">
           {t("appearance")}
         </TabsTrigger>
+        <TabsTrigger value="assistant" className="flex-1">
+          {t("assistant")}
+        </TabsTrigger>
         <TabsTrigger value="labels" className="flex-1">
           {t("labels")}
         </TabsTrigger>
@@ -93,9 +96,6 @@ export function SettingsShell({
         </TabsTrigger>
         <TabsTrigger value="provider" className="flex-1">
           {t("provider")}
-        </TabsTrigger>
-        <TabsTrigger value="assistant" className="flex-1">
-          {t("assistant")}
         </TabsTrigger>
       </TabsList>
 

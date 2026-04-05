@@ -111,7 +111,7 @@
     },
     "tabs": {
       "appearance": "Appearance",
-      "provider": "AI",
+      "provider": "Providers",
       "usage": "Usage",
       "labels": "Labels",
       "assistant": "Assistant"

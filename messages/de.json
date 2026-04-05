@@ -111,7 +111,7 @@
     },
     "tabs": {
       "appearance": "Erscheinungsbild",
-      "provider": "KI",
+      "provider": "Anbieter",
       "usage": "Nutzung",
       "labels": "Labels",
       "assistant": "Assistent"
