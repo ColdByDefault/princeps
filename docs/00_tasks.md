@@ -24,7 +24,6 @@
 - [ ] Tooltips for Navbar icons.
 - [ ] Add `index.ts` everywhere in components, libs, etc. for better imports.
 - [ ] Contact Page UI
-- [ ] Setting saves on which tab user was last, and for labels i can see i have refresh btn, i deleted a label pressed refresh btn (inside the tab), label is deleted, i cant see it, but if i switch to another tab and come back, the label is also back. the only way to NOT see the deleted label is to refresh the whole page (hard-refresh). 
 - [ ] Dont show these errors on frontend "Groq API key is not configured.", "fetch failed". use instead friendly error messages not technical ones.
 
 # Priority
