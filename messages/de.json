@@ -211,7 +211,8 @@
       "comingSoon": "Bald verfügbar",
       "toneSelectPlaceholder": "Ton auswählen",
       "addressSelectPlaceholder": "Anredestil auswählen",
-      "lengthSelectPlaceholder": "Länge auswählen"
+      "lengthSelectPlaceholder": "Länge auswählen",
+      "reloginNotice": "Einige Änderungen (z. B. der Assistentenname im Chat-Widget) werden erst nach dem nächsten Login wirksam."
     }
   },
   "chatWidget": {

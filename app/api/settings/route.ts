@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import {
+  getUserPreferences,
   updateUserPreferences,
   updateUserTimezone,
   updateUserLocation,
@@ -18,6 +19,17 @@ import {
   type ResponseLength,
 } from "@/lib/settings/user-preferences.logic";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
+
+export async function GET() {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const prefs = await getUserPreferences(session.user.id);
+  return NextResponse.json({ assistantName: prefs.assistantName ?? null });
+}
 
 export async function PATCH(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });

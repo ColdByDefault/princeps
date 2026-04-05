@@ -70,8 +70,12 @@ export function ChatWidget({
   // Keep a ref of the current message list for use inside async callbacks
   const messagesRef = useRef<Message[]>([]);
   messagesRef.current = messages;
+  // Stable ref so the load effect can read assistantName without re-running
+  const assistantNameRef = useRef(assistantName);
+  assistantNameRef.current = assistantName;
 
-  // Load session from sessionStorage (keyed by userId — isolates sessions per user)
+  // Load session from sessionStorage once on mount. Uses a ref so the name
+  // does not cause this effect to re-run (greeting sync is handled below).
   useEffect(() => {
     const stored = sessionStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -89,13 +93,30 @@ export function ChatWidget({
     setMessages([
       {
         id: 1,
-        text: `Hi! I'm ${assistantName}, your personal assistant. How can I help you today?`,
+        text: `Hi! I'm ${assistantNameRef.current}, your personal assistant. How can I help you today?`,
         sender: "assistant",
         time: getTime(),
       },
     ]);
     setSessionLoaded(true);
-  }, [STORAGE_KEY, assistantName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [STORAGE_KEY]);
+
+  // Keep greeting in sync whenever the name prop changes (e.g. after the
+  // provider fetches the freshest name from the server).
+  useEffect(() => {
+    if (!sessionLoaded) return;
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === 1 && m.sender === "assistant"
+          ? {
+              ...m,
+              text: `Hi! I'm ${assistantName}, your personal assistant. How can I help you today?`,
+            }
+          : m,
+      ),
+    );
+  }, [assistantName, sessionLoaded]);
 
   // Persist messages to sessionStorage whenever they change
   useEffect(() => {

@@ -211,7 +211,8 @@
       "comingSoon": "Coming soon",
       "toneSelectPlaceholder": "Select tone",
       "addressSelectPlaceholder": "Select address style",
-      "lengthSelectPlaceholder": "Select length"
+      "lengthSelectPlaceholder": "Select length",
+      "reloginNotice": "Some changes (e.g. assistant name in the chat widget) take effect after your next login."
     }
   },
   "chatWidget": {
