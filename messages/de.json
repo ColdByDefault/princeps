@@ -387,6 +387,13 @@
     "actionsLabel": "Meeting-Aktionen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "L\u00f6schen",
+    "summaryDialog": {
+      "trigger": "Zusammenfassung hinzuf\u00fcgen",
+      "heading": "Besprechungszusammenfassung",
+      "submit": "Speichern",
+      "submitting": "Wird gespeichert\u2026",
+      "cancel": "Abbrechen"
+    },
     "quickContact": {
       "heading": "Neuer Kontakt",
       "name": "Name",

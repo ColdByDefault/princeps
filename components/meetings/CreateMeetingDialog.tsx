@@ -36,7 +36,6 @@ type CreateMeetingDialogProps = {
     durationMin?: number | null;
     location?: string | null;
     agenda?: string | null;
-    summary?: string | null;
     labelIds?: string[];
     participantContactIds?: string[];
   }) => Promise<boolean>;
@@ -60,7 +59,6 @@ export function CreateMeetingDialog({
   const [durationMin, setDurationMin] = useState("");
   const [location, setLocation] = useState("");
   const [agenda, setAgenda] = useState("");
-  const [summary, setSummary] = useState("");
   const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>([]);
   const [contacts, setContacts] = useState<ContactRecord[]>(availableContacts);
   const [selectedParticipantIds, setSelectedParticipantIds] = useState<
@@ -84,7 +82,6 @@ export function CreateMeetingDialog({
     setDurationMin("");
     setLocation("");
     setAgenda("");
-    setSummary("");
     setSelectedLabelIds([]);
     setSelectedParticipantIds([]);
   }
@@ -99,7 +96,6 @@ export function CreateMeetingDialog({
       durationMin: durationMin ? parseInt(durationMin, 10) : null,
       location: location.trim() || null,
       agenda: agenda.trim() || null,
-      summary: summary.trim() || null,
       ...(selectedLabelIds.length && { labelIds: selectedLabelIds }),
       ...(selectedParticipantIds.length && {
         participantContactIds: selectedParticipantIds,
@@ -307,18 +303,6 @@ export function CreateMeetingDialog({
                 value={agenda}
                 onChange={(e) => setAgenda(e.target.value)}
                 placeholder={t("fields.agendaPlaceholder")}
-                rows={3}
-                className="resize-none"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="meeting-summary">{t("fields.summary")}</Label>
-              <Textarea
-                id="meeting-summary"
-                value={summary}
-                onChange={(e) => setSummary(e.target.value)}
-                placeholder={t("fields.summaryPlaceholder")}
                 rows={3}
                 className="resize-none"
               />

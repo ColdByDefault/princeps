@@ -13,6 +13,7 @@ import {
   Trash2,
   Clock,
   Users,
+  NotebookPen,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
@@ -39,6 +40,7 @@ type MeetingCardProps = {
   isDeleting: boolean;
   onEdit: (meeting: MeetingRecord) => void;
   onDelete: (meetingId: string) => void;
+  onSummary: (meeting: MeetingRecord) => void;
 };
 
 export function MeetingCard({
@@ -47,6 +49,7 @@ export function MeetingCard({
   isDeleting,
   onEdit,
   onDelete,
+  onSummary,
 }: MeetingCardProps) {
   const t = useTranslations("meetings");
 
@@ -86,38 +89,51 @@ export function MeetingCard({
           </p>
 
           {/* Actions */}
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  aria-label={t("actionsLabel")}
-                  title={t("actionsLabel")}
-                  className="size-7 cursor-pointer shrink-0 text-muted-foreground"
-                />
-              }
+          <div className="flex shrink-0 items-center gap-0.5">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={t("summaryDialog.trigger")}
+              title={t("summaryDialog.trigger")}
+              className="size-7 cursor-pointer text-muted-foreground"
+              onClick={() => onSummary(meeting)}
             >
-              <MoreHorizontal className="size-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => onEdit(meeting)}
-                className="cursor-pointer"
+              <NotebookPen className="size-3.5" />
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={t("actionsLabel")}
+                    title={t("actionsLabel")}
+                    className="size-7 cursor-pointer text-muted-foreground"
+                  />
+                }
               >
-                <Pencil className="mr-2 size-3.5" />
-                {t("editLabel")}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => onDelete(meeting.id)}
-                className="cursor-pointer text-destructive focus:text-destructive"
-              >
-                <Trash2 className="mr-2 size-3.5" />
-                {t("deleteLabel")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <MoreHorizontal className="size-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => onEdit(meeting)}
+                  className="cursor-pointer"
+                >
+                  <Pencil className="mr-2 size-3.5" />
+                  {t("editLabel")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => onDelete(meeting.id)}
+                  className="cursor-pointer text-destructive focus:text-destructive"
+                >
+                  <Trash2 className="mr-2 size-3.5" />
+                  {t("deleteLabel")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
 
         {meeting.summary && (

@@ -387,6 +387,13 @@
     "actionsLabel": "Meeting actions",
     "editLabel": "Edit",
     "deleteLabel": "Delete",
+    "summaryDialog": {
+      "trigger": "Add summary",
+      "heading": "Meeting summary",
+      "submit": "Save",
+      "submitting": "Saving\u2026",
+      "cancel": "Cancel"
+    },
     "quickContact": {
       "heading": "New contact",
       "name": "Name",

@@ -45,7 +45,6 @@ type EditMeetingDialogProps = {
       location: string | null;
       status: string;
       agenda: string | null;
-      summary: string | null;
       labelIds: string[];
       participantContactIds: string[];
     }>,
@@ -81,7 +80,6 @@ export function EditMeetingDialog({
   const [location, setLocation] = useState(meeting?.location ?? "");
   const [status, setStatus] = useState(meeting?.status ?? "upcoming");
   const [agenda, setAgenda] = useState(meeting?.agenda ?? "");
-  const [summary, setSummary] = useState(meeting?.summary ?? "");
   const [selectedParticipantIds, setSelectedParticipantIds] = useState<
     string[]
   >(meeting?.participants.map((p) => p.contactId) ?? []);
@@ -112,7 +110,6 @@ export function EditMeetingDialog({
       location: location.trim() || null,
       status,
       agenda: agenda.trim() || null,
-      summary: summary.trim() || null,
       participantContactIds: selectedParticipantIds,
       labelIds: selectedLabelIds,
     });
@@ -321,20 +318,6 @@ export function EditMeetingDialog({
                 value={agenda}
                 onChange={(e) => setAgenda(e.target.value)}
                 placeholder={t("fields.agendaPlaceholder")}
-                rows={3}
-                className="resize-none"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="edit-meeting-summary">
-                {t("fields.summary")}
-              </Label>
-              <Textarea
-                id="edit-meeting-summary"
-                value={summary}
-                onChange={(e) => setSummary(e.target.value)}
-                placeholder={t("fields.summaryPlaceholder")}
                 rows={3}
                 className="resize-none"
               />

@@ -22,6 +22,7 @@ import {
 import { MeetingCard } from "./MeetingCard";
 import { CreateMeetingDialog } from "./CreateMeetingDialog";
 import { EditMeetingDialog } from "./EditMeetingDialog";
+import { SummaryDialog } from "./SummaryDialog";
 import { useMeetingMutations } from "./logic/useMeetingMutations";
 import type {
   LabelOptionRecord,
@@ -47,6 +48,10 @@ export function MeetingsShell({
   const [filter, setFilter] = useState<Filter>("all");
   const [editMeeting, setEditMeeting] = useState<MeetingRecord | null>(null);
   const [editOpen, setEditOpen] = useState(false);
+  const [summaryMeeting, setSummaryMeeting] = useState<MeetingRecord | null>(
+    null,
+  );
+  const [summaryOpen, setSummaryOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -79,6 +84,18 @@ export function MeetingsShell({
   function handleEdit(meeting: MeetingRecord) {
     setEditMeeting(meeting);
     setEditOpen(true);
+  }
+
+  function handleSummary(meeting: MeetingRecord) {
+    setSummaryMeeting(meeting);
+    setSummaryOpen(true);
+  }
+
+  async function handleSummarySubmit(
+    meetingId: string,
+    summary: string | null,
+  ): Promise<boolean> {
+    return updateMeeting(meetingId, { summary });
   }
 
   function handleDeleteRequest(meetingId: string) {
@@ -148,14 +165,25 @@ export function MeetingsShell({
               isDeleting={deleting === meeting.id}
               onEdit={handleEdit}
               onDelete={handleDeleteRequest}
+              onSummary={handleSummary}
             />
           ))}
         </div>
       )}
 
+      {/* Summary dialog */}
+      <SummaryDialog
+        key={`summary-${summaryMeeting?.id ?? "none"}`}
+        meeting={summaryMeeting}
+        open={summaryOpen}
+        onOpenChange={setSummaryOpen}
+        onSubmit={handleSummarySubmit}
+        updating={updating !== null}
+      />
+
       {/* Edit dialog */}
       <EditMeetingDialog
-        key={editMeeting?.id ?? ""}
+        key={`edit-${editMeeting?.id ?? "none"}`}
         meeting={editMeeting}
         open={editOpen}
         onOpenChange={setEditOpen}
