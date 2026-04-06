@@ -119,6 +119,12 @@ export function MeetingCard({
           </DropdownMenu>
         </div>
 
+        {meeting.summary && (
+          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+            {meeting.summary}
+          </p>
+        )}
+
         {/* Meta row */}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">

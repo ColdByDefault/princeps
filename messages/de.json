@@ -349,6 +349,10 @@
       "locationPlaceholder": "Raum, Link oder Adresse",
       "status": "Status",
       "labels": "Labels",
+      "agenda": "Agenda",
+      "agendaPlaceholder": "Besprechungsagenda…",
+      "summary": "Zusammenfassung",
+      "summaryPlaceholder": "Zusammenfassung oder Notizen…",
       "optional": "Optional"
     },
     "createDialog": {

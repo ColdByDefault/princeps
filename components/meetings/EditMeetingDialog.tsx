@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -38,6 +39,8 @@ type EditMeetingDialogProps = {
       durationMin: number | null;
       location: string | null;
       status: string;
+      agenda: string | null;
+      summary: string | null;
       labelIds: string[];
     }>,
   ) => Promise<boolean>;
@@ -69,6 +72,8 @@ export function EditMeetingDialog({
   );
   const [location, setLocation] = useState(meeting?.location ?? "");
   const [status, setStatus] = useState(meeting?.status ?? "upcoming");
+  const [agenda, setAgenda] = useState(meeting?.agenda ?? "");
+  const [summary, setSummary] = useState(meeting?.summary ?? "");
   const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>(
     meeting?.labels.map((l) => l.id) ?? [],
   );
@@ -89,6 +94,8 @@ export function EditMeetingDialog({
       durationMin: durationMin ? parseInt(durationMin, 10) : null,
       location: location.trim() || null,
       status,
+      agenda: agenda.trim() || null,
+      summary: summary.trim() || null,
       labelIds: selectedLabelIds,
     });
 
@@ -178,6 +185,30 @@ export function EditMeetingDialog({
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder={t("fields.locationPlaceholder")}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-meeting-agenda">{t("fields.agenda")}</Label>
+            <Textarea
+              id="edit-meeting-agenda"
+              value={agenda}
+              onChange={(e) => setAgenda(e.target.value)}
+              placeholder={t("fields.agendaPlaceholder")}
+              rows={3}
+              className="resize-none"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-meeting-summary">{t("fields.summary")}</Label>
+            <Textarea
+              id="edit-meeting-summary"
+              value={summary}
+              onChange={(e) => setSummary(e.target.value)}
+              placeholder={t("fields.summaryPlaceholder")}
+              rows={3}
+              className="resize-none"
             />
           </div>
 

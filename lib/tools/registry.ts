@@ -410,6 +410,15 @@ export const TOOL_REGISTRY: LLMTool[] = [
             enum: ["upcoming", "done", "cancelled"],
             description: "New status.",
           },
+          agenda: {
+            type: "string",
+            description: "Meeting agenda text, or null to clear it.",
+          },
+          summary: {
+            type: "string",
+            description:
+              "Meeting summary or notes after the fact, or null to clear it.",
+          },
           labelNames: {
             type: "array",
             items: { type: "string" },

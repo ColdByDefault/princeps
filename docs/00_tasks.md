@@ -13,7 +13,7 @@
 - [ ] User Profile Settings: Allow users to change their name, username, timezone. Email/password changes need careful handling with Better Auth. ProfileShell is currently read-only.
 - [ ] Slash Commands in Chat: Allow power users to bypass conversational pleasantries. Typing /task Buy plane tickets or /decision Go with the standard tier
 - [ ] Extend the LLM-awareness => LLM isn't just able to call tools or see contexts, but also can link stuff together, e.g. link a contact to a meeting, or link a note to a decision. Depends on Meetings + Decisions being live.
-- [ ] Change the availability of tools based on tier.
+- [ ] Change the availability of tools based on tier. also allow user from settings to turn tools on/off manually.
 - [ ] Admin Dashboard: User management, content moderation, system health monitoring, usage analytics, etc. Depends on having a user base and some content to moderate.
 
 

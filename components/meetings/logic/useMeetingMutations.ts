@@ -59,6 +59,8 @@ export function useMeetingMutations(
       durationMin: number | null;
       location: string | null;
       status: string;
+      agenda: string | null;
+      summary: string | null;
       labelIds: string[];
     }>,
   ) {
