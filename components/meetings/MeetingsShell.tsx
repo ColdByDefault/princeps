@@ -28,6 +28,7 @@ import type {
   LabelOptionRecord,
   MeetingRecord,
   ContactRecord,
+  TaskRecord,
 } from "@/types/api";
 
 type Filter = "all" | "upcoming" | "done" | "cancelled";
@@ -36,12 +37,14 @@ type MeetingsShellProps = {
   initialMeetings: MeetingRecord[];
   availableLabels: LabelOptionRecord[];
   availableContacts: ContactRecord[];
+  availableTasks: TaskRecord[];
 };
 
 export function MeetingsShell({
   initialMeetings,
   availableLabels,
   availableContacts,
+  availableTasks,
 }: MeetingsShellProps) {
   const t = useTranslations("meetings");
   const [meetings, setMeetings] = useState<MeetingRecord[]>(initialMeetings);
@@ -191,6 +194,7 @@ export function MeetingsShell({
         updating={updating !== null}
         availableLabels={availableLabels}
         availableContacts={availableContacts}
+        availableTasks={availableTasks}
       />
 
       {/* Delete confirmation */}

@@ -45,6 +45,11 @@ export const TOOL_REGISTRY: LLMTool[] = [
             description:
               'Optional list of label names to attach. Labels that don\'t exist yet will be created automatically. Use the exact name (e.g. "private", "work").',
           },
+          meetingId: {
+            type: "string",
+            description:
+              "Optional ID of a meeting to link this task to. Use list_meetings to find the meeting ID first.",
+          },
         },
         required: ["title"],
       },
@@ -120,6 +125,11 @@ export const TOOL_REGISTRY: LLMTool[] = [
             items: { type: "string" },
             description:
               "Replaces all current labels on the task with the given names. Missing labels are created automatically. Pass an empty array to remove all labels.",
+          },
+          meetingId: {
+            type: "string",
+            description:
+              "Link or unlink a meeting. Pass the meeting ID to link, or null to unlink from any meeting.",
           },
         },
         required: ["taskId"],
@@ -444,6 +454,12 @@ export const TOOL_REGISTRY: LLMTool[] = [
             items: { type: "string" },
             description:
               "Replacement set of participant contact IDs. Pass an empty array to remove all participants. If the user mentions a person not yet in contacts, inform them and suggest creating a contact first.",
+          },
+          linkedTaskIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Replacement set of task IDs to link to this meeting. Pass an empty array to unlink all tasks. Use list_tasks to find task IDs first.",
           },
         },
         required: ["meetingId"],

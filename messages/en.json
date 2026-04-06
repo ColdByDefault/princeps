@@ -358,6 +358,10 @@
       "removeParticipant": "Remove participant",
       "newContact": "New contact",
       "noMoreContacts": "No more contacts to add.",
+      "linkedTasks": "Linked tasks",
+      "addTask": "Link a task",
+      "removeTask": "Remove task",
+      "noMoreTasks": "No more tasks to link.",
       "optional": "Optional"
     },
     "createDialog": {

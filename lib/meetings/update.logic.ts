@@ -20,40 +20,68 @@ export async function updateMeeting(
   userId: string,
   input: UpdateMeetingInput,
 ): Promise<UpdateMeetingResult> {
-  const row = await db.meeting
-    .update({
-      where: { id: meetingId, userId },
-      data: {
-        ...(input.title !== undefined && { title: input.title }),
-        ...(input.scheduledAt !== undefined && {
-          scheduledAt: new Date(input.scheduledAt),
-        }),
-        ...(input.durationMin !== undefined && {
-          durationMin: input.durationMin,
-        }),
-        ...(input.location !== undefined && { location: input.location }),
-        ...(input.status !== undefined && { status: input.status }),
-        ...(input.agenda !== undefined && { agenda: input.agenda }),
-        ...(input.summary !== undefined && { summary: input.summary }),
-        ...(input.labelIds !== undefined && {
-          labelLinks: {
-            deleteMany: {},
-            create: input.labelIds.map((labelId) => ({ labelId })),
-          },
-        }),
-        ...(input.participantContactIds !== undefined && {
-          participants: {
-            deleteMany: {},
-            create: input.participantContactIds.map((contactId) => ({
-              contactId,
-            })),
-          },
-        }),
-      },
-      select: MEETING_SELECT,
-    })
-    .catch(() => null);
+  try {
+    // Build the batch up-front so $transaction never calls into an already-running query.
+    const batch = [
+      db.meeting.update({
+        where: { id: meetingId, userId },
+        data: {
+          ...(input.title !== undefined && { title: input.title }),
+          ...(input.scheduledAt !== undefined && {
+            scheduledAt: new Date(input.scheduledAt),
+          }),
+          ...(input.durationMin !== undefined && {
+            durationMin: input.durationMin,
+          }),
+          ...(input.location !== undefined && { location: input.location }),
+          ...(input.status !== undefined && { status: input.status }),
+          ...(input.agenda !== undefined && { agenda: input.agenda }),
+          ...(input.summary !== undefined && { summary: input.summary }),
+          ...(input.labelIds !== undefined && {
+            labelLinks: {
+              deleteMany: {},
+              create: input.labelIds.map((labelId) => ({ labelId })),
+            },
+          }),
+          ...(input.participantContactIds !== undefined && {
+            participants: {
+              deleteMany: {},
+              create: input.participantContactIds.map((contactId) => ({
+                contactId,
+              })),
+            },
+          }),
+        },
+      }),
+      ...(input.linkedTaskIds !== undefined
+        ? [
+            // Unlink all tasks currently attached to this meeting
+            db.task.updateMany({
+              where: { meetingId, userId },
+              data: { meetingId: null },
+            }),
+            // Link the new set (scoped to this user for safety)
+            ...(input.linkedTaskIds.length > 0
+              ? [
+                  db.task.updateMany({
+                    where: { id: { in: input.linkedTaskIds }, userId },
+                    data: { meetingId },
+                  }),
+                ]
+              : []),
+          ]
+        : []),
+    ];
 
-  if (!row) return { ok: false, notFound: true };
-  return { ok: true, meeting: toMeetingRecord(row) };
+    await db.$transaction(batch);
+
+    const row = await db.meeting.findUniqueOrThrow({
+      where: { id: meetingId },
+      select: MEETING_SELECT,
+    });
+
+    return { ok: true, meeting: toMeetingRecord(row) };
+  } catch {
+    return { ok: false, notFound: true };
+  }
 }

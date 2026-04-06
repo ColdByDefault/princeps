@@ -66,6 +66,7 @@ export function useMeetingMutations(
       summary: string | null;
       labelIds: string[];
       participantContactIds: string[];
+      linkedTaskIds: string[];
     }>,
   ) {
     setUpdating(meetingId);

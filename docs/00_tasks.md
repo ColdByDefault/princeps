@@ -22,7 +22,6 @@
 - [ ] Add Markdown support for system prompts in chat settings.
 - [ ] Global UI/UX checks.
 - [ ] When LLM calls a tool and successfully creates/updates something, it shows a toast within the chat-widget window, then output what it has done, keep the toast, but as reply to the user, reduce the output answer to only "Done", because the toaster is already enough 
-- [ ] LLM should be awre of required vs optional inputs when calling tools.
 
 # Priority
 
@@ -38,10 +37,11 @@
 # Open Questions
 
 - [ ] do I need these packages, why or why not, and if yes where to apply them:
-  - [ ] `framer-motion` because AI responses are streamed and can feel jittery.
-  - [ ] `nuqs`
-  - [ ] `date-fns` for date handling, formatting, and timezone conversions.
-  - [ ] `next-safe-action`
-  - [ ] `langfuse` for LLM observability and debugging.
-  - [ ] `react-hook-form` for form handling in React
-  - [ ] `react-markdown` for rendering Markdown content in React components
+    - [ ] `framer-motion` because AI responses are streamed and can feel jittery.
+    - [ ] `nuqs`
+    - [ ] `date-fns` for date handling, formatting, and timezone conversions.
+    - [ ] `next-safe-action`
+    - [ ] `langfuse` for LLM observability and debugging.
+    - [ ] `react-hook-form` for form handling in React
+    - [ ] `react-markdown` for rendering Markdown content in React components
+- [ ] Is LLM aware of required vs optional inputs when calling tools?

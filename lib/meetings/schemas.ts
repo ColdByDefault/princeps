@@ -26,6 +26,7 @@ export const updateMeetingSchema = z.object({
   summary: z.string().max(10000).optional().nullable(),
   labelIds: z.array(z.string()).optional(),
   participantContactIds: z.array(z.string()).optional(),
+  linkedTaskIds: z.array(z.string()).optional(),
 });
 
 export type CreateMeetingInput = z.infer<typeof createMeetingSchema>;

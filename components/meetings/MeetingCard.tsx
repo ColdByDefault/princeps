@@ -14,6 +14,7 @@ import {
   Clock,
   Users,
   NotebookPen,
+  CheckSquare,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
@@ -164,6 +165,12 @@ export function MeetingCard({
             <span className="flex items-center gap-1">
               <Users className="size-3.5" />
               {meeting.participants.map((p) => p.contactName).join(", ")}
+            </span>
+          )}
+          {meeting.tasks.length > 0 && (
+            <span className="flex items-center gap-1">
+              <CheckSquare className="size-3.5" />
+              {meeting.tasks.map((t) => t.title).join(", ")}
             </span>
           )}
         </div>

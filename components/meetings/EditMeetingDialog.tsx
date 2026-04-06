@@ -25,11 +25,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { UserPlus, X } from "lucide-react";
+import { UserPlus, X, CheckSquare } from "lucide-react";
 import type {
   LabelOptionRecord,
   MeetingRecord,
   ContactRecord,
+  TaskRecord,
 } from "@/types/api";
 
 type EditMeetingDialogProps = {
@@ -47,11 +48,13 @@ type EditMeetingDialogProps = {
       agenda: string | null;
       labelIds: string[];
       participantContactIds: string[];
+      linkedTaskIds: string[];
     }>,
   ) => Promise<boolean>;
   updating: boolean;
   availableLabels: LabelOptionRecord[];
   availableContacts: ContactRecord[];
+  availableTasks: TaskRecord[];
 };
 
 function toDatetimeLocal(iso: string) {
@@ -68,6 +71,7 @@ export function EditMeetingDialog({
   updating,
   availableLabels,
   availableContacts,
+  availableTasks,
 }: EditMeetingDialogProps) {
   const t = useTranslations("meetings");
   const [title, setTitle] = useState(meeting?.title ?? "");
@@ -83,6 +87,9 @@ export function EditMeetingDialog({
   const [selectedParticipantIds, setSelectedParticipantIds] = useState<
     string[]
   >(meeting?.participants.map((p) => p.contactId) ?? []);
+  const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>(
+    meeting?.tasks.map((t) => t.id) ?? [],
+  );
   const [contacts, setContacts] = useState<ContactRecord[]>(availableContacts);
   const [qcOpen, setQcOpen] = useState(false);
   const [qcName, setQcName] = useState("");
@@ -111,6 +118,7 @@ export function EditMeetingDialog({
       status,
       agenda: agenda.trim() || null,
       participantContactIds: selectedParticipantIds,
+      linkedTaskIds: selectedTaskIds,
       labelIds: selectedLabelIds,
     });
 
@@ -309,6 +317,83 @@ export function EditMeetingDialog({
                   {t("fields.newContact")}
                 </Button>
               </div>
+            </div>
+
+            {/* Linked tasks */}
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-1.5">
+                <CheckSquare className="size-3.5" />
+                {t("fields.linkedTasks")}
+              </Label>
+              {selectedTaskIds.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-1.5">
+                  {selectedTaskIds.map((tid) => {
+                    const task =
+                      availableTasks.find((x) => x.id === tid) ??
+                      meeting?.tasks.find((x) => x.id === tid);
+                    return (
+                      <span
+                        key={tid}
+                        className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-medium"
+                      >
+                        {task?.title ?? tid}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setSelectedTaskIds((prev) =>
+                              prev.filter((id) => id !== tid),
+                            )
+                          }
+                          className="cursor-pointer text-muted-foreground hover:text-foreground"
+                          aria-label={t("fields.removeTask")}
+                        >
+                          <X className="size-3" />
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+              <Select
+                value=""
+                onValueChange={(tid) => {
+                  if (tid && !selectedTaskIds.includes(tid)) {
+                    setSelectedTaskIds((prev) => [...prev, tid]);
+                  }
+                }}
+              >
+                <SelectTrigger
+                  id="edit-meeting-tasks"
+                  className="cursor-pointer"
+                  aria-label={t("fields.addTask")}
+                >
+                  <SelectValue placeholder={t("fields.addTask")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableTasks
+                    .filter(
+                      (task) =>
+                        !selectedTaskIds.includes(task.id) &&
+                        (task.meetingId === null ||
+                          task.meetingId === meeting?.id),
+                    )
+                    .map((task) => (
+                      <SelectItem key={task.id} value={task.id}>
+                        {task.title}
+                      </SelectItem>
+                    ))}
+                  {availableTasks.filter(
+                    (task) =>
+                      !selectedTaskIds.includes(task.id) &&
+                      (task.meetingId === null ||
+                        task.meetingId === meeting?.id),
+                  ).length === 0 && (
+                    <div className="px-2 py-1.5 text-xs text-muted-foreground">
+                      {t("fields.noMoreTasks")}
+                    </div>
+                  )}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-1.5">

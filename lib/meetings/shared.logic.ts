@@ -30,6 +30,13 @@ export const MEETING_SELECT = {
       contact: { select: { name: true } },
     },
   },
+  tasks: {
+    select: {
+      id: true,
+      title: true,
+      status: true,
+    },
+  },
 } as const;
 
 type MeetingRow = {
@@ -45,6 +52,7 @@ type MeetingRow = {
   updatedAt: Date;
   labelLinks: { label: { id: string; name: string; color: string } }[];
   participants: { id: string; contactId: string; contact: { name: string } }[];
+  tasks: { id: string; title: string; status: string }[];
 };
 
 export function toMeetingRecord(row: MeetingRow): MeetingRecord {
@@ -65,6 +73,7 @@ export function toMeetingRecord(row: MeetingRow): MeetingRecord {
       contactId: p.contactId,
       contactName: p.contact.name,
     })),
+    tasks: row.tasks,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };

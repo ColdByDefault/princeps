@@ -27,7 +27,15 @@ export const meetingsSlot: ContextSlot = {
         m.labels.length > 0
           ? ` — labels: ${m.labels.map((l) => l.name).join(", ")}`
           : "";
-      return `- [${m.id}] ${m.title} — ${scheduled}${dur}${loc}${labels}`;
+      const participants =
+        m.participants.length > 0
+          ? ` — participants: ${m.participants.map((p) => p.contactName).join(", ")}`
+          : "";
+      const tasks =
+        m.tasks.length > 0
+          ? ` — linked tasks: ${m.tasks.map((t) => `${t.title} (${t.status})`).join(", ")}`
+          : "";
+      return `- [${m.id}] ${m.title} — ${scheduled}${dur}${loc}${labels}${participants}${tasks}`;
     });
 
     return lines.join("\n");
