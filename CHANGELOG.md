@@ -1,3 +1,7 @@
+## [0.1.39] - 2026-04-06
+
+- feat: restructure tasks documentation with enhanced organization and clarity
+
 ## [0.1.38] - 2026-04-06
 
 - feat: integrate task management into meetings with linked tasks functionality
