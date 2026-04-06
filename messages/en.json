@@ -50,7 +50,8 @@
       "errorFallback": "Sign in failed. Please try again.",
       "redirectNotice": "Please sign in to continue.",
       "switchPrompt": "Don't have an account?",
-      "switchLink": "Create account"
+      "switchLink": "Create account",
+      "forgotPassword": "Forgot password?"
     },
     "signUp": {
       "metadata": {
@@ -78,6 +79,42 @@
     "password": {
       "show": "Show password",
       "hide": "Hide password"
+    },
+    "forgotPassword": {
+      "metadata": {
+        "title": "Forgot Password",
+        "description": "Reset your C-Sweet password."
+      },
+      "title": "Forgot your password?",
+      "subtitle": "Enter your email address and we'll send you a reset link.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "submit": "Send reset link",
+      "submitting": "Sending...",
+      "successTitle": "Email sent",
+      "successMessage": "If an account with that email exists, you'll receive a reset link shortly.",
+      "errorFallback": "Request failed. Please try again.",
+      "backToLogin": "Back to sign in"
+    },
+    "resetPassword": {
+      "metadata": {
+        "title": "New Password",
+        "description": "Set a new password for your C-Sweet account."
+      },
+      "title": "Set a new password",
+      "subtitle": "Enter your new password below.",
+      "passwordLabel": "New password",
+      "passwordPlaceholder": "••••••••",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "••••••••",
+      "submit": "Save password",
+      "submitting": "Saving...",
+      "successTitle": "Password changed",
+      "successMessage": "Your password has been updated. You can now sign in.",
+      "errorFallback": "Reset failed. Please request a new link.",
+      "invalidToken": "This link is invalid or has expired. Please request a new one.",
+      "goToLogin": "Go to sign in",
+      "backToLogin": "Back to sign in"
     }
   },
   "theme": {
