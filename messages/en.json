@@ -318,6 +318,99 @@
       "save": "Save changes"
     }
   },
+  "meetings": {
+    "metadata": {
+      "title": "Meetings",
+      "description": "Manage your meetings."
+    },
+    "pageTitle": "Meetings",
+    "newMeeting": "New meeting",
+    "empty": "No meetings yet.",
+    "emptyFiltered": "No meetings with this status.",
+    "filter": {
+      "all": "All",
+      "upcoming": "Upcoming",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "status": {
+      "upcoming": "Upcoming",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "Meeting title",
+      "scheduledAt": "Date & time",
+      "durationMin": "Duration (min)",
+      "durationPlaceholder": "e.g. 60",
+      "minutesShort": "min",
+      "location": "Location",
+      "locationPlaceholder": "Room, link, or address",
+      "status": "Status",
+      "labels": "Labels",
+      "agenda": "Agenda",
+      "agendaPlaceholder": "Meeting agenda…",
+      "summary": "Summary",
+      "summaryPlaceholder": "Meeting summary or notes…",
+      "participants": "Participants",
+      "addParticipant": "Add participant",
+      "removeParticipant": "Remove participant",
+      "newContact": "New contact",
+      "noMoreContacts": "No more contacts to add.",
+      "linkedTasks": "Linked tasks",
+      "addTask": "Link a task",
+      "removeTask": "Remove task",
+      "noMoreTasks": "No more tasks to link.",
+      "optional": "Optional"
+    },
+    "createDialog": {
+      "heading": "New meeting",
+      "submit": "Create",
+      "submitting": "Creating\u2026",
+      "cancel": "Cancel",
+      "success": "Meeting created.",
+      "error": "Failed to create meeting."
+    },
+    "editDialog": {
+      "heading": "Edit meeting",
+      "submit": "Save",
+      "submitting": "Saving\u2026",
+      "cancel": "Cancel",
+      "success": "Meeting saved.",
+      "error": "Failed to save meeting."
+    },
+    "deleteDialog": {
+      "title": "Delete this meeting?",
+      "description": "This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Meeting deleted.",
+      "error": "Failed to delete meeting."
+    },
+    "actionsLabel": "Meeting actions",
+    "editLabel": "Edit",
+    "deleteLabel": "Delete",
+    "summaryDialog": {
+      "trigger": "Add summary",
+      "heading": "Meeting summary",
+      "submit": "Save",
+      "submitting": "Saving\u2026",
+      "cancel": "Cancel"
+    },
+    "quickContact": {
+      "heading": "New contact",
+      "name": "Name",
+      "namePlaceholder": "Full name",
+      "company": "Company",
+      "companyPlaceholder": "Company name",
+      "email": "Email",
+      "emailPlaceholder": "email@example.com",
+      "submit": "Create & add",
+      "submitting": "Creating\u2026",
+      "cancel": "Cancel"
+    }
+  },
   "tasks": {
     "metadata": {
       "title": "Tasks",
@@ -491,7 +584,8 @@
       "tasks": "Tasks",
       "labels": "Labels",
       "profile": "Profile",
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "meetings": "Meetings"
     },
     "catalog": {
       "create_task": {
@@ -558,6 +652,26 @@
         "label": "Delete Contact",
         "what": "Permanently deletes a contact.",
         "example": "\"Delete the contact Jane Doe\""
+      },
+      "create_meeting": {
+        "label": "Create Meeting",
+        "what": "Schedules a new meeting with optional duration, location, and labels.",
+        "example": "\"Schedule a meeting: Q2 review, tomorrow at 2pm, 60 minutes\""
+      },
+      "list_meetings": {
+        "label": "List Meetings",
+        "what": "Retrieves your meetings, optionally filtered by status.",
+        "example": "\"What meetings do I have coming up?\" or \"Show me all my meetings\""
+      },
+      "update_meeting": {
+        "label": "Update Meeting",
+        "what": "Changes a meeting's title, time, duration, location, status, or labels.",
+        "example": "\"Move the Q2 review to Friday at 3pm\""
+      },
+      "delete_meeting": {
+        "label": "Delete Meeting",
+        "what": "Permanently deletes a meeting.",
+        "example": "\"Delete the Q2 review meeting\""
       }
     }
   },

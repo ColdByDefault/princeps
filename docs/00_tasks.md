@@ -1,8 +1,6 @@
 # features
 
 - [ ] Tools:
-  - [x] Contacts
-  - [ ] Meetings — schema complete (participants, agenda, summary, prepPack, linked to Tasks/Decisions/Contacts)
   - [ ] Decisions — schema complete, linked to meetings
   - [ ] Briefings — BriefingCache model exists; daily LLM brief over tasks/meetings/decisions
   - [ ] Tools-usage Reports — AssistantReport model exists
@@ -14,16 +12,16 @@
 - [ ] User Profile Settings: Allow users to change their name, username, timezone. Email/password changes need careful handling with Better Auth. ProfileShell is currently read-only.
 - [ ] Slash Commands in Chat: Allow power users to bypass conversational pleasantries. Typing /task Buy plane tickets or /decision Go with the standard tier
 - [ ] Extend the LLM-awareness => LLM isn't just able to call tools or see contexts, but also can link stuff together, e.g. link a contact to a meeting, or link a note to a decision. Depends on Meetings + Decisions being live.
-- [ ] Change the availability of tools based on tier.
+- [ ] Change the availability of tools based on tier. also allow user from settings to turn tools on/off manually.
 - [ ] Admin Dashboard: User management, content moderation, system health monitoring, usage analytics, etc. Depends on having a user base and some content to moderate.
 
 
 # UI/UX
 
-- [ ] TasksList UI needs improvment.
+- [ ] TasksList UI needs improvement.
 - [ ] Add Markdown support for system prompts in chat settings.
 - [ ] Global UI/UX checks.
-- [ ] 
+- [ ] When LLM calls a tool and successfully creates/updates something, it shows a toast within the chat-widget window, then output what it has done, keep the toast, but as reply to the user, reduce the output answer to only "Done", because the toaster is already enough 
 
 # Priority
 
@@ -38,4 +36,12 @@
 
 # Open Questions
 
-- [ ]
+- [ ] do I need these packages, why or why not, and if yes where to apply them:
+    - [ ] `framer-motion` because AI responses are streamed and can feel jittery.
+    - [ ] `nuqs`
+    - [ ] `date-fns` for date handling, formatting, and timezone conversions.
+    - [ ] `next-safe-action`
+    - [ ] `langfuse` for LLM observability and debugging.
+    - [ ] `react-hook-form` for form handling in React
+    - [ ] `react-markdown` for rendering Markdown content in React components
+- [ ] Is LLM aware of required vs optional inputs when calling tools?

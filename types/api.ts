@@ -78,6 +78,7 @@ export interface MeetingRecord {
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
   participants: MeetingParticipantRecord[];
+  tasks: { id: string; title: string; status: string }[];
 }
 
 /** Client-safe shape of a Task record. */

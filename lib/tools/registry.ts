@@ -45,6 +45,11 @@ export const TOOL_REGISTRY: LLMTool[] = [
             description:
               'Optional list of label names to attach. Labels that don\'t exist yet will be created automatically. Use the exact name (e.g. "private", "work").',
           },
+          meetingId: {
+            type: "string",
+            description:
+              "Optional ID of a meeting to link this task to. Use list_meetings to find the meeting ID first.",
+          },
         },
         required: ["title"],
       },
@@ -120,6 +125,11 @@ export const TOOL_REGISTRY: LLMTool[] = [
             items: { type: "string" },
             description:
               "Replaces all current labels on the task with the given names. Missing labels are created automatically. Pass an empty array to remove all labels.",
+          },
+          meetingId: {
+            type: "string",
+            description:
+              "Link or unlink a meeting. Pass the meeting ID to link, or null to unlink from any meeting.",
           },
         },
         required: ["taskId"],
@@ -318,6 +328,158 @@ export const TOOL_REGISTRY: LLMTool[] = [
           },
         },
         required: ["contactId"],
+      },
+    },
+  },
+  // ── Meetings ─────────────────────────────────────────────────────────────
+  {
+    type: "function",
+    function: {
+      name: "create_meeting",
+      description:
+        "Create a new meeting for the user. Use when the user asks to schedule, add, or book a meeting. Requires a title and scheduled date/time.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: {
+            type: "string",
+            description: "Short, clear meeting title (required).",
+          },
+          scheduledAt: {
+            type: "string",
+            description:
+              "ISO 8601 date-time for when the meeting starts (e.g. 2026-04-10T14:00:00Z). Required.",
+          },
+          durationMin: {
+            type: "number",
+            description: "Duration in minutes (optional, e.g. 60).",
+          },
+          location: {
+            type: "string",
+            description:
+              "Meeting location — room name, URL, or address (optional).",
+          },
+          agenda: {
+            type: "string",
+            description: "Meeting agenda text (optional).",
+          },
+          summary: {
+            type: "string",
+            description: "Meeting summary or notes (optional).",
+          },
+          labelNames: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Label names to attach. Labels will be created if they do not exist.",
+          },
+          participantContactIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Contact IDs to add as participants. If a participant name is mentioned and no contact exists yet, inform the user and offer to create the contact first before adding them.",
+          },
+        },
+        required: ["title", "scheduledAt"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "list_meetings",
+      description:
+        "Retrieve the user's meetings, optionally filtered by status. Use when the user asks what meetings are coming up, what they have scheduled, or about past meetings.",
+      parameters: {
+        type: "object",
+        properties: {
+          status: {
+            type: "string",
+            enum: ["upcoming", "done", "cancelled"],
+            description: "Filter by status. Omit to return all meetings.",
+          },
+        },
+        required: [],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "update_meeting",
+      description:
+        "Update an existing meeting. Requires the meetingId. Supply only the fields that should change.",
+      parameters: {
+        type: "object",
+        properties: {
+          meetingId: {
+            type: "string",
+            description: "ID of the meeting to update.",
+          },
+          title: { type: "string", description: "New title." },
+          scheduledAt: {
+            type: "string",
+            description: "New ISO 8601 date-time.",
+          },
+          durationMin: {
+            type: "number",
+            description: "New duration in minutes, or null to clear it.",
+          },
+          location: {
+            type: "string",
+            description: "New location, or null to clear it.",
+          },
+          status: {
+            type: "string",
+            enum: ["upcoming", "done", "cancelled"],
+            description: "New status.",
+          },
+          agenda: {
+            type: "string",
+            description: "Meeting agenda text, or null to clear it.",
+          },
+          summary: {
+            type: "string",
+            description:
+              "Meeting summary or notes after the fact, or null to clear it.",
+          },
+          labelNames: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Replacement set of label names. Pass an empty array to remove all labels.",
+          },
+          participantContactIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Replacement set of participant contact IDs. Pass an empty array to remove all participants. If the user mentions a person not yet in contacts, inform them and suggest creating a contact first.",
+          },
+          linkedTaskIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Replacement set of task IDs to link to this meeting. Pass an empty array to unlink all tasks. Use list_tasks to find task IDs first.",
+          },
+        },
+        required: ["meetingId"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "delete_meeting",
+      description: "Permanently delete a meeting. Requires the meetingId.",
+      parameters: {
+        type: "object",
+        properties: {
+          meetingId: {
+            type: "string",
+            description: "ID of the meeting to delete.",
+          },
+        },
+        required: ["meetingId"],
       },
     },
   },

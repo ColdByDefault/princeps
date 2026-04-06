@@ -21,6 +21,7 @@ export async function createTask(
       notes: input.notes ?? null,
       priority: input.priority ?? "normal",
       dueDate: input.dueDate ? new Date(input.dueDate) : null,
+      ...(input.meetingId !== undefined && { meetingId: input.meetingId }),
       ...(input.labelIds?.length
         ? {
             labelLinks: {
