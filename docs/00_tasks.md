@@ -1,47 +1,109 @@
-# features
+﻿# Tasks
 
-- [ ] Tools:
-  - [ ] Decisions — schema complete, linked to meetings
-  - [ ] Briefings — BriefingCache model exists; daily LLM brief over tasks/meetings/decisions
-  - [ ] Tools-usage Reports — AssistantReport model exists
-  - [ ] Goals — needs schema design (structure, milestones, link to tasks)
-  - [ ] Notes — needs schema; lightweight freeform records, simpler than knowledge docs
-  - [ ] Calendar (Google integration) — Integration model exists with `google_calendar`; depends on Meetings done first
-  - [ ] Generate Contact Card Link for user to share with non-authenticated Users, Link is valid for 24h. User can generate manually from their profile page, or LLM can generate when user calls the tool in chat (e.g. "Generate a contact card link for John Doe"). User chooses what info to include. ShareToken model exists.
-  - [ ] Rich Document Support (PDF, Word, Excel, etc.)
-- [ ] User Profile Settings: Allow users to change their name, username, timezone. Email/password changes need careful handling with Better Auth. ProfileShell is currently read-only.
-- [ ] Slash Commands in Chat: Allow power users to bypass conversational pleasantries. Typing /task Buy plane tickets or /decision Go with the standard tier
-- [ ] Extend the LLM-awareness => LLM isn't just able to call tools or see contexts, but also can link stuff together, e.g. link a contact to a meeting, or link a note to a decision. Depends on Meetings + Decisions being live.
-- [ ] Change the availability of tools based on tier. also allow user from settings to turn tools on/off manually.
-- [ ] Admin Dashboard: User management, content moderation, system health monitoring, usage analytics, etc. Depends on having a user base and some content to moderate.
+Tasks are grouped by branch. One branch = one PR. Small related fixes share a single branch.
 
+---
 
-# UI/UX
+## Security — Fix Immediately
 
-- [ ] TasksList UI needs improvement.
-- [ ] Add Markdown support for system prompts in chat settings.
-- [ ] Global UI/UX checks.
-- [ ] When LLM calls a tool and successfully creates/updates something, it shows a toast within the chat-widget window, then output what it has done, keep the toast, but as reply to the user, reduce the output answer to only "Done", because the toaster is already enough 
+### Branch: `fix/security-hardening`
+- [ ] **#1 Wire dead rate limiters** — `writeRateLimiter`, `searchRateLimiter`, `briefingRateLimiter`, and `prepRateLimiter` are all defined in `lib/security.ts` but never imported or applied anywhere. Every mutation route (`POST/PATCH/DELETE` on tasks, meetings, contacts, labels) is completely unprotected. Apply them.
+- [ ] **#2 Password reset flow** — no `forgetPassword` / `resetPassword` pages or API hooks exist. Users who lose their password permanently lose access. Better Auth has the plugin; wire it up.
 
-# Priority
+---
 
-- [ ]
+## High Priority — Core Product Gaps
 
+### Branch: `feat/decisions`
+- [ ] **#3 Decisions tool** — schema complete, linked to meetings. Wire up handler, API, and UI.
+- [ ] **#4 Stub `decisions` i18n namespace** — `messages/de.json` and `messages/en.json` only have the nav label. Add a top-level `"decisions": {}` stub now to avoid a runtime i18n crash the moment any component does `useTranslations("decisions")`.
 
-# Other
+### Branch: `feat/notes`
+- [ ] **#5 Notes tool** — needs schema; lightweight freeform records, simpler than knowledge docs.
 
-- [ ] Add `index.ts` everywhere in components, libs, etc. for better imports.
-- [ ] Add 4 seed users with different tiers and some pre-filled data for testing and demo purposes.
+### Branch: `feat/profile-settings`
+- [ ] **#6 User Profile Settings** — allow users to change name, username, timezone. Email/password changes need careful handling with Better Auth. `ProfileShell` is currently read-only.
+- [ ] **#7 Dropdown menus (timezone + location)** — current design is poor; redesign with a searchable combobox. Do alongside #6 since both touch the same settings shell.
 
+### Branch: `fix/llm-tools`
+- [ ] **#8 LLM tool reply verbosity** — when the LLM calls a tool and it succeeds, keep the toast but reduce the LLM reply text to "Done" only.
+- [ ] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat.
+- [ ] **#10 Increase Task Notes character limit** — 250 chars is too short; increase it.
 
-# Open Questions
+---
 
-- [ ] do I need these packages, why or why not, and if yes where to apply them:
-    - [ ] `framer-motion` because AI responses are streamed and can feel jittery.
-    - [ ] `nuqs`
-    - [ ] `date-fns` for date handling, formatting, and timezone conversions.
-    - [ ] `next-safe-action`
-    - [ ] `langfuse` for LLM observability and debugging.
-    - [ ] `react-hook-form` for form handling in React
-    - [ ] `react-markdown` for rendering Markdown content in React components
-- [ ] Is LLM aware of required vs optional inputs when calling tools?
+## Important — Polish & Correctness
+
+### Branch: `fix/ui-polish`
+- [ ] **#11 Contacts empty state** — tasks and meetings look fine when empty; contacts looks bad. Fix to match.
+- [ ] **#12 Duplicate "+ New Task" button** — tasks page shows two buttons when the list is empty. Remove the redundant one.
+- [ ] **#13 Chat-Widget status dot** — switch from gray to green (online indicator).
+- [ ] **#14 TasksList UI** — general layout and visual improvements needed.
+- [ ] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
+- [ ] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
+
+### Branch: `feat/markdown`
+- [ ] **#17 Add `react-markdown`** — render Markdown in chat messages, system prompt preview, and chat settings editor.
+
+---
+
+## Enhancements — Next Feature Wave
+
+### Branch: `feat/personal-info`
+- [ ] **#18 `PersonalInfo` model** — schema exists, `app/api/knowledge/personal/` folder exists but is empty, no lib, no context slot, no UI. Implement fully and feed into the system prompt.
+
+### Branch: `feat/meeting-prep-pack`
+- [ ] **#19 Meeting prep pack** — `Meeting.prepPack` was migrated but is 0% implemented (always returns `null`). Add the generate action, tool parameter, and UI to display the pack.
+
+### Branch: `fix/tier-consistency`
+- [ ] **#20 Tier limits on meetings + tasks** — contacts and knowledge are gated per plan; meetings and tasks are not. Inconsistent with the tier model. Add per-plan limits.
+- [ ] **#21 Remove dead `enforceKnowledgeDocs` export** — deprecated function is still re-exported from `lib/tiers/index.ts` but never called. Remove it.
+
+### Branch: `feat/briefings`
+- [ ] **#22 Briefings tool** — `BriefingCache` model exists; daily LLM brief over tasks/meetings/decisions.
+
+### Branch: `feat/goals`
+- [ ] **#23 Goals tool** — needs schema design (structure, milestones, link to tasks).
+
+### Branch: `feat/labels-icons`
+- [ ] **#24 Add 20 Lucide icons to labels system** — allow icon selection per label; update label display wherever labels are rendered.
+
+### Branch: `feat/tool-settings`
+- [ ] **#25 Tool availability per tier + user toggle** — change which tools are available by tier; allow users to enable/disable tools manually in settings.
+- [ ] **#26 Make "Available Tools" in settings dynamic** — derive list from `TOOL_REGISTRY`, not a hardcoded array. Do alongside #25.
+
+### Branch: `feat/llm-crosslink`
+- [ ] **#27 Extend LLM cross-linking awareness** — LLM can link a contact to a meeting, a note to a decision, etc. Depends on Decisions (#3) + Notes (#5) being live.
+
+---
+
+## Nice to Have — Can Be Delayed
+
+### Branch: `feat/calendar`
+- [ ] **#28 Calendar tool (Google integration)** — `Integration` model exists with `google_calendar` type; depends on Meetings being fully live.
+
+### Branch: `feat/contact-share`
+- [ ] **#29 Contact Card Share Link** — generate a 24h share link; user picks what info to expose. `ShareToken` model exists. Triggerable from profile page or via LLM tool call.
+
+### Branch: `feat/knowledge-rich-docs`
+- [ ] **#30 Rich Document Support** — PDF, Word, Excel ingestion into knowledge base. `mammoth` and `pdf-parse` are already in `package.json` but never imported — wire them up here.
+
+### Branch: `feat/tools-reports`
+- [ ] **#31 Tools-usage Reports** — `AssistantReport` model exists; surface analytics on which tools are used.
+
+### Branch: `chore/cleanup`
+- [ ] **#32 Remove dead production dependencies** — `mammoth` and `pdf-parse` are in `package.json` and `serverExternalPackages` but never imported. Remove until #30 is implemented.
+- [ ] **#33 `emailVerified` always false** — Better Auth stores the field but no email verification plugin is configured and it is never checked as an access gate. Stub the plugin or document the intent before existing users become a migration problem.
+- [ ] **#34 In-memory rate limiter not production-safe** — the implementation is self-documented as broken under multi-node/serverless deploys. Replace with a Redis-backed or edge-compatible store when deploying to production.
+- [ ] **#35 Refactor Sidebar navigation** — use an array + `.map()` instead of hardcoded JSX for easier scaling.
+- [ ] **#36 Add `index.ts` barrel exports** — add missing `index.ts` in components and lib folders for cleaner imports.
+- [ ] **#37 Add `date-fns`** — standardize date formatting and timezone handling across the app.
+
+---
+
+## Deferred — Needs User Base First
+
+- [ ] **#38 Admin Dashboard** — user management, content moderation, system health, usage analytics. No value without real users.
+- [ ] **#39 Add `langfuse`** — LLM observability and prompt debugging. Useful pre-production, not during active development.
+- [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing.
+- [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config, no `.spec.ts` files anywhere. The tier enforcement, tool handlers, and schema validators have no safety net. Defer until the feature set stabilizes.
