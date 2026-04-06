@@ -41,6 +41,14 @@ export async function updateMeeting(
             create: input.labelIds.map((labelId) => ({ labelId })),
           },
         }),
+        ...(input.participantContactIds !== undefined && {
+          participants: {
+            deleteMany: {},
+            create: input.participantContactIds.map((contactId) => ({
+              contactId,
+            })),
+          },
+        }),
       },
       select: MEETING_SELECT,
     })

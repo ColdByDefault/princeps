@@ -23,6 +23,13 @@ export const MEETING_SELECT = {
       label: { select: { id: true, name: true, color: true } },
     },
   },
+  participants: {
+    select: {
+      id: true,
+      contactId: true,
+      contact: { select: { name: true } },
+    },
+  },
 } as const;
 
 type MeetingRow = {
@@ -37,6 +44,7 @@ type MeetingRow = {
   createdAt: Date;
   updatedAt: Date;
   labelLinks: { label: { id: string; name: string; color: string } }[];
+  participants: { id: string; contactId: string; contact: { name: string } }[];
 };
 
 export function toMeetingRecord(row: MeetingRow): MeetingRecord {
@@ -52,7 +60,11 @@ export function toMeetingRecord(row: MeetingRow): MeetingRecord {
     status: row.status,
     googleEventId: null,
     labels: row.labelLinks.map((l) => l.label),
-    participants: [],
+    participants: row.participants.map((p) => ({
+      id: p.id,
+      contactId: p.contactId,
+      contactName: p.contact.name,
+    })),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };

@@ -353,6 +353,11 @@
       "agendaPlaceholder": "Besprechungsagenda…",
       "summary": "Zusammenfassung",
       "summaryPlaceholder": "Zusammenfassung oder Notizen…",
+      "participants": "Teilnehmer",
+      "addParticipant": "Teilnehmer hinzufügen",
+      "removeParticipant": "Teilnehmer entfernen",
+      "newContact": "Neuer Kontakt",
+      "noMoreContacts": "Keine weiteren Kontakte verfügbar.",
       "optional": "Optional"
     },
     "createDialog": {
@@ -381,7 +386,19 @@
     },
     "actionsLabel": "Meeting-Aktionen",
     "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen"
+    "deleteLabel": "L\u00f6schen",
+    "quickContact": {
+      "heading": "Neuer Kontakt",
+      "name": "Name",
+      "namePlaceholder": "Vollst\u00e4ndiger Name",
+      "company": "Unternehmen",
+      "companyPlaceholder": "Unternehmensname",
+      "email": "E-Mail",
+      "emailPlaceholder": "email@beispiel.de",
+      "submit": "Erstellen & hinzuf\u00fcgen",
+      "submitting": "Wird erstellt\u2026",
+      "cancel": "Abbrechen"
+    }
   },
   "tasks": {
     "metadata": {

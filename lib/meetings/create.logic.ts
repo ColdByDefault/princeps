@@ -28,6 +28,15 @@ export async function createMeeting(
             },
           }
         : {}),
+      ...(input.participantContactIds?.length
+        ? {
+            participants: {
+              create: input.participantContactIds.map((contactId) => ({
+                contactId,
+              })),
+            },
+          }
+        : {}),
     },
     select: MEETING_SELECT,
   });

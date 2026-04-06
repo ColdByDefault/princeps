@@ -23,18 +23,24 @@ import { MeetingCard } from "./MeetingCard";
 import { CreateMeetingDialog } from "./CreateMeetingDialog";
 import { EditMeetingDialog } from "./EditMeetingDialog";
 import { useMeetingMutations } from "./logic/useMeetingMutations";
-import type { LabelOptionRecord, MeetingRecord } from "@/types/api";
+import type {
+  LabelOptionRecord,
+  MeetingRecord,
+  ContactRecord,
+} from "@/types/api";
 
 type Filter = "all" | "upcoming" | "done" | "cancelled";
 
 type MeetingsShellProps = {
   initialMeetings: MeetingRecord[];
   availableLabels: LabelOptionRecord[];
+  availableContacts: ContactRecord[];
 };
 
 export function MeetingsShell({
   initialMeetings,
   availableLabels,
+  availableContacts,
 }: MeetingsShellProps) {
   const t = useTranslations("meetings");
   const [meetings, setMeetings] = useState<MeetingRecord[]>(initialMeetings);
@@ -155,6 +161,7 @@ export function MeetingsShell({
         onSubmit={updateMeeting}
         updating={updating !== null}
         availableLabels={availableLabels}
+        availableContacts={availableContacts}
       />
 
       {/* Delete confirmation */}

@@ -30,6 +30,7 @@ export function useMeetingMutations(
     durationMin?: number | null;
     location?: string | null;
     labelIds?: string[];
+    participantContactIds?: string[];
   }) {
     setCreating(true);
     try {
@@ -62,6 +63,7 @@ export function useMeetingMutations(
       agenda: string | null;
       summary: string | null;
       labelIds: string[];
+      participantContactIds: string[];
     }>,
   ) {
     setUpdating(meetingId);

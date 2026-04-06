@@ -10,6 +10,7 @@ import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { listMeetings } from "@/lib/meetings/list.logic";
 import { listLabels } from "@/lib/labels/list.logic";
+import { listContacts } from "@/lib/contact/list.logic";
 import { MeetingsShell } from "@/components/meetings";
 import type { AppLanguage } from "@/types/i18n";
 
@@ -32,10 +33,17 @@ export default async function MeetingsPage() {
     redirect("/login");
   }
 
-  const [meetings, labels] = await Promise.all([
+  const [meetings, labels, contacts] = await Promise.all([
     listMeetings(session.user.id),
     listLabels(session.user.id),
+    listContacts(session.user.id),
   ]);
 
-  return <MeetingsShell initialMeetings={meetings} availableLabels={labels} />;
+  return (
+    <MeetingsShell
+      initialMeetings={meetings}
+      availableLabels={labels}
+      availableContacts={contacts}
+    />
+  );
 }

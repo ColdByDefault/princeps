@@ -12,6 +12,7 @@ import {
   Pencil,
   Trash2,
   Clock,
+  Users,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
@@ -141,6 +142,12 @@ export function MeetingCard({
             <span className="flex items-center gap-1">
               <MapPin className="size-3.5" />
               {meeting.location}
+            </span>
+          )}
+          {meeting.participants.length > 0 && (
+            <span className="flex items-center gap-1">
+              <Users className="size-3.5" />
+              {meeting.participants.map((p) => p.contactName).join(", ")}
             </span>
           )}
         </div>

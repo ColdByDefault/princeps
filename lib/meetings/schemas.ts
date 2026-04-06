@@ -11,6 +11,7 @@ export const createMeetingSchema = z.object({
   durationMin: z.number().int().min(1).max(1440).optional().nullable(),
   location: z.string().max(500).optional().nullable(),
   labelIds: z.array(z.string()).optional(),
+  participantContactIds: z.array(z.string()).optional(),
 });
 
 export const updateMeetingSchema = z.object({
@@ -22,6 +23,7 @@ export const updateMeetingSchema = z.object({
   agenda: z.string().max(10000).optional().nullable(),
   summary: z.string().max(10000).optional().nullable(),
   labelIds: z.array(z.string()).optional(),
+  participantContactIds: z.array(z.string()).optional(),
 });
 
 export type CreateMeetingInput = z.infer<typeof createMeetingSchema>;

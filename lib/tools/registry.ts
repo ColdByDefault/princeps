@@ -355,6 +355,12 @@ export const TOOL_REGISTRY: LLMTool[] = [
             description:
               "Label names to attach. Labels will be created if they do not exist.",
           },
+          participantContactIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Contact IDs to add as participants. If a participant name is mentioned and no contact exists yet, inform the user and offer to create the contact first before adding them.",
+          },
         },
         required: ["title", "scheduledAt"],
       },
@@ -424,6 +430,12 @@ export const TOOL_REGISTRY: LLMTool[] = [
             items: { type: "string" },
             description:
               "Replacement set of label names. Pass an empty array to remove all labels.",
+          },
+          participantContactIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Replacement set of participant contact IDs. Pass an empty array to remove all participants. If the user mentions a person not yet in contacts, inform them and suggest creating a contact first.",
           },
         },
         required: ["meetingId"],
