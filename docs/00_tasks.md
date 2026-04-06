@@ -1,7 +1,6 @@
 # features
 
 - [ ] Tools:
-  - [x] Contacts
   - [ ] Meetings — schema complete (participants, agenda, summary, prepPack, linked to Tasks/Decisions/Contacts)
   - [ ] Decisions — schema complete, linked to meetings
   - [ ] Briefings — BriefingCache model exists; daily LLM brief over tasks/meetings/decisions

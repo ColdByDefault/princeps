@@ -309,6 +309,7 @@ model Meeting {
   labelLinks   LabelOnMeeting[]
 
   @@index([userId])
+  @@index([userId, scheduledAt])
   @@map("meeting")
 }
 
