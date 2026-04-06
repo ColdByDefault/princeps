@@ -9,6 +9,11 @@ import { auth } from "@/lib/auth/auth";
 import { updateContact } from "@/lib/contact/update.logic";
 import { deleteContact } from "@/lib/contact/delete.logic";
 import { updateContactSchema } from "@/lib/contact/schemas";
+import {
+  writeRateLimiter,
+  getRateLimitIdentifier,
+  createRateLimitResponse,
+} from "@/lib/security";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -18,6 +23,12 @@ export async function PATCH(req: Request, { params }: Params) {
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const identifier = getRateLimitIdentifier(req, session.user.id);
+  const rateLimit = writeRateLimiter.check(identifier);
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
 
   const { id } = await params;
@@ -41,11 +52,17 @@ export async function PATCH(req: Request, { params }: Params) {
 }
 
 // DELETE /api/contact/[id] — delete a contact
-export async function DELETE(_req: Request, { params }: Params) {
+export async function DELETE(req: Request, { params }: Params) {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const identifier = getRateLimitIdentifier(req, session.user.id);
+  const rateLimit = writeRateLimiter.check(identifier);
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
 
   const { id } = await params;

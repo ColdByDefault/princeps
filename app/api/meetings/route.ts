@@ -9,6 +9,11 @@ import { auth } from "@/lib/auth/auth";
 import { listMeetings } from "@/lib/meetings/list.logic";
 import { createMeeting } from "@/lib/meetings/create.logic";
 import { createMeetingSchema } from "@/lib/meetings/schemas";
+import {
+  writeRateLimiter,
+  getRateLimitIdentifier,
+  createRateLimitResponse,
+} from "@/lib/security";
 
 // GET /api/meetings — list meetings for the current user
 export async function GET(req: Request) {
@@ -40,6 +45,12 @@ export async function POST(req: Request) {
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const identifier = getRateLimitIdentifier(req, session.user.id);
+  const rateLimit = writeRateLimiter.check(identifier);
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
 
   const body = (await req.json()) as unknown;
