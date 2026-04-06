@@ -1,3 +1,19 @@
+## [0.1.38] - 2026-04-06
+
+- feat: integrate task management into meetings with linked tasks functionality
+- feat: implement summary dialog for meetings with CRUD functionality
+- feat: add agenda and summary fields to meeting creation and management
+- feat: enhance meeting management with participant handling and quick contact creation
+- feat: add agenda and summary fields to meeting management components and schemas
+- feat: add comment to clarify sidebar menu item rendering
+- feat: implement meeting handlers for create, list, update, and delete operations
+- feat: update navigation to include meetings link and enhance meetings feature description in documentation
+- feat: add meetings management features including create, list, update, and delete operations
+- feat: add meetings management functionality with create, edit, delete, and list features
+- feat: add API endpoints for creating and listing meetings
+- feat: implement meeting management functionality with create, delete, list, and update operations
+- fix: remove completed Contacts task from features list
+
 ## [0.1.37] - 2026-04-05
 
 - fix: update tasks documentation with detailed tool features and improve UI/UX items
