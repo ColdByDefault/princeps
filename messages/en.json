@@ -318,6 +318,67 @@
       "save": "Save changes"
     }
   },
+  "meetings": {
+    "metadata": {
+      "title": "Meetings",
+      "description": "Manage your meetings."
+    },
+    "pageTitle": "Meetings",
+    "newMeeting": "New meeting",
+    "empty": "No meetings yet.",
+    "emptyFiltered": "No meetings with this status.",
+    "filter": {
+      "all": "All",
+      "upcoming": "Upcoming",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "status": {
+      "upcoming": "Upcoming",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "Meeting title",
+      "scheduledAt": "Date & time",
+      "durationMin": "Duration (min)",
+      "durationPlaceholder": "e.g. 60",
+      "minutesShort": "min",
+      "location": "Location",
+      "locationPlaceholder": "Room, link, or address",
+      "status": "Status",
+      "labels": "Labels",
+      "optional": "Optional"
+    },
+    "createDialog": {
+      "heading": "New meeting",
+      "submit": "Create",
+      "submitting": "Creating\u2026",
+      "cancel": "Cancel",
+      "success": "Meeting created.",
+      "error": "Failed to create meeting."
+    },
+    "editDialog": {
+      "heading": "Edit meeting",
+      "submit": "Save",
+      "submitting": "Saving\u2026",
+      "cancel": "Cancel",
+      "success": "Meeting saved.",
+      "error": "Failed to save meeting."
+    },
+    "deleteDialog": {
+      "title": "Delete this meeting?",
+      "description": "This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Meeting deleted.",
+      "error": "Failed to delete meeting."
+    },
+    "actionsLabel": "Meeting actions",
+    "editLabel": "Edit",
+    "deleteLabel": "Delete"
+  },
   "tasks": {
     "metadata": {
       "title": "Tasks",

@@ -318,6 +318,67 @@
       "save": "Änderungen speichern"
     }
   },
+  "meetings": {
+    "metadata": {
+      "title": "Meetings",
+      "description": "Verwalte deine Meetings."
+    },
+    "pageTitle": "Meetings",
+    "newMeeting": "Neues Meeting",
+    "empty": "Noch keine Meetings.",
+    "emptyFiltered": "Keine Meetings mit diesem Status.",
+    "filter": {
+      "all": "Alle",
+      "upcoming": "Bevorstehend",
+      "done": "Erledigt",
+      "cancelled": "Abgesagt"
+    },
+    "status": {
+      "upcoming": "Bevorstehend",
+      "done": "Erledigt",
+      "cancelled": "Abgesagt"
+    },
+    "fields": {
+      "title": "Titel",
+      "titlePlaceholder": "Meeting-Titel",
+      "scheduledAt": "Datum & Uhrzeit",
+      "durationMin": "Dauer (Min.)",
+      "durationPlaceholder": "z.B. 60",
+      "minutesShort": "Min.",
+      "location": "Ort",
+      "locationPlaceholder": "Raum, Link oder Adresse",
+      "status": "Status",
+      "labels": "Labels",
+      "optional": "Optional"
+    },
+    "createDialog": {
+      "heading": "Neues Meeting",
+      "submit": "Erstellen",
+      "submitting": "Wird erstellt\u2026",
+      "cancel": "Abbrechen",
+      "success": "Meeting erstellt.",
+      "error": "Meeting konnte nicht erstellt werden."
+    },
+    "editDialog": {
+      "heading": "Meeting bearbeiten",
+      "submit": "Speichern",
+      "submitting": "Wird gespeichert\u2026",
+      "cancel": "Abbrechen",
+      "success": "Meeting gespeichert.",
+      "error": "Meeting konnte nicht gespeichert werden."
+    },
+    "deleteDialog": {
+      "title": "Dieses Meeting l\u00f6schen?",
+      "description": "Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden.",
+      "confirm": "L\u00f6schen",
+      "cancel": "Abbrechen",
+      "success": "Meeting gel\u00f6scht.",
+      "error": "Meeting konnte nicht gel\u00f6scht werden."
+    },
+    "actionsLabel": "Meeting-Aktionen",
+    "editLabel": "Bearbeiten",
+    "deleteLabel": "L\u00f6schen"
+  },
   "tasks": {
     "metadata": {
       "title": "Aufgaben",
