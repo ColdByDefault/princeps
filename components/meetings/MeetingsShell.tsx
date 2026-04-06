@@ -104,6 +104,7 @@ export function MeetingsShell({
           onSubmit={createMeeting}
           creating={creating}
           availableLabels={availableLabels}
+          availableContacts={availableContacts}
         >
           <Button
             type="button"

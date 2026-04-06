@@ -29,6 +29,8 @@ export function useMeetingMutations(
     scheduledAt: string;
     durationMin?: number | null;
     location?: string | null;
+    agenda?: string | null;
+    summary?: string | null;
     labelIds?: string[];
     participantContactIds?: string[];
   }) {

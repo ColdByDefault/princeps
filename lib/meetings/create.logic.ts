@@ -21,6 +21,8 @@ export async function createMeeting(
       scheduledAt: new Date(input.scheduledAt),
       durationMin: input.durationMin ?? null,
       location: input.location ?? null,
+      agenda: input.agenda ?? null,
+      summary: input.summary ?? null,
       ...(input.labelIds?.length
         ? {
             labelLinks: {

@@ -349,6 +349,14 @@ export const TOOL_REGISTRY: LLMTool[] = [
             description:
               "Meeting location — room name, URL, or address (optional).",
           },
+          agenda: {
+            type: "string",
+            description: "Meeting agenda text (optional).",
+          },
+          summary: {
+            type: "string",
+            description: "Meeting summary or notes (optional).",
+          },
           labelNames: {
             type: "array",
             items: { type: "string" },
