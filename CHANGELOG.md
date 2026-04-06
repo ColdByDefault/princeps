@@ -1,3 +1,9 @@
+## [0.1.40] - 2026-04-06
+
+- feat: add pgvector DB health check script and integrate it into the dev start process
+- feat: implement password reset flow with forgot and reset password pages, including email validation and link storage
+- feat: implement rate limiting for mutation routes across tasks, meetings, contacts, and labels
+
 ## [0.1.39] - 2026-04-06
 
 - feat: restructure tasks documentation with enhanced organization and clarity
