@@ -29,7 +29,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "tsx scripts/db-healthcheck.ts && next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",

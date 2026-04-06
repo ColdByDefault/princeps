@@ -10,7 +10,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 - [x] **#1 Wire dead rate limiters** — `writeRateLimiter`, `searchRateLimiter`, `briefingRateLimiter`, and `prepRateLimiter` are all defined in `lib/security.ts` but never imported or applied anywhere. Every mutation route (`POST/PATCH/DELETE` on tasks, meetings, contacts, labels) is completely unprotected. Apply them.
 - [x] **#2 Password reset flow** — no `forgetPassword` / `resetPassword` pages or API hooks exist. Users who lose their password permanently lose access. Better Auth has the plugin; wire it up.
-- [ ] **#2.1 Extra**: add pgvector db health check and run when `npm run dev` starts.
+- [x] **#2.1 Extra**: add pgvector db health check and run when `npm run dev` starts.
 
 ---
 
