@@ -222,6 +222,7 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
           <SidebarGroupLabel>{t("sidebar.navGroup")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* save links as array and map over them */}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   render={<Link href="/home" />}
