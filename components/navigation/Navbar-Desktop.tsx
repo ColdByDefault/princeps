@@ -10,7 +10,6 @@ import {
   LogOut,
   LayoutGrid,
   ChevronDown,
-  CalendarDays,
   Scale,
   type LucideIcon,
 } from "lucide-react";
@@ -71,13 +70,10 @@ function isActivePath(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-const GROUPED_HREFS = new Set(["/tasks", "/contact"]);
+const GROUPED_HREFS = new Set(["/tasks", "/contact", "/meetings"]);
 const AFTER_DROPDOWN_HREFS = new Set(["/settings", "/pricing"]);
 
-const placeholderItems = [
-  { key: "meetings", icon: CalendarDays },
-  { key: "decisions", icon: Scale },
-] as const;
+const placeholderItems = [{ key: "decisions", icon: Scale }] as const;
 
 export default function NavbarDesktop({
   navLinks,

@@ -1,7 +1,7 @@
 # features
 
 - [ ] Tools:
-  - [ ] Meetings — schema complete (participants, agenda, summary, prepPack, linked to Tasks/Decisions/Contacts)
+  - [ ] Meetings — schema complete (participants, agenda, summary, prepPacket, etc.), CRUD handlers, linked to LLM and context, UI for listing/creating/editing meetings
   - [ ] Decisions — schema complete, linked to meetings
   - [ ] Briefings — BriefingCache model exists; daily LLM brief over tasks/meetings/decisions
   - [ ] Tools-usage Reports — AssistantReport model exists
@@ -19,10 +19,10 @@
 
 # UI/UX
 
-- [ ] TasksList UI needs improvment.
+- [ ] TasksList UI needs improvement.
 - [ ] Add Markdown support for system prompts in chat settings.
 - [ ] Global UI/UX checks.
-- [ ] 
+- [ ] When LLM calls a tool and successfully creates/updates something, it shows a toast within the chat-widget window, then output what it has done, keep the toast, but as reply to the user, reduce the output answer to only "Done", because the toaster is already enough 
 
 # Priority
 
