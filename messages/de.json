@@ -552,7 +552,8 @@
       "tasks": "Aufgaben",
       "labels": "Labels",
       "profile": "Profil",
-      "contacts": "Kontakte"
+      "contacts": "Kontakte",
+      "meetings": "Meetings"
     },
     "catalog": {
       "create_task": {
@@ -619,6 +620,26 @@
         "label": "Kontakt löschen",
         "what": "Löscht einen Kontakt dauerhaft.",
         "example": "\"Lösche den Kontakt Jana Müller\""
+      },
+      "create_meeting": {
+        "label": "Meeting erstellen",
+        "what": "Plant ein neues Meeting mit optionaler Dauer, Ort und Labels.",
+        "example": "\"Plane ein Meeting: Q2-Review, morgen um 14 Uhr, 60 Minuten\""
+      },
+      "list_meetings": {
+        "label": "Meetings anzeigen",
+        "what": "Zeigt deine Meetings an, optional gefiltert nach Status.",
+        "example": "\"Welche Meetings habe ich als nächstes?\" oder \"Zeige alle meine Meetings\""
+      },
+      "update_meeting": {
+        "label": "Meeting bearbeiten",
+        "what": "Ändert Titel, Uhrzeit, Dauer, Ort, Status oder Labels eines Meetings.",
+        "example": "\"Verschiebe das Q2-Review auf Freitag um 15 Uhr\""
+      },
+      "delete_meeting": {
+        "label": "Meeting löschen",
+        "what": "Löscht ein Meeting dauerhaft.",
+        "example": "\"Lösche das Q2-Review-Meeting\""
       }
     }
   },

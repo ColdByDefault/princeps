@@ -37,4 +37,11 @@
 
 # Open Questions
 
-- [ ]
+- [ ] do I need these packages, why or why not, and if yes where to apply them:
+  - [ ] `framer-motion` because AI responses are streamed and can feel jittery.
+  - [ ] `nuqs`
+  - [ ] `date-fns` for date handling, formatting, and timezone conversions.
+  - [ ] `next-safe-action`
+  - [ ] `langfuse` for LLM observability and debugging.
+  - [ ] `react-hook-form` for form handling in React
+  - [ ] `react-markdown` for rendering Markdown content in React components

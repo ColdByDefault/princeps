@@ -552,7 +552,8 @@
       "tasks": "Tasks",
       "labels": "Labels",
       "profile": "Profile",
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "meetings": "Meetings"
     },
     "catalog": {
       "create_task": {
@@ -619,6 +620,26 @@
         "label": "Delete Contact",
         "what": "Permanently deletes a contact.",
         "example": "\"Delete the contact Jane Doe\""
+      },
+      "create_meeting": {
+        "label": "Create Meeting",
+        "what": "Schedules a new meeting with optional duration, location, and labels.",
+        "example": "\"Schedule a meeting: Q2 review, tomorrow at 2pm, 60 minutes\""
+      },
+      "list_meetings": {
+        "label": "List Meetings",
+        "what": "Retrieves your meetings, optionally filtered by status.",
+        "example": "\"What meetings do I have coming up?\" or \"Show me all my meetings\""
+      },
+      "update_meeting": {
+        "label": "Update Meeting",
+        "what": "Changes a meeting's title, time, duration, location, status, or labels.",
+        "example": "\"Move the Q2 review to Friday at 3pm\""
+      },
+      "delete_meeting": {
+        "label": "Delete Meeting",
+        "what": "Permanently deletes a meeting.",
+        "example": "\"Delete the Q2 review meeting\""
       }
     }
   },
