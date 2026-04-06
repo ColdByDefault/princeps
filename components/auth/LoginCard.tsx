@@ -85,9 +85,17 @@ export default function LoginCard() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">
-              {t("login.passwordLabel")}
-            </label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="password" className="text-sm font-medium">
+                {t("login.passwordLabel")}
+              </label>
+              <Link
+                href="/forgot-password"
+                className="cursor-pointer text-sm text-muted-foreground hover:text-foreground"
+              >
+                {t("login.forgotPassword")}
+              </Link>
+            </div>
             <div className="relative">
               <Input
                 id="password"

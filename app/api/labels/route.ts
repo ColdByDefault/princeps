@@ -9,6 +9,11 @@ import { auth } from "@/lib/auth/auth";
 import { listLabels } from "@/lib/labels/list.logic";
 import { createLabel } from "@/lib/labels/create.logic";
 import { createLabelSchema } from "@/lib/labels/schemas";
+import {
+  writeRateLimiter,
+  getRateLimitIdentifier,
+  createRateLimitResponse,
+} from "@/lib/security";
 
 // GET /api/labels — list labels for the current user
 export async function GET() {
@@ -28,6 +33,12 @@ export async function POST(req: Request) {
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const identifier = getRateLimitIdentifier(req, session.user.id);
+  const rateLimit = writeRateLimiter.check(identifier);
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
 
   const body = (await req.json()) as unknown;

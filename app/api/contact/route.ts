@@ -10,6 +10,11 @@ import { listContacts } from "@/lib/contact/list.logic";
 import { createContact } from "@/lib/contact/create.logic";
 import { createContactSchema } from "@/lib/contact/schemas";
 import { enforceContactsMax, createTierLimitResponse } from "@/lib/tiers";
+import {
+  writeRateLimiter,
+  getRateLimitIdentifier,
+  createRateLimitResponse,
+} from "@/lib/security";
 
 // GET /api/contact — list all contacts for the current user
 export async function GET() {
@@ -29,6 +34,12 @@ export async function POST(req: Request) {
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const identifier = getRateLimitIdentifier(req, session.user.id);
+  const rateLimit = writeRateLimiter.check(identifier);
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
 
   const gate = await enforceContactsMax(session.user.id);

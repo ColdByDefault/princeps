@@ -15,11 +15,18 @@ const publicRoutes = [
   "/",
   "/login",
   "/sign-up",
+  "/forgot-password",
+  "/reset-password",
   "/privacy-policy",
   "/terms-of-use",
   "/security",
 ];
-const authRoutes = ["/login", "/sign-up"];
+const authRoutes = [
+  "/login",
+  "/sign-up",
+  "/forgot-password",
+  "/reset-password",
+];
 // Routes that should not trigger the onboarding redirect
 /* const onboardingBypassRoutes = ["/onboarding", "/api/onboarding"]; */
 

@@ -9,6 +9,11 @@ import { auth } from "@/lib/auth/auth";
 import { updateTask } from "@/lib/tasks/update.logic";
 import { deleteTask } from "@/lib/tasks/delete.logic";
 import { updateTaskSchema } from "@/lib/tasks/schemas";
+import {
+  writeRateLimiter,
+  getRateLimitIdentifier,
+  createRateLimitResponse,
+} from "@/lib/security";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -18,6 +23,12 @@ export async function PATCH(req: Request, { params }: Params) {
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const identifier = getRateLimitIdentifier(req, session.user.id);
+  const rateLimit = writeRateLimiter.check(identifier);
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
 
   const { id } = await params;
@@ -44,11 +55,17 @@ export async function PATCH(req: Request, { params }: Params) {
 }
 
 // DELETE /api/tasks/[id] — delete a task
-export async function DELETE(_req: Request, { params }: Params) {
+export async function DELETE(req: Request, { params }: Params) {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const identifier = getRateLimitIdentifier(req, session.user.id);
+  const rateLimit = writeRateLimiter.check(identifier);
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
 
   const { id } = await params;

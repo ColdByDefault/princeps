@@ -9,6 +9,11 @@ import { auth } from "@/lib/auth/auth";
 import { listTasks } from "@/lib/tasks/list.logic";
 import { createTask } from "@/lib/tasks/create.logic";
 import { createTaskSchema } from "@/lib/tasks/schemas";
+import {
+  writeRateLimiter,
+  getRateLimitIdentifier,
+  createRateLimitResponse,
+} from "@/lib/security";
 
 // GET /api/tasks — list tasks for the current user
 export async function GET(req: Request) {
@@ -37,6 +42,12 @@ export async function POST(req: Request) {
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const identifier = getRateLimitIdentifier(req, session.user.id);
+  const rateLimit = writeRateLimiter.check(identifier);
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
 
   const body = (await req.json()) as unknown;

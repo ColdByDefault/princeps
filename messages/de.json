@@ -50,7 +50,8 @@
       "errorFallback": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
       "redirectNotice": "Bitte melde dich an, um fortzufahren.",
       "switchPrompt": "Noch kein Konto?",
-      "switchLink": "Konto erstellen"
+      "switchLink": "Konto erstellen",
+      "forgotPassword": "Passwort vergessen?"
     },
     "signUp": {
       "metadata": {
@@ -78,6 +79,42 @@
     "password": {
       "show": "Passwort anzeigen",
       "hide": "Passwort ausblenden"
+    },
+    "forgotPassword": {
+      "metadata": {
+        "title": "Passwort vergessen",
+        "description": "Setze dein C-Sweet-Passwort zurück."
+      },
+      "title": "Passwort vergessen?",
+      "subtitle": "Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen.",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "du@beispiel.de",
+      "submit": "Link senden",
+      "submitting": "Wird gesendet …",
+      "successTitle": "E-Mail gesendet",
+      "successMessage": "Falls ein Konto mit dieser E-Mail existiert, hast du einen Link zum Zurücksetzen erhalten.",
+      "errorFallback": "Anfrage fehlgeschlagen. Bitte versuche es erneut.",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "resetPassword": {
+      "metadata": {
+        "title": "Neues Passwort",
+        "description": "Lege ein neues Passwort für dein C-Sweet-Konto fest."
+      },
+      "title": "Neues Passwort festlegen",
+      "subtitle": "Gib dein neues Passwort ein.",
+      "passwordLabel": "Neues Passwort",
+      "passwordPlaceholder": "••••••••",
+      "confirmPasswordLabel": "Passwort bestätigen",
+      "confirmPasswordPlaceholder": "••••••••",
+      "submit": "Passwort speichern",
+      "submitting": "Wird gespeichert …",
+      "successTitle": "Passwort geändert",
+      "successMessage": "Dein Passwort wurde erfolgreich aktualisiert. Du kannst dich jetzt anmelden.",
+      "errorFallback": "Zurücksetzen fehlgeschlagen. Bitte fordere einen neuen Link an.",
+      "invalidToken": "Dieser Link ist ungültig oder abgelaufen. Bitte fordere einen neuen an.",
+      "goToLogin": "Zur Anmeldung",
+      "backToLogin": "Zurück zur Anmeldung"
     }
   },
   "theme": {
