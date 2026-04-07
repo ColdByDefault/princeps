@@ -69,7 +69,7 @@ function isActivePath(pathname: string, href: string) {
 }
 
 const GROUPED_HREFS = new Set(["/tasks", "/contact", "/meetings"]);
-const INTEL_HREFS = new Set(["/knowledge", "/decisions"]);
+const INTEL_HREFS = new Set(["/knowledge", "/decisions", "/labels"]);
 const AFTER_DROPDOWN_HREFS = new Set(["/settings", "/pricing"]);
 
 export default function NavbarDesktop({

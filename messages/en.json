@@ -291,6 +291,7 @@
       "apps": "Apps",
       "meetings": "Meetings",
       "decisions": "Decisions",
+      "labels": "Labels",
       "intel": "Intelligence",
       "comingSoon": "Coming soon"
     },
@@ -652,6 +653,12 @@
     "lastContactLabel": "Last contact"
   },
   "labels": {
+    "metadata": {
+      "title": "Labels",
+      "description": "Manage your global labels for tasks, contacts, and other records."
+    },
+    "pageTitle": "Labels",
+    "pageSubtitle": "Global labels used across tasks, meetings, contacts, and decisions.",
     "title": "Labels",
     "description": "Global labels for tasks, contacts, and other records.",
     "newLabel": "New label",
@@ -661,7 +668,9 @@
     "fields": {
       "name": "Name",
       "namePlaceholder": "Label name",
-      "color": "Color"
+      "color": "Color",
+      "icon": "Icon",
+      "iconNone": "No icon"
     },
     "createDialog": {
       "heading": "New label",

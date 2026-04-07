@@ -15,6 +15,8 @@ import {
   CalendarDays,
   Eye,
 } from "lucide-react";
+import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
+import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { ContactRecord } from "@/types/api";
@@ -160,19 +162,25 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
 
         {/* Labels */}
         <div className="hidden w-40 shrink-0 items-center gap-1 xl:flex">
-          {contact.labels.slice(0, 2).map((label) => (
-            <span
-              key={label.id}
-              className="inline-flex h-5 shrink-0 items-center rounded-full px-2 text-[10px] font-medium"
-              style={{
-                backgroundColor: `${label.color}22`,
-                color: label.color,
-                border: `1px solid ${label.color}44`,
-              }}
-            >
-              {label.name}
-            </span>
-          ))}
+          {contact.labels.slice(0, 2).map((label) => {
+            const Icon = label.icon
+              ? LABEL_ICON_MAP[label.icon as LabelIconName]
+              : null;
+            return (
+              <span
+                key={label.id}
+                className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium"
+                style={{
+                  backgroundColor: `${label.color}22`,
+                  color: label.color,
+                  border: `1px solid ${label.color}44`,
+                }}
+              >
+                {Icon && <Icon className="size-3 shrink-0" />}
+                {label.name}
+              </span>
+            );
+          })}
           {contact.labels.length > 2 && (
             <span className="text-muted-foreground inline-flex h-5 shrink-0 items-center rounded-full border border-border px-2 text-[10px] font-medium">
               +{contact.labels.length - 2}

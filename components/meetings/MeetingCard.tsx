@@ -16,6 +16,8 @@ import {
   NotebookPen,
   CheckSquare,
 } from "lucide-react";
+import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
+import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -183,16 +185,22 @@ export function MeetingCard({
           >
             {t(`status.${meeting.status}`)}
           </Badge>
-          {meeting.labels.map((lbl) => (
-            <Badge
-              key={lbl.id}
-              variant="outline"
-              className="border-transparent text-white text-xs"
-              style={{ backgroundColor: lbl.color }}
-            >
-              {lbl.name}
-            </Badge>
-          ))}
+          {meeting.labels.map((lbl) => {
+            const Icon = lbl.icon
+              ? LABEL_ICON_MAP[lbl.icon as LabelIconName]
+              : null;
+            return (
+              <Badge
+                key={lbl.id}
+                variant="outline"
+                className="border-transparent text-white text-xs gap-1"
+                style={{ backgroundColor: lbl.color }}
+              >
+                {Icon && <Icon className="size-3 shrink-0" />}
+                {lbl.name}
+              </Badge>
+            );
+          })}
         </div>
       </div>
     </div>

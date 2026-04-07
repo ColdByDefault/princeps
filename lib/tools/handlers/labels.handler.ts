@@ -55,6 +55,7 @@ async function handleUpdateLabel(
   const parsed = updateLabelSchema.safeParse({
     ...(args.newName !== undefined ? { name: args.newName } : {}),
     ...(args.color !== undefined ? { color: args.color } : {}),
+    ...(args.icon !== undefined ? { icon: args.icon } : {}),
   });
   if (!parsed.success) {
     return {

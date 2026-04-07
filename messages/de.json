@@ -291,6 +291,7 @@
       "apps": "Apps",
       "meetings": "Meetings",
       "decisions": "Entscheidungen",
+      "labels": "Labels",
       "intel": "Intelligenz",
       "comingSoon": "Bald verfügbar"
     },
@@ -652,6 +653,12 @@
     "lastContactLabel": "Letzter Kontakt"
   },
   "labels": {
+    "metadata": {
+      "title": "Labels",
+      "description": "Verwalte deine globalen Labels für Aufgaben, Kontakte und weitere Einträge."
+    },
+    "pageTitle": "Labels",
+    "pageSubtitle": "Globale Labels für Aufgaben, Meetings, Kontakte und Entscheidungen.",
     "title": "Labels",
     "description": "Globale Labels für Aufgaben, Kontakte und weitere Einträge.",
     "newLabel": "Neues Label",
@@ -661,7 +668,9 @@
     "fields": {
       "name": "Name",
       "namePlaceholder": "Label-Name",
-      "color": "Farbe"
+      "color": "Farbe",
+      "icon": "Symbol",
+      "iconNone": "Kein Symbol"
     },
     "createDialog": {
       "heading": "Neues Label",
