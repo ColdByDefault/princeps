@@ -473,6 +473,8 @@
       "optional": "Optional"
     },
     "milestoneProgress": "milestones",
+    "milestoneMark": "Mark as done",
+    "milestoneUnmark": "Mark as not done",
     "targetDate": "Target",
     "linkedTasks": "tasks linked",
     "addMilestoneLabel": "Add milestone",
@@ -641,6 +643,7 @@
       "dueDate": "Due date",
       "status": "Status",
       "labels": "Labels",
+      "linkedGoals": "Linked goals",
       "optional": "Optional"
     },
     "createDialog": {

@@ -12,6 +12,7 @@ export const createTaskSchema = z.object({
   dueDate: z.string().datetime({ offset: true }).optional().nullable(),
   meetingId: z.string().optional().nullable(),
   labelIds: z.array(z.string()).optional(),
+  goalIds: z.array(z.string()).optional(),
 });
 
 export const updateTaskSchema = z.object({
@@ -22,6 +23,7 @@ export const updateTaskSchema = z.object({
   dueDate: z.string().datetime({ offset: true }).optional().nullable(),
   meetingId: z.string().optional().nullable(),
   labelIds: z.array(z.string()).optional(),
+  goalIds: z.array(z.string()).optional(),
 });
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;

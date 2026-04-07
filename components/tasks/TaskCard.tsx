@@ -10,6 +10,7 @@ import {
   Circle,
   MoreHorizontal,
   Pencil,
+  Target,
   Trash2,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
@@ -152,6 +153,15 @@ export function TaskCard({
               +{task.labels.length - 3}
             </span>
           )}
+          {task.goals.map((goal) => (
+            <span
+              key={goal.id}
+              className="inline-flex h-5 items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-2 text-[10px] font-medium text-muted-foreground"
+            >
+              <Target className="size-2.5 shrink-0" />
+              {goal.title}
+            </span>
+          ))}
         </div>
       </div>
 

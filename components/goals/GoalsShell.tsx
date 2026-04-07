@@ -134,6 +134,7 @@ export function GoalsShell({
             onSubmit={createGoal}
             creating={creating}
             availableLabels={availableLabels}
+            availableTasks={availableTasks}
           >
             <Button
               type="button"
@@ -178,6 +179,7 @@ export function GoalsShell({
               onSubmit={createGoal}
               creating={creating}
               availableLabels={availableLabels}
+              availableTasks={availableTasks}
             >
               <Button
                 type="button"
@@ -199,8 +201,10 @@ export function GoalsShell({
               goal={goal}
               isUpdating={updating === goal.id}
               isDeleting={deleting === goal.id}
+              milestonePending={milestonePending}
               onEdit={handleEdit}
               onDelete={handleDeleteRequest}
+              onToggleMilestone={toggleMilestone}
             />
           ))}
         </div>

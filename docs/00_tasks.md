@@ -4,6 +4,13 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ---
 
+## NEW NEW NEW
+
+### Branch: `feat/memory`
+
+- [ ] **#4 Memory tool** - no idea yet
+- [ ] use some magic to reduce tokens by summarizing old messages in the conversation, or saving keywords from tasks and meetings etc , i dont know yet.
+
 ### Branch: `feat/notes`
 
 > **NOTE:** this feature will be implemented in a future phase, Plan is to have MVP notes-app, similar to notes in Notion, with a simple text editor and the ability to link to tasks/meetings/contacts.
@@ -48,10 +55,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 ### Branch: `feat/briefings`
 
 - [ ] **#22 Briefings tool** — `BriefingCache` model exists; daily LLM brief over tasks/meetings/decisions.
-
-### Branch: `feat/goals`
-
-- [x] **#23 Goals tool** — needs schema design (structure, milestones, link to tasks).
 
 ### Branch: `feat/llm-crosslink`
 
@@ -116,6 +119,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [x] **#12 Duplicate "+ New Task" button** — tasks page shows two buttons when the list is empty. Remove the redundant one.
 - [x] **#14 TasksList UI** — general layout and visual improvements needed.
 - [x] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
+- [x] **#23 Goals tool** — needs schema design (structure, milestones, link to tasks).
+
 
 ## brainstorming — not yet scoped or planned
 
@@ -124,3 +129,17 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - add new routes from navbar to sidebar
 - add cmd+k shortcut to focus search input and add this feature .
 - version bump rule => update to 0.2.0 and make it the automatic increment count until 0.2.9, then jump to 0.3.0 and repeat, this is to make it easier to track versions during development.
+- When I am on Free tier, I have a maximum amount of tools calls per month, but what about creating manually from UI? something could be also related to `memory`.
+
+- **WHOOPS FIX THIS PLEASE**: 
+do i have any goals?
+10:42 PM
+list_goals
+nour
+Done
+10:42 PM
+do i have any Tasks
+10:42 PM
+Tasks retrieved
+nour
+Done

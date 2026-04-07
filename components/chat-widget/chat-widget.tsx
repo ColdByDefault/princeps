@@ -369,7 +369,7 @@ export function ChatWidget({
             <button
               onClick={startNewChat}
               disabled={thinking}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-primary-foreground disabled:opacity-40"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-primary-foreground disabled:opacity-40 cursor-pointer"
               aria-label={t("newChat")}
               title={t("newChat")}
             >
@@ -377,14 +377,14 @@ export function ChatWidget({
             </button>
             <button
               onClick={() => setMinimized(true)}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-primary-foreground"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-primary-foreground cursor-pointer"
               aria-label="Minimize"
             >
               <Minus className="h-4 w-4" />
             </button>
             <button
               onClick={() => setOpen(false)}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-primary-foreground"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-foreground/70 transition-colors hover:bg-white/10 hover:text-primary-foreground cursor-pointer"
               aria-label="Close"
             >
               <X className="h-4 w-4" />
@@ -519,7 +519,7 @@ export function ChatWidget({
         onClick={toggleOpen}
         aria-label={open ? "Close assistant" : "Open assistant"}
         className={cn(
-          "group relative flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200 hover:scale-105 active:scale-95",
+          "group relative flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200 hover:scale-105 active:scale-95  cursor-pointer",
           open
             ? "bg-muted text-foreground hover:bg-muted/70"
             : "bg-primary text-primary-foreground hover:opacity-90",

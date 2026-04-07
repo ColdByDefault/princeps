@@ -30,9 +30,14 @@ type Filter = "all" | "open" | "in_progress" | "done" | "cancelled";
 type TasksShellProps = {
   initialTasks: TaskRecord[];
   availableLabels: LabelOptionRecord[];
+  availableGoals: { id: string; title: string }[];
 };
 
-export function TasksShell({ initialTasks, availableLabels }: TasksShellProps) {
+export function TasksShell({
+  initialTasks,
+  availableLabels,
+  availableGoals,
+}: TasksShellProps) {
   const t = useTranslations("tasks");
   const [tasks, setTasks] = useState<TaskRecord[]>(initialTasks);
   const [filter, setFilter] = useState<Filter>("all");
@@ -129,6 +134,7 @@ export function TasksShell({ initialTasks, availableLabels }: TasksShellProps) {
             onSubmit={createTask}
             creating={creating}
             availableLabels={availableLabels}
+            availableGoals={availableGoals}
           >
             <Button
               type="button"
@@ -173,6 +179,7 @@ export function TasksShell({ initialTasks, availableLabels }: TasksShellProps) {
               onSubmit={createTask}
               creating={creating}
               availableLabels={availableLabels}
+              availableGoals={availableGoals}
             >
               <Button
                 type="button"
@@ -211,6 +218,7 @@ export function TasksShell({ initialTasks, availableLabels }: TasksShellProps) {
         onSubmit={updateTask}
         updating={!!updating}
         availableLabels={availableLabels}
+        availableGoals={availableGoals}
       />
 
       {/* Delete confirmation */}

@@ -34,16 +34,24 @@ type GoalCardProps = {
   goal: GoalRecord;
   isUpdating: boolean;
   isDeleting: boolean;
+  milestonePending: string | null;
   onEdit: (goal: GoalRecord) => void;
   onDelete: (goalId: string) => void;
+  onToggleMilestone: (
+    goalId: string,
+    milestoneId: string,
+    completed: boolean,
+  ) => Promise<boolean>;
 };
 
 export function GoalCard({
   goal,
   isUpdating,
   isDeleting,
+  milestonePending,
   onEdit,
   onDelete,
+  onToggleMilestone,
 }: GoalCardProps) {
   const t = useTranslations("goals");
 
@@ -91,23 +99,44 @@ export function GoalCard({
           </p>
         )}
 
-        {/* Milestone progress */}
-        {progressPct !== null && (
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-              {doneMilestones === totalMilestones ? (
-                <CheckCircle2 className="size-3 text-green-500" />
-              ) : (
-                <Circle className="size-3" />
-              )}
+        {/* Milestones — inline toggle */}
+        {goal.milestones.length > 0 && (
+          <div className="space-y-0.5 pt-0.5">
+            <div className="flex items-center gap-1 pb-0.5 text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
               {doneMilestones}/{totalMilestones} {t("milestoneProgress")}
             </div>
-            <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
+            <div className="h-1 w-full overflow-hidden rounded-full bg-muted mb-1.5">
               <div
                 className="h-full rounded-full bg-primary transition-all"
-                style={{ width: `${progressPct}%` }}
+                style={{ width: `${progressPct ?? 0}%` }}
               />
             </div>
+            {goal.milestones.map((m) => {
+              const isPending = milestonePending === m.id;
+              return (
+                <button
+                  key={m.id}
+                  type="button"
+                  disabled={isPending || isUpdating || isDeleting}
+                  onClick={() => onToggleMilestone(goal.id, m.id, !m.completed)}
+                  aria-label={`${m.completed ? t("milestoneUnmark") : t("milestoneMark")}: ${m.title}`}
+                  className={cn(
+                    "flex w-full items-center gap-1.5 rounded-md px-1 py-0.5 text-left text-xs transition-opacity hover:bg-muted/60 cursor-pointer",
+                    isPending && "opacity-50",
+                    m.completed && "text-muted-foreground",
+                  )}
+                >
+                  {m.completed ? (
+                    <CheckCircle2 className="size-3.5 shrink-0 text-green-500" />
+                  ) : (
+                    <Circle className="size-3.5 shrink-0 text-muted-foreground" />
+                  )}
+                  <span className={cn(m.completed && "line-through")}>
+                    {m.title}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         )}
 

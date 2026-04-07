@@ -32,10 +32,12 @@ type CreateGoalDialogProps = {
     status?: string;
     targetDate?: string | null;
     labelIds?: string[];
+    taskIds?: string[];
     milestones?: { title: string; position: number }[];
   }) => Promise<boolean>;
   creating: boolean;
   availableLabels: LabelOptionRecord[];
+  availableTasks: { id: string; title: string; status: string }[];
   children: React.ReactNode;
 };
 
@@ -43,6 +45,7 @@ export function CreateGoalDialog({
   onSubmit,
   creating,
   availableLabels,
+  availableTasks,
   children,
 }: CreateGoalDialogProps) {
   const t = useTranslations("goals");
@@ -52,12 +55,19 @@ export function CreateGoalDialog({
   const [status, setStatus] = useState("open");
   const [targetDate, setTargetDate] = useState("");
   const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>([]);
+  const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>([]);
   const [milestones, setMilestones] = useState<string[]>([]);
   const [newMilestone, setNewMilestone] = useState("");
 
   function toggleLabel(id: string) {
     setSelectedLabelIds((prev) =>
       prev.includes(id) ? prev.filter((l) => l !== id) : [...prev, id],
+    );
+  }
+
+  function toggleTask(id: string) {
+    setSelectedTaskIds((prev) =>
+      prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id],
     );
   }
 
@@ -82,6 +92,7 @@ export function CreateGoalDialog({
       status,
       targetDate: targetDate ? new Date(targetDate).toISOString() : null,
       ...(selectedLabelIds.length && { labelIds: selectedLabelIds }),
+      ...(selectedTaskIds.length && { taskIds: selectedTaskIds }),
       ...(milestones.length && {
         milestones: milestones.map((m, idx) => ({ title: m, position: idx })),
       }),
@@ -94,6 +105,7 @@ export function CreateGoalDialog({
       setStatus("open");
       setTargetDate("");
       setSelectedLabelIds([]);
+      setSelectedTaskIds([]);
       setMilestones([]);
       setNewMilestone("");
     }
@@ -213,6 +225,51 @@ export function CreateGoalDialog({
                     aria-pressed={selectedLabelIds.includes(lbl.id)}
                   >
                     {lbl.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Linked tasks */}
+          {availableTasks.length > 0 && (
+            <div className="space-y-1.5">
+              <Label>{t("fields.linkedTasks")}</Label>
+              <div className="max-h-36 overflow-y-auto space-y-0.5 rounded-md border border-border/60 p-2">
+                {availableTasks.map((task) => (
+                  <button
+                    key={task.id}
+                    type="button"
+                    onClick={() => toggleTask(task.id)}
+                    aria-pressed={selectedTaskIds.includes(task.id)}
+                    aria-label={task.title}
+                    className="flex w-full items-center gap-2 rounded px-1.5 py-1 text-left text-sm cursor-pointer hover:bg-muted/60 transition-colors"
+                  >
+                    <span
+                      className="flex size-4 shrink-0 items-center justify-center rounded border border-border"
+                      style={{
+                        backgroundColor: selectedTaskIds.includes(task.id)
+                          ? "hsl(var(--primary))"
+                          : "transparent",
+                      }}
+                    >
+                      {selectedTaskIds.includes(task.id) && (
+                        <svg
+                          viewBox="0 0 10 8"
+                          className="size-2.5"
+                          fill="none"
+                        >
+                          <path
+                            d="M1 4l2.5 2.5L9 1"
+                            stroke="white"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                    <span className="flex-1 truncate">{task.title}</span>
                   </button>
                 ))}
               </div>
