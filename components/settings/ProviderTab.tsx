@@ -10,7 +10,6 @@ import { RefreshCw, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
   Collapsible,
   CollapsibleTrigger,
@@ -27,29 +26,6 @@ function formatBytes(bytes: number): string {
   return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
 }
 
-// ─── Tool catalog ─────────────────────────────────────────
-
-const TOOL_GROUPS: { key: string; tools: string[] }[] = [
-  {
-    key: "tasks",
-    tools: ["create_task", "list_tasks", "complete_task", "update_task"],
-  },
-  {
-    key: "labels",
-    tools: ["create_label", "list_labels", "update_label", "delete_label"],
-  },
-  { key: "profile", tools: ["get_user_info"] },
-  {
-    key: "contacts",
-    tools: [
-      "create_contact",
-      "list_contacts",
-      "update_contact",
-      "delete_contact",
-    ],
-  },
-];
-
 // ─── Component ────────────────────────────────────────────
 
 type ProviderTabProps = {
@@ -58,7 +34,6 @@ type ProviderTabProps = {
 
 export function ProviderTab({ initialStatus }: ProviderTabProps) {
   const t = useTranslations("settings.provider");
-  const tTools = useTranslations("tools");
   const [status, setStatus] = useState<ProviderStatusPayload>(initialStatus);
   const [isPending, startTransition] = useTransition();
 
@@ -181,57 +156,6 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
           ))}
         </CollapsibleContent>
       </Collapsible>
-
-      <Separator />
-
-      {/* ── Tools Catalog ─────────────────────────── */}
-      <div className="py-2">
-        <div className="space-y-0.5 pb-3">
-          <p className="text-sm font-medium">{tTools("title")}</p>
-          <p className="text-sm text-muted-foreground">
-            {tTools("description")}
-          </p>
-        </div>
-
-        <div className="space-y-4 pb-2">
-          {TOOL_GROUPS.map((group) => (
-            <Collapsible key={group.key}>
-              <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 pb-1.5">
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">
-                  {tTools(`groups.${group.key}`)}
-                </p>
-                <ChevronDown className="size-3.5 shrink-0 text-muted-foreground transition-transform duration-200 group-data-panel-open:rotate-180" />
-              </CollapsibleTrigger>
-
-              <CollapsibleContent>
-                <div className="divide-y divide-border/60 rounded-xl border border-border/60">
-                  {group.tools.map((toolName) => (
-                    <div key={toolName} className="space-y-1 px-4 py-3">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Badge
-                          variant="outline"
-                          className="font-mono text-xs text-muted-foreground"
-                        >
-                          {toolName}
-                        </Badge>
-                        <span className="text-sm font-medium">
-                          {tTools(`catalog.${toolName}.label`)}
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {tTools(`catalog.${toolName}.what`)}
-                      </p>
-                      <p className="text-xs italic text-muted-foreground/70">
-                        {tTools(`catalog.${toolName}.example`)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

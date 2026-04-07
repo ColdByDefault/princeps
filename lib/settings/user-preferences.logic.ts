@@ -44,6 +44,8 @@ export interface UserPreferences {
   assistantTone: AssistantTone | null;
   addressStyle: AddressStyle | null;
   responseLength: ResponseLength | null;
+  /** Tool names the user has explicitly disabled. Absent = all enabled. */
+  disabledTools: string[];
 }
 
 // ─── Internal helpers ─────────────────────────────────────
@@ -103,6 +105,12 @@ function parsePreferences(raw: unknown): UserPreferences {
     ? (obj.responseLength as ResponseLength)
     : null;
 
+  const disabledTools = Array.isArray(obj.disabledTools)
+    ? (obj.disabledTools as unknown[]).filter(
+        (t): t is string => typeof t === "string",
+      )
+    : [];
+
   return {
     language,
     theme,
@@ -112,6 +120,7 @@ function parsePreferences(raw: unknown): UserPreferences {
     assistantTone,
     addressStyle,
     responseLength,
+    disabledTools,
   };
 }
 
@@ -138,6 +147,7 @@ export const getUserPreferences = cache(
         assistantTone: null,
         addressStyle: null,
         responseLength: null,
+        disabledTools: [],
       };
     return parsePreferences(user.preferences);
   },
@@ -167,6 +177,8 @@ export async function updateUserPreferences(
   if (merged.assistantTone) next.assistantTone = merged.assistantTone;
   if (merged.addressStyle) next.addressStyle = merged.addressStyle;
   if (merged.responseLength) next.responseLength = merged.responseLength;
+  if (merged.disabledTools !== undefined)
+    next.disabledTools = merged.disabledTools;
   await db.user.update({
     where: { id: userId },
     data: {

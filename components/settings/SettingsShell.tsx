@@ -12,10 +12,11 @@ import { AppearanceTab } from "./AppearanceTab";
 import { AssistantTab } from "./AssistantTab";
 import { LabelsTab } from "./LabelsTab";
 import { ProviderTab } from "./ProviderTab";
+import { ToolsTab } from "./ToolsTab";
 import { UsageTab } from "./UsageTab";
 import type { ProviderStatusPayload } from "@/types/llm";
 import type { UsageSummary } from "@/types/billing";
-import type { LabelRecord } from "@/types/api";
+import type { LabelRecord, ToolDisplayEntry } from "@/types/api";
 import type {
   AssistantTone,
   AddressStyle,
@@ -25,10 +26,11 @@ import type {
 const COOKIE_KEY = "settings-tab";
 const VALID_TABS = [
   "appearance",
+  "assistant",
+  "tools",
   "labels",
   "usage",
   "provider",
-  "assistant",
 ] as const;
 type SettingsTab = (typeof VALID_TABS)[number];
 
@@ -48,6 +50,8 @@ type SettingsShellProps = {
   initialAssistantTone: AssistantTone | null;
   initialAddressStyle: AddressStyle | null;
   initialResponseLength: ResponseLength | null;
+  initialDisabledTools: string[];
+  allTools: ToolDisplayEntry[];
 };
 
 export function SettingsShell({
@@ -62,6 +66,8 @@ export function SettingsShell({
   initialAssistantTone,
   initialAddressStyle,
   initialResponseLength,
+  initialDisabledTools,
+  allTools,
 }: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
   const safeInitial: SettingsTab = VALID_TABS.includes(
@@ -87,6 +93,9 @@ export function SettingsShell({
         </TabsTrigger>
         <TabsTrigger value="assistant" className="flex-1">
           {t("assistant")}
+        </TabsTrigger>
+        <TabsTrigger value="tools" className="flex-1">
+          {t("tools")}
         </TabsTrigger>
         <TabsTrigger value="labels" className="flex-1">
           {t("labels")}
@@ -145,6 +154,18 @@ export function SettingsShell({
           initialAssistantTone={initialAssistantTone}
           initialAddressStyle={initialAddressStyle}
           initialResponseLength={initialResponseLength}
+        />
+      </TabsContent>
+
+      <TabsContent
+        keepMounted
+        value="tools"
+        className="mt-6 w-full data-hidden:hidden"
+      >
+        <ToolsTab
+          tier={initialUsage.tier}
+          allTools={allTools}
+          initialDisabledTools={initialDisabledTools}
         />
       </TabsContent>
     </Tabs>

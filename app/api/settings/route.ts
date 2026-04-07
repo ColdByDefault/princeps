@@ -19,6 +19,7 @@ import {
   type ResponseLength,
 } from "@/lib/settings/user-preferences.logic";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
+import { TOOL_REGISTRY } from "@/lib/tools/registry";
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -59,6 +60,7 @@ export async function PATCH(req: Request) {
     assistantTone,
     addressStyle,
     responseLength,
+    disabledTools,
   } = body as Record<string, unknown>;
   const patch: {
     language?: AppLanguage;
@@ -68,6 +70,7 @@ export async function PATCH(req: Request) {
     assistantTone?: AssistantTone;
     addressStyle?: AddressStyle;
     responseLength?: ResponseLength;
+    disabledTools?: string[];
   } = {};
 
   if (isSupportedLanguage(language as string)) {
@@ -108,6 +111,12 @@ export async function PATCH(req: Request) {
     RESPONSE_LENGTHS.includes(responseLength as ResponseLength)
   ) {
     patch.responseLength = responseLength as ResponseLength;
+  }
+  if (Array.isArray(disabledTools)) {
+    const knownNames = new Set(TOOL_REGISTRY.map((t) => t.function.name));
+    patch.disabledTools = (disabledTools as unknown[]).filter(
+      (t): t is string => typeof t === "string" && knownNames.has(t),
+    );
   }
 
   const hasPreferencePatch = Object.keys(patch).length > 0;

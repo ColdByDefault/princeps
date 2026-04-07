@@ -50,6 +50,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#14 TasksList UI** — general layout and visual improvements needed.
 - [ ] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
 - [ ] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
+- [ ] **Extra**: move Labels to Intelligence group in navbar, and create dedicted page.tsx 
 
 ### Branch: `feat/markdown`
 
@@ -90,8 +91,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/tool-settings`
 
-- [ ] **#25 Tool availability per tier + user toggle** — change which tools are available by tier; allow users to enable/disable tools manually in settings.
-- [ ] **#26 Make "Available Tools" in settings dynamic** — derive list from `TOOL_REGISTRY`, not a hardcoded array. Do alongside #25.
+- [x] **#25 Tool availability per tier + user toggle** — change which tools are available by tier; allow users to enable/disable tools manually in settings.
+- [x] **#26 Make "Available Tools" in settings dynamic** — derive list from `TOOL_REGISTRY`, not a hardcoded array. Do alongside #25.
 
 ### Branch: `feat/llm-crosslink`
 
@@ -134,3 +135,10 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#39 Add `langfuse`** — LLM observability and prompt debugging. Useful pre-production, not during active development.
 - [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing.
 - [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config, no `.spec.ts` files anywhere. The tier enforcement, tool handlers, and schema validators have no safety net. Defer until the feature set stabilizes.
+
+
+
+Free Light Gray
+Pro	Vibrant Blue
+Premium	Deep Purple 
+Enterprise	Charcoal

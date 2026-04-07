@@ -151,7 +151,8 @@
       "provider": "Anbieter",
       "usage": "Nutzung",
       "labels": "Labels",
-      "assistant": "Assistent"
+      "assistant": "Assistent",
+      "tools": "Werkzeuge"
     },
     "appearance": {
       "themeTitle": "Design",
@@ -216,6 +217,12 @@
       "meetingsNote": "Anzahl der aktuell gespeicherten Meetings.",
       "decisionsTitle": "Entscheidungen (gespeichert)",
       "decisionsNote": "Anzahl der aktuell gespeicherten Entscheidungen."
+    },
+    "tools": {
+      "title": "KI-Werkzeuge",
+      "description": "W\u00e4hle, welche F\u00e4higkeiten dein Assistent nutzen darf.",
+      "lockedSection": "Gesperrt \u2014 Upgrade erforderlich",
+      "saveFailed": "Werkzeugeinstellungen konnten nicht gespeichert werden."
     },
     "assistant": {
       "pageDescription": "Passe an, wie dein Assistent spricht und mit dir interagiert.",
@@ -691,7 +698,8 @@
       "labels": "Labels",
       "profile": "Profil",
       "contacts": "Kontakte",
-      "meetings": "Meetings"
+      "meetings": "Meetings",
+      "decisions": "Entscheidungen"
     },
     "catalog": {
       "create_task": {
@@ -778,6 +786,21 @@
         "label": "Meeting löschen",
         "what": "Löscht ein Meeting dauerhaft.",
         "example": "\"Lösche das Q2-Review-Meeting\""
+      },
+      "create_decision": {
+        "label": "Entscheidung erfassen",
+        "what": "Protokolliert eine neue Entscheidung mit optionaler Begründung, Ergebnis und Status.",
+        "example": "\"Entscheidung festhalten: Wechsel zu Postgres, Status entschieden\""
+      },
+      "list_decisions": {
+        "label": "Entscheidungen anzeigen",
+        "what": "Zeigt deine Entscheidungen an, optional gefiltert nach Status.",
+        "example": "\"Welche Entscheidungen sind noch offen?\" oder \"Zeige alle meine Entscheidungen\""
+      },
+      "update_decision": {
+        "label": "Entscheidung bearbeiten",
+        "what": "Ändert Titel, Begründung, Ergebnis, Status oder Labels einer Entscheidung.",
+        "example": "\"Markiere die Postgres-Entscheidung als entschieden\""
       }
     }
   },

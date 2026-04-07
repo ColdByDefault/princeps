@@ -14,6 +14,7 @@ import { getProviderStatus } from "@/lib/settings/provider-status.logic";
 import { getUserUsage } from "@/lib/settings/usage.logic";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 import { listLabels } from "@/lib/labels/list.logic";
+import { TOOL_REGISTRY } from "@/lib/tools/registry";
 import { SettingsShell } from "@/components/settings";
 import type { AppLanguage } from "@/types/i18n";
 
@@ -52,6 +53,12 @@ export default async function SettingsPage() {
   const cookieStore = await cookies();
   const initialTab = cookieStore.get("settings-tab")?.value ?? "appearance";
 
+  const allTools = TOOL_REGISTRY.map(({ function: fn, minTier, group }) => ({
+    name: fn.name,
+    minTier,
+    group,
+  }));
+
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6">
       <SettingsShell
@@ -66,6 +73,8 @@ export default async function SettingsPage() {
         initialAssistantTone={initialPrefs.assistantTone ?? null}
         initialAddressStyle={initialPrefs.addressStyle ?? null}
         initialResponseLength={initialPrefs.responseLength ?? null}
+        initialDisabledTools={initialPrefs.disabledTools}
+        allTools={allTools}
       />
     </div>
   );
