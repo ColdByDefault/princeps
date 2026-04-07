@@ -1,3 +1,21 @@
+## [0.1.44] - 2026-04-07
+
+- feat: update task management documentation with completed tasks and new brainstorming ideas
+- feat: refine tool handling in chat widget to optimize LLM response logic
+- feat: enforce character limits on decision, goal, meeting, and task fields with updated schemas
+- feat: remove loading component from chat
+- feat: enhance task and goal management features with linked goals support
+- feat: add goals management feature with CRUD operations
+- feat: add goals management features including CRUD operations, status handling, and milestone support
+- feat: add goal management features including create, update, delete, and list functionalities with tier limits
+- feat: implement CRUD operations for goals and milestones with rate limiting and validation
+- feat: implement goal management features including create, update, delete, and list functionalities
+- feat: limit displayed labels to three and show count of additional labels for DecisionCard, MeetingCard, and TaskCard
+- feat: add shell layout conventions and interactive element rules to feature instructions
+- feat: enhance contact management with delete confirmation and refresh functionality
+- chore: remove obsolete feature audit document
+- feat: implement contacts management feature
+
 ## [0.1.43] - 2026-04-07
 
 - feat: implement tier color constants for badges, cards, and rings
