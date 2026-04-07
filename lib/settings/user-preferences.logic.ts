@@ -46,6 +46,8 @@ export interface UserPreferences {
   responseLength: ResponseLength | null;
   /** Tool names the user has explicitly disabled. Absent = all enabled. */
   disabledTools: string[];
+  /** Optional free-text addendum appended to the system prompt. */
+  customSystemPrompt: string | null;
 }
 
 // ─── Internal helpers ─────────────────────────────────────
@@ -111,6 +113,12 @@ function parsePreferences(raw: unknown): UserPreferences {
       )
     : [];
 
+  const customSystemPrompt =
+    typeof obj.customSystemPrompt === "string" &&
+    obj.customSystemPrompt.trim().length > 0
+      ? obj.customSystemPrompt.trim().slice(0, 2000)
+      : null;
+
   return {
     language,
     theme,
@@ -121,6 +129,7 @@ function parsePreferences(raw: unknown): UserPreferences {
     addressStyle,
     responseLength,
     disabledTools,
+    customSystemPrompt,
   };
 }
 
@@ -148,6 +157,7 @@ export const getUserPreferences = cache(
         addressStyle: null,
         responseLength: null,
         disabledTools: [],
+        customSystemPrompt: null,
       };
     return parsePreferences(user.preferences);
   },
@@ -179,6 +189,8 @@ export async function updateUserPreferences(
   if (merged.responseLength) next.responseLength = merged.responseLength;
   if (merged.disabledTools !== undefined)
     next.disabledTools = merged.disabledTools;
+  if (merged.customSystemPrompt !== undefined)
+    next.customSystemPrompt = merged.customSystemPrompt;
   await db.user.update({
     where: { id: userId },
     data: {

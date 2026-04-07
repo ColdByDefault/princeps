@@ -264,7 +264,15 @@
       "toneSelectPlaceholder": "Ton auswählen",
       "addressSelectPlaceholder": "Anredestil auswählen",
       "lengthSelectPlaceholder": "Länge auswählen",
-      "reloginNotice": "Einige Änderungen (z. B. der Assistentenname im Chat-Widget) werden erst nach dem nächsten Login wirksam."
+      "reloginNotice": "Einige Änderungen (z. B. der Assistentenname im Chat-Widget) werden erst nach dem nächsten Login wirksam.",
+      "customPromptTitle": "Eigene Anweisungen",
+      "customPromptDescription": "Füge zusätzliche Anweisungen hinzu, die immer im Kontext deines Assistenten enthalten sind. Unterstützt Markdown.",
+      "customPromptPlaceholder": "z. B. Antworte immer mit Aufzählungspunkten. Schlage nie Meetings am Freitag vor.",
+      "customPromptSaved": "Eigene Anweisungen gespeichert.",
+      "customPromptSaveFailed": "Eigene Anweisungen konnten nicht gespeichert werden.",
+      "customPromptShowPreview": "Vorschau",
+      "customPromptHidePreview": "Bearbeiten",
+      "customPromptPreviewLabel": "Vorschau"
     }
   },
   "chatWidget": {

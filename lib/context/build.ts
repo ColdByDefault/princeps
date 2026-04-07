@@ -135,5 +135,9 @@ export async function buildSystemPrompt(
     }
   }
 
+  if (prefs.customSystemPrompt) {
+    lines.push("", "## User Instructions", prefs.customSystemPrompt);
+  }
+
   return { role: "system", content: lines.join("\n") };
 }

@@ -7,9 +7,12 @@
 
 import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -29,6 +32,7 @@ type AssistantTabProps = {
   initialAssistantTone: AssistantTone | null;
   initialAddressStyle: AddressStyle | null;
   initialResponseLength: ResponseLength | null;
+  initialCustomSystemPrompt: string | null;
 };
 
 export function AssistantTab({
@@ -36,6 +40,7 @@ export function AssistantTab({
   initialAssistantTone,
   initialAddressStyle,
   initialResponseLength,
+  initialCustomSystemPrompt,
 }: AssistantTabProps) {
   const t = useTranslations("settings.assistant");
 
@@ -50,6 +55,14 @@ export function AssistantTab({
   );
   const [responseLength, setResponseLength] = useState<ResponseLength | "">(
     initialResponseLength ?? "",
+  );
+
+  const [customPrompt, setCustomPrompt] = useState(
+    initialCustomSystemPrompt ?? "",
+  );
+  const [showPreview, setShowPreview] = useState(false);
+  const customPromptDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
   );
 
   const nameDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -111,6 +124,19 @@ export function AssistantTab({
       "lengthSaved",
       "lengthSaveFailed",
     );
+  }
+
+  function handleCustomPromptChange(value: string) {
+    setCustomPrompt(value);
+    if (customPromptDebounceRef.current)
+      clearTimeout(customPromptDebounceRef.current);
+    customPromptDebounceRef.current = setTimeout(() => {
+      void patchSetting(
+        { customSystemPrompt: value.trim() || null },
+        "customPromptSaved",
+        "customPromptSaveFailed",
+      );
+    }, 1000);
   }
 
   return (
@@ -267,6 +293,58 @@ export function AssistantTab({
             />
           ))}
         </div>
+      </div>
+
+      {/* Custom System Prompt */}
+      <div className="flex flex-col gap-3 py-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0 flex-1 space-y-0.5">
+            <p className="text-sm font-medium">{t("customPromptTitle")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("customPromptDescription")}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowPreview((p) => !p)}
+            className="cursor-pointer shrink-0 text-xs text-muted-foreground underline-offset-2 hover:underline"
+            aria-label={
+              showPreview
+                ? t("customPromptHidePreview")
+                : t("customPromptShowPreview")
+            }
+          >
+            {showPreview
+              ? t("customPromptHidePreview")
+              : t("customPromptShowPreview")}
+          </button>
+        </div>
+
+        {showPreview && customPrompt.trim() ? (
+          <div className="rounded-lg border border-border bg-muted/30 px-4 py-3">
+            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              {t("customPromptPreviewLabel")}
+            </p>
+            <div className="prose prose-sm dark:prose-invert max-w-none prose-p:leading-relaxed prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-code:before:content-none prose-code:after:content-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {customPrompt}
+              </ReactMarkdown>
+            </div>
+          </div>
+        ) : (
+          <Textarea
+            value={customPrompt}
+            onChange={(e) => handleCustomPromptChange(e.target.value)}
+            placeholder={t("customPromptPlaceholder")}
+            maxLength={2000}
+            rows={5}
+            aria-label={t("customPromptTitle")}
+            className="resize-none text-sm"
+          />
+        )}
+        <p className="text-xs text-muted-foreground">
+          {customPrompt.length}/2000
+        </p>
       </div>
 
       {/* Re-login notice */}
