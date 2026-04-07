@@ -10,7 +10,8 @@ import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ContactList } from "./ContactList";
-import { ContactDialog } from "./ContactDialog";
+import { CreateContactDialog } from "./CreateContactDialog";
+import { EditContactDialog } from "./EditContactDialog";
 import { useContactMutations } from "./logic/useContactMutations";
 import type { ContactRecord, LabelOptionRecord } from "@/types/api";
 import type { ContactFormData } from "./ContactForm";
@@ -91,7 +92,7 @@ export function ContactsShell({
       />
 
       {/* Create dialog */}
-      <ContactDialog
+      <CreateContactDialog
         open={createOpen}
         onOpenChange={setCreateOpen}
         availableLabels={availableLabels}
@@ -99,16 +100,18 @@ export function ContactsShell({
       />
 
       {/* Edit dialog */}
-      <ContactDialog
-        open={editOpen}
-        onOpenChange={(open) => {
-          setEditOpen(open);
-          if (!open) setEditContact(null);
-        }}
-        contact={editContact}
-        availableLabels={availableLabels}
-        onSubmit={handleUpdate}
-      />
+      {editContact && (
+        <EditContactDialog
+          open={editOpen}
+          onOpenChange={(open) => {
+            setEditOpen(open);
+            if (!open) setEditContact(null);
+          }}
+          contact={editContact}
+          availableLabels={availableLabels}
+          onSubmit={handleUpdate}
+        />
+      )}
     </div>
   );
 }

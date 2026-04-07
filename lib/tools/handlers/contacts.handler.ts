@@ -5,14 +5,14 @@
 
 import "server-only";
 
-import { createContact } from "@/lib/contact/create.logic";
-import { listContacts, getContactById } from "@/lib/contact/list.logic";
-import { updateContact } from "@/lib/contact/update.logic";
-import { deleteContact } from "@/lib/contact/delete.logic";
+import { createContact } from "@/lib/contacts/create.logic";
+import { listContacts, getContactById } from "@/lib/contacts/list.logic";
+import { updateContact } from "@/lib/contacts/update.logic";
+import { deleteContact } from "@/lib/contacts/delete.logic";
 import {
   createContactSchema,
   updateContactSchema,
-} from "@/lib/contact/schemas";
+} from "@/lib/contacts/schemas";
 import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
 import { enforceContactsMax } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";

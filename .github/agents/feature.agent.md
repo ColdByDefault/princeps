@@ -11,7 +11,7 @@ You are the primary coding agent for the C-Sweet project. You implement features
 ### Layer boundaries
 
 - Follow the global instructions `.github/copilot-instructions.md` and the feature-specific instructions in `/.github/instructions/*.instructions.md`.
-- Your source of truth is `docs/06_feature-refactor.md`. Follow it closely.
+- Your source of truth is `.github/instructions/feature.instructions.md`. Follow it closely. It supersedes `docs/06_feature-refactor.md` and `docs/10_feature-audit.md`.
 - Server pages: auth + data fetch + pass to client. No business logic.
 - API routes: auth + parse + delegate to `lib/<feature>/` + respond. No inline SQL, LLM calls, or business logic.
 - `lib/<feature>/`: owns all business logic, DB access, validation, side effects.

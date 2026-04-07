@@ -28,7 +28,7 @@ export function useContactMutations(
   async function createContact(data: ContactFormData): Promise<boolean> {
     setCreating(true);
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch("/api/contacts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -63,7 +63,7 @@ export function useContactMutations(
   ): Promise<boolean> {
     setUpdating(contactId);
     try {
-      const res = await fetch(`/api/contact/${contactId}`, {
+      const res = await fetch(`/api/contacts/${contactId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -97,7 +97,7 @@ export function useContactMutations(
   async function deleteContact(contactId: string): Promise<boolean> {
     setDeleting(contactId);
     try {
-      const res = await fetch(`/api/contact/${contactId}`, {
+      const res = await fetch(`/api/contacts/${contactId}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error();

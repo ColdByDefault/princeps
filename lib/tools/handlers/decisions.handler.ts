@@ -1,7 +1,13 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault. All Rights Reserved.
+ */
+
 import "server-only";
 import { createDecision } from "@/lib/decisions/create.logic";
 import { listDecisions } from "@/lib/decisions/list.logic";
 import { updateDecision } from "@/lib/decisions/update.logic";
+import { deleteDecision } from "@/lib/decisions/delete.logic";
 import {
   createDecisionSchema,
   updateDecisionSchema,
@@ -100,8 +106,24 @@ async function handleUpdateDecision(
   return { ok: true, data: result.decision };
 }
 
+async function handleDeleteDecision(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.decisionId !== "string") {
+    return { ok: false, error: "delete_decision requires decisionId." };
+  }
+
+  const result = await deleteDecision(args.decisionId, userId);
+  if (!result.ok) {
+    return { ok: false, error: "Decision not found." };
+  }
+  return { ok: true, data: { deleted: true } };
+}
+
 export const decisionHandlers: Record<string, ToolHandler> = {
   create_decision: handleCreateDecision,
   list_decisions: handleListDecisions,
   update_decision: handleUpdateDecision,
+  delete_decision: handleDeleteDecision,
 };

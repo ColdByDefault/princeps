@@ -10,7 +10,7 @@ import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { listMeetings } from "@/lib/meetings/list.logic";
 import { listLabels } from "@/lib/labels/list.logic";
-import { listContacts } from "@/lib/contact/list.logic";
+import { listContacts } from "@/lib/contacts/list.logic";
 import { listTasks } from "@/lib/tasks/list.logic";
 import { MeetingsShell } from "@/components/meetings";
 import type { AppLanguage } from "@/types/i18n";

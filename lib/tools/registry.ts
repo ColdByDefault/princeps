@@ -721,4 +721,24 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
       },
     },
   },
+  {
+    minTier: "pro",
+    group: "decisions",
+    type: "function",
+    function: {
+      name: "delete_decision",
+      description:
+        "Permanently delete a decision. Always confirm with the user before calling this tool. Use list_decisions to find the decisionId first.",
+      parameters: {
+        type: "object",
+        properties: {
+          decisionId: {
+            type: "string",
+            description: "ID of the decision to delete.",
+          },
+        },
+        required: ["decisionId"],
+      },
+    },
+  },
 ];

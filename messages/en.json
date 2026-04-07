@@ -626,6 +626,7 @@
     },
     "createDialog": {
       "heading": "New contact",
+      "description": "Fill in the details below to add a new contact.",
       "submit": "Create",
       "submitting": "Creating…",
       "success": "Contact created.",
@@ -633,6 +634,7 @@
     },
     "editDialog": {
       "heading": "Edit contact",
+      "description": "Update the contact details below.",
       "submit": "Save",
       "submitting": "Saving…",
       "success": "Contact saved.",
