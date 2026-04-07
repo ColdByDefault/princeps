@@ -18,8 +18,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/decisions`
 
-- [ ] **#3 Decisions tool** — schema complete, linked to meetings. Wire up handler, API, and UI.
-- [ ] **#4 Stub `decisions` i18n namespace** — `messages/de.json` and `messages/en.json` only have the nav label. Add a top-level `"decisions": {}` stub now to avoid a runtime i18n crash the moment any component does `useTranslations("decisions")`.
+- [x] **#3 Decisions tool** — schema complete, linked to meetings. Wire up handler, API, and UI.
+- [x] **#4 Stub `decisions` i18n namespace** — `messages/de.json` and `messages/en.json` only have the nav label. Add a top-level `"decisions": {}` stub now to avoid a runtime i18n crash the moment any component does `useTranslations("decisions")`.
 
 ### Branch: `feat/notes`
 

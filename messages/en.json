@@ -355,6 +355,66 @@
       "save": "Save changes"
     }
   },
+  "decisions": {
+    "metadata": {
+      "title": "Decisions",
+      "description": "Manage your decisions."
+    },
+    "pageTitle": "Decisions",
+    "newDecision": "New decision",
+    "empty": "No decisions yet.",
+    "emptyFiltered": "No decisions with this status.",
+    "filter": {
+      "all": "All",
+      "open": "Open",
+      "decided": "Decided",
+      "reversed": "Reversed"
+    },
+    "status": {
+      "open": "Open",
+      "decided": "Decided",
+      "reversed": "Reversed"
+    },
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "Decision title",
+      "rationale": "Rationale",
+      "rationalePlaceholder": "Why was this decision made?",
+      "outcome": "Outcome",
+      "outcomePlaceholder": "What was decided?",
+      "status": "Status",
+      "decidedAt": "Decision date",
+      "labels": "Labels",
+      "linkedMeeting": "Linked meeting",
+      "noMeeting": "No meeting",
+      "optional": "Optional"
+    },
+    "createDialog": {
+      "heading": "New decision",
+      "submit": "Create",
+      "submitting": "Creating\u2026",
+      "success": "Decision created.",
+      "error": "Failed to create decision."
+    },
+    "editDialog": {
+      "heading": "Edit decision",
+      "submit": "Save",
+      "submitting": "Saving\u2026",
+      "success": "Decision saved.",
+      "error": "Failed to save decision."
+    },
+    "deleteDialog": {
+      "title": "Delete this decision?",
+      "description": "This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Decision deleted.",
+      "error": "Failed to delete decision."
+    },
+    "actionsLabel": "Decision actions",
+    "editLabel": "Edit",
+    "deleteLabel": "Delete"
+  },
   "meetings": {
     "metadata": {
       "title": "Meetings",
