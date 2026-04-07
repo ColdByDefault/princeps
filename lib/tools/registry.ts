@@ -202,6 +202,26 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
   },
   {
     minTier: "free",
+    group: "tasks",
+    type: "function",
+    function: {
+      name: "delete_task",
+      description:
+        "Permanently delete a task. Always ask the user to confirm before calling this tool. Requires the taskId — use list_tasks to find it first.",
+      parameters: {
+        type: "object",
+        properties: {
+          taskId: {
+            type: "string",
+            description: "ID of the task to delete.",
+          },
+        },
+        required: ["taskId"],
+      },
+    },
+  },
+  {
+    minTier: "free",
     group: "labels",
     type: "function",
     function: {

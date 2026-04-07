@@ -8,6 +8,7 @@ import "server-only";
 import { createTask } from "@/lib/tasks/create.logic";
 import { listTasks } from "@/lib/tasks/list.logic";
 import { updateTask } from "@/lib/tasks/update.logic";
+import { deleteTask } from "@/lib/tasks/delete.logic";
 import { createTaskSchema, updateTaskSchema } from "@/lib/tasks/schemas";
 import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
 import { enforceTasksMax } from "@/lib/tiers";
@@ -139,9 +140,32 @@ async function handleUpdateTask(
   return { ok: true, data: result.task };
 }
 
+async function handleDeleteTask(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.taskId !== "string") {
+    return { ok: false, error: "delete_task requires taskId." };
+  }
+
+  // Verify ownership before deleting so the LLM gets a clear error if missing.
+  const tasks = await listTasks(userId);
+  const task = tasks.find((t) => t.id === args.taskId);
+  if (!task) {
+    return { ok: false, error: "Task not found." };
+  }
+
+  const result = await deleteTask(args.taskId, userId);
+  if (!result.ok) {
+    return { ok: false, error: "Task not found." };
+  }
+  return { ok: true, data: { deleted: true, title: task.title } };
+}
+
 export const taskHandlers: Record<string, ToolHandler> = {
   create_task: handleCreateTask,
   list_tasks: handleListTasks,
   complete_task: handleCompleteTask,
   update_task: handleUpdateTask,
+  delete_task: handleDeleteTask,
 };

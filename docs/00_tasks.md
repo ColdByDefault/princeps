@@ -34,8 +34,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `fix/llm-tools`
 
-- [ ] **#8 LLM tool reply verbosity** — when the LLM calls a tool and it succeeds, keep the toast but reduce the LLM reply text to "Done" only.
-- [ ] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat. but the llm needs to ask user for confirmation as for contacts, or meeting.
+- [x] **#8 LLM tool reply verbosity** — when the LLM calls a tool and it succeeds, in chat-widget keep the insider toast but reduce the LLM reply text to "Done" only.
+- [x] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat. but the llm needs to ask user for confirmation as for contacts, or meeting. decision doesn thave delete tool at all
 - [ ] **#10 Increase Task Notes character limit** — 250 chars is too short; increase it.
 
 ---
@@ -50,7 +50,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#14 TasksList UI** — general layout and visual improvements needed.
 - [ ] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
 - [ ] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
-- [ ] **Extra**: move Labels to Intelligence group in navbar, and create dedicted page.tsx 
+- [ ] **Extra**: move Labels to Intelligence group in navbar, and create dedicted page.tsx
 
 ### Branch: `feat/markdown`
 
@@ -136,9 +136,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing.
 - [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config, no `.spec.ts` files anywhere. The tier enforcement, tool handlers, and schema validators have no safety net. Defer until the feature set stabilizes.
 
-
-
 Free Light Gray
-Pro	Vibrant Blue
-Premium	Deep Purple 
-Enterprise	Charcoal
+Pro Vibrant Blue
+Premium Deep Purple
+Enterprise Charcoal
