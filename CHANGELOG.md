@@ -1,3 +1,12 @@
+## [0.1.42] - 2026-04-07
+
+- feat(tools): adjust CustomToggle dimensions for consistency
+- feat(tools): replace Switch with CustomToggle and add delete_task translations
+- feat(tasks): add delete_task functionality and update tool registry
+- feat(tools): implement tools management in settings with user preferences
+- feat(usage): add task, meeting, and decision tracking to usage summary
+- feat(tiers): implement tier limits for tasks, meetings, and decisions
+
 ## [0.1.41] - 2026-04-07
 
 - feat(decisions): add refresh functionality and update UI with loading state
