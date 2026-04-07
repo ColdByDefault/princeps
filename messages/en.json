@@ -505,6 +505,8 @@
     "actionsLabel": "Meeting actions",
     "editLabel": "Edit",
     "deleteLabel": "Delete",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…",
     "summaryDialog": {
       "trigger": "Add summary",
       "heading": "Meeting summary",
@@ -595,7 +597,9 @@
     "editLabel": "Edit",
     "deleteLabel": "Delete",
     "markDoneLabel": "Mark as done",
-    "reopenLabel": "Reopen"
+    "reopenLabel": "Reopen",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…"
   },
   "contacts": {
     "metadata": {
@@ -652,7 +656,9 @@
     "viewLabel": "View",
     "editLabel": "Edit",
     "deleteLabel": "Delete",
-    "lastContactLabel": "Last contact"
+    "lastContactLabel": "Last contact",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…"
   },
   "labels": {
     "metadata": {
@@ -817,6 +823,11 @@
         "label": "Update Decision",
         "what": "Changes a decision's title, rationale, outcome, status, or labels.",
         "example": "\"Mark the Postgres migration decision as decided\""
+      },
+      "delete_decision": {
+        "label": "Delete Decision",
+        "what": "Permanently deletes a decision.",
+        "example": "\"Delete the Postgres migration decision\""
       }
     }
   },

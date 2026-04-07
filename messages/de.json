@@ -505,6 +505,8 @@
     "actionsLabel": "Meeting-Aktionen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "L\u00f6schen",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert…",
     "summaryDialog": {
       "trigger": "Zusammenfassung hinzuf\u00fcgen",
       "heading": "Besprechungszusammenfassung",
@@ -595,7 +597,9 @@
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen",
     "markDoneLabel": "Als erledigt markieren",
-    "reopenLabel": "Wiedereröffnen"
+    "reopenLabel": "Wiedereröffnen",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert…"
   },
   "contacts": {
     "metadata": {
@@ -652,7 +656,9 @@
     "viewLabel": "Ansehen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen",
-    "lastContactLabel": "Letzter Kontakt"
+    "lastContactLabel": "Letzter Kontakt",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert…"
   },
   "labels": {
     "metadata": {
@@ -817,6 +823,11 @@
         "label": "Entscheidung bearbeiten",
         "what": "Ändert Titel, Begründung, Ergebnis, Status oder Labels einer Entscheidung.",
         "example": "\"Markiere die Postgres-Entscheidung als entschieden\""
+      },
+      "delete_decision": {
+        "label": "Entscheidung löschen",
+        "what": "Löscht eine Entscheidung dauerhaft.",
+        "example": "\"Lösche die Postgres-Entscheidung\""
       }
     }
   },

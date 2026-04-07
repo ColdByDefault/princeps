@@ -5,10 +5,20 @@
 
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Plus, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ContactList } from "./ContactList";
 import { CreateContactDialog } from "./CreateContactDialog";
 import { EditContactDialog } from "./EditContactDialog";
@@ -31,8 +41,24 @@ export function ContactsShell({
   const [createOpen, setCreateOpen] = useState(false);
   const [editContact, setEditContact] = useState<ContactRecord | null>(null);
   const [editOpen, setEditOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const { creating, createContact, updateContact, deleteContact } =
+  const [isPendingRefresh, startRefresh] = useTransition();
+
+  function handleRefresh() {
+    startRefresh(async () => {
+      const res = await fetch("/api/contacts");
+      if (res.ok) {
+        const { contacts: updated } = (await res.json()) as {
+          contacts: ContactRecord[];
+        };
+        setContacts(updated);
+      }
+    });
+  }
+
+  const { creating, deleting, createContact, updateContact, deleteContact } =
     useContactMutations(setContacts, {
       createSuccess: t("createDialog.success"),
       createError: t("createDialog.error"),
@@ -57,39 +83,77 @@ export function ContactsShell({
     if (ok) setEditOpen(false);
   }
 
-  async function handleDelete(contactId: string) {
-    await deleteContact(contactId);
+  function handleDeleteRequest(contactId: string) {
+    setDeleteTarget(contactId);
+    setDeleteOpen(true);
+  }
+
+  async function handleDeleteConfirm() {
+    if (!deleteTarget) return;
+    await deleteContact(deleteTarget);
+    setDeleteOpen(false);
+    setDeleteTarget(null);
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-8 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t("pageTitle")}
-          </h1>
-          <p className="text-muted-foreground mt-1 text-sm">
-            {contacts.length === 1
-              ? t("countSingular")
-              : t("countPlural", { count: contacts.length })}
-          </p>
+    <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
+      {/* Header */}
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t("pageTitle")}
+        </h1>
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isPendingRefresh}
+            onClick={handleRefresh}
+            aria-label={t("refresh")}
+            className="cursor-pointer"
+          >
+            <RefreshCw
+              className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
+            />
+            {isPendingRefresh ? t("refreshing") : t("refresh")}
+          </Button>
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => setCreateOpen(true)}
+            className="cursor-pointer"
+            disabled={creating}
+            aria-label={t("newContact")}
+          >
+            <Plus className="size-4" />
+            {t("newContact")}
+          </Button>
         </div>
-        <Button
-          onClick={() => setCreateOpen(true)}
-          className="cursor-pointer shrink-0"
-          disabled={creating}
-          aria-label={t("newContact")}
-        >
-          <Plus className="mr-2 size-4" />
-          {t("newContact")}
-        </Button>
       </div>
 
-      <ContactList
-        contacts={contacts}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      {/* Contact list */}
+      {contacts.length === 0 ? (
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/60 px-6 py-16 text-center">
+          <p className="text-sm text-muted-foreground">{t("empty")}</p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-4 cursor-pointer"
+            onClick={() => setCreateOpen(true)}
+          >
+            <Plus className="size-4" />
+            {t("newContact")}
+          </Button>
+        </div>
+      ) : (
+        <ContactList
+          contacts={contacts}
+          isDeleting={deleting}
+          onEdit={handleEdit}
+          onDelete={handleDeleteRequest}
+        />
+      )}
 
       {/* Create dialog */}
       <CreateContactDialog
@@ -112,6 +176,30 @@ export function ContactsShell({
           onSubmit={handleUpdate}
         />
       )}
+
+      {/* Delete confirmation */}
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("deleteDialog.description")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="cursor-pointer">
+              {t("deleteDialog.cancel")}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              disabled={deleting !== null}
+              className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t("deleteDialog.confirm")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

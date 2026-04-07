@@ -5,8 +5,8 @@
 
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Plus, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { TaskCard } from "./TaskCard";
@@ -40,6 +40,20 @@ export function TasksShell({ initialTasks, availableLabels }: TasksShellProps) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const [isPendingRefresh, startRefresh] = useTransition();
+
+  function handleRefresh() {
+    startRefresh(async () => {
+      const res = await fetch("/api/tasks");
+      if (res.ok) {
+        const { tasks: updated } = (await res.json()) as {
+          tasks: TaskRecord[];
+        };
+        setTasks(updated);
+      }
+    });
+  }
 
   const {
     creating,
@@ -96,21 +110,37 @@ export function TasksShell({ initialTasks, availableLabels }: TasksShellProps) {
         <h1 className="text-2xl font-semibold tracking-tight">
           {t("pageTitle")}
         </h1>
-        <CreateTaskDialog
-          onSubmit={createTask}
-          creating={creating}
-          availableLabels={availableLabels}
-        >
+        <div className="flex items-center gap-2">
           <Button
             type="button"
+            variant="outline"
             size="sm"
+            disabled={isPendingRefresh}
+            onClick={handleRefresh}
+            aria-label={t("refresh")}
             className="cursor-pointer"
-            aria-label={t("newTask")}
           >
-            <Plus className="size-4" />
-            {t("newTask")}
+            <RefreshCw
+              className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
+            />
+            {isPendingRefresh ? t("refreshing") : t("refresh")}
           </Button>
-        </CreateTaskDialog>
+          <CreateTaskDialog
+            onSubmit={createTask}
+            creating={creating}
+            availableLabels={availableLabels}
+          >
+            <Button
+              type="button"
+              size="sm"
+              className="cursor-pointer"
+              aria-label={t("newTask")}
+            >
+              <Plus className="size-4" />
+              {t("newTask")}
+            </Button>
+          </CreateTaskDialog>
+        </div>
       </div>
 
       {/* Filter tabs */}
