@@ -8,6 +8,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { useTranslations } from "next-intl";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -236,8 +238,14 @@ function MessageBubble({ msg }: { msg: LiveMessage }) {
       >
         {isStreamingEmpty ? (
           <span className="inline-block h-4 w-4 animate-pulse rounded-full bg-current opacity-40" />
-        ) : (
+        ) : isUser ? (
           <p className="whitespace-pre-wrap wrap-break-word">{msg.content}</p>
+        ) : (
+          <div className="prose prose-sm dark:prose-invert max-w-none prose-p:leading-relaxed prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-pre:my-2 prose-code:before:content-none prose-code:after:content-none">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {msg.content}
+            </ReactMarkdown>
+          </div>
         )}
       </div>
     </div>

@@ -16,6 +16,8 @@ import {
   Plus,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { cn } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -433,7 +435,15 @@ export function ChatWidget({
                             : "ml-6 rounded-bl-sm border border-border bg-card text-card-foreground shadow-sm",
                         )}
                       >
-                        {msg.text}
+                        {msg.sender === "assistant" ? (
+                          <div className="prose prose-sm dark:prose-invert max-w-none prose-p:leading-relaxed prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-pre:my-2 prose-code:before:content-none prose-code:after:content-none">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {msg.text}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          msg.text
+                        )}
                       </div>
                       <span
                         className={cn(
