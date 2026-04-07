@@ -1,3 +1,11 @@
+## [0.1.43] - 2026-04-07
+
+- feat: implement tier color constants for badges, cards, and rings
+- feat: update chat-widget to reflect online status with green indicator
+- feat: remove LabelsTab component and related references from settings
+- feat: add icon selection to labels system
+- feat: update tier colors and styles for consistency across components
+
 ## [0.1.42] - 2026-04-07
 
 - feat(tools): adjust CustomToggle dimensions for consistency
