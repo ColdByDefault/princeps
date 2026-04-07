@@ -13,7 +13,6 @@ import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { getProviderStatus } from "@/lib/settings/provider-status.logic";
 import { getUserUsage } from "@/lib/settings/usage.logic";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
-import { listLabels } from "@/lib/labels/list.logic";
 import { TOOL_REGISTRY } from "@/lib/tools/registry";
 import { SettingsShell } from "@/components/settings";
 import type { AppLanguage } from "@/types/i18n";
@@ -39,11 +38,10 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const [initialStatus, initialUsage, initialLabels, initialPrefs, userRow] =
+  const [initialStatus, initialUsage, initialPrefs, userRow] =
     await Promise.all([
       getProviderStatus(),
       getUserUsage(session.user.id),
-      listLabels(session.user.id),
       getUserPreferences(session.user.id),
       db.user.findUnique({
         where: { id: session.user.id },
@@ -65,7 +63,6 @@ export default async function SettingsPage() {
         initialStatus={initialStatus}
         initialTab={initialTab}
         initialUsage={initialUsage}
-        initialLabels={initialLabels}
         initialNotificationsEnabled={initialPrefs.notificationsEnabled ?? true}
         initialTimezone={userRow?.timezone ?? "UTC"}
         initialLocation={initialPrefs.location ?? null}

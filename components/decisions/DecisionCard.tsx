@@ -1,6 +1,8 @@
 "use client";
 
 import { Scale, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
+import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -99,16 +101,22 @@ export function DecisionCard({
           >
             {t(`status.${decision.status}`)}
           </Badge>
-          {decision.labels.map((lbl) => (
-            <Badge
-              key={lbl.id}
-              variant="outline"
-              className="border-transparent text-white text-xs"
-              style={{ backgroundColor: lbl.color }}
-            >
-              {lbl.name}
-            </Badge>
-          ))}
+          {decision.labels.map((lbl) => {
+            const Icon = lbl.icon
+              ? LABEL_ICON_MAP[lbl.icon as LabelIconName]
+              : null;
+            return (
+              <Badge
+                key={lbl.id}
+                variant="outline"
+                className="border-transparent text-white text-xs gap-1"
+                style={{ backgroundColor: lbl.color }}
+              >
+                {Icon && <Icon className="size-3 shrink-0" />}
+                {lbl.name}
+              </Badge>
+            );
+          })}
         </div>
       </div>
 

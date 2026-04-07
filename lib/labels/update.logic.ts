@@ -30,6 +30,9 @@ export async function updateLabel(
   if (input.color !== undefined) {
     data.color = input.color;
   }
+  if (input.icon !== undefined) {
+    data.icon = input.icon;
+  }
 
   try {
     const row = await db.label.update({

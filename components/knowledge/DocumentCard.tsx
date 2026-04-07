@@ -7,6 +7,8 @@
 
 import { useState } from "react";
 import { FileText, Trash2, Tag } from "lucide-react";
+import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
+import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -89,16 +91,22 @@ export function DocumentCard({
               className="size-3 shrink-0 self-center text-muted-foreground"
               aria-hidden="true"
             />
-            {document.labels.map((label) => (
-              <Badge
-                key={label.id}
-                variant="outline"
-                className="h-5 px-1.5 text-xs"
-                style={{ borderColor: label.color, color: label.color }}
-              >
-                {label.name}
-              </Badge>
-            ))}
+            {document.labels.map((label) => {
+              const Icon = label.icon
+                ? LABEL_ICON_MAP[label.icon as LabelIconName]
+                : null;
+              return (
+                <Badge
+                  key={label.id}
+                  variant="outline"
+                  className="h-5 px-1.5 text-xs gap-1"
+                  style={{ borderColor: label.color, color: label.color }}
+                >
+                  {Icon && <Icon className="size-3 shrink-0" />}
+                  {label.name}
+                </Badge>
+              );
+            })}
           </div>
         )}
       </div>

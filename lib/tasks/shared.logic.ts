@@ -19,7 +19,7 @@ export const TASK_SELECT = {
   updatedAt: true,
   labelLinks: {
     select: {
-      label: { select: { id: true, name: true, color: true } },
+      label: { select: { id: true, name: true, color: true, icon: true } },
     },
   },
 } as const;

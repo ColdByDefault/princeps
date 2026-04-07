@@ -27,6 +27,7 @@ export async function createLabel(
         userId,
         name: input.name.trim(),
         color: input.color ?? "#6366f1",
+        icon: input.icon ?? null,
         normalizedName,
       },
       select: LABEL_SELECT,

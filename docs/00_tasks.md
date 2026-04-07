@@ -4,23 +4,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ---
 
-## Security — Fix Immediately
-
-### Branch: `fix/security-hardening`
-
-- [x] **#1 Wire dead rate limiters** — `writeRateLimiter`, `searchRateLimiter`, `briefingRateLimiter`, and `prepRateLimiter` are all defined in `lib/security.ts` but never imported or applied anywhere. Every mutation route (`POST/PATCH/DELETE` on tasks, meetings, contacts, labels) is completely unprotected. Apply them.
-- [x] **#2 Password reset flow** — no `forgetPassword` / `resetPassword` pages or API hooks exist. Users who lose their password permanently lose access. Better Auth has the plugin; wire it up.
-- [x] **#2.1 Extra**: add pgvector db health check and run when `npm run dev` starts.
-
----
-
-## High Priority — Core Product Gaps
-
-### Branch: `feat/decisions`
-
-- [x] **#3 Decisions tool** — schema complete, linked to meetings. Wire up handler, API, and UI.
-- [x] **#4 Stub `decisions` i18n namespace** — `messages/de.json` and `messages/en.json` only have the nav label. Add a top-level `"decisions": {}` stub now to avoid a runtime i18n crash the moment any component does `useTranslations("decisions")`.
-
 ### Branch: `feat/notes`
 
 > **NOTE:** this feature will be implemented in a future phase, Plan is to have MVP notes-app, similar to notes in Notion, with a simple text editor and the ability to link to tasks/meetings/contacts.
@@ -34,8 +17,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `fix/llm-tools`
 
-- [x] **#8 LLM tool reply verbosity** — when the LLM calls a tool and it succeeds, in chat-widget keep the insider toast but reduce the LLM reply text to "Done" only.
-- [x] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat. but the llm needs to ask user for confirmation as for contacts, or meeting. decision doesn thave delete tool at all
 - [ ] **#10 Increase Task Notes character limit** — 250 chars is too short; increase it.
 
 ---
@@ -44,13 +25,11 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `fix/ui-polish`
 
-- [ ] **#11 Contacts empty state** — tasks and meetings look fine when empty; contacts looks bad. Fix to match.
+- [ ] **#11 Contacts empty state** — tasks and meetings look fine when empty; contacts looks bad. makes also list to match. with refresh btn of course
 - [ ] **#12 Duplicate "+ New Task" button** — tasks page shows two buttons when the list is empty. Remove the redundant one.
-- [ ] **#13 Chat-Widget status dot** — switch from gray to green (online indicator).
 - [ ] **#14 TasksList UI** — general layout and visual improvements needed.
 - [ ] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
 - [ ] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
-- [ ] **Extra**: move Labels to Intelligence group in navbar, and create dedicted page.tsx
 
 ### Branch: `feat/markdown`
 
@@ -70,13 +49,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 - [ ] **#19 Meeting prep pack** — `Meeting.prepPack` was migrated but is 0% implemented (always returns `null`). Add the generate action, tool parameter, and UI to display the pack.
 
-### Branch: `fix/tier-consistency`
-
-> First we discuss the tier system.
-
-- [x] **#20 Tier limits on meetings + tasks + decisions** — contacts and knowledge are gated per plan; meetings, decisions, and tasks are not. Inconsistent with the tier model. Add per-plan limits.
-- [x] **#21 Remove dead `enforceKnowledgeDocs` export** — deprecated function is still re-exported from `lib/tiers/index.ts` but never called. Remove it.
-
 ### Branch: `feat/briefings`
 
 - [ ] **#22 Briefings tool** — `BriefingCache` model exists; daily LLM brief over tasks/meetings/decisions.
@@ -84,15 +56,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 ### Branch: `feat/goals`
 
 - [ ] **#23 Goals tool** — needs schema design (structure, milestones, link to tasks).
-
-### Branch: `feat/labels-icons`
-
-- [ ] **#24 Add 20 Lucide icons to labels system** — allow icon selection per label; update label display wherever labels are rendered.
-
-### Branch: `feat/tool-settings`
-
-- [x] **#25 Tool availability per tier + user toggle** — change which tools are available by tier; allow users to enable/disable tools manually in settings.
-- [x] **#26 Make "Available Tools" in settings dynamic** — derive list from `TOOL_REGISTRY`, not a hardcoded array. Do alongside #25.
 
 ### Branch: `feat/llm-crosslink`
 
@@ -136,7 +99,19 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing.
 - [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config, no `.spec.ts` files anywhere. The tier enforcement, tool handlers, and schema validators have no safety net. Defer until the feature set stabilizes.
 
-Free Light Gray
-Pro Vibrant Blue
-Premium Deep Purple
-Enterprise Charcoal
+# DONE
+
+- [x] **#1 Wire dead rate limiters** — `writeRateLimiter`, `searchRateLimiter`, `briefingRateLimiter`, and `prepRateLimiter` are all defined in `lib/security.ts` but never imported or applied anywhere. Every mutation route (`POST/PATCH/DELETE` on tasks, meetings, contacts, labels) is completely unprotected. Apply them.
+- [x] **#2 Password reset flow** — no `forgetPassword` / `resetPassword` pages or API hooks exist. Users who lose their password permanently lose access. Better Auth has the plugin; wire it up.
+- [x] **#2.1 Extra**: add pgvector db health check and run when `npm run dev` starts.
+- [x] **#3 Decisions tool** — schema complete, linked to meetings. Wire up handler, API, and UI.
+- [x] **#4 Stub `decisions` i18n namespace** — `messages/de.json` and `messages/en.json` only have the nav label. Add a top-level `"decisions": {}` stub now to avoid a runtime i18n crash the moment any component does `useTranslations("decisions")`.
+- [x] **#8 LLM tool reply verbosity** — when the LLM calls a tool and it succeeds, in chat-widget keep the insider toast but reduce the LLM reply text to "Done" only.
+- [x] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat. but the llm needs to ask user for confirmation as for contacts, or meeting. decision doesn thave delete tool at all
+- [x] **#20 Tier limits on meetings + tasks + decisions** — contacts and knowledge are gated per plan; meetings, decisions, and tasks are not. Inconsistent with the tier model. Add per-plan limits.
+- [x] **#21 Remove dead `enforceKnowledgeDocs` export** — deprecated function is still re-exported from `lib/tiers/index.ts` but never called. Remove it.
+- [x] **#25 Tool availability per tier + user toggle** — change which tools are available by tier; allow users to enable/disable tools manually in settings.
+- [x] **#26 Make "Available Tools" in settings dynamic** — derive list from `TOOL_REGISTRY`, not a hardcoded array. Do alongside #25.
+- [x] **#24 Add 20 Lucide icons to labels system** — allow icon selection per label; update label display wherever labels are rendered.
+- [x] **Extra**: move Labels to Intelligence group in navbar, and create dedicted page.tsx
+- [x] **#13 Chat-Widget status dot** — switch from gray to green (online indicator).

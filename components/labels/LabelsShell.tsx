@@ -6,10 +6,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Pencil, Trash2, Plus, Tag, RefreshCw } from "lucide-react";
+import { Pencil, Trash2, Plus, Tag, RefreshCw, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  LABEL_ICON_MAP,
+  LABEL_ICON_NAMES,
+} from "@/components/labels/label-icons";
+import type { LabelIconName } from "@/components/labels/label-icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -79,15 +84,63 @@ function ColorPicker({
   );
 }
 
+// ─── Icon Picker ───────────────────────────────────────────────────────────
+
+function IconPicker({
+  value,
+  onChange,
+}: {
+  value: string | null;
+  onChange: (icon: string | null) => void;
+}) {
+  const t = useTranslations("labels");
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      <button
+        type="button"
+        aria-label={t("fields.iconNone")}
+        onClick={() => onChange(null)}
+        className={cn(
+          "size-7 cursor-pointer rounded-md border-2 flex items-center justify-center transition-colors",
+          value === null
+            ? "border-foreground bg-muted"
+            : "border-transparent bg-muted/40 hover:bg-muted",
+        )}
+      >
+        <X className="size-3.5 text-muted-foreground" />
+      </button>
+      {LABEL_ICON_NAMES.map((iconName) => {
+        const Icon = LABEL_ICON_MAP[iconName as LabelIconName];
+        return (
+          <button
+            key={iconName}
+            type="button"
+            aria-label={iconName}
+            onClick={() => onChange(iconName)}
+            className={cn(
+              "size-7 cursor-pointer rounded-md border-2 flex items-center justify-center transition-colors",
+              value === iconName
+                ? "border-foreground bg-muted"
+                : "border-transparent bg-muted/40 hover:bg-muted",
+            )}
+          >
+            <Icon className="size-3.5" />
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 // ─── Props ─────────────────────────────────────────────────────────────────
 
-type LabelsTabProps = {
+type LabelsShellProps = {
   initialLabels: LabelRecord[];
 };
 
 // ─── Component ─────────────────────────────────────────────────────────────
 
-export function LabelsTab({ initialLabels }: LabelsTabProps) {
+export function LabelsShell({ initialLabels }: LabelsShellProps) {
   const t = useTranslations("labels");
 
   const [labels, setLabels] = useState<LabelRecord[]>(initialLabels);
@@ -96,12 +149,14 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
   const [createOpen, setCreateOpen] = useState(false);
   const [createName, setCreateName] = useState("");
   const [createColor, setCreateColor] = useState<string>(PRESET_COLORS[0]);
+  const [createIcon, setCreateIcon] = useState<string | null>(null);
   const [isPendingCreate, startCreate] = useTransition();
 
   // Edit dialog
   const [editingLabel, setEditingLabel] = useState<LabelRecord | null>(null);
   const [editName, setEditName] = useState("");
   const [editColor, setEditColor] = useState<string>(PRESET_COLORS[0]);
+  const [editIcon, setEditIcon] = useState<string | null>(null);
   const [isPendingEdit, startEdit] = useTransition();
 
   // Delete dialog
@@ -128,6 +183,7 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
   function openCreate() {
     setCreateName("");
     setCreateColor(PRESET_COLORS[0]);
+    setCreateIcon(null);
     setCreateOpen(true);
   }
 
@@ -140,7 +196,7 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
       const res = await fetch("/api/labels", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, color: createColor }),
+        body: JSON.stringify({ name, color: createColor, icon: createIcon }),
       });
 
       if (res.status === 409) {
@@ -165,6 +221,7 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
     setEditingLabel(label);
     setEditName(label.name);
     setEditColor(label.color);
+    setEditIcon(label.icon ?? null);
   }
 
   function handleEdit(e: React.FormEvent) {
@@ -177,7 +234,7 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
       const res = await fetch(`/api/labels/${editingLabel.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, color: editColor }),
+        body: JSON.stringify({ name, color: editColor, icon: editIcon }),
       });
 
       if (res.status === 409) {
@@ -219,12 +276,16 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="space-y-0.5">
-          <p className="text-sm font-medium">{t("title")}</p>
-          <p className="text-sm text-muted-foreground">{t("description")}</p>
+    <div className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
+      {/* Page header */}
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("pageTitle")}
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {t("pageSubtitle")}
+          </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <Button
@@ -257,50 +318,58 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
 
       {/* Labels list */}
       {labels.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-10 text-center text-sm text-muted-foreground">
-          <Tag className="size-5 opacity-40" />
+        <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-16 text-center text-sm text-muted-foreground">
+          <Tag className="size-6 opacity-40" />
           <span>{t("empty")}</span>
         </div>
       ) : (
         <div className="divide-y divide-border/60 rounded-lg border">
-          {labels.map((label) => (
-            <div
-              key={label.id}
-              className="flex items-center justify-between gap-3 px-3 py-2.5"
-            >
-              <div className="flex min-w-0 items-center gap-2">
-                <span
-                  className="size-3 shrink-0 rounded-full"
-                  style={{ backgroundColor: label.color }}
-                />
-                <span className="truncate text-sm font-medium">
-                  {label.name}
-                </span>
+          {labels.map((label) => {
+            const Icon = label.icon
+              ? LABEL_ICON_MAP[label.icon as LabelIconName]
+              : null;
+            return (
+              <div
+                key={label.id}
+                className="flex items-center justify-between gap-3 px-4 py-3"
+              >
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <span
+                    className="size-3 shrink-0 rounded-full"
+                    style={{ backgroundColor: label.color }}
+                  />
+                  {Icon && (
+                    <Icon className="size-4 shrink-0 text-muted-foreground" />
+                  )}
+                  <span className="truncate text-sm font-medium">
+                    {label.name}
+                  </span>
+                </div>
+                <div className="flex shrink-0 items-center gap-0.5">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 cursor-pointer"
+                    aria-label={t("editLabel")}
+                    onClick={() => openEdit(label)}
+                  >
+                    <Pencil className="size-3.5" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 cursor-pointer text-destructive hover:text-destructive"
+                    aria-label={t("deleteLabel")}
+                    onClick={() => setDeletingLabel(label)}
+                  >
+                    <Trash2 className="size-3.5" />
+                  </Button>
+                </div>
               </div>
-              <div className="flex shrink-0 items-center gap-0.5">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="size-7 cursor-pointer"
-                  aria-label={t("editLabel")}
-                  onClick={() => openEdit(label)}
-                >
-                  <Pencil className="size-3.5" />
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="size-7 cursor-pointer text-destructive hover:text-destructive"
-                  aria-label={t("deleteLabel")}
-                  onClick={() => setDeletingLabel(label)}
-                >
-                  <Trash2 className="size-3.5" />
-                </Button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -325,6 +394,10 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
             <div className="space-y-1.5">
               <Label>{t("fields.color")}</Label>
               <ColorPicker value={createColor} onChange={setCreateColor} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>{t("fields.icon")}</Label>
+              <IconPicker value={createIcon} onChange={setCreateIcon} />
             </div>
             <DialogFooter>
               <Button
@@ -367,6 +440,10 @@ export function LabelsTab({ initialLabels }: LabelsTabProps) {
             <div className="space-y-1.5">
               <Label>{t("fields.color")}</Label>
               <ColorPicker value={editColor} onChange={setEditColor} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>{t("fields.icon")}</Label>
+              <IconPicker value={editIcon} onChange={setEditIcon} />
             </div>
             <DialogFooter>
               <Button

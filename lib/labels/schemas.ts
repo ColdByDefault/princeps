@@ -4,6 +4,7 @@
  */
 
 import { z } from "zod";
+import { LABEL_ICON_NAMES } from "./label-icons";
 
 export const createLabelSchema = z.object({
   name: z.string().min(1).max(50),
@@ -12,6 +13,10 @@ export const createLabelSchema = z.object({
     .regex(/^#[0-9a-fA-F]{6}$/)
     .optional()
     .default("#6366f1"),
+  icon: z
+    .enum(LABEL_ICON_NAMES as unknown as [string, ...string[]])
+    .nullable()
+    .optional(),
 });
 
 export const updateLabelSchema = z.object({
@@ -19,6 +24,10 @@ export const updateLabelSchema = z.object({
   color: z
     .string()
     .regex(/^#[0-9a-fA-F]{6}$/)
+    .optional(),
+  icon: z
+    .enum(LABEL_ICON_NAMES as unknown as [string, ...string[]])
+    .nullable()
     .optional(),
 });
 

@@ -12,6 +12,8 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
+import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -130,15 +132,21 @@ export function TaskCard({
               {formatDue(task.dueDate)}
             </span>
           )}
-          {task.labels.map((label) => (
-            <span
-              key={label.id}
-              className="inline-flex h-5 items-center rounded-full px-2 text-[10px] font-medium text-white"
-              style={{ backgroundColor: label.color }}
-            >
-              {label.name}
-            </span>
-          ))}
+          {task.labels.map((label) => {
+            const Icon = label.icon
+              ? LABEL_ICON_MAP[label.icon as LabelIconName]
+              : null;
+            return (
+              <span
+                key={label.id}
+                className="inline-flex h-5 items-center gap-1 rounded-full px-2 text-[10px] font-medium text-white"
+                style={{ backgroundColor: label.color }}
+              >
+                {Icon && <Icon className="size-3 shrink-0" />}
+                {label.name}
+              </span>
+            );
+          })}
         </div>
       </div>
 

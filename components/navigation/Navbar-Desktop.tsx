@@ -32,6 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { TIER_RING_COLORS } from "@/lib/tiers/colors";
 import { NotificationBell } from "@/components/notifications";
 
 type NavLink = {
@@ -51,15 +52,12 @@ type NavbarDesktopProps = {
 
 function getTierRingClass(tier?: string | null) {
   if (!tier) return "border border-border/70";
-  const colorMap: Record<string, string> = {
-    free: "ring-amber-400 dark:ring-amber-500",
-    pro: "ring-violet-500 dark:ring-violet-400",
-    premium: "ring-purple-500 dark:ring-purple-400",
-    enterprise: "ring-sky-500 dark:ring-sky-400",
-  };
+  const ringColor =
+    TIER_RING_COLORS[tier as keyof typeof TIER_RING_COLORS] ??
+    TIER_RING_COLORS.pro;
   return cn(
     "ring-2 ring-offset-1 ring-offset-background border-transparent",
-    colorMap[tier] ?? "ring-violet-500",
+    ringColor,
   );
 }
 
@@ -69,7 +67,7 @@ function isActivePath(pathname: string, href: string) {
 }
 
 const GROUPED_HREFS = new Set(["/tasks", "/contact", "/meetings"]);
-const INTEL_HREFS = new Set(["/knowledge", "/decisions"]);
+const INTEL_HREFS = new Set(["/knowledge", "/decisions", "/labels"]);
 const AFTER_DROPDOWN_HREFS = new Set(["/settings", "/pricing"]);
 
 export default function NavbarDesktop({

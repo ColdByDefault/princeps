@@ -240,6 +240,11 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
             description:
               "Hex color code (e.g. #6366f1). Defaults to #6366f1 if omitted.",
           },
+          icon: {
+            type: "string",
+            description:
+              "Optional icon name for the label. One of: Tag, Bookmark, Star, Heart, Flag, Zap, Flame, Circle, Diamond, Shield, Crown, Trophy, Gem, Briefcase, Lightbulb, Globe, Clock, Bell, Target, Rocket.",
+          },
         },
         required: ["name"],
       },
@@ -282,6 +287,11 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
           color: {
             type: "string",
             description: "New hex color code, e.g. #f43f5e (optional).",
+          },
+          icon: {
+            type: "string",
+            description:
+              "New icon name (optional). One of: Tag, Bookmark, Star, Heart, Flag, Zap, Flame, Circle, Diamond, Shield, Crown, Trophy, Gem, Briefcase, Lightbulb, Globe, Clock, Bell, Target, Rocket. Pass null to remove the icon.",
           },
         },
         required: ["labelName"],
