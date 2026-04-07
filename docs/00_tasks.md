@@ -23,17 +23,19 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/notes`
 
+> **NOTE:** this feature will be implemented in a future phase, Plan is to have MVP notes-app, similar to notes in Notion, with a simple text editor and the ability to link to tasks/meetings/contacts.
+
 - [ ] **#5 Notes tool** — needs schema; lightweight freeform records, simpler than knowledge docs.
 
 ### Branch: `feat/profile-settings`
 
-- [ ] **#6 User Profile Settings** — allow users to change name, username, timezone. Email/password changes need careful handling with Better Auth. `ProfileShell` is currently read-only.
+- [ ] **#6 User Profile Settings** — allow users to change name, username. Email/password changes need careful handling with Better Auth. `ProfileShell` is currently read-only.
 - [ ] **#7 Dropdown menus (timezone + location)** — current design is poor; redesign with a searchable combobox. Do alongside #6 since both touch the same settings shell.
 
 ### Branch: `fix/llm-tools`
 
 - [ ] **#8 LLM tool reply verbosity** — when the LLM calls a tool and it succeeds, keep the toast but reduce the LLM reply text to "Done" only.
-- [ ] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat.
+- [ ] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat. but the llm needs to ask user for confirmation as for contacts, or meeting.
 - [ ] **#10 Increase Task Notes character limit** — 250 chars is too short; increase it.
 
 ---
@@ -59,6 +61,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/personal-info`
 
+> **NOTE:** I dont think this really important, users have their profiles, they can edit it, and llm's aware of it. update or delete info is restricted by the user, and llm can only read it. remove model!
+
 - [ ] **#18 `PersonalInfo` model** — schema exists, `app/api/knowledge/personal/` folder exists but is empty, no lib, no context slot, no UI. Implement fully and feed into the system prompt.
 
 ### Branch: `feat/meeting-prep-pack`
@@ -67,8 +71,10 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `fix/tier-consistency`
 
-- [ ] **#20 Tier limits on meetings + tasks** — contacts and knowledge are gated per plan; meetings and tasks are not. Inconsistent with the tier model. Add per-plan limits.
-- [ ] **#21 Remove dead `enforceKnowledgeDocs` export** — deprecated function is still re-exported from `lib/tiers/index.ts` but never called. Remove it.
+> First we discuss the tier system.
+
+- [x] **#20 Tier limits on meetings + tasks + decisions** — contacts and knowledge are gated per plan; meetings, decisions, and tasks are not. Inconsistent with the tier model. Add per-plan limits.
+- [x] **#21 Remove dead `enforceKnowledgeDocs` export** — deprecated function is still re-exported from `lib/tiers/index.ts` but never called. Remove it.
 
 ### Branch: `feat/briefings`
 

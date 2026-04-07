@@ -14,6 +14,7 @@ import {
   getRateLimitIdentifier,
   createRateLimitResponse,
 } from "@/lib/security";
+import { enforceTasksMax, createTierLimitResponse } from "@/lib/tiers";
 
 // GET /api/tasks — list tasks for the current user
 export async function GET(req: Request) {
@@ -49,6 +50,9 @@ export async function POST(req: Request) {
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
+
+  const gate = await enforceTasksMax(session.user.id);
+  if (!gate.allowed) return createTierLimitResponse(gate.reason);
 
   const body = (await req.json()) as unknown;
   const parsed = createTaskSchema.safeParse(body);

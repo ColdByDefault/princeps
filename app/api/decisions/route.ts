@@ -9,6 +9,7 @@ import {
   getRateLimitIdentifier,
   createRateLimitResponse,
 } from "@/lib/security";
+import { enforceDecisionsMax, createTierLimitResponse } from "@/lib/tiers";
 
 // GET /api/decisions
 export async function GET(req: Request) {
@@ -42,6 +43,9 @@ export async function POST(req: Request) {
   const rateLimit = writeRateLimiter.check(identifier);
   if (!rateLimit.allowed)
     return createRateLimitResponse(rateLimit.retryAfterSeconds);
+
+  const gate = await enforceDecisionsMax(session.user.id);
+  if (!gate.allowed) return createTierLimitResponse(gate.reason);
 
   const body = (await req.json()) as unknown;
   const parsed = createDecisionSchema.safeParse(body);

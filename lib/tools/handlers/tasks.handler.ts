@@ -10,6 +10,7 @@ import { listTasks } from "@/lib/tasks/list.logic";
 import { updateTask } from "@/lib/tasks/update.logic";
 import { createTaskSchema, updateTaskSchema } from "@/lib/tasks/schemas";
 import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
+import { enforceTasksMax } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";
 
 async function handleCreateTask(
@@ -52,6 +53,16 @@ async function handleCreateTask(
     return {
       ok: false,
       error: `A similar active task already exists: "${duplicate.title}" (${duplicate.status}). Avoid creating duplicates — suggest updating the existing task instead, or confirm with the user that a separate task is intended.`,
+    };
+  }
+
+  // Tier gate — checked after duplicate detection so the LLM gets the more
+  // actionable duplicate error first when both conditions apply.
+  const gate = await enforceTasksMax(userId);
+  if (!gate.allowed) {
+    return {
+      ok: false,
+      error: gate.reason ?? "Task limit reached for your plan.",
     };
   }
 

@@ -407,12 +407,89 @@ export async function enforceContactsMax(
   return { allowed: true };
 }
 
-// ─── Response factory ─────────────────────────────────────
+// ─── Tasks limit ──────────────────────────────────────────
 
 /**
- * Produces a 403 JSON response for a blocked tier enforcement check.
- * Use `result.reason` as the message when available.
+ * Checks whether the user is allowed to create another task.
+ * This is a count-at-rest limit (no monthly reset) —
+ * no counter is incremented here. The caller creates the task on success.
+ * Enterprise tier uses `-1` (unlimited) — the count check is skipped.
  */
+export async function enforceTasksMax(userId: string): Promise<EnforceResult> {
+  const [tier, count] = await Promise.all([
+    getUserTier(userId),
+    db.task.count({ where: { userId } }),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (limits.tasksMax !== -1 && count >= limits.tasksMax) {
+    return {
+      allowed: false,
+      reason: "Task limit reached for your plan.",
+    };
+  }
+
+  return { allowed: true };
+}
+
+// ─── Meetings limit ───────────────────────────────────────
+
+/**
+ * Checks whether the user is allowed to create another meeting.
+ * This is a count-at-rest limit (no monthly reset) —
+ * no counter is incremented here. The caller creates the meeting on success.
+ * Enterprise tier uses `-1` (unlimited) — the count check is skipped.
+ */
+export async function enforceMeetingsMax(
+  userId: string,
+): Promise<EnforceResult> {
+  const [tier, count] = await Promise.all([
+    getUserTier(userId),
+    db.meeting.count({ where: { userId } }),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (limits.meetingsMax !== -1 && count >= limits.meetingsMax) {
+    return {
+      allowed: false,
+      reason: "Meeting limit reached for your plan.",
+    };
+  }
+
+  return { allowed: true };
+}
+
+// ─── Decisions limit ──────────────────────────────────────
+
+/**
+ * Checks whether the user is allowed to create another decision.
+ * This is a count-at-rest limit (no monthly reset) —
+ * no counter is incremented here. The caller creates the decision on success.
+ * Enterprise tier uses `-1` (unlimited) — the count check is skipped.
+ */
+export async function enforceDecisionsMax(
+  userId: string,
+): Promise<EnforceResult> {
+  const [tier, count] = await Promise.all([
+    getUserTier(userId),
+    db.decision.count({ where: { userId } }),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (limits.decisionsMax !== -1 && count >= limits.decisionsMax) {
+    return {
+      allowed: false,
+      reason: "Decision limit reached for your plan.",
+    };
+  }
+
+  return { allowed: true };
+}
+
+// ─── Response factory ─────────────────────────────────────
 export function createTierLimitResponse(reason = "Plan limit reached.") {
   return NextResponse.json({ error: reason }, { status: 403 });
 }

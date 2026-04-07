@@ -7,6 +7,7 @@ import {
   updateDecisionSchema,
 } from "@/lib/decisions/schemas";
 import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
+import { enforceDecisionsMax } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";
 
 async function handleCreateDecision(
@@ -24,6 +25,15 @@ async function handleCreateDecision(
       ok: false,
       error:
         parsed.error.issues[0]?.message ?? "Invalid create_decision input.",
+    };
+  }
+
+  // Tier gate
+  const gate = await enforceDecisionsMax(userId);
+  if (!gate.allowed) {
+    return {
+      ok: false,
+      error: gate.reason ?? "Decision limit reached for your plan.",
     };
   }
 

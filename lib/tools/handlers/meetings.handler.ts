@@ -14,6 +14,7 @@ import {
   updateMeetingSchema,
 } from "@/lib/meetings/schemas";
 import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
+import { enforceMeetingsMax } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";
 
 async function handleCreateMeeting(
@@ -32,6 +33,15 @@ async function handleCreateMeeting(
     return {
       ok: false,
       error: parsed.error.issues[0]?.message ?? "Invalid create_meeting input.",
+    };
+  }
+
+  // Tier gate
+  const gate = await enforceMeetingsMax(userId);
+  if (!gate.allowed) {
+    return {
+      ok: false,
+      error: gate.reason ?? "Meeting limit reached for your plan.",
     };
   }
 
