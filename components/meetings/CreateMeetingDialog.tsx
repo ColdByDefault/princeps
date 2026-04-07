@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { LabelOptionRecord, ContactRecord } from "@/types/api";
+import { cn } from "@/lib/utils";
 
 type CreateMeetingDialogProps = {
   onSubmit: (input: {
@@ -301,11 +302,24 @@ export function CreateMeetingDialog({
               <Textarea
                 id="meeting-agenda"
                 value={agenda}
-                onChange={(e) => setAgenda(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 300) setAgenda(e.target.value);
+                }}
                 placeholder={t("fields.agendaPlaceholder")}
                 rows={3}
                 className="resize-none"
+                maxLength={300}
               />
+              <p
+                className={cn(
+                  "text-right text-xs",
+                  agenda.length >= 280
+                    ? "text-destructive"
+                    : "text-muted-foreground",
+                )}
+              >
+                {agenda.length}/300
+              </p>
             </div>
 
             {availableLabels.length > 0 && (

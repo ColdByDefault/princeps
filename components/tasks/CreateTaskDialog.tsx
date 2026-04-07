@@ -131,11 +131,24 @@ export function CreateTaskDialog({
             <Textarea
               id="task-notes"
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 250) setNotes(e.target.value);
+              }}
               placeholder={t("fields.notesPlaceholder")}
               rows={3}
               className="resize-none"
+              maxLength={250}
             />
+            <p
+              className={cn(
+                "text-right text-xs",
+                notes.length >= 230
+                  ? "text-destructive"
+                  : "text-muted-foreground",
+              )}
+            >
+              {notes.length}/250
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">

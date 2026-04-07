@@ -14,7 +14,7 @@ const milestoneInputSchema = z.object({
 
 export const createGoalSchema = z.object({
   title: z.string().min(1).max(255),
-  description: z.string().max(4000).optional().nullable(),
+  description: z.string().max(250).optional().nullable(),
   status: z.enum(["open", "in_progress", "done", "cancelled"]).optional(),
   targetDate: z.string().datetime({ offset: true }).optional().nullable(),
   labelIds: z.array(z.string()).optional(),
@@ -24,7 +24,7 @@ export const createGoalSchema = z.object({
 
 export const updateGoalSchema = z.object({
   title: z.string().min(1).max(255).optional(),
-  description: z.string().max(4000).optional().nullable(),
+  description: z.string().max(250).optional().nullable(),
   status: z.enum(["open", "in_progress", "done", "cancelled"]).optional(),
   targetDate: z.string().datetime({ offset: true }).optional().nullable(),
   labelIds: z.array(z.string()).optional(),

@@ -124,11 +124,24 @@ export function CreateDecisionDialog({
             <Textarea
               id="decision-rationale"
               value={rationale}
-              onChange={(e) => setRationale(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 250) setRationale(e.target.value);
+              }}
               placeholder={t("fields.rationalePlaceholder")}
               rows={2}
               className="resize-none"
+              maxLength={250}
             />
+            <p
+              className={cn(
+                "text-right text-xs",
+                rationale.length >= 230
+                  ? "text-destructive"
+                  : "text-muted-foreground",
+              )}
+            >
+              {rationale.length}/250
+            </p>
           </div>
 
           <div className="space-y-1.5">
@@ -141,11 +154,24 @@ export function CreateDecisionDialog({
             <Textarea
               id="decision-outcome"
               value={outcome}
-              onChange={(e) => setOutcome(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 250) setOutcome(e.target.value);
+              }}
               placeholder={t("fields.outcomePlaceholder")}
               rows={2}
               className="resize-none"
+              maxLength={250}
             />
+            <p
+              className={cn(
+                "text-right text-xs",
+                outcome.length >= 230
+                  ? "text-destructive"
+                  : "text-muted-foreground",
+              )}
+            >
+              {outcome.length}/250
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">

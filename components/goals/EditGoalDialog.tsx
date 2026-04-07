@@ -161,11 +161,25 @@ export function EditGoalDialog({
             <Textarea
               id="edit-goal-description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 250)
+                  setDescription(e.target.value);
+              }}
               placeholder={t("fields.descriptionPlaceholder")}
               rows={2}
               className="resize-none"
+              maxLength={250}
             />
+            <p
+              className={cn(
+                "text-right text-xs",
+                description.length >= 230
+                  ? "text-destructive"
+                  : "text-muted-foreground",
+              )}
+            >
+              {description.length}/250
+            </p>
           </div>
 
           {/* Status + Target date */}

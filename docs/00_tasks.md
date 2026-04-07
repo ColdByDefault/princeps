@@ -22,17 +22,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#6 User Profile Settings** — allow users to change name, username. Email/password changes need careful handling with Better Auth. `ProfileShell` is currently read-only.
 - [ ] **#7 Dropdown menus (timezone + location)** — current design is poor; redesign with a searchable combobox. Do alongside #6 since both touch the same settings shell.
 
-### Branch: `fix/llm-tools`
-
-- [ ] **#10 Increase Task Notes character limit** — 250 chars is too short; increase it.
-
----
-
-## Important — Polish & Correctness
-
-### Branch: `fix/ui-polish`
-
-- [ ] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
 
 ### Branch: `feat/markdown`
 
@@ -85,7 +74,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#32 Remove dead production dependencies** — `mammoth` and `pdf-parse` are in `package.json` and `serverExternalPackages` but never imported. Remove until #30 is implemented.
 - [ ] **#33 `emailVerified` always false** — Better Auth stores the field but no email verification plugin is configured and it is never checked as an access gate. Stub the plugin or document the intent before existing users become a migration problem.
 - [ ] **#34 In-memory rate limiter not production-safe** — the implementation is self-documented as broken under multi-node/serverless deploys. Replace with a Redis-backed or edge-compatible store when deploying to production.
-- [ ] **#35 Refactor Sidebar navigation** — use an array + `.map()` instead of hardcoded JSX for easier scaling.
+- [ ] **#35 Refactor Sidebar navigation** — use an array + `.map()` instead of hardcoded JSX for easier scaling. and add new routes.
 - [ ] **#36 Add `index.ts` barrel exports** — add missing `index.ts` in components and lib folders for cleaner imports.
 - [ ] **#37 Add `date-fns`** — standardize date formatting and timezone handling across the app.
 
@@ -120,7 +109,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [x] **#14 TasksList UI** — general layout and visual improvements needed.
 - [x] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
 - [x] **#23 Goals tool** — needs schema design (structure, milestones, link to tasks).
-
+- [x] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
+- [x] **#10 Increase Task Notes character limit** — 250 chars is too short; increase it.
 
 ## brainstorming — not yet scoped or planned
 
@@ -130,7 +120,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - add cmd+k shortcut to focus search input and add this feature .
 - version bump rule => update to 0.2.0 and make it the automatic increment count until 0.2.9, then jump to 0.3.0 and repeat, this is to make it easier to track versions during development.
 - When I am on Free tier, I have a maximum amount of tools calls per month, but what about creating manually from UI? something could be also related to `memory`.
-
+- I dont see prices any where, `/plans`, it needs update anyway to reflect new tier system. the badge for "current plan" is overlapping card boarder.
 - **WHOOPS FIX THIS PLEASE**: 
 do i have any goals?
 10:42 PM

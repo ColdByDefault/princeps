@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserPlus, X, CheckSquare } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type {
   LabelOptionRecord,
   MeetingRecord,
@@ -401,11 +402,24 @@ export function EditMeetingDialog({
               <Textarea
                 id="edit-meeting-agenda"
                 value={agenda}
-                onChange={(e) => setAgenda(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 300) setAgenda(e.target.value);
+                }}
                 placeholder={t("fields.agendaPlaceholder")}
                 rows={3}
                 className="resize-none"
+                maxLength={300}
               />
+              <p
+                className={cn(
+                  "text-right text-xs",
+                  agenda.length >= 280
+                    ? "text-destructive"
+                    : "text-muted-foreground",
+                )}
+              >
+                {agenda.length}/300
+              </p>
             </div>
 
             {availableLabels.length > 0 && (
