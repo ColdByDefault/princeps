@@ -52,14 +52,14 @@ type NavbarDesktopProps = {
 function getTierRingClass(tier?: string | null) {
   if (!tier) return "border border-border/70";
   const colorMap: Record<string, string> = {
-    free: "ring-amber-400 dark:ring-amber-500",
-    pro: "ring-violet-500 dark:ring-violet-400",
+    free: "ring-gray-400 dark:ring-gray-400",
+    pro: "ring-blue-500 dark:ring-blue-400",
     premium: "ring-purple-500 dark:ring-purple-400",
-    enterprise: "ring-sky-500 dark:ring-sky-400",
+    enterprise: "ring-zinc-600 dark:ring-zinc-500",
   };
   return cn(
     "ring-2 ring-offset-1 ring-offset-background border-transparent",
-    colorMap[tier] ?? "ring-violet-500",
+    colorMap[tier] ?? "ring-blue-500",
   );
 }
 

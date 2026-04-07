@@ -24,12 +24,12 @@ export function PlanBadge({ tier }: { tier: string }) {
       className={cn(
         "rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide",
         tier === "free"
-          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+          ? "bg-gray-100 text-gray-600 dark:bg-gray-800/40 dark:text-gray-400"
           : tier === "premium"
             ? "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
             : tier === "enterprise"
-              ? "bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
-              : "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
+              ? "bg-zinc-200 text-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-300"
+              : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
       )}
     >
       {label}

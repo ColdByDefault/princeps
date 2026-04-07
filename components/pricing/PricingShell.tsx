@@ -22,18 +22,19 @@ function fmt(n: number): string {
 }
 
 const TIER_COLORS: Record<Tier, string> = {
-  free: "border-amber-300 dark:border-amber-700",
-  pro: "border-violet-400 dark:border-violet-600",
+  free: "border-gray-300 dark:border-gray-600",
+  pro: "border-blue-400 dark:border-blue-600",
   premium: "border-purple-400 dark:border-purple-600",
-  enterprise: "border-sky-400 dark:border-sky-600",
+  enterprise: "border-zinc-500 dark:border-zinc-500",
 };
 
 const TIER_BADGE_COLORS: Record<Tier, string> = {
-  free: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400",
-  pro: "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
+  free: "bg-gray-100 text-gray-600 dark:bg-gray-800/40 dark:text-gray-400",
+  pro: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
   premium:
     "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
-  enterprise: "bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300",
+  enterprise:
+    "bg-zinc-200 text-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-300",
 };
 
 type PricingShellProps = {
