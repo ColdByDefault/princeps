@@ -797,7 +797,8 @@
       "contacts": "Contacts",
       "meetings": "Meetings",
       "decisions": "Decisions",
-      "goals": "Goals"
+      "goals": "Goals",
+      "knowledge": "Knowledge"
     },
     "catalog": {
       "create_task": {
@@ -939,6 +940,11 @@
         "label": "Complete Goal Milestone",
         "what": "Marks a goal milestone as completed or uncompleted.",
         "example": "\"Mark the design complete milestone as done\""
+      },
+      "search_knowledge": {
+        "label": "Search Knowledge",
+        "what": "Searches your personal knowledge base using semantic similarity to find relevant excerpts from uploaded documents.",
+        "example": "\"What does my onboarding document say about vacation policy?\""
       }
     }
   },

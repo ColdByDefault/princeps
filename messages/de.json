@@ -797,7 +797,8 @@
       "contacts": "Kontakte",
       "meetings": "Meetings",
       "decisions": "Entscheidungen",
-      "goals": "Ziele"
+      "goals": "Ziele",
+      "knowledge": "Wissen"
     },
     "catalog": {
       "create_task": {
@@ -939,6 +940,11 @@
         "label": "Meilenstein abschließen",
         "what": "Markiert einen Meilenstein als abgeschlossen oder nicht abgeschlossen.",
         "example": "\"Markiere den Meilenstein 'Design abgeschlossen' als erledigt\""
+      },
+      "search_knowledge": {
+        "label": "Wissen durchsuchen",
+        "what": "Durchsucht deine persönliche Wissensdatenbank semantisch und findet relevante Ausschnitte aus hochgeladenen Dokumenten.",
+        "example": "\"Was steht in meinem Onboarding-Dokument zur Urlaubsregelung?\""
       }
     }
   },
