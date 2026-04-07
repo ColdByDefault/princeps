@@ -355,7 +355,11 @@ export function ChatWidget({
               <p className="text-sm font-semibold leading-none text-primary-foreground">
                 {assistantName}
               </p>
-              <p className="mt-0.5 text-[11px] text-primary-foreground/65">
+              <p className="mt-0.5 flex items-center gap-1 text-[11px] text-primary-foreground/65">
+                <span
+                  className="inline-block h-1.5 w-1.5 rounded-full bg-green-400"
+                  aria-hidden
+                />
                 Personal assistant
               </p>
             </div>
@@ -530,14 +534,14 @@ export function ChatWidget({
           <Bot className="h-6 w-6 transition-transform duration-200 group-hover:scale-110" />
         )}
 
-        {/* Notification dot — only when widget is fully closed */}
+        {/* Online status dot — only when widget is fully closed */}
         {!open && !minimized && (
           <span
             className="pointer-events-none absolute right-0 top-0 flex h-3.5 w-3.5"
             aria-hidden
           >
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
-            <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-accent" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-60" />
+            <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-green-600" />
           </span>
         )}
       </button>

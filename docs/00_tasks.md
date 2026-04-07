@@ -27,11 +27,9 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 - [ ] **#11 Contacts empty state** — tasks and meetings look fine when empty; contacts looks bad. makes also list to match. with refresh btn of course
 - [ ] **#12 Duplicate "+ New Task" button** — tasks page shows two buttons when the list is empty. Remove the redundant one.
-- [ ] **#13 Chat-Widget status dot** — switch from gray to green (online indicator).
 - [ ] **#14 TasksList UI** — general layout and visual improvements needed.
 - [ ] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
 - [ ] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
-
 
 ### Branch: `feat/markdown`
 
@@ -50,7 +48,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 ### Branch: `feat/meeting-prep-pack`
 
 - [ ] **#19 Meeting prep pack** — `Meeting.prepPack` was migrated but is 0% implemented (always returns `null`). Add the generate action, tool parameter, and UI to display the pack.
-
 
 ### Branch: `feat/briefings`
 
@@ -102,7 +99,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing.
 - [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config, no `.spec.ts` files anywhere. The tier enforcement, tool handlers, and schema validators have no safety net. Defer until the feature set stabilizes.
 
-
 # DONE
 
 - [x] **#1 Wire dead rate limiters** — `writeRateLimiter`, `searchRateLimiter`, `briefingRateLimiter`, and `prepRateLimiter` are all defined in `lib/security.ts` but never imported or applied anywhere. Every mutation route (`POST/PATCH/DELETE` on tasks, meetings, contacts, labels) is completely unprotected. Apply them.
@@ -118,3 +114,4 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [x] **#26 Make "Available Tools" in settings dynamic** — derive list from `TOOL_REGISTRY`, not a hardcoded array. Do alongside #25.
 - [x] **#24 Add 20 Lucide icons to labels system** — allow icon selection per label; update label display wherever labels are rendered.
 - [x] **Extra**: move Labels to Intelligence group in navbar, and create dedicted page.tsx
+- [x] **#13 Chat-Widget status dot** — switch from gray to green (online indicator).
