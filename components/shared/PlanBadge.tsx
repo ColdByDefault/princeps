@@ -7,6 +7,7 @@
 
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { TIER_BADGE_COLORS } from "@/lib/tiers/colors";
 
 export function PlanBadge({ tier }: { tier: string }) {
   const t = useTranslations("shell.nav");
@@ -19,17 +20,15 @@ export function PlanBadge({ tier }: { tier: string }) {
           ? t("planEnterprise")
           : t("planFree");
 
+  const colorClass =
+    TIER_BADGE_COLORS[tier as keyof typeof TIER_BADGE_COLORS] ??
+    TIER_BADGE_COLORS.free;
+
   return (
     <span
       className={cn(
         "rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide",
-        tier === "free"
-          ? "bg-gray-100 text-gray-600 dark:bg-gray-800/40 dark:text-gray-400"
-          : tier === "premium"
-            ? "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
-            : tier === "enterprise"
-              ? "bg-zinc-200 text-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-300"
-              : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+        colorClass,
       )}
     >
       {label}

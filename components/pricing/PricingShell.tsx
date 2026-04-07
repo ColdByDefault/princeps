@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { PLAN_LIMITS } from "@/types/billing";
 import type { Tier } from "@/types/billing";
+import { TIER_CARD_COLORS, TIER_BADGE_COLORS } from "@/lib/tiers/colors";
 
 const TIERS: Tier[] = ["free", "pro", "premium", "enterprise"];
 
@@ -20,22 +21,6 @@ function fmt(n: number): string {
       ? `${(n / 1_000).toFixed(0)}k`
       : String(n);
 }
-
-const TIER_COLORS: Record<Tier, string> = {
-  free: "border-gray-300 dark:border-gray-600",
-  pro: "border-blue-400 dark:border-blue-600",
-  premium: "border-purple-400 dark:border-purple-600",
-  enterprise: "border-zinc-500 dark:border-zinc-500",
-};
-
-const TIER_BADGE_COLORS: Record<Tier, string> = {
-  free: "bg-gray-100 text-gray-600 dark:bg-gray-800/40 dark:text-gray-400",
-  pro: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
-  premium:
-    "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
-  enterprise:
-    "bg-zinc-200 text-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-300",
-};
 
 type PricingShellProps = {
   currentTier: Tier;
@@ -66,7 +51,7 @@ export function PricingShell({ currentTier }: PricingShellProps) {
               className={cn(
                 "relative flex flex-col rounded-xl border-2 bg-card p-5 shadow-sm transition-shadow",
                 isCurrent
-                  ? TIER_COLORS[tier]
+                  ? TIER_CARD_COLORS[tier]
                   : "border-border hover:border-muted-foreground/30",
               )}
             >

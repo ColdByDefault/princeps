@@ -32,6 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { TIER_RING_COLORS } from "@/lib/tiers/colors";
 import { NotificationBell } from "@/components/notifications";
 
 type NavLink = {
@@ -51,15 +52,12 @@ type NavbarDesktopProps = {
 
 function getTierRingClass(tier?: string | null) {
   if (!tier) return "border border-border/70";
-  const colorMap: Record<string, string> = {
-    free: "ring-gray-400 dark:ring-gray-400",
-    pro: "ring-blue-500 dark:ring-blue-400",
-    premium: "ring-purple-500 dark:ring-purple-400",
-    enterprise: "ring-zinc-600 dark:ring-zinc-500",
-  };
+  const ringColor =
+    TIER_RING_COLORS[tier as keyof typeof TIER_RING_COLORS] ??
+    TIER_RING_COLORS.pro;
   return cn(
     "ring-2 ring-offset-1 ring-offset-background border-transparent",
-    colorMap[tier] ?? "ring-blue-500",
+    ringColor,
   );
 }
 
