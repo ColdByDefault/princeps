@@ -401,6 +401,149 @@ export function useFeatureMutations(
 }
 ```
 
+### Shell layout conventions
+
+All feature shells (`<Feature>Shell.tsx`) follow a consistent layout. Do not deviate.
+
+**Wrapper:**
+
+```tsx
+<div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
+```
+
+**Header — title left, button group right:**
+
+```tsx
+<div className="mb-6 flex items-center justify-between">
+  <h1 className="text-2xl font-semibold tracking-tight">{t("pageTitle")}</h1>
+  <div className="flex items-center gap-2">
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      disabled={isPendingRefresh}
+      onClick={handleRefresh}
+      aria-label={t("refresh")}
+      className="cursor-pointer"
+    >
+      <RefreshCw className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`} />
+      {isPendingRefresh ? t("refreshing") : t("refresh")}
+    </Button>
+    <Create<Feature>Dialog ...>
+      <Button type="button" size="sm" className="cursor-pointer" aria-label={t("newFeature")}>
+        <Plus className="size-4" />
+        {t("newFeature")}
+      </Button>
+    </Create<Feature>Dialog>
+  </div>
+</div>
+```
+
+Every shell must have a refresh button using `useTransition`. The handler fetches `/api/<feature>` and replaces local state:
+
+```ts
+const [isPendingRefresh, startRefresh] = useTransition();
+
+function handleRefresh() {
+  startRefresh(async () => {
+    const res = await fetch("/api/<feature>");
+    if (res.ok) {
+      const { <feature>s: updated } = (await res.json()) as { <feature>s: <Feature>Record[] };
+      set<Feature>s(updated);
+    }
+  });
+}
+```
+
+**Filter tabs** (for features with status filters):
+
+```tsx
+<div className="mb-4 flex flex-wrap gap-1.5">
+  {FILTERS.map((f) => (
+    <Button
+      key={f.key}
+      type="button"
+      variant={filter === f.key ? "default" : "outline"}
+      size="sm"
+      onClick={() => setFilter(f.key)}
+      className="cursor-pointer rounded-full px-3 text-xs"
+    >
+      {f.label}
+      {f.key === "all"
+        ? ` (${items.length})`
+        : ` (${items.filter((i) => i.status === f.key).length})`}
+    </Button>
+  ))}
+</div>
+```
+
+Rules: `variant="default"` for active, `variant="outline"` for inactive; `rounded-full px-3 text-xs`; always show count in parentheses; never use `variant="secondary"` or `variant="ghost"` for filter tabs.
+
+**Empty state** — dashed border centered card, with action button when `filter === "all"`:
+
+```tsx
+{visible.length === 0 ? (
+  <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/60 px-6 py-16 text-center">
+    <p className="text-sm text-muted-foreground">
+      {filter === "all" ? t("empty") : t("emptyFiltered")}
+    </p>
+    {filter === "all" && (
+      <Create<Feature>Dialog ...>
+        <Button type="button" variant="outline" size="sm" className="mt-4 cursor-pointer">
+          <Plus className="size-4" />
+          {t("new<Feature>")}
+        </Button>
+      </Create<Feature>Dialog>
+    )}
+  </div>
+) : (
+  <div className="space-y-2">
+    {visible.map((item) => (
+      <FeatureCard key={item.id} ... />
+    ))}
+  </div>
+)}
+```
+
+For features without filters, omit the `emptyFiltered` branch and always show the action button.
+
+**Delete confirmation** — always at shell level, never inside individual cards:
+
+```tsx
+// Shell state
+const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+const [deleteOpen, setDeleteOpen] = useState(false);
+
+// Card calls onDelete(id) → shell opens AlertDialog
+function handleDeleteRequest(id: string) {
+  setDeleteTarget(id);
+  setDeleteOpen(true);
+}
+async function handleDeleteConfirm() {
+  if (!deleteTarget) return;
+  await deleteFeature(deleteTarget);
+  setDeleteOpen(false);
+  setDeleteTarget(null);
+}
+```
+
+Card receives `onDelete: (id: string) => void` (not `Promise<void>`). The card's dropdown item calls `onDelete(item.id)` directly — no internal dialog.
+
+**i18n keys every shell requires** (in addition to domain-specific keys):
+
+```json
+{
+  "<feature>": {
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…",
+    "empty": "No <feature>s yet.",
+    "emptyFiltered": "No <feature>s with this status."
+  }
+}
+```
+
+---
+
 ### Interactive element rules
 
 - Every button: `cursor-pointer`
