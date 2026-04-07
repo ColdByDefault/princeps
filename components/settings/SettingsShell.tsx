@@ -10,13 +10,12 @@ import { useTranslations } from "next-intl";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AppearanceTab } from "./AppearanceTab";
 import { AssistantTab } from "./AssistantTab";
-import { LabelsTab } from "./LabelsTab";
 import { ProviderTab } from "./ProviderTab";
 import { ToolsTab } from "./ToolsTab";
 import { UsageTab } from "./UsageTab";
 import type { ProviderStatusPayload } from "@/types/llm";
 import type { UsageSummary } from "@/types/billing";
-import type { LabelRecord, ToolDisplayEntry } from "@/types/api";
+import type { ToolDisplayEntry } from "@/types/api";
 import type {
   AssistantTone,
   AddressStyle,
@@ -28,7 +27,6 @@ const VALID_TABS = [
   "appearance",
   "assistant",
   "tools",
-  "labels",
   "usage",
   "provider",
 ] as const;
@@ -42,7 +40,6 @@ type SettingsShellProps = {
   initialStatus: ProviderStatusPayload;
   initialTab: string;
   initialUsage: UsageSummary;
-  initialLabels: LabelRecord[];
   initialNotificationsEnabled: boolean;
   initialTimezone: string;
   initialLocation: string | null;
@@ -58,7 +55,6 @@ export function SettingsShell({
   initialStatus,
   initialTab,
   initialUsage,
-  initialLabels,
   initialNotificationsEnabled,
   initialTimezone,
   initialLocation,
@@ -97,9 +93,6 @@ export function SettingsShell({
         <TabsTrigger value="tools" className="flex-1">
           {t("tools")}
         </TabsTrigger>
-        <TabsTrigger value="labels" className="flex-1">
-          {t("labels")}
-        </TabsTrigger>
         <TabsTrigger value="usage" className="flex-1">
           {t("usage")}
         </TabsTrigger>
@@ -118,14 +111,6 @@ export function SettingsShell({
           initialTimezone={initialTimezone}
           initialLocation={initialLocation}
         />
-      </TabsContent>
-
-      <TabsContent
-        keepMounted
-        value="labels"
-        className="mt-6 w-full data-hidden:hidden"
-      >
-        <LabelsTab initialLabels={initialLabels} />
       </TabsContent>
 
       <TabsContent

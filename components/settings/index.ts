@@ -5,7 +5,6 @@
 
 export { AppearanceTab } from "./AppearanceTab";
 export { AssistantTab } from "./AssistantTab";
-export { LabelsTab } from "./LabelsTab";
 export { ProviderTab } from "./ProviderTab";
 export { ToolsTab } from "./ToolsTab";
 export { UsageTab } from "./UsageTab";
