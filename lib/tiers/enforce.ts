@@ -489,6 +489,32 @@ export async function enforceDecisionsMax(
   return { allowed: true };
 }
 
+// ─── Goals limit ─────────────────────────────────────────
+
+/**
+ * Checks whether the user is allowed to create another goal.
+ * This is a count-at-rest limit (no monthly reset) —
+ * no counter is incremented here. The caller creates the goal on success.
+ * Enterprise tier uses `-1` (unlimited) — the count check is skipped.
+ */
+export async function enforceGoalsMax(userId: string): Promise<EnforceResult> {
+  const [tier, count] = await Promise.all([
+    getUserTier(userId),
+    db.goal.count({ where: { userId } }),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (limits.goalsMax !== -1 && count >= limits.goalsMax) {
+    return {
+      allowed: false,
+      reason: "Goal limit reached for your plan.",
+    };
+  }
+
+  return { allowed: true };
+}
+
 // ─── Response factory ─────────────────────────────────────
 export function createTierLimitResponse(reason = "Plan limit reached.") {
   return NextResponse.json({ error: reason }, { status: 403 });

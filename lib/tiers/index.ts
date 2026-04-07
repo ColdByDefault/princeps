@@ -14,6 +14,7 @@ export {
   enforceTasksMax,
   enforceMeetingsMax,
   enforceDecisionsMax,
+  enforceGoalsMax,
   accumulateTokens,
   getChatHistoryLimit,
   createTierLimitResponse,

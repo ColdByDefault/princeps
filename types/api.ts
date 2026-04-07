@@ -127,3 +127,27 @@ export interface LabelRecord extends LabelOptionRecord {
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }
+
+/** Client-safe shape of a Goal milestone. */
+export interface MilestoneRecord {
+  id: string;
+  title: string;
+  completed: boolean;
+  position: number;
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}
+
+/** Client-safe shape of a Goal record. */
+export interface GoalRecord {
+  id: string;
+  title: string;
+  description: string | null;
+  status: string; // "open" | "in_progress" | "done" | "cancelled"
+  targetDate: string | null; // ISO string on the client
+  milestones: MilestoneRecord[];
+  tasks: { id: string; title: string; status: string }[];
+  labels: LabelOptionRecord[];
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}

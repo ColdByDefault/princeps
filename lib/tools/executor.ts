@@ -11,6 +11,7 @@ import { profileHandlers } from "@/lib/tools/handlers/profile.handler";
 import { contactHandlers } from "@/lib/tools/handlers/contacts.handler";
 import { meetingHandlers } from "@/lib/tools/handlers/meetings.handler";
 import { decisionHandlers } from "@/lib/tools/handlers/decisions.handler";
+import { goalHandlers } from "@/lib/tools/handlers/goals.handler";
 import type { LLMToolCall } from "@/types/llm";
 import type { ActionResult } from "@/lib/tools/types";
 
@@ -31,6 +32,7 @@ const HANDLERS: Record<
   ...contactHandlers,
   ...meetingHandlers,
   ...decisionHandlers,
+  ...goalHandlers,
 };
 
 /**

@@ -17,6 +17,7 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     tasksStored,
     meetingsStored,
     decisionsStored,
+    goalsStored,
     counter,
   ] = await Promise.all([
     db.user.findUniqueOrThrow({
@@ -29,6 +30,7 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     db.task.count({ where: { userId } }),
     db.meeting.count({ where: { userId } }),
     db.decision.count({ where: { userId } }),
+    db.goal.count({ where: { userId } }),
     db.usageCounter.findUnique({
       where: { userId },
       select: {
@@ -65,6 +67,8 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     meetingsLimit: limits.meetingsMax,
     decisionsStored,
     decisionsLimit: limits.decisionsMax,
+    goalsStored,
+    goalsLimit: limits.goalsMax,
     monthlyResetDate:
       counter?.monthlyResetDate ?? new Date().toISOString().slice(0, 7),
   };
