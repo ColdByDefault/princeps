@@ -151,7 +151,8 @@
       "provider": "Providers",
       "usage": "Usage",
       "labels": "Labels",
-      "assistant": "Assistant"
+      "assistant": "Assistant",
+      "tools": "Tools"
     },
     "appearance": {
       "themeTitle": "Theme",
@@ -209,7 +210,19 @@
       "knowledgeCharsTitle": "Knowledge text volume (lifetime)",
       "knowledgeCharsNote": "Cumulative character count of all processed uploads — does not decrease on delete.",
       "contactsTitle": "Contacts (stored)",
-      "contactsNote": "Number of contacts currently stored."
+      "contactsNote": "Number of contacts currently stored.",
+      "tasksTitle": "Tasks (stored)",
+      "tasksNote": "Number of tasks currently stored.",
+      "meetingsTitle": "Meetings (stored)",
+      "meetingsNote": "Number of meetings currently stored.",
+      "decisionsTitle": "Decisions (stored)",
+      "decisionsNote": "Number of decisions currently stored."
+    },
+    "tools": {
+      "title": "AI Tools",
+      "description": "Choose which capabilities your assistant can use.",
+      "lockedSection": "Locked — upgrade to unlock",
+      "saveFailed": "Failed to save tool preferences."
     },
     "assistant": {
       "pageDescription": "Personalize how your assistant looks, speaks, and interacts with you.",
@@ -685,7 +698,8 @@
       "labels": "Labels",
       "profile": "Profile",
       "contacts": "Contacts",
-      "meetings": "Meetings"
+      "meetings": "Meetings",
+      "decisions": "Decisions"
     },
     "catalog": {
       "create_task": {
@@ -707,6 +721,11 @@
         "label": "Update Task",
         "what": "Changes a task's title, notes, priority, due date, status, or labels.",
         "example": "\"Change the report task to urgent and move the due date to Monday\""
+      },
+      "delete_task": {
+        "label": "Delete Task",
+        "what": "Permanently deletes a task. The assistant will ask for confirmation before proceeding.",
+        "example": "\"Delete the Q2 report task\""
       },
       "create_label": {
         "label": "Create Label",
@@ -772,6 +791,21 @@
         "label": "Delete Meeting",
         "what": "Permanently deletes a meeting.",
         "example": "\"Delete the Q2 review meeting\""
+      },
+      "create_decision": {
+        "label": "Record Decision",
+        "what": "Logs a new decision with optional rationale, outcome, and status.",
+        "example": "\"Record a decision: migrate to Postgres, status decided\""
+      },
+      "list_decisions": {
+        "label": "List Decisions",
+        "what": "Retrieves your decisions, optionally filtered by status.",
+        "example": "\"What decisions are still open?\" or \"Show me all my decisions\""
+      },
+      "update_decision": {
+        "label": "Update Decision",
+        "what": "Changes a decision's title, rationale, outcome, status, or labels.",
+        "example": "\"Mark the Postgres migration decision as decided\""
       }
     }
   },

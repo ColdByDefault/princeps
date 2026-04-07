@@ -9,10 +9,15 @@ import { db } from "@/lib/db";
 import { SLOT_REGISTRY } from "@/lib/context";
 import { TOOL_REGISTRY } from "@/lib/tools/registry";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
-import type { LLMMessage } from "@/types/llm";
+import type { LLMMessage, LLMTool } from "@/types/llm";
 
 type BuildOptions = {
   language: string | null;
+  /**
+   * Pre-filtered tool list (tier + user toggles already applied).
+   * Falls back to the full TOOL_REGISTRY if omitted.
+   */
+  tools?: LLMTool[];
 };
 
 /**
@@ -87,7 +92,9 @@ export async function buildSystemPrompt(
     ? LENGTH_DESCRIPTIONS[prefs.responseLength]
     : null;
 
-  const availableTools = TOOL_REGISTRY.map((t) => t.function.name);
+  const availableTools = (opts.tools ?? TOOL_REGISTRY).map(
+    (t) => t.function.name,
+  );
 
   const behaviorRules = [
     "- Be direct, concise, and actionable.",

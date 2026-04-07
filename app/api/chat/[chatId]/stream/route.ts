@@ -29,7 +29,7 @@ import {
 } from "@/lib/tiers";
 import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
 import { buildSystemPrompt } from "@/lib/context/build";
-import { TOOL_REGISTRY } from "@/lib/tools/registry";
+import { getActiveToolsForUser } from "@/lib/tools/registry";
 import { executeToolCall } from "@/lib/tools/executor";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
 
@@ -70,15 +70,6 @@ export async function POST(req: Request, { params }: Params) {
 
   const userMessage = body.message.trim();
 
-  const chatOptions: LLMChatOptions = {
-    ...(typeof body.temperature === "number" && {
-      temperature: Math.min(2, Math.max(0, body.temperature)),
-    }),
-    ...(typeof body.timeoutMs === "number" && {
-      timeoutMs: Math.min(120_000, Math.max(5_000, body.timeoutMs)),
-    }),
-    tools: TOOL_REGISTRY,
-  };
   const { chatId } = await params;
 
   // Verify ownership and load history
@@ -103,11 +94,25 @@ export async function POST(req: Request, { params }: Params) {
   }
 
   // Build message array for LLM
-  const prefs = await getUserPreferences(session.user.id);
+  const [prefs, activeTools] = await Promise.all([
+    getUserPreferences(session.user.id),
+    getActiveToolsForUser(session.user.id),
+  ]);
 
   const systemMessage = await buildSystemPrompt(session.user.id, userMessage, {
     language: prefs.language,
+    tools: activeTools,
   });
+
+  const chatOptions: LLMChatOptions = {
+    ...(typeof body.temperature === "number" && {
+      temperature: Math.min(2, Math.max(0, body.temperature)),
+    }),
+    ...(typeof body.timeoutMs === "number" && {
+      timeoutMs: Math.min(120_000, Math.max(5_000, body.timeoutMs)),
+    }),
+    tools: activeTools,
+  };
 
   const llmMessages: LLMMessage[] = [
     systemMessage,

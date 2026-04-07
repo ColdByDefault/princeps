@@ -23,17 +23,19 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/notes`
 
+> **NOTE:** this feature will be implemented in a future phase, Plan is to have MVP notes-app, similar to notes in Notion, with a simple text editor and the ability to link to tasks/meetings/contacts.
+
 - [ ] **#5 Notes tool** — needs schema; lightweight freeform records, simpler than knowledge docs.
 
 ### Branch: `feat/profile-settings`
 
-- [ ] **#6 User Profile Settings** — allow users to change name, username, timezone. Email/password changes need careful handling with Better Auth. `ProfileShell` is currently read-only.
+- [ ] **#6 User Profile Settings** — allow users to change name, username. Email/password changes need careful handling with Better Auth. `ProfileShell` is currently read-only.
 - [ ] **#7 Dropdown menus (timezone + location)** — current design is poor; redesign with a searchable combobox. Do alongside #6 since both touch the same settings shell.
 
 ### Branch: `fix/llm-tools`
 
-- [ ] **#8 LLM tool reply verbosity** — when the LLM calls a tool and it succeeds, keep the toast but reduce the LLM reply text to "Done" only.
-- [ ] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat.
+- [x] **#8 LLM tool reply verbosity** — when the LLM calls a tool and it succeeds, in chat-widget keep the insider toast but reduce the LLM reply text to "Done" only.
+- [x] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat. but the llm needs to ask user for confirmation as for contacts, or meeting. decision doesn thave delete tool at all
 - [ ] **#10 Increase Task Notes character limit** — 250 chars is too short; increase it.
 
 ---
@@ -48,6 +50,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#14 TasksList UI** — general layout and visual improvements needed.
 - [ ] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
 - [ ] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
+- [ ] **Extra**: move Labels to Intelligence group in navbar, and create dedicted page.tsx
 
 ### Branch: `feat/markdown`
 
@@ -59,6 +62,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/personal-info`
 
+> **NOTE:** I dont think this really important, users have their profiles, they can edit it, and llm's aware of it. update or delete info is restricted by the user, and llm can only read it. remove model!
+
 - [ ] **#18 `PersonalInfo` model** — schema exists, `app/api/knowledge/personal/` folder exists but is empty, no lib, no context slot, no UI. Implement fully and feed into the system prompt.
 
 ### Branch: `feat/meeting-prep-pack`
@@ -67,8 +72,10 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `fix/tier-consistency`
 
-- [ ] **#20 Tier limits on meetings + tasks** — contacts and knowledge are gated per plan; meetings and tasks are not. Inconsistent with the tier model. Add per-plan limits.
-- [ ] **#21 Remove dead `enforceKnowledgeDocs` export** — deprecated function is still re-exported from `lib/tiers/index.ts` but never called. Remove it.
+> First we discuss the tier system.
+
+- [x] **#20 Tier limits on meetings + tasks + decisions** — contacts and knowledge are gated per plan; meetings, decisions, and tasks are not. Inconsistent with the tier model. Add per-plan limits.
+- [x] **#21 Remove dead `enforceKnowledgeDocs` export** — deprecated function is still re-exported from `lib/tiers/index.ts` but never called. Remove it.
 
 ### Branch: `feat/briefings`
 
@@ -84,8 +91,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/tool-settings`
 
-- [ ] **#25 Tool availability per tier + user toggle** — change which tools are available by tier; allow users to enable/disable tools manually in settings.
-- [ ] **#26 Make "Available Tools" in settings dynamic** — derive list from `TOOL_REGISTRY`, not a hardcoded array. Do alongside #25.
+- [x] **#25 Tool availability per tier + user toggle** — change which tools are available by tier; allow users to enable/disable tools manually in settings.
+- [x] **#26 Make "Available Tools" in settings dynamic** — derive list from `TOOL_REGISTRY`, not a hardcoded array. Do alongside #25.
 
 ### Branch: `feat/llm-crosslink`
 
@@ -128,3 +135,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#39 Add `langfuse`** — LLM observability and prompt debugging. Useful pre-production, not during active development.
 - [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing.
 - [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config, no `.spec.ts` files anywhere. The tier enforcement, tool handlers, and schema validators have no safety net. Defer until the feature set stabilizes.
+
+Free Light Gray
+Pro Vibrant Blue
+Premium Deep Purple
+Enterprise Charcoal

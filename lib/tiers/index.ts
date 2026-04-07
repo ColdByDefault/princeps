@@ -5,13 +5,15 @@
 
 export {
   enforceChatsPerDay,
-  enforceKnowledgeDocs,
   enforceKnowledgeUpload,
   enforceWidgetChats,
   enforceWidgetTools,
   enforceMonthlyLimits,
   enforceToolCallsMonthly,
   enforceContactsMax,
+  enforceTasksMax,
+  enforceMeetingsMax,
+  enforceDecisionsMax,
   accumulateTokens,
   getChatHistoryLimit,
   createTierLimitResponse,

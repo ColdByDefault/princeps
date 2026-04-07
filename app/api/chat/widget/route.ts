@@ -177,8 +177,10 @@ export async function POST(req: Request) {
             tool_calls: toolCalls,
           });
 
+          let allToolsSucceeded = true;
           for (const toolCall of toolCalls) {
             const result = await executeToolCall(session.user.id, toolCall);
+            if (!result.ok) allToolsSucceeded = false;
             const resultContent = result.ok
               ? JSON.stringify(result.data)
               : `Error: ${result.error}`;
@@ -196,12 +198,18 @@ export async function POST(req: Request) {
             });
           }
 
-          // Second LLM pass — no tools to avoid infinite loops
-          const { tools: _tools, ...baseOptions } = chatOptions;
-          for await (const chunk of streamChat(followUp, baseOptions)) {
-            if (typeof chunk === "string") {
-              send({ type: "token", text: chunk });
-              assistantContent += chunk;
+          if (allToolsSucceeded) {
+            // All tools succeeded — skip second LLM pass and reply with "Done"
+            send({ type: "token", text: "Done" });
+            assistantContent = "Done";
+          } else {
+            // At least one tool failed — let the LLM explain via a second pass
+            const { tools: _tools, ...baseOptions } = chatOptions;
+            for await (const chunk of streamChat(followUp, baseOptions)) {
+              if (typeof chunk === "string") {
+                send({ type: "token", text: chunk });
+                assistantContent += chunk;
+              }
             }
           }
         }

@@ -260,6 +260,7 @@ export function ChatWidget({
               list_tasks: "Tasks retrieved",
               complete_task: "Task completed",
               update_task: "Task updated",
+              delete_task: "Task deleted",
               create_label: "Label created",
               list_labels: "Labels retrieved",
               update_label: "Label updated",

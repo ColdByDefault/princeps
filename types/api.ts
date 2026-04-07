@@ -3,6 +3,8 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
+import type { Tier } from "@/types/billing";
+
 export interface ApiErrorResponse {
   error: string;
 }
@@ -38,6 +40,16 @@ export interface LabelOptionRecord {
   id: string;
   name: string;
   color: string;
+}
+
+/**
+ * Serialisable entry passed from the settings server page to ToolsTab.
+ * Carries only what the client needs — no function schemas.
+ */
+export interface ToolDisplayEntry {
+  name: string;
+  minTier: Tier;
+  group: string;
 }
 
 /** Client-safe shape of a Contact record. */

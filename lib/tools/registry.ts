@@ -5,14 +5,72 @@
 
 import "server-only";
 
+import { db } from "@/lib/db";
 import type { LLMTool } from "@/types/llm";
+import type { Tier } from "@/types/billing";
+
+/**
+ * A TOOL_REGISTRY entry — same shape as LLMTool but carries minTier and group metadata.
+ * Strip minTier + group before passing to the LLM (use getToolsForTier).
+ */
+export type ToolRegistryEntry = LLMTool & { minTier: Tier; group: string };
+
+/** Tier evaluation order — lower index = lower tier. */
+const TIER_ORDER: Tier[] = ["free", "pro", "premium", "enterprise"];
+
+/**
+ * Returns the tools the LLM is allowed to call for the given tier,
+ * minus any the user has individually disabled.
+ * The returned array is OpenAI-compatible (minTier is stripped).
+ */
+export function getToolsForTier(
+  tier: Tier,
+  disabledToolNames: string[] = [],
+): LLMTool[] {
+  const userIdx = TIER_ORDER.indexOf(tier);
+  return TOOL_REGISTRY.filter(
+    ({ minTier, function: fn }) =>
+      TIER_ORDER.indexOf(minTier) <= userIdx &&
+      !disabledToolNames.includes(fn.name),
+  ).map(({ minTier: _m, group: _g, ...tool }) => tool as LLMTool);
+}
+
+/**
+ * Fetches the user's tier + disabled tool preferences from the DB,
+ * then returns the filtered LLMTool list ready to pass to the LLM.
+ */
+export async function getActiveToolsForUser(
+  userId: string,
+): Promise<LLMTool[]> {
+  const user = await db.user.findUniqueOrThrow({
+    where: { id: userId },
+    select: { tier: true, preferences: true },
+  });
+
+  const tier = user.tier as Tier;
+  let disabledTools: string[] = [];
+
+  const prefs = user.preferences;
+  if (typeof prefs === "object" && prefs !== null && !Array.isArray(prefs)) {
+    const prefsObj = prefs as Record<string, unknown>;
+    if (Array.isArray(prefsObj.disabledTools)) {
+      disabledTools = (prefsObj.disabledTools as unknown[]).filter(
+        (t): t is string => typeof t === "string",
+      );
+    }
+  }
+
+  return getToolsForTier(tier, disabledTools);
+}
 
 /**
  * All tools the LLM can call, in OpenAI function-calling schema format.
  * To add a new tool: define it here and wire it in executor.ts.
  */
-export const TOOL_REGISTRY: LLMTool[] = [
+export const TOOL_REGISTRY: ToolRegistryEntry[] = [
   {
+    minTier: "free",
+    group: "tasks",
     type: "function",
     function: {
       name: "create_task",
@@ -56,6 +114,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "tasks",
     type: "function",
     function: {
       name: "list_tasks",
@@ -76,6 +136,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "tasks",
     type: "function",
     function: {
       name: "complete_task",
@@ -94,6 +156,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "tasks",
     type: "function",
     function: {
       name: "update_task",
@@ -137,6 +201,28 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "tasks",
+    type: "function",
+    function: {
+      name: "delete_task",
+      description:
+        "Permanently delete a task. Always ask the user to confirm before calling this tool. Requires the taskId — use list_tasks to find it first.",
+      parameters: {
+        type: "object",
+        properties: {
+          taskId: {
+            type: "string",
+            description: "ID of the task to delete.",
+          },
+        },
+        required: ["taskId"],
+      },
+    },
+  },
+  {
+    minTier: "free",
+    group: "labels",
     type: "function",
     function: {
       name: "create_label",
@@ -160,6 +246,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "labels",
     type: "function",
     function: {
       name: "list_labels",
@@ -173,6 +261,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "labels",
     type: "function",
     function: {
       name: "update_label",
@@ -199,6 +289,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "labels",
     type: "function",
     function: {
       name: "delete_label",
@@ -217,6 +309,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "profile",
     type: "function",
     function: {
       name: "get_user_info",
@@ -231,6 +325,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
   },
   // ── Contacts ─────────────────────────────────────────────────────────────
   {
+    minTier: "free",
+    group: "contacts",
     type: "function",
     function: {
       name: "create_contact",
@@ -271,6 +367,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "contacts",
     type: "function",
     function: {
       name: "list_contacts",
@@ -284,6 +382,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "contacts",
     type: "function",
     function: {
       name: "update_contact",
@@ -315,6 +415,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "contacts",
     type: "function",
     function: {
       name: "delete_contact",
@@ -333,6 +435,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
   },
   // ── Meetings ─────────────────────────────────────────────────────────────
   {
+    minTier: "free",
+    group: "meetings",
     type: "function",
     function: {
       name: "create_meeting",
@@ -385,6 +489,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "meetings",
     type: "function",
     function: {
       name: "list_meetings",
@@ -404,6 +510,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "meetings",
     type: "function",
     function: {
       name: "update_meeting",
@@ -467,6 +575,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "free",
+    group: "meetings",
     type: "function",
     function: {
       name: "delete_meeting",
@@ -484,6 +594,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "pro",
+    group: "decisions",
     type: "function",
     function: {
       name: "create_decision",
@@ -532,6 +644,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "pro",
+    group: "decisions",
     type: "function",
     function: {
       name: "list_decisions",
@@ -551,6 +665,8 @@ export const TOOL_REGISTRY: LLMTool[] = [
     },
   },
   {
+    minTier: "pro",
+    group: "decisions",
     type: "function",
     function: {
       name: "update_decision",

@@ -38,6 +38,21 @@ export interface PlanLimits {
   toolCallsPerMonth: number;
   /** Max total contacts stored at once (no monthly reset). */
   contactsMax: number;
+  /**
+   * Max total tasks stored at once (no monthly reset).
+   * `-1` = unlimited — the enforce function skips the count check.
+   */
+  tasksMax: number;
+  /**
+   * Max total meetings stored at once (no monthly reset).
+   * `-1` = unlimited — the enforce function skips the count check.
+   */
+  meetingsMax: number;
+  /**
+   * Max total decisions stored at once (no monthly reset).
+   * `-1` = unlimited — the enforce function skips the count check.
+   */
+  decisionsMax: number;
   /** Whether proactive nudge notifications are active. */
   nudgesEnabled: boolean;
 }
@@ -63,6 +78,9 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetToolsPerDay: 5,
     toolCallsPerMonth: 50,
     contactsMax: 10,
+    tasksMax: 20,
+    meetingsMax: 10,
+    decisionsMax: 10,
     nudgesEnabled: false,
   },
   pro: {
@@ -77,6 +95,9 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetToolsPerDay: 25,
     toolCallsPerMonth: 200,
     contactsMax: 25,
+    tasksMax: 100,
+    meetingsMax: 50,
+    decisionsMax: 50,
     nudgesEnabled: true,
   },
   premium: {
@@ -91,6 +112,9 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetToolsPerDay: 50,
     toolCallsPerMonth: 500,
     contactsMax: 50,
+    tasksMax: 500,
+    meetingsMax: 200,
+    decisionsMax: 200,
     nudgesEnabled: true,
   },
   enterprise: {
@@ -105,6 +129,9 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetToolsPerDay: 100,
     toolCallsPerMonth: 2_000,
     contactsMax: 100,
+    tasksMax: -1,
+    meetingsMax: -1,
+    decisionsMax: -1,
     nudgesEnabled: true,
   },
 };
@@ -146,6 +173,18 @@ export interface UsageSummary {
   contactsStored: number;
   /** Plan maximum for contacts at rest. */
   contactsLimit: number;
+  /** Current count of tasks at rest. */
+  tasksStored: number;
+  /** Plan maximum for tasks at rest. `-1` = unlimited. */
+  tasksLimit: number;
+  /** Current count of meetings at rest. */
+  meetingsStored: number;
+  /** Plan maximum for meetings at rest. `-1` = unlimited. */
+  meetingsLimit: number;
+  /** Current count of decisions at rest. */
+  decisionsStored: number;
+  /** Plan maximum for decisions at rest. `-1` = unlimited. */
+  decisionsLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

@@ -14,6 +14,7 @@ import {
   getRateLimitIdentifier,
   createRateLimitResponse,
 } from "@/lib/security";
+import { enforceMeetingsMax, createTierLimitResponse } from "@/lib/tiers";
 
 // GET /api/meetings — list meetings for the current user
 export async function GET(req: Request) {
@@ -52,6 +53,9 @@ export async function POST(req: Request) {
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
+
+  const gate = await enforceMeetingsMax(session.user.id);
+  if (!gate.allowed) return createTierLimitResponse(gate.reason);
 
   const body = (await req.json()) as unknown;
   const parsed = createMeetingSchema.safeParse(body);
