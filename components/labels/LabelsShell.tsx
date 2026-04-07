@@ -321,6 +321,16 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
         <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-16 text-center text-sm text-muted-foreground">
           <Tag className="size-6 opacity-40" />
           <span>{t("empty")}</span>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={openCreate}
+            className="mt-2 cursor-pointer"
+          >
+            <Plus className="size-4" />
+            {t("newLabel")}
+          </Button>
         </div>
       ) : (
         <div className="divide-y divide-border/60 rounded-lg border">

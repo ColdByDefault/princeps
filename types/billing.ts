@@ -53,6 +53,11 @@ export interface PlanLimits {
    * `-1` = unlimited — the enforce function skips the count check.
    */
   decisionsMax: number;
+  /**
+   * Max total goals stored at once (no monthly reset).
+   * `-1` = unlimited — the enforce function skips the count check.
+   */
+  goalsMax: number;
   /** Whether proactive nudge notifications are active. */
   nudgesEnabled: boolean;
 }
@@ -81,6 +86,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     tasksMax: 20,
     meetingsMax: 10,
     decisionsMax: 10,
+    goalsMax: 10,
     nudgesEnabled: false,
   },
   pro: {
@@ -98,6 +104,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     tasksMax: 100,
     meetingsMax: 50,
     decisionsMax: 50,
+    goalsMax: 25,
     nudgesEnabled: true,
   },
   premium: {
@@ -115,6 +122,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     tasksMax: 500,
     meetingsMax: 200,
     decisionsMax: 200,
+    goalsMax: 100,
     nudgesEnabled: true,
   },
   enterprise: {
@@ -132,6 +140,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     tasksMax: -1,
     meetingsMax: -1,
     decisionsMax: -1,
+    goalsMax: -1,
     nudgesEnabled: true,
   },
 };
@@ -185,6 +194,10 @@ export interface UsageSummary {
   decisionsStored: number;
   /** Plan maximum for decisions at rest. `-1` = unlimited. */
   decisionsLimit: number;
+  /** Current count of goals at rest. */
+  goalsStored: number;
+  /** Plan maximum for goals at rest. `-1` = unlimited. */
+  goalsLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

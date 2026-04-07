@@ -5,8 +5,8 @@
 
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Plus, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,6 +57,20 @@ export function MeetingsShell({
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const [isPendingRefresh, startRefresh] = useTransition();
+
+  function handleRefresh() {
+    startRefresh(async () => {
+      const res = await fetch("/api/meetings");
+      if (res.ok) {
+        const { meetings: updated } = (await res.json()) as {
+          meetings: MeetingRecord[];
+        };
+        setMeetings(updated);
+      }
+    });
+  }
 
   const {
     creating,
@@ -120,22 +134,38 @@ export function MeetingsShell({
         <h1 className="text-2xl font-semibold tracking-tight">
           {t("pageTitle")}
         </h1>
-        <CreateMeetingDialog
-          onSubmit={createMeeting}
-          creating={creating}
-          availableLabels={availableLabels}
-          availableContacts={availableContacts}
-        >
+        <div className="flex items-center gap-2">
           <Button
             type="button"
+            variant="outline"
             size="sm"
+            disabled={isPendingRefresh}
+            onClick={handleRefresh}
+            aria-label={t("refresh")}
             className="cursor-pointer"
-            aria-label={t("newMeeting")}
           >
-            <Plus className="size-4" />
-            {t("newMeeting")}
+            <RefreshCw
+              className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
+            />
+            {isPendingRefresh ? t("refreshing") : t("refresh")}
           </Button>
-        </CreateMeetingDialog>
+          <CreateMeetingDialog
+            onSubmit={createMeeting}
+            creating={creating}
+            availableLabels={availableLabels}
+            availableContacts={availableContacts}
+          >
+            <Button
+              type="button"
+              size="sm"
+              className="cursor-pointer"
+              aria-label={t("newMeeting")}
+            >
+              <Plus className="size-4" />
+              {t("newMeeting")}
+            </Button>
+          </CreateMeetingDialog>
+        </div>
       </div>
 
       {/* Filter tabs */}
@@ -143,21 +173,45 @@ export function MeetingsShell({
         {FILTERS.map((f) => (
           <Button
             key={f.key}
-            variant={filter === f.key ? "secondary" : "ghost"}
+            type="button"
+            variant={filter === f.key ? "default" : "outline"}
             size="sm"
             onClick={() => setFilter(f.key)}
-            className="cursor-pointer"
+            className="cursor-pointer rounded-full px-3 text-xs"
           >
             {f.label}
+            {f.key === "all"
+              ? ` (${meetings.length})`
+              : ` (${meetings.filter((m) => m.status === f.key).length})`}
           </Button>
         ))}
       </div>
 
       {/* List */}
       {visible.length === 0 ? (
-        <p className="text-sm text-muted-foreground">
-          {filter === "all" ? t("empty") : t("emptyFiltered")}
-        </p>
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/60 px-6 py-16 text-center">
+          <p className="text-sm text-muted-foreground">
+            {filter === "all" ? t("empty") : t("emptyFiltered")}
+          </p>
+          {filter === "all" && (
+            <CreateMeetingDialog
+              onSubmit={createMeeting}
+              creating={creating}
+              availableLabels={availableLabels}
+              availableContacts={availableContacts}
+            >
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="mt-4 cursor-pointer"
+              >
+                <Plus className="size-4" />
+                {t("newMeeting")}
+              </Button>
+            </CreateMeetingDialog>
+          )}
+        </div>
       ) : (
         <div className="space-y-2">
           {visible.map((meeting) => (

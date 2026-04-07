@@ -178,6 +178,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           limit={usage.decisionsLimit}
           note={t("decisionsNote")}
         />
+        <QuotaRow
+          label={t("goalsTitle")}
+          used={usage.goalsStored}
+          limit={usage.goalsLimit}
+          note={t("goalsNote")}
+        />
       </div>
 
       {/* Reset footer */}

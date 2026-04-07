@@ -17,21 +17,21 @@ import {
 } from "@/components/ui/dialog";
 import { ContactForm, type ContactFormData } from "./ContactForm";
 
-interface ContactDialogProps {
+interface EditContactDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  contact?: ContactRecord | null;
+  contact: ContactRecord;
   availableLabels: LabelOptionRecord[];
   onSubmit: (data: ContactFormData) => Promise<void>;
 }
 
-export function ContactDialog({
+export function EditContactDialog({
   open,
   onOpenChange,
-  contact = null,
+  contact,
   availableLabels,
   onSubmit,
-}: ContactDialogProps) {
+}: EditContactDialogProps) {
   const t = useTranslations("contacts");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -49,14 +49,11 @@ export function ContactDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>
-            {contact ? t("editDialog.heading") : t("createDialog.heading")}
-          </DialogTitle>
-          <DialogDescription>
-            {contact ? t("editDialog.heading") : t("createDialog.heading")}
-          </DialogDescription>
+          <DialogTitle>{t("editDialog.heading")}</DialogTitle>
+          <DialogDescription>{t("editDialog.description")}</DialogDescription>
         </DialogHeader>
         <ContactForm
+          key={contact.id}
           contact={contact}
           onSubmit={handleSubmit}
           onCancel={() => onOpenChange(false)}

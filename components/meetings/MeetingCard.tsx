@@ -185,7 +185,7 @@ export function MeetingCard({
           >
             {t(`status.${meeting.status}`)}
           </Badge>
-          {meeting.labels.map((lbl) => {
+          {meeting.labels.slice(0, 3).map((lbl) => {
             const Icon = lbl.icon
               ? LABEL_ICON_MAP[lbl.icon as LabelIconName]
               : null;
@@ -201,6 +201,11 @@ export function MeetingCard({
               </Badge>
             );
           })}
+          {meeting.labels.length > 3 && (
+            <Badge variant="outline" className="text-xs text-muted-foreground">
+              +{meeting.labels.length - 3}
+            </Badge>
+          )}
         </div>
       </div>
     </div>

@@ -21,13 +21,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface ContactListProps {
   contacts: ContactRecord[];
   isLoading?: boolean;
+  isDeleting?: string | null;
   onEdit: (contact: ContactRecord) => void;
-  onDelete: (contactId: string) => Promise<void>;
+  onDelete: (contactId: string) => void;
 }
 
 export function ContactList({
   contacts,
   isLoading,
+  isDeleting,
   onEdit,
   onDelete,
 }: ContactListProps) {
@@ -71,6 +73,7 @@ export function ContactList({
         <ContactCard
           key={contact.id}
           contact={contact}
+          isDeleting={isDeleting === contact.id}
           onEdit={onEdit}
           onDelete={onDelete}
         />

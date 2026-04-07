@@ -6,9 +6,9 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { updateContact } from "@/lib/contact/update.logic";
-import { deleteContact } from "@/lib/contact/delete.logic";
-import { updateContactSchema } from "@/lib/contact/schemas";
+import { updateGoal } from "@/lib/goals/update.logic";
+import { deleteGoal } from "@/lib/goals/delete.logic";
+import { updateGoalSchema } from "@/lib/goals/schemas";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,
@@ -17,24 +17,20 @@ import {
 
 type Params = { params: Promise<{ id: string }> };
 
-// PATCH /api/contact/[id] — update a contact
+// PATCH /api/goals/[id]
 export async function PATCH(req: Request, { params }: Params) {
   const session = await auth.api.getSession({ headers: await headers() });
-
-  if (!session) {
+  if (!session)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
 
   const identifier = getRateLimitIdentifier(req, session.user.id);
   const rateLimit = writeRateLimiter.check(identifier);
-  if (!rateLimit.allowed) {
+  if (!rateLimit.allowed)
     return createRateLimitResponse(rateLimit.retryAfterSeconds);
-  }
 
   const { id } = await params;
   const body = (await req.json()) as unknown;
-  const parsed = updateContactSchema.safeParse(body);
-
+  const parsed = updateGoalSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.issues[0]?.message ?? "Invalid input" },
@@ -42,35 +38,31 @@ export async function PATCH(req: Request, { params }: Params) {
     );
   }
 
-  const result = await updateContact(id, session.user.id, parsed.data);
-
+  const result = await updateGoal(id, session.user.id, parsed.data);
   if (!result.ok) {
-    return NextResponse.json({ error: "Contact not found" }, { status: 404 });
+    if (result.notFound)
+      return NextResponse.json({ error: "Goal not found" }, { status: 404 });
+    return NextResponse.json({ error: result.error }, { status: 500 });
   }
 
-  return NextResponse.json({ contact: result.contact });
+  return NextResponse.json({ goal: result.goal });
 }
 
-// DELETE /api/contact/[id] — delete a contact
+// DELETE /api/goals/[id]
 export async function DELETE(req: Request, { params }: Params) {
   const session = await auth.api.getSession({ headers: await headers() });
-
-  if (!session) {
+  if (!session)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
 
   const identifier = getRateLimitIdentifier(req, session.user.id);
   const rateLimit = writeRateLimiter.check(identifier);
-  if (!rateLimit.allowed) {
+  if (!rateLimit.allowed)
     return createRateLimitResponse(rateLimit.retryAfterSeconds);
-  }
 
   const { id } = await params;
-  const result = await deleteContact(id, session.user.id);
-
-  if (!result.ok) {
-    return NextResponse.json({ error: "Contact not found" }, { status: 404 });
-  }
+  const result = await deleteGoal(id, session.user.id);
+  if (!result.ok)
+    return NextResponse.json({ error: "Goal not found" }, { status: 404 });
 
   return new NextResponse(null, { status: 204 });
 }

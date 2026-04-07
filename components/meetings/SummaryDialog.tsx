@@ -16,6 +16,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import type { MeetingRecord } from "@/types/api";
 
 type SummaryDialogProps = {
@@ -52,12 +53,25 @@ export function SummaryDialog({
         <form onSubmit={handleSubmit} className="space-y-3">
           <Textarea
             value={summary}
-            onChange={(e) => setSummary(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length <= 500) setSummary(e.target.value);
+            }}
             placeholder={t("fields.summaryPlaceholder")}
             rows={6}
             className="resize-none"
+            maxLength={500}
             autoFocus
           />
+          <p
+            className={cn(
+              "text-right text-xs",
+              summary.length >= 470
+                ? "text-destructive"
+                : "text-muted-foreground",
+            )}
+          >
+            {summary.length}/500
+          </p>
           <DialogFooter>
             <Button
               type="button"

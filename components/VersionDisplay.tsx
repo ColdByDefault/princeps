@@ -13,7 +13,7 @@ interface VersionDisplayProps {
 }
 
 export default function VersionDisplay({
-  prefix = "v",
+  prefix = "v.",
   className = "",
   versionOnly = false,
   titleLabel = "Application version",

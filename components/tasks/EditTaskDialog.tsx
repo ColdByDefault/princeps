@@ -41,10 +41,12 @@ type EditTaskDialogProps = {
       priority: string;
       dueDate: string | null;
       labelIds: string[];
+      goalIds: string[];
     }>,
   ) => Promise<boolean>;
   updating: boolean;
   availableLabels: LabelOptionRecord[];
+  availableGoals: { id: string; title: string }[];
 };
 
 export function EditTaskDialog({
@@ -54,6 +56,7 @@ export function EditTaskDialog({
   onSubmit,
   updating,
   availableLabels,
+  availableGoals,
 }: EditTaskDialogProps) {
   const t = useTranslations("tasks");
   const [title, setTitle] = useState(task?.title ?? "");
@@ -66,10 +69,19 @@ export function EditTaskDialog({
   const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>(
     task?.labels.map((l) => l.id) ?? [],
   );
+  const [selectedGoalIds, setSelectedGoalIds] = useState<string[]>(
+    task?.goals.map((g) => g.id) ?? [],
+  );
 
   function toggleLabel(id: string) {
     setSelectedLabelIds((prev) =>
       prev.includes(id) ? prev.filter((l) => l !== id) : [...prev, id],
+    );
+  }
+
+  function toggleGoal(id: string) {
+    setSelectedGoalIds((prev) =>
+      prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id],
     );
   }
 
@@ -84,6 +96,7 @@ export function EditTaskDialog({
       status,
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
       labelIds: selectedLabelIds,
+      goalIds: selectedGoalIds,
     });
 
     if (ok) onOpenChange(false);
@@ -123,11 +136,24 @@ export function EditTaskDialog({
             <Textarea
               id="edit-task-notes"
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 250) setNotes(e.target.value);
+              }}
               placeholder={t("fields.notesPlaceholder")}
               rows={3}
               className="resize-none"
+              maxLength={250}
             />
+            <p
+              className={cn(
+                "text-right text-xs",
+                notes.length >= 230
+                  ? "text-destructive"
+                  : "text-muted-foreground",
+              )}
+            >
+              {notes.length}/250
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -238,6 +264,55 @@ export function EditTaskDialog({
                     </button>
                   );
                 })}
+              </div>
+            </div>
+          )}
+
+          {availableGoals.length > 0 && (
+            <div className="space-y-1.5">
+              <Label>
+                {t("fields.linkedGoals")}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">
+                  ({t("fields.optional")})
+                </span>
+              </Label>
+              <div className="max-h-36 overflow-y-auto space-y-0.5 rounded-md border border-border/60 p-2">
+                {availableGoals.map((goal) => (
+                  <button
+                    key={goal.id}
+                    type="button"
+                    onClick={() => toggleGoal(goal.id)}
+                    aria-pressed={selectedGoalIds.includes(goal.id)}
+                    aria-label={goal.title}
+                    className="flex w-full items-center gap-2 rounded px-1.5 py-1 text-left text-sm cursor-pointer hover:bg-muted/60 transition-colors"
+                  >
+                    <span
+                      className="flex size-4 shrink-0 items-center justify-center rounded border border-border"
+                      style={{
+                        backgroundColor: selectedGoalIds.includes(goal.id)
+                          ? "hsl(var(--primary))"
+                          : "transparent",
+                      }}
+                    >
+                      {selectedGoalIds.includes(goal.id) && (
+                        <svg
+                          viewBox="0 0 10 8"
+                          className="size-2.5"
+                          fill="none"
+                        >
+                          <path
+                            d="M1 4l2.5 2.5L9 1"
+                            stroke="white"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                    <span className="flex-1 truncate">{goal.title}</span>
+                  </button>
+                ))}
               </div>
             </div>
           )}

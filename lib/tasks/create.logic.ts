@@ -29,6 +29,13 @@ export async function createTask(
             },
           }
         : {}),
+      ...(input.goalIds?.length
+        ? {
+            goalLinks: {
+              create: input.goalIds.map((goalId) => ({ goalId })),
+            },
+          }
+        : {}),
     },
     select: TASK_SELECT,
   });

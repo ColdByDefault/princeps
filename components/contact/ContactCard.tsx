@@ -27,16 +27,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 import { ContactDetailDialog } from "./ContactDetailDialog";
 
@@ -68,25 +58,19 @@ function getInitials(name: string): string {
 
 interface ContactCardProps {
   contact: ContactRecord;
+  isDeleting?: boolean;
   onEdit: (contact: ContactRecord) => void;
-  onDelete: (contactId: string) => Promise<void>;
+  onDelete: (contactId: string) => void;
 }
 
-export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
+export function ContactCard({
+  contact,
+  isDeleting,
+  onEdit,
+  onDelete,
+}: ContactCardProps) {
   const t = useTranslations("contacts");
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [showDetailDialog, setShowDetailDialog] = useState(false);
-
-  async function handleDelete() {
-    setIsDeleting(true);
-    try {
-      await onDelete(contact.id);
-    } finally {
-      setIsDeleting(false);
-      setShowDeleteDialog(false);
-    }
-  }
 
   function formatDate(iso: string) {
     return new Date(iso).toLocaleDateString(undefined, {
@@ -105,7 +89,10 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
         role="button"
         tabIndex={0}
         aria-label={t("viewLabel", { name: contact.name })}
-        className="group flex cursor-pointer items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/40"
+        className={cn(
+          "group flex cursor-pointer items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/40",
+          isDeleting && "opacity-60 pointer-events-none",
+        )}
         onClick={() => setShowDetailDialog(true)}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") setShowDetailDialog(true);
@@ -229,7 +216,7 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
                 {t("editLabel")}
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setShowDeleteDialog(true)}
+                onClick={() => onDelete(contact.id)}
                 className="cursor-pointer text-destructive focus:text-destructive"
               >
                 <Trash2 className="mr-2 size-4" />
@@ -246,29 +233,6 @@ export function ContactCard({ contact, onEdit, onDelete }: ContactCardProps) {
         onOpenChange={setShowDetailDialog}
         onEdit={onEdit}
       />
-
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("deleteDialog.description")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting} className="cursor-pointer">
-              {t("deleteDialog.cancel")}
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {isDeleting ? "…" : t("deleteDialog.confirm")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }

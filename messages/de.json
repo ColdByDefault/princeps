@@ -216,7 +216,9 @@
       "meetingsTitle": "Meetings (gespeichert)",
       "meetingsNote": "Anzahl der aktuell gespeicherten Meetings.",
       "decisionsTitle": "Entscheidungen (gespeichert)",
-      "decisionsNote": "Anzahl der aktuell gespeicherten Entscheidungen."
+      "decisionsNote": "Anzahl der aktuell gespeicherten Entscheidungen.",
+      "goalsTitle": "Ziele (gespeichert)",
+      "goalsNote": "Anzahl der aktuell gespeicherten Ziele."
     },
     "tools": {
       "title": "KI-Werkzeuge",
@@ -291,6 +293,7 @@
       "apps": "Apps",
       "meetings": "Meetings",
       "decisions": "Entscheidungen",
+      "goals": "Ziele",
       "labels": "Labels",
       "intel": "Intelligenz",
       "comingSoon": "Bald verfügbar"
@@ -432,6 +435,82 @@
     "refresh": "Aktualisieren",
     "refreshing": "Wird aktualisiert\u2026"
   },
+  "goals": {
+    "metadata": {
+      "title": "Ziele",
+      "description": "Verwalte deine Ziele und Meilensteine."
+    },
+    "pageTitle": "Ziele",
+    "newGoal": "Neues Ziel",
+    "empty": "Noch keine Ziele.",
+    "emptyFiltered": "Keine Ziele mit diesem Status.",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert\u2026",
+    "filter": {
+      "all": "Alle",
+      "open": "Offen",
+      "in_progress": "In Arbeit",
+      "done": "Erledigt",
+      "cancelled": "Abgebrochen"
+    },
+    "status": {
+      "open": "Offen",
+      "in_progress": "In Arbeit",
+      "done": "Erledigt",
+      "cancelled": "Abgebrochen"
+    },
+    "fields": {
+      "title": "Titel",
+      "titlePlaceholder": "z. B. Neues Produkt launchen",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Wie sieht das Erreichen dieses Ziels aus?",
+      "status": "Status",
+      "targetDate": "Zieldatum",
+      "labels": "Labels",
+      "linkedTasks": "Verknüpfte Aufgaben",
+      "milestones": "Meilensteine",
+      "milestonePlaceholder": "Meilenstein hinzufügen\u2026",
+      "optional": "Optional"
+    },
+    "milestoneProgress": "Meilensteine",
+    "milestoneMark": "Als erledigt markieren",
+    "milestoneUnmark": "Als nicht erledigt markieren",
+    "targetDate": "Ziel",
+    "linkedTasks": "Aufgaben verknüpft",
+    "addMilestoneLabel": "Meilenstein hinzufügen",
+    "removeMilestoneLabel": "Meilenstein entfernen",
+    "completeMilestoneLabel": "Als erledigt markieren",
+    "uncompleteMilestoneLabel": "Als nicht erledigt markieren",
+    "createDialog": {
+      "heading": "Neues Ziel",
+      "description": "Fülle die Details unten aus, um ein neues Ziel zu erstellen.",
+      "submit": "Erstellen",
+      "submitting": "Wird erstellt\u2026",
+      "cancel": "Abbrechen",
+      "success": "Ziel erstellt.",
+      "error": "Ziel konnte nicht erstellt werden."
+    },
+    "editDialog": {
+      "heading": "Ziel bearbeiten",
+      "description": "Aktualisiere die Details unten.",
+      "submit": "Speichern",
+      "submitting": "Wird gespeichert\u2026",
+      "cancel": "Abbrechen",
+      "success": "Ziel gespeichert.",
+      "error": "Ziel konnte nicht gespeichert werden."
+    },
+    "deleteDialog": {
+      "heading": "Dieses Ziel l\u00f6schen?",
+      "body": "Das Ziel und alle seine Meilensteine werden dauerhaft gel\u00f6scht. Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden.",
+      "confirm": "L\u00f6schen",
+      "cancel": "Abbrechen",
+      "success": "Ziel gel\u00f6scht.",
+      "error": "Ziel konnte nicht gel\u00f6scht werden."
+    },
+    "actionsLabel": "Zielaktionen",
+    "editLabel": "Bearbeiten",
+    "deleteLabel": "L\u00f6schen"
+  },
   "meetings": {
     "metadata": {
       "title": "Meetings",
@@ -505,6 +584,8 @@
     "actionsLabel": "Meeting-Aktionen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "L\u00f6schen",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert…",
     "summaryDialog": {
       "trigger": "Zusammenfassung hinzuf\u00fcgen",
       "heading": "Besprechungszusammenfassung",
@@ -562,6 +643,7 @@
       "dueDate": "F\u00e4lligkeitsdatum",
       "status": "Status",
       "labels": "Labels",
+      "linkedGoals": "Verknüpfte Ziele",
       "optional": "Optional"
     },
     "createDialog": {
@@ -595,7 +677,9 @@
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen",
     "markDoneLabel": "Als erledigt markieren",
-    "reopenLabel": "Wiedereröffnen"
+    "reopenLabel": "Wiedereröffnen",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert…"
   },
   "contacts": {
     "metadata": {
@@ -626,6 +710,7 @@
     },
     "createDialog": {
       "heading": "Neuer Kontakt",
+      "description": "Fülle die Details unten aus, um einen neuen Kontakt hinzuzufügen.",
       "submit": "Erstellen",
       "submitting": "Wird erstellt\u2026",
       "success": "Kontakt erstellt.",
@@ -633,6 +718,7 @@
     },
     "editDialog": {
       "heading": "Kontakt bearbeiten",
+      "description": "Aktualisiere die Kontaktdaten unten.",
       "submit": "Speichern",
       "submitting": "Wird gespeichert\u2026",
       "success": "Kontakt gespeichert.",
@@ -650,7 +736,9 @@
     "viewLabel": "Ansehen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen",
-    "lastContactLabel": "Letzter Kontakt"
+    "lastContactLabel": "Letzter Kontakt",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert…"
   },
   "labels": {
     "metadata": {
@@ -708,7 +796,8 @@
       "profile": "Profil",
       "contacts": "Kontakte",
       "meetings": "Meetings",
-      "decisions": "Entscheidungen"
+      "decisions": "Entscheidungen",
+      "goals": "Ziele"
     },
     "catalog": {
       "create_task": {
@@ -815,6 +904,41 @@
         "label": "Entscheidung bearbeiten",
         "what": "Ändert Titel, Begründung, Ergebnis, Status oder Labels einer Entscheidung.",
         "example": "\"Markiere die Postgres-Entscheidung als entschieden\""
+      },
+      "delete_decision": {
+        "label": "Entscheidung löschen",
+        "what": "Löscht eine Entscheidung dauerhaft.",
+        "example": "\"Lösche die Postgres-Entscheidung\""
+      },
+      "create_goal": {
+        "label": "Ziel erstellen",
+        "what": "Erstellt ein neues Ziel mit optionaler Beschreibung, Status, Zieldatum, Labels und Meilensteinen.",
+        "example": "\"Ziel setzen: Beta bis Juni launchen, mit Meilensteinen für Design und Entwicklung\""
+      },
+      "list_goals": {
+        "label": "Ziele anzeigen",
+        "what": "Zeigt deine Ziele an, optional gefiltert nach Status.",
+        "example": "\"Welche offenen Ziele habe ich?\" oder \"Zeige alle meine Ziele\""
+      },
+      "update_goal": {
+        "label": "Ziel bearbeiten",
+        "what": "Ändert Titel, Beschreibung, Status, Zieldatum oder Labels eines Ziels.",
+        "example": "\"Markiere mein Launch-Ziel als in Arbeit\""
+      },
+      "delete_goal": {
+        "label": "Ziel löschen",
+        "what": "Löscht ein Ziel und alle seine Meilensteine dauerhaft.",
+        "example": "\"Lösche das Launch-Ziel\""
+      },
+      "add_goal_milestone": {
+        "label": "Meilenstein hinzufügen",
+        "what": "Fügt einem bestehenden Ziel einen neuen Meilenstein hinzu.",
+        "example": "\"Füge dem Launch-Ziel den Meilenstein 'Design abgeschlossen' hinzu\""
+      },
+      "complete_goal_milestone": {
+        "label": "Meilenstein abschließen",
+        "what": "Markiert einen Meilenstein als abgeschlossen oder nicht abgeschlossen.",
+        "example": "\"Markiere den Meilenstein 'Design abgeschlossen' als erledigt\""
       }
     }
   },

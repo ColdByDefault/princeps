@@ -40,6 +40,12 @@ export async function updateTask(
             create: input.labelIds.map((labelId) => ({ labelId })),
           },
         }),
+        ...(input.goalIds !== undefined && {
+          goalLinks: {
+            deleteMany: {},
+            create: input.goalIds.map((goalId) => ({ goalId })),
+          },
+        }),
       },
       select: TASK_SELECT,
     })

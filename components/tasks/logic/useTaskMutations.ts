@@ -33,6 +33,7 @@ export function useTaskMutations(
     priority?: string;
     dueDate?: string | null;
     labelIds?: string[];
+    goalIds?: string[];
   }) {
     setCreating(true);
     try {
@@ -63,6 +64,7 @@ export function useTaskMutations(
       priority: string;
       dueDate: string | null;
       labelIds: string[];
+      goalIds: string[];
     }>,
     silent = false,
   ) {

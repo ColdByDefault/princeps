@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { listContacts } from "@/lib/contact/list.logic";
+import { listContacts } from "@/lib/contacts/list.logic";
 import type { ContextSlot } from "@/lib/context";
 
 export const contactsSlot: ContextSlot = {

@@ -66,7 +66,7 @@ function isActivePath(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-const GROUPED_HREFS = new Set(["/tasks", "/contact", "/meetings"]);
+const GROUPED_HREFS = new Set(["/tasks", "/goals", "/contacts", "/meetings"]);
 const INTEL_HREFS = new Set(["/knowledge", "/decisions", "/labels"]);
 const AFTER_DROPDOWN_HREFS = new Set(["/settings", "/pricing"]);
 

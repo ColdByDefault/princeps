@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listContacts } from "@/lib/contact/list.logic";
+import { listContacts } from "@/lib/contacts/list.logic";
 import { listLabels } from "@/lib/labels/list.logic";
 import { ContactsShell } from "@/components/contact";
 import type { AppLanguage } from "@/types/i18n";
@@ -20,7 +20,7 @@ export async function generateMetadata() {
   return defineSEO({
     title: t("metadata.title"),
     description: t("metadata.description"),
-    path: "/contact",
+    path: "/contacts",
     locale: getSeoLocale(locale),
   });
 }

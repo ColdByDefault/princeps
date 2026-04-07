@@ -258,8 +258,8 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  render={<Link href="/contact" />}
-                  isActive={pathname.startsWith("/contact")}
+                  render={<Link href="/contacts" />}
+                  isActive={pathname.startsWith("/contacts")}
                   tooltip={t("sidebar.navContacts")}
                   className="cursor-pointer"
                 >

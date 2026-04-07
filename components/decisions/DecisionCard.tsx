@@ -101,7 +101,7 @@ export function DecisionCard({
           >
             {t(`status.${decision.status}`)}
           </Badge>
-          {decision.labels.map((lbl) => {
+          {decision.labels.slice(0, 3).map((lbl) => {
             const Icon = lbl.icon
               ? LABEL_ICON_MAP[lbl.icon as LabelIconName]
               : null;
@@ -117,6 +117,11 @@ export function DecisionCard({
               </Badge>
             );
           })}
+          {decision.labels.length > 3 && (
+            <Badge variant="outline" className="text-xs text-muted-foreground">
+              +{decision.labels.length - 3}
+            </Badge>
+          )}
         </div>
       </div>
 
