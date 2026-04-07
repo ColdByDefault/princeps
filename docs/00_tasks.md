@@ -37,33 +37,11 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 # DONE
 
-- [x] **#1 Wire dead rate limiters** — `writeRateLimiter`, `searchRateLimiter`, `briefingRateLimiter`, and `prepRateLimiter` are all defined in `lib/security.ts` but never imported or applied anywhere. Every mutation route (`POST/PATCH/DELETE` on tasks, meetings, contacts, labels) is completely unprotected. Apply them.
-- [x] **#2 Password reset flow** — no `forgetPassword` / `resetPassword` pages or API hooks exist. Users who lose their password permanently lose access. Better Auth has the plugin; wire it up.
-- [x] **#43**: add pgvector db health check and run when `npm run dev` starts.
-- [x] **#3 Decisions tool** — schema complete, linked to meetings. Wire up handler, API, and UI.
-- [x] **#4 Stub `decisions` i18n namespace** — `messages/de.json` and `messages/en.json` only have the nav label. Add a top-level `"decisions": {}` stub now to avoid a runtime i18n crash the moment any component does `useTranslations("decisions")`.
-- [x] **#8 LLM tool reply verbosity** — when the LLM calls a tool and it succeeds, in chat-widget keep the insider toast but reduce the LLM reply text to "Done" only.
-- [x] **#9 Add `delete_task` to LLM tool registry** — `DELETE /api/tasks/[id]` and `deleteTask` logic both work, but there is no tool schema or handler entry. The LLM can never delete a task via chat. but the llm needs to ask user for confirmation as for contacts, or meeting. decision doesn thave delete tool at all
-- [x] **#20 Tier limits on meetings + tasks + decisions** — contacts and knowledge are gated per plan; meetings, decisions, and tasks are not. Inconsistent with the tier model. Add per-plan limits.
-- [x] **#21 Remove dead `enforceKnowledgeDocs` export** — deprecated function is still re-exported from `lib/tiers/index.ts` but never called. Remove it.
-- [x] **#25 Tool availability per tier + user toggle** — change which tools are available by tier; allow users to enable/disable tools manually in settings.
-- [x] **#26 Make "Available Tools" in settings dynamic** — derive list from `TOOL_REGISTRY`, not a hardcoded array. Do alongside #25.
-- [x] **#24 Add 20 Lucide icons to labels system** — allow icon selection per label; update label display wherever labels are rendered.
-- [x] **#42**: move Labels to Intelligence group in navbar, and create dedicted page.tsx
-- [x] **#13 Chat-Widget status dot** — switch from gray to green (online indicator).
-- [x] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
-- [x] **#11 Contacts empty state** — tasks and meetings look fine when empty; contacts looks bad. makes also list to match. with refresh btn of course
-- [x] **#12 Duplicate "+ New Task" button** — tasks page shows two buttons when the list is empty. Remove the redundant one.
-- [x] **#14 TasksList UI** — general layout and visual improvements needed.
-- [x] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
-- [x] **#23 Goals tool** — needs schema design (structure, milestones, link to tasks).
-- [x] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
-- [x] **#10 Increase Task Notes character limit** — 250 chars is too short; increase it.
 
 ## brainstorming — not yet scoped or planned
 
 - mobile navbar, close automatic after redirect
-- footer on small screen, adjust
+- footer on small screen, adjust, better layout then 1 long column of links
 - add new routes from navbar to sidebar
 - add cmd+k shortcut to focus search input and add this feature .
 - version bump rule => update to 0.2.0 and make it the automatic increment count until 0.2.9, then jump to 0.3.0 and repeat, this is to make it easier to track versions during development.
