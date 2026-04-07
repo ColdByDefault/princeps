@@ -39,21 +39,22 @@ type QuotaRowProps = {
 };
 
 function QuotaRow({ label, used, limit, note }: QuotaRowProps) {
-  const p = pct(used, limit);
-  const color = indicatorColor(p);
+  const unlimited = limit < 0;
+  const p = unlimited ? 0 : pct(used, limit);
+  const color = unlimited ? "bg-primary" : indicatorColor(p);
 
   return (
     <div className="space-y-2 py-4">
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium">{label}</p>
         <span className="text-sm text-muted-foreground tabular-nums ml-auto">
-          {fmt(used)} / {fmt(limit)}
+          {unlimited ? `${fmt(used)} / ∞` : `${fmt(used)} / ${fmt(limit)}`}
         </span>
       </div>
       <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
         <div
           className={`h-full transition-all ${color}`}
-          style={{ width: `${p}%` }}
+          style={{ width: unlimited ? "0%" : `${p}%` }}
         />
       </div>
       {note && <p className="text-xs text-muted-foreground">{note}</p>}
@@ -158,6 +159,24 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           used={usage.contactsStored}
           limit={usage.contactsLimit}
           note={t("contactsNote")}
+        />
+        <QuotaRow
+          label={t("tasksTitle")}
+          used={usage.tasksStored}
+          limit={usage.tasksLimit}
+          note={t("tasksNote")}
+        />
+        <QuotaRow
+          label={t("meetingsTitle")}
+          used={usage.meetingsStored}
+          limit={usage.meetingsLimit}
+          note={t("meetingsNote")}
+        />
+        <QuotaRow
+          label={t("decisionsTitle")}
+          used={usage.decisionsStored}
+          limit={usage.decisionsLimit}
+          note={t("decisionsNote")}
         />
       </div>
 

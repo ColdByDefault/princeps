@@ -173,6 +173,18 @@ export interface UsageSummary {
   contactsStored: number;
   /** Plan maximum for contacts at rest. */
   contactsLimit: number;
+  /** Current count of tasks at rest. */
+  tasksStored: number;
+  /** Plan maximum for tasks at rest. `-1` = unlimited. */
+  tasksLimit: number;
+  /** Current count of meetings at rest. */
+  meetingsStored: number;
+  /** Plan maximum for meetings at rest. `-1` = unlimited. */
+  meetingsLimit: number;
+  /** Current count of decisions at rest. */
+  decisionsStored: number;
+  /** Plan maximum for decisions at rest. `-1` = unlimited. */
+  decisionsLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

@@ -209,7 +209,13 @@
       "knowledgeCharsTitle": "Knowledge text volume (lifetime)",
       "knowledgeCharsNote": "Cumulative character count of all processed uploads — does not decrease on delete.",
       "contactsTitle": "Contacts (stored)",
-      "contactsNote": "Number of contacts currently stored."
+      "contactsNote": "Number of contacts currently stored.",
+      "tasksTitle": "Tasks (stored)",
+      "tasksNote": "Number of tasks currently stored.",
+      "meetingsTitle": "Meetings (stored)",
+      "meetingsNote": "Number of meetings currently stored.",
+      "decisionsTitle": "Decisions (stored)",
+      "decisionsNote": "Number of decisions currently stored."
     },
     "assistant": {
       "pageDescription": "Personalize how your assistant looks, speaks, and interacts with you.",
