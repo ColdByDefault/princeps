@@ -198,12 +198,20 @@ export async function POST(req: Request) {
             });
           }
 
-          if (allToolsSucceeded) {
-            // All tools succeeded — skip second LLM pass and reply with "Done"
+          // Read tools (list_*, get_*) need a second LLM pass to surface results.
+          // Write tools that all succeeded can skip it and just reply "Done".
+          const hasReadTool = toolCalls.some(
+            (tc) =>
+              tc.function.name.startsWith("list_") ||
+              tc.function.name.startsWith("get_"),
+          );
+
+          if (allToolsSucceeded && !hasReadTool) {
+            // All write tools succeeded — skip second LLM pass and reply with "Done"
             send({ type: "token", text: "Done" });
             assistantContent = "Done";
           } else {
-            // At least one tool failed — let the LLM explain via a second pass
+            // Read tool present, or at least one tool failed — let the LLM respond
             const { tools: _tools, ...baseOptions } = chatOptions;
             for await (const chunk of streamChat(followUp, baseOptions)) {
               if (typeof chunk === "string") {
