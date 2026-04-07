@@ -15,6 +15,7 @@ import {
   BrainCircuit,
   Users,
   CalendarDays,
+  Scale,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -77,6 +78,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
     { href: "/tasks", icon: CheckSquare, label: t("nav.tasks") },
     { href: "/contact", icon: Users, label: t("nav.contacts") },
     { href: "/meetings", icon: CalendarDays, label: t("nav.meetings") },
+    { href: "/decisions", icon: Scale, label: t("nav.decisions") },
     { href: "/settings", icon: Settings, label: t("nav.settings") },
     { href: "/pricing", icon: CreditCard, label: t("nav.pricing") },
   ];
