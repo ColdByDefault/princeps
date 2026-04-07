@@ -1,3 +1,8 @@
+## [0.1.41] - 2026-04-07
+
+- feat(decisions): add refresh functionality and update UI with loading state
+- feat(decisions): implement decision management UI and logic
+
 ## [0.1.40] - 2026-04-06
 
 - feat: add pgvector DB health check script and integrate it into the dev start process
