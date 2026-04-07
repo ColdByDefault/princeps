@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Plus, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,6 +45,20 @@ export function DecisionsShell({
   const [editOpen, setEditOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const [isPendingRefresh, startRefresh] = useTransition();
+
+  function handleRefresh() {
+    startRefresh(async () => {
+      const res = await fetch("/api/decisions");
+      if (res.ok) {
+        const { decisions: updated } = (await res.json()) as {
+          decisions: DecisionRecord[];
+        };
+        setDecisions(updated);
+      }
+    });
+  }
 
   const {
     creating,
@@ -96,22 +110,38 @@ export function DecisionsShell({
         <h1 className="text-2xl font-semibold tracking-tight">
           {t("pageTitle")}
         </h1>
-        <CreateDecisionDialog
-          onSubmit={createDecision}
-          creating={creating}
-          availableLabels={availableLabels}
-          availableMeetings={availableMeetings}
-        >
+        <div className="flex items-center gap-2">
           <Button
             type="button"
+            variant="outline"
             size="sm"
+            disabled={isPendingRefresh}
+            onClick={handleRefresh}
+            aria-label={t("refresh")}
             className="cursor-pointer"
-            aria-label={t("newDecision")}
           >
-            <Plus className="size-4" />
-            {t("newDecision")}
+            <RefreshCw
+              className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
+            />
+            {isPendingRefresh ? t("refreshing") : t("refresh")}
           </Button>
-        </CreateDecisionDialog>
+          <CreateDecisionDialog
+            onSubmit={createDecision}
+            creating={creating}
+            availableLabels={availableLabels}
+            availableMeetings={availableMeetings}
+          >
+            <Button
+              type="button"
+              size="sm"
+              className="cursor-pointer"
+              aria-label={t("newDecision")}
+            >
+              <Plus className="size-4" />
+              {t("newDecision")}
+            </Button>
+          </CreateDecisionDialog>
+        </div>
       </div>
 
       {/* Filter tabs */}

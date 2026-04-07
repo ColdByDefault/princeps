@@ -278,6 +278,7 @@
       "apps": "Apps",
       "meetings": "Meetings",
       "decisions": "Entscheidungen",
+      "intel": "Intelligenz",
       "comingSoon": "Bald verfügbar"
     },
     "language": {
@@ -413,7 +414,9 @@
     },
     "actionsLabel": "Entscheidungsaktionen",
     "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen"
+    "deleteLabel": "L\u00f6schen",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert\u2026"
   },
   "meetings": {
     "metadata": {

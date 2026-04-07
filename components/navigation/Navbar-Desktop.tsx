@@ -10,7 +10,7 @@ import {
   LogOut,
   LayoutGrid,
   ChevronDown,
-  Scale,
+  BrainCog,
   type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -29,8 +29,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
@@ -71,9 +69,8 @@ function isActivePath(pathname: string, href: string) {
 }
 
 const GROUPED_HREFS = new Set(["/tasks", "/contact", "/meetings"]);
+const INTEL_HREFS = new Set(["/knowledge", "/decisions"]);
 const AFTER_DROPDOWN_HREFS = new Set(["/settings", "/pricing"]);
-
-const placeholderItems = [{ key: "decisions", icon: Scale }] as const;
 
 export default function NavbarDesktop({
   navLinks,
@@ -85,7 +82,12 @@ export default function NavbarDesktop({
 }: NavbarDesktopProps) {
   const t = useTranslations("shell");
 
-  const flatLinks = navLinks.filter((l) => !GROUPED_HREFS.has(l.href));
+  const intelLinks = navLinks.filter((l) => INTEL_HREFS.has(l.href));
+  const isIntelActive = intelLinks.some((l) => isActivePath(pathname, l.href));
+
+  const flatLinks = navLinks.filter(
+    (l) => !GROUPED_HREFS.has(l.href) && !INTEL_HREFS.has(l.href),
+  );
   const beforeLinks = flatLinks.filter(
     (l) => !AFTER_DROPDOWN_HREFS.has(l.href),
   );
@@ -119,6 +121,53 @@ export default function NavbarDesktop({
           );
         })}
 
+        {/* Intelligence dropdown: Knowledge Base + Decisions */}
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                type="button"
+                variant={isIntelActive ? "secondary" : "ghost"}
+                size="sm"
+                className={cn(
+                  "cursor-pointer rounded-full bg-transparent px-3",
+                  isIntelActive && "shadow-sm",
+                )}
+              />
+            }
+          >
+            <BrainCog className="size-3.5" />
+            {t("nav.intel")}
+            <ChevronDown className="size-3" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            side="bottom"
+            align="start"
+            className="min-w-44 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
+          >
+            <DropdownMenuGroup>
+              {intelLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = isActivePath(pathname, link.href);
+                return (
+                  <DropdownMenuItem
+                    key={link.href}
+                    className={cn(
+                      "cursor-pointer rounded-xl",
+                      isActive && "bg-accent text-accent-foreground",
+                    )}
+                    render={<Link href={link.href} />}
+                  >
+                    <Icon className="size-3.5" />
+                    {link.label}
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Apps dropdown: Tasks, Contacts, Meetings */}
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
@@ -160,20 +209,6 @@ export default function NavbarDesktop({
                   </DropdownMenuItem>
                 );
               })}
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>{t("nav.comingSoon")}</DropdownMenuLabel>
-              {placeholderItems.map(({ key, icon: Icon }) => (
-                <DropdownMenuItem
-                  key={key}
-                  disabled
-                  className="rounded-xl opacity-50"
-                >
-                  <Icon className="size-3.5" />
-                  {t(`nav.${key}`)}
-                </DropdownMenuItem>
-              ))}
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -278,6 +278,7 @@
       "apps": "Apps",
       "meetings": "Meetings",
       "decisions": "Decisions",
+      "intel": "Intelligence",
       "comingSoon": "Coming soon"
     },
     "language": {
@@ -413,7 +414,9 @@
     },
     "actionsLabel": "Decision actions",
     "editLabel": "Edit",
-    "deleteLabel": "Delete"
+    "deleteLabel": "Delete",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…"
   },
   "meetings": {
     "metadata": {
