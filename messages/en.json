@@ -216,7 +216,9 @@
       "meetingsTitle": "Meetings (stored)",
       "meetingsNote": "Number of meetings currently stored.",
       "decisionsTitle": "Decisions (stored)",
-      "decisionsNote": "Number of decisions currently stored."
+      "decisionsNote": "Number of decisions currently stored.",
+      "goalsTitle": "Goals (stored)",
+      "goalsNote": "Number of goals currently stored."
     },
     "tools": {
       "title": "AI Tools",
@@ -291,6 +293,7 @@
       "apps": "Apps",
       "meetings": "Meetings",
       "decisions": "Decisions",
+      "goals": "Goals",
       "labels": "Labels",
       "intel": "Intelligence",
       "comingSoon": "Coming soon"
@@ -431,6 +434,80 @@
     "deleteLabel": "Delete",
     "refresh": "Refresh",
     "refreshing": "Refreshing…"
+  },
+  "goals": {
+    "metadata": {
+      "title": "Goals",
+      "description": "Manage your goals and milestones."
+    },
+    "pageTitle": "Goals",
+    "newGoal": "New goal",
+    "empty": "No goals yet.",
+    "emptyFiltered": "No goals with this status.",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…",
+    "filter": {
+      "all": "All",
+      "open": "Open",
+      "in_progress": "In progress",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "e.g. Launch new product",
+      "description": "Description",
+      "descriptionPlaceholder": "What does achieving this goal look like?",
+      "status": "Status",
+      "targetDate": "Target date",
+      "labels": "Labels",
+      "linkedTasks": "Linked tasks",
+      "milestones": "Milestones",
+      "milestonePlaceholder": "Add a milestone…",
+      "optional": "Optional"
+    },
+    "milestoneProgress": "milestones",
+    "targetDate": "Target",
+    "linkedTasks": "tasks linked",
+    "addMilestoneLabel": "Add milestone",
+    "removeMilestoneLabel": "Remove milestone",
+    "completeMilestoneLabel": "Mark as done",
+    "uncompleteMilestoneLabel": "Mark as not done",
+    "createDialog": {
+      "heading": "New goal",
+      "description": "Fill in the details below to create a new goal.",
+      "submit": "Create",
+      "submitting": "Creating…",
+      "cancel": "Cancel",
+      "success": "Goal created.",
+      "error": "Failed to create goal."
+    },
+    "editDialog": {
+      "heading": "Edit goal",
+      "description": "Update the details below.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "success": "Goal saved.",
+      "error": "Failed to save goal."
+    },
+    "deleteDialog": {
+      "heading": "Delete this goal?",
+      "body": "This will permanently delete the goal and all its milestones. This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Goal deleted.",
+      "error": "Failed to delete goal."
+    },
+    "actionsLabel": "Goal actions",
+    "editLabel": "Edit",
+    "deleteLabel": "Delete"
   },
   "meetings": {
     "metadata": {
@@ -716,7 +793,8 @@
       "profile": "Profile",
       "contacts": "Contacts",
       "meetings": "Meetings",
-      "decisions": "Decisions"
+      "decisions": "Decisions",
+      "goals": "Goals"
     },
     "catalog": {
       "create_task": {
@@ -828,6 +906,36 @@
         "label": "Delete Decision",
         "what": "Permanently deletes a decision.",
         "example": "\"Delete the Postgres migration decision\""
+      },
+      "create_goal": {
+        "label": "Create Goal",
+        "what": "Creates a new goal with optional description, status, target date, labels, and milestones.",
+        "example": "\"Set a goal: launch the beta by June, with milestones for design and development\""
+      },
+      "list_goals": {
+        "label": "List Goals",
+        "what": "Retrieves your goals, optionally filtered by status.",
+        "example": "\"What goals do I have open?\" or \"Show me all my goals\""
+      },
+      "update_goal": {
+        "label": "Update Goal",
+        "what": "Changes a goal's title, description, status, target date, or labels.",
+        "example": "\"Mark my launch goal as in progress\""
+      },
+      "delete_goal": {
+        "label": "Delete Goal",
+        "what": "Permanently deletes a goal and all its milestones.",
+        "example": "\"Delete the launch goal\""
+      },
+      "add_goal_milestone": {
+        "label": "Add Goal Milestone",
+        "what": "Adds a new milestone checkpoint to an existing goal.",
+        "example": "\"Add a milestone 'design complete' to my launch goal\""
+      },
+      "complete_goal_milestone": {
+        "label": "Complete Goal Milestone",
+        "what": "Marks a goal milestone as completed or uncompleted.",
+        "example": "\"Mark the design complete milestone as done\""
       }
     }
   },
