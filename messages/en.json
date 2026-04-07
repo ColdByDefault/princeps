@@ -722,6 +722,11 @@
         "what": "Changes a task's title, notes, priority, due date, status, or labels.",
         "example": "\"Change the report task to urgent and move the due date to Monday\""
       },
+      "delete_task": {
+        "label": "Delete Task",
+        "what": "Permanently deletes a task. The assistant will ask for confirmation before proceeding.",
+        "example": "\"Delete the Q2 report task\""
+      },
       "create_label": {
         "label": "Create Label",
         "what": "Creates a new global label with an optional color.",

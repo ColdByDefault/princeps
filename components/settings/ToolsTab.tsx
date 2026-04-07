@@ -9,14 +9,13 @@ import { useState } from "react";
 import { ChevronDown, Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
-import { PlanBadge } from "@/components/shared";
+import { PlanBadge, CustomToggle } from "@/components/shared";
 import type { Tier } from "@/types/billing";
 import type { ToolDisplayEntry } from "@/types/api";
 
@@ -139,8 +138,9 @@ export function ToolsTab({
                             <>
                               <Lock className="size-3.5 text-muted-foreground" />
                               <PlanBadge tier={tool.minTier} />
-                              <Switch
+                              <CustomToggle
                                 checked={false}
+                                onCheckedChange={() => {}}
                                 disabled
                                 aria-label={tTools(
                                   `catalog.${tool.name}.label`,
@@ -148,14 +148,13 @@ export function ToolsTab({
                               />
                             </>
                           ) : (
-                            <Switch
+                            <CustomToggle
                               checked={enabled}
                               onCheckedChange={(v) =>
-                                void handleToggle(tool.name, v as boolean)
+                                void handleToggle(tool.name, v)
                               }
                               disabled={isSaving}
                               aria-label={tTools(`catalog.${tool.name}.label`)}
-                              className="cursor-pointer"
                             />
                           )}
                         </div>

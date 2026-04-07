@@ -722,6 +722,11 @@
         "what": "Ändert Titel, Notizen, Priorität, Fälligkeitsdatum, Status oder Labels einer Aufgabe.",
         "example": "\"Setze die Bericht-Aufgabe auf dringend und verschiebe das Datum auf Montag\""
       },
+      "delete_task": {
+        "label": "Aufgabe löschen",
+        "what": "Löscht eine Aufgabe dauerhaft. Der Assistent fragt vor dem Löschen nach einer Bestätigung.",
+        "example": "\"Lösche die Q2-Bericht-Aufgabe\""
+      },
       "create_label": {
         "label": "Label erstellen",
         "what": "Erstellt ein neues globales Label mit optionaler Farbe.",
