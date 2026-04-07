@@ -132,7 +132,7 @@ export function TaskCard({
               {formatDue(task.dueDate)}
             </span>
           )}
-          {task.labels.map((label) => {
+          {task.labels.slice(0, 3).map((label) => {
             const Icon = label.icon
               ? LABEL_ICON_MAP[label.icon as LabelIconName]
               : null;
@@ -147,6 +147,11 @@ export function TaskCard({
               </span>
             );
           })}
+          {task.labels.length > 3 && (
+            <span className="inline-flex h-5 items-center rounded-full border border-border px-2 text-[10px] font-medium text-muted-foreground">
+              +{task.labels.length - 3}
+            </span>
+          )}
         </div>
       </div>
 

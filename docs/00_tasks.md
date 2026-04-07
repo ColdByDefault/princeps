@@ -25,10 +25,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `fix/ui-polish`
 
-- [ ] **#11 Contacts empty state** — tasks and meetings look fine when empty; contacts looks bad. makes also list to match. with refresh btn of course
-- [ ] **#12 Duplicate "+ New Task" button** — tasks page shows two buttons when the list is empty. Remove the redundant one.
-- [ ] **#14 TasksList UI** — general layout and visual improvements needed.
-- [ ] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
 - [ ] **#16 `/chat` double loading screen** — investigate why two skeleton/loading states appear on initial navigation.
 
 ### Branch: `feat/markdown`
@@ -115,9 +111,13 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [x] **#24 Add 20 Lucide icons to labels system** — allow icon selection per label; update label display wherever labels are rendered.
 - [x] **Extra**: move Labels to Intelligence group in navbar, and create dedicted page.tsx
 - [x] **#13 Chat-Widget status dot** — switch from gray to green (online indicator).
+- [x] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
+- [x] **#11 Contacts empty state** — tasks and meetings look fine when empty; contacts looks bad. makes also list to match. with refresh btn of course
+- [x] **#12 Duplicate "+ New Task" button** — tasks page shows two buttons when the list is empty. Remove the redundant one.
+- [x] **#14 TasksList UI** — general layout and visual improvements needed.
+- [x] **#15 Label overflow** — when tasks/meetings have many labels, show first 2-3 then "+X more", matching the contacts pattern.
 
-
-mobile navbar, close automatic after redirect
-footer on small screen, adjust
-add new routes from navbar to sidebar
-add cmd+k shortcut to focus search input and add this feature .
+      mobile navbar, close automatic after redirect
+      footer on small screen, adjust
+      add new routes from navbar to sidebar
+      add cmd+k shortcut to focus search input and add this feature .
