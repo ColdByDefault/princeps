@@ -7,8 +7,10 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { enforceKnowledgeUpload, createTierLimitResponse } from "@/lib/tiers";
-import { createKnowledgeDocument } from "@/lib/knowledge/create.logic";
-import { createKnowledgeDocumentSchema } from "@/lib/knowledge/schemas";
+import {
+  createKnowledgeDocument,
+  createKnowledgeDocumentSchema,
+} from "@/lib/knowledge";
 
 // POST /api/knowledge/upload — parse a text/markdown file and index it
 //

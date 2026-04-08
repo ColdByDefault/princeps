@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { listMeetings } from "@/lib/meetings/list.logic";
+import { listMeetings } from "@/lib/meetings";
 import type { ContextSlot } from "@/lib/context";
 
 export const meetingsSlot: ContextSlot = {

@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { listGoals } from "@/lib/goals/list.logic";
+import { listGoals } from "@/lib/goals";
 import type { ContextSlot } from "@/lib/context";
 
 export const goalsSlot: ContextSlot = {

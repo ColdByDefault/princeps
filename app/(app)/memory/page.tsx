@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listMemoryEntries } from "@/lib/memory/list.logic";
+import { listMemoryEntries } from "@/lib/memory";
 import { MemoryShell } from "@/components/memory";
 import type { AppLanguage } from "@/types/i18n";
 

@@ -6,7 +6,7 @@
 import "server-only";
 
 import { db } from "@/lib/db";
-import { embedBatch } from "@/lib/llm-providers/provider";
+import { embedBatch } from "@/lib/llm-providers";
 import {
   chunkText,
   normalizeVector,

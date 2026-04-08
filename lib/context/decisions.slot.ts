@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { listDecisions } from "@/lib/decisions/list.logic";
+import { listDecisions } from "@/lib/decisions";
 import type { ContextSlot } from "@/lib/context";
 
 export const decisionsSlot: ContextSlot = {

@@ -17,9 +17,9 @@ import {
   type AssistantTone,
   type AddressStyle,
   type ResponseLength,
-} from "@/lib/settings/user-preferences.logic";
+} from "@/lib/settings";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
-import { TOOL_REGISTRY } from "@/lib/tools/registry";
+import { TOOL_REGISTRY } from "@/lib/tools";
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });

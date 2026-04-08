@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { listMemoryEntries } from "@/lib/memory/list.logic";
+import { listMemoryEntries } from "@/lib/memory";
 import type { ContextSlot } from "@/lib/context";
 
 export const memorySlot: ContextSlot = {

@@ -6,8 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { deleteChat } from "@/lib/chat/delete.logic";
-import { renameChat } from "@/lib/chat/update.logic";
+import { deleteChat, renameChat } from "@/lib/chat";
 
 type Params = { params: Promise<{ chatId: string }> };
 

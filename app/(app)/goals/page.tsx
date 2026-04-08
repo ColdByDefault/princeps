@@ -10,9 +10,9 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listGoals } from "@/lib/goals/list.logic";
-import { listLabels } from "@/lib/labels/list.logic";
-import { listTasks } from "@/lib/tasks/list.logic";
+import { listGoals } from "@/lib/goals";
+import { listLabels } from "@/lib/labels";
+import { listTasks } from "@/lib/tasks";
 import { GoalsShell } from "@/components/goals";
 import type { AppLanguage } from "@/types/i18n";
 

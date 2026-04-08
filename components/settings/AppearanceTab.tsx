@@ -19,11 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TIMEZONE_OPTIONS } from "@/lib/weather/timezone-list";
 import {
+  TIMEZONE_OPTIONS,
   LOCATION_OPTIONS_BY_COUNTRY,
   LOCATION_COUNTRIES,
-} from "@/lib/weather/location-list";
+} from "@/lib/weather";
 
 type AppearanceTabProps = {
   initialNotificationsEnabled: boolean;

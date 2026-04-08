@@ -6,9 +6,11 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listDecisions } from "@/lib/decisions/list.logic";
-import { createDecision } from "@/lib/decisions/create.logic";
-import { createDecisionSchema } from "@/lib/decisions/schemas";
+import {
+  listDecisions,
+  createDecision,
+  createDecisionSchema,
+} from "@/lib/decisions";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,

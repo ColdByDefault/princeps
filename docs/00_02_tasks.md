@@ -6,9 +6,9 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ## Beta — implement before first stable release
 
-- [x] **#3 Version bump to 0.2.0** — `package.json` set to `0.2.0`. GitHub Actions workflow (`.github/workflows/version-bump.yml`) updated to follow the rule: patch increments 0–9, then minor increments and patch resets to 0 (e.g. 0.2.9 → 0.3.0).
+- [x] **#3 Version bump to 0.2.0** — `package.json` set to `0.2.0`. GitHub Actions workflow updated: patch increments 0–9, then minor increments (e.g. 0.2.9 → 0.3.0).
+- [x] **#36 Add `index.ts` barrel exports** — added barrels to all missing `components/` and `lib/` subfolders; updated all 59 import sites to use barrels.
 
-- [ ] **#36 Add `index.ts` barrel exports** — add missing `index.ts` in `components/` and `lib/` folders for cleaner imports.
 - [ ] **#37 Add `date-fns`** — standardize date formatting and timezone handling across the app.
 
 - [ ] **#1 Mobile navbar auto-close** — close the mobile nav automatically after a route redirect.
@@ -33,3 +33,15 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#39 Add `langfuse`** — LLM observability and prompt debugging. Wire up pre-production, not during active development.
 - [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing.
 - [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config anywhere. Defer until the feature set stabilizes.
+
+
+
+## Brainstorming / Backlog
+
+- [ ] **#42 Extend Notifications** — Currently only "User Greetings" on Login (once or twice per day ?? check!), and once on new sign-up. IMPORTANT: there is a toggle in settings for greetings notification to enable/disable.
+- [ ] **#43 ** —
+- [ ] **#44 ** —
+- [ ] **#45 ** —
+- [ ] **#46 ** —
+- [ ] **#47 ** —
+- [ ] **#48 ** —

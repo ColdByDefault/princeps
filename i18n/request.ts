@@ -11,7 +11,7 @@ import {
   isSupportedLanguage,
 } from "@/types/i18n";
 import { auth } from "@/lib/auth/auth";
-import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
+import { getUserPreferences } from "@/lib/settings";
 
 function getLanguageFromHeader(value: string | null) {
   if (!value) return DEFAULT_LANGUAGE;

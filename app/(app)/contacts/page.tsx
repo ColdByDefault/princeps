@@ -8,8 +8,8 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listContacts } from "@/lib/contacts/list.logic";
-import { listLabels } from "@/lib/labels/list.logic";
+import { listContacts } from "@/lib/contacts";
+import { listLabels } from "@/lib/labels";
 import { ContactsShell } from "@/components/contact";
 import type { AppLanguage } from "@/types/i18n";
 

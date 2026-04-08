@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { listLabels } from "@/lib/labels/list.logic";
+import { listLabels } from "@/lib/labels";
 import type { ContextSlot } from "@/lib/context";
 
 export const labelsSlot: ContextSlot = {

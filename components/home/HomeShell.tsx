@@ -6,7 +6,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import type { WeatherSnapshot } from "@/lib/weather/fetch";
+import type { WeatherSnapshot } from "@/lib/weather";
 
 type HomeShellProps = {
   weather: WeatherSnapshot | null;

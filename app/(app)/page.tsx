@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { LandingHero } from "@/components/landing/LandingHero";
+import { LandingHero } from "@/components/landing";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {

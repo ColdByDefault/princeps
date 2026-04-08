@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { fetchWeather } from "@/lib/weather/fetch";
+import { fetchWeather } from "@/lib/weather";
 import { HomeShell } from "@/components/home";
 import type { AppLanguage } from "@/types/i18n";
 

@@ -6,9 +6,11 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listContacts } from "@/lib/contacts/list.logic";
-import { createContact } from "@/lib/contacts/create.logic";
-import { createContactSchema } from "@/lib/contacts/schemas";
+import {
+  listContacts,
+  createContact,
+  createContactSchema,
+} from "@/lib/contacts";
 import { enforceContactsMax, createTierLimitResponse } from "@/lib/tiers";
 import {
   writeRateLimiter,

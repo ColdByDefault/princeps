@@ -6,7 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { generateDailyGreeting } from "@/lib/notifications/greeting.logic";
+import { generateDailyGreeting } from "@/lib/notifications";
 
 // POST /api/notifications/greeting — trigger daily greeting generation
 // Returns { created: boolean, notification: NotificationRecord | null }

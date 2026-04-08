@@ -6,9 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listGoals } from "@/lib/goals/list.logic";
-import { createGoal } from "@/lib/goals/create.logic";
-import { createGoalSchema } from "@/lib/goals/schemas";
+import { listGoals, createGoal, createGoalSchema } from "@/lib/goals";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,

@@ -7,8 +7,8 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { SLOT_REGISTRY } from "@/lib/context";
-import { TOOL_REGISTRY } from "@/lib/tools/registry";
-import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
+import { TOOL_REGISTRY } from "@/lib/tools";
+import { getUserPreferences } from "@/lib/settings";
 import type { LLMMessage, LLMTool } from "@/types/llm";
 
 type BuildOptions = {

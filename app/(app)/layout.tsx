@@ -6,10 +6,10 @@
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { auth } from "@/lib/auth/auth";
-import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
+import { getUserPreferences } from "@/lib/settings";
 import { Navbar, Footer } from "@/components/navigation";
 import { LanguageHydrator, ThemeHydrator } from "@/components/shared";
-import { ChatWidgetProvider } from "@/components/chat-widget/ChatWidgetProvider";
+import { ChatWidgetProvider } from "@/components/chat-widget";
 import type { AppLanguage } from "@/types/i18n";
 
 export default async function AppLayout({

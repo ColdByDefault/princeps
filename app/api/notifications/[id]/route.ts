@@ -6,8 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { markNotificationRead } from "@/lib/notifications/mark-read.logic";
-import { deleteNotification } from "@/lib/notifications/delete.logic";
+import { markNotificationRead, deleteNotification } from "@/lib/notifications";
 
 type Params = { params: Promise<{ id: string }> };
 
