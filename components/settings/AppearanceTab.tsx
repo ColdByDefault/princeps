@@ -26,12 +26,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { TIMEZONE_OPTIONS } from "@/lib/weather/timezone-list";
 import {
-  TIMEZONE_OPTIONS,
   LOCATION_OPTIONS,
   LOCATION_OPTIONS_BY_COUNTRY,
   LOCATION_COUNTRIES,
-} from "@/lib/weather";
+} from "@/lib/weather/location-list";
 
 type AppearanceTabProps = {
   initialNotificationsEnabled: boolean;
