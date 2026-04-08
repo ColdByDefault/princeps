@@ -1,6 +1,6 @@
 ﻿# Princeps
 
-**Version:** 0.1.45
+**Version:** 0.1.46
 
 A private AI workspace that functions as a personal executive secretariat — not another generic chat interface. Princeps gives individuals the same operational leverage that high-performing executives build around themselves through chiefs of staff: preparation, memory, coordination, and structured follow-through.
 

@@ -1,3 +1,15 @@
+## [0.1.46] - 2026-04-08
+
+- feat(memory): add memory usage tracking and localization for memory facts in English and German
+- feat(memory): update MemoryEntryCard interaction and enhance memory limits localization in English and German
+- feat(memory): enhance MemoryShell UI and add refreshing state translations
+- feat: add delete functionality to ContactDetailDialog and update ContactCard to handle onDelete prop
+- feat: update Navbar to include memory link and enhance system prompt behavior for long-term memory retention
+- feat: update ToolsTab to have collapsible sections closed by default and enhance memory localization in English and German
+- feat(memory): implement memory feature with CRUD operations and LLM integration
+- feat: add MemoryEntry model and MemorySource enum to schema
+- feat: update docker-compose configuration for consistent database naming and health checks
+
 ## [0.1.45] - 2026-04-08
 
 - feat: update sign-up prompts and add free account hints in localization files
