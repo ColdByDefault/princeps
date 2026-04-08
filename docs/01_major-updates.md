@@ -91,3 +91,9 @@
 - `components/home/HomeShell.tsx` — weather widget (emoji + °C + condition + location) + today's LLM greeting
 - `app/(app)/home/page.tsx` — server-side weather fetch, passed to `HomeShell`
 - i18n strings added to `messages/de.json` and `messages/en.json` (`notifications.*`, `home.weather.*`)
+
+# Major Updates 8
+
+---
+
+- **Memory feature** — persistent user-scoped fact store the LLM can read and write, with a full management UI at `/memory`. See `docs/10_memory.md` for full implementation details.

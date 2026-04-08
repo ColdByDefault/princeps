@@ -8,7 +8,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/memory`
 
-- [ ] **#4 Memory tool** — persistent user-scoped fact store the LLM can read and write, plus optional UI to manage entries.
+- [x] **#4 Memory tool** — persistent user-scoped fact store the LLM can read and write, plus optional UI to manage entries.
   > **DESIGN NOTES:**
   >
   > - Two potential shapes: (a) **conversation summarizer** — after N messages, compress older turns into a summary and replace them; (b) **fact store** — explicit `MemoryEntry` rows (key/value or freeform) the LLM can write/read via tool calls.
@@ -37,7 +37,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#39 Add `langfuse`** — LLM observability and prompt debugging. Useful pre-production, not during active development.
 - [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing.
 - [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config, no `.spec.ts` files anywhere. The tier enforcement, tool handlers, and schema validators have no safety net. Defer until the feature set stabilizes.
-
 
 ## brainstorming — not yet scoped or planned
 

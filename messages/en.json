@@ -524,6 +524,47 @@
     "editLabel": "Edit",
     "deleteLabel": "Delete"
   },
+  "memory": {
+    "metadata": {
+      "title": "Memory",
+      "description": "Facts the assistant remembers about you."
+    },
+    "pageTitle": "Memory",
+    "pageSubtitle": "Facts the assistant remembers about you.",
+    "addEntry": "Add fact",
+    "refresh": "Refresh",
+    "empty": "No facts remembered yet.",
+    "emptyHint": "Ask the assistant to remember something, or add a fact manually.",
+    "sourceAI": "AI",
+    "sourceUser": "You",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "keyLabel": "Topic",
+    "keyPlaceholder": "e.g. job title",
+    "valueLabel": "Fact",
+    "valuePlaceholder": "e.g. Senior engineer at Acme",
+    "createTitle": "Add fact",
+    "editTitle": "Edit fact",
+    "createDialog": {
+      "success": "Fact saved.",
+      "error": "Failed to save fact."
+    },
+    "editDialog": {
+      "success": "Fact updated.",
+      "error": "Failed to update fact."
+    },
+    "deleteDialog": {
+      "title": "Delete this fact?",
+      "description": "This will permanently remove the fact from memory. The assistant will no longer have access to it.",
+      "confirm": "Delete",
+      "success": "Fact deleted.",
+      "error": "Failed to delete fact."
+    }
+  },
   "meetings": {
     "metadata": {
       "title": "Meetings",

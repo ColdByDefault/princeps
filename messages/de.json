@@ -524,6 +524,47 @@
     "editLabel": "Bearbeiten",
     "deleteLabel": "L\u00f6schen"
   },
+  "memory": {
+    "metadata": {
+      "title": "Ged\u00e4chtnis",
+      "description": "Fakten, die sich der Assistent \u00fcber dich merkt."
+    },
+    "pageTitle": "Ged\u00e4chtnis",
+    "pageSubtitle": "Fakten, die sich der Assistent \u00fcber dich merkt.",
+    "addEntry": "Fakt hinzuf\u00fcgen",
+    "refresh": "Aktualisieren",
+    "empty": "Noch keine Fakten gespeichert.",
+    "emptyHint": "Bitte den Assistenten, sich etwas zu merken, oder f\u00fcge einen Fakt manuell hinzu.",
+    "sourceAI": "KI",
+    "sourceUser": "Du",
+    "actions": "Aktionen",
+    "edit": "Bearbeiten",
+    "delete": "L\u00f6schen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "saving": "Wird gespeichert\u2026",
+    "keyLabel": "Thema",
+    "keyPlaceholder": "z.\u00a0B. Berufsbezeichnung",
+    "valueLabel": "Fakt",
+    "valuePlaceholder": "z.\u00a0B. Senior Engineer bei Acme",
+    "createTitle": "Fakt hinzuf\u00fcgen",
+    "editTitle": "Fakt bearbeiten",
+    "createDialog": {
+      "success": "Fakt gespeichert.",
+      "error": "Fakt konnte nicht gespeichert werden."
+    },
+    "editDialog": {
+      "success": "Fakt aktualisiert.",
+      "error": "Fakt konnte nicht aktualisiert werden."
+    },
+    "deleteDialog": {
+      "title": "Diesen Fakt l\u00f6schen?",
+      "description": "Der Fakt wird dauerhaft aus dem Ged\u00e4chtnis entfernt. Der Assistent hat dann keinen Zugriff mehr darauf.",
+      "confirm": "L\u00f6schen",
+      "success": "Fakt gel\u00f6scht.",
+      "error": "Fakt konnte nicht gel\u00f6scht werden."
+    }
+  },
   "meetings": {
     "metadata": {
       "title": "Meetings",
