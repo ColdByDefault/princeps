@@ -223,7 +223,9 @@
       "decisionsTitle": "Entscheidungen (gespeichert)",
       "decisionsNote": "Anzahl der aktuell gespeicherten Entscheidungen.",
       "goalsTitle": "Ziele (gespeichert)",
-      "goalsNote": "Anzahl der aktuell gespeicherten Ziele."
+      "goalsNote": "Anzahl der aktuell gespeicherten Ziele.",
+      "memoryTitle": "Gedächtnis-Fakten (gespeichert)",
+      "memoryNote": "Anzahl der aktuell gespeicherten Gedächtnis-Fakten."
     },
     "tools": {
       "title": "KI-Werkzeuge",

@@ -223,7 +223,9 @@
       "decisionsTitle": "Decisions (stored)",
       "decisionsNote": "Number of decisions currently stored.",
       "goalsTitle": "Goals (stored)",
-      "goalsNote": "Number of goals currently stored."
+      "goalsNote": "Number of goals currently stored.",
+      "memoryTitle": "Memory facts (stored)",
+      "memoryNote": "Number of memory facts currently stored."
     },
     "tools": {
       "title": "AI Tools",

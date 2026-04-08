@@ -223,6 +223,10 @@ export interface UsageSummary {
   goalsStored: number;
   /** Plan maximum for goals at rest. `-1` = unlimited. */
   goalsLimit: number;
+  /** Current count of memory entries at rest. */
+  memoryStored: number;
+  /** Plan maximum for memory entries at rest. `-1` = unlimited. */
+  memoryLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

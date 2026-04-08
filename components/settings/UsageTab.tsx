@@ -184,6 +184,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           limit={usage.goalsLimit}
           note={t("goalsNote")}
         />
+        <QuotaRow
+          label={t("memoryTitle")}
+          used={usage.memoryStored}
+          limit={usage.memoryLimit}
+          note={t("memoryNote")}
+        />
       </div>
 
       {/* Reset footer */}
