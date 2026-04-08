@@ -16,10 +16,10 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
   > **NOTE:** I dont think this really important, users have their profiles, they can edit it, and llm's aware of it. update or delete info is restricted by the user, and llm can only read it. remove model!
 - [ ] **#19 Meeting prep pack** — `Meeting.prepPack` was migrated but is 0% implemented (always returns `null`). Add the generate action, tool parameter, and UI to display the pack.
 - [ ] **#22 Briefings tool** — `BriefingCache` model exists; daily LLM brief over tasks/meetings/decisions + Worker
-- [ ] **#27 Extend LLM cross-linking awareness** — LLM can link a contact to a meeting, a note to a decision, etc. Depends on Decisions (#3).
+
 - [ ] **#29 Contact Card Share Link** — generate a 24h share link; user picks what info to expose. `ShareToken` model exists. Triggerable from profile page or via LLM tool call.
 - [ ] **#31 Tools-usage Reports** — `AssistantReport` model exists; surface analytics on which tools are used.
-- [ ] **#32 Remove dead production dependencies** — `mammoth` and `pdf-parse` are in `package.json` and `serverExternalPackages` but never imported. Remove until #30 is implemented.
+
 - [ ] **#33 `emailVerified` always false** — Better Auth stores the field but no email verification plugin is configured and it is never checked as an access gate. Stub the plugin or document the intent before existing users become a migration problem.
 - [ ] **#34 In-memory rate limiter not production-safe** — the implementation is self-documented as broken under multi-node/serverless deploys. Replace with a Redis-backed or edge-compatible store when deploying to production.
 - [ ] **#36 Add `index.ts` barrel exports** — add missing `index.ts` in components and lib folders for cleaner imports.
