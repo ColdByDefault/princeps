@@ -22,6 +22,7 @@ import {
   Target,
   BookMarked,
   User2,
+  Loader2,
   type LucideIcon,
 } from "lucide-react";
 import {
@@ -33,8 +34,24 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 
+type TaskItem = { id: string; title: string };
+type ContactItem = { id: string; name: string; company: string | null };
+type MeetingItem = { id: string; title: string };
+type DecisionItem = { id: string; title: string };
+type GoalItem = { id: string; title: string };
+
+type SearchData = {
+  tasks: TaskItem[];
+  contacts: ContactItem[];
+  meetings: MeetingItem[];
+  decisions: DecisionItem[];
+  goals: GoalItem[];
+};
+
 export function GlobalSearch() {
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState<SearchData | null>(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations("shell");
 
@@ -56,6 +73,38 @@ export function GlobalSearch() {
     window.addEventListener("global-search:open", handler);
     return () => window.removeEventListener("global-search:open", handler);
   }, []);
+
+  // fetch all content once on first open
+  useEffect(() => {
+    if (!open || data !== null || loading) return;
+    setLoading(true);
+    Promise.all([
+      fetch("/api/tasks").then((r) => r.json()),
+      fetch("/api/contacts").then((r) => r.json()),
+      fetch("/api/meetings").then((r) => r.json()),
+      fetch("/api/decisions").then((r) => r.json()),
+      fetch("/api/goals").then((r) => r.json()),
+    ])
+      .then(([taskRes, contactRes, meetingRes, decisionRes, goalRes]) => {
+        setData({
+          tasks: taskRes.tasks ?? [],
+          contacts: contactRes.contacts ?? [],
+          meetings: meetingRes.meetings ?? [],
+          decisions: decisionRes.decisions ?? [],
+          goals: goalRes.goals ?? [],
+        });
+      })
+      .catch(() => {
+        setData({
+          tasks: [],
+          contacts: [],
+          meetings: [],
+          decisions: [],
+          goals: [],
+        });
+      })
+      .finally(() => setLoading(false));
+  }, [open, data, loading]);
 
   const navigate = useCallback(
     (href: string) => {
@@ -90,19 +139,113 @@ export function GlobalSearch() {
     >
       <CommandInput placeholder={t("search.placeholder")} />
       <CommandList>
-        <CommandEmpty>{t("search.empty")}</CommandEmpty>
-        <CommandGroup heading={t("search.navigation")}>
-          {navLinks.map(({ href, icon: Icon, label }) => (
-            <CommandItem
-              key={href}
-              value={label}
-              onSelect={() => navigate(href)}
-            >
-              <Icon />
-              {label}
-            </CommandItem>
-          ))}
-        </CommandGroup>
+        {loading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="size-4 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <>
+            <CommandEmpty>{t("search.empty")}</CommandEmpty>
+
+            <CommandGroup heading={t("search.navigation")}>
+              {navLinks.map(({ href, icon: Icon, label }) => (
+                <CommandItem
+                  key={href}
+                  value={label}
+                  onSelect={() => navigate(href)}
+                >
+                  <Icon />
+                  {label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+
+            {(data?.tasks.length ?? 0) > 0 && (
+              <CommandGroup heading={t("search.tasks")}>
+                {data!.tasks.map((item) => (
+                  <CommandItem
+                    key={item.id}
+                    value={item.title}
+                    keywords={["task"]}
+                    onSelect={() => navigate("/tasks")}
+                  >
+                    <CheckSquare />
+                    {item.title}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+            {(data?.contacts.length ?? 0) > 0 && (
+              <CommandGroup heading={t("search.contacts")}>
+                {data!.contacts.map((item) => (
+                  <CommandItem
+                    key={item.id}
+                    value={item.name}
+                    keywords={["contact", item.company ?? ""]}
+                    onSelect={() => navigate("/contacts")}
+                  >
+                    <Users />
+                    <span className="flex-1 truncate">{item.name}</span>
+                    {item.company && (
+                      <span className="ml-auto shrink-0 text-xs text-muted-foreground">
+                        {item.company}
+                      </span>
+                    )}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+            {(data?.meetings.length ?? 0) > 0 && (
+              <CommandGroup heading={t("search.meetings")}>
+                {data!.meetings.map((item) => (
+                  <CommandItem
+                    key={item.id}
+                    value={item.title}
+                    keywords={["meeting"]}
+                    onSelect={() => navigate("/meetings")}
+                  >
+                    <CalendarDays />
+                    {item.title}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+            {(data?.decisions.length ?? 0) > 0 && (
+              <CommandGroup heading={t("search.decisions")}>
+                {data!.decisions.map((item) => (
+                  <CommandItem
+                    key={item.id}
+                    value={item.title}
+                    keywords={["decision"]}
+                    onSelect={() => navigate("/decisions")}
+                  >
+                    <Scale />
+                    {item.title}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+            {(data?.goals.length ?? 0) > 0 && (
+              <CommandGroup heading={t("search.goals")}>
+                {data!.goals.map((item) => (
+                  <CommandItem
+                    key={item.id}
+                    value={item.title}
+                    keywords={["goal"]}
+                    onSelect={() => navigate("/goals")}
+                  >
+                    <Target />
+                    {item.title}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+          </>
+        )}
       </CommandList>
     </CommandDialog>
   );

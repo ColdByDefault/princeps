@@ -328,9 +328,14 @@
       "triggerLabel": "Search…",
       "title": "Quick navigation",
       "description": "Navigate pages in your workspace",
-      "placeholder": "Search pages…",
+      "placeholder": "Search pages or content…",
       "empty": "No results found.",
-      "navigation": "Navigation"
+      "navigation": "Navigation",
+      "tasks": "Tasks",
+      "contacts": "Contacts",
+      "meetings": "Meetings",
+      "decisions": "Decisions",
+      "goals": "Goals"
     },
     "footer": {
       "workspace": "Workspace",

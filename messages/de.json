@@ -328,9 +328,14 @@
       "triggerLabel": "Suchen…",
       "title": "Schnellnavigation",
       "description": "Seitennavigation im Arbeitsbereich",
-      "placeholder": "Seite suchen…",
+      "placeholder": "Seite oder Inhalt suchen…",
       "empty": "Keine Ergebnisse gefunden.",
-      "navigation": "Navigation"
+      "navigation": "Navigation",
+      "tasks": "Aufgaben",
+      "contacts": "Kontakte",
+      "meetings": "Meetings",
+      "decisions": "Entscheidungen",
+      "goals": "Ziele"
     },
     "footer": {
       "workspace": "Arbeitsbereich",
