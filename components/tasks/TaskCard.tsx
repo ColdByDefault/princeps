@@ -12,6 +12,7 @@ import {
   Pencil,
   Target,
   Trash2,
+  CalendarDays,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
@@ -162,6 +163,12 @@ export function TaskCard({
               {goal.title}
             </span>
           ))}
+          {task.meetingTitle && (
+            <span className="inline-flex h-5 items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-2 text-[10px] font-medium text-muted-foreground">
+              <CalendarDays className="size-2.5 shrink-0" />
+              {task.meetingTitle}
+            </span>
+          )}
         </div>
       </div>
 

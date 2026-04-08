@@ -100,6 +100,7 @@ export interface TaskRecord {
   priority: string; // "low" | "normal" | "high" | "urgent"
   dueDate: string | null; // ISO string on the client
   meetingId: string | null;
+  meetingTitle: string | null;
   goals: { id: string; title: string }[];
   labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client
@@ -115,6 +116,7 @@ export interface DecisionRecord {
   status: string; // "open" | "decided" | "reversed"
   decidedAt: string | null; // ISO string on the client
   meetingId: string | null;
+  meetingTitle: string | null;
   labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client

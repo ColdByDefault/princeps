@@ -7,6 +7,7 @@ import {
   Trash2,
   CheckCircle2,
   Circle,
+  ListChecks,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
@@ -147,12 +148,27 @@ export function GoalCard({
               {t("targetDate")}: {formatDate(goal.targetDate)}
             </span>
           )}
-          {goal.tasks.length > 0 && (
-            <span>
-              {goal.tasks.length} {t("linkedTasks")}
-            </span>
-          )}
         </div>
+
+        {/* Linked tasks */}
+        {goal.tasks.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {goal.tasks.slice(0, 3).map((task) => (
+              <span
+                key={task.id}
+                className="inline-flex h-5 items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-2 text-[10px] font-medium text-muted-foreground"
+              >
+                <ListChecks className="size-2.5 shrink-0" />
+                {task.title}
+              </span>
+            ))}
+            {goal.tasks.length > 3 && (
+              <span className="inline-flex h-5 items-center rounded-full border border-border px-2 text-[10px] font-medium text-muted-foreground">
+                +{goal.tasks.length - 3}
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Status + labels */}
         <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
