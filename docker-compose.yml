@@ -1,3 +1,5 @@
+name: princeps
+
 services:
   db:
     image: pgvector/pgvector:pg18
