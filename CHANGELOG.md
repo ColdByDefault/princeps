@@ -1,3 +1,22 @@
+## [0.1.45] - 2026-04-08
+
+- feat: update sign-up prompts and add free account hints in localization files
+- feat: update copyright information in localization files for consistency
+- feat: enhance pricing structure with plan prices and update PricingShell for better display of pricing and limits
+- feat: adjust ChatWidget position and refactor Footer component for improved layout and styling
+- feat: update color definitions for tier badges, cards, and rings for consistent styling
+- feat: update Navbar components for improved styling and layout adjustments
+- feat: add BackgroundThread component for enhanced visual effects and update LandingHero to integrate it
+- feat: enhance RotatingText component with array support for rotation intervals and add motion effects to LandingHero
+- feat: remove LandingHero component and its associated functionality
+- feat: update branding references from C-Sweet to Princeps in chat widget, documentation, and settings
+- feat: update branding references from C-Sweet to Princeps in localization files
+- feat: rename project references from C-Sweet to Princeps across documentation and codebase
+- feat: implement theme toggle functionality with view transitions and API integration
+- feat: add custom system prompt functionality with localization support and Markdown rendering
+- feat: integrate react-markdown and remark-gfm for enhanced Markdown rendering in chat messages
+- feat: add knowledge search functionality with handlers and localization support
+
 ## [0.1.44] - 2026-04-07
 
 - feat: update task management documentation with completed tasks and new brainstorming ideas
