@@ -29,9 +29,10 @@ export function ThemeHydrator({ theme }: Props) {
     if (!stored) {
       setTheme(theme);
     }
-    // Intentionally empty deps: run only once on mount.
+    // Also re-runs when `theme` changes (e.g. auth transition: null → real value
+    // after username login, where the layout stays mounted across navigation).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [theme]);
 
   return null;
 }

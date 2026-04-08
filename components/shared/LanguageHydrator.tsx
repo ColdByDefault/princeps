@@ -63,8 +63,10 @@ export function LanguageHydrator({ language, preferredLanguage }: Props) {
     if (!isSupportedLanguage(cookieValue)) {
       setCookieAndStorage(language);
     }
+    // Also re-runs when `preferredLanguage` changes (e.g. auth transition:
+    // null → real value after username login, where the layout stays mounted).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [preferredLanguage]);
 
   return null;
 }
