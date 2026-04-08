@@ -24,7 +24,7 @@ export async function updateProfile(
 
   if (username) {
     const existing = await db.user.findFirst({
-      where: { username, NOT: { id: userId } },
+      where: { username: username.toLowerCase(), NOT: { id: userId } },
       select: { id: true },
     });
     if (existing) {
@@ -36,7 +36,9 @@ export async function updateProfile(
     where: { id: userId },
     data: {
       ...(name !== undefined ? { name } : {}),
-      ...(username !== undefined ? { username } : {}),
+      ...(username !== undefined
+        ? { username: username.toLowerCase(), displayUsername: username }
+        : {}),
     },
     select: { name: true, username: true },
   });
