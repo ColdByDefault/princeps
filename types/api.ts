@@ -32,9 +32,6 @@ export interface KnowledgeDocumentRecord {
   createdAt: string; // ISO string on the client
 }
 
-/** Client-safe shape of the PersonalInfo fields map. */
-export type PersonalInfoFields = Record<string, string | number | null>;
-
 /** Client-safe shape of a lightweight label reference. */
 export interface LabelOptionRecord {
   id: string;

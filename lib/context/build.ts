@@ -37,7 +37,14 @@ export async function buildSystemPrompt(
   const [user, prefs] = await Promise.all([
     db.user.findUnique({
       where: { id: userId },
-      select: { name: true, timezone: true },
+      select: {
+        name: true,
+        username: true,
+        email: true,
+        tier: true,
+        role: true,
+        timezone: true,
+      },
     }),
     getUserPreferences(userId),
   ]);
@@ -121,6 +128,14 @@ export async function buildSystemPrompt(
     ...behaviorRules,
     "",
     `Available Tools: ${availableTools.join(", ")}.`,
+    "",
+    "## User Profile",
+    `- Name: ${user?.name ?? "not set"}`,
+    `- Username: ${user?.username ?? "not set"}`,
+    `- Email: ${user?.email ?? "not set"}`,
+    `- Plan: ${user?.tier ?? "free"}`,
+    `- Role: ${user?.role ?? "user"}`,
+    `- Timezone: ${tz}`,
   ];
 
   // Run all registered slots in parallel; omit sections that return null.
