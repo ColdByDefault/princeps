@@ -981,21 +981,36 @@
     "pageTitle": "Plans & Quotas",
     "pageSubtitle": "Your current plan and all available options.",
     "currentPlan": "Current plan",
+    "price": {
+      "free": "Free",
+      "perMonth": "/month",
+      "annual": "€{price}/yr billed annually"
+    },
     "planNames": {
       "free": "Free",
       "pro": "Pro",
       "premium": "Premium",
       "enterprise": "Enterprise"
     },
+    "sections": {
+      "ai": "AI Usage",
+      "data": "Stored Data",
+      "widget": "Widget"
+    },
     "limits": {
-      "messagesPerMonth": "Messages per month",
-      "tokensPerMonth": "Approx. tokens per month",
-      "chatsPerDay": "New chats per day",
+      "messagesPerMonth": "Messages / month",
+      "tokensPerMonth": "Tokens / month (approx.)",
+      "chatsPerDay": "New chats / day",
       "chatHistoryTotal": "Saved chats",
-      "knowledgeDocs": "Knowledge documents",
-      "toolCallsPerMonth": "AI tool calls per month",
-      "widgetChatsPerDay": "Widget chats per day",
-      "widgetToolsPerDay": "Widget tool calls per day",
+      "tasksMax": "Tasks",
+      "meetingsMax": "Meetings",
+      "decisionsMax": "Decisions",
+      "contactsMax": "Contacts",
+      "knowledgeDocs": "Knowledge docs",
+      "knowledgeFileSize": "Max file size",
+      "toolCallsPerMonth": "Tool calls / month",
+      "widgetChatsPerDay": "Widget chats / day",
+      "widgetToolsPerDay": "Widget tools / day",
       "nudgesEnabled": "Proactive nudges"
     },
     "yes": "Yes",

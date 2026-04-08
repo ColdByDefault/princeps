@@ -981,21 +981,36 @@
     "pageTitle": "Pläne & Kontingente",
     "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",
     "currentPlan": "Aktueller Plan",
+    "price": {
+      "free": "Kostenlos",
+      "perMonth": "/Monat",
+      "annual": "€{price}/Jahr jährlich"
+    },
     "planNames": {
       "free": "Free",
       "pro": "Pro",
       "premium": "Premium",
       "enterprise": "Enterprise"
     },
+    "sections": {
+      "ai": "KI-Nutzung",
+      "data": "Gespeicherte Daten",
+      "widget": "Widget"
+    },
     "limits": {
-      "messagesPerMonth": "Nachrichten pro Monat",
-      "tokensPerMonth": "Token pro Monat (ca.)",
-      "chatsPerDay": "Neue Chats pro Tag",
+      "messagesPerMonth": "Nachrichten / Monat",
+      "tokensPerMonth": "Token / Monat (ca.)",
+      "chatsPerDay": "Neue Chats / Tag",
       "chatHistoryTotal": "Gespeicherte Chats",
+      "tasksMax": "Aufgaben",
+      "meetingsMax": "Meetings",
+      "decisionsMax": "Entscheidungen",
+      "contactsMax": "Kontakte",
       "knowledgeDocs": "Wissensdokumente",
-      "toolCallsPerMonth": "KI-Werkzeugaufrufe pro Monat",
-      "widgetChatsPerDay": "Widget-Chats pro Tag",
-      "widgetToolsPerDay": "Widget-Werkzeugaufrufe pro Tag",
+      "knowledgeFileSize": "Max. Dateigröße",
+      "toolCallsPerMonth": "Werkzeugaufrufe / Monat",
+      "widgetChatsPerDay": "Widget-Chats / Tag",
+      "widgetToolsPerDay": "Widget-Werkzeuge / Tag",
       "nudgesEnabled": "Proaktive Hinweise"
     },
     "yes": "Ja",

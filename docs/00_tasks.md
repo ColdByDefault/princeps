@@ -40,10 +40,9 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 ## brainstorming — not yet scoped or planned
 
 - mobile navbar, close automatic after redirect
-- footer on small screen, adjust, better layout then 1 long column of links
 - add new routes from navbar to sidebar
 - add cmd+k shortcut to focus search input and add this feature .
 - version bump rule => update to 0.2.0 and make it the automatic increment count until 0.2.9, then jump to 0.3.0 and repeat, this is to make it easier to track versions during development.
 - When I am on Free tier, I have a maximum amount of tools calls per month, but what about creating manually from UI? something could be also related to `memory`.
 - I dont see prices any where, `/plans`, it needs update anyway to reflect new tier system. the badge for "current plan" is overlapping card boarder.
-
+- settings => tools tab, make them collapsed by default.
