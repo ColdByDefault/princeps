@@ -8,12 +8,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/memory`
 
-- [x] **#4 Memory tool** — persistent user-scoped fact store the LLM can read and write, plus optional UI to manage entries.
-  > **DESIGN NOTES:**
-  >
-  > - Two potential shapes: (a) **conversation summarizer** — after N messages, compress older turns into a summary and replace them; (b) **fact store** — explicit `MemoryEntry` rows (key/value or freeform) the LLM can write/read via tool calls.
-  > - Both can coexist: fact store as the primary `MemoryEntry` model, summarization as a background job that trims `ChatMessage` rows and writes a summary entry.
-  > - **Tier enforcement:** `MemoryEntry` is just another at-rest-limited model. Add `memoryMax` to `PlanLimits` and `UsageCounter` (same pattern as `tasksMax`). LLM tool calls to memory consume `toolCallsPerMonth` as normal. Manual UI edits are only gated by the at-rest cap — they do NOT consume from the tool call monthly budget. This resolves the brainstorming concern below.
 - [ ] **#5 Notes tool** — needs schema; lightweight freeform records, simpler than knowledge docs.
   > **NOTE:** this feature will be implemented in a future phase, Plan is to have MVP notes-app, similar to notes in Notion, with a simple text editor and the ability to link to tasks/meetings/contacts.
 - [ ] **#6 User Profile Settings** — allow users to change name, username. Email/password changes need careful handling with Better Auth. `ProfileShell` is currently read-only.
@@ -41,12 +35,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 ## brainstorming — not yet scoped or planned
 
 - mobile navbar, close automatic after redirect
-- add new routes from navbar to sidebar
 - add cmd+k shortcut to focus search input and add this feature .
 - version bump rule => update to 0.2.0 and make it the automatic increment count until 0.2.9, then jump to 0.3.0 and repeat, this is to make it easier to track versions during development.
-- ~~When I am on Free tier, I have a maximum amount of tools calls per month, but what about creating manually from UI? something could be also related to `memory`.~~ → Resolved: at-rest limits (`tasksMax`, `contactsMax`, etc.) already gate UI creates independently of `toolCallsPerMonth`. Memory will follow the same pattern — see #4.
-- I dont see prices any where, `/plans`, it needs update anyway to reflect new tier system. the badge for "current plan" is overlapping card boarder.
-- ~~settings => tools tab, make them collapsed by default.~~
 - for at-rest-limited models, users can request a one-time wipe of all their data, every 6 months, but this doesnt affect any other monthly tracked limits. this for premium and enterprise users who needs a reset of the LLM knowledge (Chunks) and memory (MemoryEntry).
-- allow users to login with either email or username, currently only email is allowed, but username is more user-friendly. backend is already setup to handle both, just need to update the login logic and UI.
 - dont unfocuse chat input in chat widget after sending a message, this is a common UX pattern in chat apps, and it allows for faster consecutive messages. currently it unfocuse after every send, which is annoying.

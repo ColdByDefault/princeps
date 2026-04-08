@@ -21,7 +21,7 @@ export default function LoginCard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +31,7 @@ export default function LoginCard() {
     event.preventDefault();
     setError(null);
 
-    const result = signInSchema.safeParse({ email, password });
+    const result = signInSchema.safeParse({ identifier, password });
     if (!result.success) {
       setError(result.error.issues[0].message);
       return;
@@ -39,11 +39,18 @@ export default function LoginCard() {
 
     setLoading(true);
 
-    const { error: authError } = await authClient.signIn.email({
-      email,
-      password,
-      callbackURL: callbackUrl ?? "/home",
-    });
+    const isEmail = identifier.includes("@");
+    const { error: authError } = isEmail
+      ? await authClient.signIn.email({
+          email: identifier,
+          password,
+          callbackURL: callbackUrl ?? "/home",
+        })
+      : await authClient.signIn.username({
+          username: identifier,
+          password,
+          callbackURL: callbackUrl ?? "/home",
+        });
 
     if (authError) {
       setError(authError.message ?? t("login.errorFallback"));
@@ -69,17 +76,17 @@ export default function LoginCard() {
           ) : null}
 
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
-              {t("login.emailLabel")}
+            <label htmlFor="identifier" className="text-sm font-medium">
+              {t("login.identifierLabel")}
             </label>
             <Input
-              id="email"
-              type="email"
-              autoComplete="email"
+              id="identifier"
+              type="text"
+              autoComplete="username email"
               required
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder={t("login.emailPlaceholder")}
+              value={identifier}
+              onChange={(event) => setIdentifier(event.target.value)}
+              placeholder={t("login.identifierPlaceholder")}
               className="h-11 rounded-xl bg-background/80"
             />
           </div>
