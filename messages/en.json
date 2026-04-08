@@ -852,7 +852,8 @@
       "meetings": "Meetings",
       "decisions": "Decisions",
       "goals": "Goals",
-      "knowledge": "Knowledge"
+      "knowledge": "Knowledge",
+      "memory": "Memory"
     },
     "catalog": {
       "create_task": {
@@ -999,6 +1000,21 @@
         "label": "Search Knowledge",
         "what": "Searches your personal knowledge base using semantic similarity to find relevant excerpts from uploaded documents.",
         "example": "\"What does my onboarding document say about vacation policy?\""
+      },
+      "remember_fact": {
+        "label": "Remember Fact",
+        "what": "Saves a key–value fact to your personal memory so the assistant can recall it in future conversations.",
+        "example": "\"Remember that my preferred meeting time is 10am\""
+      },
+      "recall_facts": {
+        "label": "Recall Facts",
+        "what": "Retrieves all facts stored in your personal memory.",
+        "example": "\"What do you know about me?\" or \"What have I told you to remember?\""
+      },
+      "forget_fact": {
+        "label": "Forget Fact",
+        "what": "Permanently deletes a stored memory fact by its ID.",
+        "example": "\"Forget that fact about my meeting time\""
       }
     }
   },

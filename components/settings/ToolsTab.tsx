@@ -92,7 +92,7 @@ export function ToolsTab({
       {/* Tool groups */}
       <div className="space-y-3">
         {Array.from(groups.entries()).map(([groupKey, tools]) => (
-          <Collapsible key={groupKey} defaultOpen>
+          <Collapsible key={groupKey} defaultOpen={false}>
             <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 pb-1.5">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">
                 {tTools(`groups.${groupKey}`)}

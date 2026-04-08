@@ -46,5 +46,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - version bump rule => update to 0.2.0 and make it the automatic increment count until 0.2.9, then jump to 0.3.0 and repeat, this is to make it easier to track versions during development.
 - ~~When I am on Free tier, I have a maximum amount of tools calls per month, but what about creating manually from UI? something could be also related to `memory`.~~ → Resolved: at-rest limits (`tasksMax`, `contactsMax`, etc.) already gate UI creates independently of `toolCallsPerMonth`. Memory will follow the same pattern — see #4.
 - I dont see prices any where, `/plans`, it needs update anyway to reflect new tier system. the badge for "current plan" is overlapping card boarder.
-- settings => tools tab, make them collapsed by default.
+- ~~settings => tools tab, make them collapsed by default.~~
 - for at-rest-limited models, users can request a one-time wipe of all their data, every 6 months, but this doesnt affect any other monthly tracked limits. this for premium and enterprise users who needs a reset of the LLM knowledge (Chunks) and memory (MemoryEntry).
+- allow users to login with either email or username, currently only email is allowed, but username is more user-friendly. backend is already setup to handle both, just need to update the login logic and UI.

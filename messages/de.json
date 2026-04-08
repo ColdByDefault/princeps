@@ -852,7 +852,8 @@
       "meetings": "Meetings",
       "decisions": "Entscheidungen",
       "goals": "Ziele",
-      "knowledge": "Wissen"
+      "knowledge": "Wissen",
+      "memory": "Gedächtnis"
     },
     "catalog": {
       "create_task": {
@@ -999,6 +1000,21 @@
         "label": "Wissen durchsuchen",
         "what": "Durchsucht deine persönliche Wissensdatenbank semantisch und findet relevante Ausschnitte aus hochgeladenen Dokumenten.",
         "example": "\"Was steht in meinem Onboarding-Dokument zur Urlaubsregelung?\""
+      },
+      "remember_fact": {
+        "label": "Fakt merken",
+        "what": "Speichert einen Schlüssel-Wert-Fakt in deinem persönlichen Gedächtnis, damit der Assistent ihn in zukünftigen Gesprächen abrufen kann.",
+        "example": "\"Merke dir, dass meine bevorzugte Meetings-Zeit 10 Uhr ist\""
+      },
+      "recall_facts": {
+        "label": "Fakten abrufen",
+        "what": "Ruft alle in deinem persönlichen Gedächtnis gespeicherten Fakten ab.",
+        "example": "\"Was weißt du über mich?\" oder \"Was habe ich dir zu merken gebeten?\""
+      },
+      "forget_fact": {
+        "label": "Fakt vergessen",
+        "what": "Löscht einen gespeicherten Gedächtnis-Fakt dauerhaft anhand seiner ID.",
+        "example": "\"Vergiss den Fakt über meine Meeting-Zeit\""
       }
     }
   },
