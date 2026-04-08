@@ -3,7 +3,7 @@
 > **Status:** Implemented — April 2026
 > **Branch:** `feat/major-update-6`
 
-Labels are global, user-scoped tags that can be attached to any record in C-Sweet (tasks, contacts, meetings, decisions, knowledge documents). They are created and managed in **Settings → Labels** and are available in every feature that supports them.
+Labels are global, user-scoped tags that can be attached to any record in Princeps (tasks, contacts, meetings, decisions, knowledge documents). They are created and managed in **Settings → Labels** and are available in every feature that supports them.
 
 ---
 

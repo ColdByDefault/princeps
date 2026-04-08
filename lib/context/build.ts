@@ -54,7 +54,7 @@ export async function buildSystemPrompt(
     timeZone: tz,
   });
 
-  const assistantName = prefs.assistantName ?? "C-Sweet";
+  const assistantName = prefs.assistantName ?? "Princeps";
 
   const TONE_DESCRIPTIONS: Record<string, string> = {
     professional: "Maintain a professional, polished tone at all times.",

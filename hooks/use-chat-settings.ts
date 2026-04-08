@@ -17,7 +17,7 @@ export const CHAT_SETTINGS_DEFAULTS: ChatSettings = {
   timeoutMs: 30_000,
 };
 
-const STORAGE_KEY = "c-sweet:chat-settings";
+const STORAGE_KEY = "Princeps:chat-settings";
 
 function load(): ChatSettings {
   if (typeof window === "undefined") return CHAT_SETTINGS_DEFAULTS;
