@@ -265,7 +265,7 @@ export default function NavbarDesktop({
                   size="icon-sm"
                   aria-label={t("nav.profile")}
                   className={cn(
-                    "cursor-pointer rounded-sm bg-transparent p-0",
+                    "cursor-pointer rounded-full bg-transparent p-0",
                     getTierRingClass(tier),
                   )}
                   nativeButton={false}
@@ -273,8 +273,8 @@ export default function NavbarDesktop({
                 />
               }
             >
-              <Avatar className="size-7">
-                <AvatarFallback className="bg-primary/10 text-primary text-[11px] font-semibold">
+              <Avatar className="size-7 rounded-full">
+                <AvatarFallback className="bg-primary/10 text-primary text-[11px] font-semibold rounded-full">
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
