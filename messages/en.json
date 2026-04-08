@@ -1,11 +1,14 @@
 {
   "landing": {
     "metadata": {
-      "title": "C-Sweet",
+      "title": "Princeps",
       "description": "Private executive secretariat for focused operators."
     },
-    "brandName": "C-Sweet",
+    "brandName": "Princeps",
     "tagline": "Your digital chief of staff",
+    "heroText0": "Princeps",
+    "heroText1": "Stay in Control",
+    "heroText2": "Built for Operators",
     "login": "Sign in",
     "signUp": "Create account"
   },
@@ -37,7 +40,7 @@
     "login": {
       "metadata": {
         "title": "Sign In",
-        "description": "Sign in to your C-Sweet workspace."
+        "description": "Sign in to your Princeps workspace."
       },
       "title": "Welcome back",
       "subtitle": "Sign in with your email and password.",
@@ -56,7 +59,7 @@
     "signUp": {
       "metadata": {
         "title": "Create Account",
-        "description": "Create your C-Sweet workspace."
+        "description": "Create your Princeps workspace."
       },
       "title": "Create an account",
       "subtitle": "Sign up with your email address.",
@@ -83,7 +86,7 @@
     "forgotPassword": {
       "metadata": {
         "title": "Forgot Password",
-        "description": "Reset your C-Sweet password."
+        "description": "Reset your Princeps password."
       },
       "title": "Forgot your password?",
       "subtitle": "Enter your email address and we'll send you a reset link.",
@@ -99,7 +102,7 @@
     "resetPassword": {
       "metadata": {
         "title": "New Password",
-        "description": "Set a new password for your C-Sweet account."
+        "description": "Set a new password for your Princeps account."
       },
       "title": "Set a new password",
       "subtitle": "Enter your new password below.",
@@ -280,7 +283,7 @@
   },
   "shell": {
     "nav": {
-      "brand": "C-Sweet",
+      "brand": "Princeps",
       "home": "Workspace",
       "chat": "Chat",
       "knowledge": "Knowledge Base",
@@ -973,7 +976,7 @@
   "pricing": {
     "metadata": {
       "title": "Plans",
-      "description": "Available plans and quotas for C-Sweet."
+      "description": "Available plans and quotas for Princeps."
     },
     "pageTitle": "Plans & Quotas",
     "pageSubtitle": "Your current plan and all available options.",

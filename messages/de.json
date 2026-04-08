@@ -1,11 +1,14 @@
 {
   "landing": {
     "metadata": {
-      "title": "C-Sweet",
+      "title": "Princeps",
       "description": "Privates Chefsekretariat für fokussierte Entscheider."
     },
-    "brandName": "C-Sweet",
+    "brandName": "Princeps",
     "tagline": "Dein digitales Chefsekretariat",
+    "heroText0": "Princeps",
+    "heroText1": "Behalte die Kontrolle",
+    "heroText2": "Für Entscheider",
     "login": "Anmelden",
     "signUp": "Konto erstellen"
   },
@@ -37,7 +40,7 @@
     "login": {
       "metadata": {
         "title": "Anmelden",
-        "description": "Melde dich in deinem C-Sweet-Arbeitsbereich an."
+        "description": "Melde dich in deinem Princeps-Arbeitsbereich an."
       },
       "title": "Willkommen zurück",
       "subtitle": "Melde dich mit deiner E-Mail-Adresse und deinem Passwort an.",
@@ -56,7 +59,7 @@
     "signUp": {
       "metadata": {
         "title": "Konto erstellen",
-        "description": "Erstelle deinen C-Sweet-Arbeitsbereich."
+        "description": "Erstelle deinen Princeps-Arbeitsbereich."
       },
       "title": "Konto erstellen",
       "subtitle": "Registriere dich mit deiner E-Mail-Adresse.",
@@ -83,7 +86,7 @@
     "forgotPassword": {
       "metadata": {
         "title": "Passwort vergessen",
-        "description": "Setze dein C-Sweet-Passwort zurück."
+        "description": "Setze dein Princeps-Passwort zurück."
       },
       "title": "Passwort vergessen?",
       "subtitle": "Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen.",
@@ -99,7 +102,7 @@
     "resetPassword": {
       "metadata": {
         "title": "Neues Passwort",
-        "description": "Lege ein neues Passwort für dein C-Sweet-Konto fest."
+        "description": "Lege ein neues Passwort für dein Princeps-Konto fest."
       },
       "title": "Neues Passwort festlegen",
       "subtitle": "Gib dein neues Passwort ein.",
@@ -280,7 +283,7 @@
   },
   "shell": {
     "nav": {
-      "brand": "C-Sweet",
+      "brand": "Princeps",
       "home": "Arbeitsbereich",
       "knowledge": "Wissensbasis",
       "chat": "Chat",
@@ -973,7 +976,7 @@
   "pricing": {
     "metadata": {
       "title": "Pläne",
-      "description": "Verfügbare Pläne und Kontingente für C-Sweet."
+      "description": "Verfügbare Pläne und Kontingente für Princeps."
     },
     "pageTitle": "Pläne & Kontingente",
     "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",
