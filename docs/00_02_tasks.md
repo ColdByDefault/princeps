@@ -6,8 +6,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ## Beta — implement before first stable release
 
-
-- [ ] **#1 Mobile navbar auto-close** — close the mobile nav automatically after a route redirect.
 - [ ] **#2 `cmd+k` search shortcut** — focus search input on `cmd+k` / `ctrl+k`; wire up the shortcut across the app.
 
 - [ ] **#19 Meeting prep pack** — `Meeting.prepPack` was migrated but is 0% implemented (always returns `null`). Add the generate action, tool parameter, and UI to display the pack.
