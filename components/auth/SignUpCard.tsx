@@ -195,6 +195,9 @@ export default function SignUpCard() {
             {loading ? t("signUp.submitting") : t("signUp.submit")}
             <ArrowRight className="size-4" />
           </Button>
+          <p className="text-center text-xs text-muted-foreground/70">
+            {t("signUp.freeHint")}
+          </p>
         </form>
       }
       footer={

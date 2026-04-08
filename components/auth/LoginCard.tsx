@@ -136,15 +136,20 @@ export default function LoginCard() {
         </form>
       }
       footer={
-        <p className="text-center text-sm text-muted-foreground">
-          {t("login.switchPrompt")}{" "}
-          <Link
-            href="/sign-up"
-            className="cursor-pointer font-medium text-foreground hover:text-primary"
-          >
-            {t("login.switchLink")}
-          </Link>
-        </p>
+        <div className="space-y-1 text-center">
+          <p className="text-sm text-muted-foreground">
+            {t("login.switchPrompt")}{" "}
+            <Link
+              href="/sign-up"
+              className="cursor-pointer font-medium text-foreground hover:text-primary"
+            >
+              {t("login.switchLink")}
+            </Link>
+          </p>
+          <p className="text-xs text-muted-foreground/70">
+            {t("login.freeHint")}
+          </p>
+        </div>
       }
     />
   );

@@ -10,7 +10,7 @@
     "heroText1": "Behalte die Kontrolle",
     "heroText2": "Für Entscheider",
     "login": "Anmelden",
-    "signUp": "Konto erstellen"
+    "signUp": "Kostenlos starten"
   },
   "home": {
     "metadata": {
@@ -54,6 +54,7 @@
       "redirectNotice": "Bitte melde dich an, um fortzufahren.",
       "switchPrompt": "Noch kein Konto?",
       "switchLink": "Konto erstellen",
+      "freeHint": "Kostenlos — keine Kreditkarte erforderlich.",
       "forgotPassword": "Passwort vergessen?"
     },
     "signUp": {
@@ -77,7 +78,8 @@
       "submitting": "Wird erstellt …",
       "errorFallback": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",
       "switchPrompt": "Bereits ein Konto?",
-      "switchLink": "Anmelden"
+      "switchLink": "Anmelden",
+      "freeHint": "Kostenlos — keine Kreditkarte erforderlich."
     },
     "password": {
       "show": "Passwort anzeigen",

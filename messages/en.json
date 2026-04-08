@@ -10,7 +10,7 @@
     "heroText1": "Stay in Control",
     "heroText2": "Built for Operators",
     "login": "Sign in",
-    "signUp": "Create account"
+    "signUp": "Start for free"
   },
   "home": {
     "metadata": {
@@ -54,6 +54,7 @@
       "redirectNotice": "Please sign in to continue.",
       "switchPrompt": "Don't have an account?",
       "switchLink": "Create account",
+      "freeHint": "It's free — no credit card required.",
       "forgotPassword": "Forgot password?"
     },
     "signUp": {
@@ -77,7 +78,8 @@
       "submitting": "Creating account...",
       "errorFallback": "Sign up failed. Please try again.",
       "switchPrompt": "Already have an account?",
-      "switchLink": "Sign in"
+      "switchLink": "Sign in",
+      "freeHint": "Free forever — no credit card required."
     },
     "password": {
       "show": "Show password",
