@@ -16,8 +16,8 @@ import {
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
-import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
+import { useTranslations, useLocale } from "next-intl";
+import { cn, formatDate } from "@/lib/utils";
 import type { ContactRecord } from "@/types/api";
 import {
   Dialog,
@@ -77,13 +77,7 @@ export function ContactDetailDialog({
   const initials = getInitials(contact.name);
   const avatarColor = getAvatarColor(contact.name);
 
-  function formatDate(iso: string) {
-    return new Date(iso).toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  }
+  const locale = useLocale();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -183,7 +177,8 @@ export function ContactDetailDialog({
             <div className="text-muted-foreground flex items-center gap-2.5 text-sm">
               <CalendarDays className="size-4 shrink-0" />
               <span>
-                {t("lastContactLabel")}: {formatDate(contact.lastContact)}
+                {t("lastContactLabel")}:{" "}
+                {formatDate(contact.lastContact, locale)}
               </span>
             </div>
           )}

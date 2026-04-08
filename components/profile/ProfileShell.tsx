@@ -8,6 +8,7 @@
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Pencil } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { PlanBadge } from "@/components/shared";
@@ -63,10 +64,7 @@ export default function ProfileShell({ user }: ProfileShellProps) {
   const initials = getInitials(name, user.email);
   const displayName = name?.trim() || user.email;
 
-  const memberSince = new Date(user.createdAt).toLocaleDateString(
-    locale === "de" ? "de-DE" : "en-US",
-    { year: "numeric", month: "long", day: "numeric" },
-  );
+  const memberSince = formatDate(user.createdAt, locale);
 
   const rows: { label: string; value: React.ReactNode }[] = [
     {

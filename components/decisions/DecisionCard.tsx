@@ -9,8 +9,8 @@ import {
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
-import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
+import { useTranslations, useLocale } from "next-intl";
+import { cn, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,14 +44,7 @@ export function DecisionCard({
   onDelete,
 }: DecisionCardProps) {
   const t = useTranslations("decisions");
-
-  function formatDate(iso: string) {
-    return new Date(iso).toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  }
+  const locale = useLocale();
 
   return (
     <div
@@ -92,7 +85,7 @@ export function DecisionCard({
         {/* Meta row */}
         {decision.decidedAt && (
           <p className="text-[10px] text-muted-foreground">
-            {formatDate(decision.decidedAt)}
+            {formatDate(decision.decidedAt, locale)}
           </p>
         )}
 
