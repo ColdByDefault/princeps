@@ -1,0 +1,1 @@
+I just spoke with Sarah Chen — she's the new Head of Product at Nexus Corp, sarah@nexus.io. We agreed to meet next Tuesday at 2pm for a product walkthrough, about 45 minutes. I need to prepare a slide deck beforehand — make it high priority. Oh, and she mentioned their Q3 deadline is September 15th, worth keeping in mind.
