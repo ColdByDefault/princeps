@@ -71,13 +71,12 @@ export function ContactDetailDialog({
   onDelete,
 }: ContactDetailDialogProps) {
   const t = useTranslations("contacts");
+  const locale = useLocale();
 
   if (!contact) return null;
 
   const initials = getInitials(contact.name);
   const avatarColor = getAvatarColor(contact.name);
-
-  const locale = useLocale();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
