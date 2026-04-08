@@ -58,6 +58,11 @@ export interface PlanLimits {
    * `-1` = unlimited — the enforce function skips the count check.
    */
   goalsMax: number;
+  /**
+   * Max total memory entries stored at once (no monthly reset).
+   * `-1` = unlimited — the enforce function skips the count check.
+   */
+  memoryMax: number;
   /** Whether proactive nudge notifications are active. */
   nudgesEnabled: boolean;
 }
@@ -87,6 +92,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     meetingsMax: 10,
     decisionsMax: 10,
     goalsMax: 10,
+    memoryMax: 25,
     nudgesEnabled: false,
   },
   pro: {
@@ -105,6 +111,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     meetingsMax: 50,
     decisionsMax: 50,
     goalsMax: 25,
+    memoryMax: 100,
     nudgesEnabled: true,
   },
   premium: {
@@ -123,6 +130,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     meetingsMax: 200,
     decisionsMax: 200,
     goalsMax: 100,
+    memoryMax: 500,
     nudgesEnabled: true,
   },
   enterprise: {
@@ -141,6 +149,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     meetingsMax: -1,
     decisionsMax: -1,
     goalsMax: -1,
+    memoryMax: -1,
     nudgesEnabled: true,
   },
 };
@@ -214,6 +223,10 @@ export interface UsageSummary {
   goalsStored: number;
   /** Plan maximum for goals at rest. `-1` = unlimited. */
   goalsLimit: number;
+  /** Current count of memory entries at rest. */
+  memoryStored: number;
+  /** Plan maximum for memory entries at rest. `-1` = unlimited. */
+  memoryLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

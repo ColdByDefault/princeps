@@ -232,6 +232,7 @@ export function ContactCard({
         open={showDetailDialog}
         onOpenChange={setShowDetailDialog}
         onEdit={onEdit}
+        onDelete={onDelete}
       />
     </>
   );

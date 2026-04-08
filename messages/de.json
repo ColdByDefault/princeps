@@ -223,7 +223,9 @@
       "decisionsTitle": "Entscheidungen (gespeichert)",
       "decisionsNote": "Anzahl der aktuell gespeicherten Entscheidungen.",
       "goalsTitle": "Ziele (gespeichert)",
-      "goalsNote": "Anzahl der aktuell gespeicherten Ziele."
+      "goalsNote": "Anzahl der aktuell gespeicherten Ziele.",
+      "memoryTitle": "Gedächtnis-Fakten (gespeichert)",
+      "memoryNote": "Anzahl der aktuell gespeicherten Gedächtnis-Fakten."
     },
     "tools": {
       "title": "KI-Werkzeuge",
@@ -309,6 +311,7 @@
       "goals": "Ziele",
       "labels": "Labels",
       "intel": "Intelligenz",
+      "memory": "Gedächtnis",
       "comingSoon": "Bald verfügbar"
     },
     "language": {
@@ -523,6 +526,48 @@
     "actionsLabel": "Zielaktionen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "L\u00f6schen"
+  },
+  "memory": {
+    "metadata": {
+      "title": "Ged\u00e4chtnis",
+      "description": "Fakten, die sich der Assistent \u00fcber dich merkt."
+    },
+    "pageTitle": "Ged\u00e4chtnis",
+    "pageSubtitle": "Fakten, die sich der Assistent \u00fcber dich merkt.",
+    "addEntry": "Fakt hinzuf\u00fcgen",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert\u2026",
+    "empty": "Noch keine Fakten gespeichert.",
+    "emptyHint": "Bitte den Assistenten, sich etwas zu merken, oder f\u00fcge einen Fakt manuell hinzu.",
+    "sourceAI": "KI",
+    "sourceUser": "Du",
+    "actions": "Aktionen",
+    "edit": "Bearbeiten",
+    "delete": "L\u00f6schen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "saving": "Wird gespeichert\u2026",
+    "keyLabel": "Thema",
+    "keyPlaceholder": "z.\u00a0B. Berufsbezeichnung",
+    "valueLabel": "Fakt",
+    "valuePlaceholder": "z.\u00a0B. Senior Engineer bei Acme",
+    "createTitle": "Fakt hinzuf\u00fcgen",
+    "editTitle": "Fakt bearbeiten",
+    "createDialog": {
+      "success": "Fakt gespeichert.",
+      "error": "Fakt konnte nicht gespeichert werden."
+    },
+    "editDialog": {
+      "success": "Fakt aktualisiert.",
+      "error": "Fakt konnte nicht aktualisiert werden."
+    },
+    "deleteDialog": {
+      "title": "Diesen Fakt l\u00f6schen?",
+      "description": "Der Fakt wird dauerhaft aus dem Ged\u00e4chtnis entfernt. Der Assistent hat dann keinen Zugriff mehr darauf.",
+      "confirm": "L\u00f6schen",
+      "success": "Fakt gel\u00f6scht.",
+      "error": "Fakt konnte nicht gel\u00f6scht werden."
+    }
   },
   "meetings": {
     "metadata": {
@@ -811,7 +856,8 @@
       "meetings": "Meetings",
       "decisions": "Entscheidungen",
       "goals": "Ziele",
-      "knowledge": "Wissen"
+      "knowledge": "Wissen",
+      "memory": "Gedächtnis"
     },
     "catalog": {
       "create_task": {
@@ -958,6 +1004,21 @@
         "label": "Wissen durchsuchen",
         "what": "Durchsucht deine persönliche Wissensdatenbank semantisch und findet relevante Ausschnitte aus hochgeladenen Dokumenten.",
         "example": "\"Was steht in meinem Onboarding-Dokument zur Urlaubsregelung?\""
+      },
+      "remember_fact": {
+        "label": "Fakt merken",
+        "what": "Speichert einen Schlüssel-Wert-Fakt in deinem persönlichen Gedächtnis, damit der Assistent ihn in zukünftigen Gesprächen abrufen kann.",
+        "example": "\"Merke dir, dass meine bevorzugte Meetings-Zeit 10 Uhr ist\""
+      },
+      "recall_facts": {
+        "label": "Fakten abrufen",
+        "what": "Ruft alle in deinem persönlichen Gedächtnis gespeicherten Fakten ab.",
+        "example": "\"Was weißt du über mich?\" oder \"Was habe ich dir zu merken gebeten?\""
+      },
+      "forget_fact": {
+        "label": "Fakt vergessen",
+        "what": "Löscht einen gespeicherten Gedächtnis-Fakt dauerhaft anhand seiner ID.",
+        "example": "\"Vergiss den Fakt über meine Meeting-Zeit\""
       }
     }
   },
@@ -1008,6 +1069,7 @@
       "meetingsMax": "Meetings",
       "decisionsMax": "Entscheidungen",
       "contactsMax": "Kontakte",
+      "memoryMax": "Gedächtnis-Fakten",
       "knowledgeDocs": "Wissensdokumente",
       "knowledgeFileSize": "Max. Dateigröße",
       "toolCallsPerMonth": "Werkzeugaufrufe / Monat",

@@ -152,3 +152,13 @@ export interface GoalRecord {
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }
+
+/** Client-safe shape of a MemoryEntry record. */
+export interface MemoryEntryRecord {
+  id: string;
+  key: string;
+  value: string;
+  source: string; // "llm" | "user"
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}

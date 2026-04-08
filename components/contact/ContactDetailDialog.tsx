@@ -12,6 +12,7 @@ import {
   Briefcase,
   CalendarDays,
   Pencil,
+  Trash2,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
@@ -59,6 +60,7 @@ interface ContactDetailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onEdit: (contact: ContactRecord) => void;
+  onDelete: (contactId: string) => void;
 }
 
 export function ContactDetailDialog({
@@ -66,6 +68,7 @@ export function ContactDetailDialog({
   open,
   onOpenChange,
   onEdit,
+  onDelete,
 }: ContactDetailDialogProps) {
   const t = useTranslations("contacts");
 
@@ -125,19 +128,33 @@ export function ContactDetailDialog({
               </div>
             )}
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="cursor-pointer shrink-0"
-            aria-label={t("editLabel")}
-            onClick={() => {
-              onOpenChange(false);
-              onEdit(contact);
-            }}
-          >
-            <Pencil className="mr-1.5 size-3.5" />
-            {t("editLabel")}
-          </Button>
+          <div className="flex items-center gap-2 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              className="cursor-pointer"
+              aria-label={t("editLabel")}
+              onClick={() => {
+                onOpenChange(false);
+                onEdit(contact);
+              }}
+            >
+              <Pencil className="mr-1.5 size-3.5" />
+              {t("editLabel")}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="cursor-pointer text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
+              aria-label={t("deleteLabel")}
+              onClick={() => {
+                onOpenChange(false);
+                onDelete(contact.id);
+              }}
+            >
+              <Trash2 className="mr-1.5 size-3.5" />
+            </Button>
+          </div>
         </div>
 
         <Separator />

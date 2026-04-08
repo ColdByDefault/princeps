@@ -69,6 +69,11 @@ enum GoalStatus {
   cancelled
 }
 
+enum MemorySource {
+  llm
+  user
+}
+
 enum InteractionSource {
   meeting
   task
@@ -80,6 +85,7 @@ model User {
   id                   String   @id @default(cuid())
   name                 String?
   username             String?  @unique
+  displayUsername      String?
   email                String   @unique
   emailVerified        Boolean  @default(false)
   image                String?
@@ -110,6 +116,7 @@ model User {
   integrations       Integration[]
   labels             Label[]
   usageCounter       UsageCounter?
+  memoryEntries      MemoryEntry[]
 
   @@map("user")
 }
@@ -595,4 +602,21 @@ model LabelOnGoal {
 
   @@id([labelId, goalId])
   @@map("label_on_goal")
+}
+
+// ─── Memory ───────────────────────────────────────────────
+
+model MemoryEntry {
+  id        String       @id @default(cuid())
+  userId    String
+  key       String       // brief topic label, e.g. "job title"
+  value     String       // freeform fact content
+  source    MemorySource @default(user)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("memory_entry")
 }

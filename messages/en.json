@@ -223,7 +223,9 @@
       "decisionsTitle": "Decisions (stored)",
       "decisionsNote": "Number of decisions currently stored.",
       "goalsTitle": "Goals (stored)",
-      "goalsNote": "Number of goals currently stored."
+      "goalsNote": "Number of goals currently stored.",
+      "memoryTitle": "Memory facts (stored)",
+      "memoryNote": "Number of memory facts currently stored."
     },
     "tools": {
       "title": "AI Tools",
@@ -309,6 +311,7 @@
       "goals": "Goals",
       "labels": "Labels",
       "intel": "Intelligence",
+      "memory": "Memory",
       "comingSoon": "Coming soon"
     },
     "language": {
@@ -523,6 +526,48 @@
     "actionsLabel": "Goal actions",
     "editLabel": "Edit",
     "deleteLabel": "Delete"
+  },
+  "memory": {
+    "metadata": {
+      "title": "Memory",
+      "description": "Facts the assistant remembers about you."
+    },
+    "pageTitle": "Memory",
+    "pageSubtitle": "Facts the assistant remembers about you.",
+    "addEntry": "Add fact",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…",
+    "empty": "No facts remembered yet.",
+    "emptyHint": "Ask the assistant to remember something, or add a fact manually.",
+    "sourceAI": "AI",
+    "sourceUser": "You",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "keyLabel": "Topic",
+    "keyPlaceholder": "e.g. job title",
+    "valueLabel": "Fact",
+    "valuePlaceholder": "e.g. Senior engineer at Acme",
+    "createTitle": "Add fact",
+    "editTitle": "Edit fact",
+    "createDialog": {
+      "success": "Fact saved.",
+      "error": "Failed to save fact."
+    },
+    "editDialog": {
+      "success": "Fact updated.",
+      "error": "Failed to update fact."
+    },
+    "deleteDialog": {
+      "title": "Delete this fact?",
+      "description": "This will permanently remove the fact from memory. The assistant will no longer have access to it.",
+      "confirm": "Delete",
+      "success": "Fact deleted.",
+      "error": "Failed to delete fact."
+    }
   },
   "meetings": {
     "metadata": {
@@ -811,7 +856,8 @@
       "meetings": "Meetings",
       "decisions": "Decisions",
       "goals": "Goals",
-      "knowledge": "Knowledge"
+      "knowledge": "Knowledge",
+      "memory": "Memory"
     },
     "catalog": {
       "create_task": {
@@ -958,6 +1004,21 @@
         "label": "Search Knowledge",
         "what": "Searches your personal knowledge base using semantic similarity to find relevant excerpts from uploaded documents.",
         "example": "\"What does my onboarding document say about vacation policy?\""
+      },
+      "remember_fact": {
+        "label": "Remember Fact",
+        "what": "Saves a key–value fact to your personal memory so the assistant can recall it in future conversations.",
+        "example": "\"Remember that my preferred meeting time is 10am\""
+      },
+      "recall_facts": {
+        "label": "Recall Facts",
+        "what": "Retrieves all facts stored in your personal memory.",
+        "example": "\"What do you know about me?\" or \"What have I told you to remember?\""
+      },
+      "forget_fact": {
+        "label": "Forget Fact",
+        "what": "Permanently deletes a stored memory fact by its ID.",
+        "example": "\"Forget that fact about my meeting time\""
       }
     }
   },
@@ -1008,6 +1069,7 @@
       "meetingsMax": "Meetings",
       "decisionsMax": "Decisions",
       "contactsMax": "Contacts",
+      "memoryMax": "Memory facts",
       "knowledgeDocs": "Knowledge docs",
       "knowledgeFileSize": "Max file size",
       "toolCallsPerMonth": "Tool calls / month",

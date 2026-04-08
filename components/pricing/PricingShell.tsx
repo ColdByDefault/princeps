@@ -112,7 +112,7 @@ export function PricingShell({ currentTier }: PricingShellProps) {
                   )}
                 </div>
 
-                <Separator className="mb-4" />
+                <Separator className="my-2" />
 
                 {/* AI usage */}
                 <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
@@ -140,7 +140,7 @@ export function PricingShell({ currentTier }: PricingShellProps) {
                 </ul>
 
                 {/* Data */}
-                <Separator className="mb-4" />
+                <Separator className="my-2" />
                 <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
                   {t("sections.data")}
                 </p>
@@ -170,6 +170,10 @@ export function PricingShell({ currentTier }: PricingShellProps) {
                     value={fmt(limits.contactsMax)}
                   />
                   <LimitRow
+                    label={t("limits.memoryMax")}
+                    value={fmt(limits.memoryMax)}
+                  />
+                  <LimitRow
                     label={t("limits.knowledgeDocs")}
                     value={fmt(limits.knowledgeDocs)}
                   />
@@ -180,7 +184,7 @@ export function PricingShell({ currentTier }: PricingShellProps) {
                 </ul>
 
                 {/* Widget */}
-                <Separator className="mb-4" />
+                <Separator className="my-2" />
                 <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
                   {t("sections.widget")}
                 </p>
