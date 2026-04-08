@@ -11,6 +11,7 @@ import {
   LayoutGrid,
   ChevronDown,
   BrainCog,
+  Search,
   type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -234,7 +235,7 @@ export default function NavbarDesktop({
       </nav>
 
       <div className="ml-auto hidden items-center gap-2 min-[1000px]:flex">
-        {/*         <Button
+        <Button
           type="button"
           variant="outline"
           size="sm"
@@ -250,7 +251,7 @@ export default function NavbarDesktop({
           <kbd className="pointer-events-none ml-auto hidden select-none rounded border border-border/70 bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground sm:inline-flex">
             ⌘K
           </kbd>
-        </Button> */}
+        </Button>
 
         <NotificationBell />
         <LanguageToggle />

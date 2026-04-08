@@ -325,7 +325,12 @@
     },
     "search": {
       "trigger": "Arbeitsbereich durchsuchen",
-      "triggerLabel": "Suchen…"
+      "triggerLabel": "Suchen…",
+      "title": "Schnellnavigation",
+      "description": "Seitennavigation im Arbeitsbereich",
+      "placeholder": "Seite suchen…",
+      "empty": "Keine Ergebnisse gefunden.",
+      "navigation": "Navigation"
     },
     "footer": {
       "workspace": "Arbeitsbereich",

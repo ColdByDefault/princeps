@@ -325,7 +325,12 @@
     },
     "search": {
       "trigger": "Search workspace",
-      "triggerLabel": "Search…"
+      "triggerLabel": "Search…",
+      "title": "Quick navigation",
+      "description": "Navigate pages in your workspace",
+      "placeholder": "Search pages…",
+      "empty": "No results found.",
+      "navigation": "Navigation"
     },
     "footer": {
       "workspace": "Workspace",

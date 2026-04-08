@@ -7,7 +7,7 @@ import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { auth } from "@/lib/auth/auth";
 import { getUserPreferences } from "@/lib/settings";
-import { Navbar, Footer } from "@/components/navigation";
+import { Navbar, Footer, GlobalSearch } from "@/components/navigation";
 import { LanguageHydrator, ThemeHydrator } from "@/components/shared";
 import { ChatWidgetProvider } from "@/components/chat-widget";
 import type { AppLanguage } from "@/types/i18n";
@@ -48,6 +48,7 @@ export default async function AppLayout({
         userId={sessionUser?.id ?? ""}
         assistantName={preferredAssistantName ?? undefined}
       />
+      {sessionUser && <GlobalSearch />}
     </div>
   );
 }

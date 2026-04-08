@@ -6,12 +6,9 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ## Beta — implement before first stable release
 
-- [ ] **#2 `cmd+k` search shortcut** — focus search input on `cmd+k` / `ctrl+k`; wire up the shortcut across the app.
 
 - [ ] **#19 Meeting prep pack** — `Meeting.prepPack` was migrated but is 0% implemented (always returns `null`). Add the generate action, tool parameter, and UI to display the pack.
 - [ ] **#22 Briefings tool** — `BriefingCache` model exists; daily LLM brief over tasks/meetings/decisions + Worker.
-
-- [ ] **#29 Contact Card Share Link** — generate a 24h share link; user picks what info to expose. `ShareToken` model exists. Triggerable from profile page or via LLM tool call.
 - [ ] **#31 Tools-usage Reports** — `AssistantReport` model exists; surface analytics on which tools are used.
 
 ---
