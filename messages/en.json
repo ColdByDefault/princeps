@@ -534,6 +534,7 @@
     "pageSubtitle": "Facts the assistant remembers about you.",
     "addEntry": "Add fact",
     "refresh": "Refresh",
+    "refreshing": "Refreshing…",
     "empty": "No facts remembered yet.",
     "emptyHint": "Ask the assistant to remember something, or add a fact manually.",
     "sourceAI": "AI",

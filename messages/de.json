@@ -534,6 +534,7 @@
     "pageSubtitle": "Fakten, die sich der Assistent \u00fcber dich merkt.",
     "addEntry": "Fakt hinzuf\u00fcgen",
     "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert\u2026",
     "empty": "Noch keine Fakten gespeichert.",
     "emptyHint": "Bitte den Assistenten, sich etwas zu merken, oder f\u00fcge einen Fakt manuell hinzu.",
     "sourceAI": "KI",

@@ -74,30 +74,34 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t("pageTitle")}
-          </h1>
-          <p className="text-sm text-muted-foreground">{t("pageSubtitle")}</p>
-        </div>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t("pageTitle")}
+        </h1>
         <div className="flex items-center gap-2">
           <Button
-            variant="ghost"
-            size="icon"
-            className="cursor-pointer"
-            onClick={handleRefresh}
+            type="button"
+            variant="outline"
+            size="sm"
             disabled={isPendingRefresh}
+            onClick={handleRefresh}
             aria-label={t("refresh")}
+            className="cursor-pointer"
           >
             <RefreshCw
-              className={isPendingRefresh ? "animate-spin size-4" : "size-4"}
+              className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
+            {isPendingRefresh ? t("refreshing") : t("refresh")}
           </Button>
           <CreateMemoryEntryDialog onSubmit={createEntry} creating={creating}>
-            <Button className="cursor-pointer gap-2">
+            <Button
+              type="button"
+              size="sm"
+              className="cursor-pointer"
+              aria-label={t("addEntry")}
+            >
               <Plus className="size-4" />
               {t("addEntry")}
             </Button>
@@ -107,16 +111,14 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
 
       {/* List */}
       {entries.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
-          <p className="text-sm font-medium text-muted-foreground">
-            {t("empty")}
-          </p>
-          <p className="text-xs text-muted-foreground/70 mt-1">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/60 px-6 py-16 text-center">
+          <p className="text-sm text-muted-foreground">{t("empty")}</p>
+          <p className="mt-1 text-xs text-muted-foreground/70">
             {t("emptyHint")}
           </p>
         </div>
       ) : (
-        <div className="grid gap-3">
+        <div className="space-y-2">
           {entries.map((entry) => (
             <MemoryEntryCard
               key={entry.id}
