@@ -20,8 +20,14 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     passwordMinLength: 8,
-    // TODO: Replace with a real email provider (e.g. nodemailer, Resend) before going to production.
-    // Set RESET_PASSWORD_FROM_EMAIL and configure SMTP/API credentials in env.
+    // Email verification is intentionally disabled.
+    // No SMTP/email provider is configured, and there is a single known user.
+    // `emailVerified` will remain `false` in the DB and is NOT used as an access
+    // gate anywhere in the app. If multi-user support or email verification is
+    // required in the future, enable Better Auth's `emailVerification` plugin
+    // and add a real email provider (e.g. Resend, Nodemailer) before gating any
+    // route or feature on this field — otherwise existing accounts will be locked out.
+    // TODO (#33): wire up emailVerification plugin + provider when moving to production.
     sendResetPassword: async ({ user, url }) => {
       console.log(
         `[Password Reset] Reset link for ${user.email}:\n${url}\n(Configure an email provider to send this automatically.)`,
