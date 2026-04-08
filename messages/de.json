@@ -1041,7 +1041,19 @@
     "plan": "Aktueller Plan",
     "memberSince": "Mitglied seit",
     "timezone": "Zeitzone",
-    "notSet": "Nicht gesetzt"
+    "notSet": "Nicht gesetzt",
+    "editDialog": {
+      "heading": "Profil bearbeiten",
+      "namePlaceholder": "Dein vollständiger Name",
+      "usernamePlaceholder": "dein_benutzername",
+      "usernameHint": "Nur Buchstaben, Zahlen, Unterstriche und Punkte. 3–30 Zeichen.",
+      "cancel": "Abbrechen",
+      "submit": "Änderungen speichern",
+      "submitting": "Wird gespeichert …",
+      "updateSuccess": "Profil aktualisiert.",
+      "updateError": "Profil konnte nicht aktualisiert werden. Bitte erneut versuchen.",
+      "usernameTaken": "Dieser Benutzername ist bereits vergeben."
+    }
   },
   "pricing": {
     "metadata": {

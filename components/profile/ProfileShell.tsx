@@ -5,10 +5,15 @@
 
 "use client";
 
+import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { Pencil } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { PlanBadge } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
+import { EditProfileDialog } from "./EditProfileDialog";
+import { useProfileMutations } from "./logic/useProfileMutations";
 
 export type ProfileUser = {
   name: string | null;
@@ -39,8 +44,24 @@ export default function ProfileShell({ user }: ProfileShellProps) {
   const t = useTranslations("profile");
   const locale = useLocale();
 
-  const initials = getInitials(user.name, user.email);
-  const displayName = user.name?.trim() || user.email;
+  const [name, setName] = useState<string | null>(user.name);
+  const [username, setUsername] = useState<string | null>(user.username);
+  const [editOpen, setEditOpen] = useState(false);
+
+  const { updating, updateProfile } = useProfileMutations(
+    (newName, newUsername) => {
+      setName(newName);
+      setUsername(newUsername);
+    },
+    {
+      updateSuccess: t("editDialog.updateSuccess"),
+      updateError: t("editDialog.updateError"),
+      usernameTaken: t("editDialog.usernameTaken"),
+    },
+  );
+
+  const initials = getInitials(name, user.email);
+  const displayName = name?.trim() || user.email;
 
   const memberSince = new Date(user.createdAt).toLocaleDateString(
     locale === "de" ? "de-DE" : "en-US",
@@ -52,7 +73,19 @@ export default function ProfileShell({ user }: ProfileShellProps) {
       label: t("name"),
       value: (
         <span className="text-sm text-foreground">
-          {user.name?.trim() ?? (
+          {name?.trim() ?? (
+            <span className="text-muted-foreground">{t("notSet")}</span>
+          )}
+        </span>
+      ),
+    },
+    {
+      label: t("username"),
+      value: (
+        <span className="text-sm text-foreground">
+          {username?.trim() ? (
+            <span className="font-mono">@{username}</span>
+          ) : (
             <span className="text-muted-foreground">{t("notSet")}</span>
           )}
         </span>
@@ -96,10 +129,8 @@ export default function ProfileShell({ user }: ProfileShellProps) {
               <h1 className="text-lg font-semibold text-foreground">
                 {displayName}
               </h1>
-              {user.username?.trim() && (
-                <p className="text-sm text-muted-foreground">
-                  @{user.username}
-                </p>
+              {username?.trim() && (
+                <p className="text-sm text-muted-foreground">@{username}</p>
               )}
             </div>
           </div>
@@ -117,8 +148,33 @@ export default function ProfileShell({ user }: ProfileShellProps) {
               </div>
             ))}
           </dl>
+
+          <Separator className="my-6" />
+
+          {/* Edit button */}
+          <div className="flex justify-center">
+            <Button
+              type="button"
+              variant="outline"
+              className="cursor-pointer gap-2"
+              aria-label={t("editDialog.heading")}
+              onClick={() => setEditOpen(true)}
+            >
+              <Pencil className="size-3.5" />
+              {t("editDialog.heading")}
+            </Button>
+          </div>
         </div>
       </div>
+
+      <EditProfileDialog
+        name={name}
+        username={username}
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        onSubmit={updateProfile}
+        updating={updating}
+      />
     </div>
   );
 }
