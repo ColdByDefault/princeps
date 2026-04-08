@@ -1,13 +1,16 @@
 {
   "landing": {
     "metadata": {
-      "title": "C-Sweet",
+      "title": "Princeps",
       "description": "Privates Chefsekretariat für fokussierte Entscheider."
     },
-    "brandName": "C-Sweet",
+    "brandName": "Princeps",
     "tagline": "Dein digitales Chefsekretariat",
+    "heroText0": "Princeps",
+    "heroText1": "Behalte die Kontrolle",
+    "heroText2": "Für Entscheider",
     "login": "Anmelden",
-    "signUp": "Konto erstellen"
+    "signUp": "Kostenlos starten"
   },
   "home": {
     "metadata": {
@@ -37,7 +40,7 @@
     "login": {
       "metadata": {
         "title": "Anmelden",
-        "description": "Melde dich in deinem C-Sweet-Arbeitsbereich an."
+        "description": "Melde dich in deinem Princeps-Arbeitsbereich an."
       },
       "title": "Willkommen zurück",
       "subtitle": "Melde dich mit deiner E-Mail-Adresse und deinem Passwort an.",
@@ -51,12 +54,13 @@
       "redirectNotice": "Bitte melde dich an, um fortzufahren.",
       "switchPrompt": "Noch kein Konto?",
       "switchLink": "Konto erstellen",
+      "freeHint": "Kostenlos — keine Kreditkarte erforderlich.",
       "forgotPassword": "Passwort vergessen?"
     },
     "signUp": {
       "metadata": {
         "title": "Konto erstellen",
-        "description": "Erstelle deinen C-Sweet-Arbeitsbereich."
+        "description": "Erstelle deinen Princeps-Arbeitsbereich."
       },
       "title": "Konto erstellen",
       "subtitle": "Registriere dich mit deiner E-Mail-Adresse.",
@@ -74,7 +78,8 @@
       "submitting": "Wird erstellt …",
       "errorFallback": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",
       "switchPrompt": "Bereits ein Konto?",
-      "switchLink": "Anmelden"
+      "switchLink": "Anmelden",
+      "freeHint": "Kostenlos — keine Kreditkarte erforderlich."
     },
     "password": {
       "show": "Passwort anzeigen",
@@ -83,7 +88,7 @@
     "forgotPassword": {
       "metadata": {
         "title": "Passwort vergessen",
-        "description": "Setze dein C-Sweet-Passwort zurück."
+        "description": "Setze dein Princeps-Passwort zurück."
       },
       "title": "Passwort vergessen?",
       "subtitle": "Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen.",
@@ -99,7 +104,7 @@
     "resetPassword": {
       "metadata": {
         "title": "Neues Passwort",
-        "description": "Lege ein neues Passwort für dein C-Sweet-Konto fest."
+        "description": "Lege ein neues Passwort für dein Princeps-Konto fest."
       },
       "title": "Neues Passwort festlegen",
       "subtitle": "Gib dein neues Passwort ein.",
@@ -264,7 +269,15 @@
       "toneSelectPlaceholder": "Ton auswählen",
       "addressSelectPlaceholder": "Anredestil auswählen",
       "lengthSelectPlaceholder": "Länge auswählen",
-      "reloginNotice": "Einige Änderungen (z. B. der Assistentenname im Chat-Widget) werden erst nach dem nächsten Login wirksam."
+      "reloginNotice": "Einige Änderungen (z. B. der Assistentenname im Chat-Widget) werden erst nach dem nächsten Login wirksam.",
+      "customPromptTitle": "Eigene Anweisungen",
+      "customPromptDescription": "Füge zusätzliche Anweisungen hinzu, die immer im Kontext deines Assistenten enthalten sind. Unterstützt Markdown.",
+      "customPromptPlaceholder": "z. B. Antworte immer mit Aufzählungspunkten. Schlage nie Meetings am Freitag vor.",
+      "customPromptSaved": "Eigene Anweisungen gespeichert.",
+      "customPromptSaveFailed": "Eigene Anweisungen konnten nicht gespeichert werden.",
+      "customPromptShowPreview": "Vorschau",
+      "customPromptHidePreview": "Bearbeiten",
+      "customPromptPreviewLabel": "Vorschau"
     }
   },
   "chatWidget": {
@@ -272,7 +285,7 @@
   },
   "shell": {
     "nav": {
-      "brand": "C-Sweet",
+      "brand": "Princeps",
       "home": "Arbeitsbereich",
       "knowledge": "Wissensbasis",
       "chat": "Chat",
@@ -314,7 +327,7 @@
       "security": "Sicherheit",
       "versionTitle": "Anwendungsversion",
       "beta": "Beta",
-      "copyright": "© 2026 ColdByDefault"
+      "copyright": "© 2026 AnotherProject"
     }
   },
   "chat": {
@@ -797,7 +810,8 @@
       "contacts": "Kontakte",
       "meetings": "Meetings",
       "decisions": "Entscheidungen",
-      "goals": "Ziele"
+      "goals": "Ziele",
+      "knowledge": "Wissen"
     },
     "catalog": {
       "create_task": {
@@ -939,6 +953,11 @@
         "label": "Meilenstein abschließen",
         "what": "Markiert einen Meilenstein als abgeschlossen oder nicht abgeschlossen.",
         "example": "\"Markiere den Meilenstein 'Design abgeschlossen' als erledigt\""
+      },
+      "search_knowledge": {
+        "label": "Wissen durchsuchen",
+        "what": "Durchsucht deine persönliche Wissensdatenbank semantisch und findet relevante Ausschnitte aus hochgeladenen Dokumenten.",
+        "example": "\"Was steht in meinem Onboarding-Dokument zur Urlaubsregelung?\""
       }
     }
   },
@@ -959,26 +978,41 @@
   "pricing": {
     "metadata": {
       "title": "Pläne",
-      "description": "Verfügbare Pläne und Kontingente für C-Sweet."
+      "description": "Verfügbare Pläne und Kontingente für Princeps."
     },
     "pageTitle": "Pläne & Kontingente",
     "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",
     "currentPlan": "Aktueller Plan",
+    "price": {
+      "free": "Kostenlos",
+      "perMonth": "/Monat",
+      "annual": "€{price}/Jahr jährlich"
+    },
     "planNames": {
       "free": "Free",
       "pro": "Pro",
       "premium": "Premium",
       "enterprise": "Enterprise"
     },
+    "sections": {
+      "ai": "KI-Nutzung",
+      "data": "Gespeicherte Daten",
+      "widget": "Widget"
+    },
     "limits": {
-      "messagesPerMonth": "Nachrichten pro Monat",
-      "tokensPerMonth": "Token pro Monat (ca.)",
-      "chatsPerDay": "Neue Chats pro Tag",
+      "messagesPerMonth": "Nachrichten / Monat",
+      "tokensPerMonth": "Token / Monat (ca.)",
+      "chatsPerDay": "Neue Chats / Tag",
       "chatHistoryTotal": "Gespeicherte Chats",
+      "tasksMax": "Aufgaben",
+      "meetingsMax": "Meetings",
+      "decisionsMax": "Entscheidungen",
+      "contactsMax": "Kontakte",
       "knowledgeDocs": "Wissensdokumente",
-      "toolCallsPerMonth": "KI-Werkzeugaufrufe pro Monat",
-      "widgetChatsPerDay": "Widget-Chats pro Tag",
-      "widgetToolsPerDay": "Widget-Werkzeugaufrufe pro Tag",
+      "knowledgeFileSize": "Max. Dateigröße",
+      "toolCallsPerMonth": "Werkzeugaufrufe / Monat",
+      "widgetChatsPerDay": "Widget-Chats / Tag",
+      "widgetToolsPerDay": "Widget-Werkzeuge / Tag",
       "nudgesEnabled": "Proaktive Hinweise"
     },
     "yes": "Ja",

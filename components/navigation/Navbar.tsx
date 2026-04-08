@@ -106,13 +106,13 @@ export default function Navbar({ sessionUser }: NavbarProps) {
   };
 
   return (
-    <div className="sticky top-4 z-40 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="rounded-[1.75rem] border border-black/10 bg-white/50 px-4 py-3 shadow-lg shadow-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-black/35">
+    <div className="sticky top-0 z-40">
+      <div>
+        <div className="border-b border-border/70 bg-background/95 px-6 py-2.5 backdrop-blur-xl">
           <div className="flex items-center gap-3">
             <Link
               href="/home"
-              className="cursor-pointer rounded-full px-2 py-1 text-sm font-semibold tracking-[0.22em] text-foreground uppercase transition hover:text-primary"
+              className="cursor-pointer px-2 py-1 text-sm font-bold tracking-[0.22em] text-foreground uppercase transition hover:text-primary"
             >
               {t("nav.brand")}
             </Link>

@@ -54,7 +54,7 @@ export async function buildSystemPrompt(
     timeZone: tz,
   });
 
-  const assistantName = prefs.assistantName ?? "C-Sweet";
+  const assistantName = prefs.assistantName ?? "Princeps";
 
   const TONE_DESCRIPTIONS: Record<string, string> = {
     professional: "Maintain a professional, polished tone at all times.",
@@ -133,6 +133,10 @@ export async function buildSystemPrompt(
         lines.push("", `## ${SLOT_REGISTRY[i].label}`, result);
       }
     }
+  }
+
+  if (prefs.customSystemPrompt) {
+    lines.push("", "## User Instructions", prefs.customSystemPrompt);
   }
 
   return { role: "system", content: lines.join("\n") };

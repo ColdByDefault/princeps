@@ -81,7 +81,7 @@ sendResetPassword: async ({ user, url }) => {
   await resend.emails.send({
     from: process.env.RESET_PASSWORD_FROM_EMAIL!,
     to: user.email,
-    subject: "Reset your C-Sweet password",
+    subject: "Reset your Princeps password",
     html: `<p>Click <a href="${url}">here</a> to reset your password. This link expires in 1 hour.</p>`,
   });
 },

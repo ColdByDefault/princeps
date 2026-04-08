@@ -1,13 +1,16 @@
 {
   "landing": {
     "metadata": {
-      "title": "C-Sweet",
+      "title": "Princeps",
       "description": "Private executive secretariat for focused operators."
     },
-    "brandName": "C-Sweet",
+    "brandName": "Princeps",
     "tagline": "Your digital chief of staff",
+    "heroText0": "Princeps",
+    "heroText1": "Stay in Control",
+    "heroText2": "Built for Operators",
     "login": "Sign in",
-    "signUp": "Create account"
+    "signUp": "Start for free"
   },
   "home": {
     "metadata": {
@@ -37,7 +40,7 @@
     "login": {
       "metadata": {
         "title": "Sign In",
-        "description": "Sign in to your C-Sweet workspace."
+        "description": "Sign in to your Princeps workspace."
       },
       "title": "Welcome back",
       "subtitle": "Sign in with your email and password.",
@@ -51,12 +54,13 @@
       "redirectNotice": "Please sign in to continue.",
       "switchPrompt": "Don't have an account?",
       "switchLink": "Create account",
+      "freeHint": "It's free — no credit card required.",
       "forgotPassword": "Forgot password?"
     },
     "signUp": {
       "metadata": {
         "title": "Create Account",
-        "description": "Create your C-Sweet workspace."
+        "description": "Create your Princeps workspace."
       },
       "title": "Create an account",
       "subtitle": "Sign up with your email address.",
@@ -74,7 +78,8 @@
       "submitting": "Creating account...",
       "errorFallback": "Sign up failed. Please try again.",
       "switchPrompt": "Already have an account?",
-      "switchLink": "Sign in"
+      "switchLink": "Sign in",
+      "freeHint": "Free forever — no credit card required."
     },
     "password": {
       "show": "Show password",
@@ -83,7 +88,7 @@
     "forgotPassword": {
       "metadata": {
         "title": "Forgot Password",
-        "description": "Reset your C-Sweet password."
+        "description": "Reset your Princeps password."
       },
       "title": "Forgot your password?",
       "subtitle": "Enter your email address and we'll send you a reset link.",
@@ -99,7 +104,7 @@
     "resetPassword": {
       "metadata": {
         "title": "New Password",
-        "description": "Set a new password for your C-Sweet account."
+        "description": "Set a new password for your Princeps account."
       },
       "title": "Set a new password",
       "subtitle": "Enter your new password below.",
@@ -264,7 +269,15 @@
       "toneSelectPlaceholder": "Select tone",
       "addressSelectPlaceholder": "Select address style",
       "lengthSelectPlaceholder": "Select length",
-      "reloginNotice": "Some changes (e.g. assistant name in the chat widget) take effect after your next login."
+      "reloginNotice": "Some changes (e.g. assistant name in the chat widget) take effect after your next login.",
+      "customPromptTitle": "Custom Instructions",
+      "customPromptDescription": "Add extra instructions that will always be included in your assistant's context. Supports Markdown.",
+      "customPromptPlaceholder": "e.g. Always respond in bullet points. Never suggest meetings on Fridays.",
+      "customPromptSaved": "Custom instructions saved.",
+      "customPromptSaveFailed": "Failed to save custom instructions.",
+      "customPromptShowPreview": "Preview",
+      "customPromptHidePreview": "Edit",
+      "customPromptPreviewLabel": "Preview"
     }
   },
   "chatWidget": {
@@ -272,7 +285,7 @@
   },
   "shell": {
     "nav": {
-      "brand": "C-Sweet",
+      "brand": "Princeps",
       "home": "Workspace",
       "chat": "Chat",
       "knowledge": "Knowledge Base",
@@ -314,7 +327,7 @@
       "security": "Security",
       "versionTitle": "Application version",
       "beta": "Beta",
-      "copyright": "© 2026 ColdByDefault"
+      "copyright": "© 2026 AnotherProject"
     }
   },
   "chat": {
@@ -797,7 +810,8 @@
       "contacts": "Contacts",
       "meetings": "Meetings",
       "decisions": "Decisions",
-      "goals": "Goals"
+      "goals": "Goals",
+      "knowledge": "Knowledge"
     },
     "catalog": {
       "create_task": {
@@ -939,6 +953,11 @@
         "label": "Complete Goal Milestone",
         "what": "Marks a goal milestone as completed or uncompleted.",
         "example": "\"Mark the design complete milestone as done\""
+      },
+      "search_knowledge": {
+        "label": "Search Knowledge",
+        "what": "Searches your personal knowledge base using semantic similarity to find relevant excerpts from uploaded documents.",
+        "example": "\"What does my onboarding document say about vacation policy?\""
       }
     }
   },
@@ -959,26 +978,41 @@
   "pricing": {
     "metadata": {
       "title": "Plans",
-      "description": "Available plans and quotas for C-Sweet."
+      "description": "Available plans and quotas for Princeps."
     },
     "pageTitle": "Plans & Quotas",
     "pageSubtitle": "Your current plan and all available options.",
     "currentPlan": "Current plan",
+    "price": {
+      "free": "Free",
+      "perMonth": "/month",
+      "annual": "€{price}/yr billed annually"
+    },
     "planNames": {
       "free": "Free",
       "pro": "Pro",
       "premium": "Premium",
       "enterprise": "Enterprise"
     },
+    "sections": {
+      "ai": "AI Usage",
+      "data": "Stored Data",
+      "widget": "Widget"
+    },
     "limits": {
-      "messagesPerMonth": "Messages per month",
-      "tokensPerMonth": "Approx. tokens per month",
-      "chatsPerDay": "New chats per day",
+      "messagesPerMonth": "Messages / month",
+      "tokensPerMonth": "Tokens / month (approx.)",
+      "chatsPerDay": "New chats / day",
       "chatHistoryTotal": "Saved chats",
-      "knowledgeDocs": "Knowledge documents",
-      "toolCallsPerMonth": "AI tool calls per month",
-      "widgetChatsPerDay": "Widget chats per day",
-      "widgetToolsPerDay": "Widget tool calls per day",
+      "tasksMax": "Tasks",
+      "meetingsMax": "Meetings",
+      "decisionsMax": "Decisions",
+      "contactsMax": "Contacts",
+      "knowledgeDocs": "Knowledge docs",
+      "knowledgeFileSize": "Max file size",
+      "toolCallsPerMonth": "Tool calls / month",
+      "widgetChatsPerDay": "Widget chats / day",
+      "widgetToolsPerDay": "Widget tools / day",
       "nudgesEnabled": "Proactive nudges"
     },
     "yes": "Yes",

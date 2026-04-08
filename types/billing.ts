@@ -153,6 +153,22 @@ export function getPlanLimits(tier: Tier): PlanLimits {
   return PLAN_LIMITS[tier] ?? PLAN_LIMITS.free;
 }
 
+// ─── Plan prices ──────────────────────────────────────────
+
+export interface PlanPrice {
+  /** Monthly price in EUR. 0 = free tier. */
+  monthly: number;
+  /** Annual price in EUR. null = no annual option. */
+  annual: number | null;
+}
+
+export const PLAN_PRICES: Record<Tier, PlanPrice> = {
+  free: { monthly: 0, annual: null },
+  pro: { monthly: 9, annual: 89 },
+  premium: { monthly: 19, annual: 179 },
+  enterprise: { monthly: 49, annual: 449 },
+};
+
 // ─── Usage summary ────────────────────────────────────────
 
 /**

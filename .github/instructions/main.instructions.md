@@ -1,13 +1,13 @@
 ---
-description: "High-level repo architecture, layer responsibilities, and cross-cutting rules for C-Sweet."
-name: "C-Sweet Repo Overview"
+description: "High-level repo architecture, layer responsibilities, and cross-cutting rules for Princeps."
+name: "Princeps Repo Overview"
 ---
 
-# C-Sweet Repo Overview
+# Princeps Repo Overview
 
 ## Product Intent
 
-- C-Sweet is a private executive secretariat, not a generic chatbot.
+- Princeps is a private executive secretariat, not a generic chatbot.
 - Prioritize workflows around preparation, memory, decisions, coordination, and follow-through.
 - Favor features that increase user leverage inside a personal authenticated workspace.
 - Core shape: user-scoped data, retrieval-backed assistant, configurable behavior, multilingual UI (German default + English), structured workspace flows.

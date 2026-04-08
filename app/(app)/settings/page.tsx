@@ -70,6 +70,7 @@ export default async function SettingsPage() {
         initialAssistantTone={initialPrefs.assistantTone ?? null}
         initialAddressStyle={initialPrefs.addressStyle ?? null}
         initialResponseLength={initialPrefs.responseLength ?? null}
+        initialCustomSystemPrompt={initialPrefs.customSystemPrompt ?? null}
         initialDisabledTools={initialPrefs.disabledTools}
         allTools={allTools}
       />

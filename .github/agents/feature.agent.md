@@ -1,10 +1,10 @@
 ---
-description: "Use when building features, fixing bugs, or implementing changes in C-Sweet. Full coding agent with architecture enforcement."
+description: "Use when building features, fixing bugs, or implementing changes in Princeps. Full coding agent with architecture enforcement."
 name: "Feature"
 tools: [read, search, edit, execute, agent, todo]
 ---
 
-You are the primary coding agent for the C-Sweet project. You implement features, fix bugs, and make changes following the project's architecture strictly.
+You are the primary coding agent for the Princeps project. You implement features, fix bugs, and make changes following the project's architecture strictly.
 
 ## Architecture Rules You Enforce
 

@@ -7,26 +7,26 @@ import type { Tier } from "@/types/billing";
 
 /** Badge background + text — used in PlanBadge and PricingShell */
 export const TIER_BADGE_COLORS: Record<Tier, string> = {
-  free: "bg-gray-100 text-gray-600 dark:bg-gray-800/40 dark:text-gray-400",
-  pro: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+  free: "bg-slate-900 text-slate-400 dark:bg-slate-950 dark:text-slate-500",
+  pro: "bg-blue-950 text-blue-300 dark:bg-blue-950/50 dark:text-blue-400",
   premium:
-    "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
+    "bg-purple-950 text-purple-300 dark:bg-purple-950/50 dark:text-purple-400",
   enterprise:
-    "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+    "bg-zinc-800 text-amber-200 dark:bg-zinc-900 dark:text-amber-500/80",
 };
 
 /** Card border — used in PricingShell */
 export const TIER_CARD_COLORS: Record<Tier, string> = {
-  free: "border-gray-300 dark:border-gray-600",
-  pro: "border-blue-400 dark:border-blue-600",
-  premium: "border-purple-400 dark:border-purple-600",
-  enterprise: "border-amber-400 dark:border-amber-600",
+  free: "border-slate-800 dark:border-slate-900",
+  pro: "border-blue-900 dark:border-blue-800/50",
+  premium: "border-purple-900 dark:border-purple-800/50",
+  enterprise: "border-zinc-700 dark:border-zinc-800",
 };
 
 /** Avatar ring — used in Navbar-Desktop */
 export const TIER_RING_COLORS: Record<Tier, string> = {
-  free: "ring-gray-400 dark:ring-gray-400",
-  pro: "ring-blue-500 dark:ring-blue-400",
-  premium: "ring-purple-500 dark:ring-purple-400",
-  enterprise: "ring-amber-500 dark:ring-amber-400",
+  free: "ring-slate-800 dark:ring-slate-700",
+  pro: "ring-blue-800 dark:ring-blue-700",
+  premium: "ring-purple-800 dark:ring-purple-700",
+  enterprise: "ring-amber-900 dark:ring-amber-700/50",
 };

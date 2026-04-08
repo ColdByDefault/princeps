@@ -1,10 +1,10 @@
 ---
-description: "Complete implementation reference for C-Sweet features. The canonical template for every new feature and the correctness benchmark for all existing ones. Supersedes docs/06_feature-refactor.md and docs/10_feature-audit.md."
-name: "C-Sweet Feature Implementation"
+description: "Complete implementation reference for Princeps features. The canonical template for every new feature and the correctness benchmark for all existing ones. Supersedes docs/06_feature-refactor.md and docs/10_feature-audit.md."
+name: "Princeps Feature Implementation"
 applyTo: "app/**/*, components/**/*, lib/**/*, types/**"
 ---
 
-# C-Sweet Feature Implementation Reference
+# Princeps Feature Implementation Reference
 
 > **Status:** Live — April 2026
 > **Supersedes:** `docs/06_feature-refactor.md`, `docs/10_feature-audit.md`

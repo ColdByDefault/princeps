@@ -47,6 +47,7 @@ type SettingsShellProps = {
   initialAssistantTone: AssistantTone | null;
   initialAddressStyle: AddressStyle | null;
   initialResponseLength: ResponseLength | null;
+  initialCustomSystemPrompt: string | null;
   initialDisabledTools: string[];
   allTools: ToolDisplayEntry[];
 };
@@ -62,6 +63,7 @@ export function SettingsShell({
   initialAssistantTone,
   initialAddressStyle,
   initialResponseLength,
+  initialCustomSystemPrompt,
   initialDisabledTools,
   allTools,
 }: SettingsShellProps) {
@@ -139,6 +141,7 @@ export function SettingsShell({
           initialAssistantTone={initialAssistantTone}
           initialAddressStyle={initialAddressStyle}
           initialResponseLength={initialResponseLength}
+          initialCustomSystemPrompt={initialCustomSystemPrompt}
         />
       </TabsContent>
 

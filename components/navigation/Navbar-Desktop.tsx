@@ -107,7 +107,7 @@ export default function NavbarDesktop({
               variant={isActive ? "secondary" : "ghost"}
               size="sm"
               className={cn(
-                "cursor-pointer rounded-full bg-transparent px-3",
+                "cursor-pointer rounded-none bg-transparent px-3",
                 isActive && "shadow-sm",
               )}
               nativeButton={false}
@@ -128,7 +128,7 @@ export default function NavbarDesktop({
                 variant={isIntelActive ? "secondary" : "ghost"}
                 size="sm"
                 className={cn(
-                  "cursor-pointer rounded-full bg-transparent px-3",
+                  "cursor-pointer rounded-none bg-transparent px-3",
                   isIntelActive && "shadow-sm",
                 )}
               />
@@ -141,7 +141,7 @@ export default function NavbarDesktop({
           <DropdownMenuContent
             side="bottom"
             align="start"
-            className="min-w-44 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
+            className="min-w-44 rounded-md border-border/70 bg-background/95 backdrop-blur-xl"
           >
             <DropdownMenuGroup>
               {intelLinks.map((link) => {
@@ -151,7 +151,7 @@ export default function NavbarDesktop({
                   <DropdownMenuItem
                     key={link.href}
                     className={cn(
-                      "cursor-pointer rounded-xl",
+                      "cursor-pointer rounded-sm",
                       isActive && "bg-accent text-accent-foreground",
                     )}
                     render={<Link href={link.href} />}
@@ -174,7 +174,7 @@ export default function NavbarDesktop({
                 variant={isGroupActive ? "secondary" : "ghost"}
                 size="sm"
                 className={cn(
-                  "cursor-pointer rounded-full bg-transparent px-3",
+                  "cursor-pointer rounded-none bg-transparent px-3",
                   isGroupActive && "shadow-sm",
                 )}
               />
@@ -187,7 +187,7 @@ export default function NavbarDesktop({
           <DropdownMenuContent
             side="bottom"
             align="start"
-            className="min-w-44 rounded-2xl border-border/70 bg-background/92 backdrop-blur-xl"
+            className="min-w-44 rounded-md border-border/70 bg-background/95 backdrop-blur-xl"
           >
             <DropdownMenuGroup>
               {groupedLinks.map((link) => {
@@ -197,7 +197,7 @@ export default function NavbarDesktop({
                   <DropdownMenuItem
                     key={link.href}
                     className={cn(
-                      "cursor-pointer rounded-xl",
+                      "cursor-pointer rounded-sm",
                       isActive && "bg-accent text-accent-foreground",
                     )}
                     render={<Link href={link.href} />}
@@ -220,7 +220,7 @@ export default function NavbarDesktop({
               variant={isActive ? "secondary" : "ghost"}
               size="sm"
               className={cn(
-                "cursor-pointer rounded-full bg-transparent px-3",
+                "cursor-pointer rounded-none bg-transparent px-3",
                 isActive && "shadow-sm",
               )}
               nativeButton={false}
@@ -265,7 +265,7 @@ export default function NavbarDesktop({
                   size="icon-sm"
                   aria-label={t("nav.profile")}
                   className={cn(
-                    "cursor-pointer rounded-full bg-background/70 p-0 backdrop-blur-sm",
+                    "cursor-pointer rounded-full bg-transparent p-0",
                     getTierRingClass(tier),
                   )}
                   nativeButton={false}
@@ -273,8 +273,8 @@ export default function NavbarDesktop({
                 />
               }
             >
-              <Avatar className="size-7">
-                <AvatarFallback className="bg-primary/10 text-primary text-[11px] font-semibold">
+              <Avatar className="size-7 rounded-full">
+                <AvatarFallback className="bg-primary/10 text-primary text-[11px] font-semibold rounded-full">
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
@@ -293,7 +293,7 @@ export default function NavbarDesktop({
                   aria-label={
                     isSigningOut ? t("nav.signingOut") : t("nav.signOut")
                   }
-                  className="cursor-pointer rounded-full border-border/70 bg-background/70 backdrop-blur-sm"
+                  className="cursor-pointer rounded-sm border-border/70 bg-transparent"
                   disabled={isSigningOut}
                   onClick={onSignOut}
                 />

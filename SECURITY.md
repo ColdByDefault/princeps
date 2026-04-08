@@ -2,9 +2,9 @@
 
 ## Overview
 
-This policy describes how security issues should be reported for C-Sweet.
+This policy describes how security issues should be reported for Princeps.
 
-C-Sweet handles authenticated chat, personal knowledge entries, uploaded documents, and assistant configuration. Any issue affecting account access, stored user data, API protection, document handling, or model/provider configuration should be treated as security-relevant.
+Princeps handles authenticated chat, personal knowledge entries, uploaded documents, and assistant configuration. Any issue affecting account access, stored user data, API protection, document handling, or model/provider configuration should be treated as security-relevant.
 
 ## Supported Versions
 

@@ -61,6 +61,7 @@ export async function PATCH(req: Request) {
     addressStyle,
     responseLength,
     disabledTools,
+    customSystemPrompt,
   } = body as Record<string, unknown>;
   const patch: {
     language?: AppLanguage;
@@ -71,6 +72,7 @@ export async function PATCH(req: Request) {
     addressStyle?: AddressStyle;
     responseLength?: ResponseLength;
     disabledTools?: string[];
+    customSystemPrompt?: string | null;
   } = {};
 
   if (isSupportedLanguage(language as string)) {
@@ -117,6 +119,15 @@ export async function PATCH(req: Request) {
     patch.disabledTools = (disabledTools as unknown[]).filter(
       (t): t is string => typeof t === "string" && knownNames.has(t),
     );
+  }
+  // customSystemPrompt: null clears it, non-empty string sets it (max 2000 chars)
+  if (customSystemPrompt === null) {
+    patch.customSystemPrompt = null;
+  } else if (
+    typeof customSystemPrompt === "string" &&
+    customSystemPrompt.trim().length > 0
+  ) {
+    patch.customSystemPrompt = customSystemPrompt.trim().slice(0, 2000);
   }
 
   const hasPreferencePatch = Object.keys(patch).length > 0;
