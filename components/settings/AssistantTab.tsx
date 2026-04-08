@@ -25,7 +25,7 @@ import type {
   AssistantTone,
   AddressStyle,
   ResponseLength,
-} from "@/lib/settings";
+} from "@/lib/settings/types";
 
 type AssistantTabProps = {
   initialAssistantName: string | null;

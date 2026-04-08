@@ -20,7 +20,7 @@ import type {
   AssistantTone,
   AddressStyle,
   ResponseLength,
-} from "@/lib/settings";
+} from "@/lib/settings/types";
 
 const COOKIE_KEY = "settings-tab";
 const VALID_TABS = [

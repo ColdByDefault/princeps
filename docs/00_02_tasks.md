@@ -6,20 +6,15 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ## Beta — implement before first stable release
 
-- [ ] **#37 Add `date-fns`** — standardize date formatting and timezone handling across the app.
 
 - [ ] **#1 Mobile navbar auto-close** — close the mobile nav automatically after a route redirect.
 - [ ] **#2 `cmd+k` search shortcut** — focus search input on `cmd+k` / `ctrl+k`; wire up the shortcut across the app.
-
-- [ ] **#7 Dropdown menus (timezone + location)** — current design is poor; redesign with a searchable combobox. Do alongside #6 since both touch the same settings shell.
 
 - [ ] **#19 Meeting prep pack** — `Meeting.prepPack` was migrated but is 0% implemented (always returns `null`). Add the generate action, tool parameter, and UI to display the pack.
 - [ ] **#22 Briefings tool** — `BriefingCache` model exists; daily LLM brief over tasks/meetings/decisions + Worker.
 
 - [ ] **#29 Contact Card Share Link** — generate a 24h share link; user picks what info to expose. `ShareToken` model exists. Triggerable from profile page or via LLM tool call.
 - [ ] **#31 Tools-usage Reports** — `AssistantReport` model exists; surface analytics on which tools are used.
-
-- [ ] **#4 One-time data wipe** — premium/enterprise users can request a full wipe of `Chunk` + `MemoryEntry` data once every 6 months. Does not reset monthly usage limits.
 
 ---
 
@@ -34,7 +29,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 ## Brainstorming / Backlog
 
 - [ ] **#42 Extend Notifications** — Currently only "User Greetings" on Login (once or twice per day ?? check!), and once on new sign-up. IMPORTANT: there is a toggle in settings for greetings notification to enable/disable.
-- [ ] **#43 ** —
+- [ ] **#43 One-time data wipe** — premium/enterprise users can request a full wipe of `Chunk` + `MemoryEntry` data once every 6 months. Does not reset monthly usage limits.
 - [ ] **#44 ** —
 - [ ] **#45 ** —
 - [ ] **#46 ** —
