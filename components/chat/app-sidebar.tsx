@@ -210,7 +210,7 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
       return;
     }
     sessionStorage.removeItem(GREETING_SESSION_KEY);
-    router.replace("/login");
+    router.replace("/");
     router.refresh();
   };
 

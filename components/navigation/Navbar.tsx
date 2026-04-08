@@ -103,7 +103,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
       return;
     }
     sessionStorage.removeItem(GREETING_SESSION_KEY);
-    router.replace("/login");
+    router.replace("/");
     router.refresh();
   };
 

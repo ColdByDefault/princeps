@@ -40,4 +40,3 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - for at-rest-limited models, users can request a one-time wipe of all their data, every 6 months, but this doesnt affect any other monthly tracked limits. this for premium and enterprise users who needs a reset of the LLM knowledge (Chunks) and memory (MemoryEntry).
 - dont unfocuse chat input in chat widget after sending a message, this is a common UX pattern in chat apps, and it allows for faster consecutive messages. currently it unfocuse after every send, which is annoying.
 - Use Int font for all UI elements
-- logout redirect to `/` landing page instead of login page.
