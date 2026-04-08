@@ -1,14 +1,14 @@
 ---
-description: "Global workspace rules for C-Sweet: product direction, architecture principles, layer boundaries, and workflow rules. Always active."
-name: "C-Sweet Workspace"
+description: "Global workspace rules for Princeps: product direction, architecture principles, layer boundaries, and workflow rules. Always active."
+name: "Princeps Workspace"
 applyTo: "**"
 ---
 
-# C-Sweet Workspace Instructions
+# Princeps Workspace Instructions
 
 ## Product Direction
 
-- C-Sweet is a private executive secretariat / chief-of-staff product — the digital equivalent of the support structure used by major CEOs, adapted for an individual user.
+- Princeps is a private executive secretariat / chief-of-staff product — the digital equivalent of the support structure used by major CEOs, adapted for an individual user.
 - The product helps users stay organized across tasks, meetings, contacts, decisions, knowledge retrieval, and system behavior. It is not a generic chatbot or prompt box.
 - Core shape: authenticated workspace, user-scoped data, retrieval-backed assistant, configurable behavior, multilingual UI (German default + English).
 

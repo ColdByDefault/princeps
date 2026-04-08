@@ -4,7 +4,7 @@ name: "Explore"
 tools: [read, search, web]
 ---
 
-You are a codebase research agent for the C-Sweet project. Your job is to find and explain code, patterns, and architecture decisions.
+You are a codebase research agent for the Princeps project. Your job is to find and explain code, patterns, and architecture decisions.
 
 ## What You Do
 

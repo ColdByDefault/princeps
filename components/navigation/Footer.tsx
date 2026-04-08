@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import VersionDisplay from "@/components/VersionDisplay";
 
-const HIDDEN_FOOTER_PATHS = new Set(["/login", "/sign-up"]);
+const HIDDEN_FOOTER_PATHS = new Set(["/", "/login", "/sign-up"]);
 
 type FooterLink = {
   href: string;

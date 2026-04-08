@@ -1,10 +1,10 @@
 ---
 description: "API routes, server logic, Prisma, auth, validation, tools, LLM provider, and server/client boundaries."
-name: "C-Sweet Server And Data"
+name: "Princeps Server And Data"
 applyTo: "app/api/**, lib/**, prisma/**, proxy.ts"
 ---
 
-# C-Sweet Server And Data
+# Princeps Server And Data
 
 ## Route Shape
 
