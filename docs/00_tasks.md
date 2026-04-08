@@ -8,14 +8,18 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ### Branch: `feat/memory`
 
-- [ ] **#4 Memory tool** - no idea yet
-    > **NOTE:** use some magic to reduce tokens by summarizing old messages in the conversation, or saving keywords from tasks and meetings etc , i dont know yet.
+- [ ] **#4 Memory tool** — persistent user-scoped fact store the LLM can read and write, plus optional UI to manage entries.
+  > **DESIGN NOTES:**
+  >
+  > - Two potential shapes: (a) **conversation summarizer** — after N messages, compress older turns into a summary and replace them; (b) **fact store** — explicit `MemoryEntry` rows (key/value or freeform) the LLM can write/read via tool calls.
+  > - Both can coexist: fact store as the primary `MemoryEntry` model, summarization as a background job that trims `ChatMessage` rows and writes a summary entry.
+  > - **Tier enforcement:** `MemoryEntry` is just another at-rest-limited model. Add `memoryMax` to `PlanLimits` and `UsageCounter` (same pattern as `tasksMax`). LLM tool calls to memory consume `toolCallsPerMonth` as normal. Manual UI edits are only gated by the at-rest cap — they do NOT consume from the tool call monthly budget. This resolves the brainstorming concern below.
 - [ ] **#5 Notes tool** — needs schema; lightweight freeform records, simpler than knowledge docs.
-    > **NOTE:** this feature will be implemented in a future phase, Plan is to have MVP notes-app, similar to notes in Notion, with a simple text editor and the ability to link to tasks/meetings/contacts.
+  > **NOTE:** this feature will be implemented in a future phase, Plan is to have MVP notes-app, similar to notes in Notion, with a simple text editor and the ability to link to tasks/meetings/contacts.
 - [ ] **#6 User Profile Settings** — allow users to change name, username. Email/password changes need careful handling with Better Auth. `ProfileShell` is currently read-only.
 - [ ] **#7 Dropdown menus (timezone + location)** — current design is poor; redesign with a searchable combobox. Do alongside #6 since both touch the same settings shell.
 - [ ] **#18 `PersonalInfo` model** — schema exists, `app/api/knowledge/personal/` folder exists but is empty, no lib, no context slot, no UI. Implement fully and feed into the system prompt.
-    > **NOTE:** I dont think this really important, users have their profiles, they can edit it, and llm's aware of it. update or delete info is restricted by the user, and llm can only read it. remove model!
+  > **NOTE:** I dont think this really important, users have their profiles, they can edit it, and llm's aware of it. update or delete info is restricted by the user, and llm can only read it. remove model!
 - [ ] **#19 Meeting prep pack** — `Meeting.prepPack` was migrated but is 0% implemented (always returns `null`). Add the generate action, tool parameter, and UI to display the pack.
 - [ ] **#22 Briefings tool** — `BriefingCache` model exists; daily LLM brief over tasks/meetings/decisions + Worker
 - [ ] **#27 Extend LLM cross-linking awareness** — LLM can link a contact to a meeting, a note to a decision, etc. Depends on Decisions (#3) + Notes (#5) being live.
@@ -34,8 +38,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing.
 - [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config, no `.spec.ts` files anywhere. The tier enforcement, tool handlers, and schema validators have no safety net. Defer until the feature set stabilizes.
 
-# DONE
-
 
 ## brainstorming — not yet scoped or planned
 
@@ -43,6 +45,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - add new routes from navbar to sidebar
 - add cmd+k shortcut to focus search input and add this feature .
 - version bump rule => update to 0.2.0 and make it the automatic increment count until 0.2.9, then jump to 0.3.0 and repeat, this is to make it easier to track versions during development.
-- When I am on Free tier, I have a maximum amount of tools calls per month, but what about creating manually from UI? something could be also related to `memory`.
+- ~~When I am on Free tier, I have a maximum amount of tools calls per month, but what about creating manually from UI? something could be also related to `memory`.~~ → Resolved: at-rest limits (`tasksMax`, `contactsMax`, etc.) already gate UI creates independently of `toolCallsPerMonth`. Memory will follow the same pattern — see #4.
 - I dont see prices any where, `/plans`, it needs update anyway to reflect new tier system. the badge for "current plan" is overlapping card boarder.
 - settings => tools tab, make them collapsed by default.
+- for at-rest-limited models, users can request a one-time wipe of all their data, every 6 months, but this doesnt affect any other monthly tracked limits. this for premium and enterprise users who needs a reset of the LLM knowledge (Chunks) and memory (MemoryEntry).
