@@ -49,14 +49,6 @@ function formatApproxTokens(chars: number): string {
   return `~${tokens} tokens`;
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
 export function DocumentCard({
   document,
   deleting,
