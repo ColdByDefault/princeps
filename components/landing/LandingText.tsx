@@ -37,7 +37,7 @@ export interface RotatingTextProps extends Omit<
   exit?: Target | VariantLabels;
   animatePresenceMode?: "sync" | "wait";
   animatePresenceInitial?: boolean;
-  rotationInterval?: number;
+  rotationInterval?: number | number[];
   staggerDuration?: number;
   staggerFrom?: "first" | "last" | "center" | "random" | number;
   loop?: boolean;
@@ -59,7 +59,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
       exit = { y: "-120%", opacity: 0 },
       animatePresenceMode = "wait",
       animatePresenceInitial = false,
-      rotationInterval = 2000,
+      rotationInterval = 2000 as number | number[],
       staggerDuration = 0,
       staggerFrom = "first",
       loop = true,
@@ -194,9 +194,13 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
 
     useEffect(() => {
       if (!auto) return;
-      const intervalId = setInterval(next, rotationInterval);
-      return () => clearInterval(intervalId);
-    }, [next, rotationInterval, auto]);
+      const delay = Array.isArray(rotationInterval)
+        ? (rotationInterval[currentTextIndex] ??
+          rotationInterval[rotationInterval.length - 1])
+        : rotationInterval;
+      const timeoutId = setTimeout(next, delay);
+      return () => clearTimeout(timeoutId);
+    }, [next, rotationInterval, auto, currentTextIndex]);
 
     return (
       <motion.span

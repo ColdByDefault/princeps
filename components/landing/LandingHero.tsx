@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { motion } from "motion/react";
 import RotatingText from "@/components/landing/LandingText";
 import { Button } from "@/components/ui/button";
 
@@ -18,7 +19,7 @@ export function LandingHero() {
 
       <RotatingText
         texts={heroTexts}
-        rotationInterval={3000}
+        rotationInterval={[2000, 3000, 3000]}
         staggerDuration={0.03}
         staggerFrom="first"
         splitBy="characters"
@@ -33,7 +34,12 @@ export function LandingHero() {
 
       <p className="text-lg text-muted-foreground">{t("tagline")}</p>
 
-      <div className="mt-4 flex items-center gap-3">
+      <motion.div
+        className="mt-4 flex items-center gap-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 1.5 }}
+      >
         <Button
           size="lg"
           variant="outline"
@@ -51,7 +57,7 @@ export function LandingHero() {
         >
           {t("signUp")}
         </Button>
-      </div>
+      </motion.div>
     </div>
   );
 }
