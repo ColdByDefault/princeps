@@ -81,14 +81,14 @@ export function MemoryEntryCard({
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             className="cursor-pointer"
-            onSelect={() => onEdit(entry)}
+            onClick={() => onEdit(entry)}
           >
             <Pencil className="mr-2 size-4" />
             {t("edit")}
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer text-destructive focus:text-destructive"
-            onSelect={() => onDelete(entry.id)}
+            onClick={() => onDelete(entry.id)}
           >
             <Trash2 className="mr-2 size-4" />
             {t("delete")}

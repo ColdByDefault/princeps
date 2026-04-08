@@ -1067,6 +1067,7 @@
       "meetingsMax": "Meetings",
       "decisionsMax": "Decisions",
       "contactsMax": "Contacts",
+      "memoryMax": "Memory facts",
       "knowledgeDocs": "Knowledge docs",
       "knowledgeFileSize": "Max file size",
       "toolCallsPerMonth": "Tool calls / month",
