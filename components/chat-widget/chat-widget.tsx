@@ -313,6 +313,7 @@ export function ChatWidget({
       }
     } finally {
       setThinking(false);
+      requestAnimationFrame(() => inputRef.current?.focus());
     }
   }, [input, thinking]);
 

@@ -108,6 +108,12 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
             description:
               "Optional ID of a meeting to link this task to. Use list_meetings to find the meeting ID first.",
           },
+          goalIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Optional list of goal IDs to link this task to. Use list_goals to find goal IDs first. Pass an empty array to remove all goal links.",
+          },
         },
         required: ["title"],
       },
@@ -194,6 +200,12 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
             type: "string",
             description:
               "Link or unlink a meeting. Pass the meeting ID to link, or null to unlink from any meeting.",
+          },
+          goalIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Replacement set of goal IDs to link this task to. Pass an empty array to remove all goal links. Use list_goals to find goal IDs.",
           },
         },
         required: ["taskId"],
@@ -716,6 +728,11 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
             description:
               "Updated list of label names. Replaces existing labels.",
           },
+          meetingId: {
+            type: "string",
+            description:
+              "Link or unlink the meeting this decision originated from. Pass the meeting ID to link, or null to unlink. Use list_meetings to find the meeting ID.",
+          },
         },
         required: ["decisionId"],
       },
@@ -782,6 +799,12 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
             description:
               "Optional list of milestone titles to create with the goal.",
           },
+          taskIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Optional list of task IDs to link to this goal. Use list_tasks to find task IDs first.",
+          },
         },
         required: ["title"],
       },
@@ -845,6 +868,12 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
             items: { type: "string" },
             description:
               "Replacement label names. Replaces all existing labels.",
+          },
+          taskIds: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Replacement set of task IDs linked to this goal. Pass an empty array to unlink all tasks. Use list_tasks to find task IDs.",
           },
         },
         required: ["goalId"],

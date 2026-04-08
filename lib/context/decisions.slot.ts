@@ -22,7 +22,10 @@ export const decisionsSlot: ContextSlot = {
         : "";
       const outcome = d.outcome ? ` — outcome: ${d.outcome}` : "";
       const rationale = d.rationale ? ` — rationale: ${d.rationale}` : "";
-      return `- [${d.id}] ${d.title} ${status}${decided}${outcome}${rationale}`;
+      const meeting = d.meetingId
+        ? ` — from meeting: ${d.meetingId}`
+        : "";
+      return `- [${d.id}] ${d.title} ${status}${decided}${outcome}${rationale}${meeting}`;
     });
 
     return lines.join("\n");

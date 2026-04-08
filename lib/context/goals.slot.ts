@@ -24,7 +24,11 @@ export const goalsSlot: ContextSlot = {
       const total = g.milestones.length;
       const done = g.milestones.filter((m) => m.completed).length;
       const progress = total > 0 ? ` milestones: ${done}/${total}` : "";
-      return `- [${g.id}] ${g.title} ${status}${target}${desc}${progress}`;
+      const tasks =
+        g.tasks && g.tasks.length > 0
+          ? ` — linked tasks: ${g.tasks.map((t) => `${t.title} (${t.status})`).join(", ")}`
+          : "";
+      return `- [${g.id}] ${g.title} ${status}${target}${desc}${progress}${tasks}`;
     });
 
     return lines.join("\n");
