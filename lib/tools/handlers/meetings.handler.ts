@@ -9,13 +9,18 @@ import { createMeeting } from "@/lib/meetings/create.logic";
 import { listMeetings } from "@/lib/meetings/list.logic";
 import { updateMeeting } from "@/lib/meetings/update.logic";
 import { deleteMeeting } from "@/lib/meetings/delete.logic";
-import { generatePrepPack } from "@/lib/meetings/generate-prep-pack.logic";
+import {
+  generatePrepPack,
+  getMeetingPrepPack,
+  clearMeetingPrepPack,
+  updateMeetingPrepPack,
+} from "@/lib/meetings/generate-prep-pack.logic";
 import {
   createMeetingSchema,
   updateMeetingSchema,
 } from "@/lib/meetings/schemas";
 import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
-import { enforceMeetingsMax } from "@/lib/tiers";
+import { enforceMeetingsMax, enforcePrepPackMonthly } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";
 
 async function handleCreateMeeting(
@@ -127,6 +132,14 @@ async function handleGeneratePrepPack(
     };
   }
 
+  const quota = await enforcePrepPackMonthly(userId);
+  if (!quota.allowed) {
+    return {
+      ok: false,
+      error: quota.reason ?? "Prep pack limit reached for your plan.",
+    };
+  }
+
   const result = await generatePrepPack(args.meetingId, userId);
   if (!result.ok) {
     if ("notFound" in result && result.notFound) {
@@ -140,10 +153,125 @@ async function handleGeneratePrepPack(
   return { ok: true, data: result.meeting };
 }
 
+async function handleGetPrepPack(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.meetingId !== "string") {
+    return { ok: false, error: "get_meeting_prep_pack requires meetingId." };
+  }
+
+  const quota = await enforcePrepPackMonthly(userId);
+  if (!quota.allowed) {
+    return {
+      ok: false,
+      error: quota.reason ?? "Prep pack limit reached for your plan.",
+    };
+  }
+
+  const result = await getMeetingPrepPack(args.meetingId, userId);
+  if (!result.ok) {
+    if ("notFound" in result && result.notFound) {
+      return { ok: false, error: "Meeting not found." };
+    }
+    return {
+      ok: false,
+      error: "error" in result ? result.error : "Failed to read prep pack.",
+    };
+  }
+
+  if (!result.prepPack) {
+    return {
+      ok: true,
+      data: {
+        meetingTitle: result.meetingTitle,
+        prepPack: null,
+        message: "No prep pack has been generated for this meeting yet.",
+      },
+    };
+  }
+
+  return {
+    ok: true,
+    data: { meetingTitle: result.meetingTitle, prepPack: result.prepPack },
+  };
+}
+
+async function handleClearPrepPack(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.meetingId !== "string") {
+    return { ok: false, error: "clear_meeting_prep_pack requires meetingId." };
+  }
+
+  const quota = await enforcePrepPackMonthly(userId);
+  if (!quota.allowed) {
+    return {
+      ok: false,
+      error: quota.reason ?? "Prep pack limit reached for your plan.",
+    };
+  }
+
+  const result = await clearMeetingPrepPack(args.meetingId, userId);
+  if (!result.ok) {
+    if ("notFound" in result && result.notFound) {
+      return { ok: false, error: "Meeting not found." };
+    }
+    return {
+      ok: false,
+      error: "error" in result ? result.error : "Failed to clear prep pack.",
+    };
+  }
+  return { ok: true, data: { cleared: true, meetingId: args.meetingId } };
+}
+
+async function handleUpdatePrepPack(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.meetingId !== "string") {
+    return { ok: false, error: "update_meeting_prep_pack requires meetingId." };
+  }
+  if (typeof args.content !== "string" || !args.content.trim()) {
+    return {
+      ok: false,
+      error: "update_meeting_prep_pack requires non-empty content.",
+    };
+  }
+
+  const quota = await enforcePrepPackMonthly(userId);
+  if (!quota.allowed) {
+    return {
+      ok: false,
+      error: quota.reason ?? "Prep pack limit reached for your plan.",
+    };
+  }
+
+  const result = await updateMeetingPrepPack(
+    args.meetingId,
+    userId,
+    args.content,
+  );
+  if (!result.ok) {
+    if ("notFound" in result && result.notFound) {
+      return { ok: false, error: "Meeting not found." };
+    }
+    return {
+      ok: false,
+      error: "error" in result ? result.error : "Failed to update prep pack.",
+    };
+  }
+  return { ok: true, data: result.meeting };
+}
+
 export const meetingHandlers: Record<string, ToolHandler> = {
   create_meeting: handleCreateMeeting,
   list_meetings: handleListMeetings,
   update_meeting: handleUpdateMeeting,
   delete_meeting: handleDeleteMeeting,
   generate_meeting_prep_pack: handleGeneratePrepPack,
+  get_meeting_prep_pack: handleGetPrepPack,
+  clear_meeting_prep_pack: handleClearPrepPack,
+  update_meeting_prep_pack: handleUpdatePrepPack,
 };

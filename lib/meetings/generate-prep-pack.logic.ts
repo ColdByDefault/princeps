@@ -111,5 +111,94 @@ Keep the total under 400 words. Be direct and practical. Use Markdown headings a
     select: MEETING_SELECT,
   });
 
+  // Fire-and-forget: accumulate actual LLM tokens into the monthly counter.
+  // enforcePrepPackMonthly guarantees the UsageCounter row exists before we get here.
+  db.usageCounter
+    .update({
+      where: { userId },
+      data: {
+        tokenMonthlyCount: {
+          increment: result.promptTokens + result.completionTokens,
+        },
+      },
+    })
+    .catch(() => {});
+
+  return { ok: true, meeting: toMeetingRecord(updated) };
+}
+
+// ─── Get prep pack ────────────────────────────────────────
+
+export type GetPrepPackResult =
+  | { ok: true; prepPack: string | null; meetingTitle: string }
+  | { ok: false; notFound: true }
+  | { ok: false; notFound: false; error: string };
+
+export async function getMeetingPrepPack(
+  meetingId: string,
+  userId: string,
+): Promise<GetPrepPackResult> {
+  const meeting = await db.meeting.findFirst({
+    where: { id: meetingId, userId },
+    select: { title: true, prepPack: true },
+  });
+
+  if (!meeting) return { ok: false, notFound: true };
+
+  return { ok: true, prepPack: meeting.prepPack, meetingTitle: meeting.title };
+}
+
+// ─── Clear prep pack ─────────────────────────────────────
+
+export type ClearPrepPackResult =
+  | { ok: true; meeting: MeetingRecord }
+  | { ok: false; notFound: true }
+  | { ok: false; notFound: false; error: string };
+
+export async function clearMeetingPrepPack(
+  meetingId: string,
+  userId: string,
+): Promise<ClearPrepPackResult> {
+  const existing = await db.meeting.findFirst({
+    where: { id: meetingId, userId },
+    select: { id: true },
+  });
+
+  if (!existing) return { ok: false, notFound: true };
+
+  const updated = await db.meeting.update({
+    where: { id: meetingId, userId },
+    data: { prepPack: null },
+    select: MEETING_SELECT,
+  });
+
+  return { ok: true, meeting: toMeetingRecord(updated) };
+}
+
+// ─── Update (manual edit) ─────────────────────────────────
+
+export type UpdatePrepPackResult =
+  | { ok: true; meeting: MeetingRecord }
+  | { ok: false; notFound: true }
+  | { ok: false; notFound: false; error: string };
+
+export async function updateMeetingPrepPack(
+  meetingId: string,
+  userId: string,
+  content: string,
+): Promise<UpdatePrepPackResult> {
+  const existing = await db.meeting.findFirst({
+    where: { id: meetingId, userId },
+    select: { id: true },
+  });
+
+  if (!existing) return { ok: false, notFound: true };
+
+  const updated = await db.meeting.update({
+    where: { id: meetingId, userId },
+    data: { prepPack: content.trim() },
+    select: MEETING_SELECT,
+  });
+
   return { ok: true, meeting: toMeetingRecord(updated) };
 }

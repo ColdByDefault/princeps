@@ -10,6 +10,7 @@ export {
   enforceWidgetTools,
   enforceMonthlyLimits,
   enforceToolCallsMonthly,
+  enforcePrepPackMonthly,
   enforceContactsMax,
   enforceTasksMax,
   enforceMeetingsMax,

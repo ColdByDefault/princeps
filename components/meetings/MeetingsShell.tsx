@@ -82,10 +82,12 @@ export function MeetingsShell({
     updating,
     deleting,
     generatingPrepPack,
+    deletingPrepPack,
     createMeeting,
     updateMeeting,
     deleteMeeting,
     generatePrepPack,
+    deletePrepPack,
   } = useMeetingMutations(setMeetings, {
     createSuccess: t("createDialog.success"),
     createError: t("createDialog.error"),
@@ -95,6 +97,8 @@ export function MeetingsShell({
     deleteError: t("deleteDialog.error"),
     prepPackSuccess: t("prepPackDialog.success"),
     prepPackError: t("prepPackDialog.error"),
+    deletePrepPackSuccess: t("prepPackDialog.deleteSuccess"),
+    deletePrepPackError: t("prepPackDialog.deleteError"),
   });
 
   const FILTERS: { key: Filter; label: string }[] = [
@@ -127,6 +131,10 @@ export function MeetingsShell({
     // After success, useMeetingMutations calls setMeetings with the updated record.
     // MeetingsShell's meeting prop to PrepPackDialog reads from meetings via find(),
     // so the updated prepPack flows in automatically on the next render.
+  }
+
+  async function handlePrepPackDelete(meetingId: string): Promise<boolean> {
+    return deletePrepPack(meetingId);
   }
 
   async function handleSummarySubmit(
@@ -274,6 +282,8 @@ export function MeetingsShell({
         onOpenChange={setPrepPackOpen}
         onGenerate={handlePrepPackGenerate}
         generating={generatingPrepPack !== null}
+        onDelete={handlePrepPackDelete}
+        deleting={deletingPrepPack !== null}
       />
 
       {/* Edit dialog */}

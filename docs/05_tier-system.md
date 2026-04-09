@@ -48,14 +48,14 @@ Calibrated to OpenAI GPT-4o blended rate ~$0.0075/exchange.
 | Tasks (at-rest)                  | 20    | 100  | 500     | unlimited  |
 | Meetings (at-rest)               | 10    | 50   | 200     | unlimited  |
 | Decisions (at-rest)              | 10    | 50   | 200     | unlimited  |
-| Contacts (at-rest)               | 10    | 50   | 150     | unlimited  |
+| Contacts (at-rest)               | 20    | 50   | 150     | unlimited  |
 | Knowledge docs (at-rest)         | 3     | 25   | 50      | 200        |
 | Knowledge file size              | 500KB | 2MB  | 5MB     | 20MB       |
 | Widget chats/day                 | 30    | 60   | 120     | 300        |
 | Widget tool calls/day            | 5     | 25   | 50      | 100        |
 | Nudges (proactive notifications) | No    | Yes  | Yes     | Yes        |
 
-> **Note on contacts cap:** An executive assistant managing a real network realistically needs 100–500 contacts. The contacts limits were raised from the original 25/50/100 to 50/150/unlimited to better reflect this use case.
+> **Note on contacts cap:** An executive assistant managing a real network realistically needs 100–500 contacts. The contacts limits were raised from the original 25/50/100/200 to 20/50/150/unlimited to better reflect this use case.
 
 ---
 

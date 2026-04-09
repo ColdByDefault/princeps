@@ -173,6 +173,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           note={t("meetingsNote")}
         />
         <QuotaRow
+          label={t("prepPackTitle")}
+          used={usage.prepPacksGenerated}
+          limit={usage.prepPacksLimit}
+          note={t("prepPackNote")}
+        />
+        <QuotaRow
           label={t("decisionsTitle")}
           used={usage.decisionsStored}
           limit={usage.decisionsLimit}

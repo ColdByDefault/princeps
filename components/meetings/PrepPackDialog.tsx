@@ -5,7 +5,7 @@
 
 "use client";
 
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2, RefreshCw, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -26,6 +26,8 @@ type PrepPackDialogProps = {
   onOpenChange: (open: boolean) => void;
   onGenerate: (meetingId: string) => Promise<boolean>;
   generating: boolean;
+  onDelete: (meetingId: string) => Promise<boolean>;
+  deleting: boolean;
 };
 
 export function PrepPackDialog({
@@ -34,6 +36,8 @@ export function PrepPackDialog({
   onOpenChange,
   onGenerate,
   generating,
+  onDelete,
+  deleting,
 }: PrepPackDialogProps) {
   const t = useTranslations("meetings");
 
@@ -44,6 +48,11 @@ export function PrepPackDialog({
   async function handleGenerate() {
     if (!meeting) return;
     await onGenerate(meeting.id);
+  }
+
+  async function handleDelete() {
+    if (!meeting) return;
+    await onDelete(meeting.id);
   }
 
   return (
@@ -73,28 +82,47 @@ export function PrepPackDialog({
         </ScrollArea>
 
         <DialogFooter className="flex-row justify-between gap-2 sm:justify-between">
-          <Button
-            type="button"
-            onClick={handleGenerate}
-            disabled={generating || !meeting}
-            className="cursor-pointer"
-            aria-label={
-              displayContent
-                ? t("prepPackDialog.regenerate")
-                : t("prepPackDialog.generate")
-            }
-          >
-            {generating ? (
-              <Loader2 className="mr-2 size-4 animate-spin" />
-            ) : (
-              <RefreshCw className="mr-2 size-4" />
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              onClick={handleGenerate}
+              disabled={generating || deleting || !meeting}
+              className="cursor-pointer"
+              aria-label={
+                displayContent
+                  ? t("prepPackDialog.regenerate")
+                  : t("prepPackDialog.generate")
+              }
+            >
+              {generating ? (
+                <Loader2 className="mr-2 size-4 animate-spin" />
+              ) : (
+                <RefreshCw className="mr-2 size-4" />
+              )}
+              {generating
+                ? t("prepPackDialog.generating")
+                : displayContent
+                  ? t("prepPackDialog.regenerate")
+                  : t("prepPackDialog.generate")}
+            </Button>
+            {displayContent && (
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={deleting || generating || !meeting}
+                className="cursor-pointer"
+                aria-label={t("prepPackDialog.delete")}
+              >
+                {deleting ? (
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                ) : (
+                  <Trash2 className="mr-2 size-4" />
+                )}
+                {t("prepPackDialog.delete")}
+              </Button>
             )}
-            {generating
-              ? t("prepPackDialog.generating")
-              : displayContent
-                ? t("prepPackDialog.regenerate")
-                : t("prepPackDialog.generate")}
-          </Button>
+          </div>
           <Button
             type="button"
             variant="ghost"

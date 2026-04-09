@@ -225,6 +225,8 @@
       "tasksNote": "Number of tasks currently stored.",
       "meetingsTitle": "Meetings (stored)",
       "meetingsNote": "Number of meetings currently stored.",
+      "prepPackTitle": "Meeting prep packs (generated)",
+      "prepPackNote": "AI-generated prep packs this calendar month.",
       "decisionsTitle": "Decisions (stored)",
       "decisionsNote": "Number of decisions currently stored.",
       "goalsTitle": "Goals (stored)",
@@ -680,8 +682,11 @@
       "regenerate": "Regenerate",
       "generating": "Generating\u2026",
       "close": "Close",
+      "delete": "Delete",
       "success": "Prep pack generated.",
-      "error": "Failed to generate prep pack."
+      "error": "Failed to generate prep pack.",
+      "deleteSuccess": "Prep pack deleted.",
+      "deleteError": "Failed to delete prep pack."
     },
     "quickContact": {
       "heading": "New contact",
@@ -986,6 +991,21 @@
         "label": "Generate Meeting Prep Pack",
         "what": "Creates a structured AI briefing for a meeting: goal, key context, participants, open items, talking points, and questions to resolve.",
         "example": "\"Prepare me for the Q2 review meeting\""
+      },
+      "get_meeting_prep_pack": {
+        "label": "Read Meeting Prep Pack",
+        "what": "Returns the current prep pack content for a specific meeting.",
+        "example": "\"Show me the prep pack for the Q2 review\""
+      },
+      "clear_meeting_prep_pack": {
+        "label": "Clear Meeting Prep Pack",
+        "what": "Deletes the stored prep pack for a meeting.",
+        "example": "\"Clear the prep pack for the Q2 review\""
+      },
+      "update_meeting_prep_pack": {
+        "label": "Edit Meeting Prep Pack",
+        "what": "Manually edits the content of an existing prep pack — e.g. to add a note or correct a section.",
+        "example": "\"Add a note about the open budget item to my Q2 review prep pack\""
       },
       "create_decision": {
         "label": "Record Decision",
