@@ -672,6 +672,17 @@
       "submitting": "Saving\u2026",
       "cancel": "Cancel"
     },
+    "prepPackDialog": {
+      "trigger": "Prep pack",
+      "heading": "Meeting prep pack",
+      "empty": "No prep pack generated yet. Click \"Generate\" to create an AI briefing.",
+      "generate": "Generate",
+      "regenerate": "Regenerate",
+      "generating": "Generating\u2026",
+      "close": "Close",
+      "success": "Prep pack generated.",
+      "error": "Failed to generate prep pack."
+    },
     "quickContact": {
       "heading": "New contact",
       "name": "Name",
@@ -970,6 +981,11 @@
         "label": "Delete Meeting",
         "what": "Permanently deletes a meeting.",
         "example": "\"Delete the Q2 review meeting\""
+      },
+      "generate_meeting_prep_pack": {
+        "label": "Generate Meeting Prep Pack",
+        "what": "Creates a structured AI briefing for a meeting: goal, key context, participants, open items, talking points, and questions to resolve.",
+        "example": "\"Prepare me for the Q2 review meeting\""
       },
       "create_decision": {
         "label": "Record Decision",

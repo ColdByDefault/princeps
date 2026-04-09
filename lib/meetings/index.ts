@@ -9,3 +9,4 @@ export * from "./create.logic";
 export * from "./list.logic";
 export * from "./update.logic";
 export * from "./delete.logic";
+export * from "./generate-prep-pack.logic";

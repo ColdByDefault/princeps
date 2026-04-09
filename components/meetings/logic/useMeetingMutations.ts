@@ -14,6 +14,8 @@ type Translations = {
   updateError: string;
   deleteSuccess: string;
   deleteError: string;
+  prepPackSuccess: string;
+  prepPackError: string;
 };
 
 export function useMeetingMutations(
@@ -23,6 +25,9 @@ export function useMeetingMutations(
   const [creating, setCreating] = useState(false);
   const [updating, setUpdating] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [generatingPrepPack, setGeneratingPrepPack] = useState<string | null>(
+    null,
+  );
 
   async function createMeeting(input: {
     title: string;
@@ -109,12 +114,35 @@ export function useMeetingMutations(
     }
   }
 
+  async function generatePrepPack(meetingId: string) {
+    setGeneratingPrepPack(meetingId);
+    try {
+      const res = await fetch(`/api/meetings/${meetingId}/prep-pack`, {
+        method: "POST",
+      });
+      if (!res.ok) throw new Error();
+      const data = (await res.json()) as { meeting: MeetingRecord };
+      setMeetings((prev) =>
+        prev.map((m) => (m.id === meetingId ? data.meeting : m)),
+      );
+      toast.success(t.prepPackSuccess);
+      return true;
+    } catch {
+      toast.error(t.prepPackError);
+      return false;
+    } finally {
+      setGeneratingPrepPack(null);
+    }
+  }
+
   return {
     creating,
     updating,
     deleting,
+    generatingPrepPack,
     createMeeting,
     updateMeeting,
     deleteMeeting,
+    generatePrepPack,
   };
 }

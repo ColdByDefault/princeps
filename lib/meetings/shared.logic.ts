@@ -16,6 +16,7 @@ export const MEETING_SELECT = {
   status: true,
   agenda: true,
   summary: true,
+  prepPack: true,
   createdAt: true,
   updatedAt: true,
   labelLinks: {
@@ -48,6 +49,7 @@ type MeetingRow = {
   status: string;
   agenda: string | null;
   summary: string | null;
+  prepPack: string | null;
   createdAt: Date;
   updatedAt: Date;
   labelLinks: { label: { id: string; name: string; color: string } }[];
@@ -64,7 +66,7 @@ export function toMeetingRecord(row: MeetingRow): MeetingRecord {
     location: row.location,
     agenda: row.agenda,
     summary: row.summary,
-    prepPack: null,
+    prepPack: row.prepPack,
     status: row.status,
     googleEventId: null,
     labels: row.labelLinks.map((l) => l.label),

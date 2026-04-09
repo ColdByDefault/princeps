@@ -25,8 +25,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 - [ ] **#42 Extend Notifications** — Currently only "User Greetings" on Login (once or twice per day ?? check!), and once on new sign-up. IMPORTANT: there is a toggle in settings for greetings notification to enable/disable.
 - [ ] **#43 One-time data wipe** — premium/enterprise users can request a full wipe of `Chunk` + `MemoryEntry` data once every 6 months. Does not reset monthly usage limits.
-- [ ] **#44 ** —
-- [ ] **#45 ** —
-- [ ] **#46 ** —
-- [ ] **#47 ** —
-- [ ] **#48 ** —
+- [ ] **#74 ** —
+- [ ] **#75 ** —
+- [ ] **#76 ** —
+- [ ] **#77 ** —
+- [ ] **#78 ** —

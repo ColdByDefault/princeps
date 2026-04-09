@@ -9,6 +9,7 @@ import { createMeeting } from "@/lib/meetings/create.logic";
 import { listMeetings } from "@/lib/meetings/list.logic";
 import { updateMeeting } from "@/lib/meetings/update.logic";
 import { deleteMeeting } from "@/lib/meetings/delete.logic";
+import { generatePrepPack } from "@/lib/meetings/generate-prep-pack.logic";
 import {
   createMeetingSchema,
   updateMeetingSchema,
@@ -115,9 +116,34 @@ async function handleDeleteMeeting(
   return { ok: true, data: { deleted: true, meetingId: args.meetingId } };
 }
 
+async function handleGeneratePrepPack(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.meetingId !== "string") {
+    return {
+      ok: false,
+      error: "generate_meeting_prep_pack requires meetingId.",
+    };
+  }
+
+  const result = await generatePrepPack(args.meetingId, userId);
+  if (!result.ok) {
+    if ("notFound" in result && result.notFound) {
+      return { ok: false, error: "Meeting not found." };
+    }
+    return {
+      ok: false,
+      error: "error" in result ? result.error : "Failed to generate prep pack.",
+    };
+  }
+  return { ok: true, data: result.meeting };
+}
+
 export const meetingHandlers: Record<string, ToolHandler> = {
   create_meeting: handleCreateMeeting,
   list_meetings: handleListMeetings,
   update_meeting: handleUpdateMeeting,
   delete_meeting: handleDeleteMeeting,
+  generate_meeting_prep_pack: handleGeneratePrepPack,
 };

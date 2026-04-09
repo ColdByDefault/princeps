@@ -15,6 +15,7 @@ import {
   Users,
   NotebookPen,
   CheckSquare,
+  BriefcaseBusiness,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
@@ -41,18 +42,22 @@ type MeetingCardProps = {
   meeting: MeetingRecord;
   isUpdating: boolean;
   isDeleting: boolean;
+  isGeneratingPrepPack: boolean;
   onEdit: (meeting: MeetingRecord) => void;
   onDelete: (meetingId: string) => void;
   onSummary: (meeting: MeetingRecord) => void;
+  onPrepPack: (meeting: MeetingRecord) => void;
 };
 
 export function MeetingCard({
   meeting,
   isUpdating,
   isDeleting,
+  isGeneratingPrepPack,
   onEdit,
   onDelete,
   onSummary,
+  onPrepPack,
 }: MeetingCardProps) {
   const t = useTranslations("meetings");
 
@@ -62,7 +67,8 @@ export function MeetingCard({
     <div
       className={cn(
         "flex items-start gap-3 rounded-xl border border-border/60 bg-card px-4 py-3 transition-opacity",
-        (isUpdating || isDeleting) && "opacity-60 pointer-events-none",
+        (isUpdating || isDeleting || isGeneratingPrepPack) &&
+          "opacity-60 pointer-events-none",
       )}
     >
       {/* Icon */}
@@ -85,6 +91,17 @@ export function MeetingCard({
 
           {/* Actions */}
           <div className="flex shrink-0 items-center gap-0.5">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={t("prepPackDialog.trigger")}
+              title={t("prepPackDialog.trigger")}
+              className="size-7 cursor-pointer text-muted-foreground"
+              onClick={() => onPrepPack(meeting)}
+            >
+              <BriefcaseBusiness className="size-3.5" />
+            </Button>
             <Button
               type="button"
               variant="ghost"

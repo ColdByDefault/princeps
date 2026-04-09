@@ -23,6 +23,7 @@ import { MeetingCard } from "./MeetingCard";
 import { CreateMeetingDialog } from "./CreateMeetingDialog";
 import { EditMeetingDialog } from "./EditMeetingDialog";
 import { SummaryDialog } from "./SummaryDialog";
+import { PrepPackDialog } from "./PrepPackDialog";
 import { useMeetingMutations } from "./logic/useMeetingMutations";
 import type {
   LabelOptionRecord,
@@ -57,6 +58,10 @@ export function MeetingsShell({
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [prepPackMeeting, setPrepPackMeeting] = useState<MeetingRecord | null>(
+    null,
+  );
+  const [prepPackOpen, setPrepPackOpen] = useState(false);
 
   const [isPendingRefresh, startRefresh] = useTransition();
 
@@ -76,9 +81,11 @@ export function MeetingsShell({
     creating,
     updating,
     deleting,
+    generatingPrepPack,
     createMeeting,
     updateMeeting,
     deleteMeeting,
+    generatePrepPack,
   } = useMeetingMutations(setMeetings, {
     createSuccess: t("createDialog.success"),
     createError: t("createDialog.error"),
@@ -86,6 +93,8 @@ export function MeetingsShell({
     updateError: t("editDialog.error"),
     deleteSuccess: t("deleteDialog.success"),
     deleteError: t("deleteDialog.error"),
+    prepPackSuccess: t("prepPackDialog.success"),
+    prepPackError: t("prepPackDialog.error"),
   });
 
   const FILTERS: { key: Filter; label: string }[] = [
@@ -106,6 +115,18 @@ export function MeetingsShell({
   function handleSummary(meeting: MeetingRecord) {
     setSummaryMeeting(meeting);
     setSummaryOpen(true);
+  }
+
+  function handlePrepPack(meeting: MeetingRecord) {
+    setPrepPackMeeting(meeting);
+    setPrepPackOpen(true);
+  }
+
+  async function handlePrepPackGenerate(meetingId: string): Promise<boolean> {
+    return generatePrepPack(meetingId);
+    // After success, useMeetingMutations calls setMeetings with the updated record.
+    // MeetingsShell's meeting prop to PrepPackDialog reads from meetings via find(),
+    // so the updated prepPack flows in automatically on the next render.
   }
 
   async function handleSummarySubmit(
@@ -220,9 +241,11 @@ export function MeetingsShell({
               meeting={meeting}
               isUpdating={updating === meeting.id}
               isDeleting={deleting === meeting.id}
+              isGeneratingPrepPack={generatingPrepPack === meeting.id}
               onEdit={handleEdit}
               onDelete={handleDeleteRequest}
               onSummary={handleSummary}
+              onPrepPack={handlePrepPack}
             />
           ))}
         </div>
@@ -236,6 +259,21 @@ export function MeetingsShell({
         onOpenChange={setSummaryOpen}
         onSubmit={handleSummarySubmit}
         updating={updating !== null}
+      />
+
+      {/* Prep pack dialog */}
+      <PrepPackDialog
+        key={`prep-pack-${prepPackMeeting?.id ?? "none"}`}
+        meeting={
+          prepPackMeeting
+            ? (meetings.find((m) => m.id === prepPackMeeting.id) ??
+              prepPackMeeting)
+            : null
+        }
+        open={prepPackOpen}
+        onOpenChange={setPrepPackOpen}
+        onGenerate={handlePrepPackGenerate}
+        generating={generatingPrepPack !== null}
       />
 
       {/* Edit dialog */}

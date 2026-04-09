@@ -616,6 +616,27 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
     },
   },
   {
+    minTier: "free",
+    group: "meetings",
+    type: "function",
+    function: {
+      name: "generate_meeting_prep_pack",
+      description:
+        "Generate a meeting prep pack for a specific meeting. The prep pack is an AI-written briefing document containing: the meeting goal, key context, participant overview, open linked items, suggested talking points, and questions to resolve. Use when the user asks to prepare for a meeting, generate a brief, or wants a prep pack.",
+      parameters: {
+        type: "object",
+        properties: {
+          meetingId: {
+            type: "string",
+            description:
+              "ID of the meeting to generate the prep pack for. Use list_meetings to find the ID if you don't have it.",
+          },
+        },
+        required: ["meetingId"],
+      },
+    },
+  },
+  {
     minTier: "pro",
     group: "decisions",
     type: "function",
