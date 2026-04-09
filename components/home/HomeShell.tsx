@@ -6,14 +6,23 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { BriefingCard } from "./BriefingCard";
 import type { WeatherSnapshot } from "@/lib/weather/types";
+import type { BriefingRecord } from "@/types/api";
 
 type HomeShellProps = {
   weather: WeatherSnapshot | null;
   greetingTitle: string;
+  initialBriefing: BriefingRecord | null;
+  autoBriefingEnabled: boolean;
 };
 
-export function HomeShell({ weather, greetingTitle }: HomeShellProps) {
+export function HomeShell({
+  weather,
+  greetingTitle,
+  initialBriefing,
+  autoBriefingEnabled,
+}: HomeShellProps) {
   const t = useTranslations("home");
 
   return (
@@ -48,6 +57,12 @@ export function HomeShell({ weather, greetingTitle }: HomeShellProps) {
           {t("weather.noWeather")}
         </p>
       )}
+
+      {/* Briefing card — always shown; content gated by autoBriefingEnabled */}
+      <BriefingCard
+        initialBriefing={initialBriefing}
+        autoBriefingEnabled={autoBriefingEnabled}
+      />
     </div>
   );
 }

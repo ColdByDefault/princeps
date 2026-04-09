@@ -18,6 +18,7 @@ import { decisionTools } from "./registry/decisions.registry";
 import { goalTools } from "./registry/goals.registry";
 import { knowledgeTools } from "./registry/knowledge.registry";
 import { memoryTools } from "./registry/memory.registry";
+import { briefingTools } from "./registry/briefings.registry";
 
 export type { ToolRegistryEntry };
 
@@ -83,5 +84,5 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
   ...goalTools,
   ...knowledgeTools,
   ...memoryTools,
+  ...briefingTools,
 ];
- 

@@ -39,18 +39,6 @@ export default function Footer() {
   return (
     <footer className="border-t border-border/70 bg-background/95 px-6 py-3 backdrop-blur-xl">
       <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-        <div className="flex items-center gap-2">
-          <VersionDisplay
-            className="text-xs text-muted-foreground"
-            titleLabel={t("footer.versionTitle")}
-          />
-          <span className="inline-flex items-center bg-amber-500/10 px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.18em] text-amber-700 uppercase dark:text-amber-300">
-            {t("footer.beta")}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {t("footer.copyright")}
-          </span>
-        </div>
         <nav className="flex flex-wrap items-center gap-x-4 gap-y-1">
           {allLinks.map((link) => (
             <Link
@@ -62,6 +50,21 @@ export default function Footer() {
             </Link>
           ))}
         </nav>
+        <div className="flex items-center gap-2">
+          <VersionDisplay
+            className="text-xs text-muted-foreground"
+            titleLabel={t("footer.versionTitle")}
+          />
+          <span className="inline-flex items-center bg-amber-500/10 px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.18em] text-amber-700 uppercase dark:text-amber-300">
+            {t("footer.beta")}
+          </span>
+          <span className="text-xs text-muted-foreground">
+            | {t("footer.copyright")} |
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {t("footer.authors")}
+          </span>
+        </div>
       </div>
     </footer>
   );

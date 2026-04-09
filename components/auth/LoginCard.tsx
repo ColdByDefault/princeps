@@ -88,6 +88,7 @@ export default function LoginCard() {
               onChange={(event) => setIdentifier(event.target.value)}
               placeholder={t("login.identifierPlaceholder")}
               className="h-11 rounded-xl bg-background/80"
+              suppressHydrationWarning
             />
           </div>
 
@@ -113,6 +114,7 @@ export default function LoginCard() {
                 onChange={(event) => setPassword(event.target.value)}
                 placeholder={t("login.passwordPlaceholder")}
                 className="h-11 rounded-xl bg-background/80 pr-11"
+                suppressHydrationWarning
               />
               <button
                 type="button"

@@ -3,5 +3,4 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
-export { HomeShell } from "./HomeShell";
-export { BriefingCard } from "./BriefingCard";
+export { BriefingShell } from "./BriefingShell";

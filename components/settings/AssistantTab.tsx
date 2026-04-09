@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { CustomToggle } from "@/components/shared";
 import {
   Select,
   SelectContent,
@@ -33,6 +34,7 @@ type AssistantTabProps = {
   initialAddressStyle: AddressStyle | null;
   initialResponseLength: ResponseLength | null;
   initialCustomSystemPrompt: string | null;
+  initialAutoBriefingEnabled: boolean;
 };
 
 export function AssistantTab({
@@ -41,6 +43,7 @@ export function AssistantTab({
   initialAddressStyle,
   initialResponseLength,
   initialCustomSystemPrompt,
+  initialAutoBriefingEnabled,
 }: AssistantTabProps) {
   const t = useTranslations("settings.assistant");
 
@@ -61,6 +64,9 @@ export function AssistantTab({
     initialCustomSystemPrompt ?? "",
   );
   const [showPreview, setShowPreview] = useState(false);
+  const [autoBriefingEnabled, setAutoBriefingEnabled] = useState(
+    initialAutoBriefingEnabled,
+  );
   const customPromptDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -137,6 +143,15 @@ export function AssistantTab({
         "customPromptSaveFailed",
       );
     }, 1000);
+  }
+
+  async function handleAutoBriefingToggle(checked: boolean) {
+    setAutoBriefingEnabled(checked);
+    await patchSetting(
+      { autoBriefingEnabled: checked },
+      "autoBriefingSaved",
+      "autoBriefingSaveFailed",
+    );
   }
 
   return (
@@ -349,6 +364,21 @@ export function AssistantTab({
 
       {/* Re-login notice */}
       <p className="pt-4 text-xs text-muted-foreground">{t("reloginNotice")}</p>
+
+      {/* Automatic Daily Briefing */}
+      <div className="flex items-center justify-between gap-4 py-4">
+        <div className="min-w-0 flex-1 space-y-0.5">
+          <p className="text-sm font-medium">{t("autoBriefingLabel")}</p>
+          <p className="text-sm text-muted-foreground">
+            {t("autoBriefingDescription")}
+          </p>
+        </div>
+        <CustomToggle
+          checked={autoBriefingEnabled}
+          onCheckedChange={handleAutoBriefingToggle}
+          aria-label={t("autoBriefingLabel")}
+        />
+      </div>
     </div>
   );
 }

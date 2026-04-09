@@ -21,6 +21,19 @@
     "weather": {
       "location": "Location",
       "noWeather": "Weather unavailable"
+    },
+    "briefing": {
+      "title": "Daily Briefing",
+      "readMore": "...read more",
+      "refresh": "Refresh briefing",
+      "refreshing": "Refreshing…",
+      "empty": "No briefing yet. Click refresh to generate one.",
+      "generatedAt": "Generated",
+      "generateSuccess": "Briefing refreshed.",
+      "generateError": "Failed to refresh briefing.",
+      "autoOff": "Automatic daily briefing is turned off.",
+      "autoOffHint": "Enable it in Settings \u2192 Assistant to see your briefing here.",
+      "goToSettings": "Open Settings"
     }
   },
   "notifications": {
@@ -227,6 +240,8 @@
       "meetingsNote": "Number of meetings currently stored.",
       "prepPackTitle": "Meeting prep packs (generated)",
       "prepPackNote": "AI-generated prep packs this calendar month.",
+      "briefingTitle": "Daily briefings (generated)",
+      "briefingNote": "AI-generated daily briefings (manual regeneration) this calendar month. The automatic cron briefing does not count.",
       "decisionsTitle": "Decisions (stored)",
       "decisionsNote": "Number of decisions currently stored.",
       "goalsTitle": "Goals (stored)",
@@ -288,7 +303,11 @@
       "customPromptSaveFailed": "Failed to save custom instructions.",
       "customPromptShowPreview": "Preview",
       "customPromptHidePreview": "Edit",
-      "customPromptPreviewLabel": "Preview"
+      "customPromptPreviewLabel": "Preview",
+      "autoBriefingLabel": "Automatic daily briefing",
+      "autoBriefingDescription": "Generate your daily briefing automatically every morning.",
+      "autoBriefingSaved": "Briefing setting saved.",
+      "autoBriefingSaveFailed": "Failed to save briefing setting."
     }
   },
   "chatWidget": {
@@ -321,6 +340,7 @@
       "labels": "Labels",
       "intel": "Intelligence",
       "memory": "Memory",
+      "briefings": "Daily Briefing",
       "comingSoon": "Coming soon"
     },
     "language": {
@@ -349,7 +369,8 @@
       "security": "Security",
       "versionTitle": "Application version",
       "beta": "Beta",
-      "copyright": "© 2026 AnotherProject"
+      "copyright": "© 2026 PRINCEPS All rights reserved.",
+      "authors": " Made by AnotherProject™ - ColdByDefault"
     }
   },
   "chat": {
@@ -896,7 +917,8 @@
       "decisions": "Decisions",
       "goals": "Goals",
       "knowledge": "Knowledge",
-      "memory": "Memory"
+      "memory": "Memory",
+      "briefings": "Briefings"
     },
     "catalog": {
       "create_task": {
@@ -1078,6 +1100,16 @@
         "label": "Forget Fact",
         "what": "Permanently deletes a stored memory fact by its ID.",
         "example": "\"Forget that fact about my meeting time\""
+      },
+      "get_briefing": {
+        "label": "Get Briefing",
+        "what": "Reads your current daily executive briefing.",
+        "example": "\"Show me my daily briefing\" or \"What's my briefing for today?\""
+      },
+      "regenerate_briefing": {
+        "label": "Regenerate Briefing",
+        "what": "Generates a fresh daily briefing from your tasks, meetings, and decisions.",
+        "example": "\"Regenerate my briefing\" or \"Create a new daily summary\""
       }
     }
   },
@@ -1184,5 +1216,23 @@
       "confirm": "Delete",
       "cancel": "Cancel"
     }
+  },
+  "briefings": {
+    "metadata": {
+      "title": "Daily Briefing",
+      "description": "Your daily AI-generated executive briefing."
+    },
+    "pageTitle": "Daily Briefing",
+    "generate": "Generate",
+    "generating": "Generating…",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing…",
+    "empty": "No briefing yet. Generate your first daily briefing.",
+    "generatedAt": "Generated on {date}",
+    "generateSuccess": "Briefing generated.",
+    "generateError": "Failed to generate briefing. Please try again.",
+    "autoOff": "Automatic daily briefing is off.",
+    "autoOffHint": "Your briefing won't be generated automatically. You can still generate it here or ask your assistant.",
+    "goToSettings": "Open Settings"
   }
 }

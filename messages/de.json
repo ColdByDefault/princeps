@@ -21,6 +21,19 @@
     "weather": {
       "location": "Standort",
       "noWeather": "Kein Wetter verfügbar"
+    },
+    "briefing": {
+      "title": "Tagesbriefing",
+      "readMore": "…weiterlesen",
+      "refresh": "Briefing aktualisieren",
+      "refreshing": "Wird aktualisiert…",
+      "empty": "Kein Briefing vorhanden. Klicke auf Aktualisieren, um eines zu erstellen.",
+      "generatedAt": "Erstellt",
+      "generateSuccess": "Briefing aktualisiert.",
+      "generateError": "Briefing konnte nicht aktualisiert werden.",
+      "autoOff": "Automatisches Tagesbriefing ist deaktiviert.",
+      "autoOffHint": "Aktiviere es in Einstellungen → Assistent, um dein Briefing hier zu sehen.",
+      "goToSettings": "Einstellungen öffnen"
     }
   },
   "notifications": {
@@ -227,6 +240,8 @@
       "meetingsNote": "Anzahl der aktuell gespeicherten Meetings.",
       "prepPackTitle": "Meeting-Vorbereitungen (generiert)",
       "prepPackNote": "KI-generierte Vorbereitungsdokumente in diesem Kalendermonat.",
+      "briefingTitle": "Tagesbriefings (generiert)",
+      "briefingNote": "KI-generierte Tagesbriefings (manuelle Neugenerierung) in diesem Kalendermonat. Das automatische Cron-Briefing wird nicht gezählt.",
       "decisionsTitle": "Entscheidungen (gespeichert)",
       "decisionsNote": "Anzahl der aktuell gespeicherten Entscheidungen.",
       "goalsTitle": "Ziele (gespeichert)",
@@ -288,7 +303,11 @@
       "customPromptSaveFailed": "Eigene Anweisungen konnten nicht gespeichert werden.",
       "customPromptShowPreview": "Vorschau",
       "customPromptHidePreview": "Bearbeiten",
-      "customPromptPreviewLabel": "Vorschau"
+      "customPromptPreviewLabel": "Vorschau",
+      "autoBriefingLabel": "Automatisches Tagesbriefing",
+      "autoBriefingDescription": "Erstelle jeden Morgen automatisch dein Tagesbriefing.",
+      "autoBriefingSaved": "Briefing-Einstellung gespeichert.",
+      "autoBriefingSaveFailed": "Briefing-Einstellung konnte nicht gespeichert werden."
     }
   },
   "chatWidget": {
@@ -321,6 +340,7 @@
       "labels": "Labels",
       "intel": "Intelligenz",
       "memory": "Gedächtnis",
+      "briefings": "Tagesbriefing",
       "comingSoon": "Bald verfügbar"
     },
     "language": {
@@ -349,7 +369,8 @@
       "security": "Sicherheit",
       "versionTitle": "Anwendungsversion",
       "beta": "Beta",
-      "copyright": "© 2026 AnotherProject"
+      "copyright": "© 2026 PRINCEPS Alle Rechte vorbehalten.",
+      "authors": "Erstellt von AnotherProject™ – ColdByDefault"
     }
   },
   "chat": {
@@ -896,7 +917,8 @@
       "decisions": "Entscheidungen",
       "goals": "Ziele",
       "knowledge": "Wissen",
-      "memory": "Gedächtnis"
+      "memory": "Gedächtnis",
+      "briefings": "Briefings"
     },
     "catalog": {
       "create_task": {
@@ -1078,6 +1100,16 @@
         "label": "Fakt vergessen",
         "what": "Löscht einen gespeicherten Gedächtnis-Fakt dauerhaft anhand seiner ID.",
         "example": "\"Vergiss den Fakt über meine Meeting-Zeit\""
+      },
+      "get_briefing": {
+        "label": "Briefing abrufen",
+        "what": "Zeigt dein aktuelles tägliches Executive-Briefing an.",
+        "example": "\"Zeig mir mein Tagesbriefing\" oder \"Was steht in meinem heutigen Briefing?\""
+      },
+      "regenerate_briefing": {
+        "label": "Briefing neu generieren",
+        "what": "Erstellt ein neues tägliches Briefing aus deinen Aufgaben, Meetings und offenen Entscheidungen.",
+        "example": "\"Briefing neu erstellen\" oder \"Erstelle eine neue Tageszusammenfassung\""
       }
     }
   },
@@ -1184,5 +1216,23 @@
       "confirm": "Löschen",
       "cancel": "Abbrechen"
     }
+  },
+  "briefings": {
+    "metadata": {
+      "title": "Tagesbriefing",
+      "description": "Dein täglich KI-generiertes Executive-Briefing."
+    },
+    "pageTitle": "Tagesbriefing",
+    "generate": "Generieren",
+    "generating": "Wird generiert…",
+    "refresh": "Aktualisieren",
+    "refreshing": "Wird aktualisiert…",
+    "empty": "Noch kein Briefing vorhanden. Erstelle dein erstes Tagesbriefing.",
+    "generatedAt": "Generiert am {date}",
+    "generateSuccess": "Briefing wurde generiert.",
+    "generateError": "Briefing konnte nicht generiert werden. Bitte erneut versuchen.",
+    "autoOff": "Automatisches Tagesbriefing ist deaktiviert.",
+    "autoOffHint": "Dein Briefing wird nicht automatisch generiert. Du kannst es hier oder über deinen Assistenten erstellen.",
+    "goToSettings": "Einstellungen öffnen"
   }
 }

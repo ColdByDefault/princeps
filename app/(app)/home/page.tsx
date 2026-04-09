@@ -9,6 +9,8 @@ import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { fetchWeather } from "@/lib/weather";
+import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
+import { getBriefing } from "@/lib/briefings";
 import { HomeShell } from "@/components/home";
 import type { AppLanguage } from "@/types/i18n";
 
@@ -76,9 +78,24 @@ export default async function HomePage() {
     typeof prefs.location === "string" ? prefs.location : null;
   const name = session.user.name ?? "";
 
-  const [weather] = await Promise.all([fetchWeather(timezone, locationKey)]);
+  const userPrefs = await getUserPreferences(session.user.id);
+  const autoBriefingEnabled = userPrefs.autoBriefingEnabled !== false;
+
+  const [weather, initialBriefing] = await Promise.all([
+    fetchWeather(timezone, locationKey),
+    // Only fetch the cached briefing when auto is on; when off the card shows the
+    // "turn it on" notice regardless of what's stored in the DB.
+    autoBriefingEnabled ? getBriefing(session.user.id) : Promise.resolve(null),
+  ]);
 
   const greetingTitle = buildGreetingTitle(name || "there", timezone, lang);
 
-  return <HomeShell weather={weather} greetingTitle={greetingTitle} />;
+  return (
+    <HomeShell
+      weather={weather}
+      greetingTitle={greetingTitle}
+      initialBriefing={initialBriefing}
+      autoBriefingEnabled={autoBriefingEnabled}
+    />
+  );
 }

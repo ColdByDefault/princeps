@@ -161,3 +161,10 @@ export interface MemoryEntryRecord {
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }
+
+/** Client-safe shape of a BriefingCache record. */
+export interface BriefingRecord {
+  id: string;
+  content: string;
+  generatedAt: string; // ISO string on the client
+}

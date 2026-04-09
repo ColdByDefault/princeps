@@ -73,6 +73,16 @@ export interface PlanLimits {
    * `0` = feature disabled for this tier.
    */
   prepPacksPerMonth: number;
+  /**
+   * Max daily briefings manually regenerated per calendar day.
+   * Spam burst guard only — the monthly limit is the primary gate.
+   */
+  briefingsPerDay: number;
+  /**
+   * Max daily briefings manually regenerated per calendar month.
+   * `-1` = unlimited. `0` = feature disabled for this tier.
+   */
+  briefingsPerMonth: number;
 }
 
 /**
@@ -103,6 +113,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     memoryMax: 25,
     nudgesEnabled: false,
     prepPacksPerMonth: 0,
+    briefingsPerDay: 1,
+    briefingsPerMonth: 3,
   },
   pro: {
     knowledgeDocs: 25,
@@ -123,6 +135,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     memoryMax: 100,
     nudgesEnabled: true,
     prepPacksPerMonth: 10,
+    briefingsPerDay: 3,
+    briefingsPerMonth: 30,
   },
   premium: {
     knowledgeDocs: 50,
@@ -143,6 +157,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     memoryMax: 500,
     nudgesEnabled: true,
     prepPacksPerMonth: 25,
+    briefingsPerDay: 5,
+    briefingsPerMonth: 100,
   },
   enterprise: {
     knowledgeDocs: 200,
@@ -163,6 +179,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     memoryMax: -1,
     nudgesEnabled: true,
     prepPacksPerMonth: 100,
+    briefingsPerDay: -1,
+    briefingsPerMonth: -1,
   },
 };
 
@@ -243,6 +261,10 @@ export interface UsageSummary {
   prepPacksGenerated: number;
   /** Plan maximum for AI-generated prep packs per month. `0` = feature disabled. */
   prepPacksLimit: number;
+  /** Number of daily briefings manually regenerated this month. */
+  briefingsGenerated: number;
+  /** Plan maximum for briefings regenerated per month. `-1` = unlimited. */
+  briefingsLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }
