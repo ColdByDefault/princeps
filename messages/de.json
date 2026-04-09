@@ -232,7 +232,9 @@
       "goalsTitle": "Ziele (gespeichert)",
       "goalsNote": "Anzahl der aktuell gespeicherten Ziele.",
       "memoryTitle": "Gedächtnis-Fakten (gespeichert)",
-      "memoryNote": "Anzahl der aktuell gespeicherten Gedächtnis-Fakten."
+      "memoryNote": "Anzahl der aktuell gespeicherten Gedächtnis-Fakten.",
+      "budgetNoteTitle": "Wie Limits funktionieren",
+      "budgetNoteBody": "Die Token-Zählung ist eine Näherung und dient als Budgethilfe, keine exakte Kostenerfassung. Es kann passieren, dass dein monatliches Token-Budget aufgebraucht ist, obwohl noch LLM-Aufrufe übrig sind — diese können erst nach dem Monatsreset wieder genutzt werden."
     },
     "tools": {
       "title": "KI-Werkzeuge",

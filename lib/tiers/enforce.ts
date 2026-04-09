@@ -438,7 +438,7 @@ export async function enforceContactsMax(
 
   const limits = getPlanLimits(tier);
 
-  if (count >= limits.contactsMax) {
+  if (limits.contactsMax !== -1 && count >= limits.contactsMax) {
     return {
       allowed: false,
       reason: "Contact limit reached for your plan.",

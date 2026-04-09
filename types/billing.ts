@@ -36,7 +36,10 @@ export interface PlanLimits {
   widgetToolsPerDay: number;
   /** Max LLM tool calls (function calls) per calendar month in main chat. */
   toolCallsPerMonth: number;
-  /** Max total contacts stored at once (no monthly reset). */
+  /**
+   * Max total contacts stored at once (no monthly reset).
+   * `-1` = unlimited — the enforce function skips the count check.
+   */
   contactsMax: number;
   /**
    * Max total tasks stored at once (no monthly reset).
@@ -152,7 +155,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetChatsPerDay: 300,
     widgetToolsPerDay: 100,
     toolCallsPerMonth: 2_000,
-    contactsMax: 100,
+    contactsMax: -1,
     tasksMax: -1,
     meetingsMax: -1,
     decisionsMax: -1,
