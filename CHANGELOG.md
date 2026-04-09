@@ -1,3 +1,9 @@
+## [0.2.2] - 2026-04-09
+
+- feat: update task list for meeting prep pack implementation and fix typos
+- feat: implement meeting prep pack management with generation, deletion, and quota enforcement
+- feat: add meeting prep pack generation functionality and UI components
+
 ## [0.2.1] - 2026-04-09
 
 - feat: improve Navbar state management for menu open handling
