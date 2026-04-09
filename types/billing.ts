@@ -65,6 +65,11 @@ export interface PlanLimits {
   memoryMax: number;
   /** Whether proactive nudge notifications are active. */
   nudgesEnabled: boolean;
+  /**
+   * Max AI-generated prep packs per calendar month.
+   * `0` = feature disabled for this tier.
+   */
+  prepPacksPerMonth: number;
 }
 
 /**
@@ -94,6 +99,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     goalsMax: 10,
     memoryMax: 25,
     nudgesEnabled: false,
+    prepPacksPerMonth: 0,
   },
   pro: {
     knowledgeDocs: 25,
@@ -113,6 +119,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     goalsMax: 25,
     memoryMax: 100,
     nudgesEnabled: true,
+    prepPacksPerMonth: 10,
   },
   premium: {
     knowledgeDocs: 50,
@@ -132,6 +139,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     goalsMax: 100,
     memoryMax: 500,
     nudgesEnabled: true,
+    prepPacksPerMonth: 25,
   },
   enterprise: {
     knowledgeDocs: 200,
@@ -151,6 +159,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     goalsMax: -1,
     memoryMax: -1,
     nudgesEnabled: true,
+    prepPacksPerMonth: 100,
   },
 };
 
@@ -227,6 +236,10 @@ export interface UsageSummary {
   memoryStored: number;
   /** Plan maximum for memory entries at rest. `-1` = unlimited. */
   memoryLimit: number;
+  /** Number of AI-generated prep packs this month. */
+  prepPacksGenerated: number;
+  /** Plan maximum for AI-generated prep packs per month. `0` = feature disabled. */
+  prepPacksLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

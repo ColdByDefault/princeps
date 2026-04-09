@@ -35,7 +35,10 @@ export const meetingsSlot: ContextSlot = {
         m.tasks.length > 0
           ? ` — linked tasks: ${m.tasks.map((t) => `${t.title} (${t.status})`).join(", ")}`
           : "";
-      return `- [${m.id}] ${m.title} — ${scheduled}${dur}${loc}${labels}${participants}${tasks}`;
+      const prepPack = m.prepPack
+        ? " — [prep pack: yes]"
+        : " — [prep pack: no]";
+      return `- [${m.id}] ${m.title} — ${scheduled}${dur}${loc}${labels}${participants}${tasks}${prepPack}`;
     });
 
     return lines.join("\n");

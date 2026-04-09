@@ -225,6 +225,8 @@
       "tasksNote": "Anzahl der aktuell gespeicherten Aufgaben.",
       "meetingsTitle": "Meetings (gespeichert)",
       "meetingsNote": "Anzahl der aktuell gespeicherten Meetings.",
+      "prepPackTitle": "Meeting-Vorbereitungen (generiert)",
+      "prepPackNote": "KI-generierte Vorbereitungsdokumente in diesem Kalendermonat.",
       "decisionsTitle": "Entscheidungen (gespeichert)",
       "decisionsNote": "Anzahl der aktuell gespeicherten Entscheidungen.",
       "goalsTitle": "Ziele (gespeichert)",
@@ -672,6 +674,20 @@
       "submitting": "Wird gespeichert\u2026",
       "cancel": "Abbrechen"
     },
+    "prepPackDialog": {
+      "trigger": "Vorbereitung",
+      "heading": "Meeting-Vorbereitung",
+      "empty": "Noch keine Vorbereitung generiert. Klicke auf \"Generieren\", um eine KI-Zusammenfassung zu erstellen.",
+      "generate": "Generieren",
+      "regenerate": "Neu generieren",
+      "generating": "Wird generiert\u2026",
+      "close": "Schlie\u00dfen",
+      "delete": "L\u00f6schen",
+      "success": "Vorbereitung generiert.",
+      "error": "Vorbereitung konnte nicht generiert werden.",
+      "deleteSuccess": "Vorbereitung gel\u00f6scht.",
+      "deleteError": "Vorbereitung konnte nicht gel\u00f6scht werden."
+    },
     "quickContact": {
       "heading": "Neuer Kontakt",
       "name": "Name",
@@ -970,6 +986,26 @@
         "label": "Meeting löschen",
         "what": "Löscht ein Meeting dauerhaft.",
         "example": "\"Lösche das Q2-Review-Meeting\""
+      },
+      "generate_meeting_prep_pack": {
+        "label": "Meeting-Vorbereitung generieren",
+        "what": "Erstellt ein strukturiertes Vorbereitungsdokument für ein Meeting: Ziel, Kontext, Teilnehmer, offene Punkte, Gesprächsthemen und Fragen.",
+        "example": "\"Bereite mich auf das Q2-Review-Meeting vor\""
+      },
+      "get_meeting_prep_pack": {
+        "label": "Meeting-Vorbereitung lesen",
+        "what": "Zeigt den Inhalt der gespeicherten Vorbereitung für ein Meeting an.",
+        "example": "\"Zeige mir die Vorbereitung für das Q2-Review\""
+      },
+      "clear_meeting_prep_pack": {
+        "label": "Meeting-Vorbereitung löschen",
+        "what": "Löscht die gespeicherte Vorbereitung eines Meetings.",
+        "example": "\"Lösche die Vorbereitung für das Q2-Review\""
+      },
+      "update_meeting_prep_pack": {
+        "label": "Meeting-Vorbereitung bearbeiten",
+        "what": "Bearbeitet den Inhalt einer bestehenden Meeting-Vorbereitung manuell, z. B. um Abschnitte zu ergänzen oder zu korrigieren.",
+        "example": "\"Füge einen Hinweis zu den offenen Punkten in meiner Q2-Review-Vorbereitung hinzu\""
       },
       "create_decision": {
         "label": "Entscheidung erfassen",

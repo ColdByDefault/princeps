@@ -617,6 +617,93 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
   },
   {
     minTier: "pro",
+    group: "meetings",
+    type: "function",
+    function: {
+      name: "generate_meeting_prep_pack",
+      description:
+        "Generate or regenerate the AI-written prep pack for a specific meeting. Calling this on a meeting that already has a prep pack will replace it with a freshly generated one. The prep pack contains: meeting goal, key context, participant overview, open linked items, suggested talking points, and questions to resolve. Use when the user asks to prepare for a meeting, generate a brief, regenerate, or refresh the prep pack.",
+      parameters: {
+        type: "object",
+        properties: {
+          meetingId: {
+            type: "string",
+            description:
+              "ID of the meeting to generate the prep pack for. Use list_meetings to find the ID if you don't have it.",
+          },
+        },
+        required: ["meetingId"],
+      },
+    },
+  },
+  {
+    minTier: "pro",
+    group: "meetings",
+    type: "function",
+    function: {
+      name: "get_meeting_prep_pack",
+      description:
+        "Read the current prep pack content for a specific meeting. Use when the user asks to see, show, or read the prep pack for a meeting. Returns null if no prep pack has been generated yet.",
+      parameters: {
+        type: "object",
+        properties: {
+          meetingId: {
+            type: "string",
+            description:
+              "ID of the meeting whose prep pack you want to read. Use list_meetings to find the ID if you don't have it.",
+          },
+        },
+        required: ["meetingId"],
+      },
+    },
+  },
+  {
+    minTier: "pro",
+    group: "meetings",
+    type: "function",
+    function: {
+      name: "clear_meeting_prep_pack",
+      description:
+        "Delete (clear) the prep pack for a specific meeting. Use when the user explicitly asks to remove, delete, or clear the prep pack. Requires confirmation — ask the user before calling this.",
+      parameters: {
+        type: "object",
+        properties: {
+          meetingId: {
+            type: "string",
+            description: "ID of the meeting whose prep pack should be cleared.",
+          },
+        },
+        required: ["meetingId"],
+      },
+    },
+  },
+  {
+    minTier: "pro",
+    group: "meetings",
+    type: "function",
+    function: {
+      name: "update_meeting_prep_pack",
+      description:
+        "Manually edit or update the prep pack text for a specific meeting. Use when the user wants to make specific changes to an existing prep pack — e.g. add a note, rewrite a section, or correct something. To replace the whole pack with a freshly AI-generated version, use generate_meeting_prep_pack instead.",
+      parameters: {
+        type: "object",
+        properties: {
+          meetingId: {
+            type: "string",
+            description: "ID of the meeting whose prep pack should be updated.",
+          },
+          content: {
+            type: "string",
+            description:
+              "The full updated prep pack content in Markdown. This replaces the existing text entirely, so include all sections you want to keep.",
+          },
+        },
+        required: ["meetingId", "content"],
+      },
+    },
+  },
+  {
+    minTier: "pro",
     group: "decisions",
     type: "function",
     function: {

@@ -380,6 +380,47 @@ export async function enforceToolCallsMonthly(
   return { allowed: true };
 }
 
+// ─── Prep pack monthly limit ──────────────────────────────
+
+export async function enforcePrepPackMonthly(
+  userId: string,
+): Promise<EnforceResult> {
+  const [tier, counter] = await Promise.all([
+    getUserTier(userId),
+    getOrCreateCounter(userId),
+  ]);
+
+  const limits = getPlanLimits(tier);
+  const month = currentMonth();
+  const stale = counter.monthlyResetDate !== month;
+
+  if (limits.prepPacksPerMonth === 0) {
+    return {
+      allowed: false,
+      reason: "Meeting prep pack generation is not available on your plan.",
+    };
+  }
+
+  const current = stale ? 0 : counter.prepPackMonthlyCount;
+
+  if (current >= limits.prepPacksPerMonth) {
+    return {
+      allowed: false,
+      reason: "Monthly prep pack limit reached for your plan.",
+    };
+  }
+
+  await db.usageCounter.update({
+    where: { userId },
+    data: {
+      prepPackMonthlyCount: current + 1,
+      monthlyResetDate: month,
+    },
+  });
+
+  return { allowed: true };
+}
+
 // ─── Contacts limit ───────────────────────────────────────
 
 /**
