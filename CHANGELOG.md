@@ -1,3 +1,9 @@
+## [0.2.3] - 2026-04-09
+
+- feat: add daily briefing feature with generation and retrieval capabilities
+- feat: integrate Langfuse for LLM observability and add configuration documentation
+- feat: add contact, decision, goal, knowledge, label, meeting, memory, profile, and task tools to the registry
+
 ## [0.2.2] - 2026-04-09
 
 - feat: update task list for meeting prep pack implementation and fix typos
