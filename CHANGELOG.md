@@ -1,3 +1,33 @@
+## [0.2.1] - 2026-04-09
+
+- feat: improve Navbar state management for menu open handling
+- feat: simplify loading state management in GlobalSearch and refactor Navbar state handling
+- feat: refine CommandDialog and CommandItem styles for improved UI consistency
+- feat: enhance GlobalSearch with loading state and fetch multiple data types
+- feat: implement GlobalSearch component with keyboard shortcut and navigation links
+- feat: add auto-close functionality for mobile navbar after route redirect
+- feat: organize types into separate files for weather and settings, update imports accordingly
+- feat: update imports in multiple components for improved organization and clarity
+- fix: remove duplicate locale initialization in ContactDetailDialog
+- feat: refactor AppearanceTab to use Popover for location and timezone selection, update translations for search placeholders
+- feat: implement locale-aware date formatting across multiple components and add Popover component
+- Refactor imports to use barrel exports for cleaner code organization
+- feat: add new index files for various components and libraries, exporting necessary modules
+- feat(version-bump): implement custom version bump logic and update package.json to 0.2.0
+- feat(meeting): add "work" label instruction for slide deck preparation in meeting notes
+- feat(meeting): add meeting title display to DecisionCard and TaskCard, and update data models to include meeting title
+- feat(tasks): update task list by removing obsolete user profile settings and clarifying meeting prep pack implementation
+- feat(profile): expand user data retrieval to include username, email, tier, and role
+- feat(profile): ensure username is stored in lowercase and added displayUsername field
+- feat(profile): implement profile editing functionality with validation and dialog
+- feat(tasks): remove obsolete tasks and clean up task list for clarity
+- feat(contacts): enhance fetch to include meeting details for each contact
+- feat(chat-widget): keep focus on input after sending a message for improved UX
+- fix(HomeShell): change greeting title font weight from semibold to bold
+- feat(navigation): redirect logout to landing page instead of login page
+- feat(hydrators): update LanguageHydrator and ThemeHydrator to re-run on language and theme changes
+- feat(auth): update login to accept username or email and enhance localization
+
 ## [0.1.46] - 2026-04-08
 
 - feat(memory): add memory usage tracking and localization for memory facts in English and German
