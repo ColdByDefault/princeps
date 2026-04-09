@@ -48,6 +48,7 @@ type SettingsShellProps = {
   initialAddressStyle: AddressStyle | null;
   initialResponseLength: ResponseLength | null;
   initialCustomSystemPrompt: string | null;
+  initialAutoBriefingEnabled: boolean;
   initialDisabledTools: string[];
   allTools: ToolDisplayEntry[];
 };
@@ -64,6 +65,7 @@ export function SettingsShell({
   initialAddressStyle,
   initialResponseLength,
   initialCustomSystemPrompt,
+  initialAutoBriefingEnabled,
   initialDisabledTools,
   allTools,
 }: SettingsShellProps) {
@@ -142,6 +144,7 @@ export function SettingsShell({
           initialAddressStyle={initialAddressStyle}
           initialResponseLength={initialResponseLength}
           initialCustomSystemPrompt={initialCustomSystemPrompt}
+          initialAutoBriefingEnabled={initialAutoBriefingEnabled}
         />
       </TabsContent>
 

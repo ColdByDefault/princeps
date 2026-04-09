@@ -424,6 +424,76 @@ export async function enforcePrepPackMonthly(
 // ─── Contacts limit ───────────────────────────────────────
 
 /**
+ * Checks whether the user is allowed to generate another briefing.
+ * Enforces two independent gates:
+ *  1. Daily burst guard (`briefingsPerDay`) — resets each UTC day.
+ *  2. Monthly quota (`briefingsPerMonth`) — resets each calendar month.
+ * Both counters are incremented on success.
+ * `-1` = unlimited for that gate.
+ */
+export async function enforceBriefingMonthly(
+  userId: string,
+): Promise<EnforceResult> {
+  const [tier, counter] = await Promise.all([
+    getUserTier(userId),
+    getOrCreateCounter(userId),
+  ]);
+
+  const limits = getPlanLimits(tier);
+  const today = todayUtc();
+  const month = currentMonth();
+  const staleDay = counter.briefingDailyDate !== today;
+  const staleMonth = counter.monthlyResetDate !== month;
+
+  if (limits.briefingsPerMonth === 0) {
+    return {
+      allowed: false,
+      reason: "Daily briefing generation is not available on your plan.",
+    };
+  }
+
+  // ── Daily burst guard ──────────────────────────────────
+  if (limits.briefingsPerDay !== -1) {
+    const dailyCurrent = staleDay ? 0 : counter.briefingDailyCount;
+    if (dailyCurrent >= limits.briefingsPerDay) {
+      return {
+        allowed: false,
+        reason:
+          "Daily briefing regeneration limit reached. Try again tomorrow.",
+      };
+    }
+  }
+
+  // ── Monthly quota ──────────────────────────────────────
+  if (limits.briefingsPerMonth !== -1) {
+    const monthlyCurrent = staleMonth ? 0 : counter.briefingMonthlyCount;
+    if (monthlyCurrent >= limits.briefingsPerMonth) {
+      return {
+        allowed: false,
+        reason: "Monthly briefing limit reached for your plan.",
+      };
+    }
+  }
+
+  // ── Increment both ─────────────────────────────────────
+  await db.usageCounter.update({
+    where: { userId },
+    data: {
+      briefingDailyCount: staleDay ? 1 : { increment: 1 },
+      briefingDailyDate: today,
+      ...(limits.briefingsPerMonth !== -1
+        ? {
+            briefingMonthlyCount: staleMonth ? 1 : { increment: 1 },
+            monthlyResetDate: month,
+          }
+        : {}),
+    },
+  });
+
+  return { allowed: true };
+}
+
+/**
  * Checks whether the user is allowed to create another contact.
  * This is a count-at-rest limit (no monthly reset) —
  * no counter is incremented here. The caller creates the contact on success.
@@ -438,7 +508,7 @@ export async function enforceContactsMax(
 
   const limits = getPlanLimits(tier);
 
-  if (count >= limits.contactsMax) {
+  if (limits.contactsMax !== -1 && count >= limits.contactsMax) {
     return {
       allowed: false,
       reason: "Contact limit reached for your plan.",

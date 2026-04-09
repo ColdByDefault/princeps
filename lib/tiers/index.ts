@@ -11,6 +11,7 @@ export {
   enforceMonthlyLimits,
   enforceToolCallsMonthly,
   enforcePrepPackMonthly,
+  enforceBriefingMonthly,
   enforceContactsMax,
   enforceTasksMax,
   enforceMeetingsMax,

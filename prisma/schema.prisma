@@ -405,16 +405,19 @@ model UsageCounter {
   // Daily burst guards
   chatsDailyCount      Int     @default(0)
   chatsDailyDate       String? // "YYYY-MM-DD" UTC — reset boundary for chatsDailyCount
+  briefingDailyCount   Int     @default(0)
+  briefingDailyDate    String? // "YYYY-MM-DD" UTC — reset boundary for briefingDailyCount
   // Widget dailies (untouched — widget not yet refactored)
   widgetChatsCount     Int     @default(0)
   widgetToolsCount     Int     @default(0)
   widgetCountsDate     String? // "YYYY-MM-DD" UTC — reset boundary for widget counters
   // Monthly quotas (primary limits)
-  messageMonthlyCount  Int     @default(0)
-  tokenMonthlyCount    Int     @default(0)
-  toolMonthlyCount     Int     @default(0)
-  prepPackMonthlyCount Int     @default(0)
-  monthlyResetDate     String? // "YYYY-MM" UTC — reset boundary for monthly counters
+  messageMonthlyCount   Int     @default(0)
+  tokenMonthlyCount     Int     @default(0)
+  toolMonthlyCount      Int     @default(0)
+  prepPackMonthlyCount  Int     @default(0)
+  briefingMonthlyCount  Int     @default(0)
+  monthlyResetDate      String? // "YYYY-MM" UTC — reset boundary for monthly counters
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

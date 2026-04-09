@@ -5,6 +5,15 @@
 
 import "server-only";
 
+import type { LLMTool } from "@/types/llm";
+import type { Tier } from "@/types/billing";
+
+/**
+ * A TOOL_REGISTRY entry — same shape as LLMTool but carries minTier and group metadata.
+ * Strip minTier + group before passing to the LLM (use getToolsForTier).
+ */
+export type ToolRegistryEntry = LLMTool & { minTier: Tier; group: string };
+
 export type ActionResult =
   | { ok: true; data: unknown }
   | { ok: false; error: string };

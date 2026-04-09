@@ -17,6 +17,11 @@ import * as groq from "@/lib/llm-providers/groq/groq";
 import * as groqEmbed from "@/lib/llm-providers/groq/groq-embedding";
 import * as ollama from "@/lib/llm-providers/ollama/ollama";
 import * as ollamaEmbed from "@/lib/llm-providers/ollama/ollama-embedding";
+import {
+  tracedCallChat,
+  tracedEmbed,
+  tracedStreamChat,
+} from "@/lib/llm-providers/observability";
 import * as openai from "@/lib/llm-providers/openai/openai";
 import * as openaiEmbed from "@/lib/llm-providers/openai/openai-embedding";
 import type {
@@ -54,14 +59,16 @@ export async function callChat(
 ): Promise<LLMChatResult> {
   const provider = getProvider();
 
-  switch (provider) {
-    case "openAi":
-      return openai.callChat(messages, options);
-    case "ollama":
-      return ollama.callChat(messages, options);
-    case "groq":
-      return groq.callChat(messages, options);
-  }
+  return tracedCallChat(provider, messages, options, (msgs, opts) => {
+    switch (provider) {
+      case "openAi":
+        return openai.callChat(msgs, opts);
+      case "ollama":
+        return ollama.callChat(msgs, opts);
+      case "groq":
+        return groq.callChat(msgs, opts);
+    }
+  });
 }
 
 /**
@@ -74,17 +81,16 @@ export async function* streamChat(
 ): AsyncGenerator<string | LLMToolCall> {
   const provider = getProvider();
 
-  switch (provider) {
-    case "openAi":
-      yield* openai.streamChat(messages, options);
-      break;
-    case "ollama":
-      yield* ollama.streamChat(messages, options);
-      break;
-    case "groq":
-      yield* groq.streamChat(messages, options);
-      break;
-  }
+  yield* tracedStreamChat(provider, messages, options, (msgs, opts) => {
+    switch (provider) {
+      case "openAi":
+        return openai.streamChat(msgs, opts);
+      case "ollama":
+        return ollama.streamChat(msgs, opts);
+      case "groq":
+        return groq.streamChat(msgs, opts);
+    }
+  });
 }
 
 // ─── Embedding ────────────────────────────────────────────
@@ -96,14 +102,16 @@ export async function* streamChat(
 export async function embed(text: string): Promise<number[]> {
   const provider = getProvider();
 
-  switch (provider) {
-    case "openAi":
-      return openaiEmbed.embed(text);
-    case "ollama":
-      return ollamaEmbed.embed(text);
-    case "groq":
-      return groqEmbed.embed(text);
-  }
+  return tracedEmbed(provider, text, (t) => {
+    switch (provider) {
+      case "openAi":
+        return openaiEmbed.embed(t);
+      case "ollama":
+        return ollamaEmbed.embed(t);
+      case "groq":
+        return groqEmbed.embed(t);
+    }
+  });
 }
 
 /**

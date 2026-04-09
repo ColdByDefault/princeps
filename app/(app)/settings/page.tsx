@@ -73,6 +73,7 @@ export default async function SettingsPage() {
         initialAddressStyle={initialPrefs.addressStyle ?? null}
         initialResponseLength={initialPrefs.responseLength ?? null}
         initialCustomSystemPrompt={initialPrefs.customSystemPrompt ?? null}
+        initialAutoBriefingEnabled={initialPrefs.autoBriefingEnabled ?? true}
         initialDisabledTools={initialPrefs.disabledTools}
         allTools={allTools}
       />

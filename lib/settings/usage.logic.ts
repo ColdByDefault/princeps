@@ -40,6 +40,7 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
         tokenMonthlyCount: true,
         toolMonthlyCount: true,
         prepPackMonthlyCount: true,
+        briefingMonthlyCount: true,
         monthlyResetDate: true,
       },
     }),
@@ -76,6 +77,8 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     memoryLimit: limits.memoryMax,
     prepPacksGenerated: counter?.prepPackMonthlyCount ?? 0,
     prepPacksLimit: limits.prepPacksPerMonth,
+    briefingsGenerated: counter?.briefingMonthlyCount ?? 0,
+    briefingsLimit: limits.briefingsPerMonth,
     monthlyResetDate:
       counter?.monthlyResetDate ?? new Date().toISOString().slice(0, 7),
   };

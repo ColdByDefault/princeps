@@ -16,7 +16,7 @@ function fmt(n: number): string {
   return n >= 1_000_000
     ? `${(n / 1_000_000).toFixed(1)}M`
     : n >= 1_000
-      ? `${(n / 1_000).toFixed(0)}k`
+      ? `${(n / 1_000).toFixed(1)}k`
       : String(n);
 }
 
@@ -179,6 +179,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           note={t("prepPackNote")}
         />
         <QuotaRow
+          label={t("briefingTitle")}
+          used={usage.briefingsGenerated}
+          limit={usage.briefingsLimit}
+          note={t("briefingNote")}
+        />
+        <QuotaRow
           label={t("decisionsTitle")}
           used={usage.decisionsStored}
           limit={usage.decisionsLimit}
@@ -203,6 +209,14 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
         <p className="text-xs text-muted-foreground">
           {t("resetLabel")}: <span className="font-medium">{resetLabel}</span>
         </p>
+      </div>
+
+      {/* Budget disclaimer */}
+      <div className="rounded-lg border border-border/60 bg-muted/40 p-4 mt-2">
+        <p className="text-xs font-medium text-foreground mb-1">
+          {t("budgetNoteTitle")}
+        </p>
+        <p className="text-xs text-muted-foreground">{t("budgetNoteBody")}</p>
       </div>
     </div>
   );
