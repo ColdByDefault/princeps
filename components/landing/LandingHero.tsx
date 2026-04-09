@@ -29,7 +29,7 @@ export function LandingHero() {
 
         <RotatingText
           texts={heroTexts}
-          rotationInterval={[2000, 3000, 3000]}
+          rotationInterval={[3000, 3000, 3000]}
           staggerDuration={0.03}
           staggerFrom="first"
           splitBy="characters"

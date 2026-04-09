@@ -6,7 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listKnowledgeDocuments } from "@/lib/knowledge/list.logic";
+import { listKnowledgeDocuments } from "@/lib/knowledge";
 
 // GET /api/knowledge — list knowledge documents for the current user
 export async function GET() {

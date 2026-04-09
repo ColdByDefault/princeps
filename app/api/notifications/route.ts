@@ -6,8 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listNotifications } from "@/lib/notifications/list.logic";
-import { deleteAllNotifications } from "@/lib/notifications/delete.logic";
+import { listNotifications, deleteAllNotifications } from "@/lib/notifications";
 
 // GET /api/notifications — list all non-dismissed notifications
 export async function GET() {

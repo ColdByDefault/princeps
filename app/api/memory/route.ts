@@ -6,9 +6,11 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listMemoryEntries } from "@/lib/memory/list.logic";
-import { createMemoryEntry } from "@/lib/memory/create.logic";
-import { createMemoryEntrySchema } from "@/lib/memory/schemas";
+import {
+  listMemoryEntries,
+  createMemoryEntry,
+  createMemoryEntrySchema,
+} from "@/lib/memory";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,

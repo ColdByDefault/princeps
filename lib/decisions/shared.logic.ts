@@ -11,6 +11,9 @@ export const DECISION_SELECT = {
   meetingId: true,
   createdAt: true,
   updatedAt: true,
+  meeting: {
+    select: { title: true },
+  },
   labelLinks: {
     select: {
       label: { select: { id: true, name: true, color: true, icon: true } },
@@ -26,6 +29,7 @@ type DecisionRow = {
   status: string;
   decidedAt: Date | null;
   meetingId: string | null;
+  meeting: { title: string } | null;
   createdAt: Date;
   updatedAt: Date;
   labelLinks: { label: { id: string; name: string; color: string } }[];
@@ -40,6 +44,7 @@ export function toDecisionRecord(row: DecisionRow): DecisionRecord {
     status: row.status,
     decidedAt: row.decidedAt?.toISOString() ?? null,
     meetingId: row.meetingId,
+    meetingTitle: row.meeting?.title ?? null,
     labels: row.labelLinks.map((l) => l.label),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

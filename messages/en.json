@@ -43,9 +43,9 @@
         "description": "Sign in to your Princeps workspace."
       },
       "title": "Welcome back",
-      "subtitle": "Sign in with your email and password.",
-      "emailLabel": "Email",
-      "emailPlaceholder": "you@example.com",
+      "subtitle": "Sign in with your email or username.",
+      "identifierLabel": "Email or Username",
+      "identifierPlaceholder": "you@example.com or username",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
       "submit": "Sign in",
@@ -68,6 +68,7 @@
       "namePlaceholder": "Your name",
       "usernameLabel": "Username",
       "usernamePlaceholder": "username_123",
+      "usernameHint": "Must be unique. You can use it to sign in.",
       "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "passwordLabel": "Password",
@@ -167,11 +168,15 @@
       "locationTitle": "Location",
       "locationDescription": "Choose your city for accurate weather display.",
       "locationPlaceholder": "Select city",
+      "locationSearchPlaceholder": "Search city…",
+      "locationEmpty": "No city found.",
       "locationSaved": "Location saved.",
       "locationSaveFailed": "Failed to save location.",
       "timezoneTitle": "Timezone",
       "timezoneDescription": "Choose your timezone — affects weather and daily greetings.",
       "timezonePlaceholder": "Select timezone",
+      "timezoneSearchPlaceholder": "Search timezone…",
+      "timezoneEmpty": "No timezone found.",
       "timezoneSaved": "Timezone saved.",
       "timezoneSaveFailed": "Failed to save timezone.",
       "notificationsTitle": "Daily Greeting",
@@ -320,7 +325,17 @@
     },
     "search": {
       "trigger": "Search workspace",
-      "triggerLabel": "Search…"
+      "triggerLabel": "Search…",
+      "title": "Quick navigation",
+      "description": "Navigate pages in your workspace",
+      "placeholder": "Search pages or content…",
+      "empty": "No results found.",
+      "navigation": "Navigation",
+      "tasks": "Tasks",
+      "contacts": "Contacts",
+      "meetings": "Meetings",
+      "decisions": "Decisions",
+      "goals": "Goals"
     },
     "footer": {
       "workspace": "Workspace",
@@ -354,9 +369,15 @@
       "actions": "Chat actions",
       "userFallback": "Workspace user",
       "navTasks": "Tasks",
-      "navKnowledge": "Knowledge Base",
+      "navGoals": "Goals",
       "navContacts": "Contacts",
+      "navMeetings": "Meetings",
+      "navKnowledge": "Knowledge Base",
+      "navDecisions": "Decisions",
+      "navMemory": "Memory",
+      "navLabels": "Labels",
       "navSettings": "Settings",
+      "navPricing": "Pricing",
       "profile": "My profile",
       "signOut": "Sign out",
       "signingOut": "Signing out…"
@@ -1034,7 +1055,19 @@
     "plan": "Current plan",
     "memberSince": "Member since",
     "timezone": "Timezone",
-    "notSet": "Not set"
+    "notSet": "Not set",
+    "editDialog": {
+      "heading": "Edit Profile",
+      "namePlaceholder": "Your full name",
+      "usernamePlaceholder": "your_username",
+      "usernameHint": "Letters, numbers, underscores, and dots only. 3–30 characters.",
+      "cancel": "Cancel",
+      "submit": "Save changes",
+      "submitting": "Saving…",
+      "updateSuccess": "Profile updated.",
+      "updateError": "Failed to update profile. Please try again.",
+      "usernameTaken": "That username is already taken."
+    }
   },
   "pricing": {
     "metadata": {

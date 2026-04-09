@@ -1,6 +1,6 @@
 {
   "name": "princeps",
-  "version": "0.1.46",
+  "version": "0.2.0",
   "description": "Princeps is a private AI workspace for chat, knowledge retrieval, and assistant system tuning.",
   "keywords": [
     "princeps",
@@ -45,6 +45,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "lucide-react": "^0.577.0",
     "mammoth": "^1.12.0",

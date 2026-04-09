@@ -5,6 +5,7 @@
 
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import {
   LayoutDashboard,
@@ -63,7 +64,13 @@ export default function Navbar({ sessionUser }: NavbarProps) {
   const t = useTranslations("shell");
   const pathname = usePathname();
   const router = useRouter();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuOpenForPath, setMenuOpenForPath] = useState<string | null>(null);
+  const isMenuOpen = menuOpenForPath === pathname;
+  const setIsMenuOpen = (value: React.SetStateAction<boolean>) => {
+    const next =
+      typeof value === "function" ? value(menuOpenForPath === pathname) : value;
+    setMenuOpenForPath(next ? pathname : null);
+  };
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   if (
@@ -103,7 +110,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
       return;
     }
     sessionStorage.removeItem(GREETING_SESSION_KEY);
-    router.replace("/login");
+    router.replace("/");
     router.refresh();
   };
 

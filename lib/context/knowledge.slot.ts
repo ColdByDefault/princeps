@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { searchKnowledge } from "@/lib/knowledge/search.logic";
+import { searchKnowledge } from "@/lib/knowledge";
 import type { ContextSlot } from "@/lib/context";
 
 /**

@@ -21,7 +21,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { streamChat } from "@/lib/llm-providers/provider";
+import { streamChat } from "@/lib/llm-providers";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
 import {
   enforceWidgetChats,
@@ -30,10 +30,9 @@ import {
   accumulateTokens,
   enforceToolCallsMonthly,
 } from "@/lib/tiers";
-import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
+import { getUserPreferences } from "@/lib/settings";
 import { buildSystemPrompt } from "@/lib/context/build";
-import { TOOL_REGISTRY } from "@/lib/tools/registry";
-import { executeToolCall } from "@/lib/tools/executor";
+import { TOOL_REGISTRY, executeToolCall } from "@/lib/tools";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
 
 export async function POST(req: Request) {

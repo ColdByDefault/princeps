@@ -6,9 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listLabels } from "@/lib/labels/list.logic";
-import { createLabel } from "@/lib/labels/create.logic";
-import { createLabelSchema } from "@/lib/labels/schemas";
+import { listLabels, createLabel, createLabelSchema } from "@/lib/labels";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,

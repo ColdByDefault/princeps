@@ -101,6 +101,9 @@ export default function SignUpCard() {
               placeholder={t("signUp.usernamePlaceholder")}
               className="h-11 rounded-xl bg-background/80"
             />
+            <p className="text-xs text-muted-foreground">
+              {t("signUp.usernameHint")}
+            </p>
           </div>
 
           <div className="space-y-2">

@@ -5,7 +5,7 @@
 
 import "server-only";
 
-import { listTasks } from "@/lib/tasks/list.logic";
+import { listTasks } from "@/lib/tasks";
 import type { ContextSlot } from "@/lib/context";
 
 const PRIORITY_ORDER: Record<string, number> = {
@@ -33,7 +33,12 @@ export const tasksSlot: ContextSlot = {
         ? ` (due ${new Date(t.dueDate).toISOString().slice(0, 10)})`
         : "";
       const inProg = t.status === "in_progress" ? " [in progress]" : "";
-      return `- [${t.id}] ${t.title}${inProg}${due} — priority: ${t.priority}`;
+      const meeting = t.meetingId ? ` — linked meeting: ${t.meetingId}` : "";
+      const goals =
+        t.goals && t.goals.length > 0
+          ? ` — goals: ${t.goals.map((g) => g.title).join(", ")}`
+          : "";
+      return `- [${t.id}] ${t.title}${inProg}${due} — priority: ${t.priority}${meeting}${goals}`;
     });
 
     return lines.join("\n");

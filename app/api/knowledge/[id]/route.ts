@@ -6,7 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { deleteKnowledgeDocument } from "@/lib/knowledge/delete.logic";
+import { deleteKnowledgeDocument } from "@/lib/knowledge";
 
 // DELETE /api/knowledge/[id] — delete a knowledge document and all its chunks
 export async function DELETE(

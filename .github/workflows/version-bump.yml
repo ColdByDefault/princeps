@@ -30,8 +30,20 @@ jobs:
         id: bump
         run: |
           OLD=$(node -p "require('./package.json').version")
-          npm version patch --no-git-tag-version
-          NEW=$(node -p "require('./package.json').version")
+          NEW=$(node -e "
+            const [major, minor, patch] = '$OLD'.split('.').map(Number);
+            const next = patch < 9
+              ? \`\${major}.\${minor}.\${patch + 1}\`
+              : \`\${major}.\${minor + 1}.0\`;
+            console.log(next);
+          ")
+          # Write new version to package.json without creating a git tag
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            pkg.version = '$NEW';
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
           echo "old=$OLD" >> "$GITHUB_OUTPUT"
           echo "new=$NEW" >> "$GITHUB_OUTPUT"
 

@@ -25,8 +25,7 @@ import {
   Target,
   Rocket,
 } from "lucide-react";
-import { LABEL_ICON_NAMES } from "@/lib/labels/label-icons";
-import type { LabelIconName } from "@/lib/labels/label-icons";
+import { LABEL_ICON_NAMES, type LabelIconName } from "@/lib/labels/label-icons";
 
 export { LABEL_ICON_NAMES, type LabelIconName };
 

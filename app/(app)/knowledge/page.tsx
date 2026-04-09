@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listKnowledgeDocuments } from "@/lib/knowledge/list.logic";
+import { listKnowledgeDocuments } from "@/lib/knowledge";
 import { KnowledgePageClient } from "@/components/knowledge";
 import type { AppLanguage } from "@/types/i18n";
 

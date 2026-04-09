@@ -6,9 +6,11 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listMeetings } from "@/lib/meetings/list.logic";
-import { createMeeting } from "@/lib/meetings/create.logic";
-import { createMeetingSchema } from "@/lib/meetings/schemas";
+import {
+  listMeetings,
+  createMeeting,
+  createMeetingSchema,
+} from "@/lib/meetings";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,

@@ -9,7 +9,8 @@ import { useState } from "react";
 import { FileText, Trash2, Tag } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -48,20 +49,13 @@ function formatApproxTokens(chars: number): string {
   return `~${tokens} tokens`;
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
 export function DocumentCard({
   document,
   deleting,
   onDelete,
 }: DocumentCardProps) {
   const t = useTranslations("knowledge");
+  const locale = useLocale();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
@@ -82,7 +76,7 @@ export function DocumentCard({
           <span>·</span>
           <span>{formatApproxTokens(document.charCount)}</span>
           <span>·</span>
-          <span>{formatDate(document.createdAt)}</span>
+          <span>{formatDate(document.createdAt, locale)}</span>
         </div>
 
         {document.labels.length > 0 && (

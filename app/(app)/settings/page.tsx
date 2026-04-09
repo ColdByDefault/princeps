@@ -10,10 +10,12 @@ import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { getProviderStatus } from "@/lib/settings/provider-status.logic";
-import { getUserUsage } from "@/lib/settings/usage.logic";
-import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
-import { TOOL_REGISTRY } from "@/lib/tools/registry";
+import {
+  getProviderStatus,
+  getUserUsage,
+  getUserPreferences,
+} from "@/lib/settings";
+import { TOOL_REGISTRY } from "@/lib/tools";
 import { SettingsShell } from "@/components/settings";
 import type { AppLanguage } from "@/types/i18n";
 

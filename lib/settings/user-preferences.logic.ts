@@ -11,27 +11,23 @@ import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
 import { VALID_TIMEZONES } from "@/lib/weather/timezone-list";
 import { VALID_LOCATIONS } from "@/lib/weather/location-list";
 import type { Prisma } from "@/prisma/generated/prisma/client";
+import {
+  ASSISTANT_TONES,
+  type AssistantTone,
+  ADDRESS_STYLES,
+  type AddressStyle,
+  RESPONSE_LENGTHS,
+  type ResponseLength,
+} from "./types";
 
-export const ASSISTANT_TONES = [
-  "professional",
-  "friendly",
-  "casual",
-  "witty",
-  "motivational",
-  "concise",
-] as const;
-export type AssistantTone = (typeof ASSISTANT_TONES)[number];
-
-export const ADDRESS_STYLES = [
-  "firstname",
-  "formal_male",
-  "formal_female",
-  "informal",
-] as const;
-export type AddressStyle = (typeof ADDRESS_STYLES)[number];
-
-export const RESPONSE_LENGTHS = ["brief", "balanced", "detailed"] as const;
-export type ResponseLength = (typeof RESPONSE_LENGTHS)[number];
+export {
+  ASSISTANT_TONES,
+  type AssistantTone,
+  ADDRESS_STYLES,
+  type AddressStyle,
+  RESPONSE_LENGTHS,
+  type ResponseLength,
+};
 
 // ─── Types ────────────────────────────────────────────────
 

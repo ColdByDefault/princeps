@@ -7,14 +7,9 @@ import "server-only";
 
 import { getCoordsForTimezone } from "./timezone-coords";
 import { getCoordsForLocation } from "./location-coords";
+import type { WeatherSnapshot } from "./types";
 
-export interface WeatherSnapshot {
-  temperatureCelsius: number;
-  weatherCode: number;
-  conditionLabel: string;
-  conditionEmoji: string;
-  location: string;
-}
+export type { WeatherSnapshot };
 
 /**
  * WMO Weather Interpretation Codes → human-readable label + emoji.

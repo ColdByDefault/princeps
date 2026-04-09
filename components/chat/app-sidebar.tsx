@@ -10,19 +10,25 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
+  BookMarked,
+  BrainCircuit,
+  CalendarDays,
   CheckSquare,
   ChevronUp,
+  CreditCard,
   LayoutDashboard,
   LogOut,
   MessageSquare,
   MoreHorizontal,
   Pencil,
   Plus,
+  Scale,
   Settings,
+  Tag,
+  Target,
   Trash2,
   User,
   Users,
-  BrainCircuit,
 } from "lucide-react";
 import {
   Sidebar,
@@ -204,7 +210,7 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
       return;
     }
     sessionStorage.removeItem(GREETING_SESSION_KEY);
-    router.replace("/login");
+    router.replace("/");
     router.refresh();
   };
 
@@ -222,62 +228,70 @@ export function AppSidebar({ sessionUser, tier }: AppSidebarProps) {
           <SidebarGroupLabel>{t("sidebar.navGroup")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* save links as array and map over them */}
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  render={<Link href="/home" />}
-                  isActive={pathname === "/home"}
-                  tooltip={t("sidebar.navHome")}
-                  className="cursor-pointer"
-                >
-                  <LayoutDashboard className="size-4 shrink-0" />
-                  <span className="truncate">{t("sidebar.navHome")}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  render={<Link href="/tasks" />}
-                  isActive={pathname === "/tasks"}
-                  tooltip={t("sidebar.navTasks")}
-                  className="cursor-pointer"
-                >
-                  <CheckSquare className="size-4 shrink-0" />
-                  <span className="truncate">{t("sidebar.navTasks")}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  render={<Link href="/knowledge" />}
-                  isActive={pathname.startsWith("/knowledge")}
-                  tooltip={t("sidebar.navKnowledge")}
-                  className="cursor-pointer"
-                >
-                  <BrainCircuit className="size-4 shrink-0" />
-                  <span className="truncate">{t("sidebar.navKnowledge")}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  render={<Link href="/contacts" />}
-                  isActive={pathname.startsWith("/contacts")}
-                  tooltip={t("sidebar.navContacts")}
-                  className="cursor-pointer"
-                >
-                  <Users className="size-4 shrink-0" />
-                  <span className="truncate">{t("sidebar.navContacts")}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  render={<Link href="/settings" />}
-                  isActive={pathname.startsWith("/settings")}
-                  tooltip={t("sidebar.navSettings")}
-                  className="cursor-pointer"
-                >
-                  <Settings className="size-4 shrink-0" />
-                  <span className="truncate">{t("sidebar.navSettings")}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {[
+                {
+                  href: "/home",
+                  icon: LayoutDashboard,
+                  label: t("sidebar.navHome"),
+                  exact: true,
+                },
+                {
+                  href: "/tasks",
+                  icon: CheckSquare,
+                  label: t("sidebar.navTasks"),
+                },
+                { href: "/goals", icon: Target, label: t("sidebar.navGoals") },
+                {
+                  href: "/contacts",
+                  icon: Users,
+                  label: t("sidebar.navContacts"),
+                },
+                {
+                  href: "/meetings",
+                  icon: CalendarDays,
+                  label: t("sidebar.navMeetings"),
+                },
+                {
+                  href: "/knowledge",
+                  icon: BrainCircuit,
+                  label: t("sidebar.navKnowledge"),
+                },
+                {
+                  href: "/decisions",
+                  icon: Scale,
+                  label: t("sidebar.navDecisions"),
+                },
+                {
+                  href: "/memory",
+                  icon: BookMarked,
+                  label: t("sidebar.navMemory"),
+                },
+                { href: "/labels", icon: Tag, label: t("sidebar.navLabels") },
+                {
+                  href: "/settings",
+                  icon: Settings,
+                  label: t("sidebar.navSettings"),
+                },
+                {
+                  href: "/pricing",
+                  icon: CreditCard,
+                  label: t("sidebar.navPricing"),
+                },
+              ].map(({ href, icon: Icon, label, exact }) => (
+                <SidebarMenuItem key={href}>
+                  <SidebarMenuButton
+                    render={<Link href={href} />}
+                    isActive={
+                      exact ? pathname === href : pathname.startsWith(href)
+                    }
+                    tooltip={label}
+                    className="cursor-pointer"
+                  >
+                    <Icon className="size-4 shrink-0" />
+                    <span className="truncate">{label}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

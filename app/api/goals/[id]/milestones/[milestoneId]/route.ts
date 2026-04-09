@@ -6,8 +6,11 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { updateMilestone, deleteMilestone } from "@/lib/goals/milestones.logic";
-import { updateMilestoneSchema } from "@/lib/goals/schemas";
+import {
+  updateMilestone,
+  deleteMilestone,
+  updateMilestoneSchema,
+} from "@/lib/goals";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,

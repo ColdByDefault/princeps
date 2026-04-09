@@ -43,9 +43,9 @@
         "description": "Melde dich in deinem Princeps-Arbeitsbereich an."
       },
       "title": "Willkommen zurück",
-      "subtitle": "Melde dich mit deiner E-Mail-Adresse und deinem Passwort an.",
-      "emailLabel": "E-Mail",
-      "emailPlaceholder": "du@beispiel.de",
+      "subtitle": "Melde dich mit deiner E-Mail-Adresse oder deinem Benutzernamen an.",
+      "identifierLabel": "E-Mail oder Benutzername",
+      "identifierPlaceholder": "du@beispiel.de oder benutzername",
       "passwordLabel": "Passwort",
       "passwordPlaceholder": "••••••••",
       "submit": "Anmelden",
@@ -68,6 +68,7 @@
       "namePlaceholder": "Dein Name",
       "usernameLabel": "Benutzername",
       "usernamePlaceholder": "benutzername_123",
+      "usernameHint": "Muss eindeutig sein. Du kannst ihn zum Anmelden verwenden.",
       "emailLabel": "E-Mail",
       "emailPlaceholder": "du@beispiel.de",
       "passwordLabel": "Passwort",
@@ -167,11 +168,15 @@
       "locationTitle": "Standort",
       "locationDescription": "Wähle deine Stadt für genaue Wetteranzeigen.",
       "locationPlaceholder": "Stadt auswählen",
+      "locationSearchPlaceholder": "Stadt suchen…",
+      "locationEmpty": "Keine Stadt gefunden.",
       "locationSaved": "Standort gespeichert.",
       "locationSaveFailed": "Standort konnte nicht gespeichert werden.",
       "timezoneTitle": "Zeitzone",
       "timezoneDescription": "Wähle deine Zeitzone — beeinflusst Wetter und tägliche Grüße.",
       "timezonePlaceholder": "Zeitzone auswählen",
+      "timezoneSearchPlaceholder": "Zeitzone suchen…",
+      "timezoneEmpty": "Keine Zeitzone gefunden.",
       "timezoneSaved": "Zeitzone gespeichert.",
       "timezoneSaveFailed": "Zeitzone konnte nicht gespeichert werden.",
       "notificationsTitle": "Tägliche Begrüßung",
@@ -320,7 +325,17 @@
     },
     "search": {
       "trigger": "Arbeitsbereich durchsuchen",
-      "triggerLabel": "Suchen…"
+      "triggerLabel": "Suchen…",
+      "title": "Schnellnavigation",
+      "description": "Seitennavigation im Arbeitsbereich",
+      "placeholder": "Seite oder Inhalt suchen…",
+      "empty": "Keine Ergebnisse gefunden.",
+      "navigation": "Navigation",
+      "tasks": "Aufgaben",
+      "contacts": "Kontakte",
+      "meetings": "Meetings",
+      "decisions": "Entscheidungen",
+      "goals": "Ziele"
     },
     "footer": {
       "workspace": "Arbeitsbereich",
@@ -354,9 +369,15 @@
       "actions": "Chat-Aktionen",
       "userFallback": "Arbeitsbereich-Nutzer",
       "navTasks": "Aufgaben",
-      "navKnowledge": "Wissensbasis",
+      "navGoals": "Ziele",
       "navContacts": "Kontakte",
+      "navMeetings": "Meetings",
+      "navKnowledge": "Wissensbasis",
+      "navDecisions": "Entscheidungen",
+      "navMemory": "Gedächtnis",
+      "navLabels": "Labels",
       "navSettings": "Einstellungen",
+      "navPricing": "Preise",
       "profile": "Mein Profil",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…"
@@ -1034,7 +1055,19 @@
     "plan": "Aktueller Plan",
     "memberSince": "Mitglied seit",
     "timezone": "Zeitzone",
-    "notSet": "Nicht gesetzt"
+    "notSet": "Nicht gesetzt",
+    "editDialog": {
+      "heading": "Profil bearbeiten",
+      "namePlaceholder": "Dein vollständiger Name",
+      "usernamePlaceholder": "dein_benutzername",
+      "usernameHint": "Nur Buchstaben, Zahlen, Unterstriche und Punkte. 3–30 Zeichen.",
+      "cancel": "Abbrechen",
+      "submit": "Änderungen speichern",
+      "submitting": "Wird gespeichert …",
+      "updateSuccess": "Profil aktualisiert.",
+      "updateError": "Profil konnte nicht aktualisiert werden. Bitte erneut versuchen.",
+      "usernameTaken": "Dieser Benutzername ist bereits vergeben."
+    }
   },
   "pricing": {
     "metadata": {

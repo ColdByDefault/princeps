@@ -18,8 +18,8 @@ import {
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
-import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
+import { useTranslations, useLocale } from "next-intl";
+import { cn, formatDateTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -56,15 +56,7 @@ export function MeetingCard({
 }: MeetingCardProps) {
   const t = useTranslations("meetings");
 
-  function formatScheduled(iso: string) {
-    return new Date(iso).toLocaleString(undefined, {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
+  const locale = useLocale();
 
   return (
     <div
@@ -149,7 +141,7 @@ export function MeetingCard({
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <CalendarClock className="size-3.5" />
-            {formatScheduled(meeting.scheduledAt)}
+            {formatDateTime(meeting.scheduledAt, locale)}
           </span>
           {meeting.durationMin != null && (
             <span className="flex items-center gap-1">

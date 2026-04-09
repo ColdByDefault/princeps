@@ -18,19 +18,18 @@ import {
   saveUserMessage,
   saveAssistantMessage,
   touchChat,
-} from "@/lib/chat/messages.logic";
-import { setInitialTitle } from "@/lib/chat/create.logic";
-import { streamChat } from "@/lib/llm-providers/provider";
+  setInitialTitle,
+} from "@/lib/chat";
+import { streamChat } from "@/lib/llm-providers";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
 import {
   enforceMonthlyLimits,
   accumulateTokens,
   enforceToolCallsMonthly,
 } from "@/lib/tiers";
-import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
+import { getUserPreferences } from "@/lib/settings";
 import { buildSystemPrompt } from "@/lib/context/build";
-import { getActiveToolsForUser } from "@/lib/tools/registry";
-import { executeToolCall } from "@/lib/tools/executor";
+import { getActiveToolsForUser, executeToolCall } from "@/lib/tools";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
 
 type Params = { params: Promise<{ chatId: string }> };

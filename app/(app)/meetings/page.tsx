@@ -8,10 +8,10 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listMeetings } from "@/lib/meetings/list.logic";
-import { listLabels } from "@/lib/labels/list.logic";
-import { listContacts } from "@/lib/contacts/list.logic";
-import { listTasks } from "@/lib/tasks/list.logic";
+import { listMeetings } from "@/lib/meetings";
+import { listLabels } from "@/lib/labels";
+import { listContacts } from "@/lib/contacts";
+import { listTasks } from "@/lib/tasks";
 import { MeetingsShell } from "@/components/meetings";
 import type { AppLanguage } from "@/types/i18n";
 

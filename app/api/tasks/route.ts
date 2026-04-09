@@ -6,9 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listTasks } from "@/lib/tasks/list.logic";
-import { createTask } from "@/lib/tasks/create.logic";
-import { createTaskSchema } from "@/lib/tasks/schemas";
+import { listTasks, createTask, createTaskSchema } from "@/lib/tasks";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,

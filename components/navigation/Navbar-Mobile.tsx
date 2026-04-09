@@ -7,7 +7,7 @@
 
 import Link from "next/link";
 import { type Dispatch, type SetStateAction } from "react";
-import { LogOut, Menu, X, type LucideIcon } from "lucide-react";
+import { LogOut, Menu, X, Search, type LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
@@ -49,11 +49,12 @@ export function NavbarMobileBar({
 
   return (
     <div className="ml-auto flex items-center gap-2 min-[1000px]:hidden">
-      {/* <Button
+      <Button
         type="button"
         variant="outline"
         size="sm"
         aria-label={t("search.trigger")}
+        title={t("search.trigger")}
         className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
         onClick={() => window.dispatchEvent(new Event("global-search:open"))}
       >
@@ -61,7 +62,7 @@ export function NavbarMobileBar({
         <kbd className="pointer-events-none select-none rounded border border-border/70 bg-muted px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
           ⌘K
         </kbd>
-      </Button> */}
+      </Button>
       <NotificationBell />
       <Button
         type="button"

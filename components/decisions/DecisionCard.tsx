@@ -1,10 +1,16 @@
 "use client";
 
-import { Scale, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  Scale,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+  CalendarDays,
+} from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
-import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
+import { useTranslations, useLocale } from "next-intl";
+import { cn, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,14 +44,7 @@ export function DecisionCard({
   onDelete,
 }: DecisionCardProps) {
   const t = useTranslations("decisions");
-
-  function formatDate(iso: string) {
-    return new Date(iso).toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  }
+  const locale = useLocale();
 
   return (
     <div
@@ -86,7 +85,7 @@ export function DecisionCard({
         {/* Meta row */}
         {decision.decidedAt && (
           <p className="text-[10px] text-muted-foreground">
-            {formatDate(decision.decidedAt)}
+            {formatDate(decision.decidedAt, locale)}
           </p>
         )}
 
@@ -101,6 +100,12 @@ export function DecisionCard({
           >
             {t(`status.${decision.status}`)}
           </Badge>
+          {decision.meetingTitle && (
+            <span className="inline-flex h-5 items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-2 text-[10px] font-medium text-muted-foreground">
+              <CalendarDays className="size-2.5 shrink-0" />
+              {decision.meetingTitle}
+            </span>
+          )}
           {decision.labels.slice(0, 3).map((lbl) => {
             const Icon = lbl.icon
               ? LABEL_ICON_MAP[lbl.icon as LabelIconName]

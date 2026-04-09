@@ -8,9 +8,9 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listDecisions } from "@/lib/decisions/list.logic";
-import { listLabels } from "@/lib/labels/list.logic";
-import { listMeetings } from "@/lib/meetings/list.logic";
+import { listDecisions } from "@/lib/decisions";
+import { listLabels } from "@/lib/labels";
+import { listMeetings } from "@/lib/meetings";
 import { DecisionsShell } from "@/components/decisions";
 import type { AppLanguage } from "@/types/i18n";
 

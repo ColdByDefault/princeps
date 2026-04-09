@@ -6,8 +6,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { listChats } from "@/lib/chat/list.logic";
-import { createChat } from "@/lib/chat/create.logic";
+import { listChats, createChat } from "@/lib/chat";
 import { getChatHistoryLimit } from "@/lib/tiers";
 
 // GET /api/chat — list chats for the current user

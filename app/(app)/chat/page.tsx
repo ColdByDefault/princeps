@@ -6,7 +6,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/auth";
-import { getOrCreateFirstChat } from "@/lib/chat/create.logic";
+import { getOrCreateFirstChat } from "@/lib/chat";
 
 export default async function ChatPage() {
   const session = await auth.api.getSession({ headers: await headers() });

@@ -12,11 +12,12 @@ import {
   Pencil,
   Target,
   Trash2,
+  CalendarDays,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
-import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
+import { useTranslations, useLocale } from "next-intl";
+import { cn, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -62,12 +63,7 @@ export function TaskCard({
   const t = useTranslations("tasks");
   const isDone = task.status === "done";
 
-  function formatDue(iso: string) {
-    return new Date(iso).toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-    });
-  }
+  const locale = useLocale();
 
   return (
     <div
@@ -130,7 +126,7 @@ export function TaskCard({
           </Badge>
           {task.dueDate && (
             <span className="text-[10px] text-muted-foreground">
-              {formatDue(task.dueDate)}
+              {formatDate(task.dueDate, locale)}
             </span>
           )}
           {task.labels.slice(0, 3).map((label) => {
@@ -162,6 +158,12 @@ export function TaskCard({
               {goal.title}
             </span>
           ))}
+          {task.meetingTitle && (
+            <span className="inline-flex h-5 items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-2 text-[10px] font-medium text-muted-foreground">
+              <CalendarDays className="size-2.5 shrink-0" />
+              {task.meetingTitle}
+            </span>
+          )}
         </div>
       </div>
 

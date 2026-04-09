@@ -6,7 +6,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import type { WeatherSnapshot } from "@/lib/weather/fetch";
+import type { WeatherSnapshot } from "@/lib/weather/types";
 
 type HomeShellProps = {
   weather: WeatherSnapshot | null;
@@ -19,7 +19,7 @@ export function HomeShell({ weather, greetingTitle }: HomeShellProps) {
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-16 gap-6">
       {/* Static time-based greeting */}
-      <p className="text-2xl font-semibold text-foreground text-center">
+      <p className="text-2xl font-bold text-foreground text-center">
         {greetingTitle}
       </p>
 

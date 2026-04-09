@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listLabels } from "@/lib/labels/list.logic";
+import { listLabels } from "@/lib/labels";
 import { LabelsShell } from "@/components/labels";
 import type { AppLanguage } from "@/types/i18n";
 

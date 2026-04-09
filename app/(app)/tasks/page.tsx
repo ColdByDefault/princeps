@@ -8,9 +8,9 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listTasks } from "@/lib/tasks/list.logic";
-import { listLabels } from "@/lib/labels/list.logic";
-import { listGoals } from "@/lib/goals/list.logic";
+import { listTasks } from "@/lib/tasks";
+import { listLabels } from "@/lib/labels";
+import { listGoals } from "@/lib/goals";
 import { TasksShell } from "@/components/tasks";
 import type { AppLanguage } from "@/types/i18n";
 
