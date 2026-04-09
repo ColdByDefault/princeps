@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavbarDesktop from "@/components/navigation/Navbar-Desktop";
 import {
   NavbarMobileBar,
@@ -63,12 +63,11 @@ export default function Navbar({ sessionUser }: NavbarProps) {
   const t = useTranslations("shell");
   const pathname = usePathname();
   const router = useRouter();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuOpenForPath, setMenuOpenForPath] = useState<string | null>(null);
+  const isMenuOpen = menuOpenForPath === pathname;
+  const setIsMenuOpen = (open: boolean) =>
+    setMenuOpenForPath(open ? pathname : null);
   const [isSigningOut, setIsSigningOut] = useState(false);
-
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
 
   if (
     HIDDEN_NAVBAR_PATHS.has(pathname) ||

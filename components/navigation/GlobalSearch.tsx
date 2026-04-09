@@ -51,7 +51,6 @@ type SearchData = {
 export function GlobalSearch() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<SearchData | null>(null);
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations("shell");
 
@@ -76,14 +75,23 @@ export function GlobalSearch() {
 
   // fetch all content once on first open
   useEffect(() => {
-    if (!open || data !== null || loading) return;
-    setLoading(true);
+    if (!open || data !== null) return;
     Promise.all([
-      fetch("/api/tasks").then((r) => r.json()),
-      fetch("/api/contacts").then((r) => r.json()),
-      fetch("/api/meetings").then((r) => r.json()),
-      fetch("/api/decisions").then((r) => r.json()),
-      fetch("/api/goals").then((r) => r.json()),
+      fetch("/api/tasks").then(
+        (r) => r.json() as Promise<{ tasks?: TaskItem[] }>,
+      ),
+      fetch("/api/contacts").then(
+        (r) => r.json() as Promise<{ contacts?: ContactItem[] }>,
+      ),
+      fetch("/api/meetings").then(
+        (r) => r.json() as Promise<{ meetings?: MeetingItem[] }>,
+      ),
+      fetch("/api/decisions").then(
+        (r) => r.json() as Promise<{ decisions?: DecisionItem[] }>,
+      ),
+      fetch("/api/goals").then(
+        (r) => r.json() as Promise<{ goals?: GoalItem[] }>,
+      ),
     ])
       .then(([taskRes, contactRes, meetingRes, decisionRes, goalRes]) => {
         setData({
@@ -102,9 +110,8 @@ export function GlobalSearch() {
           decisions: [],
           goals: [],
         });
-      })
-      .finally(() => setLoading(false));
-  }, [open, data, loading]);
+      });
+  }, [open, data]);
 
   const navigate = useCallback(
     (href: string) => {
@@ -139,7 +146,7 @@ export function GlobalSearch() {
     >
       <CommandInput placeholder={t("search.placeholder")} />
       <CommandList>
-        {loading ? (
+        {open && data === null ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="size-4 animate-spin text-muted-foreground" />
           </div>
