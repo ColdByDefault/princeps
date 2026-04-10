@@ -19,6 +19,4 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#43 One-time data wipe** — premium/enterprise users can request a full wipe of `Chunk` + `MemoryEntry` data once every 6 months. Does not reset monthly usage limits.
 - [ ] **#76 ALL LLM CALLS** — ENSURE ALL LLM CALLES TOKENS GET ALSO CALCUATED AND ADDED TO APPROXIMATE TOKEN COUNT FOR MONTHLY LIMIT ENFORCEMENT. CURRENTLY SOME CALLS MIGHT BE MISSING THIS, ESPECIALLY IN TOOLS. NEED TO AUDIT ALL LLM CALLS AND MAKE SURE THIS IS CONSISTENTLY APPLIED. EVEN WHEN LLM SAYS "Done" after calling a tool, must be counted towards monthly token limit. This is critical to prevent abuse and ensure fair usage across users.
 Every letter everything the llm input/out must be calculated, either in one counter for both, or separate counters.
-- [ ] **#77 System Prompt** — The ssystem must have 2 distguished prompts:
-    - Default System Prompt: non-editable, contains core instructions for the assistant's behavior and capabilities. This is the "base" system prompt that ensures consistent performance and adherence to guidelines.
-    - Custom System Prompt: editable by the user, allows them to add specific instructions, preferences, which we already have in ASsistant tab in settings. Just need to seperate and re-structure.
+
