@@ -110,10 +110,17 @@ export async function* streamChat(
 
   if (!response.ok) {
     const body = await response.text().catch(() => "");
-    throw new OllamaProviderError(
-      `Chat stream failed (${response.status}): ${body}`,
-      response.status,
-    );
+    let friendlyMessage = `The AI provider returned an error (${response.status}).`;
+    try {
+      const parsed = JSON.parse(body) as Record<string, unknown>;
+      const inner = (parsed["error"] ?? parsed) as Record<string, unknown>;
+      if (typeof inner["message"] === "string" && inner["message"].trim()) {
+        friendlyMessage = inner["message"].trim();
+      }
+    } catch {
+      /* ignore — use the fallback */
+    }
+    throw new OllamaProviderError(friendlyMessage, response.status);
   }
 
   if (!response.body) {

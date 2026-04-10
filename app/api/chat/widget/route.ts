@@ -33,7 +33,9 @@ import {
 import { getUserPreferences } from "@/lib/settings";
 import { buildSystemPrompt } from "@/lib/context/build";
 import { TOOL_REGISTRY, executeToolCall } from "@/lib/tools";
+import { createReport } from "@/lib/reports";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
+import type { ReportDetailCall } from "@/lib/reports";
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -126,6 +128,7 @@ export async function POST(req: Request) {
 
       let assistantContent = "";
       let toolCallChars = 0;
+      const reportDetails: ReportDetailCall[] = [];
 
       try {
         const toolCalls: LLMToolCall[] = [];
@@ -190,6 +193,13 @@ export async function POST(req: Request) {
               name: toolCall.function.name,
               record: result.ok ? (result.data as Record<string, unknown>) : {},
             });
+            reportDetails.push(
+              buildDetailCall(
+                toolCall.function.name,
+                toolCall.function.arguments,
+                result,
+              ),
+            );
             followUp.push({
               role: "tool",
               tool_call_id: toolCall.id,
@@ -234,6 +244,19 @@ export async function POST(req: Request) {
             assistantContent.length,
             toolCallChars,
           ).catch(() => {});
+          // Create report if tools were called and user has reports enabled
+          if (reportDetails.length > 0 && prefs.reportsEnabled !== false) {
+            const approxTokens = Math.ceil(
+              (userMessage.length + assistantContent.length + toolCallChars) /
+                4,
+            );
+            createReport(session.user.id, {
+              toolsCalled: reportDetails.map((d) => d.tool),
+              toolCallCount: reportDetails.length,
+              tokenUsage: approxTokens,
+              details: reportDetails,
+            }).catch(() => {});
+          }
         }
         send({ type: "done" });
         controller.close();
@@ -248,4 +271,55 @@ export async function POST(req: Request) {
       Connection: "keep-alive",
     },
   });
+}
+
+// ─── Helpers ──────────────────────────────────────────────
+
+function buildDetailCall(
+  toolName: string,
+  rawArgs: string,
+  result: { ok: boolean; data?: unknown; error?: string },
+): ReportDetailCall {
+  let args: Record<string, unknown> = {};
+  try {
+    args = JSON.parse(rawArgs) as Record<string, unknown>;
+  } catch {
+    /* ignore */
+  }
+
+  const kv: Record<string, unknown> = {};
+
+  if (!result.ok) {
+    kv["err"] = result.error ?? "unknown";
+    return { tool: toolName, ok: false, kv };
+  }
+
+  const data = result.data as Record<string, unknown> | null | undefined;
+
+  if (typeof args["title"] === "string") kv["title"] = args["title"];
+  else if (typeof data?.["title"] === "string") kv["title"] = data["title"];
+
+  if (typeof args["name"] === "string") kv["name"] = args["name"];
+  else if (typeof data?.["name"] === "string") kv["name"] = data["name"];
+
+  if (typeof data?.["id"] === "string") kv["id"] = data["id"];
+
+  if (typeof args["status"] === "string") kv["status"] = args["status"];
+  else if (typeof data?.["status"] === "string") kv["status"] = data["status"];
+
+  if (typeof args["priority"] === "string") kv["priority"] = args["priority"];
+
+  if (typeof args["meetingId"] === "string")
+    kv["meetingId"] = args["meetingId"];
+  else if (typeof data?.["meetingId"] === "string")
+    kv["meetingId"] = data["meetingId"];
+
+  if (Array.isArray(data?.["contacts"]))
+    kv["contacts"] = (data["contacts"] as unknown[]).length;
+  if (Array.isArray(data?.["labels"]))
+    kv["labels"] = (data["labels"] as unknown[]).length;
+
+  if (Array.isArray(data)) kv["count"] = data.length;
+
+  return { tool: toolName, ok: true, kv };
 }

@@ -307,7 +307,11 @@
       "autoBriefingLabel": "Automatisches Tagesbriefing",
       "autoBriefingDescription": "Erstelle jeden Morgen automatisch dein Tagesbriefing.",
       "autoBriefingSaved": "Briefing-Einstellung gespeichert.",
-      "autoBriefingSaveFailed": "Briefing-Einstellung konnte nicht gespeichert werden."
+      "autoBriefingSaveFailed": "Briefing-Einstellung konnte nicht gespeichert werden.",
+      "reportsLabel": "Aktivitätsberichte",
+      "reportsDescription": "Nach jeder Tool-Interaktion des Assistenten einen Bericht erstellen.",
+      "reportsSaved": "Berichtseinstellung gespeichert.",
+      "reportsSaveFailed": "Berichtseinstellung konnte nicht gespeichert werden."
     }
   },
   "chatWidget": {
@@ -341,6 +345,7 @@
       "intel": "Intelligenz",
       "memory": "Gedächtnis",
       "briefings": "Tagesbriefing",
+      "reports": "Berichte",
       "comingSoon": "Bald verfügbar"
     },
     "language": {
@@ -1216,6 +1221,28 @@
       "confirm": "Löschen",
       "cancel": "Abbrechen"
     }
+  },
+  "reports": {
+    "metadata": {
+      "title": "Berichte",
+      "description": "Aktivitätsberichte für die Tool-Interaktionen deines Assistenten."
+    },
+    "pageTitle": "Aktivitätsberichte",
+    "pageDescription": "Ein Protokoll aller Tool-Aktionen, die dein Assistent durchgeführt hat.",
+    "refresh": "Berichte aktualisieren",
+    "delete": "Löschen",
+    "deleteAriaLabel": "Bericht löschen",
+    "deleteSuccess": "Bericht gelöscht.",
+    "deleteError": "Bericht konnte nicht gelöscht werden.",
+    "clearAll": "Alle löschen",
+    "clearingAll": "Wird gelöscht…",
+    "clearAllAriaLabel": "Alle Berichte löschen",
+    "clearAllSuccess": "Alle Berichte gelöscht.",
+    "clearAllError": "Berichte konnten nicht gelöscht werden.",
+    "empty": "Noch keine Berichte vorhanden.",
+    "emptyHint": "Berichte erscheinen hier, sobald dein Assistent Tools verwendet.",
+    "toolCalls": "Tool-Aufrufe",
+    "tokens": "Tokens"
   },
   "briefings": {
     "metadata": {

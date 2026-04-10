@@ -307,7 +307,11 @@
       "autoBriefingLabel": "Automatic daily briefing",
       "autoBriefingDescription": "Generate your daily briefing automatically every morning.",
       "autoBriefingSaved": "Briefing setting saved.",
-      "autoBriefingSaveFailed": "Failed to save briefing setting."
+      "autoBriefingSaveFailed": "Failed to save briefing setting.",
+      "reportsLabel": "Activity Reports",
+      "reportsDescription": "Generate a report after each assistant tool interaction.",
+      "reportsSaved": "Reports setting saved.",
+      "reportsSaveFailed": "Failed to save reports setting."
     }
   },
   "chatWidget": {
@@ -341,6 +345,7 @@
       "intel": "Intelligence",
       "memory": "Memory",
       "briefings": "Daily Briefing",
+      "reports": "Reports",
       "comingSoon": "Coming soon"
     },
     "language": {
@@ -1216,6 +1221,28 @@
       "confirm": "Delete",
       "cancel": "Cancel"
     }
+  },
+  "reports": {
+    "metadata": {
+      "title": "Reports",
+      "description": "Activity reports for your assistant's tool interactions."
+    },
+    "pageTitle": "Activity Reports",
+    "pageDescription": "A log of every tools interaction your assistant performed.",
+    "refresh": "Refresh reports",
+    "delete": "Delete",
+    "deleteAriaLabel": "Delete report",
+    "deleteSuccess": "Report deleted.",
+    "deleteError": "Failed to delete report.",
+    "clearAll": "Clear all",
+    "clearingAll": "Clearing…",
+    "clearAllAriaLabel": "Delete all reports",
+    "clearAllSuccess": "All reports deleted.",
+    "clearAllError": "Failed to delete reports.",
+    "empty": "No reports yet.",
+    "emptyHint": "Reports appear here after your assistant uses tools.",
+    "toolCalls": "tool calls",
+    "tokens": "tokens"
   },
   "briefings": {
     "metadata": {

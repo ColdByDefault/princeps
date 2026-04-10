@@ -49,6 +49,7 @@ type SettingsShellProps = {
   initialResponseLength: ResponseLength | null;
   initialCustomSystemPrompt: string | null;
   initialAutoBriefingEnabled: boolean;
+  initialReportsEnabled: boolean;
   initialDisabledTools: string[];
   allTools: ToolDisplayEntry[];
 };
@@ -66,6 +67,7 @@ export function SettingsShell({
   initialResponseLength,
   initialCustomSystemPrompt,
   initialAutoBriefingEnabled,
+  initialReportsEnabled,
   initialDisabledTools,
   allTools,
 }: SettingsShellProps) {
@@ -145,6 +147,7 @@ export function SettingsShell({
           initialResponseLength={initialResponseLength}
           initialCustomSystemPrompt={initialCustomSystemPrompt}
           initialAutoBriefingEnabled={initialAutoBriefingEnabled}
+          initialReportsEnabled={initialReportsEnabled}
         />
       </TabsContent>
 

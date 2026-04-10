@@ -35,6 +35,7 @@ type AssistantTabProps = {
   initialResponseLength: ResponseLength | null;
   initialCustomSystemPrompt: string | null;
   initialAutoBriefingEnabled: boolean;
+  initialReportsEnabled: boolean;
 };
 
 export function AssistantTab({
@@ -44,6 +45,7 @@ export function AssistantTab({
   initialResponseLength,
   initialCustomSystemPrompt,
   initialAutoBriefingEnabled,
+  initialReportsEnabled,
 }: AssistantTabProps) {
   const t = useTranslations("settings.assistant");
 
@@ -67,6 +69,7 @@ export function AssistantTab({
   const [autoBriefingEnabled, setAutoBriefingEnabled] = useState(
     initialAutoBriefingEnabled,
   );
+  const [reportsEnabled, setReportsEnabled] = useState(initialReportsEnabled);
   const customPromptDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -151,6 +154,15 @@ export function AssistantTab({
       { autoBriefingEnabled: checked },
       "autoBriefingSaved",
       "autoBriefingSaveFailed",
+    );
+  }
+
+  async function handleReportsToggle(checked: boolean) {
+    setReportsEnabled(checked);
+    await patchSetting(
+      { reportsEnabled: checked },
+      "reportsSaved",
+      "reportsSaveFailed",
     );
   }
 
@@ -377,6 +389,21 @@ export function AssistantTab({
           checked={autoBriefingEnabled}
           onCheckedChange={handleAutoBriefingToggle}
           aria-label={t("autoBriefingLabel")}
+        />
+      </div>
+
+      {/* Activity Reports */}
+      <div className="flex items-center justify-between gap-4 py-4">
+        <div className="min-w-0 flex-1 space-y-0.5">
+          <p className="text-sm font-medium">{t("reportsLabel")}</p>
+          <p className="text-sm text-muted-foreground">
+            {t("reportsDescription")}
+          </p>
+        </div>
+        <CustomToggle
+          checked={reportsEnabled}
+          onCheckedChange={handleReportsToggle}
+          aria-label={t("reportsLabel")}
         />
       </div>
     </div>

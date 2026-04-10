@@ -21,6 +21,7 @@ import {
   Target,
   BookMarked,
   Newspaper,
+  FileBarChart2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -94,6 +95,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
     { href: "/decisions", icon: Scale, label: t("nav.decisions") },
     { href: "/memory", icon: BookMarked, label: t("nav.memory") },
     { href: "/briefings", icon: Newspaper, label: t("nav.briefings") },
+    { href: "/reports", icon: FileBarChart2, label: t("nav.reports") },
     { href: "/settings", icon: Settings, label: t("nav.settings") },
     { href: "/pricing", icon: CreditCard, label: t("nav.pricing") },
   ];

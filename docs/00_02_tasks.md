@@ -4,11 +4,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ---
 
-## Beta — implement before first stable release
-
-- [ ] **#31 Tools-usage Reports** — `AssistantReport` model exists; surface analytics on which tools are used.
-
----
 
 ## Deferred — not needed until production / multi-user
 
