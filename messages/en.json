@@ -705,7 +705,8 @@
       "addTask": "Link a task",
       "removeTask": "Remove task",
       "noMoreTasks": "No more tasks to link.",
-      "optional": "Optional"
+      "optional": "Optional",
+      "kind": "Type"
     },
     "createDialog": {
       "heading": "New meeting",

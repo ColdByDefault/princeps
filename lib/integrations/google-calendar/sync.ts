@@ -8,6 +8,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import { getCalendarClient } from "./client";
 import { markSynced } from "@/lib/integrations/shared/upsert";
+import { getPlanLimits } from "@/types/billing";
 import type { calendar_v3 } from "googleapis";
 
 export interface SyncResult {
@@ -65,6 +66,16 @@ async function resolveAttendeeContactIds(
 
 export async function syncGoogleCalendar(userId: string): Promise<SyncResult> {
   const result: SyncResult = { created: 0, updated: 0, skipped: 0, errors: [] };
+
+  // Respect the user's tier cap. -1 means unlimited (enterprise).
+  const user = await db.user.findUniqueOrThrow({
+    where: { id: userId },
+    select: { tier: true },
+  });
+  const limits = getPlanLimits(
+    user.tier as Parameters<typeof getPlanLimits>[0],
+  );
+  const meetingsMax = limits.meetingsMax; // -1 = unlimited
 
   const calendar = await getCalendarClient(userId);
 
@@ -188,6 +199,15 @@ export async function syncGoogleCalendar(userId: string): Promise<SyncResult> {
 
           result.updated++;
         } else {
+          // Enforce tier cap before creating new rows
+          if (meetingsMax !== -1) {
+            const currentCount = await db.meeting.count({ where: { userId } });
+            if (currentCount >= meetingsMax) {
+              result.skipped++;
+              continue;
+            }
+          }
+
           const created = await db.meeting.create({
             data: {
               userId,

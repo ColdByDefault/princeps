@@ -35,6 +35,7 @@ export async function updateMeeting(
           }),
           ...(input.location !== undefined && { location: input.location }),
           ...(input.status !== undefined && { status: input.status }),
+          ...(input.kind !== undefined && { kind: input.kind }),
           ...(input.agenda !== undefined && { agenda: input.agenda }),
           ...(input.summary !== undefined && { summary: input.summary }),
           ...(input.labelIds !== undefined && {

@@ -46,6 +46,7 @@ type EditMeetingDialogProps = {
       durationMin: number | null;
       location: string | null;
       status: string;
+      kind: string;
       agenda: string | null;
       labelIds: string[];
       participantContactIds: string[];
@@ -84,6 +85,7 @@ export function EditMeetingDialog({
   );
   const [location, setLocation] = useState(meeting?.location ?? "");
   const [status, setStatus] = useState(meeting?.status ?? "upcoming");
+  const [kind, setKind] = useState(meeting?.kind ?? "meeting");
   const [agenda, setAgenda] = useState(meeting?.agenda ?? "");
   const [selectedParticipantIds, setSelectedParticipantIds] = useState<
     string[]
@@ -125,6 +127,7 @@ export function EditMeetingDialog({
       durationMin: durationMin ? parseInt(durationMin, 10) : null,
       location: location.trim() || null,
       status,
+      kind,
       agenda: agenda.trim() || null,
       participantContactIds: selectedParticipantIds,
       linkedTaskIds: selectedTaskIds,
@@ -193,7 +196,7 @@ export function EditMeetingDialog({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="edit-meeting-duration">
                   {t("fields.durationMin")}
@@ -232,6 +235,28 @@ export function EditMeetingDialog({
                     <SelectItem value="done">{t("status.done")}</SelectItem>
                     <SelectItem value="cancelled">
                       {t("status.cancelled")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-meeting-kind">{t("fields.kind")}</Label>
+                <Select
+                  value={kind}
+                  onValueChange={(v) => {
+                    if (v) setKind(v);
+                  }}
+                >
+                  <SelectTrigger
+                    id="edit-meeting-kind"
+                    className="cursor-pointer"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="meeting">{t("kind.meeting")}</SelectItem>
+                    <SelectItem value="appointment">
+                      {t("kind.appointment")}
                     </SelectItem>
                   </SelectContent>
                 </Select>

@@ -23,6 +23,7 @@ export const updateMeetingSchema = z.object({
   durationMin: z.number().int().min(1).max(1440).optional().nullable(),
   location: z.string().max(500).optional().nullable(),
   status: z.enum(["upcoming", "done", "cancelled"]).optional(),
+  kind: z.enum(["meeting", "appointment"]).optional(),
   agenda: z.string().max(300).optional().nullable(),
   summary: z.string().max(500).optional().nullable(),
   labelIds: z.array(z.string()).optional(),

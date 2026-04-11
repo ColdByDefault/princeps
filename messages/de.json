@@ -705,7 +705,8 @@
       "addTask": "Aufgabe verkn\u00fcpfen",
       "removeTask": "Aufgabe entfernen",
       "noMoreTasks": "Keine weiteren Aufgaben verf\u00fcgbar.",
-      "optional": "Optional"
+      "optional": "Optional",
+      "kind": "Typ"
     },
     "createDialog": {
       "heading": "Neues Meeting",
