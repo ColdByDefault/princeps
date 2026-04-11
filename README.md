@@ -2,7 +2,9 @@
 
 **Version:** 0.2.4
 
-A private AI workspace that functions as a personal executive secretariat — not another generic chat interface. Princeps gives individuals the same operational leverage that high-performing executives build around themselves through chiefs of staff: preparation, memory, coordination, and structured follow-through.
+A private AI workspace that functions as a personal executive secretariat. Princeps gives individuals the same operational leverage that high-performing executives build around themselves through chiefs of staff: preparation, memory, coordination, and structured follow-through.
+
+Every feature writes to a single user-scoped Postgres database. The LLM assistant is context-aware across all of it — not just the chat history.
 
 ---
 
@@ -14,35 +16,76 @@ A private AI workspace that functions as a personal executive secretariat — no
 | npm                     | 10                 |
 | Docker & Docker Compose | any recent version |
 | PostgreSQL (via Docker) | 18 with pgvector   |
-| Ollama                  | latest             |
 
-**Ollama models required:**
+**LLM provider (choose one):**
 
-- `qwen3` (or any `qwen3:*` variant) — chat and notification generation
-- Any Ollama embedding model configured in `OLLAMA_EMBED_MODEL` — knowledge base retrieval
+| Provider | Purpose                                   |
+| -------- | ----------------------------------------- |
+| Ollama   | Local chat completions + local embeddings |
+| OpenAI   | Chat completions + embeddings via API     |
+| Groq     | Chat completions via API (no embeddings)  |
+
+The active provider is selected at runtime via the `CHAT_PROVIDER` environment variable. Embeddings fall back to the configured embed provider independently. All three providers share the same `callChat()` / `streamChat()` / `embed()` interface defined in `lib/llm-providers/`.
 
 **Optional external services:**
 
-- Google Cloud project with Calendar API enabled — for the Google Calendar integration
-- Stripe account — for billing tiers (infrastructure present, enforcement deferred)
+- Upstash Redis — for distributed rate limiting (falls back to in-memory if absent)
+- Langfuse — for LLM observability in production
 
 ---
 
 ## Tech Stack
 
-| Layer            | Technology                                        |
-| ---------------- | ------------------------------------------------- |
-| Framework        | Next.js 16 (App Router)                           |
-| Language         | TypeScript 5                                      |
-| UI               | React 19, Tailwind CSS 4, shadcn/ui               |
-| Auth             | Better Auth (email/password, session-based)       |
-| Database         | PostgreSQL 18 + pgvector                          |
-| ORM              | Prisma 7                                          |
-| AI runtime       | Ollama (local LLM, local embeddings)              |
-| Validation       | Zod 4                                             |
-| Notifications    | Server-Sent Events (SSE)                          |
-| i18n             | Custom flat-key message system (English + German) |
-| Containerization | Docker Compose                                    |
+| Layer            | Technology                                                    |
+| ---------------- | ------------------------------------------------------------- |
+| Framework        | Next.js 16 (App Router, Turbopack in dev)                     |
+| Language         | TypeScript 5                                                  |
+| UI               | React 19, Tailwind CSS 4, shadcn/ui, Framer Motion            |
+| Auth             | Better Auth — email/password, session cookies, Prisma adapter |
+| Database         | PostgreSQL 18 + pgvector extension                            |
+| ORM              | Prisma 7 with `@prisma/adapter-pg`                            |
+| LLM providers    | Ollama · OpenAI · Groq (runtime-switchable)                   |
+| Embeddings       | Ollama or OpenAI (cosine similarity via pgvector)             |
+| Validation       | Zod 4                                                         |
+| Rate limiting    | Upstash Ratelimit (Redis-backed or in-memory fallback)        |
+| Observability    | Langfuse (production only, opt-in)                            |
+| Real-time        | Server-Sent Events (SSE) for the notification stream          |
+| i18n             | next-intl — English and German, cookie-aware                  |
+| Containerisation | Docker Compose                                                |
+
+---
+
+## Architecture
+
+The codebase is organized in strict layers. The layering is enforced by convention — every feature follows the same shape and no layer reaches into another's responsibilities.
+
+```
+prisma/schema.prisma         Data model — IDs (cuid), enums, indexes
+lib/<feature>/               Server logic — Zod schemas, CRUD operations, side effects
+app/api/<feature>/           API routes — thin: auth → parse → delegate → respond
+lib/tools/                   LLM tool layer — registry, executor, per-feature handlers
+lib/context/                 System prompt assembly — one slot file per feature
+lib/llm-providers/           Provider abstraction — callChat, streamChat, embed
+lib/chat/                    Chat persistence and streaming orchestration
+components/<feature>/        Client UI — shell, cards, dialogs, logic/ hooks
+app/(app)/<feature>/page.tsx Server pages — auth, data fetch, serialize, pass to shell
+messages/{en,de}.json        i18n strings — flat namespaced keys
+lib/tiers/                   Tier enforcement and quota gating
+```
+
+### LLM tool system
+
+The assistant can take actions (create tasks, search knowledge, update contacts, etc.) using OpenAI function-calling. Tool definitions live in `lib/tools/registry.ts`. The executor in `lib/tools/executor.ts` dispatches by tool name to per-feature handler files in `lib/tools/handlers/`. Adding a new feature's tools means creating one handler file and spreading it into `HANDLERS` — the executor is never touched.
+
+Tools are feature-agnostic: the same executor handles calls from the chat stream, cron jobs, and any future surface.
+
+### Context assembly
+
+Before each LLM request, `lib/context/build.ts` assembles the system prompt from slot files — one per feature (`tasks.slot.ts`, `meetings.slot.ts`, `contacts.slot.ts`, etc.). Each slot retrieves and formats a section of the user's live data. The result is a complete system message injected into every request, grounding the assistant in the user's actual workspace state.
+
+### Server/client boundary
+
+Modules that import Prisma, Better Auth server helpers, or LLM provider code carry `import "server-only"`. API routes and server pages enforce auth independently — middleware (`proxy.ts`) is not considered sufficient. All DB queries filter by `userId`.
 
 ---
 
@@ -73,21 +116,38 @@ cp .env.example .env
 Required variables:
 
 ```env
-DATABASE_URL=postgresql://seesweet:yourpassword@localhost:5432/seesweet
+DATABASE_URL=postgresql://princeps:yourpassword@localhost:5432/princeps
 BETTER_AUTH_SECRET=your-secret-here
 BETTER_AUTH_URL=http://localhost:3000
 
+# LLM provider — "ollama" | "openAi" | "groq"
+CHAT_PROVIDER=ollama
+
+# Ollama (if CHAT_PROVIDER=ollama)
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=qwen3:4b
 OLLAMA_EMBED_MODEL=nomic-embed-text
 
-# Optional: Google Calendar integration
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_REDIRECT_URI=http://localhost:3000/api/integrations/google/callback
+# OpenAI (if CHAT_PROVIDER=openAi)
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_EMBED_MODEL=text-embedding-3-small
+
+# Groq (if CHAT_PROVIDER=groq)
+GROQ_API_KEY=
+GROQ_MODEL=llama-3.3-70b-versatile
 
 # Optional: cron job protection
 CRON_SECRET=your-cron-secret
+
+# Optional: Upstash rate limiting
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+
+# Optional: Langfuse observability (production only)
+LANGFUSE_PUBLIC_KEY=
+LANGFUSE_SECRET_KEY=
+LANGFUSE_HOST=
 ```
 
 ### 4. Run migrations and seed
@@ -95,9 +155,6 @@ CRON_SECRET=your-cron-secret
 ```bash
 npm run db:migrate
 npm run db:seed
-
-# seed an admin account (optional)
-npm run db:seed-admin
 ```
 
 ### 5. Start the development server
@@ -106,93 +163,111 @@ npm run db:seed-admin
 npm run dev
 ```
 
+The dev server runs Turbopack and is preceded by a DB healthcheck (`scripts/db-healthcheck.ts`) that aborts startup if Postgres is unreachable.
+
 Open `http://localhost:3000`.
 
 ---
 
 ## Features
 
-### Authenticated Workspace
+### Authentication and Session Management
 
-Every user operates inside a private, session-gated workspace. Data is hard-scoped to the authenticated user at every layer — no record from one user is ever accessible to another. Authentication is handled by Better Auth with email/password credentials and Prisma-backed sessions.
+Handled entirely by [Better Auth](https://www.better-auth.com/) with email/password credentials and session cookies. Sessions are stored in Postgres via the Prisma adapter. Every API route and server page reads and validates the session independently — middleware alone is not the trust boundary.
+
+User accounts carry a `tier` field (`free` | `pro` | `premium` | `enterprise`). `lib/tiers/enforce.ts` checks quotas against `UsageCounter` before mutating operations. Quotas include per-day and per-month LLM message limits, per-day widget chat limits, lifetime knowledge character budgets, and per-resource record caps.
 
 ### AI Chat
 
-A persistent, retrieval-aware assistant backed by a local Ollama LLM. Each conversation is stored in the database and titled automatically from the first message. Users can maintain up to 10 saved chats, rename, delete, and switch between them.
+A streaming, multi-conversation assistant backed by the configured LLM provider. Each conversation (`Chat`) holds an ordered list of `ChatMessage` records. Conversations are titled automatically from the first user message (a separate non-streaming LLM call).
 
-The assistant receives a server-assembled system prompt built from all user data available at request time — contacts, meetings, tasks, decisions, knowledge base chunks, and personal info — so responses are grounded in the user's actual context rather than generic knowledge.
+The full system prompt is assembled by `lib/context/build.ts` on every request — pulling live data from all feature slots so the assistant always has the user's current workspace state. Tool calls are handled mid-stream: the executor resolves the tool name, calls the appropriate handler, and the result is appended to the stream.
 
-**Thinking mode** lets the model reason before responding. A progress indicator is shown while the model thinks; the raw reasoning is never exposed to the user. Toggle state persists in local storage.
+Thinking mode sends a prefixed instruction to the model and strips the `<think>...</think>` block from the streamed response before it reaches the client. A floating chat widget (`components/chat-widget/`) is mounted in the root app layout and available on every authenticated page.
 
-A **floating chat widget** is available on every authenticated page for quick questions without navigating away.
+**Tier limits:** messages per month, tool calls per month, chats per day, widget messages per day.
+
+### Knowledge Base (RAG)
+
+Users upload documents (`.txt`, `.md`, `.pdf`, `.docx`). The server parses the file using format-appropriate libraries, chunks the text, generates an embedding for each chunk via the configured embed provider, and stores the vectors in `KnowledgeChunk.embedding` (a `pgvector` column). No raw file blob is ever persisted.
+
+On every chat request the user's message is embedded and a cosine-similarity query over `KnowledgeChunk` retrieves the top-N most relevant chunks, which are injected into the system prompt as a dedicated context slot.
+
+Users also maintain a single **Personal Info** record — free-form text that is always prepended to the system prompt regardless of semantic relevance.
+
+**Tier limits:** max documents stored, max single file size, lifetime characters processed (never decrements on delete — prevents delete-and-reupload bypass).
 
 ### Notification Inbox
 
-A persistent in-app inbox for LLM-generated and system notifications, delivered in real time via Server-Sent Events. Each notification carries a category, title, and a body generated by the local LLM. Notifications can be read, dismissed, and reviewed. Unread count is shown in the navigation.
+A persistent inbox for LLM-generated and system notifications. The `Notification` model stores category, title, body, read state, and a dismissal flag. The notification stream is delivered to connected clients via Server-Sent Events (`app/api/notifications/stream/`). Unread count is computed server-side and reflected in navigation in real time.
 
-### Knowledge Base
-
-Users upload `.txt` or `.md` documents. The file is parsed, chunked, embedded via Ollama, and stored in PostgreSQL with pgvector. No raw file is persisted — only vector chunks. On every chat request, the user's message is embedded and a cosine-similarity search retrieves the most relevant chunks, which are injected into the LLM prompt.
-
-Users also maintain a **Personal Info** record — free-form background context that is always included in the assistant system prompt.
+Notifications are generated by the LLM (briefings, nudges, greeting), by cron jobs, and by system events. The LLM-generated body is produced with a lightweight non-streaming call.
 
 ### Contacts
 
-A relationship index. Each contact stores name, role, company, email, phone, notes, tags, and a last-contact date. The assistant is aware of the user's contacts and references them when preparing meeting notes or surfacing context.
+A relationship index backed by the `Contact` model. Each record stores name, role, company, email, phone, notes, tags, a last-contact date, and a `ContactInteraction` log. Contacts are exposed to the LLM via `lib/context/contacts.slot.ts` and are referenceable by name in tool calls via `lib/tools/resolvers.ts`.
 
-A **24-hour shareable card link** lets users share a read-only contact card via a time-limited token URL, with no account required for the recipient.
+**Shareable card links** — the `ShareToken` model issues a signed, time-limited token (24-hour TTL) that renders a read-only contact card to unauthenticated recipients.
 
 ### Meetings
 
-A meeting log for past and upcoming events. Meetings carry a title, date, duration, location, agenda, participant list (linked to Contacts), status, and a summary field for post-meeting notes. The assistant uses meeting data for briefings and follow-up nudges. Meetings can be imported from Google Calendar.
+The `Meeting` model stores title, date, duration, location, agenda, status (`scheduled` | `in_progress` | `completed` | `cancelled`), and a free-text summary field. Participants are stored in a `MeetingParticipant` join table linked to `Contact`. Meetings are exposed to the context slot layer and are referenceable in tool calls by title.
+
+Google Calendar events are imported via the OAuth 2.0 integration (read-only scope). Imported events are created as `Meeting` records; subsequent syncs update rather than duplicate. Token refresh runs automatically; revoked-access errors are detected and the integration is deactivated cleanly.
+
+**Tier limits:** max total meetings stored.
 
 ### Tasks
 
-An open task list with title, notes, status (`open`, `in_progress`, `done`, `cancelled`), priority (`low`, `normal`, `high`, `urgent`), due date, and an optional meeting link. The assistant is aware of open and overdue tasks and references them in daily briefs and planning conversations.
+The `Task` model stores title, notes, status (`open` | `in_progress` | `done` | `cancelled`), priority (`low` | `normal` | `high` | `urgent`), due date, and an optional `meetingId` foreign key. Tasks are included in the daily briefing slot and the overdue nudge cron. The assistant can create, update, and complete tasks via tool calls.
+
+**Tier limits:** max total tasks stored.
 
 ### Decisions
 
-A decision log for recording consequential choices with rationale, outcome, and status (`open`, `decided`, `reversed`). Decisions can be linked to the meeting where they were made. The assistant can surface open decisions and avoid re-litigating resolved reasoning.
+The `Decision` model stores title, rationale, outcome, status (`open` | `decided` | `reversed`), and an optional `meetingId` link to the meeting where the decision was made. Open decisions are surfaced in context so the assistant can avoid re-litigating settled reasoning.
+
+**Tier limits:** max total decisions stored.
+
+### Goals
+
+The `Goal` feature tracks longer-horizon objectives with title, description, target date, and status. Goals are exposed through a context slot and are manageable via LLM tool calls.
+
+### Memory
+
+User-authored memory entries (`MemoryEntry`) are free-form notes the assistant stores and can later retrieve. The memory context slot surfaces recent entries directly in the system prompt. Memory is distinct from the knowledge base — it is structured around personal recall rather than document retrieval.
 
 ### Reports
 
-A structured summary view that aggregates activity across meetings, tasks, and decisions into a readable weekly digest, useful for reviews and status reporting.
+`AssistantReport` records aggregate activity across meetings, tasks, and decisions into a structured weekly digest. Report generation is triggered on demand or by the weekly cron. Output is rendered in a dedicated reports view.
+
+### Labels
+
+A cross-feature tagging system. `Label` records carry name and color. Labels attach to tasks, meetings, contacts, and decisions via separate join tables (`LabelOnTask`, `LabelOnMeeting`, etc.). The tool layer resolves label names to IDs with auto-create (`lib/tools/resolvers.ts`), so the assistant can tag items by name without prior setup.
 
 ### Daily Briefing
 
-An LLM-generated briefing delivered as an in-app notification. The briefing summarises the user's agenda, open tasks, pending decisions, and anything the assistant identifies as worth surfacing. Cadence is user-controlled (off / daily / weekly) from App Settings.
+On each briefing trigger (cron or manual), `lib/briefings/` assembles a prompt from the user's agenda, open tasks, pending decisions, and goals, sends a non-streaming LLM call, and stores the result as a `BriefingCache` record and a `Notification`. Cadence is configurable per user (off / daily / weekly) from App Settings.
 
-### Proactive Nudges
+### Proactive Nudges (Cron)
 
-Automated, opt-out notifications triggered by real data patterns:
+Automated notifications triggered by real data conditions, evaluated by cron jobs in `app/api/cron/`:
 
-- **Overdue task alerts** — fires when tasks are past their due date.
-- **Meeting follow-up prompts** — fires when a meeting has ended but no summary has been captured yet.
-- **Weekly digest** — a Friday summary of decisions, tasks closed, and meetings held during the week.
+- **Overdue task alert** — fires when at least one task is past its due date.
+- **Meeting follow-up prompt** — fires when a completed meeting has no summary captured.
+- **Weekly digest** — a Friday summary of decisions made, tasks closed, and meetings held.
 
-All nudges respect a minimum cooldown and are individually toggleable from App Settings. Day-of-week targeting is timezone-aware per user.
-
-### Google Calendar Integration
-
-Users connect their Google Calendar via OAuth 2.0 (read-only scope). Once connected, upcoming events within 30 days are imported as Meeting records. Sync runs on demand and on a schedule. Token refresh is automatic; revoked access is detected and cleaned up without silent failures.
-
-### Admin Panel
-
-An internal user management surface accessible only to accounts with the `admin` role. Admins can view all users, change tier assignments (`free`, `pro`, `premium`), and delete accounts.
-
-### Onboarding
-
-A first-run onboarding flow that walks new users through the product before they reach the workspace.
+Each nudge type respects a per-user cooldown stored in `UsageCounter` and can be individually toggled from App Settings. Timezone-aware day-of-week targeting uses the user's stored timezone preference.
 
 ### Settings
 
-**Assistant Settings** — configure assistant name, system prompt override, response style, and advanced Ollama model parameters (temperature, top-p, top-k, context window, repeat penalty).
+**Assistant Settings** — assistant display name, system prompt prefix override, response style hint, and raw Ollama generation parameters (temperature, top-p, top-k, context window size, repeat penalty).
 
-**App Settings** — configure preferred language (English / German), notification cadences, and Google Calendar integration status.
+**App Settings** — preferred locale (English or German), notification and briefing cadence toggles.
 
 ### Multilingual UI
 
-The entire interface is available in English and German. The active language is stored in user preferences and applied server-side via a cookie-aware locale resolver.
+All user-visible strings are managed through `next-intl` with flat namespaced keys in `messages/de.json` and `messages/en.json`. German is the default locale. The active locale is resolved server-side from a cookie set by the locale middleware and persisted in user preferences. Technical text, validation errors, and logs remain in English.
 
 ---
 
@@ -232,6 +307,3 @@ Security issues should be reported privately — not in public issues or pull re
 Include a short description of the issue, the affected area or endpoint, reproduction steps, and expected impact. See [SECURITY.md](SECURITY.md) for the full policy.
 
 Please allow reasonable time for review and remediation before any public disclosure.
-
-
-

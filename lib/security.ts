@@ -3,32 +3,26 @@
  * @copyright 2026 ColdByDefault. All Rights Reserved.
  */
 
+import "server-only";
 import { NextResponse } from "next/server";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
-interface RateLimitResult {
+export interface RateLimitResult {
   allowed: boolean;
   retryAfterSeconds: number;
 }
-/* NEED TO ADJUST/UPDATE/IMPROVE */
-/**
- * In-memory rate limiting is acceptable for local development and single-node
- * deployments, but it is not production-grade for multi-instance or serverless
- * environments.
- *
- * Why this is limited:
- * - Each instance keeps its own counter state, so limits are enforced per node,
- *   not globally.
- * - Serverless cold starts reset the counters.
- * - Parallel requests may hit different instances and bypass the intended limit.
- *
- * In practice, a limit like 30 requests per minute can become roughly 90 per
- * minute across 3 instances because each instance tracks requests separately.
- *
- * Keep this implementation as a lightweight fallback for development or simple
- * self-hosted setups. For real production enforcement, replace it with a
- * distributed limiter backed by shared storage such as Redis or Upstash.
- */
-export class InMemoryRateLimiter {
+
+export interface RateLimiter {
+  check(identifier: string): Promise<RateLimitResult>;
+}
+
+// ---------------------------------------------------------------------------
+// In-memory fallback — suitable for local dev and single-node deploys.
+// Each instance keeps its own counters; not suitable for multi-instance or
+// serverless. Automatically used when UPSTASH_REDIS_REST_URL is not set.
+// ---------------------------------------------------------------------------
+class InMemoryRateLimiter implements RateLimiter {
   private readonly requests = new Map<string, number[]>();
   private lastCleanupAt = Date.now();
 
@@ -38,7 +32,7 @@ export class InMemoryRateLimiter {
     private readonly cleanupIntervalMs: number = 5 * 60 * 1000,
   ) {}
 
-  check(identifier: string): RateLimitResult {
+  async check(identifier: string): Promise<RateLimitResult> {
     const now = Date.now();
 
     if (now - this.lastCleanupAt >= this.cleanupIntervalMs) {
@@ -55,46 +49,85 @@ export class InMemoryRateLimiter {
         1,
         Math.ceil((this.windowMs - (now - oldestRequest)) / 1000),
       );
-
       this.requests.set(identifier, validRequests);
-
-      return {
-        allowed: false,
-        retryAfterSeconds,
-      };
+      return { allowed: false, retryAfterSeconds };
     }
 
     validRequests.push(now);
     this.requests.set(identifier, validRequests);
-
-    return {
-      allowed: true,
-      retryAfterSeconds: 0,
-    };
+    return { allowed: true, retryAfterSeconds: 0 };
   }
 
   private cleanup(now: number): void {
     for (const [identifier, timestamps] of this.requests.entries()) {
-      const validRequests = timestamps.filter(
-        (time) => now - time < this.windowMs,
-      );
-
-      if (validRequests.length === 0) {
+      const valid = timestamps.filter((t) => now - t < this.windowMs);
+      if (valid.length === 0) {
         this.requests.delete(identifier);
       } else {
-        this.requests.set(identifier, validRequests);
+        this.requests.set(identifier, valid);
       }
     }
   }
 }
 
-export const chatRateLimiter = new InMemoryRateLimiter(60_000, 30);
-export const searchRateLimiter = new InMemoryRateLimiter(60_000, 45);
-export const uploadRateLimiter = new InMemoryRateLimiter(5 * 60_000, 10);
-export const writeRateLimiter = new InMemoryRateLimiter(60_000, 30);
-export const briefingRateLimiter = new InMemoryRateLimiter(60 * 60_000, 5);
-export const prepRateLimiter = new InMemoryRateLimiter(60 * 60_000, 10);
-export const authRateLimiter = new InMemoryRateLimiter(60_000, 10);
+// ---------------------------------------------------------------------------
+// Upstash (Redis-backed) limiter — production-grade, multi-instance safe.
+// Used automatically when UPSTASH_REDIS_REST_URL and
+// UPSTASH_REDIS_REST_TOKEN environment variables are both present.
+// ---------------------------------------------------------------------------
+class UpstashRateLimiter implements RateLimiter {
+  private readonly limiter: Ratelimit;
+
+  constructor(limiter: Ratelimit) {
+    this.limiter = limiter;
+  }
+
+  async check(identifier: string): Promise<RateLimitResult> {
+    const result = await this.limiter.limit(identifier);
+    if (result.success) {
+      return { allowed: true, retryAfterSeconds: 0 };
+    }
+    const retryAfterSeconds = Math.max(
+      1,
+      Math.ceil((result.reset - Date.now()) / 1000),
+    );
+    return { allowed: false, retryAfterSeconds };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Factory — returns Upstash limiter when env vars are present, otherwise
+// falls back to in-memory.
+// ---------------------------------------------------------------------------
+function createRateLimiter(
+  tokens: number,
+  windowMs: number,
+  upstashWindow: `${number} ${"s" | "m" | "h" | "d"}`,
+): RateLimiter {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (url && token) {
+    const redis = new Redis({ url, token });
+    return new UpstashRateLimiter(
+      new Ratelimit({
+        redis,
+        limiter: Ratelimit.slidingWindow(tokens, upstashWindow),
+        analytics: false,
+      }),
+    );
+  }
+
+  return new InMemoryRateLimiter(windowMs, tokens);
+}
+
+export const chatRateLimiter = createRateLimiter(30, 60_000, "60 s");
+export const searchRateLimiter = createRateLimiter(45, 60_000, "60 s");
+export const uploadRateLimiter = createRateLimiter(10, 5 * 60_000, "5 m");
+export const writeRateLimiter = createRateLimiter(30, 60_000, "60 s");
+export const briefingRateLimiter = createRateLimiter(5, 60 * 60_000, "60 m");
+export const prepRateLimiter = createRateLimiter(10, 60 * 60_000, "60 m");
+export const authRateLimiter = createRateLimiter(10, 60_000, "60 s");
 
 export function getRateLimitIdentifier(
   req: Request,

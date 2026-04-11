@@ -7,6 +7,7 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { embed } from "@/lib/llm-providers/provider";
+import { accumulateTokens } from "@/lib/tiers/enforce";
 import { normalizeVector, EMBEDDING_DIM } from "./shared.logic";
 
 // ─── Types ────────────────────────────────────────────────
@@ -41,6 +42,8 @@ export async function searchKnowledge(
 ): Promise<KnowledgeSearchResult[]> {
   // Embed the query and normalize to the storage dimension
   const rawVector = await embed(query);
+  // Fire-and-forget: count embedding input chars against the monthly token budget
+  accumulateTokens(userId, query.length, 0).catch(() => {});
   const vector = normalizeVector(rawVector, EMBEDDING_DIM);
   const vectorLiteral = `[${vector.join(",")}]`;
 

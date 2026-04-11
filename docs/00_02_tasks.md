@@ -3,20 +3,46 @@
 Tasks are grouped by branch. One branch = one PR. Small related fixes share a single branch.
 
 ---
+## Ready for Implementation
 
+- [ ] **#41 Fully functional Calender View** — Maybe inside Meetings, or in `/home`, or seperate page.
+- [ ] **#42 Implement Strip Payment** — Simulate payments to test your integration. https://docs.stripe.com/testing 
+- [ ] **#43 ** — 
+- [ ] **#44 ** — 
+- [ ] **#45 ** — 
+- [ ] **#46 ** — 
+- [ ] **#47 ** — 
+- [ ] **#48 ** — 
+- [ ] **#49 ** — 
+- [ ] **#50 ** — 
+- [ ] **#51 ** — 
+- [ ] **#52 ** — 
 
-## Deferred — not needed until production / multi-user
+## Backlog
 
-- [ ] **#34 In-memory rate limiter** — safe for single-node/dev. Replace with Upstash Rate Limit (Redis-backed) before multi-instance or serverless deploy.
-- [ ] **#38 Admin Dashboard** — user management, content moderation, system health, usage analytics. No value without real users.
-
-- [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing, different language and theme preferences.
-- [ ] **#41 Testing infrastructure** — no `jest`/`vitest` config anywhere. Defer until the feature set stabilizes.
-
-## Brainstorming / Backlog
-
-- [ ] **#42 Extend Notifications** — Currently only "User Greetings" on Login (once or twice per day ?? check!), and once on new sign-up. IMPORTANT: there is a toggle in settings for greetings notification to enable/disable.
-- [ ] **#43 One-time data wipe** — premium/enterprise users can request a full wipe of `Chunk` + `MemoryEntry` data once every 6 months. Does not reset monthly usage limits.
-- [ ] **#76 ALL LLM CALLS** — ENSURE ALL LLM CALLES TOKENS GET ALSO CALCUATED AND ADDED TO APPROXIMATE TOKEN COUNT FOR MONTHLY LIMIT ENFORCEMENT. CURRENTLY SOME CALLS MIGHT BE MISSING THIS, ESPECIALLY IN TOOLS. NEED TO AUDIT ALL LLM CALLS AND MAKE SURE THIS IS CONSISTENTLY APPLIED. EVEN WHEN LLM SAYS "Done" after calling a tool, must be counted towards monthly token limit. This is critical to prevent abuse and ensure fair usage across users.
-Every letter everything the llm input/out must be calculated, either in one counter for both, or separate counters.
+- [ ] **Extend Notifications** — Currently only "User Greetings" on Login (once or twice per day ?? check!), and once on new sign-up. IMPORTANT: there is a toggle in settings for greetings notification to enable/disable.
+- [ ] **One-time data wipe** — premium/enterprise users can request a full wipe of `Chunk` + `MemoryEntry` data once every 6 months. Does not reset monthly usage limits.
+  > Needs and admin and a request from user to admin.
+- [ ] **Refactor README**.
+- [ ] **Admin Dashboard** — user management, content moderation, system health, usage analytics. No value without real users.
+- [ ] **#4 seed users** — different tiers, pre-filled data for demos and testing, different language and theme preferences.
+    - Meetings, tasks, contacts, decisions, goals, labels, memory => at least 2 entries each, and link what can be linked (e.g. apply global labels, meetings with contacts, decisions with meetings and contacts, etc.)
+    - Users should also have different Assistant, Appearance, and Notification settings to demonstrate the functionality of each.
+- [ ] **Testing infrastructure** — no `jest`/`vitest` config anywhere. Defer until the feature set stabilizes.
+- [ ] **Extend Knowledge Base** — currently supports `.txt` and `.md` files. Extend to support more file types (e.g. PDF, Word, Excel, email formats)
+- [ ] **Almight-Script** — a Linux/Powershell/Bash script to set up a local development environment with one command: install dependencies, create .env file and copy content from .env.example to it, start docker, generate/migrate data, seed test data, and start dev server. Instead of having to run multiple commands, developers can just run this script and be ready to go.
+- [ ] **Verification** — Show Email verification badge on user profile (in `/profile` page).
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
 

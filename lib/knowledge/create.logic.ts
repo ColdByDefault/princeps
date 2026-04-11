@@ -7,6 +7,7 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { embedBatch } from "@/lib/llm-providers";
+import { accumulateTokens } from "@/lib/tiers/enforce";
 import {
   chunkText,
   normalizeVector,
@@ -41,6 +42,9 @@ export async function createKnowledgeDocument(
 
   // 2. Embed all chunks in one batch
   const rawVectors = await embedBatch(rawChunks);
+  // Fire-and-forget: count embedding input chars against the monthly token budget
+  const totalChunkChars = rawChunks.reduce((sum, c) => sum + c.length, 0);
+  accumulateTokens(userId, totalChunkChars, 0).catch(() => {});
   const vectors = rawVectors.map((v) => normalizeVector(v, EMBEDDING_DIM));
 
   // 3. Persist document + chunks + lifetime counters in a transaction.
