@@ -46,6 +46,8 @@ export interface UserPreferences {
   customSystemPrompt: string | null;
   /** Whether the cron job should auto-generate a daily briefing for this user. */
   autoBriefingEnabled: boolean | null;
+  /** Whether the assistant should generate reports after tool interactions. */
+  reportsEnabled: boolean | null;
 }
 
 // ─── Internal helpers ─────────────────────────────────────
@@ -122,6 +124,9 @@ function parsePreferences(raw: unknown): UserPreferences {
       ? obj.autoBriefingEnabled
       : null;
 
+  const reportsEnabled =
+    typeof obj.reportsEnabled === "boolean" ? obj.reportsEnabled : null;
+
   return {
     language,
     theme,
@@ -134,6 +139,7 @@ function parsePreferences(raw: unknown): UserPreferences {
     disabledTools,
     customSystemPrompt,
     autoBriefingEnabled,
+    reportsEnabled,
   };
 }
 
@@ -163,6 +169,7 @@ export const getUserPreferences = cache(
         disabledTools: [],
         customSystemPrompt: null,
         autoBriefingEnabled: null,
+        reportsEnabled: null,
       };
     return parsePreferences(user.preferences);
   },
@@ -201,6 +208,8 @@ export async function updateUserPreferences(
     merged.autoBriefingEnabled !== undefined
   )
     next.autoBriefingEnabled = merged.autoBriefingEnabled;
+  if (merged.reportsEnabled !== null && merged.reportsEnabled !== undefined)
+    next.reportsEnabled = merged.reportsEnabled;
   await db.user.update({
     where: { id: userId },
     data: {

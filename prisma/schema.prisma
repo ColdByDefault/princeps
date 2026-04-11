@@ -329,11 +329,13 @@ model MeetingParticipant {
 // ─── Assistant Reports ────────────────────────────────────
 
 model AssistantReport {
-  id          String   @id @default(cuid())
-  userId      String
-  toolsCalled Json // string[] — ordered list of tool names that were invoked
-  summary     String // LLM-generated brief description of what was done
-  createdAt   DateTime @default(now())
+  id            String   @id @default(cuid())
+  userId        String
+  toolsCalled   Json     // string[] — ordered list of tool names invoked
+  toolCallCount Int      @default(0) // number of tool calls in this interaction
+  tokenUsage    Int      @default(0) // approximate tokens for this interaction
+  details       Json     @default("[]") // ReportDetailCall[] — key-value summaries per tool call
+  createdAt     DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

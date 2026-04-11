@@ -35,6 +35,7 @@ type AssistantTabProps = {
   initialResponseLength: ResponseLength | null;
   initialCustomSystemPrompt: string | null;
   initialAutoBriefingEnabled: boolean;
+  initialReportsEnabled: boolean;
 };
 
 export function AssistantTab({
@@ -44,6 +45,7 @@ export function AssistantTab({
   initialResponseLength,
   initialCustomSystemPrompt,
   initialAutoBriefingEnabled,
+  initialReportsEnabled,
 }: AssistantTabProps) {
   const t = useTranslations("settings.assistant");
 
@@ -67,6 +69,7 @@ export function AssistantTab({
   const [autoBriefingEnabled, setAutoBriefingEnabled] = useState(
     initialAutoBriefingEnabled,
   );
+  const [reportsEnabled, setReportsEnabled] = useState(initialReportsEnabled);
   const customPromptDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -154,8 +157,22 @@ export function AssistantTab({
     );
   }
 
+  async function handleReportsToggle(checked: boolean) {
+    setReportsEnabled(checked);
+    await patchSetting(
+      { reportsEnabled: checked },
+      "reportsSaved",
+      "reportsSaveFailed",
+    );
+  }
+
   return (
     <div className="divide-y divide-border/60">
+      {/* Section: Personality & Style */}
+      <p className="pb-2 pt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {t("sectionPersonality")}
+      </p>
+
       {/* Assistant Name */}
       <div className="flex items-center justify-between gap-4 py-4">
         <div className="min-w-0 flex-1 space-y-0.5">
@@ -362,8 +379,10 @@ export function AssistantTab({
         </p>
       </div>
 
-      {/* Re-login notice */}
-      <p className="pt-4 text-xs text-muted-foreground">{t("reloginNotice")}</p>
+      {/* Section: Automation */}
+      <p className="pb-2 pt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {t("sectionAutomation")}
+      </p>
 
       {/* Automatic Daily Briefing */}
       <div className="flex items-center justify-between gap-4 py-4">
@@ -379,6 +398,26 @@ export function AssistantTab({
           aria-label={t("autoBriefingLabel")}
         />
       </div>
+
+      {/* Activity Reports */}
+      <div className="flex items-center justify-between gap-4 py-4">
+        <div className="min-w-0 flex-1 space-y-0.5">
+          <p className="text-sm font-medium">{t("reportsLabel")}</p>
+          <p className="text-sm text-muted-foreground">
+            {t("reportsDescription")}
+          </p>
+        </div>
+        <CustomToggle
+          checked={reportsEnabled}
+          onCheckedChange={handleReportsToggle}
+          aria-label={t("reportsLabel")}
+        />
+      </div>
+
+      {/* Re-login notice */}
+      <p className="pb-2 pt-4 text-xs text-muted-foreground">
+        {t("reloginNotice")}
+      </p>
     </div>
   );
 }

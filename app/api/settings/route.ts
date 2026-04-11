@@ -63,6 +63,7 @@ export async function PATCH(req: Request) {
     disabledTools,
     customSystemPrompt,
     autoBriefingEnabled,
+    reportsEnabled,
   } = body as Record<string, unknown>;
   const patch: {
     language?: AppLanguage;
@@ -75,6 +76,7 @@ export async function PATCH(req: Request) {
     disabledTools?: string[];
     customSystemPrompt?: string | null;
     autoBriefingEnabled?: boolean;
+    reportsEnabled?: boolean;
   } = {};
 
   if (isSupportedLanguage(language as string)) {
@@ -133,6 +135,9 @@ export async function PATCH(req: Request) {
   }
   if (typeof autoBriefingEnabled === "boolean") {
     patch.autoBriefingEnabled = autoBriefingEnabled;
+  }
+  if (typeof reportsEnabled === "boolean") {
+    patch.reportsEnabled = reportsEnabled;
   }
 
   const hasPreferencePatch = Object.keys(patch).length > 0;

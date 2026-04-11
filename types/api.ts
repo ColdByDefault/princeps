@@ -9,6 +9,23 @@ export interface ApiErrorResponse {
   error: string;
 }
 
+/** Compact key-value entry inside a report detail. */
+export interface ReportDetailCall {
+  tool: string;
+  ok: boolean;
+  kv: Record<string, unknown>;
+}
+
+/** Client-safe shape of an AssistantReport record. */
+export interface AssistantReportRecord {
+  id: string;
+  toolsCalled: string[];
+  toolCallCount: number;
+  tokenUsage: number;
+  details: ReportDetailCall[];
+  createdAt: string; // ISO string on the client
+}
+
 /** Client-safe shape of a Notification record (matches the Prisma model). */
 export interface NotificationRecord {
   id: string;
