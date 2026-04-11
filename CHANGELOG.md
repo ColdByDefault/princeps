@@ -1,3 +1,9 @@
+## [0.2.6] - 2026-04-11
+
+- feat: update tasks documentation and add Stripe payments guide
+- feat: implement subscription management and onboarding flow
+- feat: integrate Stripe for user billing and add related environment variables
+
 ## [0.2.5] - 2026-04-11
 
 - feat: add spacing in tasks documentation for better readability
