@@ -17,6 +17,5 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 - [ ] **#42 Extend Notifications** — Currently only "User Greetings" on Login (once or twice per day ?? check!), and once on new sign-up. IMPORTANT: there is a toggle in settings for greetings notification to enable/disable.
 - [ ] **#43 One-time data wipe** — premium/enterprise users can request a full wipe of `Chunk` + `MemoryEntry` data once every 6 months. Does not reset monthly usage limits.
-- [ ] **#76 ALL LLM CALLS** — ENSURE ALL LLM CALLES TOKENS GET ALSO CALCUATED AND ADDED TO APPROXIMATE TOKEN COUNT FOR MONTHLY LIMIT ENFORCEMENT. CURRENTLY SOME CALLS MIGHT BE MISSING THIS, ESPECIALLY IN TOOLS. NEED TO AUDIT ALL LLM CALLS AND MAKE SURE THIS IS CONSISTENTLY APPLIED. EVEN WHEN LLM SAYS "Done" after calling a tool, must be counted towards monthly token limit. This is critical to prevent abuse and ensure fair usage across users.
-Every letter everything the llm input/out must be calculated, either in one counter for both, or separate counters.
+  > Needs and admin and a request from user to admin.
 
