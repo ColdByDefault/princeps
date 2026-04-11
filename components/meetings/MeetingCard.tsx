@@ -28,6 +28,12 @@ import { cn, formatDateTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -108,39 +114,63 @@ export function MeetingCard({
 
           {/* Actions */}
           <div className="flex shrink-0 items-center gap-0.5">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={t("detailLabel")}
-              title={t("detailLabel")}
-              className="size-7 cursor-pointer text-muted-foreground"
-              onClick={() => onDetail(meeting)}
-            >
-              <Eye className="size-3.5" />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={t("prepPackDialog.trigger")}
-              title={t("prepPackDialog.trigger")}
-              className="size-7 cursor-pointer text-muted-foreground"
-              onClick={() => onPrepPack(meeting)}
-            >
-              <BriefcaseBusiness className="size-3.5" />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={t("summaryDialog.trigger")}
-              title={t("summaryDialog.trigger")}
-              className="size-7 cursor-pointer text-muted-foreground"
-              onClick={() => onSummary(meeting)}
-            >
-              <NotebookPen className="size-3.5" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("detailLabel")}
+                      className="size-7 cursor-pointer text-muted-foreground"
+                      onClick={() => onDetail(meeting)}
+                    />
+                  }
+                >
+                  <Eye className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{t("detailLabel")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("prepPackDialog.trigger")}
+                      className="size-7 cursor-pointer text-muted-foreground"
+                      onClick={() => onPrepPack(meeting)}
+                    />
+                  }
+                >
+                  <BriefcaseBusiness className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{t("prepPackDialog.trigger")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("summaryDialog.trigger")}
+                      className="size-7 cursor-pointer text-muted-foreground"
+                      onClick={() => onSummary(meeting)}
+                    />
+                  }
+                >
+                  <NotebookPen className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{t("summaryDialog.trigger")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -149,7 +179,6 @@ export function MeetingCard({
                     variant="ghost"
                     size="icon"
                     aria-label={t("actionsLabel")}
-                    title={t("actionsLabel")}
                     className="size-7 cursor-pointer text-muted-foreground"
                   />
                 }
