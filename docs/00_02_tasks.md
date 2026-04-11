@@ -4,6 +4,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ---
 ## Ready for Implementation
+
 - [ ] **#41 Fully functional Calender View** — Maybe inside Meetings, or in `/home`, or seperate page.
 - [ ] **#42 Implement Strip Payment** — Simulate payments to test your integration. https://docs.stripe.com/testing 
 - [ ] **#43 ** — 
