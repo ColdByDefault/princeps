@@ -6,8 +6,8 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ## Ready for Implementation
 
-- [ ] **#41 Fully functional Calender View** — Maybe inside Meetings, or in `/home`, or seperate page.
-- [ ] **#43 ** —
+- [ ] **#41 Google Calendar** — Create/Edit/Delete from Princeps. currently is read-only, on edit it falls back to original after refresh, on delete wasnt tested.
+- [ ] **#43 Fully functional Calendar View** — Maybe inside Meetings, or in `/home`, or separate page
 - [ ] **#44 ** —
 - [ ] **#45 ** —
 - [ ] **#46 ** —
