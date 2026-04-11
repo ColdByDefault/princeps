@@ -94,6 +94,7 @@ model User {
   tier                 UserTier @default(free)
   knowledgeCharsUsed   Int      @default(0)
   knowledgeUploadsUsed Int      @default(0)
+  stripeCustomerId     String?  @unique @map("stripe_customer_id")
   preferences          Json     @default("{}")
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
