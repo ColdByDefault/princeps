@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -88,6 +88,14 @@ export function EditMeetingDialog({
   const [selectedParticipantIds, setSelectedParticipantIds] = useState<
     string[]
   >(meeting?.participants.map((p) => p.contactId) ?? []);
+
+  // Fallback name map from participant data — covers contacts created during sync
+  // that aren't yet in availableContacts (loaded at page render time).
+  const participantNameFallback = useMemo(() => {
+    const map = new Map<string, string>();
+    meeting?.participants.forEach((p) => map.set(p.contactId, p.contactName));
+    return map;
+  }, [meeting]);
   const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>(
     meeting?.tasks.map((t) => t.id) ?? [],
   );
@@ -249,12 +257,14 @@ export function EditMeetingDialog({
                 <div className="flex flex-wrap gap-1.5 mb-1.5">
                   {selectedParticipantIds.map((cid) => {
                     const c = contacts.find((x) => x.id === cid);
+                    const displayName =
+                      c?.name ?? participantNameFallback.get(cid) ?? cid;
                     return (
                       <span
                         key={cid}
                         className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-medium"
                       >
-                        {c?.name ?? cid}
+                        {displayName}
                         <button
                           type="button"
                           onClick={() =>
