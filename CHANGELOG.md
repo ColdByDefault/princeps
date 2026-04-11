@@ -1,3 +1,9 @@
+## [0.2.4] - 2026-04-11
+
+- feat: add personality and automation sections to AssistantTab and update localization strings
+- feat: add task for system prompt distinction and user customization
+- feat: enhance error handling in chat stream responses for Ollama and OpenAI providers
+
 ## [0.2.3] - 2026-04-09
 
 - feat: add daily briefing feature with generation and retrieval capabilities
