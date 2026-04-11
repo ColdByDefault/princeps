@@ -171,7 +171,28 @@
       "usage": "Nutzung",
       "labels": "Labels",
       "assistant": "Assistent",
-      "tools": "Werkzeuge"
+      "tools": "Werkzeuge",
+      "subscription": "Abonnement"
+    },
+    "subscription": {
+      "title": "Plan & Abonnement",
+      "description": "Verwalte deinen aktuellen Plan und deine Abrechnung.",
+      "currentPlan": "Aktueller Plan",
+      "managePlan": "Abonnement verwalten",
+      "managing": "Portal wird geöffnet…",
+      "manageDescription": "Zahlungsmethode aktualisieren, Rechnungen einsehen oder Abonnement kündigen.",
+      "upgradeTitle": "Plan upgraden",
+      "upgradeDescription": "Schalte mehr Funktionen und höhere Limits frei.",
+      "billingMonthly": "Monatlich",
+      "billingAnnual": "Jährlich",
+      "annualSavings": "Spare ~{percent}%",
+      "perMonth": "/Mo.",
+      "perYear": "/Jahr",
+      "subscribeCta": "Abonnieren",
+      "subscribing": "Weiterleitung…",
+      "enterpriseCta": "Kontaktiere uns",
+      "error": "Checkout konnte nicht gestartet werden. Bitte erneut versuchen.",
+      "portalError": "Abrechnungsportal konnte nicht geöffnet werden. Bitte erneut versuchen."
     },
     "appearance": {
       "themeTitle": "Design",
@@ -1263,5 +1284,37 @@
     "autoOff": "Automatisches Tagesbriefing ist deaktiviert.",
     "autoOffHint": "Dein Briefing wird nicht automatisch generiert. Du kannst es hier oder über deinen Assistenten erstellen.",
     "goToSettings": "Einstellungen öffnen"
+  },
+  "onboarding": {
+    "plan": {
+      "metadata": {
+        "title": "Plan wählen",
+        "description": "Wähle den passenden Plan für deinen Workflow."
+      },
+      "title": "Wähle deinen Plan",
+      "subtitle": "Wähle den Plan, der am besten zu dir passt. Du kannst ihn jederzeit ändern.",
+      "billingMonthly": "Monatlich",
+      "billingAnnual": "Jährlich",
+      "annualSavings": "Spare ~{percent}%",
+      "currentPlan": "Ausgewählt",
+      "free": {
+        "cta": "Kostenlos fortfahren"
+      },
+      "paid": {
+        "cta": "Abonnieren",
+        "subscribing": "Weiterleitung…"
+      },
+      "enterprise": {
+        "cta": "Kontaktiere uns"
+      },
+      "error": "Checkout konnte nicht gestartet werden. Bitte erneut versuchen.",
+      "perMonth": "/Mo.",
+      "perYear": "/Jahr"
+    },
+    "success": {
+      "title": "Willkommen bei Princeps!",
+      "body": "Dein Plan wird gerade aktiviert – das dauert nur einen Moment.",
+      "redirecting": "Du wirst zu deinem Arbeitsbereich weitergeleitet…"
+    }
   }
 }

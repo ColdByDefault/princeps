@@ -171,7 +171,28 @@
       "usage": "Usage",
       "labels": "Labels",
       "assistant": "Assistant",
-      "tools": "Tools"
+      "tools": "Tools",
+      "subscription": "Subscription"
+    },
+    "subscription": {
+      "title": "Plan & Subscription",
+      "description": "Manage your current plan and billing.",
+      "currentPlan": "Current plan",
+      "managePlan": "Manage subscription",
+      "managing": "Opening portal…",
+      "manageDescription": "Update payment method, view invoices, or cancel your subscription.",
+      "upgradeTitle": "Upgrade your plan",
+      "upgradeDescription": "Unlock more features and higher limits.",
+      "billingMonthly": "Monthly",
+      "billingAnnual": "Annual",
+      "annualSavings": "Save ~{percent}%",
+      "perMonth": "/mo",
+      "perYear": "/yr",
+      "subscribeCta": "Subscribe",
+      "subscribing": "Redirecting…",
+      "enterpriseCta": "Contact us",
+      "error": "Failed to start checkout. Please try again.",
+      "portalError": "Failed to open billing portal. Please try again."
     },
     "appearance": {
       "themeTitle": "Theme",
@@ -1263,5 +1284,37 @@
     "autoOff": "Automatic daily briefing is off.",
     "autoOffHint": "Your briefing won't be generated automatically. You can still generate it here or ask your assistant.",
     "goToSettings": "Open Settings"
+  },
+  "onboarding": {
+    "plan": {
+      "metadata": {
+        "title": "Choose a plan",
+        "description": "Pick the plan that fits your workflow."
+      },
+      "title": "Choose your plan",
+      "subtitle": "Pick the plan that fits your workflow. You can change it at any time.",
+      "billingMonthly": "Monthly",
+      "billingAnnual": "Annual",
+      "annualSavings": "Save ~{percent}%",
+      "currentPlan": "Selected",
+      "free": {
+        "cta": "Continue for free"
+      },
+      "paid": {
+        "cta": "Subscribe",
+        "subscribing": "Redirecting…"
+      },
+      "enterprise": {
+        "cta": "Contact us"
+      },
+      "error": "Failed to start checkout. Please try again.",
+      "perMonth": "/mo",
+      "perYear": "/yr"
+    },
+    "success": {
+      "title": "Welcome to Princeps!",
+      "body": "Your plan is being activated — this takes just a moment.",
+      "redirecting": "Taking you to your workspace…"
+    }
   }
 }

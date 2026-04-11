@@ -13,9 +13,11 @@ import { AssistantTab } from "./AssistantTab";
 import { ProviderTab } from "./ProviderTab";
 import { ToolsTab } from "./ToolsTab";
 import { UsageTab } from "./UsageTab";
+import { SubscriptionTab } from "./SubscriptionTab";
 import type { ProviderStatusPayload } from "@/types/llm";
 import type { UsageSummary } from "@/types/billing";
 import type { ToolDisplayEntry } from "@/types/api";
+import type { Tier } from "@/types/billing";
 import type {
   AssistantTone,
   AddressStyle,
@@ -29,6 +31,7 @@ const VALID_TABS = [
   "tools",
   "usage",
   "provider",
+  "subscription",
 ] as const;
 type SettingsTab = (typeof VALID_TABS)[number];
 
@@ -52,6 +55,14 @@ type SettingsShellProps = {
   initialReportsEnabled: boolean;
   initialDisabledTools: string[];
   allTools: ToolDisplayEntry[];
+  currentTier: Tier;
+  appOrigin: string;
+  priceIds: {
+    proMonthly: string;
+    proAnnual: string;
+    premiumMonthly: string;
+    premiumAnnual: string;
+  };
 };
 
 export function SettingsShell({
@@ -70,6 +81,9 @@ export function SettingsShell({
   initialReportsEnabled,
   initialDisabledTools,
   allTools,
+  currentTier,
+  appOrigin,
+  priceIds,
 }: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
   const safeInitial: SettingsTab = VALID_TABS.includes(
@@ -104,6 +118,9 @@ export function SettingsShell({
         </TabsTrigger>
         <TabsTrigger value="provider" className="flex-1">
           {t("provider")}
+        </TabsTrigger>
+        <TabsTrigger value="subscription" className="flex-1">
+          {t("subscription")}
         </TabsTrigger>
       </TabsList>
 
@@ -160,6 +177,18 @@ export function SettingsShell({
           tier={initialUsage.tier}
           allTools={allTools}
           initialDisabledTools={initialDisabledTools}
+        />
+      </TabsContent>
+
+      <TabsContent
+        keepMounted
+        value="subscription"
+        className="mt-6 w-full data-hidden:hidden"
+      >
+        <SubscriptionTab
+          currentTier={currentTier}
+          appOrigin={appOrigin}
+          priceIds={priceIds}
         />
       </TabsContent>
     </Tabs>

@@ -18,6 +18,7 @@ import {
 import { TOOL_REGISTRY } from "@/lib/tools";
 import { SettingsShell } from "@/components/settings";
 import type { AppLanguage } from "@/types/i18n";
+import type { Tier } from "@/types/billing";
 
 export async function generateMetadata() {
   const t = await getTranslations("settings");
@@ -47,7 +48,7 @@ export default async function SettingsPage() {
       getUserPreferences(session.user.id),
       db.user.findUnique({
         where: { id: session.user.id },
-        select: { timezone: true },
+        select: { timezone: true, tier: true },
       }),
     ]);
   const cookieStore = await cookies();
@@ -77,6 +78,14 @@ export default async function SettingsPage() {
         initialReportsEnabled={initialPrefs.reportsEnabled ?? true}
         initialDisabledTools={initialPrefs.disabledTools}
         allTools={allTools}
+        currentTier={(userRow?.tier ?? "free") as Tier}
+        appOrigin={process.env.BETTER_AUTH_URL ?? "http://localhost:3000"}
+        priceIds={{
+          proMonthly: process.env.STRIPE_PRICE_PRO_MONTHLY ?? "",
+          proAnnual: process.env.STRIPE_PRICE_PRO_ANNUAL ?? "",
+          premiumMonthly: process.env.STRIPE_PRICE_PREMIUM_MONTHLY ?? "",
+          premiumAnnual: process.env.STRIPE_PRICE_PREMIUM_ANNUAL ?? "",
+        }}
       />
     </div>
   );
