@@ -8,6 +8,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import { getCalendarClient } from "./client";
 import { markSynced } from "@/lib/integrations/shared/upsert";
+import type { calendar_v3 } from "googleapis";
 
 export interface SyncResult {
   created: number;
@@ -26,8 +27,42 @@ const SYNC_DAYS_FUTURE = 365;
  *
  * - All imported events land as kind=appointment, source=google_calendar.
  * - Deduplication is by googleEventId — upsert on conflict.
- * - Never deletes existing Princeps meetings when a remote event disappears.
+ * - Cancelled/deleted Google events are removed from the DB.
+ * - Status is derived from the event END time (not start), so ongoing events stay "upcoming".
  */
+/**
+ * For each attendee with an email, find or create a Contact for this user.
+ * Returns an array of contactIds (skips attendees without email and self).
+ */
+async function resolveAttendeeContactIds(
+  userId: string,
+  attendees: calendar_v3.Schema$EventAttendee[],
+): Promise<string[]> {
+  const ids: string[] = [];
+  for (const attendee of attendees) {
+    if (attendee.self) continue; // skip the calendar owner
+    const email = attendee.email;
+    if (!email) continue;
+
+    const name = attendee.displayName ?? email;
+
+    let contact = await db.contact.findFirst({
+      where: { userId, email },
+      select: { id: true },
+    });
+
+    if (!contact) {
+      contact = await db.contact.create({
+        data: { userId, name, email },
+        select: { id: true },
+      });
+    }
+
+    ids.push(contact.id);
+  }
+  return ids;
+}
+
 export async function syncGoogleCalendar(userId: string): Promise<SyncResult> {
   const result: SyncResult = { created: 0, updated: 0, skipped: 0, errors: [] };
 
@@ -40,12 +75,14 @@ export async function syncGoogleCalendar(userId: string): Promise<SyncResult> {
   timeMax.setDate(timeMax.getDate() + SYNC_DAYS_FUTURE);
 
   let pageToken: string | undefined;
+  const seenGoogleIds = new Set<string>();
 
   do {
     const response = await calendar.events.list({
       calendarId: "primary",
       timeMin: timeMin.toISOString(),
       timeMax: timeMax.toISOString(),
+      showDeleted: true,
       singleEvents: true,
       orderBy: "startTime",
       maxResults: 250,
@@ -56,10 +93,29 @@ export async function syncGoogleCalendar(userId: string): Promise<SyncResult> {
     pageToken = response.data.nextPageToken ?? undefined;
 
     for (const event of events) {
-      if (!event.id || !event.summary) {
+      if (!event.id) {
         result.skipped++;
         continue;
       }
+
+      // Cancelled/deleted — remove from DB if present
+      if (event.status === "cancelled") {
+        try {
+          await db.meeting.deleteMany({
+            where: { googleEventId: event.id, userId },
+          });
+        } catch {
+          // ignore deletion errors
+        }
+        continue;
+      }
+
+      if (!event.summary) {
+        result.skipped++;
+        continue;
+      }
+
+      seenGoogleIds.add(event.id);
 
       // Skip all-day events (no time component) — no meaningful scheduledAt
       const startRaw = event.start?.dateTime ?? event.start?.date;
@@ -76,25 +132,34 @@ export async function syncGoogleCalendar(userId: string): Promise<SyncResult> {
 
       // Calculate duration in minutes if end time is present
       let durationMin: number | null = null;
+      let endAt: Date | null = null;
       const endRaw = event.end?.dateTime ?? event.end?.date;
       if (endRaw) {
-        const endAt = new Date(endRaw);
-        if (!isNaN(endAt.getTime())) {
+        const parsed = new Date(endRaw);
+        if (!isNaN(parsed.getTime())) {
+          endAt = parsed;
           durationMin = Math.round(
-            (endAt.getTime() - scheduledAt.getTime()) / 60000,
+            (parsed.getTime() - scheduledAt.getTime()) / 60000,
           );
         }
       }
 
+      // Status: use end time so currently-ongoing events stay "upcoming"
+      const now = new Date();
+      const eventEnd = endAt ?? scheduledAt;
+      const status = eventEnd <= now ? "done" : "upcoming";
+
       try {
+        const attendees = event.attendees ?? [];
+        const contactIds = await resolveAttendeeContactIds(userId, attendees);
+
         const existing = await db.meeting.findUnique({
           where: { googleEventId: event.id },
           select: { id: true },
         });
 
         if (existing) {
-          // Update only the fields that come from Google — do not overwrite
-          // user edits to agenda, summary, prepPack, or kind.
+          // Update fields from Google — do not overwrite user edits to summary, prepPack, or kind.
           await db.meeting.update({
             where: { googleEventId: event.id },
             data: {
@@ -102,22 +167,53 @@ export async function syncGoogleCalendar(userId: string): Promise<SyncResult> {
               scheduledAt,
               durationMin,
               location: event.location ?? null,
+              agenda: event.description ?? null,
+              status,
             },
           });
+
+          // Sync participants: replace all with current attendee list
+          await db.meetingParticipant.deleteMany({
+            where: { meetingId: existing.id },
+          });
+          if (contactIds.length) {
+            await db.meetingParticipant.createMany({
+              data: contactIds.map((contactId) => ({
+                meetingId: existing.id,
+                contactId,
+              })),
+              skipDuplicates: true,
+            });
+          }
+
           result.updated++;
         } else {
-          await db.meeting.create({
+          const created = await db.meeting.create({
             data: {
               userId,
               title: event.summary,
               scheduledAt,
               durationMin,
               location: event.location ?? null,
+              agenda: event.description ?? null,
               kind: "appointment",
               source: PROVIDER,
               googleEventId: event.id,
+              status,
             },
+            select: { id: true },
           });
+
+          if (contactIds.length) {
+            await db.meetingParticipant.createMany({
+              data: contactIds.map((contactId) => ({
+                meetingId: created.id,
+                contactId,
+              })),
+              skipDuplicates: true,
+            });
+          }
+
           result.created++;
         }
       } catch (err) {

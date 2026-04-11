@@ -43,12 +43,6 @@ export async function GET(req: Request) {
   const savedState = cookieStore.get("oauth_state_google")?.value;
   cookieStore.delete("oauth_state_google");
 
-  console.log("[google-calendar/callback] state check:", {
-    savedState: savedState ?? "(missing)",
-    receivedState: state,
-    match: savedState === state,
-  });
-
   if (!savedState || savedState !== state) {
     return NextResponse.redirect(
       new URL("/settings?integration_error=state_mismatch", req.url),

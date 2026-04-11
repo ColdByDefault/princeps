@@ -34,7 +34,11 @@ async function handleCreateMeeting(
     ? await resolveOrCreateLabelIdsByNames(userId, labelNames)
     : undefined;
 
-  const parsed = createMeetingSchema.safeParse({ ...args, labelIds });
+  const parsed = createMeetingSchema.safeParse({
+    ...args,
+    labelIds,
+    source: "llm",
+  });
   if (!parsed.success) {
     return {
       ok: false,

@@ -734,8 +734,20 @@
     "actionsLabel": "Meeting actions",
     "editLabel": "Edit",
     "deleteLabel": "Delete",
+    "detailLabel": "View meeting details",
     "refresh": "Refresh",
     "refreshing": "Refreshing…",
+    "detailDialog": {
+      "description": "Meeting details"
+    },
+    "source": {
+      "google_calendar": "Google",
+      "llm": "AI"
+    },
+    "kind": {
+      "meeting": "Meeting",
+      "appointment": "Appointment"
+    },
     "summaryDialog": {
       "trigger": "Add summary",
       "heading": "Meeting summary",

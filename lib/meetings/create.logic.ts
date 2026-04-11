@@ -23,6 +23,7 @@ export async function createMeeting(
       location: input.location ?? null,
       agenda: input.agenda ?? null,
       summary: input.summary ?? null,
+      ...(input.source ? { source: input.source } : {}),
       ...(input.labelIds?.length
         ? {
             labelLinks: {

@@ -14,6 +14,7 @@ export const createMeetingSchema = z.object({
   summary: z.string().max(500).optional().nullable(),
   labelIds: z.array(z.string()).optional(),
   participantContactIds: z.array(z.string()).optional(),
+  source: z.string().optional(),
 });
 
 export const updateMeetingSchema = z.object({

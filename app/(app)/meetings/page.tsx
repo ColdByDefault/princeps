@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
+import { db } from "@/lib/db";
 import { listMeetings } from "@/lib/meetings";
 import { listLabels } from "@/lib/labels";
 import { listContacts } from "@/lib/contacts";
@@ -34,12 +35,17 @@ export default async function MeetingsPage() {
     redirect("/login");
   }
 
-  const [meetings, labels, contacts, tasks] = await Promise.all([
-    listMeetings(session.user.id),
-    listLabels(session.user.id),
-    listContacts(session.user.id),
-    listTasks(session.user.id),
-  ]);
+  const [meetings, labels, contacts, tasks, gcalIntegration] =
+    await Promise.all([
+      listMeetings(session.user.id),
+      listLabels(session.user.id),
+      listContacts(session.user.id),
+      listTasks(session.user.id),
+      db.integration.findFirst({
+        where: { userId: session.user.id, provider: "google_calendar" },
+        select: { id: true },
+      }),
+    ]);
 
   return (
     <MeetingsShell
@@ -47,6 +53,7 @@ export default async function MeetingsPage() {
       availableLabels={labels}
       availableContacts={contacts}
       availableTasks={tasks}
+      hasGoogleCalendar={gcalIntegration !== null}
     />
   );
 }

@@ -734,8 +734,20 @@
     "actionsLabel": "Meeting-Aktionen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "L\u00f6schen",
+    "detailLabel": "Meeting-Details anzeigen",
     "refresh": "Aktualisieren",
     "refreshing": "Wird aktualisiert…",
+    "detailDialog": {
+      "description": "Meeting-Details"
+    },
+    "source": {
+      "google_calendar": "Google",
+      "llm": "KI"
+    },
+    "kind": {
+      "meeting": "Meeting",
+      "appointment": "Termin"
+    },
     "summaryDialog": {
       "trigger": "Zusammenfassung hinzuf\u00fcgen",
       "heading": "Besprechungszusammenfassung",
