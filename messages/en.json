@@ -172,7 +172,25 @@
       "labels": "Labels",
       "assistant": "Assistant",
       "tools": "Tools",
+      "integrations": "Integrations",
       "subscription": "Subscription"
+    },
+    "integrations": {
+      "title": "Connected Services",
+      "description": "Connect third-party services to sync data into Princeps.",
+      "badgeConnected": "Connected",
+      "lastSynced": "Last synced",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "disconnecting": "Disconnecting…",
+      "syncNow": "Sync now",
+      "syncing": "Syncing…",
+      "errorSync": "Sync failed. Please try again.",
+      "errorDisconnect": "Failed to disconnect. Please try again.",
+      "errorExpired": "Token expired — please reconnect.",
+      "ariaConnect": "Connect {provider}",
+      "ariaSync": "Sync {provider} now",
+      "ariaDisconnect": "Disconnect {provider}"
     },
     "subscription": {
       "title": "Plan & Subscription",

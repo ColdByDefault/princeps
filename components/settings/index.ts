@@ -9,4 +9,6 @@ export { ProviderTab } from "./ProviderTab";
 export { ToolsTab } from "./ToolsTab";
 export { UsageTab } from "./UsageTab";
 export { SubscriptionTab } from "./SubscriptionTab";
+export { IntegrationsTab } from "./IntegrationsTab";
+export { IntegrationCard } from "./IntegrationCard";
 export { SettingsShell } from "./SettingsShell";

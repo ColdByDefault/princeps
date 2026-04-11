@@ -41,7 +41,7 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const [initialStatus, initialUsage, initialPrefs, userRow] =
+  const [initialStatus, initialUsage, initialPrefs, userRow, integrationRows] =
     await Promise.all([
       getProviderStatus(),
       getUserUsage(session.user.id),
@@ -49,6 +49,16 @@ export default async function SettingsPage() {
       db.user.findUnique({
         where: { id: session.user.id },
         select: { timezone: true, tier: true },
+      }),
+      db.integration.findMany({
+        where: { userId: session.user.id },
+        select: {
+          provider: true,
+          lastSyncedAt: true,
+          expiresAt: true,
+          createdAt: true,
+        },
+        orderBy: { createdAt: "asc" },
       }),
     ]);
   const cookieStore = await cookies();
@@ -80,6 +90,12 @@ export default async function SettingsPage() {
         allTools={allTools}
         currentTier={(userRow?.tier ?? "free") as Tier}
         appOrigin={process.env.BETTER_AUTH_URL ?? "http://localhost:3000"}
+        initialIntegrations={integrationRows.map((r) => ({
+          provider: r.provider,
+          lastSyncedAt: r.lastSyncedAt?.toISOString() ?? null,
+          expiresAt: r.expiresAt?.toISOString() ?? null,
+          createdAt: r.createdAt.toISOString(),
+        }))}
         priceIds={{
           proMonthly: process.env.STRIPE_PRICE_PRO_MONTHLY ?? "",
           proAnnual: process.env.STRIPE_PRICE_PRO_ANNUAL ?? "",

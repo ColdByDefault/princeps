@@ -14,6 +14,8 @@ import { ProviderTab } from "./ProviderTab";
 import { ToolsTab } from "./ToolsTab";
 import { UsageTab } from "./UsageTab";
 import { SubscriptionTab } from "./SubscriptionTab";
+import { IntegrationsTab } from "./IntegrationsTab";
+import type { IntegrationInfo } from "./IntegrationCard";
 import type { ProviderStatusPayload } from "@/types/llm";
 import type { UsageSummary } from "@/types/billing";
 import type { ToolDisplayEntry } from "@/types/api";
@@ -31,6 +33,7 @@ const VALID_TABS = [
   "tools",
   "usage",
   "provider",
+  "integrations",
   "subscription",
 ] as const;
 type SettingsTab = (typeof VALID_TABS)[number];
@@ -57,6 +60,7 @@ type SettingsShellProps = {
   allTools: ToolDisplayEntry[];
   currentTier: Tier;
   appOrigin: string;
+  initialIntegrations: IntegrationInfo[];
   priceIds: {
     proMonthly: string;
     proAnnual: string;
@@ -83,6 +87,7 @@ export function SettingsShell({
   allTools,
   currentTier,
   appOrigin,
+  initialIntegrations,
   priceIds,
 }: SettingsShellProps) {
   const t = useTranslations("settings.tabs");
@@ -118,6 +123,9 @@ export function SettingsShell({
         </TabsTrigger>
         <TabsTrigger value="provider" className="flex-1">
           {t("provider")}
+        </TabsTrigger>
+        <TabsTrigger value="integrations" className="flex-1">
+          {t("integrations")}
         </TabsTrigger>
         <TabsTrigger value="subscription" className="flex-1">
           {t("subscription")}
@@ -178,6 +186,14 @@ export function SettingsShell({
           allTools={allTools}
           initialDisabledTools={initialDisabledTools}
         />
+      </TabsContent>
+
+      <TabsContent
+        keepMounted
+        value="integrations"
+        className="mt-6 w-full data-hidden:hidden"
+      >
+        <IntegrationsTab initialIntegrations={initialIntegrations} />
       </TabsContent>
 
       <TabsContent

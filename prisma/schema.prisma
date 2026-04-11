@@ -62,6 +62,11 @@ enum MeetingStatus {
   cancelled
 }
 
+enum EventKind {
+  meeting
+  appointment
+}
+
 enum GoalStatus {
   open
   in_progress
@@ -300,6 +305,8 @@ model Meeting {
   summary       String?
   prepPack      String?
   status        MeetingStatus @default(upcoming)
+  kind          EventKind     @default(meeting)
+  source        String        @default("manual") // "manual" | "llm" | "google_calendar" | "microsoft_outlook" | ...
   googleEventId String?  @unique
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

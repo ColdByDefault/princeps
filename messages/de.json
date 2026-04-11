@@ -172,7 +172,25 @@
       "labels": "Labels",
       "assistant": "Assistent",
       "tools": "Werkzeuge",
+      "integrations": "Integrationen",
       "subscription": "Abonnement"
+    },
+    "integrations": {
+      "title": "Verbundene Dienste",
+      "description": "Verbinde externe Dienste, um Daten in Princeps zu synchronisieren.",
+      "badgeConnected": "Verbunden",
+      "lastSynced": "Zuletzt synchronisiert",
+      "connect": "Verbinden",
+      "disconnect": "Trennen",
+      "disconnecting": "Wird getrennt…",
+      "syncNow": "Jetzt synchronisieren",
+      "syncing": "Synchronisierung…",
+      "errorSync": "Synchronisierung fehlgeschlagen. Bitte erneut versuchen.",
+      "errorDisconnect": "Trennen fehlgeschlagen. Bitte erneut versuchen.",
+      "errorExpired": "Token abgelaufen – bitte erneut verbinden.",
+      "ariaConnect": "{provider} verbinden",
+      "ariaSync": "{provider} jetzt synchronisieren",
+      "ariaDisconnect": "{provider} trennen"
     },
     "subscription": {
       "title": "Plan & Abonnement",
