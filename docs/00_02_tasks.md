@@ -7,7 +7,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 ## Ready for Implementation
 
 - [ ] **#41 Fully functional Calender View** — Maybe inside Meetings, or in `/home`, or seperate page.
-- [x] **#42 Implement Stripe Payment** — Test mode. Stripe customer created on registration, plan picker on onboarding, webhook tier sync, subscription tab in settings. See `docs/12_stripe.md`. https://docs.stripe.com/testing
 - [ ] **#43 ** —
 - [ ] **#44 ** —
 - [ ] **#45 ** —
@@ -26,23 +25,20 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
   > Needs and admin and a request from user to admin.
 - [ ] **Refactor README**.
 - [ ] **Admin Dashboard** — user management, content moderation, system health, usage analytics. No value without real users.
-- [ ] **#4 seed users** — different tiers, pre-filled data for demos and testing, different language and theme preferences.
-  - Meetings, tasks, contacts, decisions, goals, labels, memory => at least 2 entries each, and link what can be linked (e.g. apply global labels, meetings with contacts, decisions with meetings and contacts, etc.)
-  - Users should also have different Assistant, Appearance, and Notification settings to demonstrate the functionality of each.
 - [ ] **Testing infrastructure** — no `jest`/`vitest` config anywhere. Defer until the feature set stabilizes.
 - [ ] **Extend Knowledge Base** — currently supports `.txt` and `.md` files. Extend to support more file types (e.g. PDF, Word, Excel, email formats)
 - [ ] **Almight-Script** — a Linux/Powershell/Bash script to set up a local development environment with one command: install dependencies, create .env file and copy content from .env.example to it, start docker, generate/migrate data, seed test data, and start dev server. Instead of having to run multiple commands, developers can just run this script and be ready to go.
 - [ ] **Verification** — Show Email verification badge on user profile (in `/profile` page).
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
+- [ ] ** ** —
