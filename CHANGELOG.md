@@ -1,3 +1,10 @@
+## [0.2.5] - 2026-04-11
+
+- feat: add spacing in tasks documentation for better readability
+- feat: restructure tasks documentation and add new backlog items
+- chore: add Upstash rate limiting and Redis dependencies
+- feat: implement token accumulation for LLM calls in knowledge document creation and search
+
 ## [0.2.4] - 2026-04-11
 
 - feat: add personality and automation sections to AssistantTab and update localization strings
