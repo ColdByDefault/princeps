@@ -28,7 +28,7 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={cn("font-sans", geist.variable)}
     >
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider
             attribute="class"

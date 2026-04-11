@@ -43,6 +43,12 @@ export async function GET(req: Request) {
   const savedState = cookieStore.get("oauth_state_google")?.value;
   cookieStore.delete("oauth_state_google");
 
+  console.log("[google-calendar/callback] state check:", {
+    savedState: savedState ?? "(missing)",
+    receivedState: state,
+    match: savedState === state,
+  });
+
   if (!savedState || savedState !== state) {
     return NextResponse.redirect(
       new URL("/settings?integration_error=state_mismatch", req.url),
@@ -58,7 +64,8 @@ export async function GET(req: Request) {
       refreshToken: tokens.refreshToken,
       expiresAt: tokens.expiresAt,
     });
-  } catch {
+  } catch (err) {
+    console.error("[google-calendar/callback] token exchange failed:", err);
     return NextResponse.redirect(
       new URL("/settings?integration_error=token_exchange", req.url),
     );
