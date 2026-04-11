@@ -45,7 +45,7 @@ export async function POST(req: Request, { params }: Params) {
 
   // Rate limiting
   const identifier = getRateLimitIdentifier(req, session.user.id);
-  const rateLimit = chatRateLimiter.check(identifier);
+  const rateLimit = await chatRateLimiter.check(identifier);
 
   if (!rateLimit.allowed) {
     return NextResponse.json(

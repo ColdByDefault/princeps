@@ -7,7 +7,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ## Deferred — not needed until production / multi-user
 
-- [ ] **#34 In-memory rate limiter** — safe for single-node/dev. Replace with Upstash Rate Limit (Redis-backed) before multi-instance or serverless deploy.
+- [x] **#34 In-memory rate limiter** — replaced with Upstash Rate Limit (Redis-backed, `slidingWindow`). Falls back to in-memory when `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` are not set. `check()` is now async; all API routes updated.
 - [ ] **#38 Admin Dashboard** — user management, content moderation, system health, usage analytics. No value without real users.
 
 - [ ] **#40 4 seed users** — different tiers, pre-filled data for demos and testing, different language and theme preferences.

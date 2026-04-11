@@ -28,7 +28,7 @@ export async function PATCH(req: Request, { params }: Params) {
   }
 
   const identifier = getRateLimitIdentifier(req, session.user.id);
-  const rateLimit = writeRateLimiter.check(identifier);
+  const rateLimit = await writeRateLimiter.check(identifier);
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }
@@ -65,7 +65,7 @@ export async function DELETE(req: Request, { params }: Params) {
   }
 
   const identifier = getRateLimitIdentifier(req, session.user.id);
-  const rateLimit = writeRateLimiter.check(identifier);
+  const rateLimit = await writeRateLimiter.check(identifier);
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.retryAfterSeconds);
   }

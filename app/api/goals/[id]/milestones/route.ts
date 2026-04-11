@@ -22,7 +22,7 @@ export async function POST(req: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const identifier = getRateLimitIdentifier(req, session.user.id);
-  const rateLimit = writeRateLimiter.check(identifier);
+  const rateLimit = await writeRateLimiter.check(identifier);
   if (!rateLimit.allowed)
     return createRateLimitResponse(rateLimit.retryAfterSeconds);
 

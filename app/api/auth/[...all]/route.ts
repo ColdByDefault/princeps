@@ -17,7 +17,7 @@ export const GET = handler.GET;
 
 export async function POST(req: Request) {
   const identifier = getRateLimitIdentifier(req, "auth");
-  const { allowed, retryAfterSeconds } = authRateLimiter.check(identifier);
+  const { allowed, retryAfterSeconds } = await authRateLimiter.check(identifier);
 
   if (!allowed) {
     return createRateLimitResponse(
