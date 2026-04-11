@@ -61,7 +61,7 @@ export default function SignUpCard() {
       return;
     }
 
-    router.push("/home");
+    router.push("/onboarding/plan");
     router.refresh();
   }
 
