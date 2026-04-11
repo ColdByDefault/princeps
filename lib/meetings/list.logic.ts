@@ -19,10 +19,44 @@ type ListMeetingsFilter = {
  */
 const DONE_LIMIT = 200;
 
+/**
+ * Auto-marks stale "upcoming" meetings as "done".
+ * A meeting is stale when its end time (scheduledAt + durationMin) or
+ * scheduledAt itself has passed. Runs as a side-effect before listing.
+ */
+async function autoExpireUpcoming(userId: string): Promise<void> {
+  const now = new Date();
+
+  // Pull only the fields needed to decide — no heavy select.
+  const stale = await db.meeting.findMany({
+    where: { userId, status: "upcoming" },
+    select: { id: true, scheduledAt: true, durationMin: true },
+  });
+
+  const staleIds = stale
+    .filter((m) => {
+      const endTime = m.durationMin
+        ? new Date(m.scheduledAt.getTime() + m.durationMin * 60_000)
+        : m.scheduledAt;
+      return endTime <= now;
+    })
+    .map((m) => m.id);
+
+  if (staleIds.length === 0) return;
+
+  await db.meeting.updateMany({
+    where: { id: { in: staleIds } },
+    data: { status: "done" },
+  });
+}
+
 export async function listMeetings(
   userId: string,
   filter: ListMeetingsFilter = {},
 ): Promise<MeetingRecord[]> {
+  // Expire any stale "upcoming" meetings before querying.
+  await autoExpireUpcoming(userId);
+
   // Filtered view — simple take limit per status.
   if (filter.status) {
     const rows = await db.meeting.findMany({
