@@ -1,0 +1,704 @@
+{
+  "users": [
+    {
+      "name": "Alice Müller",
+      "email": "alice.mueller@seed.local",
+      "password": "Seed_Alice_2026!",
+      "username": "alice_mueller",
+      "displayUsername": "alice_mueller",
+      "timezone": "Europe/Berlin",
+      "tier": "pro",
+      "preferences": {
+        "language": "de",
+        "theme": "dark",
+        "notificationsEnabled": true,
+        "assistantName": "Max",
+        "assistantTone": "professional",
+        "addressStyle": "firstname",
+        "responseLength": "balanced",
+        "autoBriefingEnabled": true,
+        "reportsEnabled": false
+      },
+      "labels": {
+        "strategie": {
+          "name": "Strategie",
+          "normalizedName": "strategie",
+          "color": "#7c3aed",
+          "icon": "target"
+        },
+        "finanzen": {
+          "name": "Finanzen",
+          "normalizedName": "finanzen",
+          "color": "#16a34a",
+          "icon": "trending-up"
+        },
+        "personal": {
+          "name": "Personal",
+          "normalizedName": "personal",
+          "color": "#2563eb",
+          "icon": "users"
+        }
+      },
+      "contacts": {
+        "klaus": {
+          "name": "Dr. Klaus Weber",
+          "role": "Chief Financial Officer",
+          "company": "TechVentures GmbH",
+          "email": "k.weber@techventures.de",
+          "phone": "+49 30 555 0101",
+          "notes": "Bevorzugt schriftliche Updates vor Meetings. Gründlich und zahlenorientiert.",
+          "lastContact": -14,
+          "labels": ["finanzen"]
+        },
+        "lisa": {
+          "name": "Lisa Braun",
+          "role": "Head of HR",
+          "company": "TechVentures GmbH",
+          "email": "l.braun@techventures.de",
+          "phone": "+49 30 555 0102",
+          "notes": "Sehr strukturiert. Bevorzugt 1:1-Meetings freitags nachmittags.",
+          "lastContact": -28,
+          "labels": ["personal"]
+        }
+      },
+      "meetings": {
+        "q2": {
+          "title": "Q2 Finanzplanungsgespräch",
+          "scheduledAt": -14,
+          "durationMin": 60,
+          "location": "Konferenzraum A, Hauptstadtbüro",
+          "agenda": "Budget-Review Q1, Planung Q2-Q3, FTE-Anfragen der Fachabteilungen",
+          "summary": "Budget für Q2 genehmigt. Erhöhung der FTE-Quote für Q3 beschlossen. Klaus erstellt Detailplan bis Ende Mai.",
+          "status": "done",
+          "participants": ["klaus"],
+          "labels": ["finanzen"]
+        },
+        "hr": {
+          "title": "HR-Jahresgespräch 2026",
+          "scheduledAt": 18,
+          "durationMin": 90,
+          "location": "Büro Lisa Braun",
+          "agenda": "Personalentwicklung, Recruiting-Strategie 2026, Führungskräftefeedback",
+          "status": "upcoming",
+          "participants": ["lisa"],
+          "labels": ["personal"]
+        }
+      },
+      "tasks": {
+        "bericht": {
+          "title": "Quartalsbericht Q2 fertigstellen",
+          "notes": "Alle Kostenstellen konsolidieren. Abweichungsanalyse einfügen. Präsentation für den Vorstand vorbereiten.",
+          "status": "in_progress",
+          "priority": "high",
+          "dueDate": 10,
+          "meeting": "q2",
+          "labels": ["finanzen"]
+        },
+        "hrStrategie": {
+          "title": "HR-Strategie 2026 ausarbeiten",
+          "notes": "Recruiting-Ziele, L&D-Budget und Retention-Maßnahmen dokumentieren.",
+          "status": "open",
+          "priority": "normal",
+          "dueDate": 21,
+          "labels": ["strategie"]
+        }
+      },
+      "decisions": {
+        "budget": {
+          "title": "Budgeterhöhung Q3 genehmigen",
+          "rationale": "Wachstumsziele erfordern 3 zusätzliche FTE in Q3. CFO hat Kostenvorteil gegenüber externen Beratern bestätigt.",
+          "outcome": "Budget für 3 neue Stellen in Q3 freigegeben. Klaus koordiniert den Einstellungsprozess.",
+          "status": "decided",
+          "decidedAt": -14,
+          "meeting": "q2",
+          "labels": ["finanzen"]
+        },
+        "recruiting": {
+          "title": "Neue Recruiting-Plattform einführen",
+          "rationale": "Aktuelle Plattform verursacht hohe manuelle Aufwände. 3 Angebote werden derzeit evaluiert.",
+          "status": "open",
+          "labels": ["personal"]
+        }
+      },
+      "goals": {
+        "umsatz": {
+          "title": "Umsatz um 20 % steigern bis Ende 2026",
+          "description": "Kombination aus Neukundengewinnung, Upselling bei Bestandskunden und Ausbau des DACH-Markts.",
+          "status": "in_progress",
+          "targetDate": "2026-12-31",
+          "milestones": [
+            { "title": "Q1 Ist-Analyse abgeschlossen", "completed": true },
+            { "title": "Q2 Maßnahmenplan erstellt", "completed": false },
+            { "title": "Q3 Umsetzung gestartet", "completed": false },
+            {
+              "title": "Q4 Ergebnisse konsolidiert und berichtet",
+              "completed": false
+            }
+          ],
+          "labels": ["strategie"],
+          "tasks": ["bericht"]
+        },
+        "fuhrung": {
+          "title": "Führungsteam erweitern",
+          "description": "Zwei neue Senior-Führungspositionen besetzen: Head of Product und Head of Engineering.",
+          "status": "open",
+          "targetDate": "2026-09-30",
+          "milestones": [
+            { "title": "Anforderungsprofile erstellen", "completed": false },
+            { "title": "Ausschreibungen veröffentlichen", "completed": false },
+            { "title": "Einstellungsprozess abschließen", "completed": false }
+          ],
+          "labels": ["personal"],
+          "tasks": ["hrStrategie"]
+        }
+      },
+      "interactions": [
+        { "contact": "klaus", "source": "meeting", "ref": "q2" },
+        { "contact": "lisa", "source": "task", "ref": "hrStrategie" }
+      ],
+      "memory": [
+        {
+          "key": "Rolle",
+          "value": "VP Operations bei TechVentures GmbH",
+          "source": "user"
+        },
+        {
+          "key": "Bevorzugte Arbeitszeiten",
+          "value": "7:00 – 17:00 Uhr. Keine Termine nach 17:30 Uhr.",
+          "source": "user"
+        },
+        {
+          "key": "Sprache",
+          "value": "Deutsch bevorzugt für alle internen Kommunikationen.",
+          "source": "user"
+        }
+      ]
+    },
+
+    {
+      "name": "John Smith",
+      "email": "john.smith@seed.local",
+      "password": "Seed_John_2026!",
+      "username": "john_smith",
+      "displayUsername": "john_smith",
+      "timezone": "America/New_York",
+      "tier": "premium",
+      "preferences": {
+        "language": "en",
+        "theme": "light",
+        "notificationsEnabled": true,
+        "assistantName": "Aria",
+        "assistantTone": "friendly",
+        "addressStyle": "informal",
+        "responseLength": "detailed",
+        "autoBriefingEnabled": true,
+        "reportsEnabled": true
+      },
+      "labels": {
+        "product": {
+          "name": "Product",
+          "normalizedName": "product",
+          "color": "#2563eb",
+          "icon": "package"
+        },
+        "investor": {
+          "name": "Investor Relations",
+          "normalizedName": "investor relations",
+          "color": "#d97706",
+          "icon": "bar-chart-2"
+        },
+        "legal": {
+          "name": "Legal",
+          "normalizedName": "legal",
+          "color": "#dc2626",
+          "icon": "scale"
+        }
+      },
+      "contacts": {
+        "michael": {
+          "name": "Michael Chang",
+          "role": "Lead Investor",
+          "company": "Apex Capital",
+          "email": "m.chang@apexcapital.com",
+          "phone": "+1 212 555 0301",
+          "notes": "Prefers concise exec summaries. Responds quickly via email. Key decision-maker for Series B.",
+          "lastContact": -21,
+          "labels": ["investor"]
+        },
+        "emma": {
+          "name": "Emma Wilson",
+          "role": "General Counsel",
+          "company": "Wilson & Partners LLP",
+          "email": "e.wilson@wilsonpartners.com",
+          "phone": "+1 617 555 0401",
+          "notes": "Highly responsive. Specialises in startup IP and SaaS agreements.",
+          "lastContact": -7,
+          "labels": ["legal"]
+        }
+      },
+      "meetings": {
+        "seriesB": {
+          "title": "Series B Prep Call",
+          "scheduledAt": -21,
+          "durationMin": 90,
+          "location": "Zoom call",
+          "agenda": "Valuation discussion, timeline for close, open diligence items, lead investor commitments",
+          "summary": "Michael confirmed $30M cap at agreed valuation. Full due diligence package requested by end of April. Term sheet targeted for mid-May.",
+          "status": "done",
+          "participants": ["michael"],
+          "labels": ["investor"]
+        },
+        "legalReview": {
+          "title": "Legal Review: Terms of Service Update",
+          "scheduledAt": 14,
+          "durationMin": 60,
+          "location": "Google Meet",
+          "agenda": "Review ToS v2 draft, data processing clauses, liability caps, user data provisions",
+          "status": "upcoming",
+          "participants": ["emma"],
+          "labels": ["legal"]
+        }
+      },
+      "tasks": {
+        "deck": {
+          "title": "Prepare Series B investor deck",
+          "notes": "Incorporate updated ARR figures, unit economics, and 18-month runway projection. Include team slide.",
+          "status": "in_progress",
+          "priority": "urgent",
+          "dueDate": 7,
+          "meeting": "seriesB",
+          "labels": ["investor"]
+        },
+        "tos": {
+          "title": "Review and approve updated Terms of Service",
+          "notes": "Focus on data retention clauses and liability caps. Ensure GDPR and CCPA alignment.",
+          "status": "open",
+          "priority": "high",
+          "dueDate": 20,
+          "meeting": "legalReview",
+          "labels": ["legal"]
+        }
+      },
+      "decisions": {
+        "seriesB": {
+          "title": "Proceed with Series B at $30M valuation",
+          "rationale": "Lead investor confirmed commitment. Valuation reflects 4x ARR multiple, in line with market comps.",
+          "outcome": "Series B term sheet targeting Q2 close. Michael Chang leading the round with two additional co-investors.",
+          "status": "decided",
+          "decidedAt": -21,
+          "meeting": "seriesB",
+          "labels": ["investor"]
+        },
+        "counsel": {
+          "title": "Retain external IP legal counsel",
+          "rationale": "Growing IP portfolio and pending patent applications require specialized expertise beyond in-house scope.",
+          "outcome": "Engaged Wilson & Partners for IP matters. Scope agreed for 12-month retainer.",
+          "status": "decided",
+          "decidedAt": -7,
+          "labels": ["legal"]
+        }
+      },
+      "goals": {
+        "closeSeriesB": {
+          "title": "Close Series B funding round",
+          "description": "Raise $30M Series B to fund 18 months of runway, enterprise sales, and key hires.",
+          "status": "in_progress",
+          "targetDate": "2026-07-31",
+          "milestones": [
+            { "title": "Complete data room", "completed": true },
+            { "title": "Finalize investor deck", "completed": false },
+            { "title": "Run investor roadshow", "completed": false },
+            { "title": "Negotiate and sign term sheet", "completed": false },
+            { "title": "Close funding", "completed": false }
+          ],
+          "labels": ["investor"],
+          "tasks": ["deck"]
+        },
+        "v2": {
+          "title": "Launch product v2.0",
+          "description": "Ship v2.0 with new AI features, enterprise SSO, and redesigned onboarding flow.",
+          "status": "open",
+          "targetDate": "2026-10-31",
+          "milestones": [
+            { "title": "Feature freeze", "completed": false },
+            { "title": "Beta release to select customers", "completed": false },
+            { "title": "General availability", "completed": false }
+          ],
+          "labels": ["product"],
+          "tasks": ["tos"]
+        }
+      },
+      "interactions": [
+        { "contact": "michael", "source": "meeting", "ref": "seriesB" },
+        { "contact": "emma", "source": "task", "ref": "tos" }
+      ],
+      "memory": [
+        {
+          "key": "Company stage",
+          "value": "Pre-Series B. ~18 employees. SaaS productivity tool with $4.2M ARR.",
+          "source": "user"
+        },
+        {
+          "key": "Key priorities",
+          "value": "Close Series B, build enterprise sales motion, hire VP of Marketing by Q3.",
+          "source": "user"
+        },
+        {
+          "key": "Working style",
+          "value": "Prefers async communication. Calendar blocks for deep work on Tuesdays and Thursdays.",
+          "source": "user"
+        }
+      ]
+    },
+
+    {
+      "name": "Sarah Chen",
+      "email": "sarah.chen@seed.local",
+      "password": "Seed_Sarah_2026!",
+      "username": "sarah_chen",
+      "displayUsername": "sarah_chen",
+      "timezone": "Asia/Singapore",
+      "tier": "enterprise",
+      "preferences": {
+        "language": "en",
+        "theme": "system",
+        "notificationsEnabled": false,
+        "assistantName": "Kai",
+        "assistantTone": "concise",
+        "addressStyle": "formal_female",
+        "responseLength": "brief",
+        "autoBriefingEnabled": true,
+        "reportsEnabled": true,
+        "customSystemPrompt": "Always lead with the most critical action item. Format responses as bullet lists where possible."
+      },
+      "labels": {
+        "rnd": {
+          "name": "R&D",
+          "normalizedName": "r&d",
+          "color": "#0d9488",
+          "icon": "flask-conical"
+        },
+        "ops": {
+          "name": "Operations",
+          "normalizedName": "operations",
+          "color": "#ea580c",
+          "icon": "settings-2"
+        },
+        "exec": {
+          "name": "Executive",
+          "normalizedName": "executive",
+          "color": "#7c3aed",
+          "icon": "briefcase"
+        }
+      },
+      "contacts": {
+        "james": {
+          "name": "Dr. James Park",
+          "role": "Chief Science Officer",
+          "company": "Nexigen Technologies",
+          "email": "j.park@nexigen.com",
+          "phone": "+65 6555 0201",
+          "notes": "Rigorous data-driven decision maker. Requires 48h notice for agenda items requiring analysis.",
+          "lastContact": -28,
+          "labels": ["rnd"]
+        },
+        "priya": {
+          "name": "Priya Nair",
+          "role": "VP of Operations",
+          "company": "Nexigen Technologies",
+          "email": "p.nair@nexigen.com",
+          "phone": "+65 6555 0202",
+          "notes": "Strong executer. Prefers structured briefs and clear owners on action items.",
+          "lastContact": -7,
+          "labels": ["ops"]
+        }
+      },
+      "meetings": {
+        "rndRoadmap": {
+          "title": "R&D Roadmap Alignment Q2",
+          "scheduledAt": -28,
+          "durationMin": 120,
+          "location": "Board Room 2, Singapore HQ",
+          "agenda": "Q2 project status, headcount needs for Q3, patent pipeline review, tooling budget",
+          "summary": "Approved 3 additional engineer headcount for Q3. James to submit job specs by end of April. Patent strategy review deferred to June.",
+          "status": "done",
+          "participants": ["james"],
+          "labels": ["rnd"]
+        },
+        "opsReview": {
+          "title": "Operations Efficiency Review",
+          "scheduledAt": 21,
+          "durationMin": 90,
+          "location": "Microsoft Teams",
+          "agenda": "ERP evaluation progress, process bottleneck analysis, KPI framework review, APAC warehouse update",
+          "status": "upcoming",
+          "participants": ["priya"],
+          "labels": ["ops"]
+        }
+      },
+      "tasks": {
+        "budget": {
+          "title": "Approve Q3 R&D budget allocation",
+          "notes": "Sign off on the Q3 capex/opex split. Confirm headcount budget with Finance before deadline.",
+          "status": "done",
+          "priority": "high",
+          "dueDate": -21,
+          "meeting": "rndRoadmap",
+          "labels": ["rnd"]
+        },
+        "kpis": {
+          "title": "Define KPIs for operations improvement plan",
+          "notes": "Work with Priya to set measurable targets for Q2–Q3: process cycle times, error rates, throughput.",
+          "status": "in_progress",
+          "priority": "normal",
+          "dueDate": 28,
+          "meeting": "opsReview",
+          "labels": ["ops"]
+        }
+      },
+      "decisions": {
+        "headcount": {
+          "title": "Expand R&D headcount by 3 engineers in Q3",
+          "rationale": "Current team is at capacity. Product roadmap acceleration requires additional engineering bandwidth.",
+          "outcome": "3 senior engineer positions approved. James Park to own recruitment with HR support. Target start: August 2026.",
+          "status": "decided",
+          "decidedAt": -28,
+          "meeting": "rndRoadmap",
+          "labels": ["rnd"]
+        },
+        "erp": {
+          "title": "Migrate to new ERP system in Q4 2026",
+          "rationale": "Legacy ERP is constraining multi-region operations. Three vendors shortlisted; evaluation underway.",
+          "status": "open",
+          "labels": ["ops"]
+        }
+      },
+      "goals": {
+        "iso": {
+          "title": "Achieve ISO 27001 certification",
+          "description": "Obtain ISO 27001 ISMS certification to support enterprise customer requirements and regulatory compliance.",
+          "status": "in_progress",
+          "targetDate": "2026-12-31",
+          "milestones": [
+            { "title": "Gap analysis complete", "completed": true },
+            { "title": "Controls implementation", "completed": false },
+            { "title": "Internal audit", "completed": false },
+            { "title": "External audit and certification", "completed": false }
+          ],
+          "labels": ["exec"],
+          "tasks": ["budget"]
+        },
+        "apac": {
+          "title": "Launch new product line in APAC markets",
+          "description": "Introduce the advanced analytics suite to Singapore, Japan, and Australia by Q4 2026.",
+          "status": "open",
+          "targetDate": "2026-11-30",
+          "milestones": [
+            {
+              "title": "Market research and competitive analysis",
+              "completed": false
+            },
+            {
+              "title": "Regulatory review for target markets",
+              "completed": false
+            },
+            { "title": "Pilot launch in Singapore", "completed": false },
+            { "title": "Full APAC rollout", "completed": false }
+          ],
+          "labels": ["exec"],
+          "tasks": ["kpis"]
+        }
+      },
+      "interactions": [
+        { "contact": "james", "source": "meeting", "ref": "rndRoadmap" },
+        { "contact": "priya", "source": "task", "ref": "kpis" }
+      ],
+      "memory": [
+        {
+          "key": "Company",
+          "value": "Nexigen Technologies — global enterprise tech firm, 500+ employees across 12 countries.",
+          "source": "user"
+        },
+        {
+          "key": "Direct reports",
+          "value": "5 C-level executives. Weekly 1:1s on Monday mornings (SGT). Monthly leadership offsite on the last Friday of each month.",
+          "source": "user"
+        },
+        {
+          "key": "Top priorities 2026",
+          "value": "ISO 27001 certification, APAC market expansion, ERP migration, and closing two strategic partnerships.",
+          "source": "user"
+        }
+      ]
+    },
+
+    {
+      "name": "Marco Rossi",
+      "email": "marco.rossi@seed.local",
+      "password": "Seed_Marco_2026!",
+      "username": "marco_rossi",
+      "displayUsername": "marco_rossi",
+      "timezone": "Europe/Rome",
+      "tier": "free",
+      "preferences": {
+        "language": "en",
+        "theme": "dark",
+        "notificationsEnabled": true,
+        "assistantTone": "casual",
+        "addressStyle": "informal",
+        "responseLength": "balanced",
+        "autoBriefingEnabled": false,
+        "reportsEnabled": false
+      },
+      "labels": {
+        "freelance": {
+          "name": "Freelance",
+          "normalizedName": "freelance",
+          "color": "#ca8a04",
+          "icon": "pen-tool"
+        },
+        "admin": {
+          "name": "Admin",
+          "normalizedName": "admin",
+          "color": "#6b7280",
+          "icon": "folder"
+        }
+      },
+      "contacts": {
+        "sofia": {
+          "name": "Sofia Esposito",
+          "role": "Brand Director",
+          "company": "Esposito Studio",
+          "email": "sofia@esposito.studio",
+          "notes": "Great collaborator. Appreciates detailed feedback and moodboards. Pays on time.",
+          "lastContact": -14,
+          "labels": ["freelance"]
+        },
+        "robert": {
+          "name": "Robert Taylor",
+          "role": "Accountant",
+          "company": "Taylor Financial Services",
+          "email": "r.taylor@taylorfinancial.com",
+          "phone": "+44 20 5555 0601",
+          "notes": "Handles my annual tax returns and quarterly VAT submissions. Very thorough.",
+          "lastContact": -4,
+          "labels": ["admin"]
+        }
+      },
+      "meetings": {
+        "brandKickoff": {
+          "title": "Brand Refresh Kickoff: Esposito Studio",
+          "scheduledAt": -14,
+          "durationMin": 60,
+          "location": "Zoom call",
+          "agenda": "Project scope, deliverables, style preferences, timeline and milestones, revision process",
+          "summary": "Agreed on a 6-week timeline for the brand identity package. Three revision rounds included. Moodboard to be submitted by Marco within 5 days.",
+          "status": "done",
+          "participants": ["sofia"],
+          "labels": ["freelance"]
+        },
+        "taxReview": {
+          "title": "Annual Tax Review 2025",
+          "scheduledAt": 10,
+          "durationMin": 45,
+          "location": "Taylor Financial Services Office, London",
+          "agenda": "2025 income summary, deductible expenses, outstanding invoices, tax liability estimate",
+          "status": "upcoming",
+          "participants": ["robert"],
+          "labels": ["admin"]
+        }
+      },
+      "tasks": {
+        "design": {
+          "title": "Deliver initial brand concept sketches",
+          "notes": "Prepare 3 distinct moodboard directions with typography and color palette options. Export to PDF.",
+          "status": "in_progress",
+          "priority": "high",
+          "dueDate": 5,
+          "meeting": "brandKickoff",
+          "labels": ["freelance"]
+        },
+        "invoices": {
+          "title": "Gather all invoices for tax year 2025",
+          "notes": "Collect receipts: software subscriptions, hardware, co-working space, professional development courses.",
+          "status": "open",
+          "priority": "normal",
+          "dueDate": 8,
+          "meeting": "taxReview",
+          "labels": ["admin"]
+        }
+      },
+      "decisions": {
+        "acceptProject": {
+          "title": "Accept Esposito brand refresh project",
+          "rationale": "Strong creative brief, reasonable timeline, and client has a track record of timely payment.",
+          "outcome": "Project accepted. Contract signed. Kickoff completed. Total project value: €4,800.",
+          "status": "decided",
+          "decidedAt": -16,
+          "labels": ["freelance"]
+        },
+        "quarterlyInvoices": {
+          "title": "Switch to quarterly invoice submissions",
+          "rationale": "Monthly submissions were creating unnecessary overhead. Robert confirmed quarterly is sufficient for my income level.",
+          "outcome": "Will submit invoices at the end of each quarter going forward. Next submission: end of June 2026.",
+          "status": "decided",
+          "decidedAt": -4,
+          "labels": ["admin"]
+        }
+      },
+      "goals": {
+        "revenue": {
+          "title": "Grow freelance revenue by 30 % in 2026",
+          "description": "Expand client base, raise rates for new clients, and build a referral pipeline.",
+          "status": "in_progress",
+          "targetDate": "2026-12-31",
+          "milestones": [
+            { "title": "Land 2 new retainer clients", "completed": false },
+            {
+              "title": "Raise rates by 15 % for new contracts",
+              "completed": false
+            },
+            {
+              "title": "Build referral pipeline with 3 partner agencies",
+              "completed": false
+            }
+          ],
+          "labels": ["freelance"],
+          "tasks": ["design"]
+        },
+        "portfolio": {
+          "title": "Build and launch portfolio website",
+          "description": "Design and ship a personal portfolio site showcasing brand and motion work.",
+          "status": "open",
+          "targetDate": "2026-08-31",
+          "milestones": [
+            {
+              "title": "Design mockup and content outline",
+              "completed": false
+            },
+            { "title": "Development complete", "completed": false },
+            { "title": "Go live and announce on LinkedIn", "completed": false }
+          ],
+          "labels": ["freelance"],
+          "tasks": ["invoices"]
+        }
+      },
+      "interactions": [
+        { "contact": "sofia", "source": "meeting", "ref": "brandKickoff" },
+        { "contact": "robert", "source": "task", "ref": "invoices" }
+      ],
+      "memory": [
+        {
+          "key": "Specialization",
+          "value": "Brand identity, UX design, and motion graphics. 7 years of freelance experience.",
+          "source": "user"
+        },
+        {
+          "key": "Work style",
+          "value": "Async by default. Video calls only for kickoffs and major reviews. Based in Milan, CET timezone.",
+          "source": "user"
+        }
+      ]
+    }
+  ]
+}
