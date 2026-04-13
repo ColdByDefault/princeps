@@ -108,28 +108,14 @@ export function SettingsShell({
 
   return (
     <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-      <TabsList className="w-full">
-        <TabsTrigger value="appearance" className="flex-1">
-          {t("appearance")}
-        </TabsTrigger>
-        <TabsTrigger value="assistant" className="flex-1">
-          {t("assistant")}
-        </TabsTrigger>
-        <TabsTrigger value="tools" className="flex-1">
-          {t("tools")}
-        </TabsTrigger>
-        <TabsTrigger value="usage" className="flex-1">
-          {t("usage")}
-        </TabsTrigger>
-        <TabsTrigger value="provider" className="flex-1">
-          {t("provider")}
-        </TabsTrigger>
-        <TabsTrigger value="integrations" className="flex-1">
-          {t("integrations")}
-        </TabsTrigger>
-        <TabsTrigger value="subscription" className="flex-1">
-          {t("subscription")}
-        </TabsTrigger>
+      <TabsList className="w-full !h-auto flex-wrap gap-y-1">
+        <TabsTrigger value="appearance">{t("appearance")}</TabsTrigger>
+        <TabsTrigger value="assistant">{t("assistant")}</TabsTrigger>
+        <TabsTrigger value="tools">{t("tools")}</TabsTrigger>
+        <TabsTrigger value="usage">{t("usage")}</TabsTrigger>
+        <TabsTrigger value="provider">{t("provider")}</TabsTrigger>
+        <TabsTrigger value="integrations">{t("integrations")}</TabsTrigger>
+        <TabsTrigger value="subscription">{t("subscription")}</TabsTrigger>
       </TabsList>
 
       <TabsContent

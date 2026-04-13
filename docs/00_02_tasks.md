@@ -6,8 +6,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ## Ready for Implementation
 
-- [ ] **#41 Google Calendar** — Create/Edit/Delete from Princeps. currently is read-only, on edit it falls back to original after refresh, there is also no option when to create a meeting to create also on google (create event from princeps) on delete wasnt tested.
-- [ ] **#43 Fully functional Calendar View** — Maybe inside Meetings, or in `/home`, or separate page
+- [ ] **#43 Fully functional Calendar View** — Global btn can be imported anywhere, to open a drawer with calendar => user can call directly from calendar Tasks & Meetings Forms (create/edit/delete) 
 - [ ] **#44 ** —
 - [ ] **#45 ** —
 - [ ] **#46 ** —
@@ -29,14 +28,12 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **Extend Knowledge Base** — currently supports `.txt` and `.md` files. Extend to support more file types (e.g. PDF, Word, Excel, email formats)
 - [ ] **Almight-Script** — a Linux/Powershell/Bash script to set up a local development environment with one command: install dependencies, create .env file and copy content from .env.example to it, start docker, generate/migrate data, seed test data, and start dev server. Instead of having to run multiple commands, developers can just run this script and be ready to go.
 - [ ] **Verification** — Show Email verification badge on user profile (in `/profile` page).
-- [ ] **Contact Dialog** — btn are overlapping when email or name is too long
-- [ ] **Tabs in settings** — too narrow to fit all texts and tabs. maybe add a second row of tabs ? or make it scrollable ? or group some tabs into a dropdown menu ?
-- [ ] ** ** —
-- [ ] ** ** —
-- [ ] ** ** —
-- [ ] ** ** —
-- [ ] ** ** —
-- [ ] ** ** —
-- [ ] ** ** —
-- [ ] ** ** —
-- [ ] ** ** —
+- [ ] \*\* \*\* —
+- [ ] \*\* \*\* —
+- [ ] \*\* \*\* —
+- [ ] \*\* \*\* —
+- [ ] \*\* \*\* —
+- [ ] \*\* \*\* —
+- [ ] \*\* \*\* —
+- [ ] \*\* \*\* —
+- [ ] \*\* \*\* —
