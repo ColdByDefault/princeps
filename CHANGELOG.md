@@ -1,3 +1,26 @@
+## [0.2.7] - 2026-04-13
+
+- feat(calendar): update CalendarDayButton to conditionally pass locale prop
+- feat(calendar): update CalendarDrawer styling with shadow and border enhancements
+- feat(calendar): enhance CalendarDrawer with task and meeting detail dialogs, manage dialog states, and update translations
+- feat(calendar): add calendar drawer context and provider, task detail dialog, and trigger component
+- feat: refactor import path for Threads component and remove BackgroundThread export from landing index
+- feat: enhance ContactDetailDialog layout and improve email display in SettingsShell
+- feat: replace CalendarDays icon with Google icon SVG and update link to use Next.js Link component
+- feat: standardize code formatting in calendar component and add Google icon SVG
+- feat: update CalendarDayButton styles to enhance user interaction
+- feat: implement date and datetime pickers for goal and meeting dialogs
+- feat: integrate Google Calendar with Princeps meetings
+- feat: update task descriptions for Google Calendar and Calendar View implementation
+- feat: implement cron worker to auto-expire stale upcoming meetings and send follow-up reminders
+- feat: add 'kind' field to meetings and update related logic for improved event categorization
+- feat: add tooltips to action buttons in MeetingCard for improved accessibility
+- feat: enhance EditMeetingDialog with participant name fallback and improve display logic
+- feat: implement MeetingDetailDialog and enhance meeting source handling
+- feat: enhance Google Calendar callback with state logging and error handling
+- feat: integrate Google Calendar API for event synchronization
+- feat: add integrations documentation for external tools
+
 ## [0.2.6] - 2026-04-11
 
 - feat: update tasks documentation and add Stripe payments guide
