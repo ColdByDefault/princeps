@@ -5,10 +5,18 @@
 
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { format, isSameDay } from "date-fns";
 import { useTranslations } from "next-intl";
-import { X, Plus, Pencil, Trash2, CalendarDays, Clock } from "lucide-react";
+import {
+  X,
+  Plus,
+  Pencil,
+  Trash2,
+  CalendarDays,
+  Clock,
+  Eye,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import {
@@ -31,6 +39,8 @@ import { CreateTaskDialog } from "@/components/tasks/CreateTaskDialog";
 import { EditTaskDialog } from "@/components/tasks/EditTaskDialog";
 import { CreateMeetingDialog } from "@/components/meetings/CreateMeetingDialog";
 import { EditMeetingDialog } from "@/components/meetings/EditMeetingDialog";
+import { MeetingDetailDialog } from "@/components/meetings/MeetingDetailDialog";
+import { CalendarTaskDetailDialog } from "./CalendarTaskDetailDialog";
 import { cn } from "@/lib/utils";
 import type {
   TaskRecord,
@@ -41,6 +51,7 @@ import type {
 
 type CalendarDrawerProps = {
   onClose: () => void;
+  onChildDialogOpenChange: (open: boolean) => void;
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
   tasks: TaskRecord[];
@@ -127,6 +138,7 @@ const PRIORITY_COLORS: Record<string, string> = {
 
 export function CalendarDrawer({
   onClose,
+  onChildDialogOpenChange,
   selectedDate,
   onSelectDate,
   tasks,
@@ -152,13 +164,29 @@ export function CalendarDrawer({
   const tTasks = useTranslations("tasks");
   const tMeetings = useTranslations("meetings");
 
+  const [viewTask, setViewTask] = useState<TaskRecord | null>(null);
+  const [viewTaskOpen, setViewTaskOpen] = useState(false);
   const [editTask, setEditTask] = useState<TaskRecord | null>(null);
   const [editTaskOpen, setEditTaskOpen] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
 
+  const [viewMeeting, setViewMeeting] = useState<MeetingRecord | null>(null);
+  const [viewMeetingOpen, setViewMeetingOpen] = useState(false);
   const [editMeeting, setEditMeeting] = useState<MeetingRecord | null>(null);
   const [editMeetingOpen, setEditMeetingOpen] = useState(false);
   const [deleteMeetingId, setDeleteMeetingId] = useState<string | null>(null);
+
+  const anyChildOpen =
+    viewTaskOpen ||
+    editTaskOpen ||
+    deleteTaskId !== null ||
+    viewMeetingOpen ||
+    editMeetingOpen ||
+    deleteMeetingId !== null;
+
+  useEffect(() => {
+    onChildDialogOpenChange(anyChildOpen);
+  }, [anyChildOpen, onChildDialogOpenChange]);
 
   // Build sets of days that have tasks/meetings for calendar indicators
   const taskDatesSet = useMemo(() => {
@@ -200,12 +228,39 @@ export function CalendarDrawer({
   const initialDueDateStr = format(selectedDate, "yyyy-MM-dd");
   const initialScheduledAtStr = format(selectedDate, "yyyy-MM-dd") + "T09:00";
 
-  function handleEditTask(task: TaskRecord) {
+  function closeAllDialogs() {
+    setViewTaskOpen(false);
+    setViewTask(null);
+    setEditTaskOpen(false);
+    setEditTask(null);
+    setDeleteTaskId(null);
+    setViewMeetingOpen(false);
+    setViewMeeting(null);
+    setEditMeetingOpen(false);
+    setEditMeeting(null);
+    setDeleteMeetingId(null);
+  }
+
+  function openViewTask(task: TaskRecord) {
+    closeAllDialogs();
+    setViewTask(task);
+    setViewTaskOpen(true);
+  }
+
+  function openEditTask(task: TaskRecord) {
+    closeAllDialogs();
     setEditTask(task);
     setEditTaskOpen(true);
   }
 
-  function handleEditMeeting(meeting: MeetingRecord) {
+  function openViewMeeting(meeting: MeetingRecord) {
+    closeAllDialogs();
+    setViewMeeting(meeting);
+    setViewMeetingOpen(true);
+  }
+
+  function openEditMeeting(meeting: MeetingRecord) {
+    closeAllDialogs();
     setEditMeeting(meeting);
     setEditMeetingOpen(true);
   }
@@ -338,6 +393,7 @@ export function CalendarDrawer({
                       variant="ghost"
                       size="icon-sm"
                       aria-label={tTasks("newTask")}
+                      disabled={anyChildOpen}
                       className="cursor-pointer"
                     >
                       <Plus className="size-3.5" />
@@ -381,8 +437,29 @@ export function CalendarDrawer({
                                     type="button"
                                     variant="ghost"
                                     size="icon-sm"
+                                    aria-label={tTasks("viewLabel")}
+                                    onClick={() => openViewTask(task)}
+                                    className="cursor-pointer"
+                                  />
+                                }
+                              >
+                                <Eye className="size-3" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                {tTasks("viewLabel")}
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger
+                                render={
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon-sm"
                                     aria-label={tTasks("editLabel")}
-                                    onClick={() => handleEditTask(task)}
+                                    onClick={() => openEditTask(task)}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -403,7 +480,10 @@ export function CalendarDrawer({
                                     variant="ghost"
                                     size="icon-sm"
                                     aria-label={tTasks("deleteLabel")}
-                                    onClick={() => setDeleteTaskId(task.id)}
+                                    onClick={() => {
+                                      closeAllDialogs();
+                                      setDeleteTaskId(task.id);
+                                    }}
                                     disabled={deletingTask === task.id}
                                     className="cursor-pointer text-destructive hover:text-destructive"
                                   />
@@ -446,6 +526,7 @@ export function CalendarDrawer({
                       variant="ghost"
                       size="icon-sm"
                       aria-label={tMeetings("newMeeting")}
+                      disabled={anyChildOpen}
                       className="cursor-pointer"
                     >
                       <Plus className="size-3.5" />
@@ -486,8 +567,29 @@ export function CalendarDrawer({
                                     type="button"
                                     variant="ghost"
                                     size="icon-sm"
+                                    aria-label={tMeetings("detailLabel")}
+                                    onClick={() => openViewMeeting(meeting)}
+                                    className="cursor-pointer"
+                                  />
+                                }
+                              >
+                                <Eye className="size-3" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                {tMeetings("detailLabel")}
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger
+                                render={
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon-sm"
                                     aria-label={tMeetings("editLabel")}
-                                    onClick={() => handleEditMeeting(meeting)}
+                                    onClick={() => openEditMeeting(meeting)}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -508,9 +610,10 @@ export function CalendarDrawer({
                                     variant="ghost"
                                     size="icon-sm"
                                     aria-label={tMeetings("deleteLabel")}
-                                    onClick={() =>
-                                      setDeleteMeetingId(meeting.id)
-                                    }
+                                    onClick={() => {
+                                      closeAllDialogs();
+                                      setDeleteMeetingId(meeting.id);
+                                    }}
                                     disabled={deletingMeeting === meeting.id}
                                     className="cursor-pointer text-destructive hover:text-destructive"
                                   />
@@ -534,6 +637,26 @@ export function CalendarDrawer({
         </div>
       </div>
 
+      {/* ── View Task Dialog ── */}
+      <CalendarTaskDetailDialog
+        task={viewTask}
+        open={viewTaskOpen}
+        onOpenChange={(v) => {
+          setViewTaskOpen(v);
+          if (!v) setViewTask(null);
+        }}
+        onEdit={(task) => {
+          setViewTaskOpen(false);
+          setViewTask(null);
+          openEditTask(task);
+        }}
+        onDelete={(taskId) => {
+          setViewTaskOpen(false);
+          setViewTask(null);
+          setDeleteTaskId(taskId);
+        }}
+      />
+
       {/* ── Edit Task Dialog ── */}
       <EditTaskDialog
         task={editTask}
@@ -546,6 +669,28 @@ export function CalendarDrawer({
         updating={updatingTask !== null}
         availableLabels={labels}
         availableGoals={goals}
+      />
+
+      {/* ── View Meeting Dialog ── */}
+      <MeetingDetailDialog
+        meeting={viewMeeting}
+        open={viewMeetingOpen}
+        onOpenChange={(v) => {
+          setViewMeetingOpen(v);
+          if (!v) setViewMeeting(null);
+        }}
+        onEdit={(meeting) => {
+          setViewMeetingOpen(false);
+          setViewMeeting(null);
+          openEditMeeting(meeting);
+        }}
+        onDelete={(meetingId) => {
+          setViewMeetingOpen(false);
+          setViewMeeting(null);
+          setDeleteMeetingId(meetingId);
+        }}
+        onSummary={() => {}}
+        onPrepPack={() => {}}
       />
 
       {/* ── Edit Meeting Dialog ── */}

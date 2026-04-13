@@ -365,7 +365,8 @@
     "tasksSection": "Tasks",
     "meetingsSection": "Meetings",
     "noTasksOnDay": "No tasks on this day.",
-    "noMeetingsOnDay": "No meetings on this day."
+    "noMeetingsOnDay": "No meetings on this day.",
+    "taskDetailDescription": "Task details"
   },
   "chatWidget": {
     "newChat": "New Chat"

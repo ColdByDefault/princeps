@@ -365,7 +365,8 @@
     "tasksSection": "Aufgaben",
     "meetingsSection": "Meetings",
     "noTasksOnDay": "Keine Aufgaben an diesem Tag.",
-    "noMeetingsOnDay": "Keine Meetings an diesem Tag."
+    "noMeetingsOnDay": "Keine Meetings an diesem Tag.",
+    "taskDetailDescription": "Aufgaben-Details"
   },
   "chatWidget": {
     "newChat": "Neuer Chat"

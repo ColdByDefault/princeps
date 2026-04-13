@@ -19,6 +19,7 @@ export function CalendarDrawerProvider({
 }) {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(() => new Date());
+  const [anyChildDialogOpen, setAnyChildDialogOpen] = useState(false);
 
   const tTasks = useTranslations("tasks");
   const tMeetings = useTranslations("meetings");
@@ -76,14 +77,21 @@ export function CalendarDrawerProvider({
       value={{ open, openCalendar, closeCalendar }}
     >
       {children}
-      <Sheet open={open} onOpenChange={(v) => !v && closeCalendar()}>
+      <Sheet
+        open={open}
+        onOpenChange={(v) => {
+          if (!v && anyChildDialogOpen) return;
+          if (!v) closeCalendar();
+        }}
+      >
         <SheetContent
           side="right"
           showCloseButton={false}
-          className="w-full sm:w-auto sm:max-w-none p-0 gap-0 flex flex-col"
+          className="w-112.5 sm:w-112.5 p-0 gap-0 flex flex-col"
         >
           <CalendarDrawer
             onClose={closeCalendar}
+            onChildDialogOpenChange={setAnyChildDialogOpen}
             selectedDate={selectedDate}
             onSelectDate={setSelectedDate}
             tasks={tasks}
