@@ -41,6 +41,7 @@ export function useMeetingMutations(
     summary?: string | null;
     labelIds?: string[];
     participantContactIds?: string[];
+    pushToGoogle?: boolean;
   }) {
     setCreating(true);
     try {

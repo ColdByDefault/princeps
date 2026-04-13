@@ -15,6 +15,8 @@ export const createMeetingSchema = z.object({
   labelIds: z.array(z.string()).optional(),
   participantContactIds: z.array(z.string()).optional(),
   source: z.string().optional(),
+  /** When true, creates a corresponding event on the user's Google Calendar. */
+  pushToGoogle: z.boolean().optional(),
 });
 
 export const updateMeetingSchema = z.object({

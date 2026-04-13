@@ -124,19 +124,18 @@ export function MeetingsShell({
     const filtered =
       filter === "all" ? meetings : meetings.filter((m) => m.status === filter);
     return [...filtered].sort((a, b) => {
-      const aUp = a.status === "upcoming";
-      const bUp = b.status === "upcoming";
-      if (aUp && !bUp) return -1;
-      if (!aUp && bUp) return 1;
-      // Both upcoming: nearest first
-      if (aUp && bUp)
-        return (
-          new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime()
-        );
-      // Both past: most recent first
-      return (
-        new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime()
-      );
+      const aMs = new Date(a.scheduledAt).getTime();
+      const bMs = new Date(b.scheduledAt).getTime();
+      if (filter === "all") {
+        // Pure chronological timeline: earliest date first regardless of status.
+        return aMs - bMs;
+      }
+      if (filter === "upcoming") {
+        // Upcoming tab: nearest first.
+        return aMs - bMs;
+      }
+      // Done / Cancelled tab: most recently held first.
+      return bMs - aMs;
     });
   })();
 
@@ -217,6 +216,7 @@ export function MeetingsShell({
             creating={creating}
             availableLabels={availableLabels}
             availableContacts={availableContacts}
+            hasGoogleCalendar={hasGoogleCalendar}
           >
             <Button
               type="button"
@@ -262,6 +262,7 @@ export function MeetingsShell({
               creating={creating}
               availableLabels={availableLabels}
               availableContacts={availableContacts}
+              hasGoogleCalendar={hasGoogleCalendar}
             >
               <Button
                 type="button"

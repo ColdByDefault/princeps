@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { UserPlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -39,10 +40,12 @@ type CreateMeetingDialogProps = {
     agenda?: string | null;
     labelIds?: string[];
     participantContactIds?: string[];
+    pushToGoogle?: boolean;
   }) => Promise<boolean>;
   creating: boolean;
   availableLabels: LabelOptionRecord[];
   availableContacts: ContactRecord[];
+  hasGoogleCalendar?: boolean;
   children: React.ReactNode;
 };
 
@@ -51,6 +54,7 @@ export function CreateMeetingDialog({
   creating,
   availableLabels,
   availableContacts,
+  hasGoogleCalendar = false,
   children,
 }: CreateMeetingDialogProps) {
   const t = useTranslations("meetings");
@@ -70,6 +74,7 @@ export function CreateMeetingDialog({
   const [qcCompany, setQcCompany] = useState("");
   const [qcEmail, setQcEmail] = useState("");
   const [qcSubmitting, setQcSubmitting] = useState(false);
+  const [pushToGoogle, setPushToGoogle] = useState(false);
 
   function toggleLabel(id: string) {
     setSelectedLabelIds((prev) =>
@@ -85,6 +90,7 @@ export function CreateMeetingDialog({
     setAgenda("");
     setSelectedLabelIds([]);
     setSelectedParticipantIds([]);
+    setPushToGoogle(false);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -101,6 +107,7 @@ export function CreateMeetingDialog({
       ...(selectedParticipantIds.length && {
         participantContactIds: selectedParticipantIds,
       }),
+      ...(hasGoogleCalendar && pushToGoogle ? { pushToGoogle: true } : {}),
     });
 
     if (ok) {
@@ -348,6 +355,23 @@ export function CreateMeetingDialog({
                     </button>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {hasGoogleCalendar && (
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="meeting-push-to-google"
+                  checked={pushToGoogle}
+                  onCheckedChange={(v) => setPushToGoogle(v === true)}
+                  aria-label={t("createDialog.syncGoogle")}
+                />
+                <Label
+                  htmlFor="meeting-push-to-google"
+                  className="cursor-pointer text-sm font-normal"
+                >
+                  {t("createDialog.syncGoogle")}
+                </Label>
               </div>
             )}
 

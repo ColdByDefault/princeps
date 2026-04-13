@@ -713,6 +713,7 @@
       "submit": "Erstellen",
       "submitting": "Wird erstellt\u2026",
       "cancel": "Abbrechen",
+      "syncGoogle": "Auch in Google Calendar erstellen",
       "success": "Meeting erstellt.",
       "error": "Meeting konnte nicht erstellt werden."
     },

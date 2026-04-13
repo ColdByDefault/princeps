@@ -713,6 +713,7 @@
       "submit": "Create",
       "submitting": "Creating\u2026",
       "cancel": "Cancel",
+      "syncGoogle": "Also create in Google Calendar",
       "success": "Meeting created.",
       "error": "Failed to create meeting."
     },

@@ -7,6 +7,7 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { MEETING_SELECT, toMeetingRecord } from "./shared.logic";
+import { updateCalendarEvent } from "@/lib/integrations/google-calendar/events";
 import type { UpdateMeetingInput } from "./schemas";
 import type { MeetingRecord } from "@/types/api";
 
@@ -81,7 +82,24 @@ export async function updateMeeting(
       select: MEETING_SELECT,
     });
 
-    return { ok: true, meeting: toMeetingRecord(row) };
+    const meeting = toMeetingRecord(row);
+
+    // Push changes to Google Calendar for events originally imported from there.
+    if (meeting.googleEventId) {
+      try {
+        await updateCalendarEvent(userId, meeting.googleEventId, {
+          title: meeting.title,
+          scheduledAt: meeting.scheduledAt,
+          durationMin: meeting.durationMin,
+          location: meeting.location,
+          agenda: meeting.agenda,
+        });
+      } catch {
+        // Best-effort: Princeps update succeeded; Google push failed silently.
+      }
+    }
+
+    return { ok: true, meeting };
   } catch {
     return { ok: false, notFound: true };
   }
