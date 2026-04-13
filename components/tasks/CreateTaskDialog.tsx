@@ -42,6 +42,7 @@ type CreateTaskDialogProps = {
   creating: boolean;
   availableLabels: LabelOptionRecord[];
   availableGoals: { id: string; title: string }[];
+  initialDueDate?: string;
   children: React.ReactNode;
 };
 
@@ -50,6 +51,7 @@ export function CreateTaskDialog({
   creating,
   availableLabels,
   availableGoals,
+  initialDueDate,
   children,
 }: CreateTaskDialogProps) {
   const t = useTranslations("tasks");
@@ -57,7 +59,7 @@ export function CreateTaskDialog({
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
   const [priority, setPriority] = useState("normal");
-  const [dueDate, setDueDate] = useState("");
+  const [dueDate, setDueDate] = useState(initialDueDate ?? "");
   const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>([]);
   const [selectedGoalIds, setSelectedGoalIds] = useState<string[]>([]);
 

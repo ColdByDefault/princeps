@@ -355,6 +355,18 @@
       "reportsSaveFailed": "Berichtseinstellung konnte nicht gespeichert werden."
     }
   },
+  "calendar": {
+    "title": "Kalender",
+    "openTrigger": "Kalender öffnen",
+    "close": "Kalender schließen",
+    "loading": "Wird geladen…",
+    "legendTasks": "Aufgaben",
+    "legendMeetings": "Meetings",
+    "tasksSection": "Aufgaben",
+    "meetingsSection": "Meetings",
+    "noTasksOnDay": "Keine Aufgaben an diesem Tag.",
+    "noMeetingsOnDay": "Keine Meetings an diesem Tag."
+  },
   "chatWidget": {
     "newChat": "Neuer Chat"
   },

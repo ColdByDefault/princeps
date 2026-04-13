@@ -35,6 +35,7 @@ import {
 import { cn } from "@/lib/utils";
 import { TIER_RING_COLORS } from "@/lib/tiers/colors";
 import { NotificationBell } from "@/components/notifications";
+import { CalendarTrigger } from "@/components/calendar";
 
 type NavLink = {
   href: string;
@@ -260,6 +261,7 @@ export default function NavbarDesktop({
         </Button>
 
         <NotificationBell />
+        <CalendarTrigger />
         <LanguageToggle />
         <ThemeToggle />
         <TooltipProvider>

@@ -47,6 +47,7 @@ type CreateMeetingDialogProps = {
   availableLabels: LabelOptionRecord[];
   availableContacts: ContactRecord[];
   hasGoogleCalendar?: boolean;
+  initialScheduledAt?: string;
   children: React.ReactNode;
 };
 
@@ -56,12 +57,13 @@ export function CreateMeetingDialog({
   availableLabels,
   availableContacts,
   hasGoogleCalendar = false,
+  initialScheduledAt,
   children,
 }: CreateMeetingDialogProps) {
   const t = useTranslations("meetings");
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [scheduledAt, setScheduledAt] = useState("");
+  const [scheduledAt, setScheduledAt] = useState(initialScheduledAt ?? "");
   const [durationMin, setDurationMin] = useState("");
   const [location, setLocation] = useState("");
   const [agenda, setAgenda] = useState("");

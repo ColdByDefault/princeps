@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LanguageToggle, PlanBadge } from "@/components/shared";
 import { NotificationBell } from "@/components/notifications";
+import { CalendarTrigger } from "@/components/calendar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type NavLink = {
@@ -64,6 +65,7 @@ export function NavbarMobileBar({
         </kbd>
       </Button>
       <NotificationBell />
+      <CalendarTrigger />
       <Button
         type="button"
         variant="outline"

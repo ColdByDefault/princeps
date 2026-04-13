@@ -355,6 +355,18 @@
       "reportsSaveFailed": "Failed to save reports setting."
     }
   },
+  "calendar": {
+    "title": "Calendar",
+    "openTrigger": "Open calendar",
+    "close": "Close calendar",
+    "loading": "Loading…",
+    "legendTasks": "Tasks",
+    "legendMeetings": "Meetings",
+    "tasksSection": "Tasks",
+    "meetingsSection": "Meetings",
+    "noTasksOnDay": "No tasks on this day.",
+    "noMeetingsOnDay": "No meetings on this day."
+  },
   "chatWidget": {
     "newChat": "New Chat"
   },

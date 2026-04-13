@@ -10,6 +10,7 @@ import { getUserPreferences } from "@/lib/settings";
 import { Navbar, Footer, GlobalSearch } from "@/components/navigation";
 import { LanguageHydrator, ThemeHydrator } from "@/components/shared";
 import { ChatWidgetProvider } from "@/components/chat-widget";
+import { CalendarDrawerProvider } from "@/components/calendar";
 import type { AppLanguage } from "@/types/i18n";
 
 export default async function AppLayout({
@@ -34,15 +35,18 @@ export default async function AppLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
+
       {/* Restore language and theme from DB on first load after a browser wipe */}
       <LanguageHydrator
         language={locale}
         preferredLanguage={preferredLanguage}
       />
       <ThemeHydrator theme={preferredTheme} />
-      <Navbar sessionUser={sessionUser} />
-      <main className="flex flex-1 min-h-0 flex-col">{children}</main>
-      <Footer />
+      <CalendarDrawerProvider>
+        <Navbar sessionUser={sessionUser} />
+        <main className="flex flex-1 min-h-0 flex-col">{children}</main>
+        <Footer />
+      </CalendarDrawerProvider>
       <ChatWidgetProvider
         authenticated={!!sessionUser}
         userId={sessionUser?.id ?? ""}
