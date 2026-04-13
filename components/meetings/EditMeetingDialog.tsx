@@ -33,6 +33,7 @@ import type {
   ContactRecord,
   TaskRecord,
 } from "@/types/api";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 type EditMeetingDialogProps = {
   meeting: MeetingRecord | null;
@@ -187,12 +188,10 @@ export function EditMeetingDialog({
               <Label htmlFor="edit-meeting-scheduled-at">
                 {t("fields.scheduledAt")}
               </Label>
-              <Input
-                id="edit-meeting-scheduled-at"
-                type="datetime-local"
+              <DateTimePicker
                 value={scheduledAt}
-                onChange={(e) => setScheduledAt(e.target.value)}
-                required
+                onChange={setScheduledAt}
+                placeholder={t("fields.scheduledAtPlaceholder")}
               />
             </div>
 

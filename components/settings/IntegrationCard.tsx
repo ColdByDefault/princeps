@@ -130,7 +130,7 @@ export function IntegrationCard({
           <div className="flex items-center gap-2">
             <CardTitle className="text-sm font-medium">{meta.label}</CardTitle>
             {connected && (
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="text-xs bg-green-800 p-1">
                 {t("badgeConnected")}
               </Badge>
             )}

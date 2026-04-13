@@ -685,6 +685,7 @@
       "title": "Titel",
       "titlePlaceholder": "Meeting-Titel",
       "scheduledAt": "Datum & Uhrzeit",
+      "scheduledAtPlaceholder": "Datum & Uhrzeit wählen",
       "durationMin": "Dauer (Min.)",
       "durationPlaceholder": "z.B. 60",
       "minutesShort": "Min.",

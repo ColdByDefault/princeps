@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/select";
 import type { LabelOptionRecord, ContactRecord } from "@/types/api";
 import { cn } from "@/lib/utils";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 type CreateMeetingDialogProps = {
   onSubmit: (input: {
@@ -182,12 +183,10 @@ export function CreateMeetingDialog({
                   *
                 </span>
               </Label>
-              <Input
-                id="meeting-scheduled-at"
-                type="datetime-local"
+              <DateTimePicker
                 value={scheduledAt}
-                onChange={(e) => setScheduledAt(e.target.value)}
-                required
+                onChange={setScheduledAt}
+                placeholder={t("fields.scheduledAtPlaceholder")}
               />
             </div>
 
