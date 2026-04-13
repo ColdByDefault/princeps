@@ -6,7 +6,6 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ## Ready for Implementation
 
-- [ ] **#43 Fully functional Calendar View** — Global btn can be imported anywhere, to open a drawer with calendar => user can call directly from calendar Tasks & Meetings Forms (create/edit/delete) 
 - [ ] **#44 ** —
 - [ ] **#45 ** —
 - [ ] **#46 ** —
@@ -28,7 +27,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **Extend Knowledge Base** — currently supports `.txt` and `.md` files. Extend to support more file types (e.g. PDF, Word, Excel, email formats)
 - [ ] **Almight-Script** — a Linux/Powershell/Bash script to set up a local development environment with one command: install dependencies, create .env file and copy content from .env.example to it, start docker, generate/migrate data, seed test data, and start dev server. Instead of having to run multiple commands, developers can just run this script and be ready to go.
 - [ ] **Verification** — Show Email verification badge on user profile (in `/profile` page).
-- [ ] \*\* \*\* —
+- [ ] **Improve Calendar Drawer** — Meetings creation has no integrations connected, this could be Meetings Create Form.check everything again.
 - [ ] \*\* \*\* —
 - [ ] \*\* \*\* —
 - [ ] \*\* \*\* —
