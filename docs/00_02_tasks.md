@@ -30,7 +30,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **Almight-Script** — a Linux/Powershell/Bash script to set up a local development environment with one command: install dependencies, create .env file and copy content from .env.example to it, start docker, generate/migrate data, seed test data, and start dev server. Instead of having to run multiple commands, developers can just run this script and be ready to go.
 - [ ] **Verification** — Show Email verification badge on user profile (in `/profile` page).
 - [ ] **Contact Dialog** — btn are overlapping when email or name is too long
-- [ ] ** ** —
+- [ ] **Tabs in settings** — too narrow to fit all texts and tabs. maybe add a second row of tabs ? or make it scrollable ? or group some tabs into a dropdown menu ?
 - [ ] ** ** —
 - [ ] ** ** —
 - [ ] ** ** —
