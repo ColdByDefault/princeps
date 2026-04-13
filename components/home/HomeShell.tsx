@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { BriefingCard } from "./BriefingCard";
 import type { WeatherSnapshot } from "@/lib/weather/types";
 import type { BriefingRecord } from "@/types/api";
+import Threads from "../backgrounds-effects/BackgroundThread";
 
 type HomeShellProps = {
   weather: WeatherSnapshot | null;
@@ -27,6 +28,13 @@ export function HomeShell({
 
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-16 gap-6">
+            <div className="pointer-events-none fixed inset-0 -z-10 opacity-12">
+              <Threads
+                amplitude={1.2}
+                distance={0.4}
+                enableMouseInteraction={false}
+              />
+            </div>
       {/* Static time-based greeting */}
       <p className="text-2xl font-bold text-foreground text-center">
         {greetingTitle}

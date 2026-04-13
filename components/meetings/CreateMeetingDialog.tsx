@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { UserPlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +30,7 @@ import {
 } from "@/components/ui/select";
 import type { LabelOptionRecord, ContactRecord } from "@/types/api";
 import { cn } from "@/lib/utils";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 type CreateMeetingDialogProps = {
   onSubmit: (input: {
@@ -39,10 +41,13 @@ type CreateMeetingDialogProps = {
     agenda?: string | null;
     labelIds?: string[];
     participantContactIds?: string[];
+    pushToGoogle?: boolean;
   }) => Promise<boolean>;
   creating: boolean;
   availableLabels: LabelOptionRecord[];
   availableContacts: ContactRecord[];
+  hasGoogleCalendar?: boolean;
+  initialScheduledAt?: string;
   children: React.ReactNode;
 };
 
@@ -51,12 +56,14 @@ export function CreateMeetingDialog({
   creating,
   availableLabels,
   availableContacts,
+  hasGoogleCalendar = false,
+  initialScheduledAt,
   children,
 }: CreateMeetingDialogProps) {
   const t = useTranslations("meetings");
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [scheduledAt, setScheduledAt] = useState("");
+  const [scheduledAt, setScheduledAt] = useState(initialScheduledAt ?? "");
   const [durationMin, setDurationMin] = useState("");
   const [location, setLocation] = useState("");
   const [agenda, setAgenda] = useState("");
@@ -70,6 +77,7 @@ export function CreateMeetingDialog({
   const [qcCompany, setQcCompany] = useState("");
   const [qcEmail, setQcEmail] = useState("");
   const [qcSubmitting, setQcSubmitting] = useState(false);
+  const [pushToGoogle, setPushToGoogle] = useState(false);
 
   function toggleLabel(id: string) {
     setSelectedLabelIds((prev) =>
@@ -85,6 +93,7 @@ export function CreateMeetingDialog({
     setAgenda("");
     setSelectedLabelIds([]);
     setSelectedParticipantIds([]);
+    setPushToGoogle(false);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -101,6 +110,7 @@ export function CreateMeetingDialog({
       ...(selectedParticipantIds.length && {
         participantContactIds: selectedParticipantIds,
       }),
+      ...(hasGoogleCalendar && pushToGoogle ? { pushToGoogle: true } : {}),
     });
 
     if (ok) {
@@ -175,12 +185,10 @@ export function CreateMeetingDialog({
                   *
                 </span>
               </Label>
-              <Input
-                id="meeting-scheduled-at"
-                type="datetime-local"
+              <DateTimePicker
                 value={scheduledAt}
-                onChange={(e) => setScheduledAt(e.target.value)}
-                required
+                onChange={setScheduledAt}
+                placeholder={t("fields.scheduledAtPlaceholder")}
               />
             </div>
 
@@ -348,6 +356,23 @@ export function CreateMeetingDialog({
                     </button>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {hasGoogleCalendar && (
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="meeting-push-to-google"
+                  checked={pushToGoogle}
+                  onCheckedChange={(v) => setPushToGoogle(v === true)}
+                  aria-label={t("createDialog.syncGoogle")}
+                />
+                <Label
+                  htmlFor="meeting-push-to-google"
+                  className="cursor-pointer text-sm font-normal"
+                >
+                  {t("createDialog.syncGoogle")}
+                </Label>
               </div>
             )}
 

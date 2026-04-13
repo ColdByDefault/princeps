@@ -14,6 +14,9 @@ export const MEETING_SELECT = {
   durationMin: true,
   location: true,
   status: true,
+  kind: true,
+  source: true,
+  googleEventId: true,
   agenda: true,
   summary: true,
   prepPack: true,
@@ -47,6 +50,9 @@ type MeetingRow = {
   durationMin: number | null;
   location: string | null;
   status: string;
+  kind: string;
+  source: string;
+  googleEventId: string | null;
   agenda: string | null;
   summary: string | null;
   prepPack: string | null;
@@ -68,7 +74,9 @@ export function toMeetingRecord(row: MeetingRow): MeetingRecord {
     summary: row.summary,
     prepPack: row.prepPack,
     status: row.status,
-    googleEventId: null,
+    kind: row.kind,
+    source: row.source,
+    googleEventId: row.googleEventId,
     labels: row.labelLinks.map((l) => l.label),
     participants: row.participants.map((p) => ({
       id: p.id,

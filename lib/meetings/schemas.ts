@@ -14,6 +14,9 @@ export const createMeetingSchema = z.object({
   summary: z.string().max(500).optional().nullable(),
   labelIds: z.array(z.string()).optional(),
   participantContactIds: z.array(z.string()).optional(),
+  source: z.string().optional(),
+  /** When true, creates a corresponding event on the user's Google Calendar. */
+  pushToGoogle: z.boolean().optional(),
 });
 
 export const updateMeetingSchema = z.object({
@@ -22,6 +25,7 @@ export const updateMeetingSchema = z.object({
   durationMin: z.number().int().min(1).max(1440).optional().nullable(),
   location: z.string().max(500).optional().nullable(),
   status: z.enum(["upcoming", "done", "cancelled"]).optional(),
+  kind: z.enum(["meeting", "appointment"]).optional(),
   agenda: z.string().max(300).optional().nullable(),
   summary: z.string().max(500).optional().nullable(),
   labelIds: z.array(z.string()).optional(),

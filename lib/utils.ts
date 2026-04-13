@@ -35,7 +35,7 @@ export function formatDate(iso: string, locale?: string): string {
  * (e.g. "Thu, 9 Apr, 14:30"). Locale-aware.
  */
 export function formatDateTime(iso: string, locale?: string): string {
-  return format(parseISO(iso), "EEE, d MMM, HH:mm", {
+  return format(parseISO(iso), "EEE, d MMM yyyy, HH:mm", {
     locale: locale === "de" ? de : enUS,
   });
 }

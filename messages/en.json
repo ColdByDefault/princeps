@@ -172,7 +172,25 @@
       "labels": "Labels",
       "assistant": "Assistant",
       "tools": "Tools",
+      "integrations": "Integrations",
       "subscription": "Subscription"
+    },
+    "integrations": {
+      "title": "Connected Services",
+      "description": "Connect third-party services to sync data into Princeps.",
+      "badgeConnected": "Connected",
+      "lastSynced": "Last synced",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "disconnecting": "Disconnecting…",
+      "syncNow": "Sync now",
+      "syncing": "Syncing…",
+      "errorSync": "Sync failed. Please try again.",
+      "errorDisconnect": "Failed to disconnect. Please try again.",
+      "errorExpired": "Token expired — please reconnect.",
+      "ariaConnect": "Connect {provider}",
+      "ariaSync": "Sync {provider} now",
+      "ariaDisconnect": "Disconnect {provider}"
     },
     "subscription": {
       "title": "Plan & Subscription",
@@ -336,6 +354,19 @@
       "reportsSaved": "Reports setting saved.",
       "reportsSaveFailed": "Failed to save reports setting."
     }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "openTrigger": "Open calendar",
+    "close": "Close calendar",
+    "loading": "Loading…",
+    "legendTasks": "Tasks",
+    "legendMeetings": "Meetings",
+    "tasksSection": "Tasks",
+    "meetingsSection": "Meetings",
+    "noTasksOnDay": "No tasks on this day.",
+    "noMeetingsOnDay": "No meetings on this day.",
+    "taskDetailDescription": "Task details"
   },
   "chatWidget": {
     "newChat": "New Chat"
@@ -667,6 +698,7 @@
       "title": "Title",
       "titlePlaceholder": "Meeting title",
       "scheduledAt": "Date & time",
+      "scheduledAtPlaceholder": "Pick a date & time",
       "durationMin": "Duration (min)",
       "durationPlaceholder": "e.g. 60",
       "minutesShort": "min",
@@ -687,13 +719,15 @@
       "addTask": "Link a task",
       "removeTask": "Remove task",
       "noMoreTasks": "No more tasks to link.",
-      "optional": "Optional"
+      "optional": "Optional",
+      "kind": "Type"
     },
     "createDialog": {
       "heading": "New meeting",
       "submit": "Create",
       "submitting": "Creating\u2026",
       "cancel": "Cancel",
+      "syncGoogle": "Also create in Google Calendar",
       "success": "Meeting created.",
       "error": "Failed to create meeting."
     },
@@ -716,8 +750,20 @@
     "actionsLabel": "Meeting actions",
     "editLabel": "Edit",
     "deleteLabel": "Delete",
+    "detailLabel": "View meeting details",
     "refresh": "Refresh",
     "refreshing": "Refreshing…",
+    "detailDialog": {
+      "description": "Meeting details"
+    },
+    "source": {
+      "google_calendar": "Google",
+      "llm": "AI"
+    },
+    "kind": {
+      "meeting": "Meeting",
+      "appointment": "Appointment"
+    },
     "summaryDialog": {
       "trigger": "Add summary",
       "heading": "Meeting summary",

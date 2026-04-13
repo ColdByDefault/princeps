@@ -7,6 +7,7 @@
 
 import {
   CalendarClock,
+  CalendarDays,
   MapPin,
   MoreHorizontal,
   Pencil,
@@ -16,6 +17,9 @@ import {
   NotebookPen,
   CheckSquare,
   BriefcaseBusiness,
+  Bot,
+  UserPen,
+  Eye,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
@@ -23,6 +27,12 @@ import { useTranslations, useLocale } from "next-intl";
 import { cn, formatDateTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +48,13 @@ const STATUS_COLORS: Record<string, string> = {
   cancelled: "text-muted-foreground border-border bg-muted/40",
 };
 
+const SOURCE_META: Record<string, { label: string; Icon: React.ElementType }> =
+  {
+    google_calendar: { label: "Google", Icon: CalendarDays },
+    llm: { label: "AI", Icon: Bot },
+    manual: { label: "Manual", Icon: UserPen },
+  };
+
 type MeetingCardProps = {
   meeting: MeetingRecord;
   isUpdating: boolean;
@@ -47,6 +64,7 @@ type MeetingCardProps = {
   onDelete: (meetingId: string) => void;
   onSummary: (meeting: MeetingRecord) => void;
   onPrepPack: (meeting: MeetingRecord) => void;
+  onDetail: (meeting: MeetingRecord) => void;
 };
 
 export function MeetingCard({
@@ -58,6 +76,7 @@ export function MeetingCard({
   onDelete,
   onSummary,
   onPrepPack,
+  onDetail,
 }: MeetingCardProps) {
   const t = useTranslations("meetings");
 
@@ -73,7 +92,11 @@ export function MeetingCard({
     >
       {/* Icon */}
       <div className="mt-0.5 shrink-0 text-muted-foreground">
-        <CalendarClock className="size-5" />
+        {meeting.kind === "appointment" ? (
+          <CalendarDays className="size-5" />
+        ) : (
+          <CalendarClock className="size-5" />
+        )}
       </div>
 
       {/* Body */}
@@ -91,28 +114,63 @@ export function MeetingCard({
 
           {/* Actions */}
           <div className="flex shrink-0 items-center gap-0.5">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={t("prepPackDialog.trigger")}
-              title={t("prepPackDialog.trigger")}
-              className="size-7 cursor-pointer text-muted-foreground"
-              onClick={() => onPrepPack(meeting)}
-            >
-              <BriefcaseBusiness className="size-3.5" />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={t("summaryDialog.trigger")}
-              title={t("summaryDialog.trigger")}
-              className="size-7 cursor-pointer text-muted-foreground"
-              onClick={() => onSummary(meeting)}
-            >
-              <NotebookPen className="size-3.5" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("detailLabel")}
+                      className="size-7 cursor-pointer text-muted-foreground"
+                      onClick={() => onDetail(meeting)}
+                    />
+                  }
+                >
+                  <Eye className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{t("detailLabel")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("prepPackDialog.trigger")}
+                      className="size-7 cursor-pointer text-muted-foreground"
+                      onClick={() => onPrepPack(meeting)}
+                    />
+                  }
+                >
+                  <BriefcaseBusiness className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{t("prepPackDialog.trigger")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("summaryDialog.trigger")}
+                      className="size-7 cursor-pointer text-muted-foreground"
+                      onClick={() => onSummary(meeting)}
+                    />
+                  }
+                >
+                  <NotebookPen className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{t("summaryDialog.trigger")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -121,7 +179,6 @@ export function MeetingCard({
                     variant="ghost"
                     size="icon"
                     aria-label={t("actionsLabel")}
-                    title={t("actionsLabel")}
                     className="size-7 cursor-pointer text-muted-foreground"
                   />
                 }
@@ -215,6 +272,36 @@ export function MeetingCard({
               +{meeting.labels.length - 3}
             </Badge>
           )}
+          {/* Kind badge */}
+          <Badge
+            variant="outline"
+            className={cn(
+              "flex items-center gap-1 text-xs font-medium",
+              meeting.kind === "appointment"
+                ? "text-amber-600 border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30"
+                : "text-violet-600 border-violet-200 bg-violet-50 dark:border-violet-800 dark:bg-violet-950/30",
+            )}
+          >
+            {meeting.kind === "appointment" ? (
+              <CalendarDays className="size-3 shrink-0" />
+            ) : (
+              <Users className="size-3 shrink-0" />
+            )}
+            {t(`kind.${meeting.kind}`)}
+          </Badge>
+          {/* Source badge */}
+          {(() => {
+            const meta = SOURCE_META[meeting.source] ?? SOURCE_META["manual"];
+            return (
+              <Badge
+                variant="outline"
+                className="flex items-center gap-1 text-xs text-muted-foreground"
+              >
+                <meta.Icon className="size-3 shrink-0" />
+                {meta.label}
+              </Badge>
+            );
+          })()}
         </div>
       </div>
     </div>

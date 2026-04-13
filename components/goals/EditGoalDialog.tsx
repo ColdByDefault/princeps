@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { GoalRecord, LabelOptionRecord } from "@/types/api";
+import { DatePicker } from "@/components/ui/date-picker";
 
 type EditGoalDialogProps = {
   goal: GoalRecord;
@@ -217,12 +218,10 @@ export function EditGoalDialog({
                   ({t("fields.optional")})
                 </span>
               </Label>
-              <Input
-                id="edit-goal-target-date"
-                type="date"
+              <DatePicker
                 value={targetDate}
-                onChange={(e) => setTargetDate(e.target.value)}
-                className="cursor-pointer"
+                onChange={setTargetDate}
+                placeholder={t("fields.targetDate")}
               />
             </div>
           </div>

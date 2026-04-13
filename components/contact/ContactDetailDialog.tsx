@@ -89,39 +89,41 @@ export function ContactDetailDialog({
         </DialogHeader>
 
         {/* Profile header */}
-        <div className="flex items-center gap-4 pt-2">
-          <div
-            className={cn(
-              "flex size-14 shrink-0 items-center justify-center rounded-full text-lg font-semibold text-white",
-              avatarColor,
-            )}
-            aria-hidden="true"
-          >
-            {initials}
+        <div className="flex flex-col gap-3 pt-2">
+          <div className="flex items-center gap-4">
+            <div
+              className={cn(
+                "flex size-14 shrink-0 items-center justify-center rounded-full text-lg font-semibold text-white",
+                avatarColor,
+              )}
+              aria-hidden="true"
+            >
+              {initials}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-lg font-semibold leading-tight">
+                {contact.name}
+              </p>
+              {(contact.role || contact.company) && (
+                <div className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm">
+                  {contact.role && (
+                    <span className="flex items-center gap-1">
+                      <Briefcase className="size-3.5" />
+                      {contact.role}
+                    </span>
+                  )}
+                  {contact.role && contact.company && <span>·</span>}
+                  {contact.company && (
+                    <span className="flex items-center gap-1">
+                      <Building2 className="size-3.5" />
+                      {contact.company}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-lg font-semibold leading-tight">
-              {contact.name}
-            </p>
-            {(contact.role || contact.company) && (
-              <div className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm">
-                {contact.role && (
-                  <span className="flex items-center gap-1">
-                    <Briefcase className="size-3.5" />
-                    {contact.role}
-                  </span>
-                )}
-                {contact.role && contact.company && <span>·</span>}
-                {contact.company && (
-                  <span className="flex items-center gap-1">
-                    <Building2 className="size-3.5" />
-                    {contact.company}
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -157,10 +159,10 @@ export function ContactDetailDialog({
           {contact.email && (
             <a
               href={`mailto:${contact.email}`}
-              className="text-muted-foreground hover:text-foreground flex items-center gap-2.5 text-sm transition-colors"
+              className="text-muted-foreground hover:text-foreground flex items-center gap-2.5 text-sm transition-colors min-w-0"
             >
               <Mail className="size-4 shrink-0" />
-              {contact.email}
+              <span className="break-all">{contact.email}</span>
             </a>
           )}
           {contact.phone && (

@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +33,7 @@ import type {
   ContactRecord,
   TaskRecord,
 } from "@/types/api";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 type EditMeetingDialogProps = {
   meeting: MeetingRecord | null;
@@ -46,6 +47,7 @@ type EditMeetingDialogProps = {
       durationMin: number | null;
       location: string | null;
       status: string;
+      kind: string;
       agenda: string | null;
       labelIds: string[];
       participantContactIds: string[];
@@ -84,10 +86,19 @@ export function EditMeetingDialog({
   );
   const [location, setLocation] = useState(meeting?.location ?? "");
   const [status, setStatus] = useState(meeting?.status ?? "upcoming");
+  const [kind, setKind] = useState(meeting?.kind ?? "meeting");
   const [agenda, setAgenda] = useState(meeting?.agenda ?? "");
   const [selectedParticipantIds, setSelectedParticipantIds] = useState<
     string[]
   >(meeting?.participants.map((p) => p.contactId) ?? []);
+
+  // Fallback name map from participant data — covers contacts created during sync
+  // that aren't yet in availableContacts (loaded at page render time).
+  const participantNameFallback = useMemo(() => {
+    const map = new Map<string, string>();
+    meeting?.participants.forEach((p) => map.set(p.contactId, p.contactName));
+    return map;
+  }, [meeting]);
   const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>(
     meeting?.tasks.map((t) => t.id) ?? [],
   );
@@ -117,6 +128,7 @@ export function EditMeetingDialog({
       durationMin: durationMin ? parseInt(durationMin, 10) : null,
       location: location.trim() || null,
       status,
+      kind,
       agenda: agenda.trim() || null,
       participantContactIds: selectedParticipantIds,
       linkedTaskIds: selectedTaskIds,
@@ -176,16 +188,14 @@ export function EditMeetingDialog({
               <Label htmlFor="edit-meeting-scheduled-at">
                 {t("fields.scheduledAt")}
               </Label>
-              <Input
-                id="edit-meeting-scheduled-at"
-                type="datetime-local"
+              <DateTimePicker
                 value={scheduledAt}
-                onChange={(e) => setScheduledAt(e.target.value)}
-                required
+                onChange={setScheduledAt}
+                placeholder={t("fields.scheduledAtPlaceholder")}
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="edit-meeting-duration">
                   {t("fields.durationMin")}
@@ -228,6 +238,28 @@ export function EditMeetingDialog({
                   </SelectContent>
                 </Select>
               </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-meeting-kind">{t("fields.kind")}</Label>
+                <Select
+                  value={kind}
+                  onValueChange={(v) => {
+                    if (v) setKind(v);
+                  }}
+                >
+                  <SelectTrigger
+                    id="edit-meeting-kind"
+                    className="cursor-pointer"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="meeting">{t("kind.meeting")}</SelectItem>
+                    <SelectItem value="appointment">
+                      {t("kind.appointment")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="space-y-1.5">
@@ -249,12 +281,14 @@ export function EditMeetingDialog({
                 <div className="flex flex-wrap gap-1.5 mb-1.5">
                   {selectedParticipantIds.map((cid) => {
                     const c = contacts.find((x) => x.id === cid);
+                    const displayName =
+                      c?.name ?? participantNameFallback.get(cid) ?? cid;
                     return (
                       <span
                         key={cid}
                         className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-medium"
                       >
-                        {c?.name ?? cid}
+                        {displayName}
                         <button
                           type="button"
                           onClick={() =>

@@ -28,6 +28,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import type { LabelOptionRecord } from "@/types/api";
+import { DatePicker } from "@/components/ui/date-picker";
 
 type CreateTaskDialogProps = {
   onSubmit: (input: {
@@ -41,6 +42,7 @@ type CreateTaskDialogProps = {
   creating: boolean;
   availableLabels: LabelOptionRecord[];
   availableGoals: { id: string; title: string }[];
+  initialDueDate?: string;
   children: React.ReactNode;
 };
 
@@ -49,6 +51,7 @@ export function CreateTaskDialog({
   creating,
   availableLabels,
   availableGoals,
+  initialDueDate,
   children,
 }: CreateTaskDialogProps) {
   const t = useTranslations("tasks");
@@ -56,7 +59,7 @@ export function CreateTaskDialog({
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
   const [priority, setPriority] = useState("normal");
-  const [dueDate, setDueDate] = useState("");
+  const [dueDate, setDueDate] = useState(initialDueDate ?? "");
   const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>([]);
   const [selectedGoalIds, setSelectedGoalIds] = useState<string[]>([]);
 
@@ -186,12 +189,9 @@ export function CreateTaskDialog({
                   ({t("fields.optional")})
                 </span>
               </Label>
-              <Input
-                id="task-due"
-                type="date"
+              <DatePicker
                 value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-                className="cursor-pointer"
+                onChange={setDueDate}
                 placeholder={t("fields.dueDate")}
               />
             </div>

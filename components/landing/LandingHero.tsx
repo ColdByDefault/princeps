@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import RotatingText from "@/components/landing/LandingText";
-import Threads from "@/components/landing/BackgroundThread";
+import Threads from "@/components/backgrounds-effects/BackgroundThread";
 import { Button } from "@/components/ui/button";
 
 export function LandingHero() {

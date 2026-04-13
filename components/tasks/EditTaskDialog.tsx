@@ -27,6 +27,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import type { LabelOptionRecord, TaskRecord } from "@/types/api";
+import { DatePicker } from "@/components/ui/date-picker";
 
 type EditTaskDialogProps = {
   task: TaskRecord | null;
@@ -218,12 +219,9 @@ export function EditTaskDialog({
                 ({t("fields.optional")})
               </span>
             </Label>
-            <Input
-              id="edit-task-due"
-              type="date"
+            <DatePicker
               value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="cursor-pointer"
+              onChange={setDueDate}
               placeholder={t("fields.dueDate")}
             />
           </div>

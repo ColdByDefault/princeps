@@ -100,6 +100,8 @@ export interface MeetingRecord {
   summary: string | null;
   prepPack: string | null;
   status: string; // "upcoming" | "done" | "cancelled"
+  kind: string; // "meeting" | "appointment"
+  source: string; // "manual" | "llm" | "google_calendar" | "microsoft_outlook" | ...
   googleEventId: string | null;
   labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client

@@ -172,7 +172,25 @@
       "labels": "Labels",
       "assistant": "Assistent",
       "tools": "Werkzeuge",
+      "integrations": "Integrationen",
       "subscription": "Abonnement"
+    },
+    "integrations": {
+      "title": "Verbundene Dienste",
+      "description": "Verbinde externe Dienste, um Daten in Princeps zu synchronisieren.",
+      "badgeConnected": "Verbunden",
+      "lastSynced": "Zuletzt synchronisiert",
+      "connect": "Verbinden",
+      "disconnect": "Trennen",
+      "disconnecting": "Wird getrennt…",
+      "syncNow": "Jetzt synchronisieren",
+      "syncing": "Synchronisierung…",
+      "errorSync": "Synchronisierung fehlgeschlagen. Bitte erneut versuchen.",
+      "errorDisconnect": "Trennen fehlgeschlagen. Bitte erneut versuchen.",
+      "errorExpired": "Token abgelaufen – bitte erneut verbinden.",
+      "ariaConnect": "{provider} verbinden",
+      "ariaSync": "{provider} jetzt synchronisieren",
+      "ariaDisconnect": "{provider} trennen"
     },
     "subscription": {
       "title": "Plan & Abonnement",
@@ -336,6 +354,19 @@
       "reportsSaved": "Berichtseinstellung gespeichert.",
       "reportsSaveFailed": "Berichtseinstellung konnte nicht gespeichert werden."
     }
+  },
+  "calendar": {
+    "title": "Kalender",
+    "openTrigger": "Kalender öffnen",
+    "close": "Kalender schließen",
+    "loading": "Wird geladen…",
+    "legendTasks": "Aufgaben",
+    "legendMeetings": "Meetings",
+    "tasksSection": "Aufgaben",
+    "meetingsSection": "Meetings",
+    "noTasksOnDay": "Keine Aufgaben an diesem Tag.",
+    "noMeetingsOnDay": "Keine Meetings an diesem Tag.",
+    "taskDetailDescription": "Aufgaben-Details"
   },
   "chatWidget": {
     "newChat": "Neuer Chat"
@@ -667,6 +698,7 @@
       "title": "Titel",
       "titlePlaceholder": "Meeting-Titel",
       "scheduledAt": "Datum & Uhrzeit",
+      "scheduledAtPlaceholder": "Datum & Uhrzeit wählen",
       "durationMin": "Dauer (Min.)",
       "durationPlaceholder": "z.B. 60",
       "minutesShort": "Min.",
@@ -687,13 +719,15 @@
       "addTask": "Aufgabe verkn\u00fcpfen",
       "removeTask": "Aufgabe entfernen",
       "noMoreTasks": "Keine weiteren Aufgaben verf\u00fcgbar.",
-      "optional": "Optional"
+      "optional": "Optional",
+      "kind": "Typ"
     },
     "createDialog": {
       "heading": "Neues Meeting",
       "submit": "Erstellen",
       "submitting": "Wird erstellt\u2026",
       "cancel": "Abbrechen",
+      "syncGoogle": "Auch in Google Calendar erstellen",
       "success": "Meeting erstellt.",
       "error": "Meeting konnte nicht erstellt werden."
     },
@@ -716,8 +750,20 @@
     "actionsLabel": "Meeting-Aktionen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "L\u00f6schen",
+    "detailLabel": "Meeting-Details anzeigen",
     "refresh": "Aktualisieren",
     "refreshing": "Wird aktualisiert…",
+    "detailDialog": {
+      "description": "Meeting-Details"
+    },
+    "source": {
+      "google_calendar": "Google",
+      "llm": "KI"
+    },
+    "kind": {
+      "meeting": "Meeting",
+      "appointment": "Termin"
+    },
     "summaryDialog": {
       "trigger": "Zusammenfassung hinzuf\u00fcgen",
       "heading": "Besprechungszusammenfassung",

@@ -116,6 +116,12 @@ export const meetingTools: ToolRegistryEntry[] = [
             enum: ["upcoming", "done", "cancelled"],
             description: "New status.",
           },
+          kind: {
+            type: "string",
+            enum: ["meeting", "appointment"],
+            description:
+              'Change event kind: "meeting" for collaborative meetings, "appointment" for personal appointments.',
+          },
           agenda: {
             type: "string",
             description: "Meeting agenda text, or null to clear it.",

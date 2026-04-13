@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { MeetingCard } from "./MeetingCard";
+import { MeetingDetailDialog } from "./MeetingDetailDialog";
 import { CreateMeetingDialog } from "./CreateMeetingDialog";
 import { EditMeetingDialog } from "./EditMeetingDialog";
 import { SummaryDialog } from "./SummaryDialog";
@@ -39,6 +40,7 @@ type MeetingsShellProps = {
   availableLabels: LabelOptionRecord[];
   availableContacts: ContactRecord[];
   availableTasks: TaskRecord[];
+  hasGoogleCalendar?: boolean;
 };
 
 export function MeetingsShell({
@@ -46,6 +48,7 @@ export function MeetingsShell({
   availableLabels,
   availableContacts,
   availableTasks,
+  hasGoogleCalendar = false,
 }: MeetingsShellProps) {
   const t = useTranslations("meetings");
   const [meetings, setMeetings] = useState<MeetingRecord[]>(initialMeetings);
@@ -62,11 +65,20 @@ export function MeetingsShell({
     null,
   );
   const [prepPackOpen, setPrepPackOpen] = useState(false);
+  const [detailMeeting, setDetailMeeting] = useState<MeetingRecord | null>(
+    null,
+  );
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const [isPendingRefresh, startRefresh] = useTransition();
 
   function handleRefresh() {
     startRefresh(async () => {
+      if (hasGoogleCalendar) {
+        await fetch("/api/integrations/google-calendar/sync", {
+          method: "POST",
+        });
+      }
       const res = await fetch("/api/meetings");
       if (res.ok) {
         const { meetings: updated } = (await res.json()) as {
@@ -108,8 +120,24 @@ export function MeetingsShell({
     { key: "cancelled", label: t("filter.cancelled") },
   ];
 
-  const visible =
-    filter === "all" ? meetings : meetings.filter((m) => m.status === filter);
+  const visible = (() => {
+    const filtered =
+      filter === "all" ? meetings : meetings.filter((m) => m.status === filter);
+    return [...filtered].sort((a, b) => {
+      const aMs = new Date(a.scheduledAt).getTime();
+      const bMs = new Date(b.scheduledAt).getTime();
+      if (filter === "all") {
+        // Pure chronological timeline: earliest date first regardless of status.
+        return aMs - bMs;
+      }
+      if (filter === "upcoming") {
+        // Upcoming tab: nearest first.
+        return aMs - bMs;
+      }
+      // Done / Cancelled tab: most recently held first.
+      return bMs - aMs;
+    });
+  })();
 
   function handleEdit(meeting: MeetingRecord) {
     setEditMeeting(meeting);
@@ -124,6 +152,11 @@ export function MeetingsShell({
   function handlePrepPack(meeting: MeetingRecord) {
     setPrepPackMeeting(meeting);
     setPrepPackOpen(true);
+  }
+
+  function handleDetail(meeting: MeetingRecord) {
+    setDetailMeeting(meeting);
+    setDetailOpen(true);
   }
 
   async function handlePrepPackGenerate(meetingId: string): Promise<boolean> {
@@ -183,6 +216,7 @@ export function MeetingsShell({
             creating={creating}
             availableLabels={availableLabels}
             availableContacts={availableContacts}
+            hasGoogleCalendar={hasGoogleCalendar}
           >
             <Button
               type="button"
@@ -228,6 +262,7 @@ export function MeetingsShell({
               creating={creating}
               availableLabels={availableLabels}
               availableContacts={availableContacts}
+              hasGoogleCalendar={hasGoogleCalendar}
             >
               <Button
                 type="button"
@@ -254,6 +289,7 @@ export function MeetingsShell({
               onDelete={handleDeleteRequest}
               onSummary={handleSummary}
               onPrepPack={handlePrepPack}
+              onDetail={handleDetail}
             />
           ))}
         </div>
@@ -297,6 +333,29 @@ export function MeetingsShell({
         availableLabels={availableLabels}
         availableContacts={availableContacts}
         availableTasks={availableTasks}
+      />
+
+      {/* Detail dialog */}
+      <MeetingDetailDialog
+        meeting={detailMeeting}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onEdit={(m) => {
+          setDetailOpen(false);
+          handleEdit(m);
+        }}
+        onDelete={(id) => {
+          setDetailOpen(false);
+          handleDeleteRequest(id);
+        }}
+        onSummary={(m) => {
+          setDetailOpen(false);
+          handleSummary(m);
+        }}
+        onPrepPack={(m) => {
+          setDetailOpen(false);
+          handlePrepPack(m);
+        }}
       />
 
       {/* Delete confirmation */}

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { Check, X, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { PLAN_LIMITS, PLAN_PRICES } from "@/types/billing";
@@ -280,7 +281,7 @@ export function PlanPickerShell({
 
               {isEnterprise && (
                 /* use next Link */
-                <a
+                <Link
                   href="mailto:hello@princeps.app"
                   className={buttonVariants({
                     variant: "outline",
@@ -288,7 +289,7 @@ export function PlanPickerShell({
                   })}
                 >
                   {t("enterprise.cta")}
-                </a>
+                </Link>
               )}
             </div>
           );
