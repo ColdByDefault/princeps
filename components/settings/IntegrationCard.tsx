@@ -7,13 +7,8 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import {
-  CalendarDays,
-  RefreshCw,
-  Unplug,
-  Plug,
-  AlertTriangle,
-} from "lucide-react";
+import Image from "next/image";
+import { RefreshCw, Unplug, Plug, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -24,6 +19,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import Link from "next/link";
 
 export interface IntegrationInfo {
   provider: string;
@@ -51,7 +47,7 @@ const PROVIDER_META: Record<
   google_calendar: {
     label: "Google Calendar",
     description: "Sync events from Google Calendar as appointments.",
-    icon: <CalendarDays className="h-5 w-5" />,
+    icon: <Image src="/icons/google.svg" alt="Google" width={20} height={20} />,
     connectHref: "/api/integrations/google-calendar/connect",
   },
 };
@@ -184,14 +180,14 @@ export function IntegrationCard({
             </Button>
           </>
         ) : (
-          <a
+          <Link
             href={meta.connectHref}
             aria-label={t("ariaConnect", { provider: meta.label })}
             className="inline-flex cursor-pointer items-center rounded-lg border border-transparent bg-primary px-2.5 py-1 text-[0.8rem] font-medium text-primary-foreground transition-all hover:bg-primary/80"
           >
             <Plug className="mr-1.5 h-3.5 w-3.5" />
             {t("connect")}
-          </a>
+          </Link>
         )}
       </CardFooter>
     </Card>
