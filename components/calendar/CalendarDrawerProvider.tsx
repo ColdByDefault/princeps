@@ -87,7 +87,7 @@ export function CalendarDrawerProvider({
         <SheetContent
           side="right"
           showCloseButton={false}
-          className="w-112.5 sm:w-112.5 p-0 gap-0 flex flex-col"
+          className="p-0 gap-0 flex flex-col shadow-2xl border-l border-l-primary/30 w-225! max-w-[90vw]!"
         >
           <CalendarDrawer
             onClose={closeCalendar}
