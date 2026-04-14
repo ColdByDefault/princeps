@@ -1,3 +1,13 @@
+## [0.2.8] - 2026-04-14
+
+- feat: remove tasks documentation as part of project restructuring
+- feat: add .vscode to .gitignore for local settings exclusion
+- feat(calendar): disable buttons and pointer dismissal when child dialogs are open
+- feat(calendar): add create task and meeting dialogs with open state management
+- feat(calendar): integrate Google Calendar sync option in meeting management
+- feat: enhance notification system with refresh event and improve daily greeting query
+- feat: implement multi-round tool calling in chat API and enhance datetime handling in schemas
+
 ## [0.2.7] - 2026-04-13
 
 - feat(calendar): update CalendarDayButton to conditionally pass locale prop
