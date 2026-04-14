@@ -42,6 +42,8 @@ export const updateMeetingSchema = z.object({
   labelIds: z.array(z.string()).optional(),
   participantContactIds: z.array(z.string()).optional(),
   linkedTaskIds: z.array(z.string()).optional(),
+  /** When true and the meeting has no googleEventId, creates a new Google Calendar event. */
+  pushToGoogle: z.boolean().optional(),
 });
 
 export type CreateMeetingInput = z.infer<typeof createMeetingSchema>;

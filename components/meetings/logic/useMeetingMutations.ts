@@ -76,6 +76,7 @@ export function useMeetingMutations(
       labelIds: string[];
       participantContactIds: string[];
       linkedTaskIds: string[];
+      pushToGoogle: boolean;
     }>,
   ) {
     setUpdating(meetingId);

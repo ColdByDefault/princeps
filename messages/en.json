@@ -736,6 +736,7 @@
       "submit": "Save",
       "submitting": "Saving\u2026",
       "cancel": "Cancel",
+      "syncGoogle": "Also add to Google Calendar",
       "success": "Meeting saved.",
       "error": "Failed to save meeting."
     },

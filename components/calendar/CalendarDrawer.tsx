@@ -60,6 +60,7 @@ type CalendarDrawerProps = {
   goals: { id: string; title: string }[];
   contacts: ContactRecord[];
   loading: boolean;
+  hasGoogleCalendar?: boolean;
   // Task mutations
   creatingTask: boolean;
   createTask: (input: {
@@ -111,6 +112,7 @@ type CalendarDrawerProps = {
       labelIds: string[];
       participantContactIds: string[];
       linkedTaskIds: string[];
+      pushToGoogle: boolean;
     }>,
   ) => Promise<boolean>;
   deletingMeeting: string | null;
@@ -147,6 +149,7 @@ export function CalendarDrawer({
   goals,
   contacts,
   loading,
+  hasGoogleCalendar = false,
   creatingTask,
   createTask,
   updatingTask,
@@ -520,6 +523,7 @@ export function CalendarDrawer({
                     availableLabels={labels}
                     availableContacts={contacts}
                     initialScheduledAt={initialScheduledAtStr}
+                    hasGoogleCalendar={hasGoogleCalendar}
                   >
                     <Button
                       type="button"
@@ -706,6 +710,7 @@ export function CalendarDrawer({
         availableLabels={labels}
         availableContacts={contacts}
         availableTasks={tasks}
+        hasGoogleCalendar={hasGoogleCalendar}
       />
 
       {/* ── Delete Task Confirmation ── */}

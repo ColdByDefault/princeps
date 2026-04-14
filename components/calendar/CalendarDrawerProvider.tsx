@@ -14,8 +14,10 @@ import { useCalendarData } from "./logic/useCalendarData";
 
 export function CalendarDrawerProvider({
   children,
+  hasGoogleCalendar = false,
 }: {
   children: React.ReactNode;
+  hasGoogleCalendar?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(() => new Date());
@@ -100,6 +102,7 @@ export function CalendarDrawerProvider({
             goals={goals}
             contacts={contacts}
             loading={loading}
+            hasGoogleCalendar={hasGoogleCalendar}
             creatingTask={creatingTask}
             createTask={createTask}
             updatingTask={updatingTask}

@@ -55,6 +55,7 @@ type MeetingUpdateInput = Partial<{
   labelIds: string[];
   participantContactIds: string[];
   linkedTaskIds: string[];
+  pushToGoogle: boolean;
 }>;
 
 type Translations = {

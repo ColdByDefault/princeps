@@ -8,6 +8,7 @@
 import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -52,12 +53,14 @@ type EditMeetingDialogProps = {
       labelIds: string[];
       participantContactIds: string[];
       linkedTaskIds: string[];
+      pushToGoogle: boolean;
     }>,
   ) => Promise<boolean>;
   updating: boolean;
   availableLabels: LabelOptionRecord[];
   availableContacts: ContactRecord[];
   availableTasks: TaskRecord[];
+  hasGoogleCalendar?: boolean;
 };
 
 function toDatetimeLocal(iso: string) {
@@ -75,6 +78,7 @@ export function EditMeetingDialog({
   availableLabels,
   availableContacts,
   availableTasks,
+  hasGoogleCalendar = false,
 }: EditMeetingDialogProps) {
   const t = useTranslations("meetings");
   const [title, setTitle] = useState(meeting?.title ?? "");
@@ -111,6 +115,7 @@ export function EditMeetingDialog({
   const [selectedLabelIds, setSelectedLabelIds] = useState<string[]>(
     meeting?.labels.map((l) => l.id) ?? [],
   );
+  const [pushToGoogle, setPushToGoogle] = useState(false);
 
   function toggleLabel(id: string) {
     setSelectedLabelIds((prev) =>
@@ -133,6 +138,9 @@ export function EditMeetingDialog({
       participantContactIds: selectedParticipantIds,
       linkedTaskIds: selectedTaskIds,
       labelIds: selectedLabelIds,
+      ...(hasGoogleCalendar && pushToGoogle && !meeting.googleEventId
+        ? { pushToGoogle: true }
+        : {}),
     });
 
     if (ok) onOpenChange(false);
@@ -482,6 +490,23 @@ export function EditMeetingDialog({
                     </button>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {hasGoogleCalendar && !meeting?.googleEventId && (
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="edit-meeting-push-to-google"
+                  checked={pushToGoogle}
+                  onCheckedChange={(v) => setPushToGoogle(v === true)}
+                  aria-label={t("editDialog.syncGoogle")}
+                />
+                <label
+                  htmlFor="edit-meeting-push-to-google"
+                  className="cursor-pointer select-none text-sm"
+                >
+                  {t("editDialog.syncGoogle")}
+                </label>
               </div>
             )}
 
