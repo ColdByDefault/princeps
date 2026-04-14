@@ -48,6 +48,7 @@ type CreateMeetingDialogProps = {
   availableContacts: ContactRecord[];
   hasGoogleCalendar?: boolean;
   initialScheduledAt?: string;
+  onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
 };
 
@@ -58,10 +59,16 @@ export function CreateMeetingDialog({
   availableContacts,
   hasGoogleCalendar = false,
   initialScheduledAt,
+  onOpenChange: onOpenChangeProp,
   children,
 }: CreateMeetingDialogProps) {
   const t = useTranslations("meetings");
   const [open, setOpen] = useState(false);
+
+  function handleOpenChange(v: boolean) {
+    setOpen(v);
+    onOpenChangeProp?.(v);
+  }
   const [title, setTitle] = useState("");
   const [scheduledAt, setScheduledAt] = useState(initialScheduledAt ?? "");
   const [durationMin, setDurationMin] = useState("");
@@ -114,7 +121,7 @@ export function CreateMeetingDialog({
     });
 
     if (ok) {
-      setOpen(false);
+      handleOpenChange(false);
       resetForm();
     }
   }
@@ -151,7 +158,7 @@ export function CreateMeetingDialog({
       <Dialog
         open={open}
         onOpenChange={(v) => {
-          setOpen(v);
+          handleOpenChange(v);
           if (!v) resetForm();
         }}
       >
@@ -381,7 +388,7 @@ export function CreateMeetingDialog({
                 type="button"
                 variant="ghost"
                 onClick={() => {
-                  setOpen(false);
+                  handleOpenChange(false);
                   resetForm();
                 }}
                 className="cursor-pointer"

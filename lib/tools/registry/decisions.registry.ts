@@ -46,7 +46,7 @@ export const decisionTools: ToolRegistryEntry[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Optional list of label names to attach. Labels that don't exist yet will be created automatically.",
+              "Label names to attach. Labels that don't exist yet will be created automatically. Always include any labels that are being applied to other items in the same message — labels are not optional when the user has established a labeling context.",
           },
           meetingId: {
             type: "string",

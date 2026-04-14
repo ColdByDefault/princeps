@@ -736,6 +736,7 @@
       "submit": "Speichern",
       "submitting": "Wird gespeichert\u2026",
       "cancel": "Abbrechen",
+      "syncGoogle": "Auch zu Google Calendar hinzuf\u00fcgen",
       "success": "Meeting gespeichert.",
       "error": "Meeting konnte nicht gespeichert werden."
     },

@@ -60,6 +60,7 @@ type CalendarDrawerProps = {
   goals: { id: string; title: string }[];
   contacts: ContactRecord[];
   loading: boolean;
+  hasGoogleCalendar?: boolean;
   // Task mutations
   creatingTask: boolean;
   createTask: (input: {
@@ -111,6 +112,7 @@ type CalendarDrawerProps = {
       labelIds: string[];
       participantContactIds: string[];
       linkedTaskIds: string[];
+      pushToGoogle: boolean;
     }>,
   ) => Promise<boolean>;
   deletingMeeting: string | null;
@@ -147,6 +149,7 @@ export function CalendarDrawer({
   goals,
   contacts,
   loading,
+  hasGoogleCalendar = false,
   creatingTask,
   createTask,
   updatingTask,
@@ -169,14 +172,18 @@ export function CalendarDrawer({
   const [editTask, setEditTask] = useState<TaskRecord | null>(null);
   const [editTaskOpen, setEditTaskOpen] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
+  const [createTaskOpen, setCreateTaskOpen] = useState(false);
 
   const [viewMeeting, setViewMeeting] = useState<MeetingRecord | null>(null);
   const [viewMeetingOpen, setViewMeetingOpen] = useState(false);
   const [editMeeting, setEditMeeting] = useState<MeetingRecord | null>(null);
   const [editMeetingOpen, setEditMeetingOpen] = useState(false);
   const [deleteMeetingId, setDeleteMeetingId] = useState<string | null>(null);
+  const [createMeetingOpen, setCreateMeetingOpen] = useState(false);
 
   const anyChildOpen =
+    createTaskOpen ||
+    createMeetingOpen ||
     viewTaskOpen ||
     editTaskOpen ||
     deleteTaskId !== null ||
@@ -387,6 +394,7 @@ export function CalendarDrawer({
                     availableLabels={labels}
                     availableGoals={goals}
                     initialDueDate={initialDueDateStr}
+                    onOpenChange={setCreateTaskOpen}
                   >
                     <Button
                       type="button"
@@ -439,6 +447,7 @@ export function CalendarDrawer({
                                     size="icon-sm"
                                     aria-label={tTasks("viewLabel")}
                                     onClick={() => openViewTask(task)}
+                                    disabled={anyChildOpen}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -460,6 +469,7 @@ export function CalendarDrawer({
                                     size="icon-sm"
                                     aria-label={tTasks("editLabel")}
                                     onClick={() => openEditTask(task)}
+                                    disabled={anyChildOpen}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -484,7 +494,9 @@ export function CalendarDrawer({
                                       closeAllDialogs();
                                       setDeleteTaskId(task.id);
                                     }}
-                                    disabled={deletingTask === task.id}
+                                    disabled={
+                                      anyChildOpen || deletingTask === task.id
+                                    }
                                     className="cursor-pointer text-destructive hover:text-destructive"
                                   />
                                 }
@@ -520,6 +532,8 @@ export function CalendarDrawer({
                     availableLabels={labels}
                     availableContacts={contacts}
                     initialScheduledAt={initialScheduledAtStr}
+                    hasGoogleCalendar={hasGoogleCalendar}
+                    onOpenChange={setCreateMeetingOpen}
                   >
                     <Button
                       type="button"
@@ -569,6 +583,7 @@ export function CalendarDrawer({
                                     size="icon-sm"
                                     aria-label={tMeetings("detailLabel")}
                                     onClick={() => openViewMeeting(meeting)}
+                                    disabled={anyChildOpen}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -590,6 +605,7 @@ export function CalendarDrawer({
                                     size="icon-sm"
                                     aria-label={tMeetings("editLabel")}
                                     onClick={() => openEditMeeting(meeting)}
+                                    disabled={anyChildOpen}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -614,7 +630,10 @@ export function CalendarDrawer({
                                       closeAllDialogs();
                                       setDeleteMeetingId(meeting.id);
                                     }}
-                                    disabled={deletingMeeting === meeting.id}
+                                    disabled={
+                                      anyChildOpen ||
+                                      deletingMeeting === meeting.id
+                                    }
                                     className="cursor-pointer text-destructive hover:text-destructive"
                                   />
                                 }
@@ -706,6 +725,7 @@ export function CalendarDrawer({
         availableLabels={labels}
         availableContacts={contacts}
         availableTasks={tasks}
+        hasGoogleCalendar={hasGoogleCalendar}
       />
 
       {/* ── Delete Task Confirmation ── */}

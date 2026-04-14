@@ -21,7 +21,8 @@ export const taskTools: ToolRegistryEntry[] = [
         properties: {
           title: {
             type: "string",
-            description: "Short, clear task title (required).",
+            description:
+              "Short task title — 3 to 7 words maximum. Never put full sentences or context in the title; use `notes` for details.",
           },
           notes: {
             type: "string",

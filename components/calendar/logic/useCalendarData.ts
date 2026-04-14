@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import type {
   TaskRecord,
@@ -55,6 +55,7 @@ type MeetingUpdateInput = Partial<{
   labelIds: string[];
   participantContactIds: string[];
   linkedTaskIds: string[];
+  pushToGoogle: boolean;
 }>;
 
 type Translations = {
@@ -79,7 +80,6 @@ export function useCalendarData(t: Translations) {
   const [goals, setGoals] = useState<{ id: string; title: string }[]>([]);
   const [contacts, setContacts] = useState<ContactRecord[]>([]);
   const [loading, setLoading] = useState(false);
-  const loadedRef = useRef(false);
 
   // Mutation loading states
   const [creatingTask, setCreatingTask] = useState(false);
@@ -90,7 +90,6 @@ export function useCalendarData(t: Translations) {
   const [deletingMeeting, setDeletingMeeting] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (loadedRef.current) return;
     setLoading(true);
     try {
       const [tasksRes, meetingsRes, labelsRes, goalsRes, contactsRes] =
@@ -130,7 +129,6 @@ export function useCalendarData(t: Translations) {
         };
         setContacts(data.contacts);
       }
-      loadedRef.current = true;
     } finally {
       setLoading(false);
     }

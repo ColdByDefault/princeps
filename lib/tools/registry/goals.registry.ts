@@ -34,7 +34,8 @@ export const goalTools: ToolRegistryEntry[] = [
           },
           targetDate: {
             type: "string",
-            description: "Optional ISO 8601 deadline for the goal.",
+            description:
+              "Optional ISO 8601 deadline for the goal (e.g. 2026-07-01T00:00:00Z). Include the time and Z suffix.",
           },
           labelNames: {
             type: "array",

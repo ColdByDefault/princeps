@@ -64,7 +64,7 @@ export async function findTodayGreeting(
   const today = todayUtc();
 
   const rows = await db.notification.findMany({
-    where: { userId, category: "daily_greeting", dismissed: false },
+    where: { userId, category: "daily_greeting" },
     select: NOTIFICATION_SELECT,
     orderBy: { createdAt: "desc" },
     take: 10,

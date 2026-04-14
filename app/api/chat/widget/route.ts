@@ -131,20 +131,38 @@ export async function POST(req: Request) {
       const reportDetails: ReportDetailCall[] = [];
 
       try {
-        const toolCalls: LLMToolCall[] = [];
+        // Multi-round tool calling: up to MAX_TOOL_ROUNDS rounds of tool execution.
+        // Round 1 creates base entities; round 2 can link them using returned IDs.
+        const MAX_TOOL_ROUNDS = 2;
+        const conversationMessages: LLMMessage[] = [...llmMessages];
+        let toolRound = 0;
+        let allToolsSucceeded = true;
+        let hadToolCalls = false;
 
-        // First LLM pass — collect tokens and any tool call requests
-        for await (const chunk of streamChat(llmMessages, chatOptions)) {
-          if (typeof chunk === "string") {
-            send({ type: "token", text: chunk });
-            assistantContent += chunk;
-          } else {
-            toolCalls.push(chunk);
+        while (toolRound <= MAX_TOOL_ROUNDS) {
+          const toolCalls: LLMToolCall[] = [];
+          const isLastRound = toolRound === MAX_TOOL_ROUNDS;
+          const { tools: _noTools, ...baseOptions } = chatOptions;
+          const passOptions: LLMChatOptions = isLastRound
+            ? baseOptions
+            : chatOptions;
+
+          for await (const chunk of streamChat(
+            conversationMessages,
+            passOptions,
+          )) {
+            if (typeof chunk === "string") {
+              send({ type: "token", text: chunk });
+              assistantContent += chunk;
+            } else {
+              toolCalls.push(chunk);
+            }
           }
-        }
 
-        // If the LLM requested tool calls, execute them and do a second pass
-        if (toolCalls.length > 0) {
+          if (toolCalls.length === 0) break;
+
+          hadToolCalls = true;
+
           // Widget-specific daily tool gate
           const widgetToolCheck = await enforceWidgetTools(
             session.user.id,
@@ -171,15 +189,12 @@ export async function POST(req: Request) {
             return;
           }
 
-          const followUp: LLMMessage[] = [...llmMessages];
-
-          followUp.push({
+          conversationMessages.push({
             role: "assistant",
             content: null,
             tool_calls: toolCalls,
           });
 
-          let allToolsSucceeded = true;
           for (const toolCall of toolCalls) {
             const result = await executeToolCall(session.user.id, toolCall);
             if (!result.ok) allToolsSucceeded = false;
@@ -200,34 +215,41 @@ export async function POST(req: Request) {
                 result,
               ),
             );
-            followUp.push({
+            conversationMessages.push({
               role: "tool",
               tool_call_id: toolCall.id,
               content: resultContent,
             });
           }
 
-          // Read tools (list_*, get_*) need a second LLM pass to surface results.
-          // Write tools that all succeeded can skip it and just reply "Done".
+          // After the first round of write-only tools, check if we still need
+          // another LLM pass (read tool present, failures, or more rounds needed).
           const hasReadTool = toolCalls.some(
             (tc) =>
               tc.function.name.startsWith("list_") ||
               tc.function.name.startsWith("get_"),
           );
 
-          if (allToolsSucceeded && !hasReadTool) {
-            // All write tools succeeded — skip second LLM pass and reply with "Done"
+          if (allToolsSucceeded && !hasReadTool && toolRound === 0) {
+            // Round 1 was all writes and succeeded — do a quick linking round
+            // so the LLM can link entities, then we'll break out.
+          }
+
+          toolRound++;
+        }
+
+        // If all tools succeeded and no text was streamed yet, a "Done" shortcut
+        // applies only when there were tool calls and no text response is needed.
+        if (hadToolCalls && !assistantContent && allToolsSucceeded) {
+          const lastRoundCalls = reportDetails.filter(
+            (d) =>
+              d.tool.startsWith("update_") ||
+              d.tool.startsWith("list_") ||
+              d.tool.startsWith("get_"),
+          );
+          if (lastRoundCalls.length === 0) {
             send({ type: "token", text: "Done" });
             assistantContent = "Done";
-          } else {
-            // Read tool present, or at least one tool failed — let the LLM respond
-            const { tools: _tools, ...baseOptions } = chatOptions;
-            for await (const chunk of streamChat(followUp, baseOptions)) {
-              if (typeof chunk === "string") {
-                send({ type: "token", text: chunk });
-                assistantContent += chunk;
-              }
-            }
           }
         }
       } catch (err) {
@@ -316,8 +338,12 @@ function buildDetailCall(
 
   if (Array.isArray(data?.["contacts"]))
     kv["contacts"] = (data["contacts"] as unknown[]).length;
-  if (Array.isArray(data?.["labels"]))
-    kv["labels"] = (data["labels"] as unknown[]).length;
+  if (Array.isArray(data?.["labels"])) {
+    const labelNames = (data["labels"] as Array<Record<string, unknown>>)
+      .map((l) => (typeof l["name"] === "string" ? l["name"] : null))
+      .filter(Boolean);
+    kv["labels"] = labelNames.length > 0 ? labelNames.join(", ") : 0;
+  }
 
   if (Array.isArray(data)) kv["count"] = data.length;
 

@@ -333,6 +333,7 @@ export function MeetingsShell({
         availableLabels={availableLabels}
         availableContacts={availableContacts}
         availableTasks={availableTasks}
+        hasGoogleCalendar={hasGoogleCalendar}
       />
 
       {/* Detail dialog */}
