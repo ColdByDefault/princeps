@@ -18,7 +18,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 
 ## Backlog
 
-- [ ] **Extend Notifications** — Currently only "User Greetings" on Login (once or twice per day ?? check!), and once on new sign-up. IMPORTANT: there is a toggle in settings for greetings notification to enable/disable.
+- [ ] **Extend Notifications** — but first fix greetings. Currently only "User Greetings" on Login (once or twice per day ?? check!), and once on new sign-up. IMPORTANT: there is a toggle in settings for greetings notification to enable/disable.
 - [ ] **One-time data wipe** — premium/enterprise users can request a full wipe of `Chunk` + `MemoryEntry` data once every 6 months. Does not reset monthly usage limits.
   > Needs and admin and a request from user to admin.
 - [ ] **Refactor README**.
@@ -28,7 +28,7 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **Almight-Script** — a Linux/Powershell/Bash script to set up a local development environment with one command: install dependencies, create .env file and copy content from .env.example to it, start docker, generate/migrate data, seed test data, and start dev server. Instead of having to run multiple commands, developers can just run this script and be ready to go.
 - [ ] **Verification** — Show Email verification badge on user profile (in `/profile` page).
 - [ ] **Improve Calendar Drawer** — Meetings creation has no integrations connected, this could be Meetings Create Form.check everything again.
-- [ ] \*\* \*\* —
+- [ ] **Background Thread** — Reduce  animation speed.
 - [ ] \*\* \*\* —
 - [ ] \*\* \*\* —
 - [ ] \*\* \*\* —

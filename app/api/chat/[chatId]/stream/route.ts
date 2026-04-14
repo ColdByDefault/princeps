@@ -140,21 +140,37 @@ export async function POST(req: Request, { params }: Params) {
       const reportDetails: ReportDetailCall[] = [];
 
       try {
-        const toolCalls: LLMToolCall[] = [];
+        // Multi-round tool calling: up to MAX_TOOL_ROUNDS rounds of tool execution
+        // before the final text-only response pass. This allows the LLM to use
+        // IDs returned by round-1 tool calls (e.g. link tasks to a goal).
+        const MAX_TOOL_ROUNDS = 3;
+        const conversationMessages: LLMMessage[] = [...llmMessages];
+        let toolRound = 0;
 
-        // First LLM pass — collect tokens and any tool call requests
-        for await (const chunk of streamChat(llmMessages, chatOptions)) {
-          if (typeof chunk === "string") {
-            send({ type: "token", text: chunk });
-            assistantContent += chunk;
-          } else {
-            toolCalls.push(chunk);
+        while (toolRound <= MAX_TOOL_ROUNDS) {
+          const toolCalls: LLMToolCall[] = [];
+          // Final pass strips tools so the LLM is forced to produce a text response.
+          const isLastRound = toolRound === MAX_TOOL_ROUNDS;
+          const { tools: _noTools, ...baseOptions } = chatOptions;
+          const passOptions: LLMChatOptions = isLastRound
+            ? baseOptions
+            : chatOptions;
+
+          for await (const chunk of streamChat(
+            conversationMessages,
+            passOptions,
+          )) {
+            if (typeof chunk === "string") {
+              send({ type: "token", text: chunk });
+              assistantContent += chunk;
+            } else {
+              toolCalls.push(chunk);
+            }
           }
-        }
 
-        // If the LLM requested tool calls, execute them and do a second pass
-        // so the LLM can produce a text response after seeing the results.
-        if (toolCalls.length > 0) {
+          // No tool calls — LLM is done (produced a text response).
+          if (toolCalls.length === 0) break;
+
           // Gate on monthly tool call budget before executing
           const toolCheck = await enforceToolCallsMonthly(
             session.user.id,
@@ -168,10 +184,8 @@ export async function POST(req: Request, { params }: Params) {
             return;
           }
 
-          const followUp: LLMMessage[] = [...llmMessages];
-
           // Append the assistant's tool_calls turn (OpenAI requires this in history)
-          followUp.push({
+          conversationMessages.push({
             role: "assistant",
             content: null,
             tool_calls: toolCalls,
@@ -183,7 +197,6 @@ export async function POST(req: Request, { params }: Params) {
             const resultContent = result.ok
               ? JSON.stringify(result.data)
               : `Error: ${result.error}`;
-            // Accumulate chars for approximate token accounting
             toolCallChars +=
               (toolCall.function.arguments?.length ?? 0) + resultContent.length;
             send({
@@ -191,7 +204,6 @@ export async function POST(req: Request, { params }: Params) {
               name: toolCall.function.name,
               record: result.ok ? (result.data as Record<string, unknown>) : {},
             });
-            // Collect compact KV for the report
             reportDetails.push(
               buildDetailCall(
                 toolCall.function.name,
@@ -199,21 +211,14 @@ export async function POST(req: Request, { params }: Params) {
                 result,
               ),
             );
-            followUp.push({
+            conversationMessages.push({
               role: "tool",
               tool_call_id: toolCall.id,
               content: resultContent,
             });
           }
 
-          // Second LLM pass — no tools to avoid infinite loops
-          const { tools: _tools, ...baseOptions } = chatOptions;
-          for await (const chunk of streamChat(followUp, baseOptions)) {
-            if (typeof chunk === "string") {
-              send({ type: "token", text: chunk });
-              assistantContent += chunk;
-            }
-          }
+          toolRound++;
         }
       } catch (err) {
         send({
@@ -309,8 +314,12 @@ function buildDetailCall(
 
   if (Array.isArray(data?.["contacts"]))
     kv["contacts"] = (data["contacts"] as unknown[]).length;
-  if (Array.isArray(data?.["labels"]))
-    kv["labels"] = (data["labels"] as unknown[]).length;
+  if (Array.isArray(data?.["labels"])) {
+    const labelNames = (data["labels"] as Array<Record<string, unknown>>)
+      .map((l) => (typeof l["name"] === "string" ? l["name"] : null))
+      .filter(Boolean);
+    kv["labels"] = labelNames.length > 0 ? labelNames.join(", ") : 0;
+  }
 
   // Count from list results
   if (Array.isArray(data)) kv["count"] = data.length;

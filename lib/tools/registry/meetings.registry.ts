@@ -15,7 +15,7 @@ export const meetingTools: ToolRegistryEntry[] = [
     function: {
       name: "create_meeting",
       description:
-        "Create a new meeting for the user. Use when the user asks to schedule, add, or book a meeting. Requires a title and scheduled date/time.",
+        "Create a new meeting for the user. Use when the user asks to schedule, add, or book a meeting. Requires a title and scheduled date/time. Only set pushToGoogle to true if the user explicitly asks to sync to Google Calendar.",
       parameters: {
         type: "object",
         properties: {
@@ -56,6 +56,11 @@ export const meetingTools: ToolRegistryEntry[] = [
             items: { type: "string" },
             description:
               "Contact IDs to add as participants. If a participant name is mentioned and no contact exists yet, inform the user and offer to create the contact first before adding them.",
+          },
+          pushToGoogle: {
+            type: "boolean",
+            description:
+              "Set to true ONLY when the user explicitly asks to sync or add this meeting to Google Calendar. Do NOT set this by default.",
           },
         },
         required: ["title", "scheduledAt"],
