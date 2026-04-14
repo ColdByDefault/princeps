@@ -45,3 +45,6 @@ prisma/generated
 *.tsbuildinfo
 next-env.d.ts
 
+# local vscode settings & MCP config
+.vscode
+
