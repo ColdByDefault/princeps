@@ -22,6 +22,19 @@ export function useNotifications() {
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
+  const refresh = useCallback(async () => {
+    try {
+      const res = await fetch("/api/notifications");
+      if (!res.ok) return;
+      const data = (await res.json()) as {
+        notifications: NotificationRecord[];
+      };
+      setNotifications(data.notifications);
+    } catch {
+      // Non-critical
+    }
+  }, []);
+
   // Initial load + greeting (greeting fires at most once per browser tab session)
   useEffect(() => {
     async function fetchNotifications() {
@@ -63,7 +76,16 @@ export function useNotifications() {
       sessionStorage.setItem(GREETING_SESSION_KEY, "1");
       void fireGreeting();
     }
-  }, []);
+
+    // Re-fetch when a chat stream signals new server-side notifications were created.
+    function handleRefresh() {
+      void refresh();
+    }
+    window.addEventListener("notifications:refresh", handleRefresh);
+    return () => {
+      window.removeEventListener("notifications:refresh", handleRefresh);
+    };
+  }, [refresh]);
 
   const markRead = useCallback(async (id: string) => {
     // Optimistic
@@ -120,5 +142,6 @@ export function useNotifications() {
     markRead,
     deleteOne,
     deleteAll,
+    refresh,
   };
 }

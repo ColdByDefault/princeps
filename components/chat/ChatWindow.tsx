@@ -158,6 +158,7 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
       setStreaming(false);
       textareaRef.current?.focus();
       window.dispatchEvent(new CustomEvent("chat:updated"));
+      window.dispatchEvent(new CustomEvent("notifications:refresh"));
     }
   };
 

@@ -213,7 +213,7 @@ const Threads: React.FC<ThreadsProps> = ({
         uniforms.uMouse.value[0] = 0.5;
         uniforms.uMouse.value[1] = 0.5;
       }
-      uniforms.iTime.value = t * 0.001;
+      uniforms.iTime.value = t * 0.0005;
 
       renderer.render({ scene: mesh });
       animationFrameId.current = requestAnimationFrame(update);

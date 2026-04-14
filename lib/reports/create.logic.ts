@@ -11,6 +11,8 @@ import { REPORT_SELECT, toReportRecord } from "./shared.logic";
 import type { AssistantReportRecord } from "./shared.logic";
 import type { Prisma } from "@/prisma/generated/prisma/client";
 
+const TOOL_PLURAL = (n: number) => (n === 1 ? "tool" : "tools");
+
 /**
  * Creates a new AssistantReport row.
  * Only called from server-side stream routes — never exposed to the user directly.
@@ -36,5 +38,36 @@ export async function createReport(
     select: REPORT_SELECT,
   });
 
-  return toReportRecord(row);
+  const record = toReportRecord(row);
+
+  // Fire-and-forget system notification — never blocks or throws.
+  _fireReportNotification(
+    userId,
+    row.id,
+    record.toolCallCount,
+    record.tokenUsage,
+  );
+
+  return record;
+}
+
+function _fireReportNotification(
+  userId: string,
+  reportId: string,
+  toolCallCount: number,
+  tokenUsage: number,
+): void {
+  const body = `${toolCallCount} ${TOOL_PLURAL(toolCallCount)} called · ${tokenUsage} tokens used`;
+  db.notification
+    .create({
+      data: {
+        userId,
+        category: "report_generated",
+        source: "system",
+        title: "Report generated",
+        body,
+        metadata: { reportId },
+      },
+    })
+    .catch(() => {});
 }

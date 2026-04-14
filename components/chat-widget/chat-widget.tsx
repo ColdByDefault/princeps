@@ -314,6 +314,7 @@ export function ChatWidget({
     } finally {
       setThinking(false);
       requestAnimationFrame(() => inputRef.current?.focus());
+      window.dispatchEvent(new CustomEvent("notifications:refresh"));
     }
   }, [input, thinking]);
 
