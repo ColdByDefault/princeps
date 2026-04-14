@@ -172,14 +172,18 @@ export function CalendarDrawer({
   const [editTask, setEditTask] = useState<TaskRecord | null>(null);
   const [editTaskOpen, setEditTaskOpen] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
+  const [createTaskOpen, setCreateTaskOpen] = useState(false);
 
   const [viewMeeting, setViewMeeting] = useState<MeetingRecord | null>(null);
   const [viewMeetingOpen, setViewMeetingOpen] = useState(false);
   const [editMeeting, setEditMeeting] = useState<MeetingRecord | null>(null);
   const [editMeetingOpen, setEditMeetingOpen] = useState(false);
   const [deleteMeetingId, setDeleteMeetingId] = useState<string | null>(null);
+  const [createMeetingOpen, setCreateMeetingOpen] = useState(false);
 
   const anyChildOpen =
+    createTaskOpen ||
+    createMeetingOpen ||
     viewTaskOpen ||
     editTaskOpen ||
     deleteTaskId !== null ||
@@ -390,6 +394,7 @@ export function CalendarDrawer({
                     availableLabels={labels}
                     availableGoals={goals}
                     initialDueDate={initialDueDateStr}
+                    onOpenChange={setCreateTaskOpen}
                   >
                     <Button
                       type="button"
@@ -524,6 +529,7 @@ export function CalendarDrawer({
                     availableContacts={contacts}
                     initialScheduledAt={initialScheduledAtStr}
                     hasGoogleCalendar={hasGoogleCalendar}
+                    onOpenChange={setCreateMeetingOpen}
                   >
                     <Button
                       type="button"

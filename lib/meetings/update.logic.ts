@@ -105,7 +105,7 @@ export async function updateMeeting(
       try {
         const googleEventId = await createCalendarEvent(userId, {
           title: meeting.title,
-          scheduledAt: meeting.scheduledAt,
+          scheduledAt: new Date(meeting.scheduledAt),
           durationMin: meeting.durationMin,
           location: meeting.location,
           agenda: meeting.agenda,

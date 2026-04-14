@@ -43,6 +43,7 @@ type CreateTaskDialogProps = {
   availableLabels: LabelOptionRecord[];
   availableGoals: { id: string; title: string }[];
   initialDueDate?: string;
+  onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
 };
 
@@ -52,10 +53,16 @@ export function CreateTaskDialog({
   availableLabels,
   availableGoals,
   initialDueDate,
+  onOpenChange: onOpenChangeProp,
   children,
 }: CreateTaskDialogProps) {
   const t = useTranslations("tasks");
   const [open, setOpen] = useState(false);
+
+  function handleOpenChange(v: boolean) {
+    setOpen(v);
+    onOpenChangeProp?.(v);
+  }
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
   const [priority, setPriority] = useState("normal");
@@ -89,7 +96,7 @@ export function CreateTaskDialog({
     });
 
     if (ok) {
-      setOpen(false);
+      handleOpenChange(false);
       setTitle("");
       setNotes("");
       setPriority("normal");
@@ -100,7 +107,7 @@ export function CreateTaskDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger render={children as React.ReactElement} />
       <DialogContent>
         <DialogHeader>

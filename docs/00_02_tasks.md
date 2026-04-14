@@ -12,24 +12,27 @@ Tasks are grouped by branch. One branch = one PR. Small related fixes share a si
 - [ ] **#47 Location** — Allow user to search for their city. no pre-defined list of cities, but can search for any city in the world. This is used for weather. 
 - [ ] **#48 Voice Input / Transcription Engine** — For Chat-Widget Only.
 - [ ] **#49 Web Research Agent** — the agent can proactively browse the web, compile a list of options, check their reviews, and present a summary in your next briefing.
-- [ ] **#50 ** —
-- [ ] **#51 ** —
-- [ ] **#52 ** —
+- [ ] **#50 Chat Sidebar** — Collapsible grouped sub-menus, instead of one long list.
+- [ ] **#51 Almight-Script** — a Linux/Powershell/Bash script to set up a local development environment with one command: install dependencies, create .env file and copy content from .env.example to it, start docker, generate/migrate data, seed test data, and start dev server. Instead of having to run multiple commands, developers can just run this script and be ready to go.
+- [ ] **#52 Verification** — Show Email verification badge on user profile (in `/profile` page), no verfication plug-in yet, because i dont have SMTP set up, but can be done manually by setting `isVerified` to true in the database for now. This is a placeholder until we implement a proper email verification flow.
+- [ ] **#52 **
+- [ ] **#52 **
+- [ ] **#52 **
+- [ ] **#52 **
+- [ ] **#52 **
+- [ ] **#52 **
+- [ ] **#52 **
+- [ ] **#52 **
+- [ ] **#52 **
+- [ ] **#52 **
+- [ ] **#52 **
 
 ## Backlog
 
-- [ ] **Extend Notifications** — but first check/improve greetings. Currently only "User Greetings" on Login (once or twice per day ?? check!), and once on new sign-up. IMPORTANT: there is a toggle in settings for greetings notification to enable/disable.
 - [ ] **One-time data wipe** — premium/enterprise users can request a full wipe of `Chunk` + `MemoryEntry` data once every 6 months. Does not reset monthly usage limits.
   > Needs and admin and a request from user to admin.
 - [ ] **Refactor README**.
 - [ ] **Admin Dashboard** — user management, content moderation, system health, usage analytics. No value without real users.
 - [ ] **Testing infrastructure** — no `jest`/`vitest` config anywhere. Defer until the feature set stabilizes.
 - [ ] **Extend Knowledge Base** — currently supports `.txt` and `.md` files. Extend to support more file types (e.g. PDF, Word, Excel, email formats)
-- [ ] **Almight-Script** — a Linux/Powershell/Bash script to set up a local development environment with one command: install dependencies, create .env file and copy content from .env.example to it, start docker, generate/migrate data, seed test data, and start dev server. Instead of having to run multiple commands, developers can just run this script and be ready to go.
-- [ ] **Verification** — Show Email verification badge on user profile (in `/profile` page), no verfication plug-in yet, because i dont have SMTP set up, but can be done manually by setting `isVerified` to true in the database for now. This is a placeholder until we implement a proper email verification flow.
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
-- [ ] \*\* \*\* —
+- [ ] **LLM Models** — allow user to switch between at least 3 Models based on their Plan. For example: GPT-3.5 (free), GPT-4 (premium). Only for OpenAi provider, grok and ollama stay as they are (only one model defined). This task is for chat LLM not embedding.
