@@ -447,6 +447,7 @@ export function CalendarDrawer({
                                     size="icon-sm"
                                     aria-label={tTasks("viewLabel")}
                                     onClick={() => openViewTask(task)}
+                                    disabled={anyChildOpen}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -468,6 +469,7 @@ export function CalendarDrawer({
                                     size="icon-sm"
                                     aria-label={tTasks("editLabel")}
                                     onClick={() => openEditTask(task)}
+                                    disabled={anyChildOpen}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -492,7 +494,9 @@ export function CalendarDrawer({
                                       closeAllDialogs();
                                       setDeleteTaskId(task.id);
                                     }}
-                                    disabled={deletingTask === task.id}
+                                    disabled={
+                                      anyChildOpen || deletingTask === task.id
+                                    }
                                     className="cursor-pointer text-destructive hover:text-destructive"
                                   />
                                 }
@@ -579,6 +583,7 @@ export function CalendarDrawer({
                                     size="icon-sm"
                                     aria-label={tMeetings("detailLabel")}
                                     onClick={() => openViewMeeting(meeting)}
+                                    disabled={anyChildOpen}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -600,6 +605,7 @@ export function CalendarDrawer({
                                     size="icon-sm"
                                     aria-label={tMeetings("editLabel")}
                                     onClick={() => openEditMeeting(meeting)}
+                                    disabled={anyChildOpen}
                                     className="cursor-pointer"
                                   />
                                 }
@@ -624,7 +630,10 @@ export function CalendarDrawer({
                                       closeAllDialogs();
                                       setDeleteMeetingId(meeting.id);
                                     }}
-                                    disabled={deletingMeeting === meeting.id}
+                                    disabled={
+                                      anyChildOpen ||
+                                      deletingMeeting === meeting.id
+                                    }
                                     className="cursor-pointer text-destructive hover:text-destructive"
                                   />
                                 }

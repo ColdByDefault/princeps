@@ -81,6 +81,7 @@ export function CalendarDrawerProvider({
       {children}
       <Sheet
         open={open}
+        disablePointerDismissal={anyChildDialogOpen}
         onOpenChange={(v) => {
           if (!v && anyChildDialogOpen) return;
           if (!v) closeCalendar();
