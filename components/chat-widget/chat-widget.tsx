@@ -14,11 +14,15 @@ import {
   ChevronDown,
   CheckCircle2,
   Plus,
+  Mic,
+  MicOff,
+  Loader2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { cn } from "@/lib/utils";
+import { useVoiceInput } from "./logic/useVoiceInput";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface ChatWidgetProps {
@@ -66,6 +70,7 @@ export function ChatWidget({
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [sessionLoaded, setSessionLoaded] = useState(false);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -75,6 +80,31 @@ export function ChatWidget({
   // Stable ref so the load effect can read assistantName without re-running
   const assistantNameRef = useRef(assistantName);
   assistantNameRef.current = assistantName;
+
+  const voiceErrorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleTranscribed = useCallback((text: string) => {
+    setInput((prev) => (prev ? `${prev} ${text}` : text));
+    requestAnimationFrame(() => inputRef.current?.focus());
+  }, []);
+
+  const handleVoiceError = useCallback(
+    (key: string) => {
+      const msg =
+        key === "micPermissionDenied"
+          ? t("micPermissionDenied")
+          : t("transcribeError");
+      setVoiceError(msg);
+      if (voiceErrorTimerRef.current) clearTimeout(voiceErrorTimerRef.current);
+      voiceErrorTimerRef.current = setTimeout(() => setVoiceError(null), 5_000);
+    },
+    [t],
+  );
+
+  const { voiceState, startRecording, stopRecording } = useVoiceInput({
+    onTranscribed: handleTranscribed,
+    onError: handleVoiceError,
+  });
 
   // Load session from sessionStorage once on mount. Uses a ref so the name
   // does not cause this effect to re-run (greeting sync is handled below).
@@ -510,19 +540,60 @@ export function ChatWidget({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKey}
-              placeholder="Ask me anything…"
-              disabled={thinking}
-              className="flex-1 rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
+              placeholder={t("placeholder")}
+              disabled={thinking || voiceState === "transcribing"}
+              className={cn(
+                "flex-1 rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50",
+                voiceState === "recording" &&
+                  "border-red-500 ring-1 ring-red-500",
+              )}
             />
+            {/* Mic button */}
+            <button
+              type="button"
+              onClick={
+                voiceState === "recording" ? stopRecording : startRecording
+              }
+              disabled={thinking || voiceState === "transcribing"}
+              aria-label={
+                voiceState === "recording"
+                  ? t("stopRecording")
+                  : t("startRecording")
+              }
+              title={
+                voiceState === "recording"
+                  ? t("stopRecording")
+                  : voiceState === "transcribing"
+                    ? t("transcribing")
+                    : t("startRecording")
+              }
+              className={cn(
+                "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl transition-all disabled:opacity-40",
+                voiceState === "recording"
+                  ? "animate-pulse bg-red-500 text-white hover:bg-red-600"
+                  : "bg-muted text-muted-foreground hover:bg-muted/70 hover:text-foreground",
+              )}
+            >
+              {voiceState === "transcribing" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : voiceState === "recording" ? (
+                <MicOff className="h-4 w-4" />
+              ) : (
+                <Mic className="h-4 w-4" />
+              )}
+            </button>
             <button
               onClick={send}
-              disabled={!input.trim() || thinking}
-              aria-label="Send"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
+              disabled={!input.trim() || thinking || voiceState !== "idle"}
+              aria-label={t("send")}
+              className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-primary text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
             >
               <Send className="h-4 w-4" />
             </button>
           </div>
+          {voiceError && (
+            <p className="mt-1.5 px-1 text-[11px] text-red-500">{voiceError}</p>
+          )}
         </div>
       </div>
 

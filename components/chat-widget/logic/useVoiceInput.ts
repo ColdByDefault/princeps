@@ -59,17 +59,23 @@ export function useVoiceInput({
     streamRef.current = stream;
     chunksRef.current = [];
 
-    let mimeType = "audio/webm";
-    if (!MediaRecorder.isTypeSupported(mimeType)) {
-      mimeType = "audio/ogg";
-      if (!MediaRecorder.isTypeSupported(mimeType)) {
-        mimeType = "";
-      }
-    }
+    // Pick the first MIME type the browser supports (codec-qualified for
+    // better quality; falls back to plain base types then the browser default).
+    const mimeTypeCandidates = [
+      "audio/webm;codecs=opus",
+      "audio/webm",
+      "audio/ogg;codecs=opus",
+      "audio/ogg",
+      "audio/mp4",
+    ];
+    const mimeType =
+      mimeTypeCandidates.find((t) => MediaRecorder.isTypeSupported(t)) ?? "";
 
     const mr = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
     mediaRecorderRef.current = mr;
 
+    // Use a timeslice so ondataavailable fires periodically — guarantees data
+    // arrives even on very short recordings or slow browsers.
     mr.ondataavailable = (e) => {
       if (e.data.size > 0) chunksRef.current.push(e.data);
     };
@@ -79,9 +85,17 @@ export function useVoiceInput({
       stream.getTracks().forEach((t) => t.stop());
       streamRef.current = null;
 
-      const blob = new Blob(chunksRef.current, {
-        type: mr.mimeType || "audio/webm",
-      });
+      // Use the actual recorded MIME type (may include codec qualifier)
+      const recordedMime = mr.mimeType || mimeType || "audio/webm";
+      const blob = new Blob(chunksRef.current, { type: recordedMime });
+
+      // Derive correct extension so Whisper can identify the container format
+      const baseMime = recordedMime.split(";")[0].trim();
+      const ext = baseMime.includes("ogg")
+        ? "ogg"
+        : baseMime.includes("mp4")
+          ? "mp4"
+          : "webm";
 
       setVoiceState("transcribing");
 
@@ -89,7 +103,7 @@ export function useVoiceInput({
         const form = new FormData();
         form.append(
           "audio",
-          new File([blob], "recording.webm", { type: blob.type }),
+          new File([blob], `recording.${ext}`, { type: baseMime }),
         );
 
         const res = await fetch("/api/chat/transcribe", {
@@ -117,7 +131,9 @@ export function useVoiceInput({
       }
     };
 
-    mr.start();
+    // 250 ms timeslice — small enough to not lose data if stop() is called
+    // quickly; large enough that we don't generate excessive chunks.
+    mr.start(250);
     setVoiceState("recording");
 
     timeoutRef.current = setTimeout(() => {

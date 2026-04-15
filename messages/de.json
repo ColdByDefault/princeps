@@ -370,6 +370,8 @@
   },
   "chatWidget": {
     "newChat": "Neuer Chat",
+    "placeholder": "Frag mich alles…",
+    "send": "Nachricht senden",
     "startRecording": "Spracheingabe starten",
     "stopRecording": "Aufnahme stoppen",
     "transcribing": "Wird transkribiert…",

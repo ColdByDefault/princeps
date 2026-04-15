@@ -370,6 +370,8 @@
   },
   "chatWidget": {
     "newChat": "New Chat",
+    "placeholder": "Ask me anything…",
+    "send": "Send message",
     "startRecording": "Start voice input",
     "stopRecording": "Stop recording",
     "transcribing": "Transcribing…",

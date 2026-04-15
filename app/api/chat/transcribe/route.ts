@@ -63,13 +63,22 @@ export async function POST(req: Request) {
     );
   }
 
-  // Build the multipart form for Whisper
+  // Build the multipart form for Whisper.
+  // Strip any codec qualifier (e.g. "audio/webm;codecs=opus" → "audio/webm")
+  // so Whisper receives a clean MIME type. Also derive the correct extension
+  // from the base MIME type — Whisper uses the filename to detect the container.
+  const rawMime = audioField.type || "audio/webm";
+  const baseMime = rawMime.split(";")[0].trim();
+  const ext = baseMime.includes("ogg")
+    ? "ogg"
+    : baseMime.includes("mp4")
+      ? "mp4"
+      : "webm";
+
   const whisperForm = new FormData();
   whisperForm.append(
     "file",
-    new File([audioField], "recording.webm", {
-      type: audioField.type || "audio/webm",
-    }),
+    new File([audioField], `recording.${ext}`, { type: baseMime }),
   );
   whisperForm.append("model", "whisper-1");
 
@@ -91,10 +100,16 @@ export async function POST(req: Request) {
   }
 
   if (!whisperRes.ok) {
-    return NextResponse.json(
-      { error: "Transcription failed. Please try again." },
-      { status: 502 },
-    );
+    let whisperError = "Transcription failed.";
+    try {
+      const errBody = (await whisperRes.json()) as {
+        error?: { message?: string };
+      };
+      if (errBody?.error?.message) whisperError = errBody.error.message;
+    } catch {
+      // ignore unparseable body
+    }
+    return NextResponse.json({ error: whisperError }, { status: 502 });
   }
 
   const result = (await whisperRes.json()) as { text?: string };
