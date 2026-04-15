@@ -369,7 +369,12 @@
     "taskDetailDescription": "Aufgaben-Details"
   },
   "chatWidget": {
-    "newChat": "Neuer Chat"
+    "newChat": "Neuer Chat",
+    "startRecording": "Spracheingabe starten",
+    "stopRecording": "Aufnahme stoppen",
+    "transcribing": "Wird transkribiert…",
+    "micPermissionDenied": "Mikrofonzugriff verweigert. Bitte erlauben Sie den Zugriff in Ihren Browsereinstellungen.",
+    "transcribeError": "Sprachtranskription fehlgeschlagen. Bitte erneut versuchen."
   },
   "shell": {
     "nav": {

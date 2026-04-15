@@ -369,7 +369,12 @@
     "taskDetailDescription": "Task details"
   },
   "chatWidget": {
-    "newChat": "New Chat"
+    "newChat": "New Chat",
+    "startRecording": "Start voice input",
+    "stopRecording": "Stop recording",
+    "transcribing": "Transcribing…",
+    "micPermissionDenied": "Microphone access denied. Please allow it in your browser settings.",
+    "transcribeError": "Voice transcription failed. Please try again."
   },
   "shell": {
     "nav": {
