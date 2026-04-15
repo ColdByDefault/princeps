@@ -101,8 +101,18 @@ export function ChatWidget({
     [t],
   );
 
+  // Defined before useVoiceInput so it can be passed as onAutoSend
+  // (actual send logic is below — this ref avoids a circular dependency)
+  const sendRef = useRef<((textOverride?: string) => Promise<void>) | null>(
+    null,
+  );
+  const handleAutoSend = useCallback((text: string) => {
+    sendRef.current?.(text);
+  }, []);
+
   const { voiceState, startRecording, stopRecording } = useVoiceInput({
     onTranscribed: handleTranscribed,
+    onAutoSend: handleAutoSend,
     onError: handleVoiceError,
   });
 
@@ -191,162 +201,171 @@ export function ChatWidget({
     ]);
   }, [STORAGE_KEY, assistantName]);
 
-  const send = useCallback(async () => {
-    const text = input.trim();
-    if (!text || thinking) return;
+  const send = useCallback(
+    async (textOverride?: string) => {
+      const text = (textOverride ?? input).trim();
+      if (!text || thinking) return;
 
-    const userMsg: Message = {
-      id: Date.now(),
-      text,
-      sender: "user",
-      time: getTime(),
-    };
+      const userMsg: Message = {
+        id: Date.now(),
+        text,
+        sender: "user",
+        time: getTime(),
+      };
 
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
-    setThinking(true);
-    setProgress(0);
+      setMessages((prev) => [...prev, userMsg]);
+      setInput("");
+      setThinking(true);
+      setProgress(0);
 
-    // Build history from all messages currently in view (excluding the greeting and action cards)
-    const history: HistoryEntry[] = messagesRef.current
-      .filter((m) => m.id !== 1 && m.sender !== "action")
-      .map((m) => ({
-        role: m.sender as "user" | "assistant",
-        content: m.text,
-      }));
-    // Include the new user message in the history sent to the backend
-    history.push({ role: "user", content: text });
+      // Build history from all messages currently in view (excluding the greeting and action cards)
+      const history: HistoryEntry[] = messagesRef.current
+        .filter((m) => m.id !== 1 && m.sender !== "action")
+        .map((m) => ({
+          role: m.sender as "user" | "assistant",
+          content: m.text,
+        }));
+      // Include the new user message in the history sent to the backend
+      history.push({ role: "user", content: text });
 
-    const assistantId = Date.now() + 1;
-    let accumulated = "";
-    let firstToken = true;
+      const assistantId = Date.now() + 1;
+      let accumulated = "";
+      let firstToken = true;
 
-    try {
-      const res = await fetch("/api/chat/widget", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, history: history.slice(0, -1) }),
-      });
+      try {
+        const res = await fetch("/api/chat/widget", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: text,
+            history: history.slice(0, -1),
+          }),
+        });
 
-      if (!res.ok) {
-        let errMsg = "Something went wrong. Please try again.";
-        try {
-          const errBody = (await res.json()) as { error?: string };
-          if (errBody.error) errMsg = errBody.error;
-        } catch {
-          // ignore — body not parseable
-        }
-        throw new Error(errMsg);
-      }
-      if (!res.body) {
-        throw new Error("Something went wrong. Please try again.");
-      }
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const parts = buffer.split("\n\n");
-        buffer = parts.pop() ?? "";
-
-        for (const part of parts) {
-          const line = part.startsWith("data: ") ? part.slice(6) : part;
-          if (!line.trim()) continue;
-
-          let event: SseEvent;
+        if (!res.ok) {
+          let errMsg = "Something went wrong. Please try again.";
           try {
-            event = JSON.parse(line) as SseEvent;
+            const errBody = (await res.json()) as { error?: string };
+            if (errBody.error) errMsg = errBody.error;
           } catch {
-            continue;
+            // ignore — body not parseable
           }
+          throw new Error(errMsg);
+        }
+        if (!res.body) {
+          throw new Error("Something went wrong. Please try again.");
+        }
 
-          if (event.type === "token") {
-            accumulated += event.text;
-            if (firstToken) {
-              firstToken = false;
-              setThinking(false);
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split("\n\n");
+          buffer = parts.pop() ?? "";
+
+          for (const part of parts) {
+            const line = part.startsWith("data: ") ? part.slice(6) : part;
+            if (!line.trim()) continue;
+
+            let event: SseEvent;
+            try {
+              event = JSON.parse(line) as SseEvent;
+            } catch {
+              continue;
+            }
+
+            if (event.type === "token") {
+              accumulated += event.text;
+              if (firstToken) {
+                firstToken = false;
+                setThinking(false);
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    id: assistantId,
+                    text: accumulated,
+                    sender: "assistant",
+                    time: getTime(),
+                  },
+                ]);
+              } else {
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === assistantId ? { ...m, text: accumulated } : m,
+                  ),
+                );
+              }
+            } else if (event.type === "action") {
+              const actionNameMap: Record<string, string> = {
+                create_task: "Task created",
+                list_tasks: "Tasks retrieved",
+                complete_task: "Task completed",
+                update_task: "Task updated",
+                delete_task: "Task deleted",
+                create_label: "Label created",
+                list_labels: "Labels retrieved",
+                update_label: "Label updated",
+                delete_label: "Label deleted",
+              };
+              const label = actionNameMap[event.name] ?? event.name;
+              const record = event.record as { name?: string; title?: string };
+              const recordName = record.name ?? record.title ?? null;
               setMessages((prev) => [
                 ...prev,
                 {
-                  id: assistantId,
-                  text: accumulated,
-                  sender: "assistant",
+                  id: Date.now(),
+                  text: recordName ? `${label}: ${recordName}` : label,
+                  sender: "action",
                   time: getTime(),
+                  actionLabel: label,
                 },
               ]);
-            } else {
-              setMessages((prev) =>
-                prev.map((m) =>
-                  m.id === assistantId ? { ...m, text: accumulated } : m,
-                ),
-              );
+            } else if (event.type === "done") {
+              break;
+            } else if (event.type === "error") {
+              throw new Error(event.message);
             }
-          } else if (event.type === "action") {
-            const actionNameMap: Record<string, string> = {
-              create_task: "Task created",
-              list_tasks: "Tasks retrieved",
-              complete_task: "Task completed",
-              update_task: "Task updated",
-              delete_task: "Task deleted",
-              create_label: "Label created",
-              list_labels: "Labels retrieved",
-              update_label: "Label updated",
-              delete_label: "Label deleted",
-            };
-            const label = actionNameMap[event.name] ?? event.name;
-            const record = event.record as { name?: string; title?: string };
-            const recordName = record.name ?? record.title ?? null;
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: Date.now(),
-                text: recordName ? `${label}: ${recordName}` : label,
-                sender: "action",
-                time: getTime(),
-                actionLabel: label,
-              },
-            ]);
-          } else if (event.type === "done") {
-            break;
-          } else if (event.type === "error") {
-            throw new Error(event.message);
           }
         }
+      } catch (err) {
+        const errorText =
+          err instanceof Error
+            ? err.message
+            : "Something went wrong. Please try again.";
+        if (firstToken) {
+          // No message was added yet — insert one with the error text
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: assistantId,
+              text: errorText,
+              sender: "assistant",
+              time: getTime(),
+            },
+          ]);
+        } else {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantId ? { ...m, text: errorText } : m,
+            ),
+          );
+        }
+      } finally {
+        setThinking(false);
+        requestAnimationFrame(() => inputRef.current?.focus());
+        window.dispatchEvent(new CustomEvent("notifications:refresh"));
       }
-    } catch (err) {
-      const errorText =
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again.";
-      if (firstToken) {
-        // No message was added yet — insert one with the error text
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: assistantId,
-            text: errorText,
-            sender: "assistant",
-            time: getTime(),
-          },
-        ]);
-      } else {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantId ? { ...m, text: errorText } : m,
-          ),
-        );
-      }
-    } finally {
-      setThinking(false);
-      requestAnimationFrame(() => inputRef.current?.focus());
-      window.dispatchEvent(new CustomEvent("notifications:refresh"));
-    }
-  }, [input, thinking]);
+    },
+    [input, thinking],
+  );
+
+  // Keep sendRef in sync so handleAutoSend always calls the latest send closure
+  sendRef.current = send;
 
   const onKey = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -583,7 +602,7 @@ export function ChatWidget({
               )}
             </button>
             <button
-              onClick={send}
+              onClick={() => send()}
               disabled={!input.trim() || thinking || voiceState !== "idle"}
               aria-label={t("send")}
               className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-primary text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
