@@ -67,7 +67,9 @@ export async function POST(req: Request) {
   const whisperForm = new FormData();
   whisperForm.append(
     "file",
-    new File([audioField], "recording.webm", { type: audioField.type || "audio/webm" }),
+    new File([audioField], "recording.webm", {
+      type: audioField.type || "audio/webm",
+    }),
   );
   whisperForm.append("model", "whisper-1");
 
