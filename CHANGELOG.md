@@ -1,3 +1,19 @@
+## [0.2.9] - 2026-04-17
+
+- feat(voice-input): update README for clarity on environment variables and billing integration.
+- feat(voice-input): update dark mode card color for improved accessibility
+- feat(voice-input): remove unused tier color definitions from colors.ts
+- feat(voice-input): implement tier-based styling and user tier management across components
+- feat(voice-input): update UsageTab component to use QuotaCard and enhance layout; add new sections in translations
+- feat(voice-input): remove radial chart component and related configurations
+- feat: add voice request limits and monthly tracking to billing and usage models
+- feat(voice-input): add voice request usage tracking and update UI components
+- feat(voice-input): implement daily voice request limits and update transcription model
+- feat(voice-input): enhance voice input handling with auto-send feature and silence detection
+- feat(voice-input): enhance voice input functionality with error handling and dynamic MIME type support
+- style: format code for better readability in audio file handling
+- feat(voice-input): implement voice input functionality with transcription support
+
 ## [0.2.8] - 2026-04-14
 
 - feat: remove tasks documentation as part of project restructuring
