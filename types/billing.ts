@@ -274,6 +274,10 @@ export interface UsageSummary {
   briefingsGenerated: number;
   /** Plan maximum for briefings regenerated per month. `-1` = unlimited. */
   briefingsLimit: number;
+  /** Number of voice transcription requests made today. */
+  voiceRequestsUsed: number;
+  /** Plan maximum for voice transcription requests per day. `0` = feature disabled. */
+  voiceRequestsLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

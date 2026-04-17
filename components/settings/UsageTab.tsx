@@ -202,6 +202,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           limit={usage.memoryLimit}
           note={t("memoryNote")}
         />
+        <QuotaRow
+          label={t("voiceRequestsTitle")}
+          used={usage.voiceRequestsUsed}
+          limit={usage.voiceRequestsLimit}
+          note={t("voiceRequestsNote")}
+        />
       </div>
 
       {/* Reset footer */}
