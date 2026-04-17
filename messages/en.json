@@ -287,6 +287,17 @@
       "goalsNote": "Number of goals currently stored.",
       "memoryTitle": "Memory facts (stored)",
       "memoryNote": "Number of memory facts currently stored.",
+      "voiceRequestsTitle": "Voice transcriptions (today)",
+      "voiceRequestsNote": "Number of voice-to-text transcriptions used today. Resets daily.",
+      "voiceRequestsMonthlyTitle": "Voice transcriptions (month)",
+      "voiceRequestsMonthlyNote": "Number of voice-to-text transcriptions used this calendar month.",
+      "voiceMinutesTitle": "Voice minutes (month)",
+      "voiceMinutesNote": "Total audio minutes transcribed this calendar month.",
+      "sectionAI": "AI & Chat",
+      "sectionKnowledge": "Knowledge",
+      "sectionData": "Stored Data",
+      "sectionGeneration": "Generation",
+      "sectionVoice": "Voice",
       "budgetNoteTitle": "How limits work",
       "budgetNoteBody": "Token counting is approximate and serves as a budget proxy, not exact cost tracking. It is possible to exhaust your monthly token budget while still having LLM calls remaining — those remaining calls cannot be used until the token budget resets next month."
     },
@@ -369,7 +380,14 @@
     "taskDetailDescription": "Task details"
   },
   "chatWidget": {
-    "newChat": "New Chat"
+    "newChat": "New Chat",
+    "placeholder": "Ask me anything…",
+    "send": "Send message",
+    "startRecording": "Start voice input",
+    "stopRecording": "Stop recording",
+    "transcribing": "Transcribing…",
+    "micPermissionDenied": "Microphone access denied. Please allow it in your browser settings.",
+    "transcribeError": "Voice transcription failed. Please try again."
   },
   "shell": {
     "nav": {

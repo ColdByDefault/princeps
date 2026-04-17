@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  *
  * Shared type contracts used by all LLM providers.
  * No provider-specific logic or imports — safe to import from any layer.

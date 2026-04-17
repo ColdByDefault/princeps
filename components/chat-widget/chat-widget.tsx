@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 "use client";
@@ -14,11 +15,15 @@ import {
   ChevronDown,
   CheckCircle2,
   Plus,
+  Mic,
+  MicOff,
+  Loader2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { cn } from "@/lib/utils";
+import { useVoiceInput } from "./logic/useVoiceInput";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface ChatWidgetProps {
@@ -66,6 +71,7 @@ export function ChatWidget({
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [sessionLoaded, setSessionLoaded] = useState(false);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -75,6 +81,41 @@ export function ChatWidget({
   // Stable ref so the load effect can read assistantName without re-running
   const assistantNameRef = useRef(assistantName);
   assistantNameRef.current = assistantName;
+
+  const voiceErrorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleTranscribed = useCallback((text: string) => {
+    setInput((prev) => (prev ? `${prev} ${text}` : text));
+    requestAnimationFrame(() => inputRef.current?.focus());
+  }, []);
+
+  const handleVoiceError = useCallback(
+    (key: string) => {
+      const msg =
+        key === "micPermissionDenied"
+          ? t("micPermissionDenied")
+          : t("transcribeError");
+      setVoiceError(msg);
+      if (voiceErrorTimerRef.current) clearTimeout(voiceErrorTimerRef.current);
+      voiceErrorTimerRef.current = setTimeout(() => setVoiceError(null), 5_000);
+    },
+    [t],
+  );
+
+  // Defined before useVoiceInput so it can be passed as onAutoSend
+  // (actual send logic is below — this ref avoids a circular dependency)
+  const sendRef = useRef<((textOverride?: string) => Promise<void>) | null>(
+    null,
+  );
+  const handleAutoSend = useCallback((text: string) => {
+    sendRef.current?.(text);
+  }, []);
+
+  const { voiceState, startRecording, stopRecording } = useVoiceInput({
+    onTranscribed: handleTranscribed,
+    onAutoSend: handleAutoSend,
+    onError: handleVoiceError,
+  });
 
   // Load session from sessionStorage once on mount. Uses a ref so the name
   // does not cause this effect to re-run (greeting sync is handled below).
@@ -161,162 +202,171 @@ export function ChatWidget({
     ]);
   }, [STORAGE_KEY, assistantName]);
 
-  const send = useCallback(async () => {
-    const text = input.trim();
-    if (!text || thinking) return;
+  const send = useCallback(
+    async (textOverride?: string) => {
+      const text = (textOverride ?? input).trim();
+      if (!text || thinking) return;
 
-    const userMsg: Message = {
-      id: Date.now(),
-      text,
-      sender: "user",
-      time: getTime(),
-    };
+      const userMsg: Message = {
+        id: Date.now(),
+        text,
+        sender: "user",
+        time: getTime(),
+      };
 
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
-    setThinking(true);
-    setProgress(0);
+      setMessages((prev) => [...prev, userMsg]);
+      setInput("");
+      setThinking(true);
+      setProgress(0);
 
-    // Build history from all messages currently in view (excluding the greeting and action cards)
-    const history: HistoryEntry[] = messagesRef.current
-      .filter((m) => m.id !== 1 && m.sender !== "action")
-      .map((m) => ({
-        role: m.sender as "user" | "assistant",
-        content: m.text,
-      }));
-    // Include the new user message in the history sent to the backend
-    history.push({ role: "user", content: text });
+      // Build history from all messages currently in view (excluding the greeting and action cards)
+      const history: HistoryEntry[] = messagesRef.current
+        .filter((m) => m.id !== 1 && m.sender !== "action")
+        .map((m) => ({
+          role: m.sender as "user" | "assistant",
+          content: m.text,
+        }));
+      // Include the new user message in the history sent to the backend
+      history.push({ role: "user", content: text });
 
-    const assistantId = Date.now() + 1;
-    let accumulated = "";
-    let firstToken = true;
+      const assistantId = Date.now() + 1;
+      let accumulated = "";
+      let firstToken = true;
 
-    try {
-      const res = await fetch("/api/chat/widget", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, history: history.slice(0, -1) }),
-      });
+      try {
+        const res = await fetch("/api/chat/widget", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: text,
+            history: history.slice(0, -1),
+          }),
+        });
 
-      if (!res.ok) {
-        let errMsg = "Something went wrong. Please try again.";
-        try {
-          const errBody = (await res.json()) as { error?: string };
-          if (errBody.error) errMsg = errBody.error;
-        } catch {
-          // ignore — body not parseable
-        }
-        throw new Error(errMsg);
-      }
-      if (!res.body) {
-        throw new Error("Something went wrong. Please try again.");
-      }
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const parts = buffer.split("\n\n");
-        buffer = parts.pop() ?? "";
-
-        for (const part of parts) {
-          const line = part.startsWith("data: ") ? part.slice(6) : part;
-          if (!line.trim()) continue;
-
-          let event: SseEvent;
+        if (!res.ok) {
+          let errMsg = "Something went wrong. Please try again.";
           try {
-            event = JSON.parse(line) as SseEvent;
+            const errBody = (await res.json()) as { error?: string };
+            if (errBody.error) errMsg = errBody.error;
           } catch {
-            continue;
+            // ignore — body not parseable
           }
+          throw new Error(errMsg);
+        }
+        if (!res.body) {
+          throw new Error("Something went wrong. Please try again.");
+        }
 
-          if (event.type === "token") {
-            accumulated += event.text;
-            if (firstToken) {
-              firstToken = false;
-              setThinking(false);
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split("\n\n");
+          buffer = parts.pop() ?? "";
+
+          for (const part of parts) {
+            const line = part.startsWith("data: ") ? part.slice(6) : part;
+            if (!line.trim()) continue;
+
+            let event: SseEvent;
+            try {
+              event = JSON.parse(line) as SseEvent;
+            } catch {
+              continue;
+            }
+
+            if (event.type === "token") {
+              accumulated += event.text;
+              if (firstToken) {
+                firstToken = false;
+                setThinking(false);
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    id: assistantId,
+                    text: accumulated,
+                    sender: "assistant",
+                    time: getTime(),
+                  },
+                ]);
+              } else {
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === assistantId ? { ...m, text: accumulated } : m,
+                  ),
+                );
+              }
+            } else if (event.type === "action") {
+              const actionNameMap: Record<string, string> = {
+                create_task: "Task created",
+                list_tasks: "Tasks retrieved",
+                complete_task: "Task completed",
+                update_task: "Task updated",
+                delete_task: "Task deleted",
+                create_label: "Label created",
+                list_labels: "Labels retrieved",
+                update_label: "Label updated",
+                delete_label: "Label deleted",
+              };
+              const label = actionNameMap[event.name] ?? event.name;
+              const record = event.record as { name?: string; title?: string };
+              const recordName = record.name ?? record.title ?? null;
               setMessages((prev) => [
                 ...prev,
                 {
-                  id: assistantId,
-                  text: accumulated,
-                  sender: "assistant",
+                  id: Date.now(),
+                  text: recordName ? `${label}: ${recordName}` : label,
+                  sender: "action",
                   time: getTime(),
+                  actionLabel: label,
                 },
               ]);
-            } else {
-              setMessages((prev) =>
-                prev.map((m) =>
-                  m.id === assistantId ? { ...m, text: accumulated } : m,
-                ),
-              );
+            } else if (event.type === "done") {
+              break;
+            } else if (event.type === "error") {
+              throw new Error(event.message);
             }
-          } else if (event.type === "action") {
-            const actionNameMap: Record<string, string> = {
-              create_task: "Task created",
-              list_tasks: "Tasks retrieved",
-              complete_task: "Task completed",
-              update_task: "Task updated",
-              delete_task: "Task deleted",
-              create_label: "Label created",
-              list_labels: "Labels retrieved",
-              update_label: "Label updated",
-              delete_label: "Label deleted",
-            };
-            const label = actionNameMap[event.name] ?? event.name;
-            const record = event.record as { name?: string; title?: string };
-            const recordName = record.name ?? record.title ?? null;
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: Date.now(),
-                text: recordName ? `${label}: ${recordName}` : label,
-                sender: "action",
-                time: getTime(),
-                actionLabel: label,
-              },
-            ]);
-          } else if (event.type === "done") {
-            break;
-          } else if (event.type === "error") {
-            throw new Error(event.message);
           }
         }
+      } catch (err) {
+        const errorText =
+          err instanceof Error
+            ? err.message
+            : "Something went wrong. Please try again.";
+        if (firstToken) {
+          // No message was added yet — insert one with the error text
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: assistantId,
+              text: errorText,
+              sender: "assistant",
+              time: getTime(),
+            },
+          ]);
+        } else {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantId ? { ...m, text: errorText } : m,
+            ),
+          );
+        }
+      } finally {
+        setThinking(false);
+        requestAnimationFrame(() => inputRef.current?.focus());
+        window.dispatchEvent(new CustomEvent("notifications:refresh"));
       }
-    } catch (err) {
-      const errorText =
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again.";
-      if (firstToken) {
-        // No message was added yet — insert one with the error text
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: assistantId,
-            text: errorText,
-            sender: "assistant",
-            time: getTime(),
-          },
-        ]);
-      } else {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantId ? { ...m, text: errorText } : m,
-          ),
-        );
-      }
-    } finally {
-      setThinking(false);
-      requestAnimationFrame(() => inputRef.current?.focus());
-      window.dispatchEvent(new CustomEvent("notifications:refresh"));
-    }
-  }, [input, thinking]);
+    },
+    [input, thinking],
+  );
+
+  // Keep sendRef in sync so handleAutoSend always calls the latest send closure
+  sendRef.current = send;
 
   const onKey = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -510,19 +560,60 @@ export function ChatWidget({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKey}
-              placeholder="Ask me anything…"
-              disabled={thinking}
-              className="flex-1 rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
+              placeholder={t("placeholder")}
+              disabled={thinking || voiceState === "transcribing"}
+              className={cn(
+                "flex-1 rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50",
+                voiceState === "recording" &&
+                  "border-red-500 ring-1 ring-red-500",
+              )}
             />
+            {/* Mic button */}
             <button
-              onClick={send}
-              disabled={!input.trim() || thinking}
-              aria-label="Send"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
+              type="button"
+              onClick={
+                voiceState === "recording" ? stopRecording : startRecording
+              }
+              disabled={thinking || voiceState === "transcribing"}
+              aria-label={
+                voiceState === "recording"
+                  ? t("stopRecording")
+                  : t("startRecording")
+              }
+              title={
+                voiceState === "recording"
+                  ? t("stopRecording")
+                  : voiceState === "transcribing"
+                    ? t("transcribing")
+                    : t("startRecording")
+              }
+              className={cn(
+                "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl transition-all disabled:opacity-40",
+                voiceState === "recording"
+                  ? "animate-pulse bg-red-500 text-white hover:bg-red-600"
+                  : "bg-muted text-muted-foreground hover:bg-muted/70 hover:text-foreground",
+              )}
+            >
+              {voiceState === "transcribing" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : voiceState === "recording" ? (
+                <MicOff className="h-4 w-4" />
+              ) : (
+                <Mic className="h-4 w-4" />
+              )}
+            </button>
+            <button
+              onClick={() => send()}
+              disabled={!input.trim() || thinking || voiceState !== "idle"}
+              aria-label={t("send")}
+              className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-primary text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
             >
               <Send className="h-4 w-4" />
             </button>
           </div>
+          {voiceError && (
+            <p className="mt-1.5 px-1 text-[11px] text-red-500">{voiceError}</p>
+          )}
         </div>
       </div>
 

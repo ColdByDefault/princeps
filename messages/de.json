@@ -287,6 +287,17 @@
       "goalsNote": "Anzahl der aktuell gespeicherten Ziele.",
       "memoryTitle": "Gedächtnis-Fakten (gespeichert)",
       "memoryNote": "Anzahl der aktuell gespeicherten Gedächtnis-Fakten.",
+      "voiceRequestsTitle": "Sprachtranskriptionen (heute)",
+      "voiceRequestsNote": "Anzahl der heute verwendeten Sprache-zu-Text-Transkriptionen. Wird täglich zurückgesetzt.",
+      "voiceRequestsMonthlyTitle": "Sprachtranskriptionen (Monat)",
+      "voiceRequestsMonthlyNote": "Anzahl der Sprache-zu-Text-Transkriptionen in diesem Kalendermonat.",
+      "voiceMinutesTitle": "Sprachminuten (Monat)",
+      "voiceMinutesNote": "Gesamte transkribierte Audiominuten in diesem Kalendermonat.",
+      "sectionAI": "KI & Chat",
+      "sectionKnowledge": "Wissen",
+      "sectionData": "Gespeicherte Daten",
+      "sectionGeneration": "Generierung",
+      "sectionVoice": "Sprache",
       "budgetNoteTitle": "Wie Limits funktionieren",
       "budgetNoteBody": "Die Token-Zählung ist eine Näherung und dient als Budgethilfe, keine exakte Kostenerfassung. Es kann passieren, dass dein monatliches Token-Budget aufgebraucht ist, obwohl noch LLM-Aufrufe übrig sind — diese können erst nach dem Monatsreset wieder genutzt werden."
     },
@@ -369,7 +380,14 @@
     "taskDetailDescription": "Aufgaben-Details"
   },
   "chatWidget": {
-    "newChat": "Neuer Chat"
+    "newChat": "Neuer Chat",
+    "placeholder": "Frag mich alles…",
+    "send": "Nachricht senden",
+    "startRecording": "Spracheingabe starten",
+    "stopRecording": "Aufnahme stoppen",
+    "transcribing": "Wird transkribiert…",
+    "micPermissionDenied": "Mikrofonzugriff verweigert. Bitte erlauben Sie den Zugriff in Ihren Browsereinstellungen.",
+    "transcribeError": "Sprachtranskription fehlgeschlagen. Bitte erneut versuchen."
   },
   "shell": {
     "nav": {

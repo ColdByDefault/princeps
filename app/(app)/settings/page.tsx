@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 import { headers } from "next/headers";
@@ -71,7 +72,7 @@ export default async function SettingsPage() {
   }));
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6">
+    <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6">
       <SettingsShell
         initialStatus={initialStatus}
         initialTab={initialTab}

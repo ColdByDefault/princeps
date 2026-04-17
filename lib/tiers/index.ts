@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 export {
@@ -18,6 +19,8 @@ export {
   enforceDecisionsMax,
   enforceGoalsMax,
   enforceMemoryMax,
+  enforceVoiceRequests,
+  recordVoiceDuration,
   accumulateTokens,
   getChatHistoryLimit,
   createTierLimitResponse,

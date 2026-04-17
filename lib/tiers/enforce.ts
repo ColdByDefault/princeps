@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 import "server-only";
@@ -419,6 +420,99 @@ export async function enforcePrepPackMonthly(
   });
 
   return { allowed: true };
+}
+
+// ─── Voice input daily limit ──────────────────────────────
+
+/**
+ * Checks whether the user is allowed to make another voice transcription
+ * request today. `0` = feature disabled for this tier (free).
+ * Shares the `widgetCountsDate` daily reset boundary with widget counters.
+ */
+export async function enforceVoiceRequests(
+  userId: string,
+): Promise<EnforceResult> {
+  const [tier, counter] = await Promise.all([
+    getUserTier(userId),
+    getOrCreateCounter(userId),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (limits.voiceRequestsPerDay === 0) {
+    return {
+      allowed: false,
+      reason:
+        "Voice input is not available on the free plan. Upgrade to Pro or above.",
+    };
+  }
+
+  // ── Daily gate ────────────────────────────────────────────
+  const today = todayUtc();
+  const staleDay = counter.widgetCountsDate !== today;
+  const currentDaily = staleDay ? 0 : counter.voiceRequestsDailyCount;
+
+  if (currentDaily >= limits.voiceRequestsPerDay) {
+    return {
+      allowed: false,
+      reason: "Daily voice input limit reached for your plan.",
+    };
+  }
+
+  // ── Monthly gates ─────────────────────────────────────────
+  const month = currentMonth();
+  const staleMonth = counter.monthlyResetDate !== month;
+  const currentMonthlyReqs = staleMonth ? 0 : counter.voiceRequestsMonthlyCount;
+  const currentMonthlySeconds = staleMonth
+    ? 0
+    : counter.voiceSecondsMonthlyCount;
+  const currentMonthlyMinutes = currentMonthlySeconds / 60;
+
+  if (currentMonthlyReqs >= limits.voiceRequestsPerMonth) {
+    return {
+      allowed: false,
+      reason: "Monthly voice input request limit reached for your plan.",
+    };
+  }
+
+  if (currentMonthlyMinutes >= limits.voiceMinutesPerMonth) {
+    return {
+      allowed: false,
+      reason: "Monthly voice transcription minute limit reached for your plan.",
+    };
+  }
+
+  await db.usageCounter.update({
+    where: { userId },
+    data: {
+      voiceRequestsDailyCount: currentDaily + 1,
+      widgetCountsDate: today,
+      voiceRequestsMonthlyCount: currentMonthlyReqs + 1,
+      voiceSecondsMonthlyCount: staleMonth ? 0 : currentMonthlySeconds,
+      monthlyResetDate: month,
+    },
+  });
+
+  return { allowed: true };
+}
+
+/**
+ * Records the actual transcription duration after a successful request.
+ * Call fire-and-forget after the OpenAI response returns — never blocks the user.
+ */
+export async function recordVoiceDuration(
+  userId: string,
+  durationSeconds: number,
+): Promise<void> {
+  const roundedSeconds = Math.round(durationSeconds);
+  if (roundedSeconds <= 0) return;
+
+  await db.usageCounter.updateMany({
+    where: { userId },
+    data: {
+      voiceSecondsMonthlyCount: { increment: roundedSeconds },
+    },
+  });
 }
 
 // ─── Contacts limit ───────────────────────────────────────

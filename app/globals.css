@@ -1,6 +1,7 @@
-/* 
+﻿/* 
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 @import "tailwindcss";
@@ -43,6 +44,7 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-tier-accent: var(--tier-accent);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -53,6 +55,7 @@
 }
 
 :root {
+  --tier-accent: oklch(0.667 0.013 254.624); /* free: slate-400 */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -87,10 +90,21 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Tier accent — cascades via CSS custom property inheritance */
+[data-tier="pro"] {
+  --tier-accent: oklch(0.623 0.214 259.815);
+} /* blue-500   */
+[data-tier="premium"] {
+  --tier-accent: oklch(0.606 0.25 292.717);
+} /* violet-500 */
+[data-tier="enterprise"] {
+  --tier-accent: oklch(0.795 0.184 86.047);
+} /* amber-500  */
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: oklch(16.029% 0.00168 16.738 / 0.87);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);

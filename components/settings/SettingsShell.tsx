@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 "use client";
@@ -108,7 +109,7 @@ export function SettingsShell({
 
   return (
     <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-      <TabsList className="w-full !h-auto flex-wrap gap-y-1">
+      <TabsList className="w-full h-auto! flex-wrap gap-y-1">
         <TabsTrigger value="appearance">{t("appearance")}</TabsTrigger>
         <TabsTrigger value="assistant">{t("assistant")}</TabsTrigger>
         <TabsTrigger value="tools">{t("tools")}</TabsTrigger>

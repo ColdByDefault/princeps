@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 "use client";
@@ -10,7 +11,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { PLAN_LIMITS, PLAN_PRICES } from "@/types/billing";
 import type { Tier } from "@/types/billing";
-import { TIER_CARD_COLORS, TIER_BADGE_COLORS } from "@/lib/tiers/colors";
+
 import { Separator } from "@/components/ui/separator";
 
 const TIERS: Tier[] = ["free", "pro", "premium", "enterprise"];
@@ -55,14 +56,9 @@ export function PricingShell({ currentTier }: PricingShellProps) {
           const isCurrent = tier === currentTier;
 
           return (
-            <div key={tier} className="relative pt-3">
+            <div key={tier} className="relative pt-3" data-tier={tier}>
               {isCurrent && (
-                <span
-                  className={cn(
-                    "absolute top-0 left-4 -translate-y-1/2 rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wide",
-                    TIER_BADGE_COLORS[tier],
-                  )}
-                >
+                <span className="absolute top-0 left-4 -translate-y-1/2 rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent">
                   {t("currentPlan")}
                 </span>
               )}
@@ -71,18 +67,13 @@ export function PricingShell({ currentTier }: PricingShellProps) {
                 className={cn(
                   "flex h-full flex-col rounded-xl border-2 bg-card p-5 shadow-sm transition-shadow",
                   isCurrent
-                    ? TIER_CARD_COLORS[tier]
+                    ? "border-tier-accent"
                     : "border-border hover:border-muted-foreground/30",
                 )}
               >
                 {/* Plan name */}
                 <div className="mb-3">
-                  <span
-                    className={cn(
-                      "rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide",
-                      TIER_BADGE_COLORS[tier],
-                    )}
-                  >
+                  <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent">
                     {t(`planNames.${tier}`)}
                   </span>
                 </div>

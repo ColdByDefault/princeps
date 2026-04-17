@@ -1,13 +1,12 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 "use client";
 
 import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
-import { TIER_BADGE_COLORS } from "@/lib/tiers/colors";
 
 export function PlanBadge({ tier }: { tier: string }) {
   const t = useTranslations("shell.nav");
@@ -20,16 +19,10 @@ export function PlanBadge({ tier }: { tier: string }) {
           ? t("planEnterprise")
           : t("planFree");
 
-  const colorClass =
-    TIER_BADGE_COLORS[tier as keyof typeof TIER_BADGE_COLORS] ??
-    TIER_BADGE_COLORS.free;
-
   return (
     <span
-      className={cn(
-        "rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide",
-        colorClass,
-      )}
+      data-tier={tier}
+      className="rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent"
     >
       {label}
     </span>

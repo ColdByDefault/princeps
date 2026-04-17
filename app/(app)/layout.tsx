@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 import { headers } from "next/headers";
@@ -28,22 +29,28 @@ export default async function AppLayout({
   let preferredLanguage: AppLanguage | null = null;
   let preferredAssistantName: string | null = null;
   let hasGoogleCalendar = false;
+  let userTier: string = "free";
   if (sessionUser?.id) {
-    const [prefs, gcalIntegration] = await Promise.all([
+    const [prefs, gcalIntegration, userRow] = await Promise.all([
       getUserPreferences(sessionUser.id),
       db.integration.findFirst({
         where: { userId: sessionUser.id, provider: "google_calendar" },
         select: { id: true },
+      }),
+      db.user.findUnique({
+        where: { id: sessionUser.id },
+        select: { tier: true },
       }),
     ]);
     preferredTheme = prefs.theme;
     preferredLanguage = prefs.language;
     preferredAssistantName = prefs.assistantName;
     hasGoogleCalendar = gcalIntegration !== null;
+    userTier = userRow?.tier ?? "free";
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col" data-tier={userTier}>
       {/* Restore language and theme from DB on first load after a browser wipe */}
       <LanguageHydrator
         language={locale}

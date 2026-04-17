@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  *
  * POST /api/chat/widget
  * Body: { message: string; history: Array<{role: "user"|"assistant"; content: string}> }

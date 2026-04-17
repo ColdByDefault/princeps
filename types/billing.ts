@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 export type Tier = "free" | "pro" | "premium" | "enterprise";
@@ -83,6 +84,21 @@ export interface PlanLimits {
    * `-1` = unlimited. `0` = feature disabled for this tier.
    */
   briefingsPerMonth: number;
+  /**
+   * Max voice transcription requests per calendar day.
+   * `0` = feature disabled for this tier (free).
+   */
+  voiceRequestsPerDay: number;
+  /**
+   * Max voice transcription requests per calendar month.
+   * `0` = feature disabled for this tier (free).
+   */
+  voiceRequestsPerMonth: number;
+  /**
+   * Max total audio minutes transcribed per calendar month.
+   * `0` = feature disabled for this tier (free).
+   */
+  voiceMinutesPerMonth: number;
 }
 
 /**
@@ -115,6 +131,9 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     prepPacksPerMonth: 0,
     briefingsPerDay: 1,
     briefingsPerMonth: 3,
+    voiceRequestsPerDay: 0,
+    voiceRequestsPerMonth: 0,
+    voiceMinutesPerMonth: 0,
   },
   pro: {
     knowledgeDocs: 25,
@@ -137,6 +156,9 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     prepPacksPerMonth: 10,
     briefingsPerDay: 3,
     briefingsPerMonth: 30,
+    voiceRequestsPerDay: 30,
+    voiceRequestsPerMonth: 200,
+    voiceMinutesPerMonth: 60,
   },
   premium: {
     knowledgeDocs: 50,
@@ -159,6 +181,9 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     prepPacksPerMonth: 25,
     briefingsPerDay: 5,
     briefingsPerMonth: 100,
+    voiceRequestsPerDay: 60,
+    voiceRequestsPerMonth: 500,
+    voiceMinutesPerMonth: 150,
   },
   enterprise: {
     knowledgeDocs: 200,
@@ -181,6 +206,9 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     prepPacksPerMonth: 100,
     briefingsPerDay: -1,
     briefingsPerMonth: -1,
+    voiceRequestsPerDay: 150,
+    voiceRequestsPerMonth: 2_000,
+    voiceMinutesPerMonth: 600,
   },
 };
 
@@ -265,6 +293,18 @@ export interface UsageSummary {
   briefingsGenerated: number;
   /** Plan maximum for briefings regenerated per month. `-1` = unlimited. */
   briefingsLimit: number;
+  /** Number of voice transcription requests made today. */
+  voiceRequestsUsed: number;
+  /** Plan maximum for voice transcription requests per day. `0` = feature disabled. */
+  voiceRequestsLimit: number;
+  /** Number of voice transcription requests made this month. */
+  voiceRequestsMonthlyUsed: number;
+  /** Plan maximum for voice transcription requests per month. `0` = feature disabled. */
+  voiceRequestsMonthlyLimit: number;
+  /** Total audio minutes transcribed this month (decimal). */
+  voiceMinutesUsed: number;
+  /** Plan maximum for audio minutes transcribed per month. `0` = feature disabled. */
+  voiceMinutesLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

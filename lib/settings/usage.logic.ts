@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 import "server-only";
@@ -41,6 +42,9 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
         toolMonthlyCount: true,
         prepPackMonthlyCount: true,
         briefingMonthlyCount: true,
+        voiceRequestsDailyCount: true,
+        voiceRequestsMonthlyCount: true,
+        voiceSecondsMonthlyCount: true,
         monthlyResetDate: true,
       },
     }),
@@ -79,6 +83,13 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     prepPacksLimit: limits.prepPacksPerMonth,
     briefingsGenerated: counter?.briefingMonthlyCount ?? 0,
     briefingsLimit: limits.briefingsPerMonth,
+    voiceRequestsUsed: counter?.voiceRequestsDailyCount ?? 0,
+    voiceRequestsLimit: limits.voiceRequestsPerDay,
+    voiceRequestsMonthlyUsed: counter?.voiceRequestsMonthlyCount ?? 0,
+    voiceRequestsMonthlyLimit: limits.voiceRequestsPerMonth,
+    voiceMinutesUsed:
+      Math.round(((counter?.voiceSecondsMonthlyCount ?? 0) / 60) * 10) / 10,
+    voiceMinutesLimit: limits.voiceMinutesPerMonth,
     monthlyResetDate:
       counter?.monthlyResetDate ?? new Date().toISOString().slice(0, 7),
   };

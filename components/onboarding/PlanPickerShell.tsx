@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 "use client";
@@ -14,7 +15,6 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { PLAN_LIMITS, PLAN_PRICES } from "@/types/billing";
-import { TIER_BADGE_COLORS, TIER_CARD_COLORS } from "@/lib/tiers/colors";
 import { Button, buttonVariants } from "@/components/ui/button";
 import type { Tier } from "@/types/billing";
 
@@ -174,16 +174,12 @@ export function PlanPickerShell({
           return (
             <div
               key={tier}
+              data-tier={tier}
               className="flex flex-col rounded-xl border-2 border-border bg-card p-5 shadow-sm transition-shadow hover:border-muted-foreground/30"
             >
               {/* Plan badge + price */}
               <div className="mb-4">
-                <span
-                  className={cn(
-                    "rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide",
-                    TIER_BADGE_COLORS[tier],
-                  )}
-                >
+                <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent">
                   {tier.charAt(0).toUpperCase() + tier.slice(1)}
                 </span>
 
@@ -260,10 +256,7 @@ export function PlanPickerShell({
 
               {isPaid && (
                 <Button
-                  className={cn(
-                    "w-full cursor-pointer",
-                    TIER_CARD_COLORS[tier],
-                  )}
+                  className="w-full cursor-pointer"
                   disabled={!!loading}
                   onClick={() => handleSubscribe(tier as "pro" | "premium")}
                   aria-label={`Subscribe to ${tier}`}

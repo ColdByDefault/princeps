@@ -25,12 +25,13 @@ Every feature writes to a single user-scoped Postgres database. The LLM assistan
 | OpenAI   | Chat completions + embeddings via API     |
 | Groq     | Chat completions via API (no embeddings)  |
 
-The active provider is selected at runtime via the `CHAT_PROVIDER` environment variable. Embeddings fall back to the configured embed provider independently. All three providers share the same `callChat()` / `streamChat()` / `embed()` interface defined in `lib/llm-providers/`.
+All three providers share the same `callChat()` / `streamChat()` / `embed()` interface defined in `lib/llm-providers/`. The active provider is selected at runtime; embeddings fall back to the configured embed provider independently.
 
 **Optional external services:**
 
 - Upstash Redis — for distributed rate limiting (falls back to in-memory if absent)
 - Langfuse — for LLM observability in production
+- Stripe — for billing and subscription management
 
 ---
 
@@ -38,7 +39,7 @@ The active provider is selected at runtime via the `CHAT_PROVIDER` environment v
 
 | Layer            | Technology                                                    |
 | ---------------- | ------------------------------------------------------------- |
-| Framework        | Next.js 16 (App Router, Turbopack in dev)                     |
+| Framework        | Next.js 16.2 (App Router, Turbopack in dev)                   |
 | Language         | TypeScript 5                                                  |
 | UI               | React 19, Tailwind CSS 4, shadcn/ui, Framer Motion            |
 | Auth             | Better Auth — email/password, session cookies, Prisma adapter |
@@ -49,9 +50,10 @@ The active provider is selected at runtime via the `CHAT_PROVIDER` environment v
 | Validation       | Zod 4                                                         |
 | Rate limiting    | Upstash Ratelimit (Redis-backed or in-memory fallback)        |
 | Observability    | Langfuse (production only, opt-in)                            |
+| Billing          | Stripe (subscriptions, customer portal, webhook sync)         |
 | Real-time        | Server-Sent Events (SSE) for the notification stream          |
-| i18n             | next-intl — English and German, cookie-aware                  |
-| Containerisation | Docker Compose                                                |
+| i18n             | next-intl 4 — English and German, cookie-aware                |
+| Containerisation | Docker Compose                                                 |
 
 ---
 
@@ -71,6 +73,7 @@ components/<feature>/        Client UI — shell, cards, dialogs, logic/ hooks
 app/(app)/<feature>/page.tsx Server pages — auth, data fetch, serialize, pass to shell
 messages/{en,de}.json        i18n strings — flat namespaced keys
 lib/tiers/                   Tier enforcement and quota gating
+lib/stripe/                  Billing — checkout, portal, webhook sync
 ```
 
 ### LLM tool system
@@ -105,59 +108,14 @@ npm install
 docker compose up -d
 ```
 
-### 3. Configure environment variables
-
-Copy the example and fill in all values:
+### 3. Run migrations and seed
 
 ```bash
-cp .env.example .env
-```
-
-Required variables:
-
-```env
-DATABASE_URL=postgresql://princeps:yourpassword@localhost:5432/princeps
-BETTER_AUTH_SECRET=your-secret-here
-BETTER_AUTH_URL=http://localhost:3000
-
-# LLM provider — "ollama" | "openAi" | "groq"
-CHAT_PROVIDER=ollama
-
-# Ollama (if CHAT_PROVIDER=ollama)
-OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=qwen3:4b
-OLLAMA_EMBED_MODEL=nomic-embed-text
-
-# OpenAI (if CHAT_PROVIDER=openAi)
-OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4o-mini
-OPENAI_EMBED_MODEL=text-embedding-3-small
-
-# Groq (if CHAT_PROVIDER=groq)
-GROQ_API_KEY=
-GROQ_MODEL=llama-3.3-70b-versatile
-
-# Optional: cron job protection
-CRON_SECRET=your-cron-secret
-
-# Optional: Upstash rate limiting
-UPSTASH_REDIS_REST_URL=
-UPSTASH_REDIS_REST_TOKEN=
-
-# Optional: Langfuse observability (production only)
-LANGFUSE_PUBLIC_KEY=
-LANGFUSE_SECRET_KEY=
-LANGFUSE_HOST=
-```
-
-### 4. Run migrations and seed
-
-```bash
-npm run db:migrate
+npx prisma migrate dev
 npm run db:seed
 ```
 
-### 5. Start the development server
+### 4. Start the development server
 
 ```bash
 npm run dev
@@ -176,6 +134,10 @@ Open `http://localhost:3000`.
 Handled entirely by [Better Auth](https://www.better-auth.com/) with email/password credentials and session cookies. Sessions are stored in Postgres via the Prisma adapter. Every API route and server page reads and validates the session independently — middleware alone is not the trust boundary.
 
 User accounts carry a `tier` field (`free` | `pro` | `premium` | `enterprise`). `lib/tiers/enforce.ts` checks quotas against `UsageCounter` before mutating operations. Quotas include per-day and per-month LLM message limits, per-day widget chat limits, lifetime knowledge character budgets, and per-resource record caps.
+
+### Billing and Subscriptions
+
+Billing is handled by Stripe. `lib/stripe/` contains checkout session creation, customer portal access, and webhook sync. Subscription events update the user's `tier` and `stripeCustomerId` in real time via Stripe webhooks. A pricing page (`/pricing`) renders plan cards driven by the tier configuration in `lib/tiers/`.
 
 ### AI Chat
 
@@ -201,7 +163,7 @@ Users also maintain a single **Personal Info** record — free-form text that is
 
 A persistent inbox for LLM-generated and system notifications. The `Notification` model stores category, title, body, read state, and a dismissal flag. The notification stream is delivered to connected clients via Server-Sent Events (`app/api/notifications/stream/`). Unread count is computed server-side and reflected in navigation in real time.
 
-Notifications are generated by the LLM (briefings, nudges, greeting), by cron jobs, and by system events. The LLM-generated body is produced with a lightweight non-streaming call.
+Notifications are generated by the LLM (briefings, nudges, greeting), by cron jobs, and by system events.
 
 ### Contacts
 
@@ -211,9 +173,9 @@ A relationship index backed by the `Contact` model. Each record stores name, rol
 
 ### Meetings
 
-The `Meeting` model stores title, date, duration, location, agenda, status (`scheduled` | `in_progress` | `completed` | `cancelled`), and a free-text summary field. Participants are stored in a `MeetingParticipant` join table linked to `Contact`. Meetings are exposed to the context slot layer and are referenceable in tool calls by title.
+The `Meeting` model stores title, date, duration, location, agenda, status (`upcoming` | `done` | `cancelled`), and a free-text summary field. Participants are stored in a `MeetingParticipant` join table linked to `Contact`. Meetings are exposed to the context slot layer and are referenceable in tool calls by title.
 
-Google Calendar events are imported via the OAuth 2.0 integration (read-only scope). Imported events are created as `Meeting` records; subsequent syncs update rather than duplicate. Token refresh runs automatically; revoked-access errors are detected and the integration is deactivated cleanly.
+Google Calendar events are imported via the OAuth 2.0 integration (`lib/integrations/google-calendar/`, read-only scope). Imported events are created as `Meeting` records; subsequent syncs update rather than duplicate. Token refresh runs automatically; revoked-access errors are detected and the integration is deactivated cleanly.
 
 **Tier limits:** max total meetings stored.
 
@@ -231,11 +193,11 @@ The `Decision` model stores title, rationale, outcome, status (`open` | `decided
 
 ### Goals
 
-The `Goal` feature tracks longer-horizon objectives with title, description, target date, and status. Goals are exposed through a context slot and are manageable via LLM tool calls.
+The `Goal` feature tracks longer-horizon objectives with title, description, target date, and status (`open` | `in_progress` | `done` | `cancelled`). Goals are exposed through a context slot and are manageable via LLM tool calls.
 
 ### Memory
 
-User-authored memory entries (`MemoryEntry`) are free-form notes the assistant stores and can later retrieve. The memory context slot surfaces recent entries directly in the system prompt. Memory is distinct from the knowledge base — it is structured around personal recall rather than document retrieval.
+User-authored memory entries (`MemoryEntry`) are free-form notes the assistant stores and can later retrieve. They carry a `source` field (`llm` | `user`) so manually added entries are distinguished from assistant-generated ones. The memory context slot surfaces recent entries directly in the system prompt. Memory is distinct from the knowledge base — it is structured around personal recall rather than document retrieval.
 
 ### Reports
 
@@ -271,11 +233,11 @@ All user-visible strings are managed through `next-intl` with flat namespaced ke
 
 ---
 
-## Copyright
+## License
 
 Copyright © 2026 Yazan Abo-Ayash (ColdByDefault™). All rights reserved.
 
-Princeps is proprietary software. The source code is published for reference and transparency purposes only. No license is granted to use, copy, modify, distribute, sublicense, or deploy this software or any portion of it without explicit written permission from the copyright holder.
+Princeps is licensed under the **Elastic License 2.0 (ELv2)**. You are free to use, fork, modify, and self-host the software. You may not offer it as a hosted or managed service to third parties.
 
 See [LICENSE](LICENSE) for the full terms.
 

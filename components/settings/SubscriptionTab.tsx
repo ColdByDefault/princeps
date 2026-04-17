@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  */
 
 "use client";
@@ -11,7 +12,6 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { PLAN_LIMITS, PLAN_PRICES } from "@/types/billing";
-import { TIER_BADGE_COLORS } from "@/lib/tiers/colors";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import type { Tier } from "@/types/billing";
@@ -122,10 +122,8 @@ export function SubscriptionTab({ currentTier, appOrigin, priceIds }: Props) {
         </h3>
         <div className="flex items-center gap-3">
           <span
-            className={cn(
-              "rounded-full px-3 py-1 text-sm font-semibold tracking-wide",
-              TIER_BADGE_COLORS[currentTier],
-            )}
+            data-tier={currentTier}
+            className="rounded-full px-3 py-1 text-sm font-semibold tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent"
           >
             {currentTier.charAt(0).toUpperCase() + currentTier.slice(1)}
           </span>
@@ -210,15 +208,11 @@ export function SubscriptionTab({ currentTier, appOrigin, priceIds }: Props) {
               return (
                 <div
                   key={tier}
+                  data-tier={tier}
                   className="rounded-xl border-2 border-border bg-card p-5 shadow-sm"
                 >
                   <div className="mb-3">
-                    <span
-                      className={cn(
-                        "rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide",
-                        TIER_BADGE_COLORS[tier],
-                      )}
-                    >
+                    <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent">
                       {tier.charAt(0).toUpperCase() + tier.slice(1)}
                     </span>
                   </div>
@@ -288,10 +282,8 @@ export function SubscriptionTab({ currentTier, appOrigin, priceIds }: Props) {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <span
-                  className={cn(
-                    "rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide",
-                    TIER_BADGE_COLORS.enterprise,
-                  )}
+                  data-tier="enterprise"
+                  className="rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent"
                 >
                   Enterprise
                 </span>
