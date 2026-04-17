@@ -1,3 +1,7 @@
+## [0.3.0] - 2026-04-17
+
+- feat: remove LICENSE file as part of project restructuring
+
 ## [0.2.9] - 2026-04-17
 
 - feat(voice-input): update README for clarity on environment variables and billing integration.
