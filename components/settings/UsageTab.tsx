@@ -25,29 +25,31 @@ function pct(used: number, limit: number): number {
   return Math.min(100, Math.round((used / limit) * 100));
 }
 
-function indicatorColor(p: number): string {
-  if (p >= 90) return "bg-destructive";
-  if (p >= 70) return "bg-amber-500";
-  return "bg-primary";
+function tierColor(tier: string): string {
+  if (tier === "enterprise") return "bg-amber-500";
+  if (tier === "premium") return "bg-violet-500";
+  if (tier === "pro") return "bg-blue-500";
+  return "bg-slate-400";
 }
 
-type QuotaRowProps = {
+type QuotaCardProps = {
   label: string;
   used: number;
   limit: number;
+  tier: string;
   note?: string;
 };
 
-function QuotaRow({ label, used, limit, note }: QuotaRowProps) {
+function QuotaCard({ label, used, limit, tier, note }: QuotaCardProps) {
   const unlimited = limit < 0;
   const p = unlimited ? 0 : pct(used, limit);
-  const color = unlimited ? "bg-primary" : indicatorColor(p);
+  const color = tierColor(tier);
 
   return (
-    <div className="space-y-2 py-4">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-medium">{label}</p>
-        <span className="text-sm text-muted-foreground tabular-nums ml-auto">
+    <div className="rounded-lg border border-border/60 bg-card p-4 space-y-2.5">
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-xs font-medium leading-snug">{label}</p>
+        <span className="text-xs text-muted-foreground tabular-nums shrink-0">
           {unlimited ? `${fmt(used)} / ∞` : `${fmt(used)} / ${fmt(limit)}`}
         </span>
       </div>
@@ -57,7 +59,20 @@ function QuotaRow({ label, used, limit, note }: QuotaRowProps) {
           style={{ width: unlimited ? "0%" : `${p}%` }}
         />
       </div>
-      {note && <p className="text-xs text-muted-foreground">{note}</p>}
+      {note && (
+        <p className="text-xs text-muted-foreground leading-snug">{note}</p>
+      )}
+    </div>
+  );
+}
+
+function SectionHeading({ label }: { label: string }) {
+  return (
+    <div className="col-span-full pt-2">
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pb-2">
+        {label}
+      </p>
+      <div className="border-t border-border/40" />
     </div>
   );
 }
@@ -86,9 +101,9 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
     : t("resetUnknown");
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       {/* Section header */}
-      <div className="flex items-center justify-between gap-4 pb-4">
+      <div className="flex items-center justify-between gap-4 pb-2">
         <div className="space-y-0.5">
           <p className="text-sm font-medium">{t("title")}</p>
           <p className="text-sm text-muted-foreground">{t("description")}</p>
@@ -109,115 +124,144 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
       </div>
 
       {/* Plan header */}
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center justify-between py-2 border-y border-border/60">
         <p className="text-sm font-medium text-muted-foreground">
           {t("planLabel")}
         </p>
         <PlanBadge tier={usage.tier} />
       </div>
 
-      <div className="border-t border-border/60" />
-
-      {/* Monthly quotas */}
-      <div className="divide-y divide-border/60">
-        <QuotaRow
+      {/* Quota grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {/* AI & Chat */}
+        <SectionHeading label={t("sectionAI")} />
+        <QuotaCard
           label={t("messagesTitle")}
           used={usage.messagesUsed}
           limit={usage.messagesLimit}
+          tier={usage.tier}
         />
-        <QuotaRow
+        <QuotaCard
           label={t("tokensTitle")}
           used={usage.tokensUsed}
           limit={usage.tokensLimit}
+          tier={usage.tier}
         />
-        <QuotaRow
-          label={t("chatsTitle")}
-          used={usage.chatsStored}
-          limit={usage.chatsLimit}
-          note={t("chatsNote")}
-        />
-        <QuotaRow
+        <QuotaCard
           label={t("toolCallsTitle")}
           used={usage.toolCallsUsed}
           limit={usage.toolCallsLimit}
+          tier={usage.tier}
           note={t("toolCallsNote")}
         />
-        <QuotaRow
+        <QuotaCard
+          label={t("chatsTitle")}
+          used={usage.chatsStored}
+          limit={usage.chatsLimit}
+          tier={usage.tier}
+          note={t("chatsNote")}
+        />
+
+        {/* Knowledge */}
+        <SectionHeading label={t("sectionKnowledge")} />
+        <QuotaCard
           label={t("knowledgeDocsTitle")}
           used={usage.knowledgeDocsStored}
           limit={usage.knowledgeDocsLimit}
+          tier={usage.tier}
           note={t("knowledgeDocsNote")}
         />
-        <QuotaRow
+        <QuotaCard
           label={t("knowledgeCharsTitle")}
           used={usage.knowledgeCharsUsed}
           limit={usage.knowledgeCharsLimit}
+          tier={usage.tier}
           note={t("knowledgeCharsNote")}
         />
-        <QuotaRow
-          label={t("contactsTitle")}
-          used={usage.contactsStored}
-          limit={usage.contactsLimit}
-          note={t("contactsNote")}
-        />
-        <QuotaRow
+
+        {/* Stored data */}
+        <SectionHeading label={t("sectionData")} />
+        <QuotaCard
           label={t("tasksTitle")}
           used={usage.tasksStored}
           limit={usage.tasksLimit}
+          tier={usage.tier}
           note={t("tasksNote")}
         />
-        <QuotaRow
+        <QuotaCard
+          label={t("contactsTitle")}
+          used={usage.contactsStored}
+          limit={usage.contactsLimit}
+          tier={usage.tier}
+          note={t("contactsNote")}
+        />
+        <QuotaCard
           label={t("meetingsTitle")}
           used={usage.meetingsStored}
           limit={usage.meetingsLimit}
+          tier={usage.tier}
           note={t("meetingsNote")}
         />
-        <QuotaRow
-          label={t("prepPackTitle")}
-          used={usage.prepPacksGenerated}
-          limit={usage.prepPacksLimit}
-          note={t("prepPackNote")}
-        />
-        <QuotaRow
-          label={t("briefingTitle")}
-          used={usage.briefingsGenerated}
-          limit={usage.briefingsLimit}
-          note={t("briefingNote")}
-        />
-        <QuotaRow
+        <QuotaCard
           label={t("decisionsTitle")}
           used={usage.decisionsStored}
           limit={usage.decisionsLimit}
+          tier={usage.tier}
           note={t("decisionsNote")}
         />
-        <QuotaRow
+        <QuotaCard
           label={t("goalsTitle")}
           used={usage.goalsStored}
           limit={usage.goalsLimit}
+          tier={usage.tier}
           note={t("goalsNote")}
         />
-        <QuotaRow
+        <QuotaCard
           label={t("memoryTitle")}
           used={usage.memoryStored}
           limit={usage.memoryLimit}
+          tier={usage.tier}
           note={t("memoryNote")}
         />
-        <QuotaRow
+
+        {/* Generation */}
+        <SectionHeading label={t("sectionGeneration")} />
+        <QuotaCard
+          label={t("briefingTitle")}
+          used={usage.briefingsGenerated}
+          limit={usage.briefingsLimit}
+          tier={usage.tier}
+          note={t("briefingNote")}
+        />
+        <QuotaCard
+          label={t("prepPackTitle")}
+          used={usage.prepPacksGenerated}
+          limit={usage.prepPacksLimit}
+          tier={usage.tier}
+          note={t("prepPackNote")}
+        />
+
+        {/* Voice */}
+        <SectionHeading label={t("sectionVoice")} />
+        <QuotaCard
           label={t("voiceRequestsTitle")}
           used={usage.voiceRequestsUsed}
           limit={usage.voiceRequestsLimit}
+          tier={usage.tier}
           note={t("voiceRequestsNote")}
         />
-        <QuotaRow
+        <QuotaCard
           label={t("voiceRequestsMonthlyTitle")}
           used={usage.voiceRequestsMonthlyUsed}
           limit={usage.voiceRequestsMonthlyLimit}
+          tier={usage.tier}
           note={t("voiceRequestsMonthlyNote")}
         />
-        <QuotaRow
+        <QuotaCard
           label={t("voiceMinutesTitle")}
           used={usage.voiceMinutesUsed}
           limit={usage.voiceMinutesLimit}
+          tier={usage.tier}
           note={t("voiceMinutesNote")}
         />
       </div>
@@ -230,7 +274,7 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
       </div>
 
       {/* Budget disclaimer */}
-      <div className="rounded-lg border border-border/60 bg-muted/40 p-4 mt-2">
+      <div className="rounded-lg border border-border/60 bg-muted/40 p-4">
         <p className="text-xs font-medium text-foreground mb-1">
           {t("budgetNoteTitle")}
         </p>

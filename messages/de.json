@@ -293,6 +293,11 @@
       "voiceRequestsMonthlyNote": "Anzahl der Sprache-zu-Text-Transkriptionen in diesem Kalendermonat.",
       "voiceMinutesTitle": "Sprachminuten (Monat)",
       "voiceMinutesNote": "Gesamte transkribierte Audiominuten in diesem Kalendermonat.",
+      "sectionAI": "KI & Chat",
+      "sectionKnowledge": "Wissen",
+      "sectionData": "Gespeicherte Daten",
+      "sectionGeneration": "Generierung",
+      "sectionVoice": "Sprache",
       "budgetNoteTitle": "Wie Limits funktionieren",
       "budgetNoteBody": "Die Token-Zählung ist eine Näherung und dient als Budgethilfe, keine exakte Kostenerfassung. Es kann passieren, dass dein monatliches Token-Budget aufgebraucht ist, obwohl noch LLM-Aufrufe übrig sind — diese können erst nach dem Monatsreset wieder genutzt werden."
     },
