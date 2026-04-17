@@ -43,6 +43,7 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-tier-accent: var(--tier-accent);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -53,6 +54,7 @@
 }
 
 :root {
+  --tier-accent: oklch(0.667 0.013 254.624); /* free: slate-400 */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -86,6 +88,17 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
+
+/* Tier accent — cascades via CSS custom property inheritance */
+[data-tier="pro"] {
+  --tier-accent: oklch(0.623 0.214 259.815);
+} /* blue-500   */
+[data-tier="premium"] {
+  --tier-accent: oklch(0.606 0.25 292.717);
+} /* violet-500 */
+[data-tier="enterprise"] {
+  --tier-accent: oklch(0.795 0.184 86.047);
+} /* amber-500  */
 
 .dark {
   --background: oklch(0.145 0 0);

@@ -33,7 +33,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { TIER_RING_COLORS } from "@/lib/tiers/colors";
 import { NotificationBell } from "@/components/notifications";
 import { CalendarTrigger } from "@/components/calendar";
 
@@ -51,17 +50,6 @@ type NavbarDesktopProps = {
   isSigningOut: boolean;
   onSignOut: () => void;
 };
-
-function getTierRingClass(tier?: string | null) {
-  if (!tier) return "border border-border/70";
-  const ringColor =
-    TIER_RING_COLORS[tier as keyof typeof TIER_RING_COLORS] ??
-    TIER_RING_COLORS.pro;
-  return cn(
-    "ring-2 ring-offset-1 ring-offset-background border-transparent",
-    ringColor,
-  );
-}
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/home") return pathname === href;
@@ -275,7 +263,9 @@ export default function NavbarDesktop({
                   aria-label={t("nav.profile")}
                   className={cn(
                     "cursor-pointer rounded-full bg-transparent p-0",
-                    getTierRingClass(tier),
+                    tier
+                      ? "ring-2 ring-tier-accent ring-offset-1 ring-offset-background border-transparent"
+                      : "border border-border/70",
                   )}
                   nativeButton={false}
                   render={<Link href="/profile" />}

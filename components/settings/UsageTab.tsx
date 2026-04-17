@@ -25,25 +25,17 @@ function pct(used: number, limit: number): number {
   return Math.min(100, Math.round((used / limit) * 100));
 }
 
-function tierColor(tier: string): string {
-  if (tier === "enterprise") return "bg-amber-500";
-  if (tier === "premium") return "bg-violet-500";
-  if (tier === "pro") return "bg-blue-500";
-  return "bg-slate-400";
-}
-
 type QuotaCardProps = {
   label: string;
   used: number;
   limit: number;
-  tier: string;
   note?: string;
 };
 
-function QuotaCard({ label, used, limit, tier, note }: QuotaCardProps) {
+function QuotaCard({ label, used, limit, note }: QuotaCardProps) {
   const unlimited = limit < 0;
   const p = unlimited ? 0 : pct(used, limit);
-  const color = tierColor(tier);
+  const color = "bg-tier-accent";
 
   return (
     <div className="rounded-lg border border-border/60 bg-card p-4 space-y-2.5">
@@ -139,26 +131,22 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           label={t("messagesTitle")}
           used={usage.messagesUsed}
           limit={usage.messagesLimit}
-          tier={usage.tier}
         />
         <QuotaCard
           label={t("tokensTitle")}
           used={usage.tokensUsed}
           limit={usage.tokensLimit}
-          tier={usage.tier}
         />
         <QuotaCard
           label={t("toolCallsTitle")}
           used={usage.toolCallsUsed}
           limit={usage.toolCallsLimit}
-          tier={usage.tier}
           note={t("toolCallsNote")}
         />
         <QuotaCard
           label={t("chatsTitle")}
           used={usage.chatsStored}
           limit={usage.chatsLimit}
-          tier={usage.tier}
           note={t("chatsNote")}
         />
 
@@ -168,14 +156,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           label={t("knowledgeDocsTitle")}
           used={usage.knowledgeDocsStored}
           limit={usage.knowledgeDocsLimit}
-          tier={usage.tier}
           note={t("knowledgeDocsNote")}
         />
         <QuotaCard
           label={t("knowledgeCharsTitle")}
           used={usage.knowledgeCharsUsed}
           limit={usage.knowledgeCharsLimit}
-          tier={usage.tier}
           note={t("knowledgeCharsNote")}
         />
 
@@ -185,42 +171,36 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           label={t("tasksTitle")}
           used={usage.tasksStored}
           limit={usage.tasksLimit}
-          tier={usage.tier}
           note={t("tasksNote")}
         />
         <QuotaCard
           label={t("contactsTitle")}
           used={usage.contactsStored}
           limit={usage.contactsLimit}
-          tier={usage.tier}
           note={t("contactsNote")}
         />
         <QuotaCard
           label={t("meetingsTitle")}
           used={usage.meetingsStored}
           limit={usage.meetingsLimit}
-          tier={usage.tier}
           note={t("meetingsNote")}
         />
         <QuotaCard
           label={t("decisionsTitle")}
           used={usage.decisionsStored}
           limit={usage.decisionsLimit}
-          tier={usage.tier}
           note={t("decisionsNote")}
         />
         <QuotaCard
           label={t("goalsTitle")}
           used={usage.goalsStored}
           limit={usage.goalsLimit}
-          tier={usage.tier}
           note={t("goalsNote")}
         />
         <QuotaCard
           label={t("memoryTitle")}
           used={usage.memoryStored}
           limit={usage.memoryLimit}
-          tier={usage.tier}
           note={t("memoryNote")}
         />
 
@@ -230,14 +210,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           label={t("briefingTitle")}
           used={usage.briefingsGenerated}
           limit={usage.briefingsLimit}
-          tier={usage.tier}
           note={t("briefingNote")}
         />
         <QuotaCard
           label={t("prepPackTitle")}
           used={usage.prepPacksGenerated}
           limit={usage.prepPacksLimit}
-          tier={usage.tier}
           note={t("prepPackNote")}
         />
 
@@ -247,21 +225,18 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           label={t("voiceRequestsTitle")}
           used={usage.voiceRequestsUsed}
           limit={usage.voiceRequestsLimit}
-          tier={usage.tier}
           note={t("voiceRequestsNote")}
         />
         <QuotaCard
           label={t("voiceRequestsMonthlyTitle")}
           used={usage.voiceRequestsMonthlyUsed}
           limit={usage.voiceRequestsMonthlyLimit}
-          tier={usage.tier}
           note={t("voiceRequestsMonthlyNote")}
         />
         <QuotaCard
           label={t("voiceMinutesTitle")}
           used={usage.voiceMinutesUsed}
           limit={usage.voiceMinutesLimit}
-          tier={usage.tier}
           note={t("voiceMinutesNote")}
         />
       </div>
