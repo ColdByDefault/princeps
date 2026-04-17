@@ -1,6 +1,7 @@
-/**
+﻿/**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * SPDX-License-Identifier: Elastic-2.0
  *
  * Health checks for all LLM providers — one file, one import.
  * Always resolves, never throws. Errors are captured in `result.error`.
