@@ -1,3 +1,7 @@
+## [0.3.1] - 2026-04-17
+
+- Create LICENSE
+
 ## [0.3.0] - 2026-04-17
 
 - feat: remove LICENSE file as part of project restructuring
