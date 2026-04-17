@@ -88,6 +88,16 @@ export interface PlanLimits {
    * `0` = feature disabled for this tier (free).
    */
   voiceRequestsPerDay: number;
+  /**
+   * Max voice transcription requests per calendar month.
+   * `0` = feature disabled for this tier (free).
+   */
+  voiceRequestsPerMonth: number;
+  /**
+   * Max total audio minutes transcribed per calendar month.
+   * `0` = feature disabled for this tier (free).
+   */
+  voiceMinutesPerMonth: number;
 }
 
 /**
@@ -121,6 +131,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     briefingsPerDay: 1,
     briefingsPerMonth: 3,
     voiceRequestsPerDay: 0,
+    voiceRequestsPerMonth: 0,
+    voiceMinutesPerMonth: 0,
   },
   pro: {
     knowledgeDocs: 25,
@@ -144,6 +156,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     briefingsPerDay: 3,
     briefingsPerMonth: 30,
     voiceRequestsPerDay: 30,
+    voiceRequestsPerMonth: 200,
+    voiceMinutesPerMonth: 60,
   },
   premium: {
     knowledgeDocs: 50,
@@ -167,6 +181,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     briefingsPerDay: 5,
     briefingsPerMonth: 100,
     voiceRequestsPerDay: 60,
+    voiceRequestsPerMonth: 500,
+    voiceMinutesPerMonth: 150,
   },
   enterprise: {
     knowledgeDocs: 200,
@@ -190,6 +206,8 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     briefingsPerDay: -1,
     briefingsPerMonth: -1,
     voiceRequestsPerDay: 150,
+    voiceRequestsPerMonth: 2_000,
+    voiceMinutesPerMonth: 600,
   },
 };
 
@@ -278,6 +296,14 @@ export interface UsageSummary {
   voiceRequestsUsed: number;
   /** Plan maximum for voice transcription requests per day. `0` = feature disabled. */
   voiceRequestsLimit: number;
+  /** Number of voice transcription requests made this month. */
+  voiceRequestsMonthlyUsed: number;
+  /** Plan maximum for voice transcription requests per month. `0` = feature disabled. */
+  voiceRequestsMonthlyLimit: number;
+  /** Total audio minutes transcribed this month (decimal). */
+  voiceMinutesUsed: number;
+  /** Plan maximum for audio minutes transcribed per month. `0` = feature disabled. */
+  voiceMinutesLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
 }

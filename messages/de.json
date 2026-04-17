@@ -289,6 +289,10 @@
       "memoryNote": "Anzahl der aktuell gespeicherten Gedächtnis-Fakten.",
       "voiceRequestsTitle": "Sprachtranskriptionen (heute)",
       "voiceRequestsNote": "Anzahl der heute verwendeten Sprache-zu-Text-Transkriptionen. Wird täglich zurückgesetzt.",
+      "voiceRequestsMonthlyTitle": "Sprachtranskriptionen (Monat)",
+      "voiceRequestsMonthlyNote": "Anzahl der Sprache-zu-Text-Transkriptionen in diesem Kalendermonat.",
+      "voiceMinutesTitle": "Sprachminuten (Monat)",
+      "voiceMinutesNote": "Gesamte transkribierte Audiominuten in diesem Kalendermonat.",
       "budgetNoteTitle": "Wie Limits funktionieren",
       "budgetNoteBody": "Die Token-Zählung ist eine Näherung und dient als Budgethilfe, keine exakte Kostenerfassung. Es kann passieren, dass dein monatliches Token-Budget aufgebraucht ist, obwohl noch LLM-Aufrufe übrig sind — diese können erst nach dem Monatsreset wieder genutzt werden."
     },

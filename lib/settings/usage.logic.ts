@@ -42,6 +42,8 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
         prepPackMonthlyCount: true,
         briefingMonthlyCount: true,
         voiceRequestsDailyCount: true,
+        voiceRequestsMonthlyCount: true,
+        voiceSecondsMonthlyCount: true,
         monthlyResetDate: true,
       },
     }),
@@ -82,6 +84,11 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     briefingsLimit: limits.briefingsPerMonth,
     voiceRequestsUsed: counter?.voiceRequestsDailyCount ?? 0,
     voiceRequestsLimit: limits.voiceRequestsPerDay,
+    voiceRequestsMonthlyUsed: counter?.voiceRequestsMonthlyCount ?? 0,
+    voiceRequestsMonthlyLimit: limits.voiceRequestsPerMonth,
+    voiceMinutesUsed:
+      Math.round(((counter?.voiceSecondsMonthlyCount ?? 0) / 60) * 10) / 10,
+    voiceMinutesLimit: limits.voiceMinutesPerMonth,
     monthlyResetDate:
       counter?.monthlyResetDate ?? new Date().toISOString().slice(0, 7),
   };

@@ -446,26 +446,72 @@ export async function enforceVoiceRequests(
     };
   }
 
+  // ── Daily gate ────────────────────────────────────────────
   const today = todayUtc();
-  const stale = counter.widgetCountsDate !== today;
-  const current = stale ? 0 : counter.voiceRequestsDailyCount;
+  const staleDay = counter.widgetCountsDate !== today;
+  const currentDaily = staleDay ? 0 : counter.voiceRequestsDailyCount;
 
-  if (current >= limits.voiceRequestsPerDay) {
+  if (currentDaily >= limits.voiceRequestsPerDay) {
     return {
       allowed: false,
       reason: "Daily voice input limit reached for your plan.",
     };
   }
 
+  // ── Monthly gates ─────────────────────────────────────────
+  const month = currentMonth();
+  const staleMonth = counter.monthlyResetDate !== month;
+  const currentMonthlyReqs = staleMonth ? 0 : counter.voiceRequestsMonthlyCount;
+  const currentMonthlySeconds = staleMonth
+    ? 0
+    : counter.voiceSecondsMonthlyCount;
+  const currentMonthlyMinutes = currentMonthlySeconds / 60;
+
+  if (currentMonthlyReqs >= limits.voiceRequestsPerMonth) {
+    return {
+      allowed: false,
+      reason: "Monthly voice input request limit reached for your plan.",
+    };
+  }
+
+  if (currentMonthlyMinutes >= limits.voiceMinutesPerMonth) {
+    return {
+      allowed: false,
+      reason: "Monthly voice transcription minute limit reached for your plan.",
+    };
+  }
+
   await db.usageCounter.update({
     where: { userId },
     data: {
-      voiceRequestsDailyCount: current + 1,
+      voiceRequestsDailyCount: currentDaily + 1,
       widgetCountsDate: today,
+      voiceRequestsMonthlyCount: currentMonthlyReqs + 1,
+      voiceSecondsMonthlyCount: staleMonth ? 0 : currentMonthlySeconds,
+      monthlyResetDate: month,
     },
   });
 
   return { allowed: true };
+}
+
+/**
+ * Records the actual transcription duration after a successful request.
+ * Call fire-and-forget after the OpenAI response returns — never blocks the user.
+ */
+export async function recordVoiceDuration(
+  userId: string,
+  durationSeconds: number,
+): Promise<void> {
+  const roundedSeconds = Math.round(durationSeconds);
+  if (roundedSeconds <= 0) return;
+
+  await db.usageCounter.updateMany({
+    where: { userId },
+    data: {
+      voiceSecondsMonthlyCount: { increment: roundedSeconds },
+    },
+  });
 }
 
 // ─── Contacts limit ───────────────────────────────────────

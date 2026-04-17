@@ -15,7 +15,7 @@ import "server-only";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { enforceVoiceRequests } from "@/lib/tiers";
+import { enforceVoiceRequests, recordVoiceDuration } from "@/lib/tiers";
 import { getOpenAISettings } from "@/lib/llm-providers/openai/openai-settings";
 
 /** Maximum accepted audio size: 24 MB (Whisper server limit is 25 MB). */
@@ -87,6 +87,7 @@ export async function POST(req: Request) {
     new File([audioField], `recording.${ext}`, { type: baseMime }),
   );
   whisperForm.append("model", "gpt-4o-mini-transcribe");
+  whisperForm.append("response_format", "verbose_json");
 
   const whisperUrl = `${settings.baseUrl}/audio/transcriptions`;
 
@@ -118,13 +119,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: whisperError }, { status: 502 });
   }
 
-  const result = (await whisperRes.json()) as { text?: string };
+  const result = (await whisperRes.json()) as {
+    text?: string;
+    duration?: number;
+  };
 
   if (typeof result.text !== "string") {
     return NextResponse.json(
       { error: "Unexpected transcription response" },
       { status: 502 },
     );
+  }
+
+  // Track audio duration fire-and-forget — never stalls the user response.
+  if (typeof result.duration === "number" && result.duration > 0) {
+    recordVoiceDuration(session.user.id, result.duration).catch(() => {});
   }
 
   return NextResponse.json({ text: result.text.trim() });
