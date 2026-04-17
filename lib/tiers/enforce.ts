@@ -421,6 +421,53 @@ export async function enforcePrepPackMonthly(
   return { allowed: true };
 }
 
+// ─── Voice input daily limit ──────────────────────────────
+
+/**
+ * Checks whether the user is allowed to make another voice transcription
+ * request today. `0` = feature disabled for this tier (free).
+ * Shares the `widgetCountsDate` daily reset boundary with widget counters.
+ */
+export async function enforceVoiceRequests(
+  userId: string,
+): Promise<EnforceResult> {
+  const [tier, counter] = await Promise.all([
+    getUserTier(userId),
+    getOrCreateCounter(userId),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (limits.voiceRequestsPerDay === 0) {
+    return {
+      allowed: false,
+      reason:
+        "Voice input is not available on the free plan. Upgrade to Pro or above.",
+    };
+  }
+
+  const today = todayUtc();
+  const stale = counter.widgetCountsDate !== today;
+  const current = stale ? 0 : counter.voiceRequestsDailyCount;
+
+  if (current >= limits.voiceRequestsPerDay) {
+    return {
+      allowed: false,
+      reason: "Daily voice input limit reached for your plan.",
+    };
+  }
+
+  await db.usageCounter.update({
+    where: { userId },
+    data: {
+      voiceRequestsDailyCount: current + 1,
+      widgetCountsDate: today,
+    },
+  });
+
+  return { allowed: true };
+}
+
 // ─── Contacts limit ───────────────────────────────────────
 
 /**

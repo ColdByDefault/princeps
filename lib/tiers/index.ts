@@ -18,6 +18,7 @@ export {
   enforceDecisionsMax,
   enforceGoalsMax,
   enforceMemoryMax,
+  enforceVoiceRequests,
   accumulateTokens,
   getChatHistoryLimit,
   createTierLimitResponse,

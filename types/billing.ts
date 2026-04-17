@@ -83,6 +83,11 @@ export interface PlanLimits {
    * `-1` = unlimited. `0` = feature disabled for this tier.
    */
   briefingsPerMonth: number;
+  /**
+   * Max voice transcription requests per calendar day.
+   * `0` = feature disabled for this tier (free).
+   */
+  voiceRequestsPerDay: number;
 }
 
 /**
@@ -115,6 +120,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     prepPacksPerMonth: 0,
     briefingsPerDay: 1,
     briefingsPerMonth: 3,
+    voiceRequestsPerDay: 0,
   },
   pro: {
     knowledgeDocs: 25,
@@ -137,6 +143,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     prepPacksPerMonth: 10,
     briefingsPerDay: 3,
     briefingsPerMonth: 30,
+    voiceRequestsPerDay: 30,
   },
   premium: {
     knowledgeDocs: 50,
@@ -159,6 +166,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     prepPacksPerMonth: 25,
     briefingsPerDay: 5,
     briefingsPerMonth: 100,
+    voiceRequestsPerDay: 60,
   },
   enterprise: {
     knowledgeDocs: 200,
@@ -181,6 +189,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     prepPacksPerMonth: 100,
     briefingsPerDay: -1,
     briefingsPerMonth: -1,
+    voiceRequestsPerDay: 150,
   },
 };
 

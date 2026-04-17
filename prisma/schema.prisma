@@ -418,9 +418,11 @@ model UsageCounter {
   briefingDailyCount   Int     @default(0)
   briefingDailyDate    String? // "YYYY-MM-DD" UTC — reset boundary for briefingDailyCount
   // Widget dailies (untouched — widget not yet refactored)
-  widgetChatsCount     Int     @default(0)
-  widgetToolsCount     Int     @default(0)
-  widgetCountsDate     String? // "YYYY-MM-DD" UTC — reset boundary for widget counters
+  widgetChatsCount        Int     @default(0)
+  widgetToolsCount        Int     @default(0)
+  widgetCountsDate        String? // "YYYY-MM-DD" UTC — reset boundary for widget counters
+  // Voice input dailies
+  voiceRequestsDailyCount Int     @default(0) @map("voice_requests_daily_count")
   // Monthly quotas (primary limits)
   messageMonthlyCount   Int     @default(0)
   tokenMonthlyCount     Int     @default(0)

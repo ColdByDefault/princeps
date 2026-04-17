@@ -6,8 +6,8 @@
  * Body: multipart/form-data — field "audio" containing the recorded audio blob
  * Response: { text: string } | { error: string }
  *
- * Transcribes audio via the OpenAI Whisper API.
- * Scoped to authenticated users only; no quota gate beyond auth.
+ * Transcribes audio via the OpenAI API using gpt-4o-mini-transcribe.
+ * Scoped to authenticated users only; enforces per-tier daily voice request quota.
  */
 
 import "server-only";
@@ -15,6 +15,7 @@ import "server-only";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
+import { enforceVoiceRequests } from "@/lib/tiers";
 import { getOpenAISettings } from "@/lib/llm-providers/openai/openai-settings";
 
 /** Maximum accepted audio size: 24 MB (Whisper server limit is 25 MB). */
@@ -25,6 +26,11 @@ export async function POST(req: Request) {
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const voiceCheck = await enforceVoiceRequests(session.user.id);
+  if (!voiceCheck.allowed) {
+    return NextResponse.json({ error: voiceCheck.reason }, { status: 403 });
   }
 
   let formData: FormData;
@@ -80,7 +86,7 @@ export async function POST(req: Request) {
     "file",
     new File([audioField], `recording.${ext}`, { type: baseMime }),
   );
-  whisperForm.append("model", "whisper-1");
+  whisperForm.append("model", "gpt-4o-mini-transcribe");
 
   const whisperUrl = `${settings.baseUrl}/audio/transcriptions`;
 
