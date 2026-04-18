@@ -470,6 +470,13 @@
       "limitReached": "Lösche einen Chat, um einen neuen zu erstellen.",
       "pendingEmpty": "Schreibe zuerst — leere Chats werden nicht gespeichert.",
       "actions": "Chat-Aktionen",
+      "groups": {
+        "today": "Heute",
+        "yesterday": "Gestern",
+        "last7": "Letzte 7 Tage",
+        "older": "Älter"
+      },
+      "navGroupAccount": "Konto",
       "userFallback": "Arbeitsbereich-Nutzer",
       "navTasks": "Aufgaben",
       "navGoals": "Ziele",

@@ -470,6 +470,13 @@
       "limitReached": "Delete a chat to create a new one.",
       "pendingEmpty": "Start chatting first — empty chats are not saved.",
       "actions": "Chat actions",
+      "groups": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "last7": "Last 7 days",
+        "older": "Older"
+      },
+      "navGroupAccount": "Account",
       "userFallback": "Workspace user",
       "navTasks": "Tasks",
       "navGoals": "Goals",

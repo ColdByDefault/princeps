@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Elastic-2.0
  */
 
-export { ChatWindow } from "./ChatWindow";
-
+export { AppSidebar } from "../chat/app-sidebar";
+export { SiteHeader } from "../chat/site-header";
