@@ -1,7 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import "server-only";
@@ -10,7 +14,6 @@ import { cache } from "react";
 import { db } from "@/lib/db";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
 import { VALID_TIMEZONES } from "@/lib/weather/timezone-list";
-import { VALID_LOCATIONS } from "@/lib/weather/location-list";
 import type { Prisma } from "@/prisma/generated/prisma/client";
 import {
   ASSISTANT_TONES,
@@ -36,7 +39,12 @@ export interface UserPreferences {
   language: AppLanguage | null;
   theme: string | null;
   notificationsEnabled: boolean | null;
+  /** Display label for the user's chosen city (e.g. "Berlin, Germany"). */
   location: string | null;
+  /** Latitude for the user's chosen city. Stored alongside `location`. */
+  locationLat: number | null;
+  /** Longitude for the user's chosen city. Stored alongside `location`. */
+  locationLon: number | null;
   assistantName: string | null;
   assistantTone: AssistantTone | null;
   addressStyle: AddressStyle | null;
@@ -83,8 +91,24 @@ function parsePreferences(raw: unknown): UserPreferences {
       : null;
 
   const location =
-    typeof obj.location === "string" && VALID_LOCATIONS.has(obj.location)
-      ? obj.location
+    typeof obj.location === "string" && obj.location.trim().length > 0
+      ? obj.location.trim().slice(0, 128)
+      : null;
+
+  const locationLat =
+    typeof obj.locationLat === "number" &&
+    isFinite(obj.locationLat) &&
+    obj.locationLat >= -90 &&
+    obj.locationLat <= 90
+      ? obj.locationLat
+      : null;
+
+  const locationLon =
+    typeof obj.locationLon === "number" &&
+    isFinite(obj.locationLon) &&
+    obj.locationLon >= -180 &&
+    obj.locationLon <= 180
+      ? obj.locationLon
       : null;
 
   const assistantName =
@@ -133,6 +157,8 @@ function parsePreferences(raw: unknown): UserPreferences {
     theme,
     notificationsEnabled,
     location,
+    locationLat,
+    locationLon,
     assistantName,
     assistantTone,
     addressStyle,
@@ -163,6 +189,8 @@ export const getUserPreferences = cache(
         theme: null,
         notificationsEnabled: null,
         location: null,
+        locationLat: null,
+        locationLon: null,
         assistantName: null,
         assistantTone: null,
         addressStyle: null,
@@ -196,6 +224,10 @@ export async function updateUserPreferences(
     next.notificationsEnabled = merged.notificationsEnabled;
   }
   if (merged.location) next.location = merged.location;
+  if (merged.locationLat !== null && merged.locationLat !== undefined)
+    next.locationLat = merged.locationLat;
+  if (merged.locationLon !== null && merged.locationLon !== undefined)
+    next.locationLon = merged.locationLon;
   if (merged.assistantName) next.assistantName = merged.assistantName;
   if (merged.assistantTone) next.assistantTone = merged.assistantTone;
   if (merged.addressStyle) next.addressStyle = merged.addressStyle;
@@ -220,18 +252,31 @@ export async function updateUserPreferences(
 }
 
 /**
- * Updates the user's location preference (city key for weather).
- * Only accepts valid keys from the known location list.
+ * Updates the user's location preference (city label + coordinates for weather).
  */
 export async function updateUserLocation(
   userId: string,
   location: string,
+  locationLat: number,
+  locationLon: number,
 ): Promise<void> {
-  if (!VALID_LOCATIONS.has(location)) {
-    throw new Error("Invalid location value.");
+  if (
+    !isFinite(locationLat) ||
+    locationLat < -90 ||
+    locationLat > 90 ||
+    !isFinite(locationLon) ||
+    locationLon < -180 ||
+    locationLon > 180
+  ) {
+    throw new Error("Invalid location coordinates.");
   }
   const current = await getUserPreferences(userId);
-  await updateUserPreferences(userId, { ...current, location });
+  await updateUserPreferences(userId, {
+    ...current,
+    location: location.trim().slice(0, 128),
+    locationLat,
+    locationLon,
+  });
 }
 
 /**

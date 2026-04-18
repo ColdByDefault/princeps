@@ -1,17 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
- *
- * Cron worker: auto-expires stale upcoming meetings and sends follow-up reminders.
- *
- * Triggered by Vercel Cron at 18:00 UTC daily (see vercel.json).
- * Requires the CRON_SECRET environment variable to match the
- * "Authorization: Bearer <secret>" header sent by Vercel.
- *
- * A meeting is considered stale when its end time
- * (scheduledAt + durationMin) has passed but status is still "upcoming".
- * Those meetings are bulk-updated to "done".
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import { NextResponse } from "next/server";

@@ -1,15 +1,19 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LanguageToggle, CustomToggle } from "@/components/shared";
 import { Button } from "@/components/ui/button";
@@ -28,11 +32,15 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { TIMEZONE_OPTIONS } from "@/lib/weather/timezone-list";
-import {
-  LOCATION_OPTIONS,
-  LOCATION_OPTIONS_BY_COUNTRY,
-  LOCATION_COUNTRIES,
-} from "@/lib/weather/location-list";
+
+interface GeocodeSuggestion {
+  id: number;
+  name: string;
+  country: string;
+  admin1: string | null;
+  latitude: number;
+  longitude: number;
+}
 
 type AppearanceTabProps = {
   initialNotificationsEnabled: boolean;
@@ -53,9 +61,86 @@ export function AppearanceTab({
   const [timezone, setTimezone] = useState(initialTimezone);
   const [savingTimezone, setSavingTimezone] = useState(false);
   const [timezoneOpen, setTimezoneOpen] = useState(false);
-  const [location, setLocation] = useState(initialLocation ?? "");
-  const [savingLocation, setSavingLocation] = useState(false);
+
+  // Location — stores the display label of the saved city
+  const [locationLabel, setLocationLabel] = useState(initialLocation ?? "");
   const [locationOpen, setLocationOpen] = useState(false);
+  const [locationSearch, setLocationSearch] = useState("");
+  const [suggestions, setSuggestions] = useState<GeocodeSuggestion[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [savingLocation, setSavingLocation] = useState(false);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Debounced geocode search — fires 400 ms after the user stops typing
+  useEffect(() => {
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+
+    if (locationSearch.trim().length < 2) {
+      setSuggestions([]);
+      setSearching(false);
+      return;
+    }
+
+    setSearching(true);
+    searchTimeoutRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/weather/geocode?q=${encodeURIComponent(locationSearch.trim())}`,
+        );
+        if (res.ok) {
+          const data = (await res.json()) as { results: GeocodeSuggestion[] };
+          setSuggestions(data.results ?? []);
+        }
+      } catch {
+        // Non-critical — silently ignore network errors
+      } finally {
+        setSearching(false);
+      }
+    }, 400);
+
+    return () => {
+      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    };
+  }, [locationSearch]);
+
+  function handleLocationOpenChange(open: boolean) {
+    setLocationOpen(open);
+    if (!open) {
+      setLocationSearch("");
+      setSuggestions([]);
+      setSearching(false);
+    }
+  }
+
+  async function handleLocationSelect(suggestion: GeocodeSuggestion) {
+    const label = suggestion.admin1
+      ? `${suggestion.name}, ${suggestion.admin1}, ${suggestion.country}`
+      : `${suggestion.name}, ${suggestion.country}`;
+
+    setLocationLabel(label);
+    handleLocationOpenChange(false);
+    setSavingLocation(true);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          location: label,
+          locationLat: suggestion.latitude,
+          locationLon: suggestion.longitude,
+        }),
+      });
+      if (!res.ok) {
+        toast.error(t("locationSaveFailed"));
+      } else {
+        toast.success(t("locationSaved"));
+      }
+    } catch {
+      toast.error(t("locationSaveFailed"));
+    } finally {
+      setSavingLocation(false);
+    }
+  }
 
   async function handleNotificationsToggle(checked: boolean) {
     setSavingNotifications(true);
@@ -93,35 +178,9 @@ export function AppearanceTab({
     }
   }
 
-  async function handleLocationChange(value: string) {
-    setLocation(value);
-    setLocationOpen(false);
-    setSavingLocation(true);
-    try {
-      const res = await fetch("/api/settings", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ location: value }),
-      });
-      if (!res.ok) {
-        toast.error(t("locationSaveFailed"));
-      } else {
-        toast.success(t("locationSaved"));
-      }
-    } catch {
-      toast.error(t("locationSaveFailed"));
-    } finally {
-      setSavingLocation(false);
-    }
-  }
-
   const selectedTimezoneLabel =
     TIMEZONE_OPTIONS.find((o) => o.value === timezone)?.label ??
     t("timezonePlaceholder");
-
-  const selectedLocationLabel =
-    LOCATION_OPTIONS.find((o) => o.value === location)?.label ??
-    t("locationPlaceholder");
 
   return (
     <div className="divide-y divide-border/60">
@@ -152,7 +211,7 @@ export function AppearanceTab({
             {t("locationDescription")}
           </p>
         </div>
-        <Popover open={locationOpen} onOpenChange={setLocationOpen}>
+        <Popover open={locationOpen} onOpenChange={handleLocationOpenChange}>
           <PopoverTrigger
             render={
               <Button
@@ -163,36 +222,61 @@ export function AppearanceTab({
               />
             }
           >
-            <span className="truncate">{selectedLocationLabel}</span>
-            <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+            <span className="truncate">
+              {locationLabel || t("locationPlaceholder")}
+            </span>
+            {savingLocation ? (
+              <Loader2 className="ml-2 size-4 shrink-0 animate-spin opacity-50" />
+            ) : (
+              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+            )}
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-0" align="end">
-            <Command>
-              <CommandInput placeholder={t("locationSearchPlaceholder")} />
+          <PopoverContent className="w-72 p-0" align="end">
+            <Command shouldFilter={false}>
+              <CommandInput
+                placeholder={t("locationSearchPlaceholder")}
+                value={locationSearch}
+                onValueChange={setLocationSearch}
+              />
               <CommandList>
-                <CommandEmpty>{t("locationEmpty")}</CommandEmpty>
-                {LOCATION_COUNTRIES.map((country) => (
-                  <CommandGroup key={country} heading={country}>
-                    {LOCATION_OPTIONS_BY_COUNTRY[country]?.map((opt) => (
-                      <CommandItem
-                        key={opt.value}
-                        value={opt.label}
-                        onSelect={() => handleLocationChange(opt.value)}
-                        className="cursor-pointer"
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 size-4",
-                            location === opt.value
-                              ? "opacity-100"
-                              : "opacity-0",
-                          )}
-                        />
-                        {opt.label}
-                      </CommandItem>
-                    ))}
+                {searching && (
+                  <div className="flex items-center justify-center gap-2 py-3 text-sm text-muted-foreground">
+                    <Loader2 className="size-4 animate-spin" />
+                    {t("locationSearching")}
+                  </div>
+                )}
+                {!searching &&
+                  locationSearch.trim().length >= 2 &&
+                  suggestions.length === 0 && (
+                    <CommandEmpty>{t("locationEmpty")}</CommandEmpty>
+                  )}
+                {!searching && suggestions.length > 0 && (
+                  <CommandGroup>
+                    {suggestions.map((s) => {
+                      const label = s.admin1
+                        ? `${s.name}, ${s.admin1}, ${s.country}`
+                        : `${s.name}, ${s.country}`;
+                      return (
+                        <CommandItem
+                          key={s.id}
+                          value={label}
+                          onSelect={() => handleLocationSelect(s)}
+                          className="cursor-pointer"
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 size-4 shrink-0",
+                              locationLabel === label
+                                ? "opacity-100"
+                                : "opacity-0",
+                            )}
+                          />
+                          <span className="truncate">{label}</span>
+                        </CommandItem>
+                      );
+                    })}
                   </CommandGroup>
-                ))}
+                )}
               </CommandList>
             </Command>
           </PopoverContent>

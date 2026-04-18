@@ -1,14 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
- *
- * POST /api/chat/[chatId]/stream
- * Body: { message: string }
- * Response: text/event-stream
- *   data: {"type":"token","text":"…"}
- *   data: {"type":"done"}
- *   data: {"type":"error","message":"…"}
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import { headers } from "next/headers";

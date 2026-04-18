@@ -1,16 +1,21 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 "use client";
 
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { Pencil } from "lucide-react";
+import { Pencil, CheckCircle2, Clock } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlanBadge } from "@/components/shared";
 import { Separator } from "@/components/ui/separator";
@@ -21,6 +26,7 @@ export type ProfileUser = {
   name: string | null;
   username: string | null;
   email: string;
+  emailVerified: boolean;
   tier: string;
   role: string;
   createdAt: string;
@@ -124,12 +130,29 @@ export default function ProfileShell({ user }: ProfileShellProps) {
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <div>
+            <div className="flex flex-col items-center gap-1.5">
               <h1 className="text-lg font-semibold text-foreground">
                 {displayName}
               </h1>
               {username?.trim() && (
                 <p className="text-sm text-muted-foreground">@{username}</p>
+              )}
+              {user.emailVerified ? (
+                <Badge
+                  variant="outline"
+                  className="gap-1 text-xs border-green-500/40 bg-green-500/10 text-green-600 dark:text-green-400"
+                >
+                  <CheckCircle2 className="size-3" />
+                  {t("emailVerified")}
+                </Badge>
+              ) : (
+                <Badge
+                  variant="outline"
+                  className="gap-1 text-xs text-muted-foreground"
+                >
+                  <Clock className="size-3" />
+                  {t("emailUnverified")}
+                </Badge>
               )}
             </div>
           </div>

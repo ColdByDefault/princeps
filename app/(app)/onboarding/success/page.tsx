@@ -1,13 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
- *
- * Landing page after Stripe Checkout completes.
- * Retrieves the session, updates the user tier immediately, then redirects to /home.
- *
- * The webhook handler in /api/stripe/webhook is the durable fallback.
- * This page provides instant feedback if the user returns before the webhook fires.
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import { headers } from "next/headers";

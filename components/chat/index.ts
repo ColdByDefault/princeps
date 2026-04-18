@@ -1,9 +1,12 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 export { ChatWindow } from "./ChatWindow";
-export { AppSidebar } from "./app-sidebar";
-export { SiteHeader } from "./site-header";
+

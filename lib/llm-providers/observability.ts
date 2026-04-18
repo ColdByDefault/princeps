@@ -1,17 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
- *
- * Langfuse observability wrapper for LLM provider calls.
- *
- * Active only when NODE_ENV=production AND both LANGFUSE_PUBLIC_KEY
- * and LANGFUSE_SECRET_KEY are set. All functions are no-ops otherwise.
- *
- * Required env vars (production only):
- *   LANGFUSE_PUBLIC_KEY   — Langfuse project public key
- *   LANGFUSE_SECRET_KEY   — Langfuse project secret key
- *   LANGFUSE_HOST         — (optional) self-hosted URL; defaults to https://cloud.langfuse.com
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import "server-only";

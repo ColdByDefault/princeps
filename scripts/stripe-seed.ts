@@ -1,15 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
- *
- * Creates Stripe test products and prices for Princeps plans.
- *
- * Usage:
- *   npx tsx scripts/stripe-seed.ts
- *
- * Requires STRIPE_SECRET_KEY set in .env (use sk_test_... for test mode).
- * After running, paste the output price IDs into your .env file.
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import "dotenv/config";

@@ -1,13 +1,16 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import "server-only";
 
 import { getCoordsForTimezone } from "./timezone-coords";
-import { getCoordsForLocation } from "./location-coords";
 import type { WeatherSnapshot } from "./types";
 
 export type { WeatherSnapshot };
@@ -58,17 +61,21 @@ interface OpenMeteoResponse {
 
 /**
  * Fetches current weather from Open-Meteo.
- * Prefers `locationKey` (city-level precision) when provided; falls back to
+ * Prefers `locationData` (city-level precision) when provided; falls back to
  * deriving coords from the user's IANA `timezone`.
  * No user IP or identifier is ever sent externally.
  * Returns null on any network or parse error (weather is non-critical).
  */
 export async function fetchWeather(
   timezone: string,
-  locationKey?: string | null,
+  locationData?: { lat: number; lon: number; label: string } | null,
 ): Promise<WeatherSnapshot | null> {
-  const coords = locationKey
-    ? getCoordsForLocation(locationKey)
+  const coords = locationData
+    ? {
+        lat: locationData.lat,
+        lon: locationData.lon,
+        label: locationData.label,
+      }
     : getCoordsForTimezone(timezone);
 
   const url = new URL("https://api.open-meteo.com/v1/forecast");

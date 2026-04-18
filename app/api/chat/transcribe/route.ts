@@ -1,14 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
- *
- * POST /api/chat/transcribe
- * Body: multipart/form-data — field "audio" containing the recorded audio blob
- * Response: { text: string } | { error: string }
- *
- * Transcribes audio via the OpenAI API using gpt-4o-mini-transcribe.
- * Scoped to authenticated users only; enforces per-tier daily voice request quota.
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import "server-only";

@@ -1,7 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import { headers } from "next/headers";
@@ -38,6 +42,7 @@ export default async function ProfilePage() {
       name: true,
       username: true,
       email: true,
+      emailVerified: true,
       tier: true,
       role: true,
       createdAt: true,
@@ -55,6 +60,7 @@ export default async function ProfilePage() {
         name: user.name ?? null,
         username: user.username ?? null,
         email: user.email,
+        emailVerified: user.emailVerified,
         tier: user.tier,
         role: user.role,
         createdAt: user.createdAt.toISOString(),

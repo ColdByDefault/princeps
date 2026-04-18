@@ -1,15 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
- *
- * Active provider dispatcher — reads CHAT_PROVIDER at call time and
- * delegates to the configured provider.
- *
- * Supported values for CHAT_PROVIDER:
- *   "openAi"  — OpenAI API (default)
- *   "ollama"  — Ollama local server
- *   "groq"    — Groq API
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import "server-only";
