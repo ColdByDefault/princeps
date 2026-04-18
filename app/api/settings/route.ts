@@ -190,7 +190,7 @@ export async function PATCH(req: Request) {
       );
     } catch {
       return NextResponse.json(
-        { error: "Invalid location value." },
+        { error: "Invalid location label or coordinates." },
         { status: 400 },
       );
     }
