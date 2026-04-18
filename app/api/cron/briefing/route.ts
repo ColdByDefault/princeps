@@ -1,16 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
- *
- * Cron worker: regenerates daily briefings for all users.
- *
- * Triggered by Vercel Cron at 07:00 UTC daily (see vercel.json).
- * Requires the CRON_SECRET environment variable to match the
- * "Authorization: Bearer <secret>" header sent by Vercel.
- *
- * Rate: one user per request, sequential — keeps LLM load manageable and
- * avoids hammering the DB. For large user bases, extend with pagination.
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import { NextResponse } from "next/server";

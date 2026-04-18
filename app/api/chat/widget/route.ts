@@ -1,22 +1,11 @@
 ﻿/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
- * SPDX-License-Identifier: Elastic-2.0
- *
- * POST /api/chat/widget
- * Body: { message: string; history: Array<{role: "user"|"assistant"; content: string}> }
- * Response: text/event-stream
- *   data: {"type":"token","text":"…"}
- *   data: {"type":"done"}
- *   data: {"type":"error","message":"…"}
- *   data: {"type":"action","name":"…","record":{…}}
- *
- * Mirrors the main chat stream route but without DB persistence.
- * Widget conversations live in the client's sessionStorage only — they are
- * not counted toward saved-chat limits.  All shared monthly quotas
- * (messages, tokens, tool calls) are enforced identically to main chat.
- * An additional daily widget-specific gate (enforceWidgetChats /
- * enforceWidgetTools) applies on top.
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 
 import { headers } from "next/headers";

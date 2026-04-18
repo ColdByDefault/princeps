@@ -703,7 +703,12 @@ Every file in the server and tool layers must have this header:
 ```ts
 /**
  * @author ColdByDefault
- * @copyright 2026 ColdByDefault. All Rights Reserved.
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description
  */
 ```
 
