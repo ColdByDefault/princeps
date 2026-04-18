@@ -1,3 +1,8 @@
+## [0.3.3] - 2026-04-18
+
+- fix: improve error message for invalid location in PATCH request
+- fix: standardize versioning and update import paths in globals.css and chat index
+
 ## [0.3.2] - 2026-04-18
 
 - Update license headers across multiple files to standardize documentation
