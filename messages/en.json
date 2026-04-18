@@ -1215,6 +1215,8 @@
     "name": "Name",
     "username": "Username",
     "email": "Email",
+    "emailVerified": "Verified",
+    "emailUnverified": "Pending",
     "plan": "Current plan",
     "memberSince": "Member since",
     "timezone": "Timezone",
