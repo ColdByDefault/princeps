@@ -8,5 +8,5 @@
  * @description
  */
 
-export { AppSidebar } from "../chat/app-sidebar";
-export { SiteHeader } from "../chat/site-header";
+export { AppSidebar } from "./app-sidebar";
+export { SiteHeader } from "./site-header";
