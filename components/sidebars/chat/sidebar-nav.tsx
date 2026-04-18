@@ -16,11 +16,9 @@ import {
   CalendarDays,
   CheckSquare,
   ChevronRight,
-  CreditCard,
   LayoutDashboard,
   LayoutGrid,
   Scale,
-  Settings,
   Tag,
   Target,
   Users,
@@ -61,12 +59,10 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   const [initialNavCollapsed] = useState<Record<string, boolean>>(() => {
-    if (typeof window === "undefined")
-      return { apps: true, intel: true, account: true };
+    if (typeof window === "undefined") return { apps: true, intel: true };
     return {
       apps: true,
       intel: true,
-      account: true,
       ...readLocalJson(NAV_GROUPS_KEY),
     };
   });
@@ -108,19 +104,6 @@ export function SidebarNav() {
         { href: "/decisions", icon: Scale, label: t("sidebar.navDecisions") },
         { href: "/memory", icon: BookMarked, label: t("sidebar.navMemory") },
         { href: "/labels", icon: Tag, label: t("sidebar.navLabels") },
-      ],
-    },
-    {
-      key: "account",
-      icon: Settings,
-      label: t("sidebar.navGroupAccount"),
-      items: [
-        { href: "/settings", icon: Settings, label: t("sidebar.navSettings") },
-        {
-          href: "/pricing",
-          icon: CreditCard,
-          label: t("sidebar.navPricing"),
-        },
       ],
     },
   ] as const;

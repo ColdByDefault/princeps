@@ -7,21 +7,22 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ChevronUp, LogOut, User } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { CreditCard, LogOut, Settings, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   SidebarFooter,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { LanguageToggle, PlanBadge } from "@/components/shared";
 import { ThemeToggle } from "@/components/theme";
 
@@ -44,76 +45,150 @@ export function SidebarFooterSection({
   handleSignOut,
 }: SidebarFooterSectionProps) {
   const t = useTranslations("chat");
+  const pathname = usePathname();
 
   const userLabel =
     sessionUser?.name?.trim() ||
     sessionUser?.email ||
     t("sidebar.userFallback");
 
-  return (
-    <SidebarFooter>
-      {isCollapsed ? (
+  if (isCollapsed) {
+    return (
+      <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              render={<Link href="/profile" />}
+              isActive={pathname === "/profile"}
+              tooltip={userLabel}
+              className="cursor-pointer"
+            >
+              <User className="size-4 shrink-0" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <ThemeToggle collapsed />
           </SidebarMenuItem>
           <SidebarMenuItem>
             <LanguageToggle collapsed />
           </SidebarMenuItem>
-        </SidebarMenu>
-      ) : (
-        <div className="flex items-center gap-1 px-2 pb-1">
-          <ThemeToggle />
-          <LanguageToggle />
-        </div>
-      )}
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={<SidebarMenuButton className="cursor-pointer" />}
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              render={<Link href="/settings" />}
+              isActive={pathname.startsWith("/settings")}
+              tooltip={t("sidebar.navSettings")}
+              className="cursor-pointer"
             >
-              {isCollapsed ? (
-                <User className="size-4 shrink-0" />
-              ) : (
-                <>
-                  {" "}
-                  <div className="flex flex-1 flex-col leading-none text-left overflow-hidden">
-                    <span className="flex items-center gap-1.5 font-medium text-sm truncate">
-                      <span className="truncate">{userLabel}</span>
-                      {tier && <PlanBadge tier={tier} />}
-                    </span>
-                    {sessionUser?.email && (
-                      <span className="text-xs text-sidebar-foreground/60 truncate">
-                        {sessionUser.email}
-                      </span>
-                    )}
-                  </div>
-                  <ChevronUp className="ml-auto size-4 shrink-0" />
-                </>
-              )}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent side="top" align="end" className="w-56">
-              <DropdownMenuItem
-                className="cursor-pointer"
-                render={<Link href="/profile" />}
-              >
-                <User className="mr-2 size-4" />
-                {t("sidebar.profile")}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="cursor-pointer text-destructive focus:text-destructive"
-                disabled={isSigningOut}
-                onClick={() => void handleSignOut()}
-              >
-                <LogOut className="mr-2 size-4" />
-                {isSigningOut ? t("sidebar.signingOut") : t("sidebar.signOut")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </SidebarMenuItem>
-      </SidebarMenu>
+              <Settings className="size-4 shrink-0" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              render={<Link href="/pricing" />}
+              isActive={pathname.startsWith("/pricing")}
+              tooltip={t("sidebar.navPricing")}
+              className="cursor-pointer"
+            >
+              <CreditCard className="size-4 shrink-0" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip={
+                isSigningOut ? t("sidebar.signingOut") : t("sidebar.signOut")
+              }
+              disabled={isSigningOut}
+              className="cursor-pointer text-destructive hover:text-destructive"
+              onClick={() => void handleSignOut()}
+            >
+              <LogOut className="size-4 shrink-0" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    );
+  }
+
+  return (
+    <SidebarFooter>
+      {/* User info → link to profile */}
+      <Link
+        href="/profile"
+        className="flex flex-col gap-0.5 rounded-md px-2 py-2 hover:bg-sidebar-accent transition-colors overflow-hidden"
+      >
+        <span className="flex items-center gap-1.5 font-medium text-sm">
+          <span className="truncate">{userLabel}</span>
+          {tier && <PlanBadge tier={tier} />}
+        </span>
+        {sessionUser?.email && (
+          <span className="text-xs text-sidebar-foreground/60 truncate">
+            {sessionUser.email}
+          </span>
+        )}
+      </Link>
+
+      {/* Actions row */}
+      <div className="flex items-center gap-1 px-1 pb-1">
+        <ThemeToggle />
+        <LanguageToggle />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  aria-label={t("sidebar.navSettings")}
+                  className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+                  render={<Link href="/settings" />}
+                />
+              }
+            >
+              <Settings className="size-3.5" />
+            </TooltipTrigger>
+            <TooltipContent>{t("sidebar.navSettings")}</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  aria-label={t("sidebar.navPricing")}
+                  className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
+                  render={<Link href="/pricing" />}
+                />
+              }
+            >
+              <CreditCard className="size-3.5" />
+            </TooltipTrigger>
+            <TooltipContent>{t("sidebar.navPricing")}</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  aria-label={
+                    isSigningOut
+                      ? t("sidebar.signingOut")
+                      : t("sidebar.signOut")
+                  }
+                  disabled={isSigningOut}
+                  className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm text-destructive hover:text-destructive"
+                  onClick={() => void handleSignOut()}
+                />
+              }
+            >
+              <LogOut className="size-3.5" />
+            </TooltipTrigger>
+            <TooltipContent>
+              {isSigningOut ? t("sidebar.signingOut") : t("sidebar.signOut")}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </SidebarFooter>
   );
 }
