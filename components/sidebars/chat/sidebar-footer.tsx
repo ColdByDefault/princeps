@@ -30,7 +30,7 @@ type SidebarFooterSectionProps = {
     name: string | null;
     email: string | null;
   } | null;
-  tier?: string | null;
+  tier?: string | null | undefined;
   isCollapsed: boolean;
   isSigningOut: boolean;
   handleSignOut: () => Promise<void>;
@@ -108,9 +108,7 @@ export function SidebarFooterSection({
                 onClick={() => void handleSignOut()}
               >
                 <LogOut className="mr-2 size-4" />
-                {isSigningOut
-                  ? t("sidebar.signingOut")
-                  : t("sidebar.signOut")}
+                {isSigningOut ? t("sidebar.signingOut") : t("sidebar.signOut")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

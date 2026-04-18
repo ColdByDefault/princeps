@@ -229,12 +229,9 @@ export function SidebarChats({
                                 value={renameValue}
                                 maxLength={80}
                                 placeholder={t("sidebar.renamePlaceholder")}
-                                onChange={(e) =>
-                                  setRenameValue(e.target.value)
-                                }
+                                onChange={(e) => setRenameValue(e.target.value)}
                                 onKeyDown={(e) => {
-                                  if (e.key === "Escape")
-                                    setRenameTarget(null);
+                                  if (e.key === "Escape") setRenameTarget(null);
                                 }}
                                 onBlur={() => void handleRename(chat.id)}
                               />
@@ -262,10 +259,7 @@ export function SidebarChats({
                                 >
                                   <MoreHorizontal className="size-3.5" />
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent
-                                  side="right"
-                                  align="start"
-                                >
+                                <DropdownMenuContent side="right" align="start">
                                   <DropdownMenuItem
                                     className="cursor-pointer"
                                     disabled={chat.messageCount === 0}
