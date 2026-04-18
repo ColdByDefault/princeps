@@ -10,7 +10,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { CreditCard, LogOut, Settings, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   SidebarFooter,
   SidebarMenu,
@@ -135,12 +134,10 @@ export function SidebarFooterSection({
           <Tooltip>
             <TooltipTrigger
               render={
-                <Button
-                  variant="outline"
-                  size="sm"
+                <Link
+                  href="/settings"
                   aria-label={t("sidebar.navSettings")}
-                  className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
-                  render={<Link href="/settings" />}
+                  className="inline-flex h-7 cursor-pointer items-center justify-center rounded-full border border-border/70 bg-background/70 px-2.5 text-sm backdrop-blur-sm hover:bg-muted transition-colors"
                 />
               }
             >
@@ -151,12 +148,10 @@ export function SidebarFooterSection({
           <Tooltip>
             <TooltipTrigger
               render={
-                <Button
-                  variant="outline"
-                  size="sm"
+                <Link
+                  href="/pricing"
                   aria-label={t("sidebar.navPricing")}
-                  className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm"
-                  render={<Link href="/pricing" />}
+                  className="inline-flex h-7 cursor-pointer items-center justify-center rounded-full border border-border/70 bg-background/70 px-2.5 text-sm backdrop-blur-sm hover:bg-muted transition-colors"
                 />
               }
             >
@@ -167,16 +162,15 @@ export function SidebarFooterSection({
           <Tooltip>
             <TooltipTrigger
               render={
-                <Button
-                  variant="outline"
-                  size="sm"
+                <button
+                  type="button"
                   aria-label={
                     isSigningOut
                       ? t("sidebar.signingOut")
                       : t("sidebar.signOut")
                   }
                   disabled={isSigningOut}
-                  className="cursor-pointer rounded-full border-border/70 bg-background/70 px-2.5 backdrop-blur-sm text-destructive hover:text-destructive"
+                  className="inline-flex h-7 cursor-pointer items-center justify-center rounded-full border border-border/70 bg-background/70 px-2.5 text-sm backdrop-blur-sm text-destructive hover:bg-muted transition-colors disabled:pointer-events-none disabled:opacity-50"
                   onClick={() => void handleSignOut()}
                 />
               }
