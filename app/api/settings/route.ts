@@ -57,6 +57,8 @@ export async function PATCH(req: Request) {
     notificationsEnabled,
     timezone,
     location,
+    locationLat,
+    locationLon,
     assistantName,
     assistantTone,
     addressStyle,
@@ -146,7 +148,11 @@ export async function PATCH(req: Request) {
   if (
     !hasPreferencePatch &&
     typeof timezone !== "string" &&
-    typeof location !== "string"
+    !(
+      typeof location === "string" &&
+      typeof locationLat === "number" &&
+      typeof locationLon === "number"
+    )
   ) {
     return NextResponse.json({ ok: true });
   }
@@ -166,9 +172,18 @@ export async function PATCH(req: Request) {
     }
   }
 
-  if (typeof location === "string") {
+  if (
+    typeof location === "string" &&
+    typeof locationLat === "number" &&
+    typeof locationLon === "number"
+  ) {
     try {
-      await updateUserLocation(session.user.id, location);
+      await updateUserLocation(
+        session.user.id,
+        location,
+        locationLat,
+        locationLon,
+      );
     } catch {
       return NextResponse.json(
         { error: "Invalid location value." },

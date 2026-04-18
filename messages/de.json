@@ -222,6 +222,7 @@
       "locationPlaceholder": "Stadt auswählen",
       "locationSearchPlaceholder": "Stadt suchen…",
       "locationEmpty": "Keine Stadt gefunden.",
+      "locationSearching": "Suche…",
       "locationSaved": "Standort gespeichert.",
       "locationSaveFailed": "Standort konnte nicht gespeichert werden.",
       "timezoneTitle": "Zeitzone",

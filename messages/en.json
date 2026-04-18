@@ -222,6 +222,7 @@
       "locationPlaceholder": "Select city",
       "locationSearchPlaceholder": "Search city…",
       "locationEmpty": "No city found.",
+      "locationSearching": "Searching…",
       "locationSaved": "Location saved.",
       "locationSaveFailed": "Failed to save location.",
       "timezoneTitle": "Timezone",
