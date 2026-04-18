@@ -1,3 +1,14 @@
+## [0.3.2] - 2026-04-18
+
+- Update license headers across multiple files to standardize documentation
+- feat: replace Button components with Link for navigation in SidebarFooterSection
+- feat: enhance SidebarFooter with improved user interaction and navigation options
+- feat: refactor AppSidebar and related components for improved structure and readability
+- close #58
+- feat: add shadcn component management documentation with usage guidelines and critical rules
+- feat: enhance location handling with latitude and longitude support, add geocoding API integration Location Search for Weather Fixes #55
+- feat: add email verification status to profile and update translations close #60
+
 ## [0.3.1] - 2026-04-17
 
 - Create LICENSE
