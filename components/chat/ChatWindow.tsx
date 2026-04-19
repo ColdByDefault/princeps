@@ -248,7 +248,21 @@ function MessageBubble({ msg }: { msg: LiveMessage }) {
           <p className="whitespace-pre-wrap wrap-break-word">{msg.content}</p>
         ) : (
           <div className="prose prose-sm dark:prose-invert max-w-none prose-p:leading-relaxed prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-pre:my-2 prose-code:before:content-none prose-code:after:content-none">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: ({ href, children }) => (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline underline-offset-2 hover:opacity-80 cursor-pointer"
+                  >
+                    {children}
+                  </a>
+                ),
+              }}
+            >
               {msg.content}
             </ReactMarkdown>
           </div>
