@@ -13,6 +13,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
@@ -252,14 +253,14 @@ function MessageBubble({ msg }: { msg: LiveMessage }) {
               remarkPlugins={[remarkGfm]}
               components={{
                 a: ({ href, children }) => (
-                  <a
-                    href={href}
+                  <Link
+                    href={href ?? "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary underline underline-offset-2 hover:opacity-80 cursor-pointer"
+                    className="text-blue-500 underline underline-offset-2 hover:text-blue-400 cursor-pointer"
                   >
                     {children}
-                  </a>
+                  </Link>
                 ),
               }}
             >
