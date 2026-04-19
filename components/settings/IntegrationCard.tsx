@@ -55,6 +55,13 @@ const PROVIDER_META: Record<
     icon: <Image src="/icons/google.svg" alt="Google" width={20} height={20} />,
     connectHref: "/api/integrations/google-calendar/connect",
   },
+  google_drive: {
+    label: "Google Drive",
+    description:
+      "Index files from Google Drive into your Knowledge Base for AI-assisted retrieval.",
+    icon: <Image src="/icons/google.svg" alt="Google" width={20} height={20} />,
+    connectHref: "/api/integrations/google-drive/connect",
+  },
 };
 
 function formatDate(iso: string | null): string {

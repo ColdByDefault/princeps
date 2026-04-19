@@ -38,12 +38,14 @@ export interface KnowledgeSearchResult {
  * @param query   - The natural-language query to embed and search against.
  * @param topK    - Maximum number of results to return (default 5).
  * @param minSimilarity - Minimum similarity threshold 0–1 (default 0.3).
+ * @param sourceType - Optional filter by document source (e.g. "drive"). Omit to search all.
  */
 export async function searchKnowledge(
   userId: string,
   query: string,
   topK = 5,
   minSimilarity = 0.3,
+  sourceType?: string | null,
 ): Promise<KnowledgeSearchResult[]> {
   // Embed the query and normalize to the storage dimension
   const rawVector = await embed(query);
@@ -51,6 +53,11 @@ export async function searchKnowledge(
   accumulateTokens(userId, query.length, 0).catch(() => {});
   const vector = normalizeVector(rawVector, EMBEDDING_DIM);
   const vectorLiteral = `[${vector.join(",")}]`;
+
+  // Build optional source_type clause (param index 5 when present)
+  const sourceClause = sourceType != null ? `AND kd.source_type = $5` : "";
+  const queryParams: unknown[] = [userId, vectorLiteral, minSimilarity, topK];
+  if (sourceType != null) queryParams.push(sourceType);
 
   // Raw SQL for pgvector similarity search with join to document name.
   // $queryRawUnsafe is used so the vector dimension stays as a SQL literal in
@@ -75,12 +82,10 @@ export async function searchKnowledge(
     WHERE kc."userId" = $1
       AND kc.embedding IS NOT NULL
       AND 1 - (kc.embedding <=> $2::vector(1536)) >= $3
+      ${sourceClause}
     ORDER BY kc.embedding <=> $2::vector(1536)
     LIMIT $4`,
-    userId,
-    vectorLiteral,
-    minSimilarity,
-    topK,
+    ...queryParams,
   );
 
   return rows.map((r) => ({

@@ -16,7 +16,7 @@ import { IntegrationCard } from "./IntegrationCard";
 import type { IntegrationInfo } from "./IntegrationCard";
 
 // All providers the app supports — add new ones here as they are implemented
-const ALL_PROVIDERS = ["google_calendar"] as const;
+const ALL_PROVIDERS = ["google_calendar", "google_drive"] as const;
 
 type IntegrationsTabProps = {
   initialIntegrations: IntegrationInfo[];
