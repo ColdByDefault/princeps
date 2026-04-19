@@ -1,3 +1,9 @@
+## [0.3.4] - 2026-04-19
+
+- feat: replace anchor tags with Next.js Link component for improved navigation in chat messages
+- feat: enhance link rendering in chat messages with new ReactMarkdown components
+- feat: add web research functionality with web_search and fetch_url handlers
+
 ## [0.3.3] - 2026-04-18
 
 - fix: improve error message for invalid location in PATCH request
