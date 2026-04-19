@@ -20,6 +20,7 @@ import { goalHandlers } from "@/lib/tools/handlers/goals.handler";
 import { knowledgeHandlers } from "@/lib/tools/handlers/knowledge.handler";
 import { memoryHandlers } from "@/lib/tools/handlers/memory.handler";
 import { briefingHandlers } from "@/lib/tools/handlers/briefings.handler";
+import { webResearchHandlers } from "@/lib/tools/handlers/web-research.handler";
 import type { LLMToolCall } from "@/types/llm";
 import type { ActionResult } from "@/lib/tools/types";
 
@@ -44,6 +45,7 @@ const HANDLERS: Record<
   ...knowledgeHandlers,
   ...memoryHandlers,
   ...briefingHandlers,
+  ...webResearchHandlers,
 };
 
 /**
