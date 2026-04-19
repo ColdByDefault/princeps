@@ -13,6 +13,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
@@ -248,7 +249,21 @@ function MessageBubble({ msg }: { msg: LiveMessage }) {
           <p className="whitespace-pre-wrap wrap-break-word">{msg.content}</p>
         ) : (
           <div className="prose prose-sm dark:prose-invert max-w-none prose-p:leading-relaxed prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-pre:my-2 prose-code:before:content-none prose-code:after:content-none">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: ({ href, children }) => (
+                  <Link
+                    href={href ?? "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline underline-offset-2 hover:text-blue-400 cursor-pointer"
+                  >
+                    {children}
+                  </Link>
+                ),
+              }}
+            >
               {msg.content}
             </ReactMarkdown>
           </div>
