@@ -59,7 +59,7 @@ const PROVIDER_META: Record<
     label: "Google Drive",
     description:
       "Index files from Google Drive into your Knowledge Base for AI-assisted retrieval.",
-    icon: <Image src="/icons/google.svg" alt="Google" width={20} height={20} />,
+    icon: <Image src="/icons/googleDrive.png" alt="Google Drive" width={20} height={20} />,
     connectHref: "/api/integrations/google-drive/connect",
   },
 };

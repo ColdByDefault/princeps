@@ -50,6 +50,7 @@ export interface KnowledgeDocumentRecord {
   id: string;
   name: string;
   charCount: number;
+  sourceType: string | null; // "drive" | null (manual upload)
   labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client
 }

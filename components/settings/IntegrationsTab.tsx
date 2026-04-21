@@ -13,6 +13,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { IntegrationCard } from "./IntegrationCard";
+import { DriveIntegrationCard } from "./DriveIntegrationCard";
 import type { IntegrationInfo } from "./IntegrationCard";
 
 // All providers the app supports — add new ones here as they are implemented
@@ -50,15 +51,24 @@ export function IntegrationsTab({ initialIntegrations }: IntegrationsTabProps) {
       </div>
 
       <div className="grid gap-3">
-        {ALL_PROVIDERS.map((provider) => (
-          <IntegrationCard
-            key={provider}
-            provider={provider}
-            connected={getConnected(provider)}
-            onDisconnected={handleDisconnected}
-            onSynced={handleSynced}
-          />
-        ))}
+        {ALL_PROVIDERS.map((provider) =>
+          provider === "google_drive" ? (
+            <DriveIntegrationCard
+              key={provider}
+              connected={getConnected(provider)}
+              onDisconnected={handleDisconnected}
+              onSynced={handleSynced}
+            />
+          ) : (
+            <IntegrationCard
+              key={provider}
+              provider={provider}
+              connected={getConnected(provider)}
+              onDisconnected={handleDisconnected}
+              onSynced={handleSynced}
+            />
+          ),
+        )}
       </div>
     </div>
   );

@@ -11,7 +11,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { indexDriveFiles } from "@/lib/integrations/google-drive";
+import { listDriveFiles } from "@/lib/integrations/google-drive";
 import {
   IntegrationNotFoundError,
   IntegrationExpiredError,
@@ -19,8 +19,8 @@ import {
 
 /**
  * POST /api/integrations/google-drive/sync
- * Triggers a manual incremental index of the user's Google Drive files
- * into the Knowledge Base.
+ * Returns the list of supported Drive files with their import status.
+ * Does NOT index any files — indexing is user-initiated via the import route.
  */
 export async function POST(_req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -29,8 +29,8 @@ export async function POST(_req: Request) {
   }
 
   try {
-    const result = await indexDriveFiles(session.user.id);
-    return NextResponse.json(result);
+    const files = await listDriveFiles(session.user.id);
+    return NextResponse.json({ files });
   } catch (err) {
     if (err instanceof IntegrationNotFoundError) {
       return NextResponse.json({ error: "Not connected" }, { status: 400 });
@@ -42,6 +42,9 @@ export async function POST(_req: Request) {
       );
     }
     console.error("[google-drive/sync]", err);
-    return NextResponse.json({ error: "Sync failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to list files" },
+      { status: 500 },
+    );
   }
 }

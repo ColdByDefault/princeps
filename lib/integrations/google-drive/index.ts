@@ -10,8 +10,10 @@
 
 import "server-only";
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const pdfParse = require("pdf-parse") as (
+import { createRequire } from "module";
+const _require = createRequire(import.meta.url);
+// pdf-parse is a CJS-only package; bypass Turbopack's ESM interop entirely
+const pdfParse = _require("pdf-parse") as (
   buffer: Buffer,
 ) => Promise<{ text: string }>;
 
@@ -46,36 +48,29 @@ const MAX_CHARS_PER_FILE = 100_000;
 
 // ─── Types ────────────────────────────────────────────────
 
-export interface DriveIndexResult {
-  indexed: number;
-  skipped: number;
-  errors: number;
-  quotaReached: boolean;
+export interface DriveFileEntry {
+  id: string;
+  name: string;
+  mimeType: string;
+  modifiedTime: string | null;
+  size: string | null;
+  imported: boolean;
 }
 
-// ─── Main indexing function ───────────────────────────────
+// ─── List files ───────────────────────────────────────────
 
 /**
- * Lists supported files in the user's Google Drive and indexes new or
- * changed files into the Knowledge Base (pgvector).
+ * Fetches supported files from the user's Google Drive and returns them
+ * with an `imported` flag indicating whether each file has already been
+ * indexed into the Knowledge Base.
  *
- * Incremental: files already indexed and unchanged (by modifiedTime) are
- * skipped. Changed files are deleted and re-indexed.
- *
- * Call enforceKnowledgeUpload() is called per new file; tier limits apply.
+ * Does NOT index anything — indexing is user-initiated via importDriveFile.
  */
-export async function indexDriveFiles(
+export async function listDriveFiles(
   userId: string,
-): Promise<DriveIndexResult> {
+): Promise<DriveFileEntry[]> {
   const drive = await getDriveClient(userId);
-  const result: DriveIndexResult = {
-    indexed: 0,
-    skipped: 0,
-    errors: 0,
-    quotaReached: false,
-  };
 
-  // ── 1. Fetch all supported files from Drive ──────────────
   const supportedMimeQuery = [
     ...Object.keys(EXPORTABLE_MIME_TYPES),
     PDF_MIME_TYPE,
@@ -97,145 +92,139 @@ export async function indexDriveFiles(
     pageToken = resp.data.nextPageToken ?? undefined;
   } while (pageToken);
 
-  // ── 2. Load existing Drive-sourced docs for deduplication ─
+  // Cross-reference with already-imported docs
   const existingDocs = await db.knowledgeDocument.findMany({
     where: { userId, sourceType: "drive" },
-    select: { id: true, sourceId: true, sourceUpdatedAt: true },
+    select: { sourceId: true },
   });
-
-  const existingByFileId = new Map(
-    existingDocs.map((d) => [
-      d.sourceId!,
-      { id: d.id, sourceUpdatedAt: d.sourceUpdatedAt },
-    ]),
-  );
-
-  // ── 3. Process each file ─────────────────────────────────
-  for (const file of files) {
-    if (!file.id || !file.name || !file.mimeType) {
-      result.errors++;
-      continue;
-    }
-
-    const existing = existingByFileId.get(file.id);
-    const driveModifiedAt = file.modifiedTime
-      ? new Date(file.modifiedTime)
-      : null;
-
-    // Skip if already indexed and the file has not changed
-    if (existing) {
-      const isUnchanged =
-        driveModifiedAt &&
-        existing.sourceUpdatedAt &&
-        driveModifiedAt <= existing.sourceUpdatedAt;
-      if (isUnchanged || !driveModifiedAt) {
-        result.skipped++;
-        continue;
-      }
-    }
-
-    // ── Export / download file content ───────────────────
-    let content: string;
-    try {
-      content = await extractFileContent(drive, file);
-    } catch (err) {
-      console.error(`[google-drive] Failed to extract "${file.name}":`, err);
-      result.errors++;
-      continue;
-    }
-
-    // Trim to max chars per file
-    if (content.length > MAX_CHARS_PER_FILE) {
-      content = content.slice(0, MAX_CHARS_PER_FILE);
-    }
-
-    const charCount = content.length;
-    if (charCount < 50) {
-      result.skipped++;
-      continue;
-    }
-
-    // ── Tier enforcement ──────────────────────────────────
-    // For re-indexed files: delete the old doc first so the slot is freed
-    // before enforcement runs (avoids false "quota reached" on replace).
-    if (existing) {
-      await db.knowledgeDocument.delete({ where: { id: existing.id } });
-    }
-
-    // fileSizeBytes: use Drive metadata for PDFs, char count for others
-    const fileSizeBytes = file.size ? parseInt(file.size, 10) : charCount;
-    const enforcement = await enforceKnowledgeUpload(
-      userId,
-      fileSizeBytes,
-      charCount,
-    );
-    if (!enforcement.allowed) {
-      result.quotaReached = true;
-      break;
-    }
-
-    // ── Chunk + embed + persist ───────────────────────────
-    try {
-      const chunks = chunkText(content);
-      const rawVectors = await embedBatch(chunks);
-      accumulateTokens(
-        userId,
-        chunks.reduce((s, c) => s + c.length, 0),
-        0,
-      ).catch(() => {});
-      const vectors = rawVectors.map((v) => normalizeVector(v, EMBEDDING_DIM));
-
-      await db.$transaction(
-        async (tx) => {
-          const doc = await tx.knowledgeDocument.create({
-            data: {
-              userId,
-              name: file.name!,
-              charCount,
-              sourceType: "drive",
-              sourceId: file.id!,
-              sourceUpdatedAt: driveModifiedAt ?? new Date(),
-            },
-            select: { id: true },
-          });
-
-          for (let i = 0; i < chunks.length; i++) {
-            const chunk = chunks[i]!;
-            const vector = vectors[i]!;
-            const vectorLiteral = `[${vector.join(",")}]`;
-
-            await tx.$executeRawUnsafe(
-              `INSERT INTO "knowledge_chunk" ("id", "documentId", "userId", "content", "embedding", "chunkIndex", "createdAt")
-               VALUES (gen_random_uuid()::text, $1, $2, $3, $4::vector(1536), $5, NOW())`,
-              doc.id,
-              userId,
-              chunk,
-              vectorLiteral,
-              i,
-            );
-          }
-
-          // Increment lifetime counters (never decremented)
-          await tx.user.update({
-            where: { id: userId },
-            data: {
-              knowledgeCharsUsed: { increment: charCount },
-              knowledgeUploadsUsed: { increment: 1 },
-            },
-          });
-        },
-        { timeout: 30_000 },
-      );
-
-      result.indexed++;
-    } catch (err) {
-      console.error(`[google-drive] Failed to index "${file.name}":`, err);
-      result.errors++;
-    }
-  }
+  const importedIds = new Set(existingDocs.map((d) => d.sourceId!));
 
   await markSynced(userId, "google_drive");
-  return result;
+
+  return files
+    .filter((f) => f.id && f.name && f.mimeType)
+    .map((f) => ({
+      id: f.id!,
+      name: f.name!,
+      mimeType: f.mimeType!,
+      modifiedTime: f.modifiedTime ?? null,
+      size: f.size ?? null,
+      imported: importedIds.has(f.id!),
+    }));
+}
+
+// ─── Import single file ───────────────────────────────────
+
+/**
+ * Indexes a single Drive file chosen by the user into the Knowledge Base.
+ * If the file was previously imported, the old record is replaced.
+ */
+export async function importDriveFile(
+  userId: string,
+  fileId: string,
+): Promise<{ name: string }> {
+  const drive = await getDriveClient(userId);
+
+  const meta = await drive.files.get({
+    fileId,
+    fields: "id, name, mimeType, modifiedTime, size",
+  });
+  const file = meta.data;
+
+  if (!file.id || !file.name || !file.mimeType) {
+    throw new Error("Invalid file metadata from Drive.");
+  }
+
+  let content: string;
+  try {
+    content = await extractFileContent(drive, file);
+  } catch (err) {
+    throw new Error(
+      `Failed to extract content from "${file.name}": ${String(err)}`,
+    );
+  }
+
+  if (content.length > MAX_CHARS_PER_FILE) {
+    content = content.slice(0, MAX_CHARS_PER_FILE);
+  }
+
+  const charCount = content.length;
+  if (charCount < 50) {
+    throw new Error("File content is too short to index.");
+  }
+
+  // Delete existing record first so the quota slot is freed before enforcement
+  const existing = await db.knowledgeDocument.findFirst({
+    where: { userId, sourceType: "drive", sourceId: fileId },
+    select: { id: true },
+  });
+  if (existing) {
+    await db.knowledgeDocument.delete({ where: { id: existing.id } });
+  }
+
+  const fileSizeBytes = file.size ? parseInt(file.size, 10) : charCount;
+  const enforcement = await enforceKnowledgeUpload(
+    userId,
+    fileSizeBytes,
+    charCount,
+  );
+  if (!enforcement.allowed) {
+    throw new Error(enforcement.reason ?? "Knowledge Base quota reached.");
+  }
+
+  const driveModifiedAt = file.modifiedTime
+    ? new Date(file.modifiedTime)
+    : new Date();
+  const chunks = chunkText(content);
+  const rawVectors = await embedBatch(chunks);
+  accumulateTokens(
+    userId,
+    chunks.reduce((s, c) => s + c.length, 0),
+    0,
+  ).catch(() => {});
+  const vectors = rawVectors.map((v) => normalizeVector(v, EMBEDDING_DIM));
+
+  await db.$transaction(
+    async (tx) => {
+      const doc = await tx.knowledgeDocument.create({
+        data: {
+          userId,
+          name: file.name!,
+          charCount,
+          sourceType: "drive",
+          sourceId: file.id!,
+          sourceUpdatedAt: driveModifiedAt,
+        },
+        select: { id: true },
+      });
+
+      for (let i = 0; i < chunks.length; i++) {
+        const chunk = chunks[i]!;
+        const vector = vectors[i]!;
+        const vectorLiteral = `[${vector.join(",")}]`;
+        await tx.$executeRawUnsafe(
+          `INSERT INTO "knowledge_chunk" ("id", "documentId", "userId", "content", "embedding", "chunkIndex", "createdAt")
+           VALUES (gen_random_uuid()::text, $1, $2, $3, $4::vector(1536), $5, NOW())`,
+          doc.id,
+          userId,
+          chunk,
+          vectorLiteral,
+          i,
+        );
+      }
+
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          knowledgeCharsUsed: { increment: charCount },
+          knowledgeUploadsUsed: { increment: 1 },
+        },
+      });
+    },
+    { timeout: 30_000 },
+  );
+
+  return { name: file.name };
 }
 
 // ─── File content extraction ──────────────────────────────
