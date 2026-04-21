@@ -1,3 +1,7 @@
+## [1.0.1] - 2026-04-21
+
+- fix: improve changelog generation script and ensure header consistency
+
 # Changelog
 
 ## [0.3.5] - 2026-04-21
