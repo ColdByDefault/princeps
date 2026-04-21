@@ -1,3 +1,9 @@
+## [0.3.5] - 2026-04-21
+
+- feat: implement Google Drive file browsing and importing functionality close #53
+- feat: add Google Drive integration for file import and sync
+- feat: add Google Drive integration for file indexing and search functionality
+
 ## [0.3.4] - 2026-04-19
 
 - feat: replace anchor tags with Next.js Link component for improved navigation in chat messages
