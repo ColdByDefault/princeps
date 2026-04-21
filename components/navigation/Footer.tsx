@@ -36,6 +36,7 @@ export default function Footer() {
   const policyLinks: FooterLink[] = [
     { href: "/privacy-policy", label: t("footer.privacyPolicy") },
     { href: "/terms-of-use", label: t("footer.termsOfUse") },
+    { href: "/cookie-policy", label: t("footer.cookiePolicy") },
     { href: "/security", label: t("footer.security") },
   ];
 

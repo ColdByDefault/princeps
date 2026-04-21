@@ -198,6 +198,8 @@ export function PricingShell({ currentTier }: PricingShellProps) {
           );
         })}
       </div>
+
+      <BillingInfo t={t} />
     </div>
   );
 }
@@ -237,5 +239,34 @@ function BoolRow({
         </span>
       )}
     </li>
+  );
+}
+
+type BillingSection = { heading: string; content: string };
+
+function BillingInfo({
+  t,
+}: {
+  t: ReturnType<typeof useTranslations<"pricing">>;
+}) {
+  const sections = t.raw("billing.sections") as BillingSection[];
+
+  return (
+    <div className="mt-10">
+      <Separator className="mb-8" />
+      <h2 className="mb-6 text-base font-semibold tracking-tight">
+        {t("billing.title")}
+      </h2>
+      <div className="grid gap-6 sm:grid-cols-3">
+        {sections.map((section) => (
+          <div key={section.heading}>
+            <p className="mb-1 text-sm font-medium">{section.heading}</p>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {section.content}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

@@ -11,3 +11,7 @@ One more thing I overheard — apparently Helios Ventures just closed a €40M f
 Actually — all of this, the contacts, the tasks, the decision, the goal, everything from today — it's all part of the Madrid Project. That's how I'm tracking this whole expansion push internally. Make sure everything gets filed under that.
 
 
+
+fix plans onboarding and /plans enterprise, show contact instead of prise
+
+in plans, badge free and enterprise have same color, check error
