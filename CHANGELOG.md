@@ -1,3 +1,5 @@
+# Changelog
+
 ## [0.3.5] - 2026-04-21
 
 - feat: implement Google Drive file browsing and importing functionality close #53
@@ -387,7 +389,9 @@
 - refactor: remove notification, report, share, and task logic files
 
 ## [0.1.25] - 2026-04-02
+
 ## MAJOR REFACTORE
+
 - Remove localization strings and delete seed preload script
 - feat: remove outdated database seed files and related scripts for improved clarity
 - feat: update .gitignore and refactor prisma schema to improve organization and add new enums
@@ -520,6 +524,3 @@
 - feat(tools): implement tool definitions for creating contacts, meetings, and tasks
 - feat(settings): add App Settings page and update navigation structure
 - feat(assistant): implement assistant settings page and preferences management
-
-# Changelog
-

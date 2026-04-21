@@ -54,25 +54,36 @@ jobs:
 
       - name: Generate changelog entry
         run: |
+          set -euo pipefail
+
           NEW_VERSION="${{ steps.bump.outputs.new }}"
           DATE=$(date +%Y-%m-%d)
 
           # Collect commits since the previous version-bump commit
-          PREV_BUMP=$(git log --format="%H" --grep="chore: bump version" -1)
-          if [ -z "$PREV_BUMP" ]; then
-            COMMITS=$(git log --no-merges --format="- %s" | grep -v "^- chore: bump version" | head -30)
+          PREV_BUMP=$(git log --format="%H" --grep="chore: bump version" -1 || true)
+          if [ -z "${PREV_BUMP}" ]; then
+            COMMITS=$(git log --no-merges --format="- %s" \
+              | grep -v "^- chore: bump version" \
+              | head -30 || true)
           else
-            COMMITS=$(git log "${PREV_BUMP}..HEAD" --no-merges --format="- %s" | grep -v "^- chore: bump version")
+            COMMITS=$(git log "${PREV_BUMP}..HEAD" --no-merges --format="- %s" \
+              | grep -v "^- chore: bump version" || true)
           fi
 
-          if [ -z "$COMMITS" ]; then
+          if [ -z "${COMMITS}" ]; then
             COMMITS="- Minor updates and improvements"
           fi
 
-          # Prepend new entry; create header on first run
+          # Ensure CHANGELOG exists and header is at the top exactly once
           if [ ! -f CHANGELOG.md ]; then
-            echo "# Changelog" > CHANGELOG.md
-            echo "" >> CHANGELOG.md
+            printf "# Changelog\n\n" > CHANGELOG.md
+          else
+            # If header is missing from the first line, add it.
+            FIRST_LINE=$(head -n 1 CHANGELOG.md || true)
+            if [ "${FIRST_LINE}" != "# Changelog" ]; then
+              printf "# Changelog\n\n%s" "$(cat CHANGELOG.md)" > CHANGELOG.md.tmp
+              mv CHANGELOG.md.tmp CHANGELOG.md
+            fi
           fi
 
           {
@@ -81,7 +92,8 @@ jobs:
             echo "${COMMITS}"
             echo ""
             cat CHANGELOG.md
-          } > CHANGELOG.md.new && mv CHANGELOG.md.new CHANGELOG.md
+          } > CHANGELOG.md.new
+          mv CHANGELOG.md.new CHANGELOG.md
 
       - name: Commit and push
         run: |
