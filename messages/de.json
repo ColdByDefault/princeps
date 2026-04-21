@@ -208,7 +208,16 @@
       "perYear": "/Jahr",
       "subscribeCta": "Abonnieren",
       "subscribing": "Weiterleitung…",
+      "subscribeAriaLabel": "Auf {tier} upgraden",
       "enterpriseCta": "Kontaktiere uns",
+      "enterprisePriceLabel": "Individuelles Angebot",
+      "enterpriseName": "Enterprise",
+      "limits": {
+        "messagesPerMonth": "Nachrichten / Monat",
+        "contacts": "Kontakte",
+        "tasks": "Aufgaben",
+        "nudgesEnabled": "Proaktive Hinweise"
+      },
       "error": "Checkout konnte nicht gestartet werden. Bitte erneut versuchen.",
       "portalError": "Abrechnungsportal konnte nicht geöffnet werden. Bitte erneut versuchen."
     },
@@ -444,6 +453,7 @@
       "placeholderLinks": "Richtlinien",
       "privacyPolicy": "Datenschutzrichtlinie",
       "termsOfUse": "Nutzungsbedingungen",
+      "cookiePolicy": "Cookie-Richtlinie",
       "security": "Sicherheit",
       "versionTitle": "Anwendungsversion",
       "beta": "Beta",
@@ -1270,7 +1280,8 @@
     "price": {
       "free": "Kostenlos",
       "perMonth": "/Monat",
-      "annual": "€{price}/Jahr jährlich"
+      "annual": "€{price}/Jahr jährlich",
+      "enterprise": "Kontaktiere uns"
     },
     "planNames": {
       "free": "Free",
@@ -1301,7 +1312,24 @@
       "nudgesEnabled": "Proaktive Hinweise"
     },
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "billing": {
+      "title": "Abrechnung & Konditionen",
+      "sections": [
+        {
+          "heading": "Abrechnungszyklus",
+          "content": "Monatliche Pläne werden monatlich am gleichen Datum abgerechnet. Jährliche Pläne werden einmal pro Jahr im Voraus abgerechnet. Du erhältst eine Rechnung per E-Mail."
+        },
+        {
+          "heading": "Kündigung & Erstattungen",
+          "content": "Du kannst deinen Plan jederzeit kündigen. Der Zugang bleibt bis zum Ende des aktuellen Abrechnungszeitraums erhalten. Für bereits abgerechnete Zeiträume werden keine Erstattungen gewährt."
+        },
+        {
+          "heading": "Testversion",
+          "content": "Der Free-Plan ist dauerhaft ohne Zeitbeschränkung verfügbar. Kostenpflichtige Pläne beginnen sofort nach dem Checkout. Eine kostenlose Testphase für bezahlte Pläne ist aktuell nicht verfügbar."
+        }
+      ]
+    }
   },
   "knowledge": {
     "metadata": {
@@ -1413,15 +1441,33 @@
       "billingAnnual": "Jährlich",
       "annualSavings": "Spare ~{percent}%",
       "currentPlan": "Ausgewählt",
+      "planFree": "Kostenlos",
+      "planNames": {
+        "free": "Free",
+        "pro": "Pro",
+        "premium": "Premium",
+        "enterprise": "Enterprise"
+      },
       "free": {
         "cta": "Kostenlos fortfahren"
       },
       "paid": {
         "cta": "Abonnieren",
-        "subscribing": "Weiterleitung…"
+        "subscribing": "Weiterleitung…",
+        "ariaLabel": "{tier} abonnieren"
       },
       "enterprise": {
-        "cta": "Kontaktiere uns"
+        "cta": "Kontaktiere uns",
+        "price": "Individuelles Angebot"
+      },
+      "limits": {
+        "messagesPerMonth": "Nachrichten / Monat",
+        "chatsSaved": "Gespeicherte Chats",
+        "contacts": "Kontakte",
+        "tasks": "Aufgaben",
+        "meetings": "Meetings",
+        "knowledgeDocs": "Wissensdokumente",
+        "nudgesEnabled": "Proaktive Hinweise"
       },
       "error": "Checkout konnte nicht gestartet werden. Bitte erneut versuchen.",
       "perMonth": "/Mo.",
@@ -1431,6 +1477,133 @@
       "title": "Willkommen bei Princeps!",
       "body": "Dein Plan wird gerade aktiviert – das dauert nur einen Moment.",
       "redirecting": "Du wirst zu deinem Arbeitsbereich weitergeleitet…"
+    }
+  },
+  "legal": {
+    "lastUpdatedLabel": "Zuletzt aktualisiert",
+    "privacyPolicy": {
+      "metadata": {
+        "title": "Datenschutzerklärung",
+        "description": "Wie Princeps deine persönlichen Daten erhebt, verarbeitet und schützt."
+      },
+      "title": "Datenschutzerklärung",
+      "lastUpdated": "April 2026",
+      "sections": [
+        {
+          "heading": "Verantwortlicher",
+          "content": "Verantwortlich für die Verarbeitung deiner personenbezogenen Daten im Sinne der DSGVO ist AnotherProject™ – ColdByDefault. Für datenschutzrechtliche Anfragen wende dich bitte an: privacy@princeps.app"
+        },
+        {
+          "heading": "Erhobene Daten",
+          "content": "Wir erheben Kontoangaben (Name, E-Mail-Adresse, Benutzername, Passwort-Hash), Inhalte, die du erstellst (Aufgaben, Meetings, Entscheidungen, Ziele, Kontakte, Chat-Nachrichten, Wissensdokumente, Gedächtniseinträge) sowie technische Anmeldedaten (IP-Adresse, Zeitstempel) zum Schutz deines Kontos."
+        },
+        {
+          "heading": "Zweck der Verarbeitung",
+          "content": "Deine Daten werden ausschließlich zur Bereitstellung und Verbesserung von Princeps, zur Authentifizierung und Kontosicherheit sowie zur Abrechnung bei kostenpflichtigen Plänen verarbeitet. Es erfolgt keine Weitergabe an Dritte zu Werbezwecken."
+        },
+        {
+          "heading": "Speicherdauer",
+          "content": "Deine Daten bleiben gespeichert, solange dein Konto aktiv ist. Nach der Löschung deines Kontos werden alle personenbezogenen Daten innerhalb von 30 Tagen unwiderruflich entfernt."
+        },
+        {
+          "heading": "Deine Rechte (DSGVO)",
+          "content": "Du hast das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Du hast außerdem das Recht, eine Beschwerde bei einer zuständigen Datenschutzbehörde einzureichen."
+        },
+        {
+          "heading": "Kontakt",
+          "content": "Bei Fragen zum Datenschutz erreichst du uns unter privacy@princeps.app. Wir beantworten Anfragen gemäß DSGVO innerhalb von 30 Tagen."
+        }
+      ]
+    },
+    "termsOfUse": {
+      "metadata": {
+        "title": "Nutzungsbedingungen",
+        "description": "Die Regeln und Bedingungen für die Nutzung von Princeps."
+      },
+      "title": "Nutzungsbedingungen",
+      "lastUpdated": "April 2026",
+      "sections": [
+        {
+          "heading": "Geltungsbereich",
+          "content": "Diese Nutzungsbedingungen gelten für alle registrierten Nutzer von Princeps. Mit der Registrierung stimmst du diesen Bedingungen zu."
+        },
+        {
+          "heading": "Nutzerkonto",
+          "content": "Du bist für die Sicherheit deines Kontos und deiner Zugangsdaten verantwortlich. Teile dein Passwort nicht mit Dritten. Informiere uns sofort unter support@princeps.app, wenn du unbefugten Zugriff auf dein Konto vermutest."
+        },
+        {
+          "heading": "Zulässige Nutzung",
+          "content": "Princeps darf ausschließlich für rechtmäßige Zwecke genutzt werden. Untersagt sind: automatisierter Zugriff ohne Genehmigung, Reverse Engineering, das Hochladen rechtswidriger Inhalte sowie jede Nutzung, die den Betrieb des Dienstes beeinträchtigt."
+        },
+        {
+          "heading": "Haftungsbeschränkung",
+          "content": "Der Dienst wird 'wie er ist' bereitgestellt. Wir haften nicht für Datenverlust, mittelbare Schäden oder entgangenen Gewinn. Die Haftung für grobe Fahrlässigkeit und Vorsatz bleibt unberührt."
+        },
+        {
+          "heading": "Geltendes Recht",
+          "content": "Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand für alle Streitigkeiten aus oder im Zusammenhang mit diesen Bedingungen ist Deutschland."
+        },
+        {
+          "heading": "Kündigung",
+          "content": "Du kannst dein Konto jederzeit unter Einstellungen löschen. Wir behalten uns das Recht vor, Konten bei erheblichen Verstößen gegen diese Bedingungen zu sperren oder zu löschen."
+        }
+      ]
+    },
+    "cookiePolicy": {
+      "metadata": {
+        "title": "Cookie-Richtlinie",
+        "description": "Welche Cookies Princeps verwendet und wie du sie steuern kannst."
+      },
+      "title": "Cookie-Richtlinie",
+      "lastUpdated": "April 2026",
+      "sections": [
+        {
+          "heading": "Was sind Cookies?",
+          "content": "Cookies sind kleine Textdateien, die dein Browser auf deinem Gerät speichert, wenn du eine Website besuchst. Sie ermöglichen es, deine Sitzung zu identifizieren und die grundlegenden Funktionen der App bereitzustellen."
+        },
+        {
+          "heading": "Notwendige Cookies",
+          "content": "Princeps setzt ausschließlich technisch notwendige Session-Cookies ein, die für die Authentifizierung erforderlich sind. Diese Cookies werden automatisch gelöscht, wenn du dich abmeldest oder deine Browser-Sitzung beendest."
+        },
+        {
+          "heading": "Keine Marketing- oder Analyse-Cookies",
+          "content": "Wir setzen keine Tracking-, Marketing- oder Analyse-Cookies von Drittanbietern ein. Deine Nutzung von Princeps wird nicht für Werbezwecke verfolgt oder an externe Dienste weitergegeben."
+        },
+        {
+          "heading": "Opt-out",
+          "content": "Da wir ausschließlich technisch notwendige Cookies verwenden, ist ein vollständiger Opt-out nicht möglich, ohne die Grundfunktionen der App zu beeinträchtigen. Du kannst Cookies jederzeit in deinen Browser-Einstellungen verwalten oder löschen."
+        }
+      ]
+    },
+    "security": {
+      "metadata": {
+        "title": "Sicherheit",
+        "description": "Wie Princeps deine Daten schützt und wie du Sicherheitsprobleme melden kannst."
+      },
+      "title": "Sicherheit",
+      "lastUpdated": "April 2026",
+      "sections": [
+        {
+          "heading": "Datenverschlüsselung",
+          "content": "Alle Daten werden über TLS 1.2 oder höher verschlüsselt übertragen. Passwörter werden ausschließlich als kryptografische Hashes gespeichert – niemals im Klartext."
+        },
+        {
+          "heading": "Zugangskontrolle",
+          "content": "Jeder Nutzer hat ausschließlich Zugriff auf seine eigenen Daten. Zugriffskontrollen werden serverseitig erzwungen. Eine Auslieferung von Daten anderer Nutzer ist systemisch ausgeschlossen."
+        },
+        {
+          "heading": "Datensicherung",
+          "content": "Regelmäßige automatische Backups sichern deine Daten gegen Verlust. Im Falle eines technischen Problems stehen gesicherte Datenstände für die Wiederherstellung zur Verfügung."
+        },
+        {
+          "heading": "Sicherheitsvorfälle",
+          "content": "Im Falle eines Sicherheitsvorfalls, der deine Daten betreffen könnte, werden betroffene Nutzer unverzüglich informiert – entsprechend den Anforderungen der DSGVO (Art. 33–34)."
+        },
+        {
+          "heading": "Schwachstellen melden",
+          "content": "Entdeckst du eine Sicherheitslücke in Princeps, melde sie bitte verantwortungsvoll an security@princeps.app. Wir bestätigen den Eingang innerhalb von 72 Stunden und arbeiten umgehend an einer Lösung."
+        }
+      ]
     }
   }
 }

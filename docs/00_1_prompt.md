@@ -9,5 +9,3 @@ Before the meeting with Marcus I need to dig up that competitive analysis we ran
 One more thing I overheard — apparently Helios Ventures just closed a €40M fund, mostly B2B SaaS focus. Nothing to act on right now but worth keeping somewhere.
 
 Actually — all of this, the contacts, the tasks, the decision, the goal, everything from today — it's all part of the Madrid Project. That's how I'm tracking this whole expansion push internally. Make sure everything gets filed under that.
-
-

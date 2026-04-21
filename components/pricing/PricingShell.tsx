@@ -58,6 +58,7 @@ export function PricingShell({ currentTier }: PricingShellProps) {
           const limits = PLAN_LIMITS[tier];
           const price = PLAN_PRICES[tier];
           const isCurrent = tier === currentTier;
+          const isEnterprise = tier === "enterprise";
 
           return (
             <div key={tier} className="relative pt-3" data-tier={tier}>
@@ -84,26 +85,36 @@ export function PricingShell({ currentTier }: PricingShellProps) {
 
                 {/* Price */}
                 <div className="mb-4">
-                  <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold leading-none">
-                      {price.monthly === 0
-                        ? t("price.free")
-                        : `€${price.monthly}`}
-                    </span>
-                    {price.monthly > 0 && (
-                      <span className="mb-0.5 text-sm text-muted-foreground">
-                        {t("price.perMonth")}
+                  {isEnterprise ? (
+                    <div className="flex items-end gap-1">
+                      <span className="text-xl font-semibold leading-none text-muted-foreground">
+                        {t("price.enterprise")}
                       </span>
-                    )}
-                  </div>
-                  {price.annual !== null ? (
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {t("price.annual", { price: price.annual })}
-                    </p>
+                    </div>
                   ) : (
-                    <p className="mt-1 text-xs text-transparent select-none">
-                      &nbsp;
-                    </p>
+                    <>
+                      <div className="flex items-end gap-1">
+                        <span className="text-3xl font-bold leading-none">
+                          {price.monthly === 0
+                            ? t("price.free")
+                            : `€${price.monthly}`}
+                        </span>
+                        {price.monthly > 0 && (
+                          <span className="mb-0.5 text-sm text-muted-foreground">
+                            {t("price.perMonth")}
+                          </span>
+                        )}
+                      </div>
+                      {price.annual !== null ? (
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {t("price.annual", { price: price.annual })}
+                        </p>
+                      ) : (
+                        <p className="mt-1 text-xs text-transparent select-none">
+                          &nbsp;
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
 
@@ -198,6 +209,8 @@ export function PricingShell({ currentTier }: PricingShellProps) {
           );
         })}
       </div>
+
+      <BillingInfo t={t} />
     </div>
   );
 }
@@ -237,5 +250,34 @@ function BoolRow({
         </span>
       )}
     </li>
+  );
+}
+
+type BillingSection = { heading: string; content: string };
+
+function BillingInfo({
+  t,
+}: {
+  t: ReturnType<typeof useTranslations<"pricing">>;
+}) {
+  const sections = t.raw("billing.sections") as BillingSection[];
+
+  return (
+    <div className="mt-10">
+      <Separator className="mb-8" />
+      <h2 className="mb-6 text-base font-semibold tracking-tight">
+        {t("billing.title")}
+      </h2>
+      <div className="grid gap-6 sm:grid-cols-3">
+        {sections.map((section) => (
+          <div key={section.heading}>
+            <p className="mb-1 text-sm font-medium">{section.heading}</p>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {section.content}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

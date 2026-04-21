@@ -32,7 +32,7 @@ jobs:
           OLD=$(node -p "require('./package.json').version")
           NEW=$(node -e "
             const [major, minor, patch] = '$OLD'.split('.').map(Number);
-            const next = patch < 9
+            const next = patch < 10
               ? \`\${major}.\${minor}.\${patch + 1}\`
               : \`\${major}.\${minor + 1}.0\`;
             console.log(next);

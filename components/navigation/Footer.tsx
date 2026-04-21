@@ -36,6 +36,7 @@ export default function Footer() {
   const policyLinks: FooterLink[] = [
     { href: "/privacy-policy", label: t("footer.privacyPolicy") },
     { href: "/terms-of-use", label: t("footer.termsOfUse") },
+    { href: "/cookie-policy", label: t("footer.cookiePolicy") },
     { href: "/security", label: t("footer.security") },
   ];
 
@@ -60,14 +61,17 @@ export default function Footer() {
             className="text-xs text-muted-foreground"
             titleLabel={t("footer.versionTitle")}
           />
-          <span className="inline-flex items-center bg-amber-500/10 px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.18em] text-amber-700 uppercase dark:text-amber-300">
-            {t("footer.beta")}
-          </span>
           <span className="text-xs text-muted-foreground">
             | {t("footer.copyright")} |
           </span>
           <span className="text-xs text-muted-foreground">
-            {t("footer.authors")}
+            <Link
+              href="https://coldbydefault.com"
+              className="text-xs text-muted-foreground transition hover:text-foreground"
+              target="_blank"
+            >
+              {t("footer.authors")}
+            </Link>
           </span>
         </div>
       </div>

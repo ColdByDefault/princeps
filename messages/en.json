@@ -208,7 +208,16 @@
       "perYear": "/yr",
       "subscribeCta": "Subscribe",
       "subscribing": "Redirecting…",
+      "subscribeAriaLabel": "Upgrade to {tier}",
       "enterpriseCta": "Contact us",
+      "enterprisePriceLabel": "Custom pricing",
+      "enterpriseName": "Enterprise",
+      "limits": {
+        "messagesPerMonth": "Messages / month",
+        "contacts": "Contacts",
+        "tasks": "Tasks",
+        "nudgesEnabled": "Proactive nudges"
+      },
       "error": "Failed to start checkout. Please try again.",
       "portalError": "Failed to open billing portal. Please try again."
     },
@@ -444,6 +453,7 @@
       "placeholderLinks": "Policies",
       "privacyPolicy": "Privacy policy",
       "termsOfUse": "Terms of use",
+      "cookiePolicy": "Cookie policy",
       "security": "Security",
       "versionTitle": "Application version",
       "beta": "Beta",
@@ -1270,7 +1280,8 @@
     "price": {
       "free": "Free",
       "perMonth": "/month",
-      "annual": "€{price}/yr billed annually"
+      "annual": "€{price}/yr billed annually",
+      "enterprise": "Contact us"
     },
     "planNames": {
       "free": "Free",
@@ -1301,7 +1312,24 @@
       "nudgesEnabled": "Proactive nudges"
     },
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "billing": {
+      "title": "Billing & Terms",
+      "sections": [
+        {
+          "heading": "Billing Cycle",
+          "content": "Monthly plans are billed on the same date each month. Annual plans are billed once per year, in advance. You will receive an invoice by email."
+        },
+        {
+          "heading": "Cancellation & Refunds",
+          "content": "You can cancel your plan at any time. Access remains active until the end of the current billing period. No refunds are issued for already-billed periods."
+        },
+        {
+          "heading": "Trial Terms",
+          "content": "The Free plan is permanently available with no time limit. Paid plans begin immediately after checkout. A free trial for paid plans is not currently available."
+        }
+      ]
+    }
   },
   "knowledge": {
     "metadata": {
@@ -1413,15 +1441,33 @@
       "billingAnnual": "Annual",
       "annualSavings": "Save ~{percent}%",
       "currentPlan": "Selected",
+      "planFree": "Free",
+      "planNames": {
+        "free": "Free",
+        "pro": "Pro",
+        "premium": "Premium",
+        "enterprise": "Enterprise"
+      },
       "free": {
         "cta": "Continue for free"
       },
       "paid": {
         "cta": "Subscribe",
-        "subscribing": "Redirecting…"
+        "subscribing": "Redirecting…",
+        "ariaLabel": "Subscribe to {tier}"
       },
       "enterprise": {
-        "cta": "Contact us"
+        "cta": "Contact us",
+        "price": "Custom pricing"
+      },
+      "limits": {
+        "messagesPerMonth": "Messages / month",
+        "chatsSaved": "Saved chats",
+        "contacts": "Contacts",
+        "tasks": "Tasks",
+        "meetings": "Meetings",
+        "knowledgeDocs": "Knowledge docs",
+        "nudgesEnabled": "Proactive nudges"
       },
       "error": "Failed to start checkout. Please try again.",
       "perMonth": "/mo",
@@ -1431,6 +1477,133 @@
       "title": "Welcome to Princeps!",
       "body": "Your plan is being activated — this takes just a moment.",
       "redirecting": "Taking you to your workspace…"
+    }
+  },
+  "legal": {
+    "lastUpdatedLabel": "Last updated",
+    "privacyPolicy": {
+      "metadata": {
+        "title": "Privacy Policy",
+        "description": "How Princeps collects, processes, and protects your personal data."
+      },
+      "title": "Privacy Policy",
+      "lastUpdated": "April 2026",
+      "sections": [
+        {
+          "heading": "Data Controller",
+          "content": "The data controller for the processing of your personal data (as defined under GDPR) is AnotherProject™ – ColdByDefault. For data protection inquiries, please contact: privacy@princeps.app"
+        },
+        {
+          "heading": "Data We Collect",
+          "content": "We collect account information (name, email address, username, password hash), content you create (tasks, meetings, decisions, goals, contacts, chat messages, knowledge documents, memory entries), and technical login data (IP address, timestamps) to protect your account."
+        },
+        {
+          "heading": "Purpose of Processing",
+          "content": "Your data is processed solely to provide and improve Princeps, for authentication and account security, and for billing on paid plans. We do not share your data with third parties for advertising purposes."
+        },
+        {
+          "heading": "Data Retention",
+          "content": "Your data is retained as long as your account is active. After account deletion, all personal data is permanently removed within 30 days."
+        },
+        {
+          "heading": "Your Rights (GDPR)",
+          "content": "You have the right to access (Art. 15), rectification (Art. 16), erasure (Art. 17), restriction of processing (Art. 18), data portability (Art. 20), and objection (Art. 21). You also have the right to lodge a complaint with a competent data protection authority."
+        },
+        {
+          "heading": "Contact",
+          "content": "For data protection questions, contact us at privacy@princeps.app. We respond to requests in accordance with GDPR within 30 days."
+        }
+      ]
+    },
+    "termsOfUse": {
+      "metadata": {
+        "title": "Terms of Use",
+        "description": "The rules and conditions for using Princeps."
+      },
+      "title": "Terms of Use",
+      "lastUpdated": "April 2026",
+      "sections": [
+        {
+          "heading": "Scope",
+          "content": "These Terms of Use apply to all registered users of Princeps. By registering, you agree to these terms."
+        },
+        {
+          "heading": "User Account",
+          "content": "You are responsible for the security of your account and credentials. Do not share your password with others. Notify us immediately at support@princeps.app if you suspect unauthorized access to your account."
+        },
+        {
+          "heading": "Acceptable Use",
+          "content": "Princeps may only be used for lawful purposes. Prohibited activities include: unauthorized automated access, reverse engineering, uploading unlawful content, and any use that disrupts the operation of the service."
+        },
+        {
+          "heading": "Limitation of Liability",
+          "content": "The service is provided 'as is'. We are not liable for data loss, indirect damages, or loss of profits. Liability for gross negligence and intent remains unaffected."
+        },
+        {
+          "heading": "Governing Law",
+          "content": "These terms are governed by the laws of the Federal Republic of Germany. The place of jurisdiction for all disputes arising from or in connection with these terms is Germany."
+        },
+        {
+          "heading": "Termination",
+          "content": "You may delete your account at any time via Settings. We reserve the right to suspend or delete accounts in cases of serious violations of these terms."
+        }
+      ]
+    },
+    "cookiePolicy": {
+      "metadata": {
+        "title": "Cookie Policy",
+        "description": "What cookies Princeps uses and how you can control them."
+      },
+      "title": "Cookie Policy",
+      "lastUpdated": "April 2026",
+      "sections": [
+        {
+          "heading": "What Are Cookies?",
+          "content": "Cookies are small text files that your browser stores on your device when you visit a website. They allow us to identify your session and provide the basic functions of the app."
+        },
+        {
+          "heading": "Essential Cookies",
+          "content": "Princeps uses only technically necessary session cookies required for authentication. These cookies are automatically deleted when you log out or close your browser session."
+        },
+        {
+          "heading": "No Marketing or Analytics Cookies",
+          "content": "We do not use any third-party tracking, marketing, or analytics cookies. Your use of Princeps is not tracked for advertising purposes or shared with external services."
+        },
+        {
+          "heading": "Opt-Out",
+          "content": "Since we use only technically necessary cookies, a full opt-out is not possible without affecting core app functionality. You can manage or delete cookies at any time in your browser settings."
+        }
+      ]
+    },
+    "security": {
+      "metadata": {
+        "title": "Security",
+        "description": "How Princeps protects your data and how to report security issues."
+      },
+      "title": "Security",
+      "lastUpdated": "April 2026",
+      "sections": [
+        {
+          "heading": "Data Encryption",
+          "content": "All data is transmitted using TLS 1.2 or higher. Passwords are stored exclusively as cryptographic hashes — never in plaintext."
+        },
+        {
+          "heading": "Access Control",
+          "content": "Each user has access exclusively to their own data. Access controls are enforced server-side. Delivery of other users' data is systemically excluded."
+        },
+        {
+          "heading": "Backups",
+          "content": "Regular automated backups protect your data against loss. In the event of a technical issue, backed-up data states are available for recovery."
+        },
+        {
+          "heading": "Security Incidents",
+          "content": "In the event of a security incident that could affect your data, affected users will be notified promptly — in accordance with GDPR requirements (Art. 33–34)."
+        },
+        {
+          "heading": "Reporting Vulnerabilities",
+          "content": "If you discover a security vulnerability in Princeps, please report it responsibly to security@princeps.app. We confirm receipt within 72 hours and work on a resolution promptly."
+        }
+      ]
     }
   }
 }
