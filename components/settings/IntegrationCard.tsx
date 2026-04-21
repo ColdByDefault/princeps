@@ -47,6 +47,7 @@ const PROVIDER_META: Record<
     description: string;
     icon: React.ReactNode;
     connectHref: string;
+    showSyncButton?: boolean;
   }
 > = {
   google_calendar: {
@@ -54,13 +55,22 @@ const PROVIDER_META: Record<
     description: "Sync events from Google Calendar as appointments.",
     icon: <Image src="/icons/google.svg" alt="Google" width={20} height={20} />,
     connectHref: "/api/integrations/google-calendar/connect",
+    showSyncButton: true,
   },
   google_drive: {
     label: "Google Drive",
     description:
-      "Index files from Google Drive into your Knowledge Base for AI-assisted retrieval.",
-    icon: <Image src="/icons/googleDrive.png" alt="Google Drive" width={20} height={20} />,
+      "Connect Google Drive to browse and import files directly from the Knowledge Base.",
+    icon: (
+      <Image
+        src="/icons/googleDrive.png"
+        alt="Google Drive"
+        width={20}
+        height={20}
+      />
+    ),
     connectHref: "/api/integrations/google-drive/connect",
+    showSyncButton: false,
   },
 };
 
@@ -166,19 +176,21 @@ export function IntegrationCard({
       <CardFooter className="gap-2 pt-2">
         {connected ? (
           <>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={handleSync}
-              disabled={isSyncing || isDisconnecting}
-              aria-label={t("ariaSync", { provider: meta.label })}
-              className="cursor-pointer"
-            >
-              <RefreshCw
-                className={`mr-1.5 h-3.5 w-3.5 ${isSyncing ? "animate-spin" : ""}`}
-              />
-              {isSyncing ? t("syncing") : t("syncNow")}
-            </Button>
+            {meta.showSyncButton !== false && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleSync}
+                disabled={isSyncing || isDisconnecting}
+                aria-label={t("ariaSync", { provider: meta.label })}
+                className="cursor-pointer"
+              >
+                <RefreshCw
+                  className={`mr-1.5 h-3.5 w-3.5 ${isSyncing ? "animate-spin" : ""}`}
+                />
+                {isSyncing ? t("syncing") : t("syncNow")}
+              </Button>
+            )}
             <Button
               size="sm"
               variant="ghost"

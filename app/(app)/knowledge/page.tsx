@@ -12,6 +12,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/i18n";
 import { auth } from "@/lib/auth/auth";
+import { db } from "@/lib/db";
 import { defineSEO, getSeoLocale } from "@/lib/seo";
 import { listKnowledgeDocuments } from "@/lib/knowledge";
 import { KnowledgePageClient } from "@/components/knowledge";
@@ -36,7 +37,23 @@ export default async function KnowledgePage() {
     redirect("/login");
   }
 
-  const documents = await listKnowledgeDocuments(session.user.id);
+  const [documents, driveIntegration] = await Promise.all([
+    listKnowledgeDocuments(session.user.id),
+    db.integration.findUnique({
+      where: {
+        userId_provider: {
+          userId: session.user.id,
+          provider: "google_drive",
+        },
+      },
+      select: { id: true },
+    }),
+  ]);
 
-  return <KnowledgePageClient initialDocuments={documents} />;
+  return (
+    <KnowledgePageClient
+      initialDocuments={documents}
+      driveConnected={driveIntegration !== null}
+    />
+  );
 }
