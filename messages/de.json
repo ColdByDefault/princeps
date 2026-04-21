@@ -1019,7 +1019,9 @@
       "goals": "Ziele",
       "knowledge": "Wissen",
       "memory": "Gedächtnis",
-      "briefings": "Briefings"
+      "briefings": "Briefings",
+      "web-research": "Webrecherche",
+      "integrations": "Integrationen"
     },
     "catalog": {
       "create_task": {
@@ -1187,6 +1189,21 @@
         "what": "Durchsucht deine persönliche Wissensdatenbank semantisch und findet relevante Ausschnitte aus hochgeladenen Dokumenten.",
         "example": "\"Was steht in meinem Onboarding-Dokument zur Urlaubsregelung?\""
       },
+      "search_drive": {
+        "label": "Drive durchsuchen",
+        "what": "Durchsucht Dokumente aus deinem Google Drive semantisch und findet relevante Ausschnitte.",
+        "example": "\"Was steht in meinem Q1-Bericht über den Umsatz?\""
+      },
+      "web_search": {
+        "label": "Websuche",
+        "what": "Durchsucht das Web nach aktuellen Informationen, Nachrichten oder Themen, die nicht in deiner Wissensdatenbank enthalten sind.",
+        "example": "\"Was ist diese Woche in der Tech-Branche passiert?\""
+      },
+      "fetch_url": {
+        "label": "URL abrufen",
+        "what": "Lädt den Inhalt einer bestimmten URL, damit der Assistent ihn zusammenfassen oder Informationen extrahieren kann.",
+        "example": "\"Fasse diesen Artikel zusammen: https://example.com/artikel\""
+      },
       "remember_fact": {
         "label": "Fakt merken",
         "what": "Speichert einen Schlüssel-Wert-Fakt in deinem persönlichen Gedächtnis, damit der Assistent ihn in zukünftigen Gesprächen abrufen kann.",
@@ -1313,6 +1330,30 @@
     "deleteError": "Löschen fehlgeschlagen.",
     "deleteTooltip": "Dokument löschen",
     "deleteAriaLabel": "Dokument \"{name}\" löschen",
+    "sourceDrive": "Google Drive",
+    "drive": {
+      "sectionTitle": "Google Drive",
+      "sectionDescription": "Durchsuche deine Google-Drive-Dateien und importiere sie gezielt in die Wissensdatenbank.",
+      "loading": "Dateien werden geladen\u2026",
+      "refreshFiles": "Aktualisieren",
+      "importFile": "Importieren",
+      "reimportFile": "Neu importieren",
+      "imported": "Importiert",
+      "importing": "Wird importiert\u2026",
+      "noFiles": "Keine unterst\u00fctzten Dateien in Google Drive gefunden.",
+      "errorLoad": "Dateien konnten nicht geladen werden.",
+      "errorImport": "Import fehlgeschlagen.",
+      "importSuccess": "\u201e{name}\u201c erfolgreich importiert.",
+      "fileTypeDoc": "Dokument",
+      "fileTypeSheet": "Tabelle",
+      "fileTypeSlide": "Pr\u00e4sentation",
+      "fileTypePdf": "PDF",
+      "ariaImport": "{name} in die Wissensdatenbank importieren",
+      "ariaRefresh": "Google-Drive-Dateiliste aktualisieren",
+      "fileCount": "{count} Dateien ({imported} importiert)",
+      "collapse": "Drive-Dateiliste einklappen",
+      "expand": "Drive-Dateiliste ausklappen"
+    },
     "deleteDialog": {
       "title": "Dokument löschen?",
       "description": "Das Dokument \"{name}\" und alle seine Textbausteine werden dauerhaft gelöscht. Der verarbeitete Textumfang bleibt in deinem Kontingent angerechnet.",

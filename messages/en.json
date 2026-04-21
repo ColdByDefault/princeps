@@ -1019,7 +1019,9 @@
       "goals": "Goals",
       "knowledge": "Knowledge",
       "memory": "Memory",
-      "briefings": "Briefings"
+      "briefings": "Briefings",
+      "web-research": "Web Research",
+      "integrations": "Integrations"
     },
     "catalog": {
       "create_task": {
@@ -1187,6 +1189,21 @@
         "what": "Searches your personal knowledge base using semantic similarity to find relevant excerpts from uploaded documents.",
         "example": "\"What does my onboarding document say about vacation policy?\""
       },
+      "search_drive": {
+        "label": "Search Drive",
+        "what": "Searches documents indexed from your Google Drive using semantic similarity to find relevant excerpts.",
+        "example": "\"What does my Q1 report say about revenue?\""
+      },
+      "web_search": {
+        "label": "Web Search",
+        "what": "Searches the web for current information, news, or topics not covered by your knowledge base.",
+        "example": "\"What happened in the tech industry this week?\""
+      },
+      "fetch_url": {
+        "label": "Fetch URL",
+        "what": "Fetches and reads the content of a specific URL so the assistant can summarize or extract information from it.",
+        "example": "\"Summarize this article: https://example.com/article\""
+      },
       "remember_fact": {
         "label": "Remember Fact",
         "what": "Saves a key–value fact to your personal memory so the assistant can recall it in future conversations.",
@@ -1313,6 +1330,30 @@
     "deleteError": "Delete failed.",
     "deleteTooltip": "Delete document",
     "deleteAriaLabel": "Delete document \u201c{name}\u201d",
+    "sourceDrive": "Google Drive",
+    "drive": {
+      "sectionTitle": "Google Drive",
+      "sectionDescription": "Browse your Google Drive files and selectively import them into the Knowledge Base.",
+      "loading": "Loading files\u2026",
+      "refreshFiles": "Refresh",
+      "importFile": "Import",
+      "reimportFile": "Re-import",
+      "imported": "Imported",
+      "importing": "Importing\u2026",
+      "noFiles": "No supported files found in your Drive.",
+      "errorLoad": "Failed to load files.",
+      "errorImport": "Import failed.",
+      "importSuccess": "\u201c{name}\u201d imported successfully.",
+      "fileTypeDoc": "Doc",
+      "fileTypeSheet": "Sheet",
+      "fileTypeSlide": "Slide",
+      "fileTypePdf": "PDF",
+      "ariaImport": "Import {name} into Knowledge Base",
+      "ariaRefresh": "Refresh Drive file list",
+      "fileCount": "{count} files ({imported} imported)",
+      "collapse": "Collapse Drive file list",
+      "expand": "Expand Drive file list"
+    },
     "deleteDialog": {
       "title": "Delete document?",
       "description": "\u201c{name}\u201d and all its text chunks will be permanently deleted. The processed character count will remain in your quota.",

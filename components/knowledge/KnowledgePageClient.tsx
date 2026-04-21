@@ -14,15 +14,18 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { UploadForm } from "./UploadForm";
 import { DocumentList } from "./DocumentList";
+import { DriveFileBrowser } from "./DriveFileBrowser";
 import { useKnowledgeMutations } from "./logic/useKnowledgeMutations";
 import type { KnowledgeDocumentRecord } from "@/types/api";
 
 type KnowledgePageClientProps = {
   initialDocuments: KnowledgeDocumentRecord[];
+  driveConnected: boolean;
 };
 
 export function KnowledgePageClient({
   initialDocuments,
+  driveConnected,
 }: KnowledgePageClientProps) {
   const t = useTranslations("knowledge");
   const [documents, setDocuments] =
@@ -48,47 +51,72 @@ export function KnowledgePageClient({
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8 px-4 py-8">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8">
       {/* Page header */}
-      <div className="space-y-1">
+      <div className="mb-8 space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">
           {t("pageTitle")}
         </h1>
         <p className="text-sm text-muted-foreground">{t("pageDescription")}</p>
       </div>
 
-      {/* Upload section */}
-      <section aria-labelledby="upload-heading">
-        <h2
-          id="upload-heading"
-          className="mb-3 text-sm font-medium text-muted-foreground uppercase tracking-wide"
-        >
-          {t("uploadSection")}
-        </h2>
-        <UploadForm uploading={uploading} onUpload={uploadDocument} />
-      </section>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {/* Left column: upload + documents */}
+        <div className="space-y-8">
+          {/* Upload section */}
+          <section aria-labelledby="upload-heading">
+            <h2
+              id="upload-heading"
+              className="mb-3 text-sm font-medium text-muted-foreground uppercase tracking-wide"
+            >
+              {t("uploadSection")}
+            </h2>
+            <UploadForm uploading={uploading} onUpload={uploadDocument} />
+          </section>
 
-      {/* Documents list */}
-      <section aria-labelledby="docs-heading">
-        <div className="mb-3 flex items-center justify-between gap-2">
-          <h2
-            id="docs-heading"
-            className="text-sm font-medium text-muted-foreground uppercase tracking-wide"
-          >
-            {t("documentsSection")} ({documents.length})
-          </h2>
-          {documents.length > 0 && (
-            <span className="text-xs text-muted-foreground tabular-nums">
-              {t("approxTokens", { count: fmtTokens(approxTokens) })}
-            </span>
-          )}
+          {/* Documents list */}
+          <section aria-labelledby="docs-heading">
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <h2
+                id="docs-heading"
+                className="text-sm font-medium text-muted-foreground uppercase tracking-wide"
+              >
+                {t("documentsSection")} ({documents.length})
+              </h2>
+              {documents.length > 0 && (
+                <span className="text-xs text-muted-foreground tabular-nums">
+                  {t("approxTokens", { count: fmtTokens(approxTokens) })}
+                </span>
+              )}
+            </div>
+            <DocumentList
+              documents={documents}
+              deletingId={deleting}
+              onDelete={deleteDocument}
+            />
+          </section>
         </div>
-        <DocumentList
-          documents={documents}
-          deletingId={deleting}
-          onDelete={deleteDocument}
-        />
-      </section>
+
+        {/* Right column: Google Drive (only when connected) */}
+        {driveConnected && (
+          <div>
+            <section aria-labelledby="drive-heading">
+              <div className="mb-3">
+                <h2
+                  id="drive-heading"
+                  className="text-sm font-medium text-muted-foreground uppercase tracking-wide"
+                >
+                  {t("drive.sectionTitle")}
+                </h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  {t("drive.sectionDescription")}
+                </p>
+              </div>
+              <DriveFileBrowser />
+            </section>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

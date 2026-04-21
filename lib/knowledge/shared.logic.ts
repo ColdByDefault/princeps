@@ -109,6 +109,7 @@ type DocumentRow = {
   id: string;
   name: string;
   charCount: number;
+  sourceType: string | null;
   createdAt: Date;
   labelLinks: { label: { id: string; name: string; color: string } }[];
 };
@@ -120,6 +121,7 @@ export function toKnowledgeDocumentRecord(
     id: row.id,
     name: row.name,
     charCount: row.charCount,
+    sourceType: row.sourceType,
     labels: row.labelLinks.map((l) => l.label),
     createdAt: row.createdAt.toISOString(),
   };
@@ -129,6 +131,7 @@ export const KNOWLEDGE_DOCUMENT_SELECT = {
   id: true,
   name: true,
   charCount: true,
+  sourceType: true,
   createdAt: true,
   labelLinks: {
     select: {

@@ -224,17 +224,21 @@ model Notification {
 // ─── Knowledge Base ───────────────────────────────────────
 
 model KnowledgeDocument {
-  id        String   @id @default(cuid())
-  userId    String
-  name      String // original filename — display only, never stored as file
-  charCount Int // total chars contributed to quota
-  createdAt DateTime @default(now())
+  id              String    @id @default(cuid())
+  userId          String
+  name            String // original filename — display only, never stored as file
+  charCount       Int // total chars contributed to quota
+  sourceType      String?   @map("source_type") // "drive" | null (manual upload)
+  sourceId        String?   @map("source_id") // external file ID for deduplication
+  sourceUpdatedAt DateTime? @map("source_updated_at") // file's last-modified time
+  createdAt       DateTime  @default(now())
 
-  user       User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
   chunks     KnowledgeChunk[]
   labelLinks LabelOnKnowledgeDocument[]
 
   @@index([userId])
+  @@index([userId, sourceType])
   @@map("knowledge_document")
 }
 

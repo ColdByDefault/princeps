@@ -11,7 +11,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileText, Trash2, Tag } from "lucide-react";
+import { FileText, Trash2, Tag, HardDrive } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
@@ -84,6 +84,18 @@ export function DocumentCard({
           <span>{formatDate(document.createdAt, locale)}</span>
         </div>
 
+        {document.sourceType === "drive" && (
+          <div className="pt-1">
+            <Badge
+              variant="outline"
+              className="h-5 gap-1 px-1.5 text-xs text-muted-foreground"
+            >
+              <HardDrive className="size-3 shrink-0" aria-hidden="true" />
+              {t("sourceDrive")}
+            </Badge>
+          </div>
+        )}
+
         {document.labels.length > 0 && (
           <div className="flex flex-wrap gap-1 pt-1">
             <Tag
@@ -110,48 +122,50 @@ export function DocumentCard({
         )}
       </div>
 
-      {/* Delete action */}
-      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="shrink-0 cursor-pointer text-muted-foreground hover:text-destructive"
-                  disabled={deleting}
-                  aria-label={t("deleteAriaLabel", { name: document.name })}
-                  onClick={() => setConfirmOpen(true)}
-                />
-              }
-            >
-              <Trash2 className="size-4" aria-hidden="true" />
-            </TooltipTrigger>
-            <TooltipContent>{t("deleteTooltip")}</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+      {/* Delete action — hidden for Drive-sourced docs (managed by sync) */}
+      {document.sourceType !== "drive" && (
+        <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="shrink-0 cursor-pointer text-muted-foreground hover:text-destructive"
+                    disabled={deleting}
+                    aria-label={t("deleteAriaLabel", { name: document.name })}
+                    onClick={() => setConfirmOpen(true)}
+                  />
+                }
+              >
+                <Trash2 className="size-4" aria-hidden="true" />
+              </TooltipTrigger>
+              <TooltipContent>{t("deleteTooltip")}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("deleteDialog.description", { name: document.name })}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
-            </AlertDialogCancel>
-            <AlertDialogAction
-              className="cursor-pointer"
-              onClick={() => onDelete(document.id)}
-            >
-              {t("deleteDialog.confirm")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {t("deleteDialog.description", { name: document.name })}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="cursor-pointer">
+                {t("deleteDialog.cancel")}
+              </AlertDialogCancel>
+              <AlertDialogAction
+                className="cursor-pointer"
+                onClick={() => onDelete(document.id)}
+              >
+                {t("deleteDialog.confirm")}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 }
