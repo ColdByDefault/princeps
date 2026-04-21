@@ -58,6 +58,7 @@ export function PricingShell({ currentTier }: PricingShellProps) {
           const limits = PLAN_LIMITS[tier];
           const price = PLAN_PRICES[tier];
           const isCurrent = tier === currentTier;
+          const isEnterprise = tier === "enterprise";
 
           return (
             <div key={tier} className="relative pt-3" data-tier={tier}>
@@ -84,26 +85,36 @@ export function PricingShell({ currentTier }: PricingShellProps) {
 
                 {/* Price */}
                 <div className="mb-4">
-                  <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold leading-none">
-                      {price.monthly === 0
-                        ? t("price.free")
-                        : `€${price.monthly}`}
-                    </span>
-                    {price.monthly > 0 && (
-                      <span className="mb-0.5 text-sm text-muted-foreground">
-                        {t("price.perMonth")}
+                  {isEnterprise ? (
+                    <div className="flex items-end gap-1">
+                      <span className="text-xl font-semibold leading-none text-muted-foreground">
+                        {t("price.enterprise")}
                       </span>
-                    )}
-                  </div>
-                  {price.annual !== null ? (
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {t("price.annual", { price: price.annual })}
-                    </p>
+                    </div>
                   ) : (
-                    <p className="mt-1 text-xs text-transparent select-none">
-                      &nbsp;
-                    </p>
+                    <>
+                      <div className="flex items-end gap-1">
+                        <span className="text-3xl font-bold leading-none">
+                          {price.monthly === 0
+                            ? t("price.free")
+                            : `€${price.monthly}`}
+                        </span>
+                        {price.monthly > 0 && (
+                          <span className="mb-0.5 text-sm text-muted-foreground">
+                            {t("price.perMonth")}
+                          </span>
+                        )}
+                      </div>
+                      {price.annual !== null ? (
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {t("price.annual", { price: price.annual })}
+                        </p>
+                      ) : (
+                        <p className="mt-1 text-xs text-transparent select-none">
+                          &nbsp;
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
 

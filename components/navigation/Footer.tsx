@@ -68,7 +68,9 @@ export default function Footer() {
             | {t("footer.copyright")} |
           </span>
           <span className="text-xs text-muted-foreground">
-            {t("footer.authors")}
+            <Link href="https://coldbydefault.com" className="text-xs text-muted-foreground transition hover:text-foreground" target="_blank">
+              {t("footer.authors")}
+            </Link>
           </span>
         </div>
       </div>

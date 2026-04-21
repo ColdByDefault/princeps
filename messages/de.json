@@ -208,7 +208,16 @@
       "perYear": "/Jahr",
       "subscribeCta": "Abonnieren",
       "subscribing": "Weiterleitung…",
+      "subscribeAriaLabel": "Auf {tier} upgraden",
       "enterpriseCta": "Kontaktiere uns",
+      "enterprisePriceLabel": "Individuelles Angebot",
+      "enterpriseName": "Enterprise",
+      "limits": {
+        "messagesPerMonth": "Nachrichten / Monat",
+        "contacts": "Kontakte",
+        "tasks": "Aufgaben",
+        "nudgesEnabled": "Proaktive Hinweise"
+      },
       "error": "Checkout konnte nicht gestartet werden. Bitte erneut versuchen.",
       "portalError": "Abrechnungsportal konnte nicht geöffnet werden. Bitte erneut versuchen."
     },
@@ -1271,7 +1280,8 @@
     "price": {
       "free": "Kostenlos",
       "perMonth": "/Monat",
-      "annual": "€{price}/Jahr jährlich"
+      "annual": "€{price}/Jahr jährlich",
+      "enterprise": "Kontaktiere uns"
     },
     "planNames": {
       "free": "Free",
@@ -1431,15 +1441,33 @@
       "billingAnnual": "Jährlich",
       "annualSavings": "Spare ~{percent}%",
       "currentPlan": "Ausgewählt",
+      "planFree": "Kostenlos",
+      "planNames": {
+        "free": "Free",
+        "pro": "Pro",
+        "premium": "Premium",
+        "enterprise": "Enterprise"
+      },
       "free": {
         "cta": "Kostenlos fortfahren"
       },
       "paid": {
         "cta": "Abonnieren",
-        "subscribing": "Weiterleitung…"
+        "subscribing": "Weiterleitung…",
+        "ariaLabel": "{tier} abonnieren"
       },
       "enterprise": {
-        "cta": "Kontaktiere uns"
+        "cta": "Kontaktiere uns",
+        "price": "Individuelles Angebot"
+      },
+      "limits": {
+        "messagesPerMonth": "Nachrichten / Monat",
+        "chatsSaved": "Gespeicherte Chats",
+        "contacts": "Kontakte",
+        "tasks": "Aufgaben",
+        "meetings": "Meetings",
+        "knowledgeDocs": "Wissensdokumente",
+        "nudgesEnabled": "Proaktive Hinweise"
       },
       "error": "Checkout konnte nicht gestartet werden. Bitte erneut versuchen.",
       "perMonth": "/Mo.",

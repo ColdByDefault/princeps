@@ -184,17 +184,17 @@ export function PlanPickerShell({
               {/* Plan badge + price */}
               <div className="mb-4">
                 <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent">
-                  {tier.charAt(0).toUpperCase() + tier.slice(1)}
+                  {t(`planNames.${tier}` as Parameters<typeof t>[0])}
                 </span>
 
                 <div className="mt-3 flex items-end gap-1">
                   {isFree ? (
                     <span className="text-3xl font-bold leading-none">
-                      Free
+                      {t("planFree")}
                     </span>
                   ) : isEnterprise ? (
-                    <span className="text-xl font-bold leading-none">
-                      Custom
+                    <span className="text-xl font-semibold leading-none text-muted-foreground">
+                      {t("enterprise.price")}
                     </span>
                   ) : (
                     <>
@@ -205,7 +205,7 @@ export function PlanPickerShell({
                           : displayPrice.toFixed(2)}
                       </span>
                       <span className="mb-0.5 text-sm text-muted-foreground">
-                        {billing === "annual" ? t("perYear") : t("perMonth")}
+                        {t("perMonth")}
                       </span>
                     </>
                   )}
@@ -221,22 +221,31 @@ export function PlanPickerShell({
               {/* Key limits */}
               <ul className="mb-6 flex-1 space-y-2 text-sm">
                 <LimitRow
-                  label="Messages / month"
+                  label={t("limits.messagesPerMonth")}
                   value={fmt(limits.messagesPerMonth)}
                 />
                 <LimitRow
-                  label="Chats saved"
+                  label={t("limits.chatsSaved")}
                   value={fmt(limits.chatHistoryTotal)}
                 />
-                <LimitRow label="Contacts" value={fmt(limits.contactsMax)} />
-                <LimitRow label="Tasks" value={fmt(limits.tasksMax)} />
-                <LimitRow label="Meetings" value={fmt(limits.meetingsMax)} />
                 <LimitRow
-                  label="Knowledge docs"
+                  label={t("limits.contacts")}
+                  value={fmt(limits.contactsMax)}
+                />
+                <LimitRow
+                  label={t("limits.tasks")}
+                  value={fmt(limits.tasksMax)}
+                />
+                <LimitRow
+                  label={t("limits.meetings")}
+                  value={fmt(limits.meetingsMax)}
+                />
+                <LimitRow
+                  label={t("limits.knowledgeDocs")}
                   value={fmt(limits.knowledgeDocs)}
                 />
                 <LimitRow
-                  label="Proactive nudges"
+                  label={t("limits.nudgesEnabled")}
                   value={
                     limits.nudgesEnabled ? (
                       <Check className="h-4 w-4 text-emerald-500" />
@@ -263,7 +272,7 @@ export function PlanPickerShell({
                   className="w-full cursor-pointer"
                   disabled={!!loading}
                   onClick={() => handleSubscribe(tier as "pro" | "premium")}
-                  aria-label={`Subscribe to ${tier}`}
+                  aria-label={t("paid.ariaLabel", { tier })}
                 >
                   {isLoading ? (
                     <>

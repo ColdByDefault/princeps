@@ -229,7 +229,7 @@ export function SubscriptionTab({ currentTier, appOrigin, priceIds }: Props) {
                         : displayPrice.toFixed(2)}
                     </span>
                     <span className="mb-0.5 text-sm text-muted-foreground">
-                      {billing === "annual" ? t("perYear") : t("perMonth")}
+                      {t("perMonth")}
                     </span>
                   </div>
 
@@ -265,7 +265,7 @@ export function SubscriptionTab({ currentTier, appOrigin, priceIds }: Props) {
                     className="w-full cursor-pointer"
                     disabled={!!loadingTier}
                     onClick={() => handleSubscribe(tier)}
-                    aria-label={`Subscribe to ${tier}`}
+                    aria-label={t("subscribeAriaLabel", { tier })}
                   >
                     {isLoading ? (
                       <>
@@ -289,10 +289,10 @@ export function SubscriptionTab({ currentTier, appOrigin, priceIds }: Props) {
                   data-tier="enterprise"
                   className="rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent"
                 >
-                  Enterprise
+                  {t("enterpriseName")}
                 </span>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Custom pricing
+                  {t("enterprisePriceLabel")}
                 </p>
               </div>
               <a
