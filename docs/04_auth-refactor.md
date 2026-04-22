@@ -1,6 +1,5 @@
 # Auth Refactor
 
-
 > Important: This document is a work in progress and may not reflect the final implementation. It is intended to provide an overview of the new auth system architecture and key files, but details are subject to change as development progresses. Please refer to the latest codebase for the most up-to-date information.
 
 ## Overview
@@ -30,7 +29,6 @@ All auth inputs are validated with Zod before any DB or auth library call.
 
 **Limitations (documented in source):**
 
-- Per-process state — not safe for multi-instance or serverless deployments.
 - Production use requires a distributed limiter (Redis / Upstash).
 
 Rate limiters are instantiated per-route at module level (singleton per process).

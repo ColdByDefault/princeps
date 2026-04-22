@@ -2,20 +2,16 @@
 
 **Four tiers:** `free` | `pro` | `premium` | `enterprise`
 
-> The name `enterprise` may feel like a B2B contract tier; this is a personal product. A future rename to `executive` is under consideration but has not been applied to the codebase yet.
-
 ---
 
 ## Pricing (EUR)
 
-Retail prices are calibrated at a ~5–8× markup over the estimated OpenAI GPT-4o infrastructure cost per tier.
-
-| Tier           | LLM cost/month (est.) | Monthly price | Annual price |
-| -------------- | --------------------- | ------------- | ------------ |
-| **Free**       | ~€0.45                | €0            | —            |
-| **Pro**        | ~€1.80                | €9/month      | €89/year     |
-| **Premium**    | ~€4.50                | €19/month     | €179/year    |
-| **Enterprise** | ~€13.50               | €49/month     | €449/year    |
+| Tier           | Monthly price | Annual price |
+| -------------- | ------------- | ------------ |
+| **Free**       | €0            | —            |
+| **Pro**        | €9/month      | €89/year     |
+| **Premium**    | €19/month     | €179/year    |
+| **Enterprise** | €49/month     | €449/year    |
 
 ---
 
