@@ -1,4 +1,4 @@
-﻿# Princeps
+# Princeps
 
 **Version:** 1.0.2
 
@@ -237,7 +237,7 @@ All user-visible strings are managed through `next-intl` with flat namespaced ke
 
 Copyright © 2026 Yazan Abo-Ayash (ColdByDefault™). All rights reserved.
 
-Princeps is licensed under the **Elastic License 2.0 (ELv2)**. You are free to use, fork, modify, and self-host the software. You may not offer it as a hosted or managed service to third parties.
+You are free to use, fork, modify, and self-host the software.
 
 See [LICENSE](LICENSE) for the full terms.
 
@@ -264,7 +264,6 @@ Security issues should be reported privately — not in public issues or pull re
 **Contact:**
 
 - contact@coldbydefault.com
-- abo.ayash.yazan@gmail.com
 
 Include a short description of the issue, the affected area or endpoint, reproduction steps, and expected impact. See [SECURITY.md](SECURITY.md) for the full policy.
 
