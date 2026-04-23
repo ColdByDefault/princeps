@@ -1,3 +1,9 @@
+## [1.0.3] - 2026-04-23
+
+- Update README.md
+
+# Changelog
+
 ## [1.0.2] - 2026-04-22
 
 - refactor: remove outdated documentation files for i18n system, LLM provider abstraction, feature implementation reference, labels system, memory feature, and Google Calendar integration
