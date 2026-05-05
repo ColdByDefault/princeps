@@ -1,3 +1,13 @@
+## [1.0.4] - 2026-05-05
+
+- #77 close
+- feat: add overdue task nudges functionality with user preferences and notifications
+- feat: implement overdue task nudges feature with user preferences and notifications
+- #76 fix
+- feat: add audio duration handling and update transcription API logic
+
+# Changelog
+
 ## [1.0.3] - 2026-04-23
 
 - Update README.md
