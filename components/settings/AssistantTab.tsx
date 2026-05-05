@@ -10,15 +10,14 @@
 
 "use client";
 
-import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { CustomToggle } from "@/components/shared";
+import { useAssistantSettings } from "./logic/useAssistantSettings";
 import {
   Select,
   SelectContent,
@@ -41,6 +40,8 @@ type AssistantTabProps = {
   initialCustomSystemPrompt: string | null;
   initialAutoBriefingEnabled: boolean;
   initialReportsEnabled: boolean;
+  initialOverdueTaskNudgesEnabled: boolean;
+  nudgesAvailable: boolean;
 };
 
 export function AssistantTab({
@@ -51,125 +52,39 @@ export function AssistantTab({
   initialCustomSystemPrompt,
   initialAutoBriefingEnabled,
   initialReportsEnabled,
+  initialOverdueTaskNudgesEnabled,
+  nudgesAvailable,
 }: AssistantTabProps) {
   const t = useTranslations("settings.assistant");
-
-  const [assistantName, setAssistantName] = useState(
-    initialAssistantName ?? "",
-  );
-  const [assistantTone, setAssistantTone] = useState<AssistantTone | "">(
-    initialAssistantTone ?? "",
-  );
-  const [addressStyle, setAddressStyle] = useState<AddressStyle | "">(
-    initialAddressStyle ?? "",
-  );
-  const [responseLength, setResponseLength] = useState<ResponseLength | "">(
-    initialResponseLength ?? "",
-  );
-
-  const [customPrompt, setCustomPrompt] = useState(
-    initialCustomSystemPrompt ?? "",
-  );
-  const [showPreview, setShowPreview] = useState(false);
-  const [autoBriefingEnabled, setAutoBriefingEnabled] = useState(
+  const {
+    assistantName,
+    assistantTone,
+    addressStyle,
+    responseLength,
+    customPrompt,
+    showPreview,
+    autoBriefingEnabled,
+    reportsEnabled,
+    overdueTaskNudgesEnabled,
+    handleNameChange,
+    handleToneChange,
+    handleAddressChange,
+    handleLengthChange,
+    handleCustomPromptChange,
+    handleAutoBriefingToggle,
+    handleReportsToggle,
+    handleOverdueTaskNudgesToggle,
+    handlePreviewToggle,
+  } = useAssistantSettings({
+    initialAssistantName,
+    initialAssistantTone,
+    initialAddressStyle,
+    initialResponseLength,
+    initialCustomSystemPrompt,
     initialAutoBriefingEnabled,
-  );
-  const [reportsEnabled, setReportsEnabled] = useState(initialReportsEnabled);
-  const customPromptDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
-
-  const nameDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  async function patchSetting(
-    patch: Record<string, unknown>,
-    successKey: string,
-    failKey: string,
-  ) {
-    try {
-      const res = await fetch("/api/settings", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(patch),
-      });
-      if (!res.ok) {
-        toast.error(t(failKey));
-      } else {
-        toast.success(t(successKey));
-      }
-    } catch {
-      toast.error(t(failKey));
-    }
-  }
-
-  function handleNameChange(value: string) {
-    setAssistantName(value);
-    if (nameDebounceRef.current) clearTimeout(nameDebounceRef.current);
-    nameDebounceRef.current = setTimeout(() => {
-      void patchSetting(
-        { assistantName: value.trim() || null },
-        "nameSaved",
-        "nameSaveFailed",
-      );
-    }, 800);
-  }
-
-  async function handleToneChange(value: string | null) {
-    if (!value) return;
-    setAssistantTone(value as AssistantTone);
-    await patchSetting({ assistantTone: value }, "toneSaved", "toneSaveFailed");
-  }
-
-  async function handleAddressChange(value: string | null) {
-    if (!value) return;
-    setAddressStyle(value as AddressStyle);
-    await patchSetting(
-      { addressStyle: value },
-      "addressSaved",
-      "addressSaveFailed",
-    );
-  }
-
-  async function handleLengthChange(value: string | null) {
-    if (!value) return;
-    setResponseLength(value as ResponseLength);
-    await patchSetting(
-      { responseLength: value },
-      "lengthSaved",
-      "lengthSaveFailed",
-    );
-  }
-
-  function handleCustomPromptChange(value: string) {
-    setCustomPrompt(value);
-    if (customPromptDebounceRef.current)
-      clearTimeout(customPromptDebounceRef.current);
-    customPromptDebounceRef.current = setTimeout(() => {
-      void patchSetting(
-        { customSystemPrompt: value.trim() || null },
-        "customPromptSaved",
-        "customPromptSaveFailed",
-      );
-    }, 1000);
-  }
-
-  async function handleAutoBriefingToggle(checked: boolean) {
-    setAutoBriefingEnabled(checked);
-    await patchSetting(
-      { autoBriefingEnabled: checked },
-      "autoBriefingSaved",
-      "autoBriefingSaveFailed",
-    );
-  }
-
-  async function handleReportsToggle(checked: boolean) {
-    setReportsEnabled(checked);
-    await patchSetting(
-      { reportsEnabled: checked },
-      "reportsSaved",
-      "reportsSaveFailed",
-    );
-  }
+    initialReportsEnabled,
+    initialOverdueTaskNudgesEnabled,
+  });
 
   return (
     <div className="divide-y divide-border/60">
@@ -343,7 +258,7 @@ export function AssistantTab({
           </div>
           <button
             type="button"
-            onClick={() => setShowPreview((p) => !p)}
+            onClick={handlePreviewToggle}
             className="cursor-pointer shrink-0 text-xs text-muted-foreground underline-offset-2 hover:underline"
             aria-label={
               showPreview
@@ -401,6 +316,29 @@ export function AssistantTab({
           checked={autoBriefingEnabled}
           onCheckedChange={handleAutoBriefingToggle}
           aria-label={t("autoBriefingLabel")}
+        />
+      </div>
+
+      {/* Overdue Task Nudges */}
+      <div className="flex items-center justify-between gap-4 py-4">
+        <div className="min-w-0 flex-1 space-y-0.5">
+          <p className="text-sm font-medium">
+            {t("overdueTaskNudgesLabel")}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {t("overdueTaskNudgesDescription")}
+          </p>
+          {!nudgesAvailable && (
+            <p className="text-xs text-muted-foreground/60">
+              {t("overdueTaskNudgesUnavailable")}
+            </p>
+          )}
+        </div>
+        <CustomToggle
+          checked={nudgesAvailable && overdueTaskNudgesEnabled}
+          onCheckedChange={handleOverdueTaskNudgesToggle}
+          disabled={!nudgesAvailable}
+          aria-label={t("overdueTaskNudgesLabel")}
         />
       </div>
 

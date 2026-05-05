@@ -47,6 +47,13 @@
     },
     "deleteOne": {
       "ariaLabel": "Nachricht löschen"
+    },
+    "overdueTasks": {
+      "titleOne": "1 überfällige Aufgabe",
+      "titleOther": "{count} überfällige Aufgaben",
+      "bodyIntro": "Diese Aufgaben sind überfällig:",
+      "remainingOne": "Und 1 weitere.",
+      "remainingOther": "Und {count} weitere."
     }
   },
   "auth": {
@@ -241,9 +248,9 @@
       "timezoneEmpty": "Keine Zeitzone gefunden.",
       "timezoneSaved": "Zeitzone gespeichert.",
       "timezoneSaveFailed": "Zeitzone konnte nicht gespeichert werden.",
-      "notificationsTitle": "Tägliche Begrüßung",
-      "notificationsDescription": "Erhalte täglich eine persönliche Begrüßung von deinem Assistenten.",
-      "notificationsDisclaimer": "Begrüßungen verbrauchen dein monatliches Token-Kontingent."
+      "notificationsTitle": "Assistentenmitteilungen",
+      "notificationsDescription": "Erlaube Begrüßungen und proaktive Benachrichtigungen deines Assistenten.",
+      "notificationsDisclaimer": "KI-generierte Begrüßungen verbrauchen dein monatliches Token-Kontingent. Deterministische Erinnerungen nicht."
     },
     "provider": {
       "title": "Aktiver KI-Anbieter",
@@ -370,6 +377,11 @@
       "autoBriefingDescription": "Erstelle jeden Morgen automatisch dein Tagesbriefing.",
       "autoBriefingSaved": "Briefing-Einstellung gespeichert.",
       "autoBriefingSaveFailed": "Briefing-Einstellung konnte nicht gespeichert werden.",
+      "overdueTaskNudgesLabel": "Hinweise zu überfälligen Aufgaben",
+      "overdueTaskNudgesDescription": "Benachrichtigt dich einmal pro Tag, wenn offene oder laufende Aufgaben überfällig sind. Das verbraucht keine LLM-Tokens.",
+      "overdueTaskNudgesUnavailable": "Verfügbar in Pro, Premium und Enterprise.",
+      "overdueTaskNudgesSaved": "Hinweis-Einstellung gespeichert.",
+      "overdueTaskNudgesSaveFailed": "Hinweis-Einstellung konnte nicht gespeichert werden.",
       "reportsLabel": "Aktivitätsberichte",
       "reportsDescription": "Nach jeder Tool-Interaktion des Assistenten einen Bericht erstellen.",
       "reportsSaved": "Berichtseinstellung gespeichert.",

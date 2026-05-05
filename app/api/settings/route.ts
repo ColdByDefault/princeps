@@ -71,6 +71,7 @@ export async function PATCH(req: Request) {
     customSystemPrompt,
     autoBriefingEnabled,
     reportsEnabled,
+    overdueTaskNudgesEnabled,
   } = body as Record<string, unknown>;
   const patch: {
     language?: AppLanguage;
@@ -84,6 +85,7 @@ export async function PATCH(req: Request) {
     customSystemPrompt?: string | null;
     autoBriefingEnabled?: boolean;
     reportsEnabled?: boolean;
+    overdueTaskNudgesEnabled?: boolean;
   } = {};
 
   if (isSupportedLanguage(language as string)) {
@@ -145,6 +147,9 @@ export async function PATCH(req: Request) {
   }
   if (typeof reportsEnabled === "boolean") {
     patch.reportsEnabled = reportsEnabled;
+  }
+  if (typeof overdueTaskNudgesEnabled === "boolean") {
+    patch.overdueTaskNudgesEnabled = overdueTaskNudgesEnabled;
   }
 
   const hasPreferencePatch = Object.keys(patch).length > 0;

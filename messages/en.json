@@ -47,6 +47,13 @@
     },
     "deleteOne": {
       "ariaLabel": "Delete message"
+    },
+    "overdueTasks": {
+      "titleOne": "1 overdue task",
+      "titleOther": "{count} overdue tasks",
+      "bodyIntro": "These tasks are past their due date:",
+      "remainingOne": "And 1 more.",
+      "remainingOther": "And {count} more."
     }
   },
   "auth": {
@@ -241,9 +248,9 @@
       "timezoneEmpty": "No timezone found.",
       "timezoneSaved": "Timezone saved.",
       "timezoneSaveFailed": "Failed to save timezone.",
-      "notificationsTitle": "Daily Greeting",
-      "notificationsDescription": "Receive a daily personal greeting from your assistant.",
-      "notificationsDisclaimer": "Greetings use your monthly token quota."
+      "notificationsTitle": "Assistant messages",
+      "notificationsDescription": "Allow greetings and proactive assistant notifications.",
+      "notificationsDisclaimer": "AI-generated greetings use your monthly token quota. Deterministic reminders do not."
     },
     "provider": {
       "title": "Active AI Provider",
@@ -370,6 +377,11 @@
       "autoBriefingDescription": "Generate your daily briefing automatically every morning.",
       "autoBriefingSaved": "Briefing setting saved.",
       "autoBriefingSaveFailed": "Failed to save briefing setting.",
+      "overdueTaskNudgesLabel": "Overdue task nudges",
+      "overdueTaskNudgesDescription": "Notify you once per day when open or in-progress tasks are overdue. This does not use LLM tokens.",
+      "overdueTaskNudgesUnavailable": "Available on Pro, Premium, and Enterprise.",
+      "overdueTaskNudgesSaved": "Overdue task nudge setting saved.",
+      "overdueTaskNudgesSaveFailed": "Failed to save overdue task nudge setting.",
       "reportsLabel": "Activity Reports",
       "reportsDescription": "Generate a report after each assistant tool interaction.",
       "reportsSaved": "Reports setting saved.",
