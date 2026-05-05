@@ -45,6 +45,7 @@ export function useVoiceInput({
   const audioCtxRef = useRef<AudioContext | null>(null);
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const silenceRafRef = useRef<number | null>(null);
+  const recordingStartedAtRef = useRef<number | null>(null);
   /** True once the user has spoken at least once — prevents firing on initial breath noise. */
   const primedRef = useRef(false);
   /** True when the stop was triggered by silence (auto-send path). */
@@ -105,6 +106,7 @@ export function useVoiceInput({
 
     streamRef.current = stream;
     chunksRef.current = [];
+    recordingStartedAtRef.current = Date.now();
     primedRef.current = false;
     autoStopRef.current = false;
 
@@ -176,6 +178,11 @@ export function useVoiceInput({
 
       const recordedMime = mr.mimeType || mimeType || "audio/webm";
       const blob = new Blob(chunksRef.current, { type: recordedMime });
+      const durationMs =
+        recordingStartedAtRef.current === null
+          ? undefined
+          : Date.now() - recordingStartedAtRef.current;
+      recordingStartedAtRef.current = null;
       const baseMime = recordedMime.split(";")[0].trim();
       const ext = baseMime.includes("ogg")
         ? "ogg"
@@ -191,6 +198,9 @@ export function useVoiceInput({
           "audio",
           new File([blob], `recording.${ext}`, { type: baseMime }),
         );
+        if (typeof durationMs === "number" && durationMs > 0) {
+          form.append("durationMs", String(durationMs));
+        }
 
         const res = await fetch("/api/chat/transcribe", {
           method: "POST",

@@ -23,7 +23,7 @@ import {
 import { TOOL_REGISTRY } from "@/lib/tools";
 import { SettingsShell } from "@/components/settings";
 import type { AppLanguage } from "@/types/i18n";
-import type { Tier } from "@/types/billing";
+import { getPlanLimits, type Tier } from "@/types/billing";
 
 export async function generateMetadata() {
   const t = await getTranslations("settings");
@@ -74,6 +74,7 @@ export default async function SettingsPage() {
     minTier,
     group,
   }));
+  const currentTier = (userRow?.tier ?? "free") as Tier;
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6">
@@ -91,9 +92,13 @@ export default async function SettingsPage() {
         initialCustomSystemPrompt={initialPrefs.customSystemPrompt ?? null}
         initialAutoBriefingEnabled={initialPrefs.autoBriefingEnabled ?? true}
         initialReportsEnabled={initialPrefs.reportsEnabled ?? true}
+        initialOverdueTaskNudgesEnabled={
+          initialPrefs.overdueTaskNudgesEnabled ?? true
+        }
+        nudgesAvailable={getPlanLimits(currentTier).nudgesEnabled}
         initialDisabledTools={initialPrefs.disabledTools}
         allTools={allTools}
-        currentTier={(userRow?.tier ?? "free") as Tier}
+        currentTier={currentTier}
         appOrigin={process.env.BETTER_AUTH_URL ?? "http://localhost:3000"}
         initialIntegrations={integrationRows.map((r) => ({
           provider: r.provider,

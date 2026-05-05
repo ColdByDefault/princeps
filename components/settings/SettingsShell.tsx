@@ -61,6 +61,8 @@ type SettingsShellProps = {
   initialCustomSystemPrompt: string | null;
   initialAutoBriefingEnabled: boolean;
   initialReportsEnabled: boolean;
+  initialOverdueTaskNudgesEnabled: boolean;
+  nudgesAvailable: boolean;
   initialDisabledTools: string[];
   allTools: ToolDisplayEntry[];
   currentTier: Tier;
@@ -88,6 +90,8 @@ export function SettingsShell({
   initialCustomSystemPrompt,
   initialAutoBriefingEnabled,
   initialReportsEnabled,
+  initialOverdueTaskNudgesEnabled,
+  nudgesAvailable,
   initialDisabledTools,
   allTools,
   currentTier,
@@ -164,6 +168,8 @@ export function SettingsShell({
           initialCustomSystemPrompt={initialCustomSystemPrompt}
           initialAutoBriefingEnabled={initialAutoBriefingEnabled}
           initialReportsEnabled={initialReportsEnabled}
+          initialOverdueTaskNudgesEnabled={initialOverdueTaskNudgesEnabled}
+          nudgesAvailable={nudgesAvailable}
         />
       </TabsContent>
 

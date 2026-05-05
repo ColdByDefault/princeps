@@ -57,11 +57,13 @@ export interface UserPreferences {
   autoBriefingEnabled: boolean | null;
   /** Whether the assistant should generate reports after tool interactions. */
   reportsEnabled: boolean | null;
+  /** Whether overdue-task proactive nudges should be sent when available. */
+  overdueTaskNudgesEnabled: boolean | null;
 }
 
 // ─── Internal helpers ─────────────────────────────────────
 
-function parsePreferences(raw: unknown): UserPreferences {
+export function parseUserPreferences(raw: unknown): UserPreferences {
   let obj: Record<string, unknown> = {};
 
   if (typeof raw === "string") {
@@ -152,6 +154,11 @@ function parsePreferences(raw: unknown): UserPreferences {
   const reportsEnabled =
     typeof obj.reportsEnabled === "boolean" ? obj.reportsEnabled : null;
 
+  const overdueTaskNudgesEnabled =
+    typeof obj.overdueTaskNudgesEnabled === "boolean"
+      ? obj.overdueTaskNudgesEnabled
+      : null;
+
   return {
     language,
     theme,
@@ -167,6 +174,7 @@ function parsePreferences(raw: unknown): UserPreferences {
     customSystemPrompt,
     autoBriefingEnabled,
     reportsEnabled,
+    overdueTaskNudgesEnabled,
   };
 }
 
@@ -199,8 +207,9 @@ export const getUserPreferences = cache(
         customSystemPrompt: null,
         autoBriefingEnabled: null,
         reportsEnabled: null,
+        overdueTaskNudgesEnabled: null,
       };
-    return parsePreferences(user.preferences);
+    return parseUserPreferences(user.preferences);
   },
 );
 
@@ -243,6 +252,11 @@ export async function updateUserPreferences(
     next.autoBriefingEnabled = merged.autoBriefingEnabled;
   if (merged.reportsEnabled !== null && merged.reportsEnabled !== undefined)
     next.reportsEnabled = merged.reportsEnabled;
+  if (
+    merged.overdueTaskNudgesEnabled !== null &&
+    merged.overdueTaskNudgesEnabled !== undefined
+  )
+    next.overdueTaskNudgesEnabled = merged.overdueTaskNudgesEnabled;
   await db.user.update({
     where: { id: userId },
     data: {

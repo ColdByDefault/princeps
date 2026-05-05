@@ -22,6 +22,7 @@ import { memoryHandlers } from "@/lib/tools/handlers/memory.handler";
 import { briefingHandlers } from "@/lib/tools/handlers/briefings.handler";
 import { webResearchHandlers } from "@/lib/tools/handlers/web-research.handler";
 import { driveHandlers } from "@/lib/tools/handlers/drive.handler";
+import { getActiveToolsForUser } from "@/lib/tools/registry";
 import type { LLMToolCall } from "@/types/llm";
 import type { ActionResult } from "@/lib/tools/types";
 
@@ -58,6 +59,7 @@ export async function executeToolCall(
   userId: string,
   toolCall: LLMToolCall,
 ): Promise<ActionResult> {
+  const toolName = toolCall.function.name;
   let args: Record<string, unknown>;
 
   try {
@@ -66,9 +68,18 @@ export async function executeToolCall(
     return { ok: false, error: "Invalid tool arguments: not valid JSON." };
   }
 
-  const handler = HANDLERS[toolCall.function.name];
+  const handler = HANDLERS[toolName];
   if (!handler) {
-    return { ok: false, error: `Unknown tool: ${toolCall.function.name}` };
+    return { ok: false, error: `Unknown tool: ${toolName}` };
+  }
+
+  const activeTools = await getActiveToolsForUser(userId);
+  const isAllowed = activeTools.some((tool) => tool.function.name === toolName);
+  if (!isAllowed) {
+    return {
+      ok: false,
+      error: `Tool not available for this user's plan or settings: ${toolName}`,
+    };
   }
 
   return handler(userId, args);

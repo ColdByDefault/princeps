@@ -79,7 +79,7 @@ WMO code → label/emoji mapping is a small static lookup in `fetch.ts`.
 
 ## Notifications Layer — `lib/notifications/`
 
-Five files. All `import "server-only"`.
+Core logic files are server-only via `import "server-only"`.
 
 ### `shared.logic.ts`
 
@@ -116,6 +116,20 @@ Exports `NOTIFICATION_SELECT`, `toNotificationRecord()`, `findTodayGreeting(user
 
 **To change greeting content / tone**, edit the `systemPrompt` and `userPrompt` arrays in `greeting.logic.ts`. No other files need changing.
 
+### `nudge-overdue.logic.ts`
+
+`runOverdueTaskNudges()` powers the scheduled overdue-task nudge:
+
+1. Load all users with `id`, `tier`, and `preferences`.
+2. Check `getPlanLimits(tier).nudgesEnabled`; users without proactive nudges are skipped.
+3. Skip users with `preferences.notificationsEnabled === false`.
+4. Skip users with `preferences.overdueTaskNudgesEnabled === false`.
+5. Enforce one `category: "overdue_tasks"` notification per user per UTC day by checking today's existing notification before creating a new row.
+6. Count tasks where `status IN ("open", "in_progress")` and `dueDate < now`.
+7. If overdue tasks exist, create a localized German or English assistant notification with preview task metadata.
+
+The daily check-and-create runs in a serializable transaction with retry to reduce duplicate rows if cron executions overlap. This nudge is deterministic and does not call the LLM, so it does not consume monthly message or token quota.
+
 ---
 
 ## API Routes — `app/api/notifications/`
@@ -140,6 +154,16 @@ Auth → parse id → `deleteNotification(userId, id)` → `204`.
 
 Auth → `generateDailyGreeting(userId)` → return `{ created: boolean, notification: NotificationRecord | null }`.
 `created: false` means a greeting already existed for today (client silently no-ops).
+
+---
+
+## Cron Routes — `app/api/cron/`
+
+### `tasks-overdue/route.ts` — `GET` / `POST`
+
+Bearer-authenticates with `CRON_SECRET`, then calls `runOverdueTaskNudges()`.
+
+The Vercel cron path is `/api/cron/tasks-overdue` with schedule `0 9 * * *`.
 
 ---
 
@@ -200,18 +224,31 @@ Barrel export.
 
 ---
 
-## User Settings — Notifications Toggle
+## User Settings — Assistant Messages Toggle
 
-Users can enable or disable daily greetings in **Settings → Appearance**.
+Users can enable or disable assistant messages globally in **Settings → Appearance**. This is a broad opt-out for generated greetings and proactive assistant notifications.
 
 Implementation chain:
 
 - `UserPreferences.notificationsEnabled: boolean | null` — in `lib/settings/user-preferences.logic.ts`
 - PATCH `/api/settings` accepts `notificationsEnabled: boolean`
-- `components/settings/AppearanceTab.tsx` — Switch toggle with title, description, and a disclaimer: _"Greetings use your monthly token quota."_
+- `components/settings/AppearanceTab.tsx` — Switch toggle with title, description, and a disclaimer that AI-generated greetings use token quota while deterministic reminders do not.
 - `app/(app)/settings/page.tsx` reads `initialPrefs.notificationsEnabled ?? true` and passes down via `SettingsShell` → `AppearanceTab`
 
-Disabling sets `preferences.notificationsEnabled = false` in the DB. `greeting.logic.ts` checks this before doing any LLM work.
+Disabling sets `preferences.notificationsEnabled = false` in the DB. `greeting.logic.ts` checks this before doing any LLM work, and cron nudges use it as the global assistant-message opt-out.
+
+## User Settings — Overdue Task Nudges
+
+Users on tiers where `getPlanLimits(tier).nudgesEnabled === true` can enable or disable overdue-task nudges in **Settings → Assistant → Automation**.
+
+Implementation chain:
+
+- `UserPreferences.overdueTaskNudgesEnabled: boolean | null` — in `lib/settings/user-preferences.logic.ts`
+- PATCH `/api/settings` accepts `overdueTaskNudgesEnabled: boolean`
+- `components/settings/AssistantTab.tsx` — Switch toggle with title, description, and a paid-tier unavailable hint for Free users
+- `app/(app)/settings/page.tsx` passes `nudgesAvailable` from `getPlanLimits(currentTier).nudgesEnabled`
+
+Disabling sets `preferences.overdueTaskNudgesEnabled = false` in the DB. `nudge-overdue.logic.ts` checks this before scanning overdue tasks.
 
 ---
 
@@ -232,9 +269,20 @@ home.weather.noWeather
 settings.appearance.notificationsTitle
 settings.appearance.notificationsDescription
 settings.appearance.notificationsDisclaimer
+settings.assistant.overdueTaskNudgesLabel
+settings.assistant.overdueTaskNudgesDescription
+settings.assistant.overdueTaskNudgesUnavailable
+settings.assistant.overdueTaskNudgesSaved
+settings.assistant.overdueTaskNudgesSaveFailed
 ```
 
 LLM-generated greeting bodies are **not translated** — they are generated directly in the user's preferred language by the LLM prompt instructions.
+
+Deterministic overdue-task nudge copy is stored under:
+
+```
+notifications.overdueTasks.*
+```
 
 ---
 

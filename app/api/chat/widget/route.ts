@@ -22,7 +22,7 @@ import {
 } from "@/lib/tiers";
 import { getUserPreferences } from "@/lib/settings";
 import { buildSystemPrompt } from "@/lib/context/build";
-import { TOOL_REGISTRY, executeToolCall } from "@/lib/tools";
+import { getActiveToolsForUser, executeToolCall } from "@/lib/tools";
 import { createReport } from "@/lib/reports";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
 import type { ReportDetailCall } from "@/lib/reports";
@@ -89,10 +89,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: monthlyCheck.reason }, { status: 429 });
   }
 
-  const prefs = await getUserPreferences(session.user.id);
+  const [prefs, activeTools] = await Promise.all([
+    getUserPreferences(session.user.id),
+    getActiveToolsForUser(session.user.id),
+  ]);
 
   const systemMessage = await buildSystemPrompt(session.user.id, userMessage, {
     language: prefs.language,
+    tools: activeTools,
   });
 
   const llmMessages: LLMMessage[] = [
@@ -102,7 +106,7 @@ export async function POST(req: Request) {
   ];
 
   const chatOptions: LLMChatOptions = {
-    tools: TOOL_REGISTRY,
+    tools: activeTools,
   };
 
   // Stream response as SSE
