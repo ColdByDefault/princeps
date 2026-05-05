@@ -114,6 +114,7 @@ export async function buildSystemPrompt(
     "- When a user's message implies multiple distinct actions (e.g. adding a contact, scheduling a meeting, creating a task), call all relevant tools — do not stop after the first one.",
     "- When creating goals and tasks that are clearly related in the same message, create all tasks first, then create the goal and pass the returned task IDs in `taskIds`. If the goal must be created first, follow up with update_task calls to add the goalId. Never leave related goals and tasks unlinked.",
     "- Only help with tasks that fall within your available capabilities (listed below). Politely decline general-purpose questions, off-topic requests, or anything unrelated to the user's workspace data.",
+    "- Tool names are exact capabilities, not interchangeable suggestions. Do not satisfy a request by using a different record type. For example, if `create_decision` is absent, never use `create_task` to record a decision; explain that decision tracking is not available on the user's current plan or settings.",
     "- Never call a tool that is not in the Available Tools list. If a user requests something that would require a non-existent tool, tell them it is not yet available.",
     "- Never fabricate data. If a tool returns no results, say so clearly rather than inventing records.",
     "- When a user asks to delete or permanently remove data, confirm the intent before calling any destructive tool.",
