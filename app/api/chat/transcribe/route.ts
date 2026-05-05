@@ -18,6 +18,16 @@ import { getOpenAISettings } from "@/lib/llm-providers/openai/openai-settings";
 
 /** Maximum accepted audio size: 24 MB (Whisper server limit is 25 MB). */
 const MAX_AUDIO_BYTES = 24 * 1024 * 1024;
+const MAX_CLIENT_DURATION_SECONDS = 10 * 60;
+
+function parseClientDurationSeconds(value: FormDataEntryValue | null) {
+  if (typeof value !== "string") return undefined;
+
+  const durationMs = Number(value);
+  if (!Number.isFinite(durationMs) || durationMs <= 0) return undefined;
+
+  return Math.min(durationMs / 1_000, MAX_CLIENT_DURATION_SECONDS);
+}
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -57,6 +67,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Audio file is empty" }, { status: 400 });
   }
 
+  const clientDurationSeconds = parseClientDurationSeconds(
+    formData.get("durationMs"),
+  );
+
   let settings: ReturnType<typeof getOpenAISettings>;
   try {
     settings = getOpenAISettings();
@@ -85,7 +99,7 @@ export async function POST(req: Request) {
     new File([audioField], `recording.${ext}`, { type: baseMime }),
   );
   whisperForm.append("model", "gpt-4o-mini-transcribe");
-  whisperForm.append("response_format", "verbose_json");
+  whisperForm.append("response_format", "json");
 
   const whisperUrl = `${settings.baseUrl}/audio/transcriptions`;
 
@@ -120,6 +134,7 @@ export async function POST(req: Request) {
   const result = (await whisperRes.json()) as {
     text?: string;
     duration?: number;
+    usage?: { seconds?: number };
   };
 
   if (typeof result.text !== "string") {
@@ -130,8 +145,15 @@ export async function POST(req: Request) {
   }
 
   // Track audio duration fire-and-forget — never stalls the user response.
-  if (typeof result.duration === "number" && result.duration > 0) {
-    recordVoiceDuration(session.user.id, result.duration).catch(() => {});
+  const durationSeconds =
+    typeof result.duration === "number" && result.duration > 0
+      ? result.duration
+      : typeof result.usage?.seconds === "number" && result.usage.seconds > 0
+        ? result.usage.seconds
+        : clientDurationSeconds;
+
+  if (durationSeconds) {
+    recordVoiceDuration(session.user.id, durationSeconds).catch(() => {});
   }
 
   return NextResponse.json({ text: result.text.trim() });
