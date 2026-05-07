@@ -1,3 +1,9 @@
+## [1.0.7] - 2026-05-07
+
+- Add new SVG icons for CoC, Cont, Lic, and Read
+
+# Changelog
+
 ## [1.0.6] - 2026-05-07
 
 - feat: add security icon SVG to wiki icons
