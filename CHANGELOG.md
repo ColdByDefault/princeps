@@ -1,3 +1,9 @@
+## [1.0.6] - 2026-05-07
+
+- feat: add security icon SVG to wiki icons
+
+# Changelog
+
 ## [1.0.5] - 2026-05-07
 
 - Add new PNG icons for README and SECURITY with metadata
