@@ -24,7 +24,8 @@ The current live providers are:
 
 ```text
 prisma/schema.prisma                         Integration + external source fields
-docs/13_00_integrations.md                   Developer manual, partly older than live code
+docs/03_FEATURES_REFERENCE.md                Human feature map
+docs/04_DEVELOPER_PLAYBOOK.md                Human provider checklist
 lib/integrations/shared/token.ts             Token lookup, refresh, and integration errors
 lib/integrations/shared/upsert.ts            OAuth upsert + lastSyncedAt helper
 lib/integrations/google-calendar/client.ts   OAuth client, scopes, token exchange

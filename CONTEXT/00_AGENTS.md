@@ -95,14 +95,14 @@ Use it when:
 - You are changing behavior that should be documented for humans.
 - You need historical context before refactoring.
 
-Examples:
+Current wiki files:
 
 ```text
-docs/05_tier-system.md          Detailed tier-system manual
-docs/08_notification-design.md  Notification and weather design note
-docs/11_Langfuse.md             LLM observability setup
-docs/12_stripe.md               Stripe/subscription manual
-docs/13_00_integrations.md      Integration architecture
+docs/00_WIKI_INDEX.md          Human docs entrypoint
+docs/01_USER_GUIDE.md          How to use Princeps
+docs/02_ARCHITECTURE.md        Human architecture overview
+docs/03_FEATURES_REFERENCE.md  Feature map and owning files
+docs/04_DEVELOPER_PLAYBOOK.md  Setup, extension, operations, and production notes
 ```
 
 Update `docs/` when:
