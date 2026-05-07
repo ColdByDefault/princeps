@@ -1,3 +1,14 @@
+## [1.0.5] - 2026-05-07
+
+- Add new PNG icons for README and SECURITY with metadata
+- feat: restructure documentation and remove outdated files
+- feat: restructure agent and integration documentation for clarity and completeness
+- feat: add comprehensive documentation for LLM providers and notification structure
+- feat: add detailed documentation for frontend, LLM tools, tier system, user settings, app settings, and integrations
+- feat: add shadcn skill documentation and global context structure
+
+# Changelog
+
 ## [1.0.4] - 2026-05-05
 
 - #77 close
