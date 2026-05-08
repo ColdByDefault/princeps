@@ -1,6 +1,6 @@
 # Developer Playbook
 
-Last updated: 2026-05-07
+Last updated: 2026-05-08
 
 Use this when changing Princeps. Keep the app user-scoped, localized, tier-aware, and easy to reason about.
 
@@ -21,8 +21,13 @@ Quality checks:
 ```bash
 npm run lint
 npm run typecheck
+npm run test
 npm run build
 ```
+
+Tests use Vitest. Server logic tests run in the default Node environment with
+database and external service boundaries mocked. Component tests can use React
+Testing Library and jsdom when they need browser APIs.
 
 ## Before You Change Code
 
