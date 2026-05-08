@@ -2,7 +2,7 @@
 description: "Use when reviewing Princeps code, diffs, PRs, or documentation for architecture compliance, server/client boundaries, hydration safety, i18n completeness, and instruction adherence. Read-only review agent."
 name: "Reviewer"
 argument-hint: "Describe what to review, such as a file, diff, feature area, PR, or architecture concern."
-model: ["Claude Sonnet 4.6", "GPT-5.3-Codex"]
+model: ["Claude Sonnet 4.6", "GPT-5.5", "GPT-5.3-Codex"]
 tools: [read, search, web, browser]
 disable-model-invocation: false
 user-invocable: true

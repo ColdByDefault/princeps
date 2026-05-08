@@ -1,7 +1,7 @@
 ---
 description: "Use when exploring Princeps, answering architecture questions, finding code patterns, tracing behavior, or comparing docs with live code. Read-only research agent."
 name: "Explore"
-model: ["GPT-5.3-Codex", "Claude Sonnet 4.6"]
+model: ["Claude Sonnet 4.6", "GPT-5.5", "GPT-5.3-Codex"]
 tools: [read, search, web]
 disable-model-invocation: false
 user-invocable: true
