@@ -8,6 +8,12 @@ Every feature writes to a single user-scoped Postgres database. The LLM assistan
 
 ---
 
+[![Dependabot Updates](https://github.com/ColdByDefault/princeps/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/ColdByDefault/princeps/actions/workflows/dependabot/dependabot-updates)
+
+[![Tests](https://github.com/ColdByDefault/princeps/actions/workflows/tests.yml/badge.svg)](https://github.com/ColdByDefault/princeps/actions/workflows/tests.yml)
+
+
+
 ## Requirements
 
 | Requirement             | Minimum version    |
