@@ -1,3 +1,9 @@
+## [1.0.10] - 2026-05-08
+
+- Update README.md
+
+# Changelog
+
 ## [1.0.9] - 2026-05-08
 
 - feat(tests): add Vitest for testing framework and implement initial tests for task routes and logic
