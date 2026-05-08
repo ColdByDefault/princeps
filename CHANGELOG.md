@@ -1,3 +1,10 @@
+## [1.0.9] - 2026-05-08
+
+- feat(tests): add Vitest for testing framework and implement initial tests for task routes and logic
+- feat: update model versions for Explore, Feature, and Reviewer agents
+
+# Changelog
+
 ## [1.0.8] - 2026-05-08
 
 - feat: add comprehensive feature implementation checklist for Princeps
