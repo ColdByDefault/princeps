@@ -1,16 +1,18 @@
 ---
-description: "API routes, server logic, Prisma, auth, validation, tools, LLM provider, and server/client boundaries."
+description: "Backend rules for API routes, server logic, Prisma, auth, validation, rate limits, tier gates, and server-only boundaries."
 name: "Princeps Server And Data"
-applyTo: "app/api/**, lib/**, prisma/**, proxy.ts"
+applyTo: "app/api/**,lib/**,prisma/**,proxy.ts"
 ---
 
 # Princeps Server And Data
 
+Read `CONTEXT/03_BACKEND_STRUC.md` when backend behavior is non-trivial. Verify live code before editing.
+
 ## Route Shape
 
-- API handlers are thin: authenticate → parse input → delegate to `lib/<feature>/` → return `NextResponse.json(...)`.
+- API handlers are thin: authenticate, rate-limit or tier-gate when needed, parse, validate, delegate to `lib/<feature>/`, and return JSON or `204`.
 - One route file per resource operation or small group (e.g. `route.ts` for GET+POST, `[id]/route.ts` for PATCH+DELETE).
-- Route handlers never contain business logic, SQL, or LLM calls directly.
+- Route handlers never contain business logic, direct Prisma queries, raw SQL, reusable transforms, or LLM calls directly.
 
 ## Feature Logic — `lib/<feature>/`
 
@@ -21,19 +23,21 @@ applyTo: "app/api/**, lib/**, prisma/**, proxy.ts"
 
 ## Tools — `lib/tools/`
 
-- `registry.ts` — every tool the LLM can call, defined in OpenAI function-calling schema format.
+- `registry.ts` — imports/spreads feature registries and applies tier filtering.
+- `registry/<feature>.registry.ts` — feature-owned tool definitions in OpenAI function-calling schema format.
 - `types.ts` — `ActionResult` and `ToolHandler` types shared across all handler files.
-- `executor.ts` — thin dispatcher: parses JSON args, looks up the handler by tool name, calls it. **Never add feature logic here.** Adding a new feature = spread its handler map into `HANDLERS` and done.
+- `executor.ts` — thin dispatcher: parses JSON args, looks up the handler by tool name, calls it. **Never add feature logic here.** New features only import/spread handler maps.
 - `handlers/<feature>.handler.ts` — one file per feature domain. Owns validation (Zod `safeParse`), name→ID resolution, duplicate checks, and delegation to `lib/<feature>/` logic. Returns `ActionResult`.
 - `resolvers.ts` — shared name→ID helpers (`resolveOrCreateLabelIdsByNames`, `resolveLabelIdByName`, etc.) used across handler files.
 - Tools are feature-agnostic. Chat, cron, webhooks, and future agents all consume the same executor.
+- If an API action has a tier or usage gate, the equivalent tool handler must enforce the same gate.
 
-## LLM Provider — `lib/llm/`
+## LLM Provider — `lib/llm-providers/`
 
 - Abstracted provider layer exposing `callChat()`, `streamChat()`, `embed()`.
-- OpenAI is the primary provider. The abstraction keeps the door open for alternatives without changing consumers.
+- OpenAI is the primary provider. Ollama and Groq are also wired through the provider abstraction where supported.
 - Provider receives tool schemas from `lib/tools/registry.ts` — it does not define or own them.
-- Streaming uses OpenAI SSE format natively.
+- Provider modules are server-only and must not be imported by client components.
 
 ## Context Assembly — `lib/context/`
 
@@ -53,16 +57,23 @@ applyTo: "app/api/**, lib/**, prisma/**, proxy.ts"
 - Validate inputs with Zod schemas in `lib/<feature>/schemas.ts`.
 - Cast `req.json()` results with `as`, then validate. Do not use fake generics on `req.json()`.
 - Standard error response shape: `{ error: string }`.
-- Status codes: `401` unauthenticated, `400` invalid input, `429` rate-limited, `502` upstream provider failure, `500` unexpected server error.
+- Status codes: `401` unauthenticated, `400` invalid input, `403` plan or permission gate, `404` not found, `409` conflict or duplicate, `429` rate-limited, `502` upstream provider failure, `500` unexpected server error.
 - Reuse `lib/security.ts` helpers for input normalization and rate limiting.
 
 ## Data Layer
 
 - Import Prisma only from `@/lib/db`.
-- Generated Prisma client in `lib/generated/prisma`.
+- Generated Prisma client lives in `prisma/generated/prisma`; do not edit generated files.
 - Keep all database access in `lib/` server logic, never in components.
 - Pgvector: `KnowledgeChunk.embedding` uses `Unsupported("vector(...)")`. Vector reads/writes use raw SQL.
 - After schema changes: update migrations, regenerate client.
+
+## Query Patterns
+
+- User-owned reads filter by `userId`.
+- Updates use `where: { id, userId }` when supported and handle not found.
+- Deletes prefer `deleteMany({ where: { id, userId } })` and check `count`.
+- For `exactOptionalPropertyTypes`, build optional filters and update data conditionally instead of passing possibly undefined fields directly.
 
 ## Server-Only Boundaries
 
