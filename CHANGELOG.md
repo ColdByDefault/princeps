@@ -1,3 +1,9 @@
+## [1.1.0] - 2026-05-09
+
+- chore: update author name and dependencies in package.json
+
+# Changelog
+
 ## [1.0.10] - 2026-05-08
 
 - Update README.md
