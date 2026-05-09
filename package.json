@@ -32,7 +32,7 @@
     "multilingual",
     "next-intl"
   ],
-  "author": "Yazan Abo-Ayash (ColdByDefault™)",
+  "author": "Yazan Abo-Ayash (ColdByDefault© - AnotherProject™)",
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "scripts": {
@@ -51,7 +51,7 @@
   "dependencies": {
     "@base-ui/react": "^1.3.0",
     "@prisma/adapter-pg": "^7.5.0",
-    "@prisma/client": "^7.5.0",
+    "@prisma/client": "^7.8.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.37.0",
     "better-auth": "^1.5.5",
@@ -72,7 +72,6 @@
     "ogl": "^1.0.11",
     "pdf-parse": "^2.4.5",
     "pg": "^8.20.0",
-    "prisma": "^7.6.0",
     "react": "19.2.4",
     "react-day-picker": "^9.14.0",
     "react-dom": "19.2.4",
@@ -96,6 +95,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "jsdom": "^29.1.1",
+    "prisma": "^7.8.0",
     "shadcn": "^4.3.0",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
@@ -104,8 +104,9 @@
     "vitest": "^4.1.5"
   },
   "overrides": {
-    "hono": "^4.12.7",
+    "hono": "^4.12.18",
     "lodash": "^4.17.23",
+    "postcss": "^8.5.14",
     "@hono/node-server": "^1.19.10"
   }
 }
