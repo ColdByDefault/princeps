@@ -128,7 +128,7 @@ export async function POST(req: Request) {
         // Multi-round tool calling before the final text-only response pass.
         // Recap intake can need read, create, and link passes that depend on
         // IDs returned by earlier tool results.
-        const MAX_TOOL_ROUNDS = 6;
+        const MAX_TOOL_ROUNDS = 12;
         const conversationMessages: LLMMessage[] = [...llmMessages];
         let toolRound = 0;
         let allToolsSucceeded = true;

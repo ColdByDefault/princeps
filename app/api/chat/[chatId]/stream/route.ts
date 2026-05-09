@@ -142,7 +142,7 @@ export async function POST(req: Request, { params }: Params) {
         // Meeting recaps can need several dependent rounds: read existing
         // records, create missing contacts, create/link meetings, then attach
         // decisions, goals, and prep tasks using returned IDs.
-        const MAX_TOOL_ROUNDS = 6;
+        const MAX_TOOL_ROUNDS = 12;
         const conversationMessages: LLMMessage[] = [...llmMessages];
         let toolRound = 0;
 
