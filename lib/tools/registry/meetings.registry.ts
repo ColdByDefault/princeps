@@ -20,7 +20,7 @@ export const meetingTools: ToolRegistryEntry[] = [
     function: {
       name: "create_meeting",
       description:
-        "Create a meeting or appointment for the user. Use when the user asks to schedule, add, or book a future meeting, or when they share a recap of a meeting that already happened and it should be saved as a meeting record. Requires a title and scheduled date/time. For past meeting recaps, set status to done. If a recap also mentions a future follow-up, create a separate upcoming meeting for the follow-up instead of reusing or rescheduling the recap meeting. Only set pushToGoogle to true if the user explicitly asks to sync to Google Calendar.",
+        "Create a meeting or appointment for the user. Use when the user asks to schedule, add, or book a future meeting, or when they share a recap of a meeting that already happened and it should be saved as a meeting record. Requires a title and scheduled date/time. For past meeting recaps, set status to done. If the recap mentions attendees, create their contacts first (create_contact), then pass the returned contact IDs in participantContactIds on this call — do not skip participants and rely on update_meeting to add them later. If labels apply, include them in labelNames on this call. If a recap also mentions a future follow-up, create a separate upcoming meeting for the follow-up instead of reusing or rescheduling the recap meeting. Only set pushToGoogle to true if the user explicitly asks to sync to Google Calendar.",
       parameters: {
         type: "object",
         properties: {
