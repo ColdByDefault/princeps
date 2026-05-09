@@ -20,7 +20,7 @@ export const meetingTools: ToolRegistryEntry[] = [
     function: {
       name: "create_meeting",
       description:
-        "Create a new meeting for the user. Use when the user asks to schedule, add, or book a meeting. Requires a title and scheduled date/time. Only set pushToGoogle to true if the user explicitly asks to sync to Google Calendar.",
+        "Create a meeting or appointment for the user. Use when the user asks to schedule, add, or book a future meeting, or when they share a recap of a meeting that already happened and it should be saved as a meeting record. Requires a title and scheduled date/time. For past meeting recaps, set status to done. Only set pushToGoogle to true if the user explicitly asks to sync to Google Calendar.",
       parameters: {
         type: "object",
         properties: {
@@ -41,6 +41,18 @@ export const meetingTools: ToolRegistryEntry[] = [
             type: "string",
             description:
               "Meeting location — room name, URL, or address (optional).",
+          },
+          status: {
+            type: "string",
+            enum: ["upcoming", "done", "cancelled"],
+            description:
+              "Initial status. Use done when saving a recap for a meeting that already happened. Defaults to upcoming.",
+          },
+          kind: {
+            type: "string",
+            enum: ["meeting", "appointment"],
+            description:
+              'Initial event kind: "meeting" for collaborative meetings, "appointment" for personal appointments. Defaults to meeting.',
           },
           agenda: {
             type: "string",

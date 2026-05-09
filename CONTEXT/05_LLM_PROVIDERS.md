@@ -97,7 +97,7 @@ That route:
 3. Builds the system prompt from `lib/context/build.ts`.
 4. Loads tier/user-filtered tools from `lib/tools`.
 5. Streams tokens and tool-call events.
-6. Executes requested tools for up to 3 rounds.
+6. Executes requested tools for up to 6 rounds.
 7. Saves the assistant response and usage counters.
 
 ## Tool Calling

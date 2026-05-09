@@ -27,6 +27,8 @@ export async function createMeeting(
       scheduledAt: new Date(input.scheduledAt),
       durationMin: input.durationMin ?? null,
       location: input.location ?? null,
+      ...(input.status ? { status: input.status } : {}),
+      ...(input.kind ? { kind: input.kind } : {}),
       agenda: input.agenda ?? null,
       summary: input.summary ?? null,
       ...(input.source ? { source: input.source } : {}),

@@ -216,9 +216,25 @@ repeat for a small number of rounds
 final pass without tools for text response
 ```
 
-The current main chat stream allows up to three tool rounds before a final text-only pass. This lets the model use IDs returned by one tool call in a later tool call.
+The current chat streams allow up to six tool rounds before a final text-only pass. This lets the model use IDs returned by one tool call in later tool calls.
 
 Tool execution emits action events to the client and may create compact report details. Keep tool result data useful but not bloated.
+
+## Meeting Recap Intake
+
+Meeting recaps are a multi-tool workflow, not a separate monolithic importer.
+
+When the user says something like "I met with Alice and Bob today about Project Nexus", the assistant should:
+
+1. Inspect existing context and call list/recall tools when it needs exact IDs or confirmation that records do not exist.
+2. Reuse matching records instead of creating duplicates.
+3. Create missing base records first, especially contacts and labels.
+4. Create the meeting record with `status: "done"` when it was a past meeting.
+5. Use returned IDs in later rounds to link participants, decisions, prep tasks, and goals.
+6. Apply shared labels to related contacts, meetings, decisions, goals, and tasks. A project or company label is often the simplest cross-record thread.
+7. Store durable recap context with `remember_fact` when it is useful beyond the structured records.
+
+This workflow can need several dependent tool rounds, so chat surfaces should allow enough rounds for read -> create -> link behavior before the final text-only response.
 
 ## Tool Design Rules
 
