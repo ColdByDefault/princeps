@@ -82,5 +82,13 @@ export async function executeToolCall(
     };
   }
 
-  return handler(userId, args);
+  try {
+    return await handler(userId, args);
+  } catch (err) {
+    console.error(`[tools/${toolName}] Handler failed:`, err);
+    return {
+      ok: false,
+      error: `${toolName} failed before it could complete. Verify any referenced record IDs and try again.`,
+    };
+  }
 }

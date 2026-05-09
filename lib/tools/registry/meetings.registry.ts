@@ -20,7 +20,7 @@ export const meetingTools: ToolRegistryEntry[] = [
     function: {
       name: "create_meeting",
       description:
-        "Create a meeting or appointment for the user. Use when the user asks to schedule, add, or book a future meeting, or when they share a recap of a meeting that already happened and it should be saved as a meeting record. Requires a title and scheduled date/time. For past meeting recaps, set status to done. Only set pushToGoogle to true if the user explicitly asks to sync to Google Calendar.",
+        "Create a meeting or appointment for the user. Use when the user asks to schedule, add, or book a future meeting, or when they share a recap of a meeting that already happened and it should be saved as a meeting record. Requires a title and scheduled date/time. For past meeting recaps, set status to done. If a recap also mentions a future follow-up, create a separate upcoming meeting for the follow-up instead of reusing or rescheduling the recap meeting. Only set pushToGoogle to true if the user explicitly asks to sync to Google Calendar.",
       parameters: {
         type: "object",
         properties: {
@@ -72,7 +72,7 @@ export const meetingTools: ToolRegistryEntry[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Contact IDs to add as participants. If a participant name is mentioned and no contact exists yet, inform the user and offer to create the contact first before adding them.",
+              "Contact IDs or exact contact names to add as participants. If a participant name is mentioned and no contact exists yet, create the contact first before adding them.",
           },
           pushToGoogle: {
             type: "boolean",
@@ -112,7 +112,7 @@ export const meetingTools: ToolRegistryEntry[] = [
     function: {
       name: "update_meeting",
       description:
-        "Update an existing meeting. Requires the meetingId. Supply only the fields that should change.",
+        "Update an existing meeting. Requires the meetingId. Supply only the fields that should change. Do not use this to turn a past recap meeting into a future follow-up meeting; create a separate upcoming meeting instead.",
       parameters: {
         type: "object",
         properties: {
@@ -163,7 +163,7 @@ export const meetingTools: ToolRegistryEntry[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Replacement set of participant contact IDs. Pass an empty array to remove all participants. If the user mentions a person not yet in contacts, inform them and suggest creating a contact first.",
+              "Replacement set of participant contact IDs or exact contact names. Pass an empty array to remove all participants. If the user mentions a person not yet in contacts, create the contact first.",
           },
           linkedTaskIds: {
             type: "array",

@@ -19,6 +19,9 @@ export async function createTask(
   userId: string,
   input: CreateTaskInput,
 ): Promise<TaskRecord> {
+  const labelIds = uniqueIds(input.labelIds);
+  const goalIds = uniqueIds(input.goalIds);
+
   const row = await db.task.create({
     data: {
       userId,
@@ -27,17 +30,17 @@ export async function createTask(
       priority: input.priority ?? "normal",
       dueDate: input.dueDate ? new Date(input.dueDate) : null,
       ...(input.meetingId !== undefined && { meetingId: input.meetingId }),
-      ...(input.labelIds?.length
+      ...(labelIds.length
         ? {
             labelLinks: {
-              create: input.labelIds.map((labelId) => ({ labelId })),
+              create: labelIds.map((labelId) => ({ labelId })),
             },
           }
         : {}),
-      ...(input.goalIds?.length
+      ...(goalIds.length
         ? {
             goalLinks: {
-              create: input.goalIds.map((goalId) => ({ goalId })),
+              create: goalIds.map((goalId) => ({ goalId })),
             },
           }
         : {}),
@@ -46,4 +49,8 @@ export async function createTask(
   });
 
   return toTaskRecord(row);
+}
+
+function uniqueIds(ids: string[] | undefined): string[] {
+  return ids ? [...new Set(ids)] : [];
 }

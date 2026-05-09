@@ -20,7 +20,7 @@ export const taskTools: ToolRegistryEntry[] = [
     function: {
       name: "create_task",
       description:
-        "Create a new task for the user. Use this when the user asks to add, create, or schedule a task.",
+        "Create a new task for the user. Use this when the user asks to add, create, or schedule a task. Also use this for preparation or follow-up work implied by a meeting recap, especially when a future follow-up meeting is scheduled.",
       parameters: {
         type: "object",
         properties: {
@@ -52,13 +52,13 @@ export const taskTools: ToolRegistryEntry[] = [
           meetingId: {
             type: "string",
             description:
-              "Optional ID of a meeting to link this task to. Use list_meetings to find the meeting ID first.",
+              "Optional ID or exact title of a meeting to link this task to. Use the follow-up meeting ID, not the past recap meeting ID, for preparation tasks.",
           },
           goalIds: {
             type: "array",
             items: { type: "string" },
             description:
-              "Optional list of goal IDs to link this task to. Use list_goals to find goal IDs first. Pass an empty array to remove all goal links.",
+              "Optional list of goal IDs or exact goal titles to link this task to. Use list_goals to find goal IDs first. Pass an empty array to remove all goal links.",
           },
         },
         required: ["title"],
@@ -145,13 +145,13 @@ export const taskTools: ToolRegistryEntry[] = [
           meetingId: {
             type: "string",
             description:
-              "Link or unlink a meeting. Pass the meeting ID to link, or null to unlink from any meeting.",
+              "Link or unlink a meeting. Pass the meeting ID or exact title to link, or null to unlink from any meeting.",
           },
           goalIds: {
             type: "array",
             items: { type: "string" },
             description:
-              "Replacement set of goal IDs to link this task to. Pass an empty array to remove all goal links. Use list_goals to find goal IDs.",
+              "Replacement set of goal IDs or exact goal titles to link this task to. Pass an empty array to remove all goal links. Use list_goals to find goal IDs.",
           },
         },
         required: ["taskId"],

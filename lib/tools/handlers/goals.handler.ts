@@ -15,7 +15,10 @@ import { updateGoal } from "@/lib/goals/update.logic";
 import { deleteGoal } from "@/lib/goals/delete.logic";
 import { createMilestone, updateMilestone } from "@/lib/goals/milestones.logic";
 import { createGoalSchema, updateGoalSchema } from "@/lib/goals/schemas";
-import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
+import {
+  resolveOrCreateLabelIdsByNames,
+  resolveTaskIdsByRefs,
+} from "@/lib/tools/resolvers";
 import { enforceGoalsMax } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";
 
@@ -28,6 +31,19 @@ async function handleCreateGoal(
   const labelIds = labelNames.length
     ? await resolveOrCreateLabelIdsByNames(userId, labelNames as string[])
     : undefined;
+  const taskRefs = Array.isArray(args.taskIds)
+    ? (args.taskIds as unknown[]).filter(
+        (value): value is string => typeof value === "string",
+      )
+    : undefined;
+  const taskIds =
+    taskRefs !== undefined ? await resolveTaskIdsByRefs(userId, taskRefs) : undefined;
+  if (taskIds?.missing.length) {
+    return {
+      ok: false,
+      error: `Task not found for create_goal: ${taskIds.missing.join(", ")}. Use list_tasks or the create_task result before linking a goal.`,
+    };
+  }
 
   // Convert milestone title strings to milestone input objects
   const milestoneStrings = Array.isArray(args.milestones)
@@ -46,6 +62,7 @@ async function handleCreateGoal(
   const parsed = createGoalSchema.safeParse({
     ...rest,
     ...(labelIds !== undefined ? { labelIds } : {}),
+    ...(taskIds !== undefined ? { taskIds: taskIds.ids } : {}),
     ...(milestones !== undefined ? { milestones } : {}),
   });
   if (!parsed.success) {
@@ -98,11 +115,25 @@ async function handleUpdateGoal(
     labelNames !== undefined
       ? await resolveOrCreateLabelIdsByNames(userId, labelNames as string[])
       : undefined;
+  const taskRefs = Array.isArray(args.taskIds)
+    ? (args.taskIds as unknown[]).filter(
+        (value): value is string => typeof value === "string",
+      )
+    : undefined;
+  const taskIds =
+    taskRefs !== undefined ? await resolveTaskIdsByRefs(userId, taskRefs) : undefined;
+  if (taskIds?.missing.length) {
+    return {
+      ok: false,
+      error: `Task not found for update_goal: ${taskIds.missing.join(", ")}. Use list_tasks or the create_task result before linking a goal.`,
+    };
+  }
 
   const { goalId, labelNames: _ln, ...rest } = args;
   const parsed = updateGoalSchema.safeParse({
     ...rest,
     ...(labelIds !== undefined ? { labelIds } : {}),
+    ...(taskIds !== undefined ? { taskIds: taskIds.ids } : {}),
   });
   if (!parsed.success) {
     return {

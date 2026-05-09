@@ -56,7 +56,7 @@ export const decisionTools: ToolRegistryEntry[] = [
           meetingId: {
             type: "string",
             description:
-              "Optional ID of a meeting this decision came from. Use list_meetings to find the meeting ID first.",
+              "Optional ID or exact title of the meeting this decision came from. For meeting recaps with a separate future follow-up, link decisions to the past recap/source meeting, not the future follow-up.",
           },
         },
         required: ["title"],
@@ -129,7 +129,7 @@ export const decisionTools: ToolRegistryEntry[] = [
           meetingId: {
             type: "string",
             description:
-              "Link or unlink the meeting this decision originated from. Pass the meeting ID to link, or null to unlink. Use list_meetings to find the meeting ID.",
+              "Link or unlink the meeting this decision originated from. Pass the meeting ID or exact title to link, or null to unlink. For meeting recaps with a separate future follow-up, link decisions to the past recap/source meeting, not the future follow-up.",
           },
         },
         required: ["decisionId"],

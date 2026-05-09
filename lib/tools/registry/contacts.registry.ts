@@ -20,7 +20,7 @@ export const contactTools: ToolRegistryEntry[] = [
     function: {
       name: "create_contact",
       description:
-        "Create a new contact for the user. Provide at minimum a name. Optionally include role, company, email, phone, notes, lastContact (ISO date string), and labelNames (string array of label names to attach).",
+        "Create a new contact for the user. Provide at minimum a name. Optionally include role, company, email, phone, notes, lastContact (ISO date string), and labelNames (string array of label names to attach). For meeting recaps with participants not yet in contacts, create each missing contact before creating or updating the meeting participants.",
       parameters: {
         type: "object",
         properties: {

@@ -20,7 +20,7 @@ export const labelTools: ToolRegistryEntry[] = [
     function: {
       name: "create_label",
       description:
-        "Create a new global label. Use this when the user asks to add or create a label. Labels can then be attached to tasks and other records.",
+        "Create a new global label. Use this when the user asks to add or create a label, or when a missing label is needed for a multi-record workflow such as a meeting recap. Labels can then be attached to tasks and other records.",
       parameters: {
         type: "object",
         properties: {

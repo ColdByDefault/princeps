@@ -222,17 +222,24 @@ Tool execution emits action events to the client and may create compact report d
 
 ## Meeting Recap Intake
 
-Meeting recaps are a multi-tool workflow, not a separate monolithic importer.
+Meeting recaps are a multi-tool workflow, not a monolithic importer. The
+assistant should inspect existing context, call list/recall tools when it needs
+exact IDs, reuse matching records, create missing records with their native
+tools, and then link the returned IDs across the related records.
 
 When the user says something like "I met with Alice and Bob today about Project Nexus", the assistant should:
 
 1. Inspect existing context and call list/recall tools when it needs exact IDs or confirmation that records do not exist.
 2. Reuse matching records instead of creating duplicates.
-3. Create missing base records first, especially contacts and labels.
-4. Create the meeting record with `status: "done"` when it was a past meeting.
-5. Use returned IDs in later rounds to link participants, decisions, prep tasks, and goals.
-6. Apply shared labels to related contacts, meetings, decisions, goals, and tasks. A project or company label is often the simplest cross-record thread.
-7. Store durable recap context with `remember_fact` when it is useful beyond the structured records.
+3. Create missing contacts first so returned contact IDs can be used as meeting participants.
+4. Create missing labels explicitly when the prompt asks for labels.
+5. Store durable recap context with `remember_fact` when the meeting, project, decision, or follow-up date matters beyond the structured records.
+6. Create the meeting record for the meeting that happened with `status: "done"`.
+7. Create a separate future follow-up meeting with `status: "upcoming"` when a follow-up is scheduled.
+8. Create and link the decision to the recap meeting, not the follow-up meeting.
+9. Create and link the goal.
+10. Create one preparation task linked to the follow-up meeting and related goal unless the user explicitly says not to.
+11. Use update tools as needed when a returned ID is only available after an earlier tool call.
 
 This workflow can need several dependent tool rounds, so chat surfaces should allow enough rounds for read -> create -> link behavior before the final text-only response.
 
