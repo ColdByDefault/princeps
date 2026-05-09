@@ -319,6 +319,7 @@ model Meeting {
   participants MeetingParticipant[]
   tasks        Task[]
   decisions    Decision[]
+  goals        Goal[]
   labelLinks   LabelOnMeeting[]
 
   @@index([userId])
@@ -564,15 +565,18 @@ model Goal {
   description String?
   status      GoalStatus @default(open)
   targetDate  DateTime?
+  meetingId   String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
   user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meeting    Meeting?      @relation(fields: [meetingId], references: [id], onDelete: SetNull)
   milestones Milestone[]
   taskLinks  TaskOnGoal[]
   labelLinks LabelOnGoal[]
 
   @@index([userId])
+  @@index([meetingId])
   @@map("goal")
 }
 

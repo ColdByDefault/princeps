@@ -41,6 +41,9 @@ export async function updateGoal(
         ...(input.targetDate !== undefined && {
           targetDate: input.targetDate ? new Date(input.targetDate) : null,
         }),
+        ...(input.meetingId !== undefined && {
+          meetingId: input.meetingId ?? null,
+        }),
         ...(labelIds !== undefined && {
           labelLinks: {
             deleteMany: {},

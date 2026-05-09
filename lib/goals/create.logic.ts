@@ -28,6 +28,7 @@ export async function createGoal(
       description: input.description ?? null,
       status: input.status ?? "open",
       targetDate: input.targetDate ? new Date(input.targetDate) : null,
+      meetingId: input.meetingId ?? null,
       ...(labelIds.length
         ? {
             labelLinks: {

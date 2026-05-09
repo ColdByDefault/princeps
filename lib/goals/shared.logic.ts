@@ -17,6 +17,7 @@ export const GOAL_SELECT = {
   description: true,
   status: true,
   targetDate: true,
+  meetingId: true,
   createdAt: true,
   updatedAt: true,
   milestones: {
@@ -48,6 +49,7 @@ type GoalRow = {
   description: string | null;
   status: string;
   targetDate: Date | null;
+  meetingId: string | null;
   createdAt: Date;
   updatedAt: Date;
   milestones: {
@@ -82,6 +84,7 @@ export function toGoalRecord(row: GoalRow): GoalRecord {
     description: row.description,
     status: row.status,
     targetDate: row.targetDate?.toISOString() ?? null,
+    meetingId: row.meetingId ?? null,
     milestones: row.milestones.map(toMilestoneRecord),
     tasks: row.taskLinks.map((t) => t.task),
     labels: row.labelLinks.map((l) => l.label),

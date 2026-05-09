@@ -66,13 +66,13 @@ export const meetingTools: ToolRegistryEntry[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Label names to attach. Labels will be created if they do not exist.",
+              "Label names to attach. Labels will be created if they do not exist. Always include every label the user has mentioned or established as context for this work — do not omit labels just because they were created earlier in the same run.",
           },
           participantContactIds: {
             type: "array",
             items: { type: "string" },
             description:
-              "Contact IDs or exact contact names to add as participants. If a participant name is mentioned and no contact exists yet, create the contact first before adding them.",
+              "Contact IDs or exact contact names to add as participants. If a participant name is mentioned and no contact exists yet, create the contact first before adding them. Always pass this field when the user has named attendees — use the ID returned by create_contact when you created the contact in the same run.",
           },
           pushToGoogle: {
             type: "boolean",
@@ -157,13 +157,13 @@ export const meetingTools: ToolRegistryEntry[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Replacement set of label names. Pass an empty array to remove all labels.",
+              "Replacement set of label names. Pass an empty array to remove all labels. When updating a meeting to link participants or tasks, always re-pass the full label set so it is not lost.",
           },
           participantContactIds: {
             type: "array",
             items: { type: "string" },
             description:
-              "Replacement set of participant contact IDs or exact contact names. Pass an empty array to remove all participants. If the user mentions a person not yet in contacts, create the contact first.",
+              "Replacement set of participant contact IDs or exact contact names. Pass an empty array to remove all participants. If the user mentions a person not yet in contacts, create the contact first. Always populate this field on the update_meeting call that links participants — use the IDs returned by create_contact.",
           },
           linkedTaskIds: {
             type: "array",
