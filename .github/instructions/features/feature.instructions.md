@@ -33,18 +33,18 @@ A complete feature may touch:
 ```text
 prisma/schema.prisma
 types/api.ts
-lib/<feature>/
+lib/features/<feature>/
 app/api/<feature>/
 app/(app)/<feature>/page.tsx
 components/<feature>/
 messages/de.json
 messages/en.json
-lib/tools/registry/<feature>.registry.ts
-lib/tools/handlers/<feature>.handler.ts
-lib/context/<feature>.slot.ts
-lib/tiers/
-lib/settings/
-lib/notifications/
+lib/ai/tools/registry/<feature>.registry.ts
+lib/ai/tools/handlers/<feature>.handler.ts
+lib/ai/context/<feature>.slot.ts
+lib/platform/tiers/
+lib/platform/settings/
+lib/features/notifications/
 components/navigation/
 docs/
 CONTEXT/
@@ -65,7 +65,7 @@ components/<feature>/
   Create<Feature>Dialog.tsx
   Edit<Feature>Dialog.tsx
   logic/use<Feature>Mutations.ts
-lib/<feature>/
+lib/features/<feature>/
   index.ts
   schemas.ts
   shared.logic.ts
@@ -105,7 +105,7 @@ Knowledge, integrations, voice, imports, and other pipeline features may legitim
 
 ### 4. Server Logic
 
-- Put validation, DB access, mapping, side effects, and ownership checks in `lib/<feature>/`.
+- Put validation, DB access, mapping, side effects, and ownership checks in `lib/features/<feature>/`.
 - Public logic functions accept `userId` from the caller.
 - All user-owned queries and mutations filter by `userId`.
 - `shared.logic.ts` owns Prisma `select`/`include` and DB-row to client-record mapping.
@@ -114,7 +114,7 @@ Knowledge, integrations, voice, imports, and other pipeline features may legitim
 
 ### 5. API Routes
 
-- API routes stay thin: authenticate, rate-limit or tier-gate when needed, parse as `unknown`, validate with Zod, delegate to `lib/<feature>/`, and respond.
+- API routes stay thin: authenticate, rate-limit or tier-gate when needed, parse as `unknown`, validate with Zod, delegate to `lib/features/<feature>/`, and respond.
 - Routes must not contain business logic, direct Prisma queries, raw SQL, reusable transforms, or LLM calls.
 - Use standard status codes: `401`, `400`, `403`, `404`, `409`, `429`, `500`, `502`, plus `201` for creates and `204` for successful deletes.
 - Error response shape is `{ error: string }`.
@@ -143,24 +143,24 @@ Add tools only when the assistant should act on the feature.
 Current live layout:
 
 ```text
-lib/tools/registry/<feature>.registry.ts
-lib/tools/registry.ts
-lib/tools/handlers/<feature>.handler.ts
-lib/tools/executor.ts
+lib/ai/tools/registry/<feature>.registry.ts
+lib/ai/tools/registry.ts
+lib/ai/tools/handlers/<feature>.handler.ts
+lib/ai/tools/executor.ts
 ```
 
 Rules:
 
 - Registry files define OpenAI-compatible schemas with `minTier`, `group`, stable snake_case names, descriptions, and parameters.
-- `lib/tools/registry.ts` only imports and spreads feature registry entries.
-- Handlers validate untrusted args, resolve names to IDs, prevent likely duplicates, enforce tier gates, delegate to `lib/<feature>/`, and return compact `ActionResult` data.
-- `lib/tools/executor.ts` only imports and spreads handler maps.
+- `lib/ai/tools/registry.ts` only imports and spreads feature registry entries.
+- Handlers validate untrusted args, resolve names to IDs, prevent likely duplicates, enforce tier gates, delegate to `lib/features/<feature>/`, and return compact `ActionResult` data.
+- `lib/ai/tools/executor.ts` only imports and spreads handler maps.
 - Tool handlers must enforce the same feature-specific gates as API routes.
 - Destructive tools require clear user intent or confirmation in their descriptions and assistant behavior.
 
 ### 9. LLM Context
 
-Add `lib/context/<feature>.slot.ts` when the assistant should know the feature's live data during conversations.
+Add `lib/ai/context/<feature>.slot.ts` when the assistant should know the feature's live data during conversations.
 
 - Slots fetch compact, user-scoped data.
 - Include stable record IDs when later tool calls may need them.
@@ -172,8 +172,8 @@ Add `lib/context/<feature>.slot.ts` when the assistant should know the feature's
 
 For AI-generated feature content:
 
-- Use `lib/llm-providers/`, not `lib/chat` and not stale `lib/llm/` paths.
-- Put prompt assembly in `lib/<feature>/`.
+- Use `lib/ai/llm-providers/`, not `lib/chat` and not stale `lib/llm/` paths.
+- Put prompt assembly in `lib/features/<feature>/`.
 - Gate expensive actions before provider calls.
 - Catch provider errors and return a user-safe failure.
 - Store generated output only after a successful call.
@@ -183,7 +183,7 @@ For AI-generated feature content:
 
 - Decide whether the quota is count-at-rest, daily, monthly, lifetime, or disabled by tier.
 - Plan limits live in `types/billing.ts`.
-- Enforcement lives in `lib/tiers/enforce.ts`.
+- Enforcement lives in `lib/platform/tiers/enforce.ts`.
 - Call gates before writes or expensive work in both API routes and tool handlers.
 - Update usage summaries, settings UI, and i18n when the quota is user-facing.
 - Do not manually increment count-at-rest quotas; the record count is the usage.
@@ -210,7 +210,7 @@ For AI-generated feature content:
 Knowledge intentionally diverges from normal CRUD:
 
 - Upload, extraction, embeddings, and search are pipeline behavior.
-- `lib/knowledge/` has search/import flows rather than the normal create/update/delete shape.
+- `lib/features/knowledge/` has search/import flows rather than the normal create/update/delete shape.
 - Context uses the incoming query for semantic search.
 - Tools are specialized and should not be forced into ordinary CRUD.
 
@@ -220,7 +220,7 @@ Use this same judgment for future upload-indexed, RAG-backed, integration, voice
 
 - [ ] Prisma schema and generated client are updated if storage changed.
 - [ ] Client-safe types are updated.
-- [ ] `lib/<feature>/` contains schemas, shared mapper, and focused operation logic.
+- [ ] `lib/features/<feature>/` contains schemas, shared mapper, and focused operation logic.
 - [ ] API routes are thin, authenticated, user-scoped, validated, rate-limited, and tier-gated when needed.
 - [ ] Server page authenticates, fetches data, and passes serialized props.
 - [ ] UI has shell, cards, create/edit dialogs, mutation hook, refresh, delete confirmation, loading states, and feedback when applicable.

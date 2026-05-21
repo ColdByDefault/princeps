@@ -38,7 +38,7 @@ app/(app)/<feature>/page.tsx          Server page — auth, data fetch, pass to 
 components/<feature>/                  Client components — UI, state, API calls
   index.ts                             Barrel exports
   logic/                               Client hooks, API calls, transforms
-lib/<feature>/                         Server logic — one file per operation
+lib/features/<feature>/                         Server logic — one file per operation
   schemas.ts                           Zod validators
   create.logic.ts                      Insert + side effects
   list.logic.ts                        Query
@@ -46,15 +46,15 @@ lib/<feature>/                         Server logic — one file per operation
   delete.logic.ts                      Cascade delete
   shared.logic.ts                      DB→client shape mapping, shared includes
 app/api/<feature>/                     API routes — thin handlers that delegate to lib/
-lib/context/<feature>.slot.ts          LLM system-prompt context slot when needed
-lib/tools/registry/<feature>.registry.ts Tool schemas when assistant action is needed
-lib/tools/handlers/<feature>.handler.ts Tool handler logic when assistant action is needed
+lib/ai/context/<feature>.slot.ts          LLM system-prompt context slot when needed
+lib/ai/tools/registry/<feature>.registry.ts Tool schemas when assistant action is needed
+lib/ai/tools/handlers/<feature>.handler.ts Tool handler logic when assistant action is needed
 ```
 
 ### Tools are a standalone layer, not owned by chat, or any other feature
 
 ```
-lib/tools/                             Orchestration layer — feature-agnostic
+lib/ai/tools/                             Orchestration layer — feature-agnostic
   registry.ts                          Imports/spreads feature registries, tier filtering
   registry/
     tasks.registry.ts                  Feature-owned OpenAI function schemas
@@ -69,22 +69,22 @@ lib/tools/                             Orchestration layer — feature-agnostic
 ```
 
 - Any surface can execute tools: chat, cron, webhooks, future agents.
-- Chat is just another feature that talks to the LLM and passes tool calls to `lib/tools/`.
+- Chat is just another feature that talks to the LLM and passes tool calls to `lib/ai/tools/`.
 - Adding a new feature's tools = create `registry/<feature>.registry.ts` and `handlers/<feature>.handler.ts`, then spread the registry and handler maps into the orchestration files. Do not put feature business logic in `registry.ts` or `executor.ts`.
-- Tool handlers validate arguments, resolve names to IDs, enforce tier/usage gates, and delegate to `lib/<feature>/`.
+- Tool handlers validate arguments, resolve names to IDs, enforce tier/usage gates, and delegate to `lib/features/<feature>/`.
 
 ### LLM integration
 
 - OpenAI is the primary provider. Ollama and Groq are also wired through the provider abstraction where supported.
-- Provider code lives in `lib/llm-providers/` (not `lib/chat/`). Chat consumes the LLM provider, it does not own it.
+- Provider code lives in `lib/ai/llm-providers/` (not `lib/features/chat/`). Chat consumes the LLM provider, it does not own it.
 - Tool schemas use the OpenAI function-calling format natively.
-- Context assembly (system prompt, user data slots) lives in `lib/context/`.
+- Context assembly (system prompt, user data slots) lives in `lib/ai/context/`.
 
 ### Server / client boundary
 
 - Prisma, Better Auth server helpers, LLM provider calls, and pgvector access are server-only.
 - Add `import "server-only"` to any module that must never reach client bundles.
-- Never let a client import chain reach `@/lib/db`.
+- Never let a client import chain reach `@/lib/core/db`.
 
 ### i18n
 

@@ -1,5 +1,11 @@
 /**
- * Dev-only file-based mailbox for password reset links.
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version beta
+ * @since beta
+ * @module
+ * @description Dev-only file-based mailbox for password reset links.
  * Writes to .next/reset-mailbox.json so it survives hot reloads.
  * This module is never imported in production — the API route
  * returns 404 when NODE_ENV !== "development".

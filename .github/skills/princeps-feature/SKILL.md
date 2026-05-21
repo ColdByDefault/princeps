@@ -31,7 +31,7 @@ Always verify the live code before editing. Prefer `tasks` for complete CRUD, `c
 2. Build in layer order:
    - Prisma model and migrations when storage changes.
    - Client-safe type in `types/api.ts`.
-   - `lib/<feature>/` schemas, shared mapper, and operation files.
+   - `lib/features/<feature>/` schemas, shared mapper, and operation files.
    - Thin API routes.
    - Server page and client components.
    - i18n strings and navigation.
@@ -39,7 +39,7 @@ Always verify the live code before editing. Prefer `tasks` for complete CRUD, `c
 
 3. Keep boundaries intact:
    - All user-owned queries filter by `userId`.
-   - Client imports never reach `@/lib/db`.
+   - Client imports never reach `@/lib/core/db`.
    - Business logic stays out of routes, pages, and JSX.
    - Server-only modules use `import "server-only"` when they import server dependencies.
 

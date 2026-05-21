@@ -4,8 +4,6 @@
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";

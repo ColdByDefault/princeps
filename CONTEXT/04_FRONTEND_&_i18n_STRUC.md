@@ -18,7 +18,7 @@ Normal frontend flow:
 ```text
 app/(app)/<feature>/page.tsx
   -> authenticate
-  -> load initial data from lib/<feature>/
+  -> load initial data from lib/features/<feature>/
   -> pass plain serialized props to components/<feature>/<Feature>Shell
 
 components/<feature>/<Feature>Shell.tsx
@@ -41,7 +41,7 @@ They should:
 - Generate localized metadata with `getTranslations()`.
 - Authenticate with Better Auth server helpers.
 - Redirect unauthenticated users to `/login`.
-- Fetch initial user-scoped data from `lib/<feature>/`.
+- Fetch initial user-scoped data from `lib/features/<feature>/`.
 - Pass plain props to the client shell.
 - Avoid client state, browser APIs, and business logic.
 
@@ -242,7 +242,7 @@ When adding a page:
 Before finishing frontend work, verify:
 
 - Server page authenticates and passes serialized props.
-- Client components do not import server-only modules or `@/lib/db`.
+- Client components do not import server-only modules or `@/lib/core/db`.
 - Business rules are not embedded in JSX components.
 - Feature has a barrel `index.ts`.
 - API calls and mutation state live in `components/<feature>/logic/` for full features.

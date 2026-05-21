@@ -1,3 +1,11 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version beta
+ * @since beta
+ */ 
+
 import { NextResponse } from "next/server";
 import { getResetLinks } from "@/lib/core/dev/reset-mailbox";
 

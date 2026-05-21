@@ -32,7 +32,7 @@ Sub-agents are **not** visible to the user. They run server-side, return structu
 
 1. **Orchestrator owns the user conversation.** Sub-agents are internal workers.
 2. **Each sub-agent has a single responsibility.** Narrow scope = predictable output.
-3. **Sub-agents use the same `lib/tools/` layer.** No parallel tool system needed.
+3. **Sub-agents use the same `lib/ai/tools/` layer.** No parallel tool system needed.
 4. **Sub-agents are stateless per invocation.** Context is passed in; state is written to the DB.
 5. **Any surface can trigger a sub-agent.** Chat, cron, webhooks, and future automation pipelines all use the same runner.
 6. **Tier and usage gates are enforced inside each sub-agent**, just like regular tool handlers.
@@ -42,7 +42,7 @@ Sub-agents are **not** visible to the user. They run server-side, return structu
 ## Architecture
 
 ```text
-lib/agents/
+lib/ai/agents/
   types.ts                    AgentInput, AgentOutput, AgentDefinition
   runner.ts                   runAgent(agentName, input, userId) → AgentOutput
   registry.ts                 Maps agent names to definitions
@@ -61,7 +61,7 @@ type AgentDefinition = {
   name: string; // stable snake_case identifier
   description: string; // used by orchestrator to decide when to delegate
   systemPrompt: string; // narrow, task-specific instructions
-  tools: string[]; // allowed tool names from lib/tools/registry.ts
+  tools: string[]; // allowed tool names from lib/ai/tools/registry.ts
   minTier: Tier; // minimum user tier to invoke this agent
   maxRounds?: number; // default 3; orchestrator can override
 };
@@ -108,7 +108,7 @@ The main chat route gains a pre-pass step:
 
 The orchestrator does **not** stream sub-agent work to the user. It waits for sub-agent results, then streams its own synthesis.
 
-A new `classify` helper (`lib/agents/classify.ts`) uses a lightweight LLM call to map a user message to zero or more agent names. It is cheap (no tools, short prompt, small model) and returns quickly.
+A new `classify` helper (`lib/ai/agents/classify.ts`) uses a lightweight LLM call to map a user message to zero or more agent names. It is cheap (no tools, short prompt, small model) and returns quickly.
 
 ---
 
@@ -138,11 +138,11 @@ A new `classify` helper (`lib/agents/classify.ts`) uses a lightweight LLM call t
 
 ## Implementation Order
 
-1. **`lib/agents/types.ts`** — shared types.
-2. **`lib/agents/runner.ts`** — minimal runner using existing `callChat` + `executeToolCall`.
-3. **`lib/agents/registry.ts`** — agent name → definition map.
-4. **`lib/agents/agents/task-extractor.agent.ts`** — first real agent, narrow scope, easy to test.
-5. **`lib/agents/classify.ts`** — lightweight orchestrator routing helper.
+1. **`lib/ai/agents/types.ts`** — shared types.
+2. **`lib/ai/agents/runner.ts`** — minimal runner using existing `callChat` + `executeToolCall`.
+3. **`lib/ai/agents/registry.ts`** — agent name → definition map.
+4. **`lib/ai/agents/agents/task-extractor.agent.ts`** — first real agent, narrow scope, easy to test.
+5. **`lib/ai/agents/classify.ts`** — lightweight orchestrator routing helper.
 6. Update **`app/api/chat/[chatId]/stream/route.ts`** — add pre-pass delegation step.
 7. Add remaining Phase 1 agents one at a time.
 8. Add cron trigger support for agents that run on a schedule.
@@ -168,14 +168,14 @@ All 8 steps from the implementation order above are complete.
 
 | File                                         | Purpose                                                                   |
 | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `lib/agents/types.ts`                        | `AgentDefinition`, `AgentInput`, `AgentOutput` shared types               |
-| `lib/agents/runner.ts`                       | `runAgentWithDefinition()` — tier gate, tool filtering, `streamChat` loop |
-| `lib/agents/registry.ts`                     | `AGENT_REGISTRY`, `getAgentDefinition()`, public `runAgent(name, input)`  |
-| `lib/agents/classify.ts`                     | `classifyMessage()` — cheap `callChat` routing call, returns `string[]`   |
-| `lib/agents/agents/task-extractor.agent.ts`  | Extracts action items → `create_task` calls                               |
-| `lib/agents/agents/decision-logger.agent.ts` | Extracts decisions → `create_decision` calls                              |
-| `lib/agents/agents/weekly-review.agent.ts`   | Gathers tasks + meetings + goals → executive digest                       |
-| `lib/agents/agents/signal-feed.agent.ts`     | Web search + knowledge cross-ref → scored intelligence digest             |
+| `lib/ai/agents/types.ts`                        | `AgentDefinition`, `AgentInput`, `AgentOutput` shared types               |
+| `lib/ai/agents/runner.ts`                       | `runAgentWithDefinition()` — tier gate, tool filtering, `streamChat` loop |
+| `lib/ai/agents/registry.ts`                     | `AGENT_REGISTRY`, `getAgentDefinition()`, public `runAgent(name, input)`  |
+| `lib/ai/agents/classify.ts`                     | `classifyMessage()` — cheap `callChat` routing call, returns `string[]`   |
+| `lib/ai/agents/agents/task-extractor.agent.ts`  | Extracts action items → `create_task` calls                               |
+| `lib/ai/agents/agents/decision-logger.agent.ts` | Extracts decisions → `create_decision` calls                              |
+| `lib/ai/agents/agents/weekly-review.agent.ts`   | Gathers tasks + meetings + goals → executive digest                       |
+| `lib/ai/agents/agents/signal-feed.agent.ts`     | Web search + knowledge cross-ref → scored intelligence digest             |
 
 ### Files modified
 

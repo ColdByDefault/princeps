@@ -83,7 +83,7 @@ components/<feature>/                Client components — UI, state, hooks
   Edit<Feature>Dialog.tsx            Edit form
   logic/
     use<Feature>Mutations.ts         API calls, optimistic updates, toasts
-lib/<feature>/                       Server logic — business rules
+lib/features/<feature>/                       Server logic — business rules
   schemas.ts                         Zod validation schemas
   create.logic.ts                    Insert + side effects
   list.logic.ts                      Queries
@@ -93,15 +93,15 @@ lib/<feature>/                       Server logic — business rules
 app/api/<feature>/                   API routes — thin handlers
   route.ts                           GET, POST
   [id]/route.ts                      PATCH, DELETE
-lib/tools/                           LLM tool orchestration
+lib/ai/tools/                           LLM tool orchestration
   registry/<feature>.registry.ts     Tool schemas + tier gates
   handlers/<feature>.handler.ts      Tool execution logic
   registry.ts                        Central tool registry
   executor.ts                        Tool dispatcher
-lib/context/                         LLM system prompt assembly
+lib/ai/context/                         LLM system prompt assembly
   <feature>.slot.ts                  Feature data for context
   build.ts                           Context builder
-lib/llm-providers/                   LLM abstraction layer
+lib/ai/llm-providers/                   LLM abstraction layer
   openai/, ollama/, groq/            Provider implementations
   provider.ts                        Dispatcher
 messages/de.json, en.json            All user-facing strings
@@ -122,9 +122,9 @@ app/api/<feature>/route.ts
   → rate limit / tier gate
   → validate with Zod schemas
   ↓
-lib/<feature>/create|list|update|delete.logic.ts
+lib/features/<feature>/create|list|update|delete.logic.ts
   → enforce userId ownership
-  → Prisma operations via @/lib/db
+  → Prisma operations via @/lib/core/db
   → map DB rows to API records
   ↓
 API response (JSON)
@@ -142,24 +142,24 @@ User sends message
 app/api/chat/[chatId]/stream/route.ts
   → authenticate
   → enforce monthly LLM quotas
-  → build system prompt from lib/context/build.ts
-  → load tier-filtered tools from lib/tools/registry.ts
+  → build system prompt from lib/ai/context/build.ts
+  → load tier-filtered tools from lib/ai/tools/registry.ts
   ↓
-lib/llm-providers/provider.ts
+lib/ai/llm-providers/provider.ts
   → streamChat() with messages, tools, options
   ↓
 Stream tokens + tool calls to client
   ↓
-lib/tools/executor.ts
+lib/ai/tools/executor.ts
   → executeToolCall(userId, toolCall)
   → validate tool is active for user
   → dispatch to feature handler
   ↓
-lib/tools/handlers/<feature>.handler.ts
+lib/ai/tools/handlers/<feature>.handler.ts
   → validate args with Zod
   → resolve names → IDs
   → enforce tier/usage gates
-  → delegate to lib/<feature>/
+  → delegate to lib/features/<feature>/
   → return ActionResult { ok, data } or { ok: false, error }
   ↓
 Stream tool result to client
@@ -178,11 +178,11 @@ Up to 6 rounds of tool→response cycles
 **How it's built**:
 
 - **Model**: `Task` (id, userId, title, notes, status, priority, dueDate, meetingId)
-- **Server logic**: `lib/tasks/` (create, list, update, delete, shared)
+- **Server logic**: `lib/features/tasks/` (create, list, update, delete, shared)
 - **API routes**: `GET|POST /api/tasks`, `PATCH|DELETE /api/tasks/[id]`
 - **UI**: `components/tasks/TasksShell.tsx` + cards, dialogs, mutation hook
 - **Tools**: `create_task`, `list_tasks`, `update_task`, `delete_task` (LLM-callable)
-- **Context slot**: `lib/context/tasks.slot.ts` — open + in_progress tasks in system prompt
+- **Context slot**: `lib/ai/context/tasks.slot.ts` — open + in_progress tasks in system prompt
 - **Tier gate**: `tasksMax` enforced before create (free: 20, pro: 100, premium: 500, enterprise: unlimited)
 
 **Example usage**:
@@ -205,13 +205,13 @@ POST /api/tasks
 **How it's built**:
 
 - **Model**: `Meeting` (id, userId, title, scheduledAt, durationMin, location, agenda, summary, prepPack, status, kind, source, googleEventId), `MeetingParticipant` join table
-- **Server logic**: `lib/meetings/` (create, list, update, delete, prep-pack, shared)
+- **Server logic**: `lib/features/meetings/` (create, list, update, delete, prep-pack, shared)
 - **API routes**: `GET|POST /api/meetings`, `PATCH|DELETE /api/meetings/[id]`, `POST /api/meetings/[id]/prep-pack`
 - **UI**: `components/meetings/MeetingsShell.tsx` + dialogs, PrepPackDialog
 - **Tools**: `create_meeting`, `list_meetings`, `update_meeting`, `delete_meeting`, `generate_meeting_prep_pack`
-- **Context slot**: `lib/context/meetings.slot.ts` — upcoming meetings in system prompt
+- **Context slot**: `lib/ai/context/meetings.slot.ts` — upcoming meetings in system prompt
 - **Tier gate**: `prepPacksPerMonth` enforced (free: 0/disabled, pro: 10, premium: 25, enterprise: 100)
-- **Integration**: Google Calendar sync via `lib/integrations/google-calendar/`
+- **Integration**: Google Calendar sync via `lib/platform/integrations/google-calendar/`
 
 **Example usage**:
 
@@ -233,11 +233,11 @@ POST /api/meetings/[id]/prep-pack
 **How it's built**:
 
 - **Model**: `Contact` (id, userId, name, role, company, email, phone, notes, lastContact), `ContactInteraction` tracks meeting/task links
-- **Server logic**: `lib/contacts/` (create, list, update, delete, shared)
+- **Server logic**: `lib/features/contacts/` (create, list, update, delete, shared)
 - **API routes**: `GET|POST /api/contacts`, `PATCH|DELETE /api/contacts/[id]`
 - **UI**: `components/contact/ContactsShell.tsx` + cards, dialogs
 - **Tools**: `create_contact`, `list_contacts`, `update_contact`, `delete_contact`
-- **Context slot**: `lib/context/contacts.slot.ts` — recent contacts in system prompt
+- **Context slot**: `lib/ai/context/contacts.slot.ts` — recent contacts in system prompt
 - **Tier gate**: `contactsMax` enforced (free: 50, pro: 500, premium: 2000, enterprise: unlimited)
 
 **Example usage**:
@@ -260,11 +260,11 @@ POST /api/contacts
 **How it's built**:
 
 - **Model**: `Decision` (id, userId, title, rationale, outcome, status, decidedAt, meetingId)
-- **Server logic**: `lib/decisions/` (create, list, update, delete, shared)
+- **Server logic**: `lib/features/decisions/` (create, list, update, delete, shared)
 - **API routes**: `GET|POST /api/decisions`, `PATCH|DELETE /api/decisions/[id]`
 - **UI**: `components/decisions/DecisionsShell.tsx` + cards, dialogs
 - **Tools**: `create_decision`, `list_decisions`, `update_decision`, `delete_decision`
-- **Context slot**: `lib/context/decisions.slot.ts` — recent open decisions in system prompt
+- **Context slot**: `lib/ai/context/decisions.slot.ts` — recent open decisions in system prompt
 - **Tier gate**: `decisionsMax` enforced (free: 20, pro: 100, premium: 500, enterprise: unlimited)
 
 **Example usage**:
@@ -287,11 +287,11 @@ POST /api/decisions
 **How it's built**:
 
 - **Model**: `Goal` (id, userId, title, description, targetDate, status, progress, meetingId), `Milestone` (id, goalId, title, targetDate, completedAt), `TaskOnGoal` join table
-- **Server logic**: `lib/goals/` (create, list, update, delete, milestones, shared)
+- **Server logic**: `lib/features/goals/` (create, list, update, delete, milestones, shared)
 - **API routes**: `GET|POST /api/goals`, `PATCH|DELETE /api/goals/[id]`, `POST /api/goals/[id]/milestones`, `PATCH|DELETE /api/goals/[id]/milestones/[milestoneId]`
 - **UI**: `components/goals/GoalsShell.tsx` + dialogs, milestone management
 - **Tools**: `create_goal`, `list_goals`, `update_goal`, `delete_goal`, `add_milestone`, `complete_milestone`
-- **Context slot**: `lib/context/goals.slot.ts` — open + in_progress goals in system prompt
+- **Context slot**: `lib/ai/context/goals.slot.ts` — open + in_progress goals in system prompt
 - **Tier gate**: `goalsMax` enforced (free: 5, pro: 25, premium: 100, enterprise: unlimited)
 
 **Example usage**:
@@ -316,12 +316,12 @@ POST /api/goals/[id]/milestones
 **How it's built**:
 
 - **Model**: `Label` (id, userId, name, color, icon, normalizedName), join tables for each feature
-- **Server logic**: `lib/labels/` (create, list, update, delete, shared)
+- **Server logic**: `lib/features/labels/` (create, list, update, delete, shared)
 - **API routes**: `GET|POST /api/labels`, `PATCH|DELETE /api/labels/[id]`
 - **UI**: `components/labels/LabelsShell.tsx` + dialogs, color/icon picker
 - **Tools**: `create_label`, `list_labels`, `update_label`, `delete_label`
-- **Context slot**: `lib/context/labels.slot.ts` — all labels in system prompt (for name resolution)
-- **Resolvers**: `lib/tools/resolvers.ts` — `resolveOrCreateLabelIdsByNames()` used by all feature tools
+- **Context slot**: `lib/ai/context/labels.slot.ts` — all labels in system prompt (for name resolution)
+- **Resolvers**: `lib/ai/tools/resolvers.ts` — `resolveOrCreateLabelIdsByNames()` used by all feature tools
 - **Tier gate**: `labelsMax` enforced (free: 10, pro: 50, premium: 200, enterprise: unlimited)
 
 **Example usage**:
@@ -345,11 +345,11 @@ POST /api/labels
 **How it's built**:
 
 - **Model**: `MemoryEntry` (id, userId, content, source, createdAt)
-- **Server logic**: `lib/memory/` (create, list, update, delete, shared)
+- **Server logic**: `lib/features/memory/` (create, list, update, delete, shared)
 - **API routes**: `GET|POST /api/memory`, `PATCH|DELETE /api/memory/[id]`
 - **UI**: `components/memory/MemoryShell.tsx` + dialogs
 - **Tools**: `save_memory`, `list_memory`, `update_memory`, `delete_memory`
-- **Context slot**: `lib/context/memory.slot.ts` — recent memory entries in system prompt
+- **Context slot**: `lib/ai/context/memory.slot.ts` — recent memory entries in system prompt
 - **Tier gate**: `memoryEntriesMax` enforced (free: 20, pro: 200, premium: 1000, enterprise: unlimited)
 
 **Example usage**:
@@ -372,13 +372,13 @@ POST /api/memory
 **How it's built**:
 
 - **Model**: `KnowledgeDocument` (id, userId, name, charCount, sourceType, sourceId), `KnowledgeChunk` (id, documentId, userId, content, embedding as vector(1536), chunkIndex)
-- **Server logic**: `lib/knowledge/` (upload, list, delete, search, extract, embed, shared)
+- **Server logic**: `lib/features/knowledge/` (upload, list, delete, search, extract, embed, shared)
 - **API routes**: `POST /api/knowledge/upload`, `GET|DELETE /api/knowledge`, `DELETE /api/knowledge/[id]`
 - **UI**: `components/knowledge/KnowledgeShell.tsx` + upload dialog, search, preview
 - **Tools**: `search_knowledge`, `upload_knowledge_document`, `list_knowledge_documents`, `delete_knowledge_document`
 - **Context slot**: Knowledge chunks are NOT in base system prompt (too large); retrieved on-demand via search
 - **Tier gates**: `knowledgeDocsMax`, `knowledgeSizeMaxMB`, `knowledgeCharsUsed` (lifetime counter)
-- **Integration**: Google Drive import via `lib/integrations/google-drive/`
+- **Integration**: Google Drive import via `lib/platform/integrations/google-drive/`
 - **Tech**: Uses `mammoth` for DOCX, `pdf-parse` for PDF, pgvector cosine similarity for search
 
 **Example usage**:
@@ -406,13 +406,13 @@ GET /api/knowledge?q=quarterly%20revenue
 **How it's built**:
 
 - **Model**: `Chat` (id, userId, title), `ChatMessage` (id, chatId, role, content, thinking)
-- **Server logic**: `lib/chat/` (create-chat, list-chats, delete-chat, shared)
+- **Server logic**: `lib/features/chat/` (create-chat, list-chats, delete-chat, shared)
 - **API routes**: `POST /api/chat` (create chat), `GET|DELETE /api/chat`, `POST /api/chat/[chatId]/stream` (SSE streaming), `POST /api/chat/transcribe` (Whisper voice)
 - **UI**: `components/chat/ChatInterface.tsx` + message list, input, voice recording, typing indicator
 - **Widget**: `components/chat-widget/WidgetChat.tsx` — sidebar chat, separate quota
-- **Providers**: `lib/llm-providers/` — OpenAI, Ollama, Groq
-- **Context**: `lib/context/build.ts` — assembles system prompt from slots
-- **Tools**: All 40+ tools in `lib/tools/registry.ts` available during chat
+- **Providers**: `lib/ai/llm-providers/` — OpenAI, Ollama, Groq
+- **Context**: `lib/ai/context/build.ts` — assembles system prompt from slots
+- **Tools**: All 40+ tools in `lib/ai/tools/registry.ts` available during chat
 - **Tier gates**: `messagesPerMonth`, `tokensPerMonth`, `toolCallsPerMonth`, `chatsPerDay`, `voiceRequestsPerDay`
 
 **Example usage**:
@@ -440,7 +440,7 @@ FormData: audio(webm, wav);
 **How it's built**:
 
 - **Model**: `BriefingCache` (id, userId, content, generatedAt) — singleton per user
-- **Server logic**: `lib/briefings/` (generate, get, shared)
+- **Server logic**: `lib/features/briefings/` (generate, get, shared)
 - **API routes**: `POST /api/briefings` (generate), `GET /api/briefings` (retrieve cached)
 - **Cron**: `POST /api/cron/briefing` — scheduled daily generation
 - **Tools**: `generate_briefing`, `get_briefing`
@@ -467,11 +467,11 @@ POST /api/cron/briefing (Authorization: Bearer <CRON_SECRET>)
 **How it's built**:
 
 - **Model**: `Notification` (id, userId, category, source, title, body, read, dismissed, metadata)
-- **Server logic**: `lib/notifications/` (list, mark-read, delete, greeting, nudge-overdue)
+- **Server logic**: `lib/features/notifications/` (list, mark-read, delete, greeting, nudge-overdue)
 - **API routes**: `GET|DELETE /api/notifications`, `PATCH|DELETE /api/notifications/[id]`, `POST /api/notifications/greeting`
 - **Cron**: `POST /api/cron/tasks-overdue` — creates overdue-task notifications
 - **UI**: `components/notifications/NotificationBell.tsx` + drawer
-- **Weather**: `lib/weather/` — enriches daily greetings with weather context
+- **Weather**: `lib/services/weather/` — enriches daily greetings with weather context
 - **Tier gate**: `preferences.notificationsEnabled` can disable
 
 **Example usage**:
@@ -495,7 +495,7 @@ POST /api/cron/tasks-overdue (Authorization: Bearer <CRON_SECRET>)
 **How it's built**:
 
 - **Model**: `AssistantReport` (id, userId, toolsCalled, toolCallCount, tokenUsage, details as JSON)
-- **Server logic**: `lib/reports/` (create, list, delete, shared)
+- **Server logic**: `lib/features/reports/` (create, list, delete, shared)
 - **API routes**: `GET|DELETE /api/reports`, `DELETE /api/reports/[id]`
 - **UI**: `components/reports/ReportsShell.tsx` — read-only list, detail view
 - **Created by**: Chat stream route after tool execution rounds complete
@@ -519,7 +519,7 @@ GET / api / reports;
 **How it's built**:
 
 - **Model**: `Integration` (id, userId, provider, accessToken, refreshToken, expiresAt, lastSyncedAt)
-- **Server logic**: `lib/integrations/google-calendar/`, `lib/integrations/google-drive/`
+- **Server logic**: `lib/platform/integrations/google-calendar/`, `lib/platform/integrations/google-drive/`
 - **API routes**:
   - Google Calendar: `POST /api/integrations/google-calendar/connect|disconnect|callback|sync`
   - Google Drive: `POST /api/integrations/google-drive/connect|disconnect|callback|sync|import`
@@ -552,7 +552,7 @@ POST /api/integrations/google-drive/import
 
 **How it's built**:
 
-- **Server logic**: `lib/settings/`, `lib/profile/`, `lib/stripe/`
+- **Server logic**: `lib/platform/settings/`, `lib/features/profile/`, `lib/platform/stripe/`
 - **API routes**: `GET|PATCH /api/settings`, `GET /api/settings/usage`, `GET /api/settings/provider-status`, `POST /api/stripe/checkout|portal`
 - **UI**: `components/settings/` — tabs for profile, preferences, tier, usage, integrations, provider
 - **Tabs**: ProfileTab, PreferencesTab, TierTab, UsageTab, IntegrationsTab, ProviderTab
@@ -585,7 +585,7 @@ POST /api/stripe/checkout
 
 **How it's built**:
 
-- **Files**: `lib/llm-providers/openai/`, `lib/llm-providers/ollama/`, `lib/llm-providers/groq/`, `lib/llm-providers/provider.ts`
+- **Files**: `lib/ai/llm-providers/openai/`, `lib/ai/llm-providers/ollama/`, `lib/ai/llm-providers/groq/`, `lib/ai/llm-providers/provider.ts`
 - **Public API**: `callChat(messages, options)`, `streamChat(messages, options)`, `embed(text)`, `embedBatch(texts)`
 - **Env**: `CHAT_PROVIDER=openAi|ollama|groq` selects provider
 - **Observability**: Langfuse tracing in production (optional)
@@ -619,9 +619,9 @@ for await (const chunk of stream) {
 
 **How it's built**:
 
-- **Registry**: `lib/tools/registry/<feature>.registry.ts` — OpenAI function schemas + `minTier` + `group`
-- **Handlers**: `lib/tools/handlers/<feature>.handler.ts` — validate args, resolve names, enforce gates, delegate to `lib/<feature>/`
-- **Orchestration**: `lib/tools/registry.ts` spreads all feature registries, `lib/tools/executor.ts` dispatches by tool name
+- **Registry**: `lib/ai/tools/registry/<feature>.registry.ts` — OpenAI function schemas + `minTier` + `group`
+- **Handlers**: `lib/ai/tools/handlers/<feature>.handler.ts` — validate args, resolve names, enforce gates, delegate to `lib/features/<feature>/`
+- **Orchestration**: `lib/ai/tools/registry.ts` spreads all feature registries, `lib/ai/tools/executor.ts` dispatches by tool name
 - **Active tools**: `getActiveToolsForUser(userId)` filters by tier + disabled preferences
 - **Result type**: `ActionResult = { ok: true, data } | { ok: false, error }`
 
@@ -661,8 +661,8 @@ const result = await executeToolCall(userId, { function: { name: "create_task", 
 
 **How it's built**:
 
-- **Slots**: `lib/context/<feature>.slot.ts` — fetch relevant data, format for system prompt
-- **Builder**: `lib/context/build.ts` — assembles all slots + base instructions
+- **Slots**: `lib/ai/context/<feature>.slot.ts` — fetch relevant data, format for system prompt
+- **Builder**: `lib/ai/context/build.ts` — assembles all slots + base instructions
 - **Used by**: Chat stream route before calling LLM
 - **Dynamic**: Only includes slots with data (skips empty sections)
 
@@ -686,7 +686,7 @@ const messages = [{ role: "system", content: systemPrompt }, ...userMessages];
 **How it's built**:
 
 - **Config**: `types/billing.ts` — `PLAN_LIMITS` maps tier → limits
-- **Enforcement**: `lib/tiers/enforce.ts` — `enforceTasksMax()`, `enforceMonthlyLimits()`, etc
+- **Enforcement**: `lib/platform/tiers/enforce.ts` — `enforceTasksMax()`, `enforceMonthlyLimits()`, etc
 - **Model**: `UsageCounter` (userId, daily/monthly counters, reset dates)
 - **Checks**: Run before writes or expensive operations in API routes + tool handlers
 - **Gates**: Tools filtered by `minTier`, features blocked when quota = 0
@@ -752,7 +752,7 @@ const title = t("pageTitle");
 **How it's built**:
 
 - **Library**: `better-auth` with Prisma adapter
-- **Config**: `lib/auth/index.ts` — auth instance, routes, session settings
+- **Config**: `lib/core/auth/index.ts` — auth instance, routes, session settings
 - **Models**: `User`, `Session`, `Account`, `Verification`
 - **Routes**: `app/api/auth/[...all]/route.ts` — catch-all for auth endpoints
 - **Helpers**: `auth.api.getSession({ headers })` for API routes, `auth()` for server pages
@@ -782,7 +782,7 @@ if (!session) redirect("/login");
 
 **How it's built**:
 
-- **Server logic**: `lib/stripe/` — checkout, portal, webhook sync, seed products/prices
+- **Server logic**: `lib/platform/stripe/` — checkout, portal, webhook sync, seed products/prices
 - **API routes**: `POST /api/stripe/checkout`, `POST /api/stripe/portal`, `POST /api/stripe/webhook`
 - **Webhook**: `stripe-webhook` signature verification → sync subscription → update `User.tier` and `stripeCustomerId`
 - **Models**: `User.tier`, `User.stripeCustomerId`
@@ -811,13 +811,13 @@ POST / api / stripe / portal;
 
 1. **Data model**: Add to `prisma/schema.prisma` → `npx prisma migrate dev`
 2. **Types**: Define API record shape in `types/api.ts`
-3. **Server logic**: Create `lib/<feature>/schemas.ts`, `create.logic.ts`, `list.logic.ts`, `update.logic.ts`, `delete.logic.ts`, `shared.logic.ts`
+3. **Server logic**: Create `lib/features/<feature>/schemas.ts`, `create.logic.ts`, `list.logic.ts`, `update.logic.ts`, `delete.logic.ts`, `shared.logic.ts`
 4. **API routes**: Create `app/api/<feature>/route.ts` (GET, POST), `[id]/route.ts` (PATCH, DELETE)
 5. **UI**: Create `components/<feature>/<Feature>Shell.tsx`, cards, dialogs, `logic/use<Feature>Mutations.ts`
 6. **Page**: Create `app/(app)/<feature>/page.tsx`
 7. **i18n**: Add strings to `messages/de.json` and `messages/en.json`
-8. **Tools** (optional): Create `lib/tools/registry/<feature>.registry.ts`, `handlers/<feature>.handler.ts`, spread into orchestration
-9. **Context slot** (optional): Create `lib/context/<feature>.slot.ts`, add to `build.ts`
+8. **Tools** (optional): Create `lib/ai/tools/registry/<feature>.registry.ts`, `handlers/<feature>.handler.ts`, spread into orchestration
+9. **Context slot** (optional): Create `lib/ai/context/<feature>.slot.ts`, add to `build.ts`
 10. **Tier gate** (optional): Add limits to `types/billing.ts`, enforce in logic/handlers
 11. **Docs**: Update `CONTEXT/` and `/docs` as needed
 
@@ -827,16 +827,16 @@ POST / api / stripe / portal;
 
 **Always use `import "server-only"` at the top of**:
 
-- `lib/<feature>/*.logic.ts` (all server logic files)
-- `lib/tools/handlers/*.handler.ts`
-- `lib/llm-providers/**/*.ts`
-- `lib/context/**/*.ts`
-- `lib/tiers/enforce.ts`
-- Any file importing `@/lib/db`, Prisma, Better Auth server helpers, or Node-only APIs
+- `lib/features/<feature>/*.logic.ts` (all server logic files)
+- `lib/ai/tools/handlers/*.handler.ts`
+- `lib/ai/llm-providers/**/*.ts`
+- `lib/ai/context/**/*.ts`
+- `lib/platform/tiers/enforce.ts`
+- Any file importing `@/lib/core/db`, Prisma, Better Auth server helpers, or Node-only APIs
 
 **Never import from client components**:
 
-- `@/lib/db`
+- `@/lib/core/db`
 - Any file with `import "server-only"`
 - Prisma client directly
 
@@ -845,7 +845,7 @@ POST / api / stripe / portal;
 ### Zod Validation Pattern
 
 ```ts
-// lib/<feature>/schemas.ts
+// lib/features/<feature>/schemas.ts
 import { z } from "zod";
 
 export const createTaskSchema = z.object({
@@ -930,7 +930,7 @@ await accumulateTokens(userId, promptTokens, completionTokens);
 ### Tool Definition Pattern
 
 ```ts
-// lib/tools/registry/<feature>.registry.ts
+// lib/ai/tools/registry/<feature>.registry.ts
 import type { ToolRegistryEntry } from "../types";
 
 export const taskTools: ToolRegistryEntry[] = [
@@ -953,10 +953,10 @@ export const taskTools: ToolRegistryEntry[] = [
   },
 ];
 
-// lib/tools/handlers/<feature>.handler.ts
+// lib/ai/tools/handlers/<feature>.handler.ts
 import "server-only";
 import type { ActionResult } from "../types";
-import { createTaskSchema } from "@/lib/tasks/schemas";
+import { createTaskSchema } from "@/lib/features/tasks/schemas";
 import { createTask } from "@/lib/tasks";
 import { enforceTasksMax } from "@/lib/tiers";
 import { resolveOrCreateLabelIdsByNames } from "../resolvers";
@@ -983,11 +983,11 @@ export async function create_task(userId: string, args: Record<string, unknown>)
 
 export const taskHandlers = { create_task, list_tasks, update_task, delete_task };
 
-// lib/tools/registry.ts (orchestration)
+// lib/ai/tools/registry.ts (orchestration)
 import { taskTools } from "./registry/tasks.registry";
 export const TOOL_REGISTRY: ToolRegistryEntry[] = [...taskTools, ...labelTools, ...];
 
-// lib/tools/executor.ts (orchestration)
+// lib/ai/tools/executor.ts (orchestration)
 import { taskHandlers } from "./handlers/tasks.handler";
 const HANDLERS = { ...taskHandlers, ...labelHandlers, ... };
 ```
@@ -997,7 +997,7 @@ const HANDLERS = { ...taskHandlers, ...labelHandlers, ... };
 ### Context Slot Pattern
 
 ```ts
-// lib/context/<feature>.slot.ts
+// lib/ai/context/<feature>.slot.ts
 import "server-only";
 import { listTasks } from "@/lib/tasks";
 
@@ -1014,7 +1014,7 @@ export async function buildTasksContext(
   return `# Open Tasks\n${open.map((t) => `- ${t.title} (${t.priority} priority${t.dueDate ? `, due ${t.dueDate}` : ""})`).join("\n")}`;
 }
 
-// lib/context/build.ts
+// lib/ai/context/build.ts
 import { buildTasksContext } from "./tasks.slot";
 
 export async function buildContext(
@@ -1035,7 +1035,7 @@ export async function buildContext(
 ### Daily/Monthly Counter Reset Pattern
 
 ```ts
-// lib/tiers/enforce.ts
+// lib/platform/tiers/enforce.ts
 async function getOrCreateCounter(userId: string): Promise<UsageCounter> {
   const today = new Date().toISOString().split("T")[0]; // "YYYY-MM-DD"
   const thisMonth = today.slice(0, 7); // "YYYY-MM"
@@ -1142,7 +1142,7 @@ Princeps is a **full-stack Next.js 15 App Router workspace** with:
 
 1. Prisma model
 2. Zod schemas
-3. Server logic in `lib/<feature>/`
+3. Server logic in `lib/features/<feature>/`
 4. API routes in `app/api/<feature>/`
 5. Client components in `components/<feature>/`
 6. i18n strings in `messages/`

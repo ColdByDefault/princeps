@@ -34,9 +34,9 @@ components/settings/logic/useAssistantSettings.ts
 app/api/settings/route.ts         PATCH saves most preferences
 app/api/settings/usage/route.ts   Usage refresh
 app/api/settings/provider-status/route.ts
-lib/settings/user-preferences.logic.ts
-lib/settings/usage.logic.ts
-lib/settings/provider-status.logic.ts
+lib/platform/settings/user-preferences.logic.ts
+lib/platform/settings/usage.logic.ts
+lib/platform/settings/provider-status.logic.ts
 ```
 
 ## Page Load
@@ -101,7 +101,7 @@ Assistant behavior:
 AssistantTab
   -> useAssistantSettings
   -> PATCH /api/settings
-  -> lib/context/build.ts consumes saved preferences
+  -> lib/ai/context/build.ts consumes saved preferences
 ```
 
 Tools:
@@ -117,7 +117,7 @@ ToolsTab
 
 Checklist:
 
-- Add/parse/save preference in `lib/settings/user-preferences.logic.ts`.
+- Add/parse/save preference in `lib/platform/settings/user-preferences.logic.ts`.
 - Accept and validate it in `app/api/settings/route.ts`.
 - Load it in `app/(app)/settings/page.tsx`.
 - Pass it through `SettingsShell` to the owning tab.

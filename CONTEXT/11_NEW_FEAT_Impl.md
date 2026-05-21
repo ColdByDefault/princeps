@@ -25,16 +25,16 @@ A complete Princeps feature is not just a page. It may touch:
 
 ```text
 Prisma model
-lib/<feature>/ server logic
+lib/features/<feature>/ server logic
 app/api/<feature>/ routes
 components/<feature>/ UI
 messages/de.json + messages/en.json
 types/api.ts
-lib/tools/ registry + handler
-lib/context/<feature>.slot.ts
-lib/tiers/ quota gates
-lib/settings/ usage summary or preferences
-lib/notifications/ or db.notification side effects
+lib/ai/tools/ registry + handler
+lib/ai/context/<feature>.slot.ts
+lib/platform/tiers/ quota gates
+lib/platform/settings/ usage summary or preferences
+lib/features/notifications/ or db.notification side effects
 docs/ or CONTEXT updates
 ```
 
@@ -51,7 +51,7 @@ components/<feature>/
   Create<Feature>Dialog.tsx
   Edit<Feature>Dialog.tsx
   logic/use<Feature>Mutations.ts
-lib/<feature>/
+lib/features/<feature>/
   index.ts
   schemas.ts
   shared.logic.ts
@@ -116,7 +116,7 @@ NotificationRecord
 
 ### 3. Server Logic
 
-`lib/<feature>/` owns validation, DB access, mapping, and side effects.
+`lib/features/<feature>/` owns validation, DB access, mapping, and side effects.
 
 Files:
 
@@ -144,10 +144,10 @@ Patterns:
 Good examples:
 
 ```text
-lib/tasks/shared.logic.ts
-lib/tasks/update.logic.ts
-lib/contacts/create.logic.ts
-lib/meetings/update.logic.ts
+lib/features/tasks/shared.logic.ts
+lib/features/tasks/update.logic.ts
+lib/features/contacts/create.logic.ts
+lib/features/meetings/update.logic.ts
 ```
 
 Side effects stay in server logic:
@@ -165,7 +165,7 @@ auth
 rate limit writes
 tier gate creates/expensive actions
 parse body with Zod
-delegate to lib/<feature>/
+delegate to lib/features/<feature>/
 return JSON
 ```
 
@@ -273,18 +273,18 @@ Use tools when the assistant should create, update, list, delete, or perform act
 Current live layout:
 
 ```text
-lib/tools/registry/<feature>.registry.ts
-lib/tools/registry.ts
-lib/tools/handlers/<feature>.handler.ts
-lib/tools/executor.ts
+lib/ai/tools/registry/<feature>.registry.ts
+lib/ai/tools/registry.ts
+lib/ai/tools/handlers/<feature>.handler.ts
+lib/ai/tools/executor.ts
 ```
 
 Add:
 
 1. Tool schema entries in `registry/<feature>.registry.ts`.
-2. Import/spread the entries in `lib/tools/registry.ts`.
+2. Import/spread the entries in `lib/ai/tools/registry.ts`.
 3. Handler functions in `handlers/<feature>.handler.ts`.
-4. Import/spread the handler map in `lib/tools/executor.ts`.
+4. Import/spread the handler map in `lib/ai/tools/executor.ts`.
 
 Do not add business logic to `executor.ts`. It only dispatches and checks active tools.
 
@@ -321,8 +321,8 @@ The chat stream enforces monthly tool-call quota before executing tool calls. Fe
 If the LLM should know about the feature's live data, add a context slot:
 
 ```text
-lib/context/<feature>.slot.ts
-lib/context/index.ts
+lib/ai/context/<feature>.slot.ts
+lib/ai/context/index.ts
 ```
 
 Slot pattern:
@@ -355,15 +355,15 @@ References:
 
 ## LLM Calls
 
-Use `lib/llm-providers/provider.ts`, not `lib/chat` and not the stale `lib/llm/` path from older instructions.
+Use `lib/ai/llm-providers/provider.ts`, not `lib/chat` and not the stale `lib/llm/` path from older instructions.
 
 ```ts
-import { callChat } from "@/lib/llm-providers/provider";
+import { callChat } from "@/lib/ai/llm-providers/provider";
 ```
 
 For AI-generated feature content:
 
-- Put prompt assembly in `lib/<feature>/`.
+- Put prompt assembly in `lib/features/<feature>/`.
 - Gate expensive actions before the call.
 - Catch provider errors and return a user-safe failure.
 - Store generated output only after a successful call.
@@ -373,9 +373,9 @@ For AI-generated feature content:
 Reference:
 
 ```text
-lib/meetings/generate-prep-pack.logic.ts
-lib/briefings/generate.logic.ts
-lib/notifications/greeting.logic.ts
+lib/features/meetings/generate-prep-pack.logic.ts
+lib/features/briefings/generate.logic.ts
+lib/features/notifications/greeting.logic.ts
 ```
 
 ## Tier System And Usage
@@ -403,11 +403,11 @@ For a new quota:
 
 1. Add limit fields to `PlanLimits` and `PLAN_LIMITS` in `types/billing.ts`.
 2. Add counter fields to `UsageCounter` only if it is not count-at-rest.
-3. Add an enforce function in `lib/tiers/enforce.ts`.
-4. Export from `lib/tiers/index.ts`.
+3. Add an enforce function in `lib/platform/tiers/enforce.ts`.
+4. Export from `lib/platform/tiers/index.ts`.
 5. Call it in API routes and tool handlers.
 6. Add usage fields to `UsageSummary`.
-7. Read them in `lib/settings/usage.logic.ts`.
+7. Read them in `lib/platform/settings/usage.logic.ts`.
 8. Show them in `UsageTab` if user-facing.
 9. Add i18n keys.
 
@@ -419,7 +419,7 @@ Only add notifications when there is a real user-facing event.
 
 Options:
 
-- Use `lib/notifications/` for reusable notification generation flows.
+- Use `lib/features/notifications/` for reusable notification generation flows.
 - Use `db.notification.create()` fire-and-forget for simple feature-owned notices.
 - Use `createReport()` when the notification belongs to an assistant tool report.
 
@@ -435,9 +435,9 @@ Notification rules:
 
 References:
 
-- `lib/notifications/greeting.logic.ts`
-- `lib/notifications/nudge-overdue.logic.ts`
-- `lib/reports/create.logic.ts`
+- `lib/features/notifications/greeting.logic.ts`
+- `lib/features/notifications/nudge-overdue.logic.ts`
+- `lib/features/reports/create.logic.ts`
 
 ## Settings And Preferences
 
@@ -445,7 +445,7 @@ If the feature adds a user setting:
 
 - Store true preferences in `User.preferences`.
 - Use `PATCH /api/settings` for settings tabs.
-- Parse/save in `lib/settings/user-preferences.logic.ts`.
+- Parse/save in `lib/platform/settings/user-preferences.logic.ts`.
 - Pass from `app/(app)/settings/page.tsx` through `SettingsShell`.
 - Add UI under the owning settings tab.
 - Add strings to both locales.
@@ -472,11 +472,11 @@ Tasks:
 ```text
 app/(app)/tasks/page.tsx
 app/api/tasks/*
-lib/tasks/*
+lib/features/tasks/*
 components/tasks/*
-lib/tools/registry/tasks.registry.ts
-lib/tools/handlers/tasks.handler.ts
-lib/context/tasks.slot.ts
+lib/ai/tools/registry/tasks.registry.ts
+lib/ai/tools/handlers/tasks.handler.ts
+lib/ai/context/tasks.slot.ts
 ```
 
 Use Tasks for basic CRUD, filters, labels, goals, rate limits, tier gates, and LLM CRUD tools.
@@ -486,11 +486,11 @@ Contacts:
 ```text
 app/(app)/contacts/page.tsx
 app/api/contacts/*
-lib/contacts/*
+lib/features/contacts/*
 components/contact/*
-lib/tools/registry/contacts.registry.ts
-lib/tools/handlers/contacts.handler.ts
-lib/context/contacts.slot.ts
+lib/ai/tools/registry/contacts.registry.ts
+lib/ai/tools/handlers/contacts.handler.ts
+lib/ai/context/contacts.slot.ts
 ```
 
 Use Contacts for relationship records, duplicate detection, labels, and cross-feature context.
@@ -500,11 +500,11 @@ Meetings:
 ```text
 app/(app)/meetings/page.tsx
 app/api/meetings/*
-lib/meetings/*
+lib/features/meetings/*
 components/meetings/*
-lib/tools/registry/meetings.registry.ts
-lib/tools/handlers/meetings.handler.ts
-lib/context/meetings.slot.ts
+lib/ai/tools/registry/meetings.registry.ts
+lib/ai/tools/handlers/meetings.handler.ts
+lib/ai/context/meetings.slot.ts
 ```
 
 Use Meetings for advanced features: linked contacts/tasks, integration side effects, AI-generated prep packs, Pro tools, monthly counters, and token accumulation.
@@ -512,7 +512,7 @@ Use Meetings for advanced features: linked contacts/tasks, integration side effe
 ## Final Checklist
 
 - Prisma schema, generated client, and client-safe type are updated.
-- `lib/<feature>/` has schemas, shared mapper, list/create/update/delete logic.
+- `lib/features/<feature>/` has schemas, shared mapper, list/create/update/delete logic.
 - API routes are thin, authenticated, rate-limited, user-scoped, validated, and tier-gated when needed.
 - UI has shell, cards, dialogs, mutation hook, refresh, delete confirmation, loading states, and toasts.
 - All user-facing strings exist in German and English.

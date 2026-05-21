@@ -1,3 +1,12 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version beta
+ * @since beta
+ */
+
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";

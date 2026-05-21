@@ -41,17 +41,17 @@ Do not review from context or docs alone. Verify the current implementation in l
 - Current code, `package.json`, `prisma/schema.prisma`, and migrations are final for implementation details.
 - `AGENTS.md`, `CONTEXT/`, `docs/`, and `.github/instructions/` guide review criteria.
 - If sources disagree, trust live code for current behavior and call out the mismatch if it creates risk.
-- The live LLM provider layer is `lib/llm-providers/`, not `lib/llm/`.
-- Tool registry entries live in `lib/tools/registry/<feature>.registry.ts`; `lib/tools/registry.ts` should only import and spread feature registries.
+- The live LLM provider layer is `lib/ai/llm-providers/`, not `lib/llm/`.
+- Tool registry entries live in `lib/ai/tools/registry/<feature>.registry.ts`; `lib/ai/tools/registry.ts` should only import and spread feature registries.
 
 ## What You Check
 
 1. **User scope** - data queries, mutations, tools, context slots, integrations, tiers, and notifications filter by `userId` unless explicitly admin-only.
-2. **Layer boundaries** - server-only code stays server-only; no client import chain reaches `@/lib/db`; business logic lives in `lib/<feature>/`, not route handlers, pages, or components.
+2. **Layer boundaries** - server-only code stays server-only; no client import chain reaches `@/lib/core/db`; business logic lives in `lib/features/<feature>/`, not route handlers, pages, or components.
 3. **API shape** - routes authenticate, parse, validate, rate-limit/tier-gate when needed, delegate to server logic, and respond with the standard `{ error: string }` shape on errors.
 4. **Component structure** - UI `.tsx` files focus on JSX rendering, client logic is in `components/<feature>/logic/`, and `components/<feature>/index.ts` barrel exports exist.
-5. **Tool ownership** - registry entries live in `lib/tools/registry/<feature>.registry.ts`; handlers live in `lib/tools/handlers/<feature>.handler.ts`; orchestration files only import and spread.
-6. **LLM ownership** - provider code lives in `lib/llm-providers/`, context assembly in `lib/context/`, and chat does not own either.
+5. **Tool ownership** - registry entries live in `lib/ai/tools/registry/<feature>.registry.ts`; handlers live in `lib/ai/tools/handlers/<feature>.handler.ts`; orchestration files only import and spread.
+6. **LLM ownership** - provider code lives in `lib/ai/llm-providers/`, context assembly in `lib/ai/context/`, and chat does not own either.
 7. **Context correctness** - assistant-aware data has bounded, user-scoped context slots when appropriate.
 8. **Hydration safety** - no `typeof window` checks, no `useEffect` + `useState` mounted flags, no invalid nested buttons in Base UI triggers, and no `suppressHydrationWarning` abuse.
 9. **i18n completeness** - no hardcoded user-facing strings. UI text uses `next-intl`, and keys exist in both `messages/de.json` and `messages/en.json`.

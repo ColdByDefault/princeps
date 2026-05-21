@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-import packageJson from "../package.json";
+import packageJson from "../../package.json";
 
 /**
  * Gets the version from package.json

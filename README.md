@@ -31,7 +31,7 @@ Every feature writes to a single user-scoped Postgres database. The LLM assistan
 | OpenAI   | Chat completions + embeddings via API     |
 | Groq     | Chat completions via API (no embeddings)  |
 
-All three providers share the same `callChat()` / `streamChat()` / `embed()` interface defined in `lib/llm-providers/`. The active provider is selected at runtime; embeddings fall back to the configured embed provider independently.
+All three providers share the same `callChat()` / `streamChat()` / `embed()` interface defined in `lib/ai/llm-providers/`. The active provider is selected at runtime; embeddings fall back to the configured embed provider independently.
 
 **Optional external services:**
 
@@ -69,28 +69,28 @@ The codebase is organized in strict layers. The layering is enforced by conventi
 
 ```
 prisma/schema.prisma         Data model — IDs (cuid), enums, indexes
-lib/<feature>/               Server logic — Zod schemas, CRUD operations, side effects
+lib/features/<feature>/               Server logic — Zod schemas, CRUD operations, side effects
 app/api/<feature>/           API routes — thin: auth → parse → delegate → respond
-lib/tools/                   LLM tool layer — registry, executor, per-feature handlers
-lib/context/                 System prompt assembly — one slot file per feature
-lib/llm-providers/           Provider abstraction — callChat, streamChat, embed
-lib/chat/                    Chat persistence and streaming orchestration
+lib/ai/tools/                   LLM tool layer — registry, executor, per-feature handlers
+lib/ai/context/                 System prompt assembly — one slot file per feature
+lib/ai/llm-providers/           Provider abstraction — callChat, streamChat, embed
+lib/features/chat/                    Chat persistence and streaming orchestration
 components/<feature>/        Client UI — shell, cards, dialogs, logic/ hooks
 app/(app)/<feature>/page.tsx Server pages — auth, data fetch, serialize, pass to shell
 messages/{en,de}.json        i18n strings — flat namespaced keys
-lib/tiers/                   Tier enforcement and quota gating
-lib/stripe/                  Billing — checkout, portal, webhook sync
+lib/platform/tiers/                   Tier enforcement and quota gating
+lib/platform/stripe/                  Billing — checkout, portal, webhook sync
 ```
 
 ### LLM tool system
 
-The assistant can take actions (create tasks, search knowledge, update contacts, etc.) using OpenAI function-calling. Tool definitions live in `lib/tools/registry.ts`. The executor in `lib/tools/executor.ts` dispatches by tool name to per-feature handler files in `lib/tools/handlers/`. Adding a new feature's tools means creating one handler file and spreading it into `HANDLERS` — the executor is never touched.
+The assistant can take actions (create tasks, search knowledge, update contacts, etc.) using OpenAI function-calling. Tool definitions live in `lib/ai/tools/registry.ts`. The executor in `lib/ai/tools/executor.ts` dispatches by tool name to per-feature handler files in `lib/ai/tools/handlers/`. Adding a new feature's tools means creating one handler file and spreading it into `HANDLERS` — the executor is never touched.
 
 Tools are feature-agnostic: the same executor handles calls from the chat stream, cron jobs, and any future surface.
 
 ### Context assembly
 
-Before each LLM request, `lib/context/build.ts` assembles the system prompt from slot files — one per feature (`tasks.slot.ts`, `meetings.slot.ts`, `contacts.slot.ts`, etc.). Each slot retrieves and formats a section of the user's live data. The result is a complete system message injected into every request, grounding the assistant in the user's actual workspace state.
+Before each LLM request, `lib/ai/context/build.ts` assembles the system prompt from slot files — one per feature (`tasks.slot.ts`, `meetings.slot.ts`, `contacts.slot.ts`, etc.). Each slot retrieves and formats a section of the user's live data. The result is a complete system message injected into every request, grounding the assistant in the user's actual workspace state.
 
 ### Server/client boundary
 
@@ -139,17 +139,17 @@ Open `http://localhost:3000`.
 
 Handled entirely by [Better Auth](https://www.better-auth.com/) with email/password credentials and session cookies. Sessions are stored in Postgres via the Prisma adapter. Every API route and server page reads and validates the session independently — middleware alone is not the trust boundary.
 
-User accounts carry a `tier` field (`free` | `pro` | `premium` | `enterprise`). `lib/tiers/enforce.ts` checks quotas against `UsageCounter` before mutating operations. Quotas include per-day and per-month LLM message limits, per-day widget chat limits, lifetime knowledge character budgets, and per-resource record caps.
+User accounts carry a `tier` field (`free` | `pro` | `premium` | `enterprise`). `lib/platform/tiers/enforce.ts` checks quotas against `UsageCounter` before mutating operations. Quotas include per-day and per-month LLM message limits, per-day widget chat limits, lifetime knowledge character budgets, and per-resource record caps.
 
 ### Billing and Subscriptions
 
-Billing is handled by Stripe. `lib/stripe/` contains checkout session creation, customer portal access, and webhook sync. Subscription events update the user's `tier` and `stripeCustomerId` in real time via Stripe webhooks. A pricing page (`/pricing`) renders plan cards driven by the tier configuration in `lib/tiers/`.
+Billing is handled by Stripe. `lib/platform/stripe/` contains checkout session creation, customer portal access, and webhook sync. Subscription events update the user's `tier` and `stripeCustomerId` in real time via Stripe webhooks. A pricing page (`/pricing`) renders plan cards driven by the tier configuration in `lib/platform/tiers/`.
 
 ### AI Chat
 
 A streaming, multi-conversation assistant backed by the configured LLM provider. Each conversation (`Chat`) holds an ordered list of `ChatMessage` records. Conversations are titled automatically from the first user message (a separate non-streaming LLM call).
 
-The full system prompt is assembled by `lib/context/build.ts` on every request — pulling live data from all feature slots so the assistant always has the user's current workspace state. Tool calls are handled mid-stream: the executor resolves the tool name, calls the appropriate handler, and the result is appended to the stream.
+The full system prompt is assembled by `lib/ai/context/build.ts` on every request — pulling live data from all feature slots so the assistant always has the user's current workspace state. Tool calls are handled mid-stream: the executor resolves the tool name, calls the appropriate handler, and the result is appended to the stream.
 
 Thinking mode sends a prefixed instruction to the model and strips the `<think>...</think>` block from the streamed response before it reaches the client. A floating chat widget (`components/chat-widget/`) is mounted in the root app layout and available on every authenticated page.
 
@@ -173,7 +173,7 @@ Notifications are generated by the LLM (briefings, nudges, greeting), by cron jo
 
 ### Contacts
 
-A relationship index backed by the `Contact` model. Each record stores name, role, company, email, phone, notes, tags, a last-contact date, and a `ContactInteraction` log. Contacts are exposed to the LLM via `lib/context/contacts.slot.ts` and are referenceable by name in tool calls via `lib/tools/resolvers.ts`.
+A relationship index backed by the `Contact` model. Each record stores name, role, company, email, phone, notes, tags, a last-contact date, and a `ContactInteraction` log. Contacts are exposed to the LLM via `lib/ai/context/contacts.slot.ts` and are referenceable by name in tool calls via `lib/ai/tools/resolvers.ts`.
 
 **Shareable card links** — the `ShareToken` model issues a signed, time-limited token (24-hour TTL) that renders a read-only contact card to unauthenticated recipients.
 
@@ -181,7 +181,7 @@ A relationship index backed by the `Contact` model. Each record stores name, rol
 
 The `Meeting` model stores title, date, duration, location, agenda, status (`upcoming` | `done` | `cancelled`), and a free-text summary field. Participants are stored in a `MeetingParticipant` join table linked to `Contact`. Meetings are exposed to the context slot layer and are referenceable in tool calls by title.
 
-Google Calendar events are imported via the OAuth 2.0 integration (`lib/integrations/google-calendar/`, read-only scope). Imported events are created as `Meeting` records; subsequent syncs update rather than duplicate. Token refresh runs automatically; revoked-access errors are detected and the integration is deactivated cleanly.
+Google Calendar events are imported via the OAuth 2.0 integration (`lib/platform/integrations/google-calendar/`, read-only scope). Imported events are created as `Meeting` records; subsequent syncs update rather than duplicate. Token refresh runs automatically; revoked-access errors are detected and the integration is deactivated cleanly.
 
 **Tier limits:** max total meetings stored.
 
@@ -211,11 +211,11 @@ User-authored memory entries (`MemoryEntry`) are free-form notes the assistant s
 
 ### Labels
 
-A cross-feature tagging system. `Label` records carry name and color. Labels attach to tasks, meetings, contacts, and decisions via separate join tables (`LabelOnTask`, `LabelOnMeeting`, etc.). The tool layer resolves label names to IDs with auto-create (`lib/tools/resolvers.ts`), so the assistant can tag items by name without prior setup.
+A cross-feature tagging system. `Label` records carry name and color. Labels attach to tasks, meetings, contacts, and decisions via separate join tables (`LabelOnTask`, `LabelOnMeeting`, etc.). The tool layer resolves label names to IDs with auto-create (`lib/ai/tools/resolvers.ts`), so the assistant can tag items by name without prior setup.
 
 ### Daily Briefing
 
-On each briefing trigger (cron or manual), `lib/briefings/` assembles a prompt from the user's agenda, open tasks, pending decisions, and goals, sends a non-streaming LLM call, and stores the result as a `BriefingCache` record and a `Notification`. Cadence is configurable per user (off / daily / weekly) from App Settings.
+On each briefing trigger (cron or manual), `lib/features/briefings/` assembles a prompt from the user's agenda, open tasks, pending decisions, and goals, sends a non-streaming LLM call, and stores the result as a `BriefingCache` record and a `Notification`. Cadence is configurable per user (off / daily / weekly) from App Settings.
 
 ### Proactive Nudges (Cron)
 

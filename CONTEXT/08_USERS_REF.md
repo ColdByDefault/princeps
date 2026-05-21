@@ -9,7 +9,7 @@ Reference areas:
 - `app/(app)/settings/page.tsx` loads the settings screen.
 - `components/settings/SettingsShell.tsx` owns the tab layout.
 - `app/api/settings/route.ts` saves most preferences.
-- `lib/settings/user-preferences.logic.ts` parses and persists `User.preferences`.
+- `lib/platform/settings/user-preferences.logic.ts` parses and persists `User.preferences`.
 
 ## User Data Model
 
@@ -32,7 +32,7 @@ Most settings are stored in `User.preferences` JSON. Timezone is the main except
 
 ## Preferences Shape
 
-`lib/settings/user-preferences.logic.ts` defines the current preference contract.
+`lib/platform/settings/user-preferences.logic.ts` defines the current preference contract.
 
 Current preference fields:
 
@@ -231,7 +231,7 @@ Save behavior:
 - Each save calls `PATCH /api/settings`.
 - Success and failure toasts are localized.
 
-The assistant settings affect `lib/context/build.ts`:
+The assistant settings affect `lib/ai/context/build.ts`:
 
 - `assistantName` changes the system prompt identity.
 - `assistantTone` adds tone instructions.
@@ -281,7 +281,7 @@ SettingsPage -> getUserUsage(userId)
 Refresh button -> GET /api/settings/usage
 ```
 
-`lib/settings/usage.logic.ts` builds a `UsageSummary` from:
+`lib/platform/settings/usage.logic.ts` builds a `UsageSummary` from:
 
 - `User.tier`
 - current record counts
@@ -346,7 +346,7 @@ Subscription state is stored mostly in Stripe, with `User.tier` and `User.stripe
 
 For a new setting:
 
-1. Add it to `UserPreferences` in `lib/settings/user-preferences.logic.ts`.
+1. Add it to `UserPreferences` in `lib/platform/settings/user-preferences.logic.ts`.
 2. Parse and validate it in `parseUserPreferences()`.
 3. Merge and serialize it in `updateUserPreferences()`.
 4. Accept and validate it in `app/api/settings/route.ts`.
@@ -369,6 +369,6 @@ Before finishing settings work, verify:
 - Browser state, cookies, and DB preference stay in sync for language/theme.
 - Timezone changes update `User.timezone`, not preferences JSON.
 - User-facing labels, descriptions, toasts, placeholders, and aria labels are localized.
-- Settings that affect LLM behavior are reflected in `lib/context/build.ts` or the relevant consumer.
+- Settings that affect LLM behavior are reflected in `lib/ai/context/build.ts` or the relevant consumer.
 - Tool settings use valid names from `TOOL_REGISTRY`.
 - Usage, integration, and subscription state are not incorrectly stored in `User.preferences`.

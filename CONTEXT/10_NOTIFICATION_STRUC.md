@@ -46,13 +46,13 @@ Important behavior:
 ```text
 prisma/schema.prisma
 types/api.ts                              NotificationRecord
-lib/notifications/index.ts                Barrel exports
-lib/notifications/shared.logic.ts         Select + mapper + date helpers
-lib/notifications/list.logic.ts           List non-dismissed notifications
-lib/notifications/mark-read.logic.ts      Read mutations
-lib/notifications/delete.logic.ts         Soft-delete mutations
-lib/notifications/greeting.logic.ts       Daily LLM greeting
-lib/notifications/nudge-overdue.logic.ts  Overdue-task cron nudges
+lib/features/notifications/index.ts                Barrel exports
+lib/features/notifications/shared.logic.ts         Select + mapper + date helpers
+lib/features/notifications/list.logic.ts           List non-dismissed notifications
+lib/features/notifications/mark-read.logic.ts      Read mutations
+lib/features/notifications/delete.logic.ts         Soft-delete mutations
+lib/features/notifications/greeting.logic.ts       Daily LLM greeting
+lib/features/notifications/nudge-overdue.logic.ts  Overdue-task cron nudges
 app/api/notifications/route.ts
 app/api/notifications/[id]/route.ts
 app/api/notifications/greeting/route.ts
@@ -61,12 +61,12 @@ hooks/use-notifications.ts
 components/notifications/NotificationBell.tsx
 components/notifications/NotificationDrawer.tsx
 components/notifications/NotificationItem.tsx
-lib/weather/fetch.ts
-lib/weather/timezone-coords.ts
-lib/weather/location-coords.ts
+lib/services/weather/fetch.ts
+lib/services/weather/timezone-coords.ts
+lib/services/weather/location-coords.ts
 ```
 
-All `lib/notifications/*` logic is server-only.
+All `lib/features/notifications/*` logic is server-only.
 
 ## API Routes
 
@@ -142,7 +142,7 @@ Rules:
 - Weather is optional; failures silently produce a greeting without weather.
 - Greeting LLM usage counts against monthly token counters.
 
-Greeting prompt changes belong in `lib/notifications/greeting.logic.ts`.
+Greeting prompt changes belong in `lib/features/notifications/greeting.logic.ts`.
 
 ## Weather Context
 
@@ -202,7 +202,7 @@ Settings -> Assistant -> Automation -> overdueTaskNudgesEnabled
 
 ## Report Notifications
 
-`lib/reports/create.logic.ts` creates a fire-and-forget notification after assistant tool reports:
+`lib/features/reports/create.logic.ts` creates a fire-and-forget notification after assistant tool reports:
 
 ```text
 category: report_generated
@@ -266,4 +266,4 @@ Checklist:
 - If it is tiered, check `getPlanLimits()`.
 - Refresh the client through normal fetch or `notifications:refresh` if created during an active chat flow.
 
-Keep notification logic small and feature-owned. Cross-feature notification creation can call `db.notification.create`, but complex generation rules belong in `lib/notifications/` or the feature's own server logic.
+Keep notification logic small and feature-owned. Cross-feature notification creation can call `db.notification.create`, but complex generation rules belong in `lib/features/notifications/` or the feature's own server logic.

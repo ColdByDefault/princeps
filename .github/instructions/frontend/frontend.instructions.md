@@ -13,7 +13,7 @@ Read `CONTEXT/04_FRONTEND_&_i18n_STRUC.md` when frontend behavior is non-trivial
 - Server pages handle auth, metadata, and initial data assembly. Pass serialized props such as ISO strings and plain objects to client components.
 - Client components handle interactivity, local state, and browser APIs.
 - Component `.tsx` files should focus on JSX rendering. Extract hooks, state, API calls, and transforms into `components/<feature>/logic/`.
-- Move business rules into `lib/<feature>/`, not into page or component files.
+- Move business rules into `lib/features/<feature>/`, not into page or component files.
 - Use `@/*` path imports.
 
 ## Hydration

@@ -4,8 +4,6 @@
  * @license See License
  * @version canary-v1.1.3
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";

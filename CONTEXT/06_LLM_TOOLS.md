@@ -19,17 +19,17 @@ Any surface should be able to call the same executor: chat, widget chat, cron, w
 The tool flow is:
 
 ```text
-lib/tools/registry/<feature>.registry.ts
+lib/ai/tools/registry/<feature>.registry.ts
   -> declares OpenAI-compatible tool schema + minTier + group
 
-lib/tools/handlers/<feature>.handler.ts
+lib/ai/tools/handlers/<feature>.handler.ts
   -> validates parsed args
   -> resolves names to IDs when needed
   -> checks tier/usage gates when needed
-  -> delegates to lib/<feature>/
+  -> delegates to lib/features/<feature>/
   -> returns ActionResult
 
-lib/tools/executor.ts
+lib/ai/tools/executor.ts
   -> parses JSON arguments
   -> verifies the tool is active for the user
   -> dispatches by tool name
@@ -38,7 +38,7 @@ lib/tools/executor.ts
 ## Folder Map
 
 ```text
-lib/tools/
+lib/ai/tools/
   index.ts
   types.ts
   registry.ts
@@ -103,18 +103,18 @@ Handler responsibilities:
 - Start with `import "server-only"`.
 - Receive `(userId, args)`.
 - Treat `args` as untrusted.
-- Validate with Zod schemas from `lib/<feature>/schemas.ts`.
+- Validate with Zod schemas from `lib/features/<feature>/schemas.ts`.
 - Resolve names to IDs before validation when the public tool arg differs from server input.
 - Enforce create/action tier gates just like API routes.
 - Prevent obvious duplicates when the LLM may create redundant records.
-- Delegate to `lib/<feature>/` logic.
+- Delegate to `lib/features/<feature>/` logic.
 - Return `ActionResult`.
 
 Handlers should not:
 
 - Import client components.
 - Call API routes with `fetch()`.
-- Contain Prisma-heavy business logic that belongs in `lib/<feature>/`.
+- Contain Prisma-heavy business logic that belongs in `lib/features/<feature>/`.
 - Bypass `userId` ownership.
 - Return secrets, provider tokens, raw Prisma rows, or large unnecessary payloads.
 
@@ -158,11 +158,11 @@ This shows the correct layering:
 - Zod validates the final server input.
 - Handler performs LLM-specific duplicate protection.
 - Tier gate mirrors the API route.
-- `lib/tasks/create.logic.ts` performs the database write.
+- `lib/features/tasks/create.logic.ts` performs the database write.
 
 ## Resolvers
 
-Use `lib/tools/resolvers.ts` for shared name-to-ID helpers.
+Use `lib/ai/tools/resolvers.ts` for shared name-to-ID helpers.
 
 Current examples:
 
@@ -259,16 +259,16 @@ This workflow can need several dependent tool rounds, so chat surfaces should al
 
 For a normal CRUD feature:
 
-1. Add `lib/tools/registry/<feature>.registry.ts`.
+1. Add `lib/ai/tools/registry/<feature>.registry.ts`.
 2. Add registry entries with `minTier`, `group`, `name`, `description`, and `parameters`.
-3. Import and spread the feature tools in `lib/tools/registry.ts`.
-4. Add `lib/tools/handlers/<feature>.handler.ts`.
+3. Import and spread the feature tools in `lib/ai/tools/registry.ts`.
+4. Add `lib/ai/tools/handlers/<feature>.handler.ts`.
 5. Validate args with feature Zod schemas.
 6. Add resolvers if the LLM uses names but server logic needs IDs.
 7. Enforce tier gates for create/action tools.
-8. Delegate to `lib/<feature>/` logic.
+8. Delegate to `lib/features/<feature>/` logic.
 9. Export a handler map keyed by exact tool names.
-10. Import and spread the handler map in `lib/tools/executor.ts`.
+10. Import and spread the handler map in `lib/ai/tools/executor.ts`.
 11. Verify chat and widget chat still receive filtered active tools.
 12. Update user-facing tool settings/i18n if the tool appears in settings UI.
 
@@ -282,7 +282,7 @@ Before finishing tool work, verify:
 - Handler validates untrusted args.
 - Handler is user-scoped.
 - Create/action handler enforces the matching tier gate.
-- Handler delegates to `lib/<feature>/`.
+- Handler delegates to `lib/features/<feature>/`.
 - Executor only imports and spreads the handler map.
 - Active-tool filtering still works for tier and disabled tools.
 - Tool result is compact and does not leak secrets or raw internal data.

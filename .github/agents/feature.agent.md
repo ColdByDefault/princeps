@@ -42,21 +42,21 @@ Use `CONTEXT/11_NEW_FEAT_Impl.md` before building a full-stack feature or new to
 - Current code, `package.json`, `prisma/schema.prisma`, and migrations are final for implementation details.
 - `AGENTS.md`, `CONTEXT/`, `docs/`, and `.github/instructions/` guide process and architecture.
 - If sources disagree, trust live code for current behavior and call out the mismatch if it matters.
-- The live LLM provider layer is `lib/llm-providers/`, not `lib/llm/`.
-- Tool registry entries live in `lib/tools/registry/<feature>.registry.ts`; `lib/tools/registry.ts` imports and spreads feature registries only.
+- The live LLM provider layer is `lib/ai/llm-providers/`, not `lib/llm/`.
+- Tool registry entries live in `lib/ai/tools/registry/<feature>.registry.ts`; `lib/ai/tools/registry.ts` imports and spreads feature registries only.
 
 ## Architecture Rules
 
 ### Layer Boundaries
 
 - Server pages authenticate, fetch data, serialize props, and render client shells. No business logic.
-- API routes authenticate, rate-limit/tier-gate when needed, parse, validate, delegate to `lib/<feature>/`, and respond.
-- `lib/<feature>/` owns business logic, DB access, validation, authorization checks, side effects, and mapping.
+- API routes authenticate, rate-limit/tier-gate when needed, parse, validate, delegate to `lib/features/<feature>/`, and respond.
+- `lib/features/<feature>/` owns business logic, DB access, validation, authorization checks, side effects, and mapping.
 - `components/<feature>/*.tsx` focuses on JSX composition.
 - `components/<feature>/logic/` owns client hooks, mutation state, API calls, and transforms.
-- `lib/tools/` is feature-agnostic orchestration. Handlers validate args, resolve names, enforce limits, and delegate to feature logic.
-- `lib/context/` owns system-prompt slots. Add or update slots when the assistant should know the data.
-- `lib/chat/` is just another feature. It consumes providers, tools, and context; it does not own them.
+- `lib/ai/tools/` is feature-agnostic orchestration. Handlers validate args, resolve names, enforce limits, and delegate to feature logic.
+- `lib/ai/context/` owns system-prompt slots. Add or update slots when the assistant should know the data.
+- `lib/features/chat/` is just another feature. It consumes providers, tools, and context; it does not own them.
 
 ### Standard Feature Shape
 
@@ -67,13 +67,13 @@ components/<feature>/
   <Feature>Shell.tsx
   <Feature>Card.tsx
   logic/
-lib/<feature>/
+lib/features/<feature>/
   schemas.ts, shared.logic.ts
   create.logic.ts, list.logic.ts, update.logic.ts, delete.logic.ts
 app/api/<feature>/
-lib/context/<feature>.slot.ts
-lib/tools/registry/<feature>.registry.ts
-lib/tools/handlers/<feature>.handler.ts
+lib/ai/context/<feature>.slot.ts
+lib/ai/tools/registry/<feature>.registry.ts
+lib/ai/tools/handlers/<feature>.handler.ts
 messages/de.json
 messages/en.json
 ```
@@ -82,8 +82,8 @@ messages/en.json
 
 - All user data access is scoped by `userId` unless explicitly admin-only.
 - Add `import "server-only"` to modules importing Prisma, Better Auth server helpers, LLM providers, Stripe, pgvector, or Node-only APIs.
-- Never let a client import chain reach `@/lib/db`.
-- Zod validation lives in `lib/<feature>/schemas.ts`.
+- Never let a client import chain reach `@/lib/core/db`.
+- Zod validation lives in `lib/features/<feature>/schemas.ts`.
 - Error responses use `{ error: string }`.
 - Keep API routes thin; no inline SQL, LLM calls, or business logic in route handlers.
 - Every input field has a localized `placeholder`.
@@ -102,12 +102,12 @@ messages/en.json
 ## Tool And Context Rules
 
 - Add tools only when the assistant should act, not just talk.
-- Add registry entries in `lib/tools/registry/<feature>.registry.ts`.
-- Add handlers in `lib/tools/handlers/<feature>.handler.ts`.
-- Spread registries in `lib/tools/registry.ts` and handlers in `lib/tools/executor.ts`; do not add feature logic to orchestration files.
+- Add registry entries in `lib/ai/tools/registry/<feature>.registry.ts`.
+- Add handlers in `lib/ai/tools/handlers/<feature>.handler.ts`.
+- Spread registries in `lib/ai/tools/registry.ts` and handlers in `lib/ai/tools/executor.ts`; do not add feature logic to orchestration files.
 - Registry descriptions tell the LLM when to use the tool. Handlers own validation, name-to-ID resolution, duplicate checks, tier gates, and delegation.
 - If a UI/API action has a tier or usage gate, the equivalent tool path needs the same gate.
-- Add or update `lib/context/<feature>.slot.ts` when the assistant should have that user-scoped data in conversations.
+- Add or update `lib/ai/context/<feature>.slot.ts` when the assistant should have that user-scoped data in conversations.
 
 ## Workflow
 

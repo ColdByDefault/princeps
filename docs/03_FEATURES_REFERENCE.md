@@ -13,7 +13,7 @@ Purpose:
 Key files:
 
 ```text
-lib/auth/
+lib/core/auth/
 components/auth/
 app/api/auth/[...all]/route.ts
 app/api/dev/reset-links/route.ts
@@ -35,7 +35,7 @@ Key files:
 app/(app)/settings/page.tsx
 app/api/settings/
 components/settings/
-lib/settings/
+lib/platform/settings/
 messages/de.json
 messages/en.json
 ```
@@ -55,10 +55,10 @@ app/(app)/chat/
 app/api/chat/
 components/chat/
 components/chat-widget/
-lib/chat/
-lib/context/
-lib/tools/
-lib/llm-providers/
+lib/features/chat/
+lib/ai/context/
+lib/ai/tools/
+lib/ai/llm-providers/
 ```
 
 The assistant sees context slots and tier-filtered tools. Chat does not own tools or context; it consumes them.
@@ -77,9 +77,9 @@ Key files:
 app/(app)/knowledge/
 app/api/knowledge/
 components/knowledge/
-lib/knowledge/
-lib/context/knowledge.slot.ts
-lib/tools/registry/knowledge.registry.ts
+lib/features/knowledge/
+lib/ai/context/knowledge.slot.ts
+lib/ai/tools/registry/knowledge.registry.ts
 ```
 
 Manual uploads and Drive imports both enforce knowledge quotas. Raw uploaded files are not stored.
@@ -96,10 +96,10 @@ Key files:
 app/(app)/tasks/
 app/api/tasks/
 components/tasks/
-lib/tasks/
-lib/tools/registry/tasks.registry.ts
-lib/tools/handlers/tasks.handler.ts
-lib/context/tasks.slot.ts
+lib/features/tasks/
+lib/ai/tools/registry/tasks.registry.ts
+lib/ai/tools/handlers/tasks.handler.ts
+lib/ai/context/tasks.slot.ts
 ```
 
 Tasks are the cleanest reference for CRUD, labels, tier caps, LLM tools, and context.
@@ -116,9 +116,9 @@ Key files:
 app/(app)/meetings/
 app/api/meetings/
 components/meetings/
-lib/meetings/
-lib/integrations/google-calendar/
-lib/context/meetings.slot.ts
+lib/features/meetings/
+lib/platform/integrations/google-calendar/
+lib/ai/context/meetings.slot.ts
 ```
 
 Prep packs are AI-generated and quota-gated. Google Calendar side effects are best-effort.
@@ -135,9 +135,9 @@ Key files:
 app/(app)/contacts/
 app/api/contacts/
 components/contact/
-lib/contacts/
-lib/tools/registry/contacts.registry.ts
-lib/context/contacts.slot.ts
+lib/features/contacts/
+lib/ai/tools/registry/contacts.registry.ts
+lib/ai/context/contacts.slot.ts
 ```
 
 The component folder is singular legacy naming. New features should prefer `components/<feature>/`.
@@ -154,12 +154,12 @@ Purpose:
 Key files:
 
 ```text
-app/(app)/decisions/     lib/decisions/
-app/(app)/goals/         lib/goals/
-app/(app)/labels/        lib/labels/
-app/(app)/memory/        lib/memory/
-lib/tools/registry/
-lib/context/
+app/(app)/decisions/     lib/features/decisions/
+app/(app)/goals/         lib/features/goals/
+app/(app)/labels/        lib/features/labels/
+app/(app)/memory/        lib/features/memory/
+lib/ai/tools/registry/
+lib/ai/context/
 ```
 
 These features are LLM-aware and may have tier gates.
@@ -174,11 +174,11 @@ Purpose:
 Key files:
 
 ```text
-app/(app)/briefings/     lib/briefings/
-app/(app)/reports/       lib/reports/
+app/(app)/briefings/     lib/features/briefings/
+app/(app)/reports/       lib/features/reports/
 components/briefings/
 components/reports/
-lib/tools/registry/briefings.registry.ts
+lib/ai/tools/registry/briefings.registry.ts
 ```
 
 Briefings consume LLM quota. Reports are useful for audit and assistant transparency.
@@ -196,8 +196,8 @@ app/api/notifications/
 app/api/cron/tasks-overdue/route.ts
 components/notifications/
 hooks/use-notifications.ts
-lib/notifications/
-lib/weather/
+lib/features/notifications/
+lib/services/weather/
 ```
 
 Notifications are soft-deleted with `dismissed`. Greetings are once per UTC day unless `FORCE_GREETING=true`.
@@ -214,7 +214,7 @@ Key files:
 app/api/integrations/
 components/settings/IntegrationsTab.tsx
 components/settings/IntegrationCard.tsx
-lib/integrations/
+lib/platform/integrations/
 prisma/schema.prisma
 ```
 
@@ -230,8 +230,8 @@ Key files:
 
 ```text
 types/billing.ts
-lib/tiers/
-lib/stripe/
+lib/platform/tiers/
+lib/platform/stripe/
 app/api/stripe/
 components/pricing/
 components/settings/SubscriptionTab.tsx

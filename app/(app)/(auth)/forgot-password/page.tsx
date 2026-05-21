@@ -2,10 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.3
  * @since beta
- * @module
- * @description
  */
 
 import { type Metadata } from "next";
