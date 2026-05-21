@@ -4,8 +4,6 @@
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { getRequestConfig } from "next-intl/server";

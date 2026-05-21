@@ -1,3 +1,11 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version beta
+ * @since beta
+ */ 
+
 import { PrismaClient } from "@/prisma/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";

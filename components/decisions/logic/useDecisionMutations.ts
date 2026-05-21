@@ -1,3 +1,11 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version canary-v1.0.2
+ * @since canary-v1.0.2
+ */ 
+
 import { useState } from "react";
 import { toast } from "sonner";
 import type { DecisionRecord } from "@/types/api";

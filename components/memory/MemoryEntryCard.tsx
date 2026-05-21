@@ -1,3 +1,11 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version canary-v1.0.2
+ * @since canary-v1.0.2
+ */
+
 "use client";
 
 import { Brain, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
