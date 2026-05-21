@@ -1,3 +1,14 @@
+## [1.1.1] - 2026-05-21
+
+- feat: enhance meeting creation function description to include attendee handling and label support
+- chore: update prisma client and related dependencies; add meetingId to Goal model
+- Enhance multi-tool workflows for meeting recaps and improve decision, goal, meeting, and task handling
+- feat: increase maximum tool execution rounds from six to twelve and update package dependencies
+- fix: update author name format in package.json
+- feat: increase tool execution rounds to six and enhance meeting recap workflow
+
+# Changelog
+
 ## [1.1.0] - 2026-05-09
 
 - chore: update author name and dependencies in package.json
