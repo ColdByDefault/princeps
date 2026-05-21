@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,11 +10,11 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/i18n";
-import { auth } from "@/lib/auth/auth";
-import { db } from "@/lib/db";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listKnowledgeDocuments } from "@/lib/knowledge";
+import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { auth } from "@/lib/core/auth/auth";
+import { db } from "@/lib/core/db";
+import { defineSEO, getSeoLocale } from "@/lib/core/seo";
+import { listKnowledgeDocuments } from "@/lib/features/knowledge";
 import { KnowledgePageClient } from "@/components/knowledge";
 import type { AppLanguage } from "@/types/i18n";
 

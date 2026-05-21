@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createTaskSchema, updateTaskSchema } from "@/lib/tasks/schemas";
+import { createTaskSchema, updateTaskSchema } from "@/lib/features/tasks/schemas";
 
 describe("task schemas", () => {
   describe("createTaskSchema", () => {

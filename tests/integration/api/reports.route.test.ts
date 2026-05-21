@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { AssistantReportRecord } from "@/lib/reports/shared.logic";
+import type { AssistantReportRecord } from "@/lib/features/reports/shared.logic";
 
 type Session = {
   user: {
@@ -23,7 +23,7 @@ vi.mock("next/headers", () => ({
   headers: mocks.headers,
 }));
 
-vi.mock("@/lib/auth/auth", () => ({
+vi.mock("@/lib/core/auth/auth", () => ({
   auth: {
     api: {
       getSession: mocks.getSession,
@@ -31,7 +31,7 @@ vi.mock("@/lib/auth/auth", () => ({
   },
 }));
 
-vi.mock("@/lib/reports", () => ({
+vi.mock("@/lib/features/reports", () => ({
   deleteAllReports: mocks.deleteAllReports,
   listReports: mocks.listReports,
 }));

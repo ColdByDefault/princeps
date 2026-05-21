@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,7 +10,7 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
+import { auth } from "@/lib/core/auth/auth";
 import {
   getUserPreferences,
   updateUserPreferences,
@@ -22,9 +22,9 @@ import {
   type AssistantTone,
   type AddressStyle,
   type ResponseLength,
-} from "@/lib/settings";
+} from "@/lib/platform/settings";
 import { isSupportedLanguage, type AppLanguage } from "@/types/i18n";
-import { TOOL_REGISTRY } from "@/lib/tools";
+import { TOOL_REGISTRY } from "@/lib/ai/tools";
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });

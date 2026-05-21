@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MemoryEntryRecord } from "@/types/api";
-import type { CreateMemoryEntryInput } from "@/lib/memory/schemas";
-import type * as memorySchemas from "@/lib/memory/schemas";
+import type { CreateMemoryEntryInput } from "@/lib/features/memory/schemas";
+import type * as memorySchemas from "@/lib/features/memory/schemas";
 
 type Session = {
   user: {
@@ -42,7 +42,7 @@ vi.mock("next/headers", () => ({
   headers: mocks.headers,
 }));
 
-vi.mock("@/lib/auth/auth", () => ({
+vi.mock("@/lib/core/auth/auth", () => ({
   auth: {
     api: {
       getSession: mocks.getSession,
@@ -50,7 +50,7 @@ vi.mock("@/lib/auth/auth", () => ({
   },
 }));
 
-vi.mock("@/lib/security", () => ({
+vi.mock("@/lib/core/security", () => ({
   createRateLimitResponse: (retryAfterSeconds: number) =>
     Response.json(
       { error: "Too many requests" },
@@ -65,15 +65,15 @@ vi.mock("@/lib/security", () => ({
   },
 }));
 
-vi.mock("@/lib/tiers", () => ({
+vi.mock("@/lib/platform/tiers", () => ({
   createTierLimitResponse: (reason = "Plan limit reached.") =>
     Response.json({ error: reason }, { status: 403 }),
   enforceMemoryMax: mocks.enforceMemoryMax,
 }));
 
-vi.mock("@/lib/memory", async () => {
+vi.mock("@/lib/features/memory", async () => {
   const actual = await vi.importActual<typeof memorySchemas>(
-    "@/lib/memory/schemas",
+    "@/lib/features/memory/schemas",
   );
 
   return {

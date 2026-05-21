@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -8,7 +8,7 @@
  * @description
  */
 
-import { getVersion } from "@/lib/utils";
+import { getVersion } from "@/lib/core/utils";
 
 interface VersionDisplayProps {
   prefix?: string;

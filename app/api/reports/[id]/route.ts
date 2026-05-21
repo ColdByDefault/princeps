@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,8 +10,8 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { deleteReport } from "@/lib/reports";
+import { auth } from "@/lib/core/auth/auth";
+import { deleteReport } from "@/lib/features/reports";
 
 type Params = { params: Promise<{ id: string }> };
 

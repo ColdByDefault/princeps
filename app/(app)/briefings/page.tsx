@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -12,11 +12,11 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/i18n";
-import { auth } from "@/lib/auth/auth";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { getBriefing } from "@/lib/briefings";
-import { getUserPreferences } from "@/lib/settings/user-preferences.logic";
+import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { auth } from "@/lib/core/auth/auth";
+import { defineSEO, getSeoLocale } from "@/lib/core/seo";
+import { getBriefing } from "@/lib/features/briefings";
+import { getUserPreferences } from "@/lib/platform/settings/user-preferences.logic";
 import { BriefingShell } from "@/components/briefings";
 import type { AppLanguage } from "@/types/i18n";
 

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,12 +10,12 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { syncGoogleCalendar } from "@/lib/integrations/google-calendar/sync";
+import { auth } from "@/lib/core/auth/auth";
+import { syncGoogleCalendar } from "@/lib/platform/integrations/google-calendar/sync";
 import {
   IntegrationNotFoundError,
   IntegrationExpiredError,
-} from "@/lib/integrations/shared/token";
+} from "@/lib/platform/integrations/shared/token";
 
 /**
  * POST /api/integrations/google-calendar/sync

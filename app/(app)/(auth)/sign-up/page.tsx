@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -12,9 +12,9 @@ import { type Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { SignUpCard } from "@/components/auth";
-import { getTranslations, getLocale } from "@/lib/i18n";
-import { auth } from "@/lib/auth/auth";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
+import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { auth } from "@/lib/core/auth/auth";
+import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { isSupportedLanguage, DEFAULT_LANGUAGE } from "@/types/i18n";
 
 export async function generateMetadata(): Promise<Metadata> {

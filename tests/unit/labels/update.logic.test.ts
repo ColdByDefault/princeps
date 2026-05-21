@@ -20,7 +20,7 @@ const mocks = vi.hoisted(() => ({
   labelUpdate: vi.fn<(args: LabelUpdateArgs) => Promise<DbLabelRow>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     label: {
       update: mocks.labelUpdate,
@@ -28,7 +28,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { updateLabel } from "@/lib/labels/update.logic";
+import { updateLabel } from "@/lib/features/labels/update.logic";
 
 describe("updateLabel", () => {
   beforeEach(() => {

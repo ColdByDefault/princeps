@@ -20,7 +20,7 @@ vi.mock("next/headers", () => ({
   headers: mocks.headers,
 }));
 
-vi.mock("@/lib/auth/auth", () => ({
+vi.mock("@/lib/core/auth/auth", () => ({
   auth: {
     api: {
       getSession: mocks.getSession,
@@ -28,7 +28,7 @@ vi.mock("@/lib/auth/auth", () => ({
   },
 }));
 
-vi.mock("@/lib/reports", () => ({
+vi.mock("@/lib/features/reports", () => ({
   deleteReport: mocks.deleteReport,
 }));
 

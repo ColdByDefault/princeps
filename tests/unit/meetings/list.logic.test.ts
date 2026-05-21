@@ -46,7 +46,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     meeting: {
       findMany: mocks.meetingFindMany,
@@ -55,7 +55,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { listMeetings } from "@/lib/meetings/list.logic";
+import { listMeetings } from "@/lib/features/meetings/list.logic";
 
 const createdAt = new Date("2026-05-08T06:00:00.000Z");
 const updatedAt = new Date("2026-05-08T06:30:00.000Z");

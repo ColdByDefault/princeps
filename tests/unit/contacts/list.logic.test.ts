@@ -35,7 +35,7 @@ const mocks = vi.hoisted(() => ({
   contactFindMany: vi.fn<(args: ContactFindManyArgs) => Promise<DbContactRow[]>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     contact: {
       findFirst: mocks.contactFindFirst,
@@ -44,7 +44,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { getContactById, listContacts } from "@/lib/contacts/list.logic";
+import { getContactById, listContacts } from "@/lib/features/contacts/list.logic";
 
 const createdAt = new Date("2026-05-08T06:00:00.000Z");
 const updatedAt = new Date("2026-05-08T06:30:00.000Z");

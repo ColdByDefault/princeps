@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -30,8 +30,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { TIMEZONE_OPTIONS } from "@/lib/weather/timezone-list";
+import { cn } from "@/lib/core/utils";
+import { TIMEZONE_OPTIONS } from "@/lib/services/weather/timezone-list";
 
 interface GeocodeSuggestion {
   id: number;

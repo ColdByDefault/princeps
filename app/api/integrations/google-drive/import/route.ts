@@ -10,12 +10,12 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { importDriveFile } from "@/lib/integrations/google-drive";
+import { auth } from "@/lib/core/auth/auth";
+import { importDriveFile } from "@/lib/platform/integrations/google-drive";
 import {
   IntegrationNotFoundError,
   IntegrationExpiredError,
-} from "@/lib/integrations/shared/token";
+} from "@/lib/platform/integrations/shared/token";
 
 /**
  * POST /api/integrations/google-drive/import

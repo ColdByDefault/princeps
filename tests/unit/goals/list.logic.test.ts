@@ -37,7 +37,7 @@ const mocks = vi.hoisted(() => ({
   goalFindMany: vi.fn<(args: GoalFindManyArgs) => Promise<DbGoalRow[]>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     goal: {
       findMany: mocks.goalFindMany,
@@ -45,7 +45,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { listGoals } from "@/lib/goals/list.logic";
+import { listGoals } from "@/lib/features/goals/list.logic";
 
 describe("listGoals", () => {
   beforeEach(() => {

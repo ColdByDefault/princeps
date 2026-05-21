@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -13,7 +13,7 @@
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import type { NotificationRecord } from "@/types/api";
 
 type NotificationItemProps = {

@@ -22,7 +22,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import type { GoalRecord, LabelOptionRecord } from "@/types/api";
 import { DatePicker } from "@/components/ui/date-picker";
 

@@ -59,7 +59,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     goal: {
       findFirst: mocks.goalFindFirst,
@@ -77,7 +77,7 @@ import {
   createMilestone,
   deleteMilestone,
   updateMilestone,
-} from "@/lib/goals/milestones.logic";
+} from "@/lib/features/goals/milestones.logic";
 
 const createdAt = new Date("2026-05-08T06:00:00.000Z");
 const updatedAt = new Date("2026-05-08T06:30:00.000Z");

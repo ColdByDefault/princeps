@@ -37,7 +37,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     decision: {
       create: mocks.decisionCreate,
@@ -45,7 +45,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { createDecision } from "@/lib/decisions/create.logic";
+import { createDecision } from "@/lib/features/decisions/create.logic";
 
 describe("createDecision", () => {
   beforeEach(() => {

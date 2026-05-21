@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -12,9 +12,9 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { enforceVoiceRequests, recordVoiceDuration } from "@/lib/tiers";
-import { getOpenAISettings } from "@/lib/llm-providers/openai/openai-settings";
+import { auth } from "@/lib/core/auth/auth";
+import { enforceVoiceRequests, recordVoiceDuration } from "@/lib/platform/tiers";
+import { getOpenAISettings } from "@/lib/ai/llm-providers/openai/openai-settings";
 
 /** Maximum accepted audio size: 24 MB (Whisper server limit is 25 MB). */
 const MAX_AUDIO_BYTES = 24 * 1024 * 1024;

@@ -9,7 +9,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { runOverdueTaskNudges } from "@/lib/notifications";
+import { runOverdueTaskNudges } from "@/lib/features/notifications";
 
 export const dynamic = "force-dynamic";
 

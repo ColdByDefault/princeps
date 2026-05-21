@@ -52,7 +52,7 @@ const mocks = vi.hoisted(() => ({
   goalUpdate: vi.fn<(args: GoalUpdateArgs) => Promise<DbGoalRow>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     goal: {
       update: mocks.goalUpdate,
@@ -60,7 +60,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { updateGoal } from "@/lib/goals/update.logic";
+import { updateGoal } from "@/lib/features/goals/update.logic";
 
 const createdAt = new Date("2026-05-08T06:00:00.000Z");
 const updatedAt = new Date("2026-05-08T06:30:00.000Z");

@@ -13,7 +13,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     goal: {
       deleteMany: mocks.goalDeleteMany,
@@ -21,7 +21,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { deleteGoal } from "@/lib/goals/delete.logic";
+import { deleteGoal } from "@/lib/features/goals/delete.logic";
 
 describe("deleteGoal", () => {
   beforeEach(() => {

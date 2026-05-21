@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createContactSchema, updateContactSchema } from "@/lib/contacts/schemas";
+import { createContactSchema, updateContactSchema } from "@/lib/features/contacts/schemas";
 
 describe("contact schemas", () => {
   describe("createContactSchema", () => {

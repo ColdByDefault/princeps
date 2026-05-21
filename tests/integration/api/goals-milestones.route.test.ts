@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MilestoneRecord } from "@/types/api";
-import type { CreateMilestoneInput } from "@/lib/goals/schemas";
-import type * as goalSchemas from "@/lib/goals/schemas";
+import type { CreateMilestoneInput } from "@/lib/features/goals/schemas";
+import type * as goalSchemas from "@/lib/features/goals/schemas";
 
 type Session = {
   user: {
@@ -36,7 +36,7 @@ vi.mock("next/headers", () => ({
   headers: mocks.headers,
 }));
 
-vi.mock("@/lib/auth/auth", () => ({
+vi.mock("@/lib/core/auth/auth", () => ({
   auth: {
     api: {
       getSession: mocks.getSession,
@@ -44,7 +44,7 @@ vi.mock("@/lib/auth/auth", () => ({
   },
 }));
 
-vi.mock("@/lib/security", () => ({
+vi.mock("@/lib/core/security", () => ({
   createRateLimitResponse: (retryAfterSeconds: number) =>
     Response.json(
       { error: "Too many requests" },
@@ -59,9 +59,9 @@ vi.mock("@/lib/security", () => ({
   },
 }));
 
-vi.mock("@/lib/goals", async () => {
+vi.mock("@/lib/features/goals", async () => {
   const actual = await vi.importActual<typeof goalSchemas>(
-    "@/lib/goals/schemas",
+    "@/lib/features/goals/schemas",
   );
 
   return {

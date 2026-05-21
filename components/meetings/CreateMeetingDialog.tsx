@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -34,7 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { LabelOptionRecord, ContactRecord } from "@/types/api";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 type CreateMeetingDialogProps = {

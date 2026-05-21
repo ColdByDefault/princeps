@@ -36,7 +36,7 @@ const mocks = vi.hoisted(() => ({
   contactCreate: vi.fn<(args: ContactCreateArgs) => Promise<DbContactRow>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     contact: {
       create: mocks.contactCreate,
@@ -44,7 +44,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { createContact } from "@/lib/contacts/create.logic";
+import { createContact } from "@/lib/features/contacts/create.logic";
 
 describe("createContact", () => {
   beforeEach(() => {

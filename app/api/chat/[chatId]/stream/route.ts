@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,29 +10,29 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
+import { auth } from "@/lib/core/auth/auth";
 import {
   getChatMessages,
   saveUserMessage,
   saveAssistantMessage,
   touchChat,
   setInitialTitle,
-} from "@/lib/chat";
-import { streamChat } from "@/lib/llm-providers";
-import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
+} from "@/lib/features/chat";
+import { streamChat } from "@/lib/ai/llm-providers";
+import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/core/security";
 import {
   enforceMonthlyLimits,
   accumulateTokens,
   enforceToolCallsMonthly,
-} from "@/lib/tiers";
-import { getUserPreferences } from "@/lib/settings";
-import { buildSystemPrompt } from "@/lib/context/build";
-import { getActiveToolsForUser, executeToolCall } from "@/lib/tools";
-import { createReport } from "@/lib/reports";
-import { classifyMessage } from "@/lib/agents/classify";
-import { runAgent } from "@/lib/agents/registry";
+} from "@/lib/platform/tiers";
+import { getUserPreferences } from "@/lib/platform/settings";
+import { buildSystemPrompt } from "@/lib/ai/context/build";
+import { getActiveToolsForUser, executeToolCall } from "@/lib/ai/tools";
+import { createReport } from "@/lib/features/reports";
+import { classifyMessage } from "@/lib/ai/agents/classify";
+import { runAgent } from "@/lib/ai/agents/registry";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
-import type { ReportDetailCall } from "@/lib/reports";
+import type { ReportDetailCall } from "@/lib/features/reports";
 
 type Params = { params: Promise<{ chatId: string }> };
 

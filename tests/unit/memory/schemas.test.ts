@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createMemoryEntrySchema,
   updateMemoryEntrySchema,
-} from "@/lib/memory/schemas";
+} from "@/lib/features/memory/schemas";
 
 describe("memory entry schemas", () => {
   describe("createMemoryEntrySchema", () => {

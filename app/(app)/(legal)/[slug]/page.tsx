@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -9,8 +9,8 @@
  */
 
 import { notFound } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/i18n";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
+import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { Separator } from "@/components/ui/separator";
 import type { AppLanguage } from "@/types/i18n";
 

@@ -61,7 +61,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     meeting: {
       findFirst: mocks.meetingFindFirst,
@@ -73,7 +73,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-vi.mock("@/lib/llm-providers/provider", () => ({
+vi.mock("@/lib/ai/llm-providers/provider", () => ({
   callChat: mocks.callChat,
 }));
 
@@ -82,7 +82,7 @@ import {
   generatePrepPack,
   getMeetingPrepPack,
   updateMeetingPrepPack,
-} from "@/lib/meetings/generate-prep-pack.logic";
+} from "@/lib/features/meetings/generate-prep-pack.logic";
 
 const createdAt = new Date("2026-05-08T06:00:00.000Z");
 const updatedAt = new Date("2026-05-08T06:30:00.000Z");

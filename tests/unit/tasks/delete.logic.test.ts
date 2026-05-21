@@ -11,7 +11,7 @@ const mocks = vi.hoisted(() => ({
   taskDeleteMany: vi.fn<(args: TaskDeleteManyArgs) => Promise<{ count: number }>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     task: {
       deleteMany: mocks.taskDeleteMany,
@@ -19,7 +19,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { deleteTask } from "@/lib/tasks/delete.logic";
+import { deleteTask } from "@/lib/features/tasks/delete.logic";
 
 describe("deleteTask", () => {
   beforeEach(() => {

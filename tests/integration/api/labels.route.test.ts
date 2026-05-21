@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { LabelRecord } from "@/types/api";
-import type { CreateLabelInput } from "@/lib/labels/schemas";
-import type * as labelSchemas from "@/lib/labels/schemas";
+import type { CreateLabelInput } from "@/lib/features/labels/schemas";
+import type * as labelSchemas from "@/lib/features/labels/schemas";
 
 type Session = {
   user: {
@@ -41,7 +41,7 @@ vi.mock("next/headers", () => ({
   headers: mocks.headers,
 }));
 
-vi.mock("@/lib/auth/auth", () => ({
+vi.mock("@/lib/core/auth/auth", () => ({
   auth: {
     api: {
       getSession: mocks.getSession,
@@ -49,7 +49,7 @@ vi.mock("@/lib/auth/auth", () => ({
   },
 }));
 
-vi.mock("@/lib/security", () => ({
+vi.mock("@/lib/core/security", () => ({
   createRateLimitResponse: (retryAfterSeconds: number) =>
     Response.json(
       { error: "Too many requests" },
@@ -64,9 +64,9 @@ vi.mock("@/lib/security", () => ({
   },
 }));
 
-vi.mock("@/lib/labels", async () => {
+vi.mock("@/lib/features/labels", async () => {
   const actual = await vi.importActual<typeof labelSchemas>(
-    "@/lib/labels/schemas",
+    "@/lib/features/labels/schemas",
   );
 
   return {

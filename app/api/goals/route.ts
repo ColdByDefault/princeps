@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,14 +10,14 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { listGoals, createGoal, createGoalSchema } from "@/lib/goals";
+import { auth } from "@/lib/core/auth/auth";
+import { listGoals, createGoal, createGoalSchema } from "@/lib/features/goals";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,
   createRateLimitResponse,
-} from "@/lib/security";
-import { enforceGoalsMax, createTierLimitResponse } from "@/lib/tiers";
+} from "@/lib/core/security";
+import { enforceGoalsMax, createTierLimitResponse } from "@/lib/platform/tiers";
 
 // GET /api/goals
 export async function GET(req: Request) {

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -12,7 +12,7 @@
 
 import { useTranslations } from "next-intl";
 import { BriefingCard } from "./BriefingCard";
-import type { WeatherSnapshot } from "@/lib/weather/types";
+import type { WeatherSnapshot } from "@/lib/services/weather/types";
 import type { BriefingRecord } from "@/types/api";
 import Threads from "../backgrounds-effects/BackgroundThread";
 

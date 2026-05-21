@@ -31,7 +31,7 @@ const mocks = vi.hoisted(() => ({
   taskFindMany: vi.fn<(args: TaskFindManyArgs) => Promise<DbTaskRow[]>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     task: {
       findMany: mocks.taskFindMany,
@@ -39,7 +39,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { listTasks } from "@/lib/tasks/list.logic";
+import { listTasks } from "@/lib/features/tasks/list.logic";
 
 describe("listTasks", () => {
   beforeEach(() => {

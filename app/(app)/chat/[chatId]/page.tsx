@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,8 +10,8 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth/auth";
-import { getChatMessages } from "@/lib/chat";
+import { auth } from "@/lib/core/auth/auth";
+import { getChatMessages } from "@/lib/features/chat";
 import { AppSidebar, SiteHeader } from "@/components/sidebars/chat";
 import { ChatWindow } from "@/components/chat";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";

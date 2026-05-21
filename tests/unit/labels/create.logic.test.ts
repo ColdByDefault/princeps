@@ -25,7 +25,7 @@ const mocks = vi.hoisted(() => ({
   labelCreate: vi.fn<(args: LabelCreateArgs) => Promise<DbLabelRow>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     label: {
       create: mocks.labelCreate,
@@ -33,7 +33,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { createLabel } from "@/lib/labels/create.logic";
+import { createLabel } from "@/lib/features/labels/create.logic";
 
 describe("createLabel", () => {
   beforeEach(() => {

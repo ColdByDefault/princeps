@@ -60,7 +60,7 @@ const mocks = vi.hoisted(() => ({
   meetingUpdate: vi.fn<(args: MeetingUpdateArgs) => Promise<DbMeetingRow>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     meeting: {
       create: mocks.meetingCreate,
@@ -69,11 +69,11 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-vi.mock("@/lib/integrations/google-calendar/events", () => ({
+vi.mock("@/lib/platform/integrations/google-calendar/events", () => ({
   createCalendarEvent: mocks.createCalendarEvent,
 }));
 
-import { createMeeting } from "@/lib/meetings/create.logic";
+import { createMeeting } from "@/lib/features/meetings/create.logic";
 
 const createdAt = new Date("2026-05-08T06:00:00.000Z");
 const updatedAt = new Date("2026-05-08T06:30:00.000Z");

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,14 +10,14 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/i18n";
-import { auth } from "@/lib/auth/auth";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { db } from "@/lib/db";
-import { listMeetings } from "@/lib/meetings";
-import { listLabels } from "@/lib/labels";
-import { listContacts } from "@/lib/contacts";
-import { listTasks } from "@/lib/tasks";
+import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { auth } from "@/lib/core/auth/auth";
+import { defineSEO, getSeoLocale } from "@/lib/core/seo";
+import { db } from "@/lib/core/db";
+import { listMeetings } from "@/lib/features/meetings";
+import { listLabels } from "@/lib/features/labels";
+import { listContacts } from "@/lib/features/contacts";
+import { listTasks } from "@/lib/features/tasks";
 import { MeetingsShell } from "@/components/meetings";
 import type { AppLanguage } from "@/types/i18n";
 

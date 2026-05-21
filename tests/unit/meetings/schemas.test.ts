@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createMeetingSchema,
   updateMeetingSchema,
-} from "@/lib/meetings/schemas";
+} from "@/lib/features/meetings/schemas";
 
 describe("meeting schemas", () => {
   describe("createMeetingSchema", () => {

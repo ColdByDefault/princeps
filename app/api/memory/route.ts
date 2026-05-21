@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,18 +10,18 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
+import { auth } from "@/lib/core/auth/auth";
 import {
   listMemoryEntries,
   createMemoryEntry,
   createMemoryEntrySchema,
-} from "@/lib/memory";
+} from "@/lib/features/memory";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,
   createRateLimitResponse,
-} from "@/lib/security";
-import { enforceMemoryMax, createTierLimitResponse } from "@/lib/tiers";
+} from "@/lib/core/security";
+import { enforceMemoryMax, createTierLimitResponse } from "@/lib/platform/tiers";
 
 // GET /api/memory — list memory entries for the current user
 export async function GET() {

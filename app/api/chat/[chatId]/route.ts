@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,8 +10,8 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { deleteChat, renameChat } from "@/lib/chat";
+import { auth } from "@/lib/core/auth/auth";
+import { deleteChat, renameChat } from "@/lib/features/chat";
 
 type Params = { params: Promise<{ chatId: string }> };
 

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { AssistantReportRecord } from "@/lib/reports/shared.logic";
+import type { AssistantReportRecord } from "@/lib/features/reports/shared.logic";
 
 type DbReportRow = {
   id: string;
@@ -22,7 +22,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     assistantReport: {
       findMany: mocks.assistantReportFindMany,
@@ -30,7 +30,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { listReports } from "@/lib/reports/list.logic";
+import { listReports } from "@/lib/features/reports/list.logic";
 
 describe("listReports", () => {
   beforeEach(() => {

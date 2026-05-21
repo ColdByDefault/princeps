@@ -22,7 +22,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     memoryEntry: {
       findMany: mocks.memoryEntryFindMany,
@@ -30,7 +30,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { listMemoryEntries } from "@/lib/memory/list.logic";
+import { listMemoryEntries } from "@/lib/features/memory/list.logic";
 
 describe("listMemoryEntries", () => {
   beforeEach(() => {

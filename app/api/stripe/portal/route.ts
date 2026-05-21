@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -12,9 +12,9 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { auth } from "@/lib/auth/auth";
-import { db } from "@/lib/db";
-import { createPortalSession } from "@/lib/stripe/portal";
+import { auth } from "@/lib/core/auth/auth";
+import { db } from "@/lib/core/db";
+import { createPortalSession } from "@/lib/platform/stripe/portal";
 
 const bodySchema = z.object({
   returnUrl: z.string().url(),

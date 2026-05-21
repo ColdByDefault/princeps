@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -19,7 +19,7 @@ import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { type ChatMessageData } from "@/types/chat";
 import { useChatSettings } from "@/hooks/use-chat-settings";
 

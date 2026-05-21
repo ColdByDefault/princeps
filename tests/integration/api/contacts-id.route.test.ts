@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ContactRecord } from "@/types/api";
-import type { UpdateContactInput } from "@/lib/contacts/schemas";
-import type * as contactSchemas from "@/lib/contacts/schemas";
+import type { UpdateContactInput } from "@/lib/features/contacts/schemas";
+import type * as contactSchemas from "@/lib/features/contacts/schemas";
 
 type Session = {
   user: {
@@ -41,7 +41,7 @@ vi.mock("next/headers", () => ({
   headers: mocks.headers,
 }));
 
-vi.mock("@/lib/auth/auth", () => ({
+vi.mock("@/lib/core/auth/auth", () => ({
   auth: {
     api: {
       getSession: mocks.getSession,
@@ -49,7 +49,7 @@ vi.mock("@/lib/auth/auth", () => ({
   },
 }));
 
-vi.mock("@/lib/security", () => ({
+vi.mock("@/lib/core/security", () => ({
   createRateLimitResponse: (retryAfterSeconds: number) =>
     Response.json(
       { error: "Too many requests" },
@@ -64,9 +64,9 @@ vi.mock("@/lib/security", () => ({
   },
 }));
 
-vi.mock("@/lib/contacts", async () => {
+vi.mock("@/lib/features/contacts", async () => {
   const actual = await vi.importActual<typeof contactSchemas>(
-    "@/lib/contacts/schemas",
+    "@/lib/features/contacts/schemas",
   );
 
   return {

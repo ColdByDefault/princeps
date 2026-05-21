@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -27,7 +27,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { useVoiceInput } from "./logic/useVoiceInput";
 
 // ─── Types ────────────────────────────────────────────────────────────────────

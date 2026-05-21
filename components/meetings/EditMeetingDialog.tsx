@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -32,7 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserPlus, X, CheckSquare } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import type {
   LabelOptionRecord,
   MeetingRecord,

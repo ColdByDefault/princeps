@@ -51,7 +51,7 @@ vi.mock("next/headers", () => ({
   headers: mocks.headers,
 }));
 
-vi.mock("@/lib/auth/auth", () => ({
+vi.mock("@/lib/core/auth/auth", () => ({
   auth: {
     api: {
       getSession: mocks.getSession,
@@ -59,7 +59,7 @@ vi.mock("@/lib/auth/auth", () => ({
   },
 }));
 
-vi.mock("@/lib/security", () => ({
+vi.mock("@/lib/core/security", () => ({
   createRateLimitResponse: (retryAfterSeconds: number) =>
     Response.json(
       { error: "Too many requests" },
@@ -74,14 +74,14 @@ vi.mock("@/lib/security", () => ({
   },
 }));
 
-vi.mock("@/lib/tiers", () => ({
+vi.mock("@/lib/platform/tiers", () => ({
   createTierLimitResponse: (reason = "Plan limit reached.") =>
     Response.json({ error: reason }, { status: 403 }),
   enforcePrepPackMonthly: mocks.enforcePrepPackMonthly,
   enforceToolCallsMonthly: mocks.enforceToolCallsMonthly,
 }));
 
-vi.mock("@/lib/meetings", () => ({
+vi.mock("@/lib/features/meetings", () => ({
   clearMeetingPrepPack: mocks.clearMeetingPrepPack,
   generatePrepPack: mocks.generatePrepPack,
 }));

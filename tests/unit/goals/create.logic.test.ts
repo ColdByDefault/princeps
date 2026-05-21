@@ -45,7 +45,7 @@ const mocks = vi.hoisted(() => ({
   goalCreate: vi.fn<(args: GoalCreateArgs) => Promise<DbGoalRow>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     goal: {
       create: mocks.goalCreate,
@@ -53,7 +53,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { createGoal } from "@/lib/goals/create.logic";
+import { createGoal } from "@/lib/features/goals/create.logic";
 
 describe("createGoal", () => {
   beforeEach(() => {

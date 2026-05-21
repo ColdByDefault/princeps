@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,8 +10,8 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth/auth";
-import { getOrCreateFirstChat } from "@/lib/chat";
+import { auth } from "@/lib/core/auth/auth";
+import { getOrCreateFirstChat } from "@/lib/features/chat";
 
 export default async function ChatPage() {
   const session = await auth.api.getSession({ headers: await headers() });

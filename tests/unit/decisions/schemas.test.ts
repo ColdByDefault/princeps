@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createDecisionSchema,
   updateDecisionSchema,
-} from "@/lib/decisions/schemas";
+} from "@/lib/features/decisions/schemas";
 
 describe("decision schemas", () => {
   describe("createDecisionSchema", () => {

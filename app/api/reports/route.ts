@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,8 +10,8 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { listReports, deleteAllReports } from "@/lib/reports";
+import { auth } from "@/lib/core/auth/auth";
+import { listReports, deleteAllReports } from "@/lib/features/reports";
 
 // GET /api/reports — list all reports for the current user
 export async function GET() {

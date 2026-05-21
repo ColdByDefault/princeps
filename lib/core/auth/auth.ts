@@ -1,0 +1,98 @@
+import "server-only";
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { username } from "better-auth/plugins";
+import { prisma } from "@/lib/core/db";
+import { storeResetLink } from "@/lib/core/dev/reset-mailbox";
+import { stripe } from "@/lib/platform/stripe/client";
+
+export const auth = betterAuth({
+  database: prismaAdapter(prisma, {
+    provider: "postgresql",
+  }),
+
+  plugins: [
+    username({
+      minUsernameLength: 3,
+      maxUsernameLength: 30,
+    }),
+  ],
+
+  emailAndPassword: {
+    enabled: true,
+    passwordMinLength: 8,
+    // Email verification is intentionally disabled.
+    // No SMTP/email provider is configured, and there is a single known user.
+    // `emailVerified` will remain `false` in the DB and is NOT used as an access
+    // gate anywhere in the app. If multi-user support or email verification is
+    // required in the future, enable Better Auth's `emailVerification` plugin
+    // and add a real email provider (e.g. Resend, Nodemailer) before gating any
+    // route or feature on this field — otherwise existing accounts will be locked out.
+    // TODO (#33): wire up emailVerification plugin + provider when moving to production.
+    sendResetPassword: async ({ user, url }) => {
+      console.log(
+        `[Password Reset] Reset link for ${user.email}:\n${url}\n(Configure an email provider to send this automatically.)`,
+      );
+      if (process.env.NODE_ENV === "development") {
+        storeResetLink(user.email, url);
+      }
+    },
+  },
+
+  session: {
+    expiresIn: 60 * 60 * 24 * 3, // 3 days
+    updateAge: 60 * 60 * 24, // refresh if older than 1 day
+  },
+
+  user: {
+    additionalFields: {
+      timezone: {
+        type: "string",
+        defaultValue: "UTC",
+      },
+      preferences: {
+        type: "string",
+        defaultValue: "{}",
+      },
+      role: {
+        type: "string",
+        defaultValue: "user",
+      },
+      tier: {
+        type: "string",
+        defaultValue: "free",
+      },
+    },
+  },
+
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          let customerId: string;
+          try {
+            const customer = await stripe.customers.create({
+              email: user.email,
+              name: user.name ?? undefined,
+              metadata: { userId: user.id },
+            });
+            customerId = customer.id;
+          } catch (err) {
+            // Stripe customer creation failed — roll back the user so registration is atomic.
+            await prisma.user.delete({ where: { id: user.id } });
+            throw new Error(
+              `Registration failed: could not create billing account. (${err instanceof Error ? err.message : String(err)})`,
+            );
+          }
+
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { stripeCustomerId: customerId },
+          });
+        },
+      },
+    },
+  },
+});
+
+export type Session = typeof auth.$Infer.Session;

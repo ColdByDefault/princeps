@@ -25,7 +25,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     meeting: {
       deleteMany: mocks.meetingDeleteMany,
@@ -34,11 +34,11 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-vi.mock("@/lib/integrations/google-calendar/events", () => ({
+vi.mock("@/lib/platform/integrations/google-calendar/events", () => ({
   deleteCalendarEvent: mocks.deleteCalendarEvent,
 }));
 
-import { deleteMeeting } from "@/lib/meetings/delete.logic";
+import { deleteMeeting } from "@/lib/features/meetings/delete.logic";
 
 describe("deleteMeeting", () => {
   beforeEach(() => {

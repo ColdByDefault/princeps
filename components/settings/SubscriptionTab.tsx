@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -14,7 +14,7 @@ import { useState } from "react";
 import { Check, X, Loader2, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { PLAN_LIMITS, PLAN_PRICES } from "@/types/billing";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";

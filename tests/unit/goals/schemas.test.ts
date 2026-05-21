@@ -4,7 +4,7 @@ import {
   createMilestoneSchema,
   updateGoalSchema,
   updateMilestoneSchema,
-} from "@/lib/goals/schemas";
+} from "@/lib/features/goals/schemas";
 
 describe("goal schemas", () => {
   describe("createGoalSchema", () => {

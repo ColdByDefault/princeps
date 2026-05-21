@@ -43,7 +43,7 @@ const mocks = vi.hoisted(() => ({
   taskUpdate: vi.fn<(args: TaskUpdateArgs) => Promise<DbTaskRow>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     task: {
       update: mocks.taskUpdate,
@@ -51,7 +51,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { updateTask } from "@/lib/tasks/update.logic";
+import { updateTask } from "@/lib/features/tasks/update.logic";
 
 const updatedAt = new Date("2026-05-08T06:30:00.000Z");
 

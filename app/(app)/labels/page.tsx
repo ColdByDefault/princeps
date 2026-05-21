@@ -1,9 +1,9 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/i18n";
-import { auth } from "@/lib/auth/auth";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listLabels } from "@/lib/labels";
+import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { auth } from "@/lib/core/auth/auth";
+import { defineSEO, getSeoLocale } from "@/lib/core/seo";
+import { listLabels } from "@/lib/features/labels";
 import { LabelsShell } from "@/components/labels";
 import type { AppLanguage } from "@/types/i18n";
 

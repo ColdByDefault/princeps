@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { CreateReportInput } from "@/lib/reports/schemas";
-import type { AssistantReportRecord } from "@/lib/reports/shared.logic";
+import type { CreateReportInput } from "@/lib/features/reports/schemas";
+import type { AssistantReportRecord } from "@/lib/features/reports/shared.logic";
 
 type DbReportRow = {
   id: string;
@@ -42,7 +42,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     assistantReport: {
       create: mocks.assistantReportCreate,
@@ -53,7 +53,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { createReport } from "@/lib/reports/create.logic";
+import { createReport } from "@/lib/features/reports/create.logic";
 
 describe("createReport", () => {
   beforeEach(() => {

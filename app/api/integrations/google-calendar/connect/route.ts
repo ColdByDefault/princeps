@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -11,8 +11,8 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { auth } from "@/lib/auth/auth";
-import { buildGoogleAuthUrl } from "@/lib/integrations/google-calendar/client";
+import { auth } from "@/lib/core/auth/auth";
+import { buildGoogleAuthUrl } from "@/lib/platform/integrations/google-calendar/client";
 import { randomBytes } from "crypto";
 
 /**

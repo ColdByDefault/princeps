@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { TaskRecord } from "@/types/api";
-import type { CreateTaskInput } from "@/lib/tasks/schemas";
-import type * as taskSchemas from "@/lib/tasks/schemas";
+import type { CreateTaskInput } from "@/lib/features/tasks/schemas";
+import type * as taskSchemas from "@/lib/features/tasks/schemas";
 
 type Session = {
   user: {
@@ -45,7 +45,7 @@ vi.mock("next/headers", () => ({
   headers: mocks.headers,
 }));
 
-vi.mock("@/lib/auth/auth", () => ({
+vi.mock("@/lib/core/auth/auth", () => ({
   auth: {
     api: {
       getSession: mocks.getSession,
@@ -53,7 +53,7 @@ vi.mock("@/lib/auth/auth", () => ({
   },
 }));
 
-vi.mock("@/lib/security", () => ({
+vi.mock("@/lib/core/security", () => ({
   createRateLimitResponse: (retryAfterSeconds: number) =>
     Response.json(
       { error: "Too many requests" },
@@ -68,15 +68,15 @@ vi.mock("@/lib/security", () => ({
   },
 }));
 
-vi.mock("@/lib/tiers", () => ({
+vi.mock("@/lib/platform/tiers", () => ({
   createTierLimitResponse: (reason = "Plan limit reached.") =>
     Response.json({ error: reason }, { status: 403 }),
   enforceTasksMax: mocks.enforceTasksMax,
 }));
 
-vi.mock("@/lib/tasks", async () => {
+vi.mock("@/lib/features/tasks", async () => {
   const actual = await vi.importActual<typeof taskSchemas>(
-    "@/lib/tasks/schemas",
+    "@/lib/features/tasks/schemas",
   );
 
   return {

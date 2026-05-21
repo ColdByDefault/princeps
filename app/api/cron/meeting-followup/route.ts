@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -9,7 +9,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db } from "@/lib/core/db";
 
 export async function POST(req: Request) {
   const cronSecret = process.env.CRON_SECRET;

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -52,7 +52,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { type ChatSummary } from "@/types/chat";
 
 const CHAT_GROUPS_KEY = "princeps:chat-groups-collapsed";

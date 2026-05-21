@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -17,7 +17,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import Link from "next/link";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { PLAN_LIMITS, PLAN_PRICES } from "@/types/billing";
 import { Button, buttonVariants } from "@/components/ui/button";
 import type { Tier } from "@/types/billing";

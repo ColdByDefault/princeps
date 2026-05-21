@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -46,7 +46,7 @@ import { CreateMeetingDialog } from "@/components/meetings/CreateMeetingDialog";
 import { EditMeetingDialog } from "@/components/meetings/EditMeetingDialog";
 import { MeetingDetailDialog } from "@/components/meetings/MeetingDetailDialog";
 import { CalendarTaskDetailDialog } from "./CalendarTaskDetailDialog";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import type {
   TaskRecord,
   MeetingRecord,

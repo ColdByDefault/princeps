@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createReportSchema,
   reportDetailCallSchema,
-} from "@/lib/reports/schemas";
+} from "@/lib/features/reports/schemas";
 
 describe("report schemas", () => {
   it("accepts valid report detail call records", () => {

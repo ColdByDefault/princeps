@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createLabelSchema, updateLabelSchema } from "@/lib/labels/schemas";
+import { createLabelSchema, updateLabelSchema } from "@/lib/features/labels/schemas";
 
 describe("label schemas", () => {
   describe("createLabelSchema", () => {

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,17 +10,17 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
+import { auth } from "@/lib/core/auth/auth";
 import {
   updateContact,
   deleteContact,
   updateContactSchema,
-} from "@/lib/contacts";
+} from "@/lib/features/contacts";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,
   createRateLimitResponse,
-} from "@/lib/security";
+} from "@/lib/core/security";
 
 type Params = { params: Promise<{ id: string }> };
 

@@ -20,7 +20,7 @@ const mocks = vi.hoisted(() => ({
   labelFindMany: vi.fn<(args: LabelFindManyArgs) => Promise<DbLabelRow[]>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     label: {
       findMany: mocks.labelFindMany,
@@ -28,7 +28,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { listLabels } from "@/lib/labels/list.logic";
+import { listLabels } from "@/lib/features/labels/list.logic";
 
 describe("listLabels", () => {
   beforeEach(() => {

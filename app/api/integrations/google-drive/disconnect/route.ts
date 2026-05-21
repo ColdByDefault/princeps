@@ -10,8 +10,8 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { db } from "@/lib/db";
+import { auth } from "@/lib/core/auth/auth";
+import { db } from "@/lib/core/db";
 
 /**
  * DELETE /api/integrations/google-drive/disconnect

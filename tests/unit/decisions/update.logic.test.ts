@@ -40,7 +40,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     decision: {
       update: mocks.decisionUpdate,
@@ -48,7 +48,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { updateDecision } from "@/lib/decisions/update.logic";
+import { updateDecision } from "@/lib/features/decisions/update.logic";
 
 const createdAt = new Date("2026-05-08T06:00:00.000Z");
 const updatedAt = new Date("2026-05-08T06:30:00.000Z");

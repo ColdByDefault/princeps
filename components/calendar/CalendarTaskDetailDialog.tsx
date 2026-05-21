@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -14,7 +14,7 @@ import { Pencil, Trash2, CalendarDays, Tag, Target, Link2 } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
-import { formatDate, cn } from "@/lib/utils";
+import { formatDate, cn } from "@/lib/core/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";

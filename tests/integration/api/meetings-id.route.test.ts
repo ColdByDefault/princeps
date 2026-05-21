@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MeetingRecord } from "@/types/api";
-import type { UpdateMeetingInput } from "@/lib/meetings/schemas";
-import type * as meetingSchemas from "@/lib/meetings/schemas";
+import type { UpdateMeetingInput } from "@/lib/features/meetings/schemas";
+import type * as meetingSchemas from "@/lib/features/meetings/schemas";
 
 type Session = {
   user: {
@@ -45,7 +45,7 @@ vi.mock("next/headers", () => ({
   headers: mocks.headers,
 }));
 
-vi.mock("@/lib/auth/auth", () => ({
+vi.mock("@/lib/core/auth/auth", () => ({
   auth: {
     api: {
       getSession: mocks.getSession,
@@ -53,7 +53,7 @@ vi.mock("@/lib/auth/auth", () => ({
   },
 }));
 
-vi.mock("@/lib/security", () => ({
+vi.mock("@/lib/core/security", () => ({
   createRateLimitResponse: (retryAfterSeconds: number) =>
     Response.json(
       { error: "Too many requests" },
@@ -68,9 +68,9 @@ vi.mock("@/lib/security", () => ({
   },
 }));
 
-vi.mock("@/lib/meetings", async () => {
+vi.mock("@/lib/features/meetings", async () => {
   const actual = await vi.importActual<typeof meetingSchemas>(
-    "@/lib/meetings/schemas",
+    "@/lib/features/meetings/schemas",
   );
 
   return {

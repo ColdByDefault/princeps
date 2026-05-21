@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -12,10 +12,10 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { auth } from "@/lib/auth/auth";
-import { db } from "@/lib/db";
-import { createCheckoutSession } from "@/lib/stripe/checkout";
-import { stripe } from "@/lib/stripe/client";
+import { auth } from "@/lib/core/auth/auth";
+import { db } from "@/lib/core/db";
+import { createCheckoutSession } from "@/lib/platform/stripe/checkout";
+import { stripe } from "@/lib/platform/stripe/client";
 
 const bodySchema = z.object({
   priceId: z.string().min(1),

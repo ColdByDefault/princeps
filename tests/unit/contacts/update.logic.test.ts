@@ -39,7 +39,7 @@ const mocks = vi.hoisted(() => ({
   contactUpdate: vi.fn<(args: ContactUpdateArgs) => Promise<DbContactRow>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     contact: {
       update: mocks.contactUpdate,
@@ -47,7 +47,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { updateContact } from "@/lib/contacts/update.logic";
+import { updateContact } from "@/lib/features/contacts/update.logic";
 
 const createdAt = new Date("2026-05-08T06:00:00.000Z");
 const updatedAt = new Date("2026-05-08T06:30:00.000Z");

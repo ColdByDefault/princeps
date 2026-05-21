@@ -32,7 +32,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     decision: {
       findMany: mocks.decisionFindMany,
@@ -40,7 +40,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { listDecisions } from "@/lib/decisions/list.logic";
+import { listDecisions } from "@/lib/features/decisions/list.logic";
 
 describe("listDecisions", () => {
   beforeEach(() => {

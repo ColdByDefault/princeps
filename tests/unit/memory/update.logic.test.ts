@@ -25,7 +25,7 @@ const mocks = vi.hoisted(() => ({
   >(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     memoryEntry: {
       update: mocks.memoryEntryUpdate,
@@ -33,7 +33,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { updateMemoryEntry } from "@/lib/memory/update.logic";
+import { updateMemoryEntry } from "@/lib/features/memory/update.logic";
 
 describe("updateMemoryEntry", () => {
   beforeEach(() => {

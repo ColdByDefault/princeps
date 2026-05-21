@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -10,8 +10,8 @@
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { updateProfileSchema, updateProfile } from "@/lib/profile";
+import { auth } from "@/lib/core/auth/auth";
+import { updateProfileSchema, updateProfile } from "@/lib/features/profile";
 
 export async function PATCH(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });

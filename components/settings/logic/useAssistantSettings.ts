@@ -17,7 +17,7 @@ import type {
   AssistantTone,
   AddressStyle,
   ResponseLength,
-} from "@/lib/settings/types";
+} from "@/lib/platform/settings/types";
 
 type UseAssistantSettingsInput = {
   initialAssistantName: string | null;

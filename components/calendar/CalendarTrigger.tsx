@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
@@ -20,7 +20,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useCalendarDrawer } from "./CalendarDrawerContext";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 
 type CalendarTriggerProps = {
   className?: string;
