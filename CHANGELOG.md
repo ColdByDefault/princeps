@@ -1,3 +1,9 @@
+## [1.1.2] - 2026-05-21
+
+- chore(deps): bump the npm_and_yarn group across 1 directory with 2 updates
+
+# Changelog
+
 ## [1.1.1] - 2026-05-21
 
 - feat: enhance meeting creation function description to include attendee handling and label support
