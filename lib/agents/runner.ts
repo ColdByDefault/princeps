@@ -2,12 +2,13 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
- * @since beta
+ * @version canary-v1.1.3
+ * @since canary-v1.1.3
  * @module
  * @description Core runner for the Princeps sub-agents system.
  * Executes an AgentDefinition against an AgentInput and returns an AgentOutput.
- * Any surface (chat orchestrator, cron, webhooks) can call runAgent directly.
+ * Any surface (chat orchestrator, cron, webhooks) can call runAgentWithDefinition directly,
+ * or use the higher-level runAgent(name, input) exported from registry.ts.
  */
 
 import "server-only";
@@ -32,6 +33,7 @@ const DEFAULT_MAX_ROUNDS = 3;
 
 /**
  * Executes a sub-agent defined by an AgentDefinition.
+ * Prefer the higher-level runAgent(name, input) in registry.ts for name-based invocation.
  *
  * Flow:
  *  1. Enforce minTier gate.
@@ -42,7 +44,7 @@ const DEFAULT_MAX_ROUNDS = 3;
  * Note: streamChat is used (not callChat) because callChat does not forward
  * the tools array to the provider API.
  */
-export async function runAgent(
+export async function runAgentWithDefinition(
   definition: AgentDefinition,
   input: AgentInput,
 ): Promise<AgentOutput> {
@@ -136,7 +138,7 @@ export async function runAgent(
     return {
       ok: false,
       summary: "",
-      actions: collectedActions.length > 0 ? collectedActions : undefined,
+      ...(collectedActions.length > 0 && { actions: collectedActions }),
       error:
         err instanceof Error ? err.message : "Unknown error in agent runner.",
     };
@@ -145,6 +147,6 @@ export async function runAgent(
   return {
     ok: true,
     summary,
-    actions: collectedActions.length > 0 ? collectedActions : undefined,
+    ...(collectedActions.length > 0 && { actions: collectedActions }),
   };
 }
