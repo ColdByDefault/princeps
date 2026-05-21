@@ -24,6 +24,11 @@ export async function updateGoal(
   userId: string,
   input: UpdateGoalInput,
 ): Promise<UpdateGoalResult> {
+  const labelIds =
+    input.labelIds !== undefined ? uniqueIds(input.labelIds) : undefined;
+  const taskIds =
+    input.taskIds !== undefined ? uniqueIds(input.taskIds) : undefined;
+
   const row = await db.goal
     .update({
       where: { id: goalId, userId },
@@ -36,16 +41,19 @@ export async function updateGoal(
         ...(input.targetDate !== undefined && {
           targetDate: input.targetDate ? new Date(input.targetDate) : null,
         }),
-        ...(input.labelIds !== undefined && {
+        ...(input.meetingId !== undefined && {
+          meetingId: input.meetingId ?? null,
+        }),
+        ...(labelIds !== undefined && {
           labelLinks: {
             deleteMany: {},
-            create: input.labelIds.map((labelId) => ({ labelId })),
+            create: labelIds.map((labelId) => ({ labelId })),
           },
         }),
-        ...(input.taskIds !== undefined && {
+        ...(taskIds !== undefined && {
           taskLinks: {
             deleteMany: {},
-            create: input.taskIds.map((taskId) => ({ taskId })),
+            create: taskIds.map((taskId) => ({ taskId })),
           },
         }),
         ...(input.milestones !== undefined && {
@@ -65,4 +73,8 @@ export async function updateGoal(
 
   if (!row) return { ok: false, notFound: true };
   return { ok: true, goal: toGoalRecord(row) };
+}
+
+function uniqueIds(ids: string[]): string[] {
+  return [...new Set(ids)];
 }

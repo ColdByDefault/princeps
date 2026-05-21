@@ -20,14 +20,14 @@ export const memoryTools: ToolRegistryEntry[] = [
     function: {
       name: "remember_fact",
       description:
-        "Store a fact about the user in long-term memory. Use this when the user shares information they want remembered (e.g. preferences, personal details, goals). Always confirm the stored key and value in your reply.",
+        "Store a durable fact in long-term memory. Use this when the user shares information worth remembering about themselves, people, projects, meetings, preferences, key dates, goals, or working context. Always confirm the stored key and value in your reply.",
       parameters: {
         type: "object",
         properties: {
           key: {
             type: "string",
             description:
-              'Brief topic label for the fact (e.g. "job title", "preferred language", "dietary preference"). Max 100 characters.',
+              'Brief topic label for the fact (e.g. "job title", "preferred language", "Project Nexus meeting recap"). Max 100 characters.',
           },
           value: {
             type: "string",

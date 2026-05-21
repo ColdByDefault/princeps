@@ -35,6 +35,7 @@ export const createGoalSchema = z.object({
   targetDate: isoDatetimeField.optional().nullable(),
   labelIds: z.array(z.string()).optional(),
   taskIds: z.array(z.string()).optional(),
+  meetingId: z.string().optional().nullable(),
   milestones: z.array(milestoneInputSchema).optional(),
 });
 
@@ -45,6 +46,7 @@ export const updateGoalSchema = z.object({
   targetDate: isoDatetimeField.optional().nullable(),
   labelIds: z.array(z.string()).optional(),
   taskIds: z.array(z.string()).optional(),
+  meetingId: z.string().optional().nullable(),
   milestones: z.array(milestoneInputSchema).optional(),
 });
 

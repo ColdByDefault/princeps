@@ -30,6 +30,17 @@ export async function updateMeeting(
   input: UpdateMeetingInput,
 ): Promise<UpdateMeetingResult> {
   try {
+    const labelIds =
+      input.labelIds !== undefined ? uniqueIds(input.labelIds) : undefined;
+    const participantContactIds =
+      input.participantContactIds !== undefined
+        ? uniqueIds(input.participantContactIds)
+        : undefined;
+    const linkedTaskIds =
+      input.linkedTaskIds !== undefined
+        ? uniqueIds(input.linkedTaskIds)
+        : undefined;
+
     // Build the batch up-front so $transaction never calls into an already-running query.
     const batch = [
       db.meeting.update({
@@ -47,23 +58,23 @@ export async function updateMeeting(
           ...(input.kind !== undefined && { kind: input.kind }),
           ...(input.agenda !== undefined && { agenda: input.agenda }),
           ...(input.summary !== undefined && { summary: input.summary }),
-          ...(input.labelIds !== undefined && {
+          ...(labelIds !== undefined && {
             labelLinks: {
               deleteMany: {},
-              create: input.labelIds.map((labelId) => ({ labelId })),
+              create: labelIds.map((labelId) => ({ labelId })),
             },
           }),
-          ...(input.participantContactIds !== undefined && {
+          ...(participantContactIds !== undefined && {
             participants: {
               deleteMany: {},
-              create: input.participantContactIds.map((contactId) => ({
+              create: participantContactIds.map((contactId) => ({
                 contactId,
               })),
             },
           }),
         },
       }),
-      ...(input.linkedTaskIds !== undefined
+      ...(linkedTaskIds !== undefined
         ? [
             // Unlink all tasks currently attached to this meeting
             db.task.updateMany({
@@ -71,10 +82,10 @@ export async function updateMeeting(
               data: { meetingId: null },
             }),
             // Link the new set (scoped to this user for safety)
-            ...(input.linkedTaskIds.length > 0
+            ...(linkedTaskIds.length > 0
               ? [
                   db.task.updateMany({
-                    where: { id: { in: input.linkedTaskIds }, userId },
+                    where: { id: { in: linkedTaskIds }, userId },
                     data: { meetingId },
                   }),
                 ]
@@ -130,4 +141,8 @@ export async function updateMeeting(
   } catch {
     return { ok: false, notFound: true };
   }
+}
+
+function uniqueIds(ids: string[]): string[] {
+  return [...new Set(ids)];
 }

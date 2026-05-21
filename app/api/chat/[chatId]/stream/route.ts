@@ -138,10 +138,11 @@ export async function POST(req: Request, { params }: Params) {
       const reportDetails: ReportDetailCall[] = [];
 
       try {
-        // Multi-round tool calling: up to MAX_TOOL_ROUNDS rounds of tool execution
-        // before the final text-only response pass. This allows the LLM to use
-        // IDs returned by round-1 tool calls (e.g. link tasks to a goal).
-        const MAX_TOOL_ROUNDS = 3;
+        // Multi-round tool calling before the final text-only response pass.
+        // Meeting recaps can need several dependent rounds: read existing
+        // records, create missing contacts, create/link meetings, then attach
+        // decisions, goals, and prep tasks using returned IDs.
+        const MAX_TOOL_ROUNDS = 12;
         const conversationMessages: LLMMessage[] = [...llmMessages];
         let toolRound = 0;
 

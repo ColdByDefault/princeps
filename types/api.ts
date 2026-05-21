@@ -170,6 +170,7 @@ export interface GoalRecord {
   description: string | null;
   status: string; // "open" | "in_progress" | "done" | "cancelled"
   targetDate: string | null; // ISO string on the client
+  meetingId: string | null;
   milestones: MilestoneRecord[];
   tasks: { id: string; title: string; status: string }[];
   labels: LabelOptionRecord[];

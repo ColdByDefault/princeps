@@ -15,7 +15,11 @@ import { listTasks } from "@/lib/tasks/list.logic";
 import { updateTask } from "@/lib/tasks/update.logic";
 import { deleteTask } from "@/lib/tasks/delete.logic";
 import { createTaskSchema, updateTaskSchema } from "@/lib/tasks/schemas";
-import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
+import {
+  resolveGoalIdsByRefs,
+  resolveMeetingIdByRef,
+  resolveOrCreateLabelIdsByNames,
+} from "@/lib/tools/resolvers";
 import { enforceTasksMax } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";
 
@@ -29,8 +33,37 @@ async function handleCreateTask(
   const labelIds = labelNames.length
     ? await resolveOrCreateLabelIdsByNames(userId, labelNames)
     : undefined;
+  const meetingId =
+    typeof args.meetingId === "string" && args.meetingId.trim()
+      ? await resolveMeetingIdByRef(userId, args.meetingId)
+      : undefined;
+  if (typeof args.meetingId === "string" && args.meetingId.trim() && !meetingId) {
+    return {
+      ok: false,
+      error: `Meeting not found for create_task: ${args.meetingId}. Use list_meetings or the create_meeting result before linking a task.`,
+    };
+  }
 
-  const parsed = createTaskSchema.safeParse({ ...args, labelIds });
+  const goalRefs = Array.isArray(args.goalIds)
+    ? (args.goalIds as unknown[]).filter(
+        (value): value is string => typeof value === "string",
+      )
+    : undefined;
+  const goalIds =
+    goalRefs !== undefined ? await resolveGoalIdsByRefs(userId, goalRefs) : undefined;
+  if (goalIds?.missing.length) {
+    return {
+      ok: false,
+      error: `Goal not found for create_task: ${goalIds.missing.join(", ")}. Use list_goals or the create_goal result before linking a task.`,
+    };
+  }
+
+  const parsed = createTaskSchema.safeParse({
+    ...args,
+    labelIds,
+    ...(meetingId !== undefined ? { meetingId } : {}),
+    ...(goalIds !== undefined ? { goalIds: goalIds.ids } : {}),
+  });
   if (!parsed.success) {
     return {
       ok: false,
@@ -51,7 +84,11 @@ async function handleCreateTask(
       return (
         norm === normalizedNew ||
         norm.includes(normalizedNew) ||
-        normalizedNew.includes(norm)
+        normalizedNew.includes(norm) ||
+        (parsed.data.meetingId != null &&
+          t.meetingId === parsed.data.meetingId &&
+          isPrepTaskTitle(norm) &&
+          isPrepTaskTitle(normalizedNew))
       );
     });
 
@@ -123,11 +160,37 @@ async function handleUpdateTask(
     labelNames !== undefined
       ? await resolveOrCreateLabelIdsByNames(userId, labelNames)
       : undefined;
+  const meetingId =
+    typeof args.meetingId === "string" && args.meetingId.trim()
+      ? await resolveMeetingIdByRef(userId, args.meetingId)
+      : undefined;
+  if (typeof args.meetingId === "string" && args.meetingId.trim() && !meetingId) {
+    return {
+      ok: false,
+      error: `Meeting not found for update_task: ${args.meetingId}. Use list_meetings or the create_meeting result before linking a task.`,
+    };
+  }
+
+  const goalRefs = Array.isArray(args.goalIds)
+    ? (args.goalIds as unknown[]).filter(
+        (value): value is string => typeof value === "string",
+      )
+    : undefined;
+  const goalIds =
+    goalRefs !== undefined ? await resolveGoalIdsByRefs(userId, goalRefs) : undefined;
+  if (goalIds?.missing.length) {
+    return {
+      ok: false,
+      error: `Goal not found for update_task: ${goalIds.missing.join(", ")}. Use list_goals or the create_goal result before linking a task.`,
+    };
+  }
 
   const { taskId, ...rest } = args;
   const parsed = updateTaskSchema.safeParse({
     ...rest,
     ...(labelIds !== undefined ? { labelIds } : {}),
+    ...(meetingId !== undefined ? { meetingId } : {}),
+    ...(goalIds !== undefined ? { goalIds: goalIds.ids } : {}),
   });
   if (!parsed.success) {
     return {
@@ -174,3 +237,7 @@ export const taskHandlers: Record<string, ToolHandler> = {
   update_task: handleUpdateTask,
   delete_task: handleDeleteTask,
 };
+
+function isPrepTaskTitle(title: string): boolean {
+  return /\b(prep|prepare|follow[- ]?up)\b/.test(title);
+}

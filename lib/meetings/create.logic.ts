@@ -20,6 +20,9 @@ export async function createMeeting(
   userId: string,
   input: CreateMeetingInput,
 ): Promise<MeetingRecord> {
+  const labelIds = uniqueIds(input.labelIds);
+  const participantContactIds = uniqueIds(input.participantContactIds);
+
   const row = await db.meeting.create({
     data: {
       userId,
@@ -27,20 +30,22 @@ export async function createMeeting(
       scheduledAt: new Date(input.scheduledAt),
       durationMin: input.durationMin ?? null,
       location: input.location ?? null,
+      ...(input.status ? { status: input.status } : {}),
+      ...(input.kind ? { kind: input.kind } : {}),
       agenda: input.agenda ?? null,
       summary: input.summary ?? null,
       ...(input.source ? { source: input.source } : {}),
-      ...(input.labelIds?.length
+      ...(labelIds.length
         ? {
             labelLinks: {
-              create: input.labelIds.map((labelId) => ({ labelId })),
+              create: labelIds.map((labelId) => ({ labelId })),
             },
           }
         : {}),
-      ...(input.participantContactIds?.length
+      ...(participantContactIds.length
         ? {
             participants: {
-              create: input.participantContactIds.map((contactId) => ({
+              create: participantContactIds.map((contactId) => ({
                 contactId,
               })),
             },
@@ -74,4 +79,8 @@ export async function createMeeting(
   }
 
   return toMeetingRecord(row);
+}
+
+function uniqueIds(ids: string[] | undefined): string[] {
+  return ids ? [...new Set(ids)] : [];
 }

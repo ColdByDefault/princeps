@@ -46,7 +46,7 @@ export const goalTools: ToolRegistryEntry[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Optional label names to attach. Created if they do not exist.",
+              "Label names to attach. Created if they do not exist. Always include every label the user has mentioned or established as context — do not omit labels just because they were created earlier in the same run.",
           },
           milestones: {
             type: "array",
@@ -58,7 +58,12 @@ export const goalTools: ToolRegistryEntry[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Optional list of task IDs to link to this goal. Use list_tasks to find task IDs first.",
+              "Task IDs to link to this goal. Only pass IDs returned by create_task or list_tasks. Never pass decision IDs, meeting IDs, or any other entity IDs here.",
+          },
+          meetingId: {
+            type: "string",
+            description:
+              "Optional ID or exact title of the meeting this goal originated from. Use the ID returned by create_meeting when creating a goal in the same run.",
           },
         },
         required: ["title"],
@@ -93,7 +98,7 @@ export const goalTools: ToolRegistryEntry[] = [
     function: {
       name: "update_goal",
       description:
-        "Update an existing goal's title, description, status, target date, or labels. Use list_goals to find the goalId first.",
+        "Update an existing goal's title, description, status, target date, labels, linked tasks, or source meeting. Use list_goals to find the goalId first.",
       parameters: {
         type: "object",
         properties: {
@@ -122,13 +127,18 @@ export const goalTools: ToolRegistryEntry[] = [
             type: "array",
             items: { type: "string" },
             description:
-              "Replacement label names. Replaces all existing labels.",
+              "Replacement label names. Replaces all existing labels. Always re-pass the full label set when updating — do not omit labels that should remain.",
           },
           taskIds: {
             type: "array",
             items: { type: "string" },
             description:
-              "Replacement set of task IDs linked to this goal. Pass an empty array to unlink all tasks. Use list_tasks to find task IDs.",
+              "Replacement set of task IDs linked to this goal. Pass an empty array to unlink all tasks. Only pass IDs returned by create_task or list_tasks — never pass decision IDs, meeting IDs, or goal IDs here.",
+          },
+          meetingId: {
+            type: "string",
+            description:
+              "ID or exact title of the meeting this goal originated from. Use to link the goal to its source meeting after creation.",
           },
         },
         required: ["goalId"],

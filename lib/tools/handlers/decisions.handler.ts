@@ -17,7 +17,10 @@ import {
   createDecisionSchema,
   updateDecisionSchema,
 } from "@/lib/decisions/schemas";
-import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
+import {
+  resolveMeetingIdByRef,
+  resolveOrCreateLabelIdsByNames,
+} from "@/lib/tools/resolvers";
 import { enforceDecisionsMax } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";
 
@@ -39,6 +42,18 @@ async function handleCreateDecision(
     };
   }
 
+  const input = { ...parsed.data };
+  if (input.meetingId) {
+    const meetingId = await resolveMeetingIdByRef(userId, input.meetingId);
+    if (!meetingId) {
+      return {
+        ok: false,
+        error: `Meeting not found for create_decision: ${input.meetingId}. Use list_meetings or the create_meeting result before linking a decision.`,
+      };
+    }
+    input.meetingId = meetingId;
+  }
+
   // Tier gate
   const gate = await enforceDecisionsMax(userId);
   if (!gate.allowed) {
@@ -48,7 +63,27 @@ async function handleCreateDecision(
     };
   }
 
-  const decision = await createDecision(userId, parsed.data);
+  const existingDecisions = await listDecisions(userId);
+  const normalizedNew = normalizeText(input.title);
+  const duplicate = existingDecisions
+    .filter((decision) => decision.status !== "reversed")
+    .find((decision) => {
+      const normalizedExisting = normalizeText(decision.title);
+      return (
+        normalizedExisting === normalizedNew ||
+        normalizedExisting.includes(normalizedNew) ||
+        normalizedNew.includes(normalizedExisting)
+      );
+    });
+
+  if (duplicate) {
+    return {
+      ok: false,
+      error: `A similar decision already exists: "${duplicate.title}" (${duplicate.status}, id: ${duplicate.id}). Avoid creating duplicates — update the existing decision if it needs more detail.`,
+    };
+  }
+
+  const decision = await createDecision(userId, input);
   return { ok: true, data: decision };
 }
 
@@ -97,10 +132,22 @@ async function handleUpdateDecision(
     };
   }
 
+  const input = { ...parsed.data };
+  if (input.meetingId) {
+    const meetingId = await resolveMeetingIdByRef(userId, input.meetingId);
+    if (!meetingId) {
+      return {
+        ok: false,
+        error: `Meeting not found for update_decision: ${input.meetingId}. Use list_meetings or the create_meeting result before linking a decision.`,
+      };
+    }
+    input.meetingId = meetingId;
+  }
+
   const result = await updateDecision(
     decisionId as string,
     userId,
-    parsed.data,
+    input,
   );
   if (!result.ok) {
     return {
@@ -132,3 +179,7 @@ export const decisionHandlers: Record<string, ToolHandler> = {
   update_decision: handleUpdateDecision,
   delete_decision: handleDeleteDecision,
 };
+
+function normalizeText(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, " ");
+}

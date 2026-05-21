@@ -18,6 +18,9 @@ export async function createGoal(
   userId: string,
   input: CreateGoalInput,
 ): Promise<GoalRecord> {
+  const labelIds = uniqueIds(input.labelIds);
+  const taskIds = uniqueIds(input.taskIds);
+
   const row = await db.goal.create({
     data: {
       userId,
@@ -25,17 +28,18 @@ export async function createGoal(
       description: input.description ?? null,
       status: input.status ?? "open",
       targetDate: input.targetDate ? new Date(input.targetDate) : null,
-      ...(input.labelIds?.length
+      meetingId: input.meetingId ?? null,
+      ...(labelIds.length
         ? {
             labelLinks: {
-              create: input.labelIds.map((labelId) => ({ labelId })),
+              create: labelIds.map((labelId) => ({ labelId })),
             },
           }
         : {}),
-      ...(input.taskIds?.length
+      ...(taskIds.length
         ? {
             taskLinks: {
-              create: input.taskIds.map((taskId) => ({ taskId })),
+              create: taskIds.map((taskId) => ({ taskId })),
             },
           }
         : {}),
@@ -55,4 +59,8 @@ export async function createGoal(
   });
 
   return toGoalRecord(row);
+}
+
+function uniqueIds(ids: string[] | undefined): string[] {
+  return ids ? [...new Set(ids)] : [];
 }

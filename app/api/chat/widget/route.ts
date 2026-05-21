@@ -125,9 +125,10 @@ export async function POST(req: Request) {
       const reportDetails: ReportDetailCall[] = [];
 
       try {
-        // Multi-round tool calling: up to MAX_TOOL_ROUNDS rounds of tool execution.
-        // Round 1 creates base entities; round 2 can link them using returned IDs.
-        const MAX_TOOL_ROUNDS = 2;
+        // Multi-round tool calling before the final text-only response pass.
+        // Recap intake can need read, create, and link passes that depend on
+        // IDs returned by earlier tool results.
+        const MAX_TOOL_ROUNDS = 12;
         const conversationMessages: LLMMessage[] = [...llmMessages];
         let toolRound = 0;
         let allToolsSucceeded = true;

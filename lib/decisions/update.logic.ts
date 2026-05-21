@@ -14,6 +14,9 @@ export async function updateDecision(
   userId: string,
   input: UpdateDecisionInput,
 ): Promise<UpdateDecisionResult> {
+  const labelIds =
+    input.labelIds !== undefined ? uniqueIds(input.labelIds) : undefined;
+
   const row = await db.decision
     .update({
       where: { id: decisionId, userId },
@@ -26,10 +29,10 @@ export async function updateDecision(
           decidedAt: input.decidedAt ? new Date(input.decidedAt) : null,
         }),
         ...(input.meetingId !== undefined && { meetingId: input.meetingId }),
-        ...(input.labelIds !== undefined && {
+        ...(labelIds !== undefined && {
           labelLinks: {
             deleteMany: {},
-            create: input.labelIds.map((labelId) => ({ labelId })),
+            create: labelIds.map((labelId) => ({ labelId })),
           },
         }),
       },
@@ -39,4 +42,8 @@ export async function updateDecision(
 
   if (!row) return { ok: false, notFound: true };
   return { ok: true, decision: toDecisionRecord(row) };
+}
+
+function uniqueIds(ids: string[]): string[] {
+  return [...new Set(ids)];
 }

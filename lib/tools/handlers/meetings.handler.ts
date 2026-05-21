@@ -24,7 +24,10 @@ import {
   createMeetingSchema,
   updateMeetingSchema,
 } from "@/lib/meetings/schemas";
-import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
+import {
+  resolveContactIdsByRefs,
+  resolveOrCreateLabelIdsByNames,
+} from "@/lib/tools/resolvers";
 import { enforceMeetingsMax, enforcePrepPackMonthly } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";
 
@@ -38,10 +41,28 @@ async function handleCreateMeeting(
   const labelIds = labelNames.length
     ? await resolveOrCreateLabelIdsByNames(userId, labelNames)
     : undefined;
+  const participantRefs = Array.isArray(args.participantContactIds)
+    ? (args.participantContactIds as unknown[]).filter(
+        (value): value is string => typeof value === "string",
+      )
+    : [];
+  const participantContactIds = participantRefs.length
+    ? await resolveContactIdsByRefs(userId, participantRefs)
+    : undefined;
+
+  if (participantContactIds?.missing.length) {
+    return {
+      ok: false,
+      error: `Participant contact not found: ${participantContactIds.missing.join(", ")}. Create the contact first, then retry with the returned contact ID.`,
+    };
+  }
 
   const parsed = createMeetingSchema.safeParse({
     ...args,
     labelIds,
+    ...(participantContactIds
+      ? { participantContactIds: participantContactIds.ids }
+      : {}),
     source: "llm",
   });
   if (!parsed.success) {
@@ -95,11 +116,30 @@ async function handleUpdateMeeting(
     labelNames !== undefined
       ? await resolveOrCreateLabelIdsByNames(userId, labelNames)
       : undefined;
+  const participantRefs = Array.isArray(args.participantContactIds)
+    ? (args.participantContactIds as unknown[]).filter(
+        (value): value is string => typeof value === "string",
+      )
+    : undefined;
+  const participantContactIds =
+    participantRefs !== undefined
+      ? await resolveContactIdsByRefs(userId, participantRefs)
+      : undefined;
+
+  if (participantContactIds?.missing.length) {
+    return {
+      ok: false,
+      error: `Participant contact not found: ${participantContactIds.missing.join(", ")}. Create the contact first, then retry with the returned contact ID.`,
+    };
+  }
 
   const { meetingId, ...rest } = args;
   const parsed = updateMeetingSchema.safeParse({
     ...rest,
     ...(labelIds !== undefined ? { labelIds } : {}),
+    ...(participantContactIds !== undefined
+      ? { participantContactIds: participantContactIds.ids }
+      : {}),
   });
   if (!parsed.success) {
     return {

@@ -15,7 +15,11 @@ import { updateGoal } from "@/lib/goals/update.logic";
 import { deleteGoal } from "@/lib/goals/delete.logic";
 import { createMilestone, updateMilestone } from "@/lib/goals/milestones.logic";
 import { createGoalSchema, updateGoalSchema } from "@/lib/goals/schemas";
-import { resolveOrCreateLabelIdsByNames } from "@/lib/tools/resolvers";
+import {
+  resolveOrCreateLabelIdsByNames,
+  resolveTaskIdsByRefs,
+  resolveMeetingIdByRef,
+} from "@/lib/tools/resolvers";
 import { enforceGoalsMax } from "@/lib/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/tools/types";
 
@@ -28,6 +32,21 @@ async function handleCreateGoal(
   const labelIds = labelNames.length
     ? await resolveOrCreateLabelIdsByNames(userId, labelNames as string[])
     : undefined;
+  const taskRefs = Array.isArray(args.taskIds)
+    ? (args.taskIds as unknown[]).filter(
+        (value): value is string => typeof value === "string",
+      )
+    : undefined;
+  const taskIds =
+    taskRefs !== undefined
+      ? await resolveTaskIdsByRefs(userId, taskRefs)
+      : undefined;
+  if (taskIds?.missing.length) {
+    return {
+      ok: false,
+      error: `Task not found for create_goal: ${taskIds.missing.join(", ")}. Use list_tasks or the create_task result before linking a goal.`,
+    };
+  }
 
   // Convert milestone title strings to milestone input objects
   const milestoneStrings = Array.isArray(args.milestones)
@@ -42,11 +61,26 @@ async function handleCreateGoal(
       }))
     : undefined;
 
+  // Resolve meetingId ref (name or ID) to a real ID
+  let meetingId: string | null | undefined = undefined;
+  if (typeof args.meetingId === "string" && args.meetingId.trim()) {
+    const resolved = await resolveMeetingIdByRef(userId, args.meetingId);
+    if (!resolved) {
+      return {
+        ok: false,
+        error: `Meeting not found for create_goal: ${args.meetingId}. Use list_meetings or the create_meeting result before linking a goal.`,
+      };
+    }
+    meetingId = resolved;
+  }
+
   const { labelNames: _ln, milestones: _ms, ...rest } = args;
   const parsed = createGoalSchema.safeParse({
     ...rest,
     ...(labelIds !== undefined ? { labelIds } : {}),
+    ...(taskIds !== undefined ? { taskIds: taskIds.ids } : {}),
     ...(milestones !== undefined ? { milestones } : {}),
+    ...(meetingId !== undefined ? { meetingId } : {}),
   });
   if (!parsed.success) {
     return {
@@ -98,11 +132,42 @@ async function handleUpdateGoal(
     labelNames !== undefined
       ? await resolveOrCreateLabelIdsByNames(userId, labelNames as string[])
       : undefined;
+  const taskRefs = Array.isArray(args.taskIds)
+    ? (args.taskIds as unknown[]).filter(
+        (value): value is string => typeof value === "string",
+      )
+    : undefined;
+  const taskIds =
+    taskRefs !== undefined
+      ? await resolveTaskIdsByRefs(userId, taskRefs)
+      : undefined;
+  if (taskIds?.missing.length) {
+    return {
+      ok: false,
+      error: `Task not found for update_goal: ${taskIds.missing.join(", ")}. Use list_tasks or the create_task result before linking a goal.`,
+    };
+  }
 
   const { goalId, labelNames: _ln, ...rest } = args;
+
+  // Resolve meetingId ref (name or ID) to a real ID
+  let meetingId: string | null | undefined = undefined;
+  if (typeof args.meetingId === "string" && args.meetingId.trim()) {
+    const resolved = await resolveMeetingIdByRef(userId, args.meetingId);
+    if (!resolved) {
+      return {
+        ok: false,
+        error: `Meeting not found for update_goal: ${args.meetingId}. Use list_meetings or the create_meeting result before linking a goal.`,
+      };
+    }
+    meetingId = resolved;
+  }
+
   const parsed = updateGoalSchema.safeParse({
     ...rest,
     ...(labelIds !== undefined ? { labelIds } : {}),
+    ...(taskIds !== undefined ? { taskIds: taskIds.ids } : {}),
+    ...(meetingId !== undefined ? { meetingId } : {}),
   });
   if (!parsed.success) {
     return {

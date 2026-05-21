@@ -8,6 +8,8 @@ export async function createDecision(
   userId: string,
   input: CreateDecisionInput,
 ): Promise<DecisionRecord> {
+  const labelIds = uniqueIds(input.labelIds);
+
   const row = await db.decision.create({
     data: {
       userId,
@@ -17,10 +19,10 @@ export async function createDecision(
       status: input.status ?? "open",
       decidedAt: input.decidedAt ? new Date(input.decidedAt) : null,
       ...(input.meetingId !== undefined && { meetingId: input.meetingId }),
-      ...(input.labelIds?.length
+      ...(labelIds.length
         ? {
             labelLinks: {
-              create: input.labelIds.map((labelId) => ({ labelId })),
+              create: labelIds.map((labelId) => ({ labelId })),
             },
           }
         : {}),
@@ -29,4 +31,8 @@ export async function createDecision(
   });
 
   return toDecisionRecord(row);
+}
+
+function uniqueIds(ids: string[] | undefined): string[] {
+  return ids ? [...new Set(ids)] : [];
 }

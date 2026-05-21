@@ -25,6 +25,11 @@ export async function updateTask(
   userId: string,
   input: UpdateTaskInput,
 ): Promise<UpdateTaskResult> {
+  const labelIds =
+    input.labelIds !== undefined ? uniqueIds(input.labelIds) : undefined;
+  const goalIds =
+    input.goalIds !== undefined ? uniqueIds(input.goalIds) : undefined;
+
   // Single round-trip: update only if the row belongs to this user.
   // Returns null instead of throwing when no row matched.
   const row = await db.task
@@ -39,16 +44,16 @@ export async function updateTask(
           dueDate: input.dueDate ? new Date(input.dueDate) : null,
         }),
         ...(input.meetingId !== undefined && { meetingId: input.meetingId }),
-        ...(input.labelIds !== undefined && {
+        ...(labelIds !== undefined && {
           labelLinks: {
             deleteMany: {},
-            create: input.labelIds.map((labelId) => ({ labelId })),
+            create: labelIds.map((labelId) => ({ labelId })),
           },
         }),
-        ...(input.goalIds !== undefined && {
+        ...(goalIds !== undefined && {
           goalLinks: {
             deleteMany: {},
-            create: input.goalIds.map((goalId) => ({ goalId })),
+            create: goalIds.map((goalId) => ({ goalId })),
           },
         }),
       },
@@ -58,4 +63,8 @@ export async function updateTask(
 
   if (!row) return { ok: false, notFound: true };
   return { ok: true, task: toTaskRecord(row) };
+}
+
+function uniqueIds(ids: string[]): string[] {
+  return [...new Set(ids)];
 }

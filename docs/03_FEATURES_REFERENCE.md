@@ -63,6 +63,8 @@ lib/llm-providers/
 
 The assistant sees context slots and tier-filtered tools. Chat does not own tools or context; it consumes them.
 
+Meeting recap intake is handled through the tool layer as a multi-tool workflow: the assistant checks/reuses existing records, creates missing contacts/labels/meetings/decisions/goals/tasks/memory entries with their native tools, then links them with participants, `meetingId`, task-goal links, and shared labels. Chat and widget chat allow multiple tool rounds so returned IDs can be reused in later linking calls.
+
 ## Knowledge
 
 Purpose:
