@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.3
  * @since beta
  * @module
  * @description
@@ -29,6 +29,8 @@ import { getUserPreferences } from "@/lib/settings";
 import { buildSystemPrompt } from "@/lib/context/build";
 import { getActiveToolsForUser, executeToolCall } from "@/lib/tools";
 import { createReport } from "@/lib/reports";
+import { classifyMessage } from "@/lib/agents/classify";
+import { runAgent } from "@/lib/agents/registry";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
 import type { ReportDetailCall } from "@/lib/reports";
 
@@ -121,6 +123,30 @@ export async function POST(req: Request, { params }: Params) {
     })),
     { role: "user" as const, content: userMessage },
   ];
+
+  // ── Sub-agent pre-pass ──────────────────────────────────
+  // Classify the message and run matched agents before streaming.
+  // Results are injected as a synthetic assistant turn so the main LLM
+  // can reference completed work without streaming it to the user.
+  const agentNames = await classifyMessage(userMessage);
+  if (agentNames.length > 0) {
+    const agentResults = await Promise.all(
+      agentNames.map((name) =>
+        runAgent(name, { userId: session.user.id, userMessage }),
+      ),
+    );
+    const summaries = agentResults
+      .filter((r) => r.ok && r.summary)
+      .map((r) => r.summary)
+      .join("\n\n");
+    if (summaries) {
+      // Insert before the final user message so the main LLM sees the results naturally
+      llmMessages.splice(llmMessages.length - 1, 0, {
+        role: "assistant",
+        content: summaries,
+      });
+    }
+  }
 
   // Stream response as SSE
   const stream = new ReadableStream({
