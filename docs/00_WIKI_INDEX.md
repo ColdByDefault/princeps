@@ -6,7 +6,7 @@ This folder is the human wiki for Princeps. It is for developers, maintainers, t
 
 For agent-specific implementation memory, use `CONTEXT/`. For the true final answer on behavior, always verify the current code.
 
-## The Five Docs
+## Docs
 
 ```text
 docs/00_WIKI_INDEX.md          Start here
@@ -14,6 +14,7 @@ docs/01_USER_GUIDE.md          How to use Princeps
 docs/02_ARCHITECTURE.md        How the app is built
 docs/03_FEATURES_REFERENCE.md  What each feature does and where it lives
 docs/04_DEVELOPER_PLAYBOOK.md  How to change, extend, test, and operate it
+docs/05_SUB_AGENTS.md          Sub-agents architecture plan
 ```
 
 ## What Princeps Is
