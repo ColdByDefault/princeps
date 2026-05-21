@@ -157,3 +157,36 @@ A new `classify` helper (`lib/agents/classify.ts`) uses a lightweight LLM call t
 - Not exposed as a public API.
 
 Sub-agents are an internal orchestration pattern for the Princeps executive assistant. They stay invisible to the user and are always user-scoped.
+
+---
+
+## Implementation Status — Phase 1 (canary/v1.1.3)
+
+All 8 steps from the implementation order above are complete.
+
+### Files added
+
+| File                                         | Purpose                                                                   |
+| -------------------------------------------- | ------------------------------------------------------------------------- |
+| `lib/agents/types.ts`                        | `AgentDefinition`, `AgentInput`, `AgentOutput` shared types               |
+| `lib/agents/runner.ts`                       | `runAgentWithDefinition()` — tier gate, tool filtering, `streamChat` loop |
+| `lib/agents/registry.ts`                     | `AGENT_REGISTRY`, `getAgentDefinition()`, public `runAgent(name, input)`  |
+| `lib/agents/classify.ts`                     | `classifyMessage()` — cheap `callChat` routing call, returns `string[]`   |
+| `lib/agents/agents/task-extractor.agent.ts`  | Extracts action items → `create_task` calls                               |
+| `lib/agents/agents/decision-logger.agent.ts` | Extracts decisions → `create_decision` calls                              |
+| `lib/agents/agents/weekly-review.agent.ts`   | Gathers tasks + meetings + goals → executive digest                       |
+| `lib/agents/agents/signal-feed.agent.ts`     | Web search + knowledge cross-ref → scored intelligence digest             |
+
+### Files modified
+
+| File                                    | Change                                                                                                                               |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `app/api/chat/[chatId]/stream/route.ts` | Added sub-agent pre-pass: classify → run agents in parallel → inject summaries as synthetic assistant turn before final user message |
+
+### Key implementation notes
+
+- `runner.ts` uses `streamChat` (not `callChat`) — `callChat` does not forward the `tools` array to the provider API.
+- Tool filtering: the runner intersects `definition.tools` with `getActiveToolsForUser()`, so both tier gates and user-level tool toggles are respected.
+- Classifier output is validated against `AGENT_REGISTRY` keys — hallucinated names are silently dropped.
+- All agent failures are silent: `runner.ts` never throws, `classifyMessage` returns `[]` on any error. The main chat loop is unaffected.
+- `signal-feed` uses `web_search`, `fetch_url`, and `search_knowledge`. A future `create_knowledge` tool will allow it to persist digests to the knowledge base.
