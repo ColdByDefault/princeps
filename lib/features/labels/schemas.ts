@@ -34,5 +34,5 @@ export const updateLabelSchema = z.object({
     .optional(),
 });
 
-export type CreateLabelInput = z.infer<typeof createLabelSchema>;
+export type CreateLabelInput = z.input<typeof createLabelSchema>;
 export type UpdateLabelInput = z.infer<typeof updateLabelSchema>;

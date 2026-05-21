@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MeetingRecord } from "@/types/api";
+import type { LLMChatOptions, LLMMessage } from "@/types/llm";
 
 type DbMeetingRow = {
   id: string;
@@ -46,19 +47,20 @@ type UsageCounterUpdateArgs = {
 
 const mocks = vi.hoisted(() => ({
   callChat: vi.fn<
-    () => Promise<{
+    (
+      messages: LLMMessage[],
+      options?: LLMChatOptions,
+    ) => Promise<{
       content: string;
       promptTokens: number;
       completionTokens: number;
     }>
   >(),
-  meetingFindFirst: vi.fn<
-    (args: MeetingFindFirstArgs) => Promise<DbMeetingRow | null>
-  >(),
+  meetingFindFirst:
+    vi.fn<(args: MeetingFindFirstArgs) => Promise<DbMeetingRow | null>>(),
   meetingUpdate: vi.fn<(args: MeetingUpdateArgs) => Promise<DbMeetingRow>>(),
-  usageCounterUpdate: vi.fn<
-    (args: UsageCounterUpdateArgs) => Promise<unknown>
-  >(),
+  usageCounterUpdate:
+    vi.fn<(args: UsageCounterUpdateArgs) => Promise<unknown>>(),
 }));
 
 vi.mock("@/lib/core/db", () => ({
@@ -152,7 +154,9 @@ describe("meeting prep pack logic", () => {
     const callChatArgs = mocks.callChat.mock.calls[0];
     expect(callChatArgs?.[0][0]).toMatchObject({ role: "user" });
     expect(callChatArgs?.[0][0].content).toContain("Meeting: Board prep");
-    expect(callChatArgs?.[0][0].content).toContain("Participants: Alice Johnson");
+    expect(callChatArgs?.[0][0].content).toContain(
+      "Participants: Alice Johnson",
+    );
     expect(callChatArgs?.[0][0].content).toContain("- Prepare packet (open)");
     expect(callChatArgs?.[0][0].content).toContain("- Approve launch (open)");
     expect(callChatArgs?.[1]).toEqual({ temperature: 0.4 });
@@ -258,7 +262,10 @@ describe("meeting prep pack logic", () => {
       data: { prepPack: "# Updated" },
       select: expect.objectContaining({ id: true, title: true }),
     });
-    expect(result).toMatchObject({ ok: true, meeting: { prepPack: "# Updated" } });
+    expect(result).toMatchObject({
+      ok: true,
+      meeting: { prepPack: "# Updated" },
+    });
   });
 
   it("returns notFound for prep pack get, clear, and update when meeting is missing", async () => {

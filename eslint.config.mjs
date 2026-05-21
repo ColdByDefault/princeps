@@ -6,7 +6,6 @@
  * @since beta
  */
 
-
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
@@ -46,6 +45,16 @@ const eslintConfig = defineConfig([
 
       // Enforce exhaustive switch checks
       "@typescript-eslint/switch-exhaustiveness-check": "error",
+    },
+  },
+
+  // Relax unsafe-* rules in test files — vi.fn generics and asymmetric
+  // matchers like expect.objectContaining() expose `any` in their internals.
+  {
+    files: ["tests/**/*.ts", "tests/**/*.tsx"],
+    rules: {
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
     },
   },
 
