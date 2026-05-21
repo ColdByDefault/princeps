@@ -166,8 +166,8 @@ All 8 steps from the implementation order above are complete.
 
 ### Files added
 
-| File                                         | Purpose                                                                   |
-| -------------------------------------------- | ------------------------------------------------------------------------- |
+| File                                            | Purpose                                                                   |
+| ----------------------------------------------- | ------------------------------------------------------------------------- |
 | `lib/ai/agents/types.ts`                        | `AgentDefinition`, `AgentInput`, `AgentOutput` shared types               |
 | `lib/ai/agents/runner.ts`                       | `runAgentWithDefinition()` — tier gate, tool filtering, `streamChat` loop |
 | `lib/ai/agents/registry.ts`                     | `AGENT_REGISTRY`, `getAgentDefinition()`, public `runAgent(name, input)`  |
@@ -190,3 +190,46 @@ All 8 steps from the implementation order above are complete.
 - Classifier output is validated against `AGENT_REGISTRY` keys — hallucinated names are silently dropped.
 - All agent failures are silent: `runner.ts` never throws, `classifyMessage` returns `[]` on any error. The main chat loop is unaffected.
 - `signal-feed` uses `web_search`, `fetch_url`, and `search_knowledge`. A future `create_knowledge` tool will allow it to persist digests to the knowledge base.
+
+---
+
+## Known Gaps & Next Steps (canary/v1.1.3)
+
+Questions raised during review — answers documented for the next session.
+
+### Q1 — Is Phase 1 enough to cover everything?
+
+No. Phase 1 covers the core extraction and review use cases but three gaps remain:
+
+- **Cron triggers not implemented** (step 8 from the implementation order). `weekly-review` and `signal-feed` only run when triggered via chat. Scheduled execution (e.g. every Monday morning) needs an API cron endpoint that calls `runAgent` directly.
+- **`signal-feed` is read-only.** It can search the web and query the knowledge base but cannot persist digests. Requires a future `create_knowledge` tool.
+- **`commitment-tracker` (Phase 2) not built.** Referenced in the issues table but no agent file exists yet.
+
+### Q2 — Is the orchestrator aware and can it logically call agents?
+
+Yes, and it is automatic. `classifyMessage()` builds its routing prompt dynamically from `AGENT_REGISTRY` at call time — registering a new agent is sufficient for the orchestrator to discover and route to it, with no other wiring needed.
+
+One known inefficiency: the classifier does not receive the user's tier before running. It may suggest a `pro`-only agent (e.g. `weekly-review`) for a free-tier user. The runner's tier gate correctly blocks the run and returns a silent failure, so the outcome is correct — but a wasted classify + runner call occurs. Fix: pass the user tier into `classifyMessage` to pre-filter candidates from `AGENT_REGISTRY`.
+
+### Q3 — Do agents respect the tools tier rules?
+
+Yes — three independent layers enforce this:
+
+1. **Agent `minTier` gate** (`runner.ts`) — checked first. A free user cannot run `weekly-review` or `signal-feed` (both `minTier: "pro"`).
+2. **Tool whitelist** (`runner.ts`) — `getActiveToolsForUser()` returns only the tools the user's tier and preferences allow. The LLM is offered only the intersection of those and `definition.tools`.
+3. **Executor gate** (`executeToolCall`) — re-runs `getActiveToolsForUser()` as a second check. Even if the LLM names a tool it was not offered, the executor blocks it.
+
+One edge case: if every tool in `definition.tools` is filtered out by layer 2 (e.g. all tools individually disabled), the agent still runs but produces a text-only response instead of failing early. Fix: add an early guard in `runner.ts` — `if (agentTools.length === 0) return { ok: false, error: "No tools available for this agent." }`.
+
+### Q4 — Are agent tool calls included in the reports?
+
+**No — agent tool calls are invisible to the reports system.** Two reasons:
+
+1. `reportDetails` is declared inside the `ReadableStream` closure, which initialises after the pre-pass completes. Pre-pass results never reach it.
+2. `AgentOutput.actions` stores `ActionResult[]` only — it loses the tool name and arguments, so `buildDetailCall` cannot reconstruct a `ReportDetailCall` from it.
+
+Fix (not yet implemented) requires three changes:
+
+- **`types.ts`** — add `AgentActionCall` type: `{ toolName: string; args: string; result: ActionResult }` and add `agentCalls?: AgentActionCall[]` to `AgentOutput`.
+- **`runner.ts`** — capture `{ toolName, args, result }` during the tool loop instead of only `result`.
+- **`stream/route.ts`** — convert `agentResults[].agentCalls` to `ReportDetailCall[]` entries and seed `reportDetails` with them before the main streaming loop starts.
