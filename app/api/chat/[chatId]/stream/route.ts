@@ -130,6 +130,8 @@ export async function POST(req: Request, { params }: Params) {
   // can reference completed work without streaming it to the user.
   // Agent tool calls are seeded into reportDetails so they appear in reports.
   const reportDetails: ReportDetailCall[] = [];
+  // Collected for UI events emitted at stream start so clients can show which agents ran.
+  const agentRunSummary: { name: string; ok: boolean }[] = [];
 
   const agentNames = await classifyMessage(userMessage, userTier);
   if (agentNames.length > 0) {
@@ -138,6 +140,11 @@ export async function POST(req: Request, { params }: Params) {
         runAgent(name, { userId: session.user.id, userMessage }),
       ),
     );
+
+    // Collect run summary for UI events
+    for (let i = 0; i < agentNames.length; i++) {
+      agentRunSummary.push({ name: agentNames[i], ok: agentResults[i].ok });
+    }
 
     // Seed reportDetails with every tool call the agents performed
     for (const agentResult of agentResults) {
@@ -177,6 +184,11 @@ export async function POST(req: Request, { params }: Params) {
       let assistantContent = "";
       let toolCallChars = 0;
       // reportDetails is declared above and pre-seeded with any agent tool calls
+
+      // Emit agent pre-pass events so the client can show which agents ran
+      for (const agentRun of agentRunSummary) {
+        send({ type: "agent", name: agentRun.name, ok: agentRun.ok });
+      }
 
       try {
         // Multi-round tool calling before the final text-only response pass.

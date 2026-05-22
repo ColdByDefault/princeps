@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.3
  * @since beta
  */
 
@@ -37,9 +37,9 @@ interface ChatWidgetProps {
 interface Message {
   id: number;
   text: string;
-  sender: "user" | "assistant" | "action";
+  sender: "user" | "assistant" | "action" | "agent";
   time: string;
-  /** Populated only when sender === "action" */
+  /** Populated only when sender === "action" or "agent" */
   actionLabel?: string;
 }
 
@@ -49,7 +49,8 @@ type SseEvent =
   | { type: "token"; text: string }
   | { type: "done" }
   | { type: "error"; message: string }
-  | { type: "action"; name: string; record: Record<string, unknown> };
+  | { type: "action"; name: string; record: Record<string, unknown> }
+  | { type: "agent"; name: string; ok: boolean };
 
 function getTime() {
   return new Date().toLocaleTimeString("en-US", {
@@ -224,7 +225,9 @@ export function ChatWidget({
 
       // Build history from all messages currently in view (excluding the greeting and action cards)
       const history: HistoryEntry[] = messagesRef.current
-        .filter((m) => m.id !== 1 && m.sender !== "action")
+        .filter(
+          (m) => m.id !== 1 && m.sender !== "action" && m.sender !== "agent",
+        )
         .map((m) => ({
           role: m.sender as "user" | "assistant",
           content: m.text,
@@ -325,6 +328,25 @@ export function ChatWidget({
                   id: Date.now(),
                   text: recordName ? `${label}: ${recordName}` : label,
                   sender: "action",
+                  time: getTime(),
+                  actionLabel: label,
+                },
+              ]);
+            } else if (event.type === "agent") {
+              const agentLabelMap: Record<string, string> = {
+                "task-extractor": "Task Extractor",
+                "decision-logger": "Decision Logger",
+                "commitment-tracker": "Commitment Tracker",
+                "weekly-review": "Weekly Review",
+                "signal-feed": "Signal Feed",
+              };
+              const label = agentLabelMap[event.name] ?? event.name;
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: Date.now(),
+                  text: label,
+                  sender: "agent",
                   time: getTime(),
                   actionLabel: label,
                 },
@@ -468,6 +490,11 @@ export function ChatWidget({
                   {msg.sender === "action" ? (
                     <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
                       <CheckCircle2 className="size-4 shrink-0" />
+                      <span>{msg.text}</span>
+                    </div>
+                  ) : msg.sender === "agent" ? (
+                    <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm border border-violet-500/30 bg-violet-500/10 px-3.5 py-2.5 text-sm text-violet-700 dark:text-violet-400">
+                      <Bot className="size-4 shrink-0" />
                       <span>{msg.text}</span>
                     </div>
                   ) : (
