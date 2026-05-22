@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { LLMMessage } from "@/types/llm";
 import type { NotificationRecord } from "@/types/api";
 
 type DbNotificationRow = {
@@ -40,9 +41,13 @@ type NotificationCreateArgs = {
 
 const originalForceGreeting = process.env.FORCE_GREETING;
 
+type GreetingCallChat = (
+  messages: LLMMessage[],
+) => Promise<{ content: string }>;
+
 const mocks = vi.hoisted(() => ({
   accumulateTokens: vi.fn<() => Promise<void>>(),
-  callChat: vi.fn<() => Promise<{ content: string }>>(),
+  callChat: vi.fn<GreetingCallChat>(),
   fetchWeather: vi.fn<
     () => Promise<{
       location: string;
@@ -204,10 +209,11 @@ describe("generateDailyGreeting", () => {
       status: "in_progress",
     });
 
-    const callArgs = mocks.callChat.mock.calls[0]?.[0];
-    expect(callArgs?.[0].content).toContain("Respond only in English.");
-    expect(callArgs?.[1].content).toContain("Current weather in Paris");
-    expect(callArgs?.[1].content).toContain("2 active tasks");
+    expect(mocks.callChat).toHaveBeenCalled();
+    const [messages] = mocks.callChat.mock.calls[0]!;
+    expect(messages[0]?.content).toContain("Respond only in English.");
+    expect(messages[1]?.content).toContain("Current weather in Paris");
+    expect(messages[1]?.content).toContain("2 active tasks");
     expect(mocks.accumulateTokens).toHaveBeenCalledWith(
       "user-1",
       expect.any(Number),

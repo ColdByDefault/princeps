@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { LLMChatOptions, LLMMessage } from "@/types/llm";
 import type { BriefingRecord } from "@/types/api";
 
 type BriefingUpsertArgs = {
@@ -16,19 +17,22 @@ type UsageCounterUpsertArgs = {
 
 type ListFilter = { status: string };
 
+type BriefingCallChat = (
+  messages: LLMMessage[],
+  options?: LLMChatOptions,
+) => Promise<{
+  content: string;
+  promptTokens: number;
+  completionTokens: number;
+}>;
+
 const mocks = vi.hoisted(() => ({
   briefingUpsert: vi.fn<
     (
       args: BriefingUpsertArgs,
     ) => Promise<{ id: string; content: string; generatedAt: Date }>
   >(),
-  callChat: vi.fn<
-    () => Promise<{
-      content: string;
-      promptTokens: number;
-      completionTokens: number;
-    }>
-  >(),
+  callChat: vi.fn<BriefingCallChat>(),
   listDecisions: vi.fn<(userId: string, filter: ListFilter) => Promise<unknown[]>>(),
   listMeetings: vi.fn<(userId: string, filter: ListFilter) => Promise<unknown[]>>(),
   listTasks: vi.fn<(userId: string, filter: ListFilter) => Promise<unknown[]>>(),
@@ -134,14 +138,16 @@ describe("generateBriefing", () => {
       status: "open",
     });
 
-    const prompt = mocks.callChat.mock.calls[0]?.[0][0].content;
+    expect(mocks.callChat).toHaveBeenCalled();
+    const [messages, options] = mocks.callChat.mock.calls[0]!;
+    const prompt = messages[0]?.content;
     expect(prompt).toContain("Today is 2026-05-22.");
     expect(prompt).toContain("- Prepare board packet [in progress]");
     expect(prompt).toContain("- Send Q2 update (due 2026-05-22)");
     expect(prompt).toContain("- Board prep — 2026-05-23 09:00 @ HQ");
     expect(prompt).not.toContain("Far future");
     expect(prompt).toContain("- Approve launch");
-    expect(mocks.callChat.mock.calls[0]?.[1]).toEqual({ temperature: 0.3 });
+    expect(options).toEqual({ temperature: 0.3 });
     expect(mocks.briefingUpsert).toHaveBeenCalledWith({
       where: { userId: "user-1" },
       create: {
@@ -199,7 +205,9 @@ describe("generateBriefing", () => {
 
     await generateBriefing("user-1");
 
-    const prompt = mocks.callChat.mock.calls[0]?.[0][0].content;
+    expect(mocks.callChat).toHaveBeenCalled();
+    const [messages] = mocks.callChat.mock.calls[0]!;
+    const prompt = messages[0]?.content;
     expect(prompt).toContain("No open tasks.");
     expect(prompt).toContain("No upcoming meetings.");
     expect(prompt).toContain("No open decisions pending.");
