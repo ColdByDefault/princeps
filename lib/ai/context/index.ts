@@ -16,6 +16,7 @@ import { meetingsSlot } from "@/lib/ai/context/meetings.slot";
 import { decisionsSlot } from "@/lib/ai/context/decisions.slot";
 import { goalsSlot } from "@/lib/ai/context/goals.slot";
 import { memorySlot } from "@/lib/ai/context/memory.slot";
+import { briefingsSlot } from "@/lib/ai/context/briefings.slot";
 
 /**
  * A context slot contributes one labeled section to the LLM system prompt.
@@ -43,4 +44,5 @@ export const SLOT_REGISTRY: ContextSlot[] = [
   decisionsSlot,
   goalsSlot,
   memorySlot,
+  briefingsSlot,
 ];
