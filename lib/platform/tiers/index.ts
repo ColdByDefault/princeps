@@ -26,5 +26,6 @@ export {
   accumulateTokens,
   getChatHistoryLimit,
   createTierLimitResponse,
+  getUserTier,
 } from "./enforce";
 export type { EnforceResult } from "./enforce";

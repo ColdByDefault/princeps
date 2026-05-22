@@ -14,11 +14,20 @@ import "server-only";
 
 import { callChat } from "@/lib/ai/llm-providers/provider";
 import { AGENT_REGISTRY } from "@/lib/ai/agents/registry";
+import type { Tier } from "@/types/billing";
+
+/** Evaluation order — lower index = lower tier. */
+const TIER_ORDER: Tier[] = ["free", "pro", "premium", "enterprise"];
 
 // ─── Prompt ───────────────────────────────────────────────
 
-function buildClassifyPrompt(): string {
+function buildClassifyPrompt(userTier?: Tier): string {
+  const tierIdx = userTier ? TIER_ORDER.indexOf(userTier) : TIER_ORDER.length;
   const agentList = Object.values(AGENT_REGISTRY)
+    .filter((a) => {
+      const minIdx = TIER_ORDER.indexOf(a.minTier);
+      return tierIdx === -1 || minIdx <= tierIdx;
+    })
     .map((a) => `- "${a.name}": ${a.description}`)
     .join("\n");
 
@@ -46,16 +55,20 @@ Rules:
  *  - No agent is appropriate.
  *  - The LLM call fails.
  *  - The response cannot be parsed.
+ *  - No agents are available for the user's tier.
  *
  * Never throws — failures are silent and safe (orchestrator falls through to normal chat).
  */
-export async function classifyMessage(message: string): Promise<string[]> {
+export async function classifyMessage(
+  message: string,
+  userTier?: Tier,
+): Promise<string[]> {
   let raw: string;
 
   try {
     const result = await callChat(
       [
-        { role: "system", content: buildClassifyPrompt() },
+        { role: "system", content: buildClassifyPrompt(userTier) },
         { role: "user", content: message },
       ],
       {

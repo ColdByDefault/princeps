@@ -43,13 +43,24 @@ export type AgentInput = {
 };
 
 /**
+ * A single tool call captured during a sub-agent run.
+ * Preserves the tool name, raw arguments, and result so the orchestrator
+ * can reconstruct ReportDetailCall entries for the reports system.
+ */
+export type AgentActionCall = {
+  toolName: string;
+  args: string;
+  result: ActionResult;
+};
+
+/**
  * Structured result returned by runner.ts to the orchestrator.
  */
 export type AgentOutput = {
   ok: boolean;
   /** Concise result summary for the orchestrator to incorporate into its response. */
   summary: string;
-  /** Tool call results performed during the agent run, if any. */
-  actions?: ActionResult[];
+  /** Full tool call records (name, args, result) performed during the run. */
+  agentCalls?: AgentActionCall[];
   error?: string;
 };

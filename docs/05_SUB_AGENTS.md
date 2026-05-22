@@ -160,76 +160,65 @@ Sub-agents are an internal orchestration pattern for the Princeps executive assi
 
 ---
 
-## Implementation Status — Phase 1 (canary/v1.1.3)
+## Implementation Status — Phase 1 complete + Phase 2 (canary/v1.1.3)
 
-All 8 steps from the implementation order above are complete.
+All known gaps from the Phase 1 review are resolved. Phase 2 adds the `commitment-tracker` agent and cron triggers.
 
-### Files added
+### Files added (Phase 1 original)
 
 | File                                            | Purpose                                                                   |
 | ----------------------------------------------- | ------------------------------------------------------------------------- |
-| `lib/ai/agents/types.ts`                        | `AgentDefinition`, `AgentInput`, `AgentOutput` shared types               |
+| `lib/ai/agents/types.ts`                        | `AgentDefinition`, `AgentInput`, `AgentOutput`, `AgentActionCall` types   |
 | `lib/ai/agents/runner.ts`                       | `runAgentWithDefinition()` — tier gate, tool filtering, `streamChat` loop |
 | `lib/ai/agents/registry.ts`                     | `AGENT_REGISTRY`, `getAgentDefinition()`, public `runAgent(name, input)`  |
-| `lib/ai/agents/classify.ts`                     | `classifyMessage()` — cheap `callChat` routing call, returns `string[]`   |
+| `lib/ai/agents/classify.ts`                     | `classifyMessage(msg, userTier?)` — tier-filtered routing call            |
 | `lib/ai/agents/agents/task-extractor.agent.ts`  | Extracts action items → `create_task` calls                               |
 | `lib/ai/agents/agents/decision-logger.agent.ts` | Extracts decisions → `create_decision` calls                              |
 | `lib/ai/agents/agents/weekly-review.agent.ts`   | Gathers tasks + meetings + goals → executive digest                       |
 | `lib/ai/agents/agents/signal-feed.agent.ts`     | Web search + knowledge cross-ref → scored intelligence digest             |
 
+### Files added (Phase 2 / gap fixes)
+
+| File                                               | Purpose                                                                           |
+| -------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `lib/ai/agents/agents/commitment-tracker.agent.ts` | Extracts commitments from meeting notes → `create_task` follow-ups (issue #86 F1) |
+| `app/api/cron/weekly-review/route.ts`              | Cron handler — runs `weekly-review` for all pro+ users every Monday at 08:00 UTC  |
+| `app/api/cron/signal-feed/route.ts`                | Cron handler — runs `signal-feed` for pro+ users with `signalTopics` every Monday |
+
 ### Files modified
 
-| File                                    | Change                                                                                                                               |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `app/api/chat/[chatId]/stream/route.ts` | Added sub-agent pre-pass: classify → run agents in parallel → inject summaries as synthetic assistant turn before final user message |
+| File                                              | Change                                                                                                                                        |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/api/chat/[chatId]/stream/route.ts`           | Agent pre-pass with tier-aware classify; `reportDetails` hoisted before stream and seeded with agent tool calls; `getUserTier` added to batch |
+| `lib/platform/tiers/enforce.ts`                   | `getUserTier` exported (was private)                                                                                                          |
+| `lib/platform/tiers/index.ts`                     | Re-exports `getUserTier`                                                                                                                      |
+| `lib/platform/settings/user-preferences.logic.ts` | Added `signalTopics: string[]` field — used by signal-feed cron to know what to fetch                                                         |
+| `vercel.json`                                     | Added `weekly-review` (Mon 08:00) and `signal-feed` (Mon 06:00) cron entries                                                                  |
 
 ### Key implementation notes
 
 - `runner.ts` uses `streamChat` (not `callChat`) — `callChat` does not forward the `tools` array to the provider API.
 - Tool filtering: the runner intersects `definition.tools` with `getActiveToolsForUser()`, so both tier gates and user-level tool toggles are respected.
+- **Early exit guard**: if the intersection is empty, the runner returns `{ ok: false }` immediately rather than running a text-only agent pass.
+- Classifier receives the user's tier and only sees agents at or below that tier — no wasted LLM calls for gated agents.
 - Classifier output is validated against `AGENT_REGISTRY` keys — hallucinated names are silently dropped.
 - All agent failures are silent: `runner.ts` never throws, `classifyMessage` returns `[]` on any error. The main chat loop is unaffected.
-- `signal-feed` uses `web_search`, `fetch_url`, and `search_knowledge`. A future `create_knowledge` tool will allow it to persist digests to the knowledge base.
+- **Agent calls visible in reports**: `AgentOutput.agentCalls` carries `{ toolName, args, result }`. The stream route seeds `reportDetails` from these before the `ReadableStream` starts.
+- `signal-feed` is still read-only. A future `create_knowledge` tool will allow it to persist digests to the knowledge base.
+- Signal-feed cron only runs for users who have at least one `signalTopics` entry in their preferences.
 
 ---
 
-## Known Gaps & Next Steps (canary/v1.1.3)
+## Known Gaps & Remaining Work
 
-Questions raised during review — answers documented for the next session.
+### `signal-feed` is still read-only
 
-### Q1 — Is Phase 1 enough to cover everything?
+The agent can search the web and query the knowledge base but cannot persist digests. Requires a future `create_knowledge` tool. When that tool is added, update `signalFeedAgent.tools` to include it and update the `signal-feed` system prompt.
 
-No. Phase 1 covers the core extraction and review use cases but three gaps remain:
+### Classifier still triggers on every message
 
-- **Cron triggers not implemented** (step 8 from the implementation order). `weekly-review` and `signal-feed` only run when triggered via chat. Scheduled execution (e.g. every Monday morning) needs an API cron endpoint that calls `runAgent` directly.
-- **`signal-feed` is read-only.** It can search the web and query the knowledge base but cannot persist digests. Requires a future `create_knowledge` tool.
-- **`commitment-tracker` (Phase 2) not built.** Referenced in the issues table but no agent file exists yet.
+The classifier always runs a cheap LLM call regardless of message content. A fast heuristic pre-check (keyword detection or message length threshold) could skip the classify call entirely for short conversational messages and avoid a redundant round-trip.
 
-### Q2 — Is the orchestrator aware and can it logically call agents?
+### Commitment tracker has no contact creation
 
-Yes, and it is automatic. `classifyMessage()` builds its routing prompt dynamically from `AGENT_REGISTRY` at call time — registering a new agent is sufficient for the orchestrator to discover and route to it, with no other wiring needed.
-
-One known inefficiency: the classifier does not receive the user's tier before running. It may suggest a `pro`-only agent (e.g. `weekly-review`) for a free-tier user. The runner's tier gate correctly blocks the run and returns a silent failure, so the outcome is correct — but a wasted classify + runner call occurs. Fix: pass the user tier into `classifyMessage` to pre-filter candidates from `AGENT_REGISTRY`.
-
-### Q3 — Do agents respect the tools tier rules?
-
-Yes — three independent layers enforce this:
-
-1. **Agent `minTier` gate** (`runner.ts`) — checked first. A free user cannot run `weekly-review` or `signal-feed` (both `minTier: "pro"`).
-2. **Tool whitelist** (`runner.ts`) — `getActiveToolsForUser()` returns only the tools the user's tier and preferences allow. The LLM is offered only the intersection of those and `definition.tools`.
-3. **Executor gate** (`executeToolCall`) — re-runs `getActiveToolsForUser()` as a second check. Even if the LLM names a tool it was not offered, the executor blocks it.
-
-One edge case: if every tool in `definition.tools` is filtered out by layer 2 (e.g. all tools individually disabled), the agent still runs but produces a text-only response instead of failing early. Fix: add an early guard in `runner.ts` — `if (agentTools.length === 0) return { ok: false, error: "No tools available for this agent." }`.
-
-### Q4 — Are agent tool calls included in the reports?
-
-**No — agent tool calls are invisible to the reports system.** Two reasons:
-
-1. `reportDetails` is declared inside the `ReadableStream` closure, which initialises after the pre-pass completes. Pre-pass results never reach it.
-2. `AgentOutput.actions` stores `ActionResult[]` only — it loses the tool name and arguments, so `buildDetailCall` cannot reconstruct a `ReportDetailCall` from it.
-
-Fix (not yet implemented) requires three changes:
-
-- **`types.ts`** — add `AgentActionCall` type: `{ toolName: string; args: string; result: ActionResult }` and add `agentCalls?: AgentActionCall[]` to `AgentOutput`.
-- **`runner.ts`** — capture `{ toolName, args, result }` during the tool loop instead of only `result`.
-- **`stream/route.ts`** — convert `agentResults[].agentCalls` to `ReportDetailCall[]` entries and seed `reportDetails` with them before the main streaming loop starts.
+The `commitment-tracker` agent uses `list_contacts` to find existing contacts but does not create new ones. If the named person is not in the contacts list, the task is still created but without a contact link. Add `create_contact` to its tool list if contact auto-creation on commitment extraction is desired.

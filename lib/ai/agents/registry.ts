@@ -18,6 +18,7 @@ import { taskExtractorAgent } from "./agents/task-extractor.agent";
 import { decisionLoggerAgent } from "./agents/decision-logger.agent";
 import { weeklyReviewAgent } from "./agents/weekly-review.agent";
 import { signalFeedAgent } from "./agents/signal-feed.agent";
+import { commitmentTrackerAgent } from "./agents/commitment-tracker.agent";
 
 // ─── Registry ─────────────────────────────────────────────
 
@@ -30,6 +31,7 @@ export const AGENT_REGISTRY: Record<string, AgentDefinition> = {
   [decisionLoggerAgent.name]: decisionLoggerAgent,
   [weeklyReviewAgent.name]: weeklyReviewAgent,
   [signalFeedAgent.name]: signalFeedAgent,
+  [commitmentTrackerAgent.name]: commitmentTrackerAgent,
 };
 
 // ─── Public API ───────────────────────────────────────────

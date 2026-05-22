@@ -57,6 +57,12 @@ export interface UserPreferences {
   reportsEnabled: boolean | null;
   /** Whether overdue-task proactive nudges should be sent when available. */
   overdueTaskNudgesEnabled: boolean | null;
+  /**
+   * Topics the user wants monitored by the signal-feed agent.
+   * Used by the weekly cron to run signal-feed automatically.
+   * Max 5 topics, max 64 chars each.
+   */
+  signalTopics: string[];
 }
 
 // ─── Internal helpers ─────────────────────────────────────
@@ -157,6 +163,15 @@ export function parseUserPreferences(raw: unknown): UserPreferences {
       ? obj.overdueTaskNudgesEnabled
       : null;
 
+  const signalTopics = Array.isArray(obj.signalTopics)
+    ? (obj.signalTopics as unknown[])
+        .filter(
+          (t): t is string => typeof t === "string" && t.trim().length > 0,
+        )
+        .map((t) => t.trim().slice(0, 64))
+        .slice(0, 5)
+    : [];
+
   return {
     language,
     theme,
@@ -173,6 +188,7 @@ export function parseUserPreferences(raw: unknown): UserPreferences {
     autoBriefingEnabled,
     reportsEnabled,
     overdueTaskNudgesEnabled,
+    signalTopics,
   };
 }
 
@@ -206,6 +222,7 @@ export const getUserPreferences = cache(
         autoBriefingEnabled: null,
         reportsEnabled: null,
         overdueTaskNudgesEnabled: null,
+        signalTopics: [],
       };
     return parseUserPreferences(user.preferences);
   },

@@ -19,8 +19,12 @@ import { executeToolCall } from "@/lib/ai/tools/executor";
 import { getActiveToolsForUser } from "@/lib/ai/tools/registry";
 import type { LLMMessage, LLMToolCall } from "@/types/llm";
 import type { Tier } from "@/types/billing";
-import type { ActionResult } from "@/lib/ai/tools/types";
-import type { AgentDefinition, AgentInput, AgentOutput } from "./types";
+import type {
+  AgentDefinition,
+  AgentInput,
+  AgentOutput,
+  AgentActionCall,
+} from "./types";
 
 // ─── Constants ────────────────────────────────────────────
 
@@ -76,6 +80,14 @@ export async function runAgentWithDefinition(
     definition.tools.includes(t.function.name),
   );
 
+  if (agentTools.length === 0) {
+    return {
+      ok: false,
+      summary: "",
+      error: "No tools available for this agent.",
+    };
+  }
+
   // ── 3. Initial messages ───────────────────────────────────
   const systemContent =
     definition.systemPrompt + (input.context ? `\n\n${input.context}` : "");
@@ -85,7 +97,7 @@ export async function runAgentWithDefinition(
     { role: "user", content: input.userMessage },
   ];
 
-  const collectedActions: ActionResult[] = [];
+  const collectedAgentCalls: AgentActionCall[] = [];
   const maxRounds = definition.maxRounds ?? DEFAULT_MAX_ROUNDS;
   let summary = "";
 
@@ -119,7 +131,11 @@ export async function runAgentWithDefinition(
       // Execute each tool call and append results to the conversation
       for (const toolCall of toolCalls) {
         const result = await executeToolCall(input.userId, toolCall);
-        collectedActions.push(result);
+        collectedAgentCalls.push({
+          toolName: toolCall.function.name,
+          args: toolCall.function.arguments ?? "",
+          result,
+        });
         messages.push({
           role: "tool",
           content: JSON.stringify(result),
@@ -131,14 +147,16 @@ export async function runAgentWithDefinition(
       if (round === maxRounds - 1) {
         summary =
           content.trim() ||
-          `Agent completed ${collectedActions.length} action(s).`;
+          `Agent completed ${collectedAgentCalls.length} action(s).`;
       }
     }
   } catch (err) {
     return {
       ok: false,
       summary: "",
-      ...(collectedActions.length > 0 && { actions: collectedActions }),
+      ...(collectedAgentCalls.length > 0 && {
+        agentCalls: collectedAgentCalls,
+      }),
       error:
         err instanceof Error ? err.message : "Unknown error in agent runner.",
     };
@@ -147,6 +165,6 @@ export async function runAgentWithDefinition(
   return {
     ok: true,
     summary,
-    ...(collectedActions.length > 0 && { actions: collectedActions }),
+    ...(collectedAgentCalls.length > 0 && { agentCalls: collectedAgentCalls }),
   };
 }

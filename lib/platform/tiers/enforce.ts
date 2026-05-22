@@ -26,7 +26,7 @@ function todayUtc(): string {
   return new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
 }
 
-async function getUserTier(userId: string): Promise<Tier> {
+export async function getUserTier(userId: string): Promise<Tier> {
   const user = await db.user.findUniqueOrThrow({
     where: { id: userId },
     select: { tier: true },

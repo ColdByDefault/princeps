@@ -22,6 +22,7 @@ import {
   enforceMonthlyLimits,
   accumulateTokens,
   enforceToolCallsMonthly,
+  getUserTier,
 } from "@/lib/platform/tiers";
 import { getUserPreferences } from "@/lib/platform/settings";
 import { buildSystemPrompt } from "@/lib/ai/context/build";
@@ -93,9 +94,10 @@ export async function POST(req: Request, { params }: Params) {
   }
 
   // Build message array for LLM
-  const [prefs, activeTools] = await Promise.all([
+  const [prefs, activeTools, userTier] = await Promise.all([
     getUserPreferences(session.user.id),
     getActiveToolsForUser(session.user.id),
+    getUserTier(session.user.id),
   ]);
 
   const systemMessage = await buildSystemPrompt(session.user.id, userMessage, {
@@ -126,13 +128,28 @@ export async function POST(req: Request, { params }: Params) {
   // Classify the message and run matched agents before streaming.
   // Results are injected as a synthetic assistant turn so the main LLM
   // can reference completed work without streaming it to the user.
-  const agentNames = await classifyMessage(userMessage);
+  // Agent tool calls are seeded into reportDetails so they appear in reports.
+  const reportDetails: ReportDetailCall[] = [];
+
+  const agentNames = await classifyMessage(userMessage, userTier);
   if (agentNames.length > 0) {
     const agentResults = await Promise.all(
       agentNames.map((name) =>
         runAgent(name, { userId: session.user.id, userMessage }),
       ),
     );
+
+    // Seed reportDetails with every tool call the agents performed
+    for (const agentResult of agentResults) {
+      if (agentResult.agentCalls) {
+        for (const call of agentResult.agentCalls) {
+          reportDetails.push(
+            buildDetailCall(call.toolName, call.args, call.result),
+          );
+        }
+      }
+    }
+
     const summaries = agentResults
       .filter((r) => r.ok && r.summary)
       .map((r) => r.summary)
@@ -159,7 +176,7 @@ export async function POST(req: Request, { params }: Params) {
 
       let assistantContent = "";
       let toolCallChars = 0;
-      const reportDetails: ReportDetailCall[] = [];
+      // reportDetails is declared above and pre-seeded with any agent tool calls
 
       try {
         // Multi-round tool calling before the final text-only response pass.
