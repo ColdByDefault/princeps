@@ -682,7 +682,27 @@
     },
     "actionsLabel": "Zielaktionen",
     "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen"
+    "deleteLabel": "L\u00f6schen",
+    "horizon": {
+      "link": "Zeithorizonte",
+      "metadata": {
+        "title": "Zeithorizonte",
+        "description": "Deine Ziele nach strategischem Zeithorizont."
+      },
+      "pageTitle": "Zeithorizonte",
+      "pageDescription": "Strategische Sicht auf deine Ziele — jetzt, mittelfristig und langfristig.",
+      "backToGoals": "Zur\u00fcck zu Zielen",
+      "totalGoals": "{count} Ziele gesamt",
+      "now": "Jetzt",
+      "nowSub": "N\u00e4chste 90 Tage",
+      "medium": "Mittelfristig",
+      "mediumSub": "3\u201318 Monate",
+      "long": "Langfristig",
+      "longSub": "\u00dcber 18 Monate",
+      "unplaced": "Nicht eingeordnet",
+      "unplacedSub": "Kein Zieldatum gesetzt",
+      "empty": "Keine Ziele in diesem Horizont."
+    }
   },
   "memory": {
     "metadata": {
@@ -1430,7 +1450,12 @@
     "empty": "Noch keine Berichte vorhanden.",
     "emptyHint": "Berichte erscheinen hier, sobald dein Assistent Tools verwendet.",
     "toolCalls": "Tool-Aufrufe",
-    "tokens": "Tokens"
+    "tokens": "Tokens",
+    "frequency": {
+      "title": "Häufigste Tools",
+      "totalCalls": "{count} Aufrufe gesamt",
+      "sessions": "{count} Sitzungen"
+    }
   },
   "briefings": {
     "metadata": {

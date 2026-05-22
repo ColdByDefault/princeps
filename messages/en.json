@@ -682,7 +682,27 @@
     },
     "actionsLabel": "Goal actions",
     "editLabel": "Edit",
-    "deleteLabel": "Delete"
+    "deleteLabel": "Delete",
+    "horizon": {
+      "link": "Horizons",
+      "metadata": {
+        "title": "Horizon Planning",
+        "description": "Your goals viewed across strategic time horizons."
+      },
+      "pageTitle": "Horizon Planning",
+      "pageDescription": "Strategic altitude view — Now, Medium-term, and Long-term goals at a glance.",
+      "backToGoals": "Back to goals",
+      "totalGoals": "{count} goals total",
+      "now": "Now",
+      "nowSub": "Next 90 days",
+      "medium": "Medium-term",
+      "mediumSub": "3\u201318 months",
+      "long": "Long-term",
+      "longSub": "Beyond 18 months",
+      "unplaced": "Unplaced",
+      "unplacedSub": "No target date set",
+      "empty": "No goals in this horizon."
+    }
   },
   "memory": {
     "metadata": {
@@ -1430,7 +1450,12 @@
     "empty": "No reports yet.",
     "emptyHint": "Reports appear here after your assistant uses tools.",
     "toolCalls": "tool calls",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "frequency": {
+      "title": "Most-used Tools",
+      "totalCalls": "{count} total calls",
+      "sessions": "{count} sessions"
+    }
   },
   "briefings": {
     "metadata": {

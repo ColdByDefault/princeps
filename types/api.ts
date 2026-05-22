@@ -29,6 +29,19 @@ export interface AssistantReportRecord {
   createdAt: string; // ISO string on the client
 }
 
+/** One entry in the tool frequency breakdown. */
+export interface ToolFrequencyEntry {
+  tool: string;
+  count: number;
+}
+
+/** Aggregated tool-call frequency data for the reports page. */
+export interface ToolFrequencyData {
+  top: ToolFrequencyEntry[];
+  total: number;
+  sessionCount: number;
+}
+
 /** Client-safe shape of a Notification record (matches the Prisma model). */
 export interface NotificationRecord {
   id: string;

@@ -4,12 +4,13 @@
  * @license See License
  * @version canary-v1.0.2
  * @since canary-v1.0.2
- */ 
+ */
 
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, RefreshCw } from "lucide-react";
+import Link from "next/link";
+import { Plus, RefreshCw, Layers } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -124,6 +125,17 @@ export function GoalsShell({
           {t("pageTitle")}
         </h1>
         <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="cursor-pointer"
+            render={<Link href="/goals/horizon" />}
+            aria-label={t("horizon.link")}
+          >
+            <Layers className="size-3.5" />
+            {t("horizon.link")}
+          </Button>
           <Button
             type="button"
             variant="outline"

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -14,14 +14,16 @@ import { useState } from "react";
 import { FileBarChart2, Trash2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReportCard } from "./ReportCard";
+import { ToolFrequencyChart } from "./ToolFrequencyChart";
 import { useReportsMutations } from "./logic/useReportsMutations";
-import type { AssistantReportRecord } from "@/types/api";
+import type { AssistantReportRecord, ToolFrequencyData } from "@/types/api";
 
 type Props = {
   initialReports: AssistantReportRecord[];
+  frequencyData: ToolFrequencyData;
 };
 
-export function ReportsShell({ initialReports }: Props) {
+export function ReportsShell({ initialReports, frequencyData }: Props) {
   const t = useTranslations("reports");
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
@@ -75,6 +77,9 @@ export function ReportsShell({ initialReports }: Props) {
           )}
         </div>
       </div>
+
+      {/* Tool frequency chart */}
+      <ToolFrequencyChart data={frequencyData} />
 
       {/* Empty state */}
       {reports.length === 0 ? (
