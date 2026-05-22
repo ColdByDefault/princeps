@@ -54,6 +54,10 @@
       "bodyIntro": "These tasks are past their due date:",
       "remainingOne": "And 1 more.",
       "remainingOther": "And {count} more."
+    },
+    "weeklyDigest": {
+      "title": "Weekly Digest",
+      "fallbackBody": "Your weekly digest could not be generated this time. Please try again or contact support."
     }
   },
   "auth": {

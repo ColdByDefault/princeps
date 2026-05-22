@@ -54,6 +54,10 @@
       "bodyIntro": "Diese Aufgaben sind überfällig:",
       "remainingOne": "Und 1 weitere.",
       "remainingOther": "Und {count} weitere."
+    },
+    "weeklyDigest": {
+      "title": "Wöchentliche Zusammenfassung",
+      "fallbackBody": "Dein wöchentlicher Rückblick konnte diesmal nicht erstellt werden. Versuche es erneut oder melde dich beim Support."
     }
   },
   "auth": {
