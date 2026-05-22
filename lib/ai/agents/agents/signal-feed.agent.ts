@@ -9,7 +9,8 @@
  * Searches the web for recent signals on a given topic, cross-references
  * the user's knowledge base, scores results by relevance, and produces
  * a structured intelligence digest with cited source URLs.
- * Note: write-to-knowledge (create_knowledge tool) is planned for a future iteration.
+ * Persists the digest to the knowledge base via create_knowledge when content
+ * is substantive enough to be worth storing for later retrieval.
  */
 
 import "server-only";
@@ -30,9 +31,10 @@ Steps:
    - **Top signals** — highest relevance items with source URLs
    - **Notable developments** — medium relevance
    - **What to watch** — emerging or low-signal items worth monitoring
+5. Call create_knowledge to persist the digest with a descriptive name (e.g. "Signal Digest — [Topic] [Date]").
 
 Keep the digest concise. Always cite source URLs. Do not fabricate sources.`,
-  tools: ["web_search", "fetch_url", "search_knowledge"],
+  tools: ["web_search", "fetch_url", "search_knowledge", "create_knowledge"],
   minTier: "pro",
   maxRounds: 4,
 };

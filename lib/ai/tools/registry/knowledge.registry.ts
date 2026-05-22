@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.3
  * @since beta
  */
 
@@ -34,6 +34,32 @@ export const knowledgeTools: ToolRegistryEntry[] = [
           },
         },
         required: ["query"],
+      },
+    },
+  },
+  {
+    minTier: "free",
+    group: "knowledge",
+    type: "function",
+    function: {
+      name: "create_knowledge",
+      description:
+        "Save a text document to the user's personal knowledge base. Use when the user asks to save, store, or remember a document, note, or digest — or when you have produced a substantive output (e.g. a signal digest or research summary) that the user would benefit from having stored for later retrieval. Subject to the user's knowledge document and character quota.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: {
+            type: "string",
+            description:
+              "A short, descriptive title for the document (e.g. 'Signal Digest — AI 2026-05-22'). Max 255 characters.",
+          },
+          content: {
+            type: "string",
+            description:
+              "The full text content to store. Plain text only. Do not include raw HTML or binary data.",
+          },
+        },
+        required: ["name", "content"],
       },
     },
   },
