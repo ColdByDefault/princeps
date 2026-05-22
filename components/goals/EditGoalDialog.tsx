@@ -1,3 +1,11 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version canary-v1.0.2
+ * @since canary-v1.0.2
+ */ 
+
 "use client";
 
 import React, { useState } from "react";
@@ -22,7 +30,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import type { GoalRecord, LabelOptionRecord } from "@/types/api";
 import { DatePicker } from "@/components/ui/date-picker";
 

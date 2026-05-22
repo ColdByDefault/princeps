@@ -1,27 +1,25 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { generatePrepPack, clearMeetingPrepPack } from "@/lib/meetings";
+import { auth } from "@/lib/core/auth/auth";
+import { generatePrepPack, clearMeetingPrepPack } from "@/lib/features/meetings";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,
   createRateLimitResponse,
-} from "@/lib/security";
+} from "@/lib/core/security";
 import {
   enforcePrepPackMonthly,
   enforceToolCallsMonthly,
   createTierLimitResponse,
-} from "@/lib/tiers";
+} from "@/lib/platform/tiers";
 
 type Params = { params: Promise<{ id: string }> };
 

@@ -1,0 +1,22 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version beta
+ * @since beta
+ */
+
+import "server-only";
+
+import { db } from "@/lib/core/db";
+
+export async function deleteChat(chatId: string, userId: string) {
+  const chat = await db.chat.findFirst({ where: { id: chatId, userId } });
+
+  if (!chat) {
+    return { ok: false } as const;
+  }
+
+  await db.chat.delete({ where: { id: chatId } });
+  return { ok: true } as const;
+}

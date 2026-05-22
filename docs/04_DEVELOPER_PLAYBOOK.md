@@ -46,13 +46,13 @@ Typical CRUD feature shape:
 ```text
 prisma/schema.prisma
 types/api.ts
-lib/<feature>/schemas.ts
-lib/<feature>/shared.logic.ts
-lib/<feature>/create.logic.ts
-lib/<feature>/list.logic.ts
-lib/<feature>/update.logic.ts
-lib/<feature>/delete.logic.ts
-lib/<feature>/index.ts
+lib/features/<feature>/schemas.ts
+lib/features/<feature>/shared.logic.ts
+lib/features/<feature>/create.logic.ts
+lib/features/<feature>/list.logic.ts
+lib/features/<feature>/update.logic.ts
+lib/features/<feature>/delete.logic.ts
+lib/features/<feature>/index.ts
 app/api/<feature>/route.ts
 app/api/<feature>/[id]/route.ts
 app/(app)/<feature>/page.tsx
@@ -65,7 +65,7 @@ Rules:
 
 - Add `userId` and useful indexes to stored user data.
 - Keep API routes thin: auth, parse, gate, delegate, respond.
-- Keep business logic in `lib/<feature>/`.
+- Keep business logic in `lib/features/<feature>/`.
 - Keep client mutation logic in `components/<feature>/logic/`.
 - Return client-safe types with ISO date strings.
 - Localize all user-facing copy.
@@ -82,9 +82,9 @@ Add tools only when the assistant should act, not just talk.
 
 Tool checklist:
 
-- Add registry entries in `lib/tools/registry/<feature>.registry.ts`.
+- Add registry entries in `lib/ai/tools/registry/<feature>.registry.ts`.
 - Set `minTier` and `group`.
-- Add a handler in `lib/tools/handlers/<feature>.handler.ts`.
+- Add a handler in `lib/ai/tools/handlers/<feature>.handler.ts`.
 - Validate all args with Zod or a feature schema.
 - Resolve names to IDs in the handler, not the registry.
 - Enforce the same tier limits as the API route.
@@ -93,14 +93,14 @@ Tool checklist:
 
 Context checklist:
 
-- Add `lib/context/<feature>.slot.ts` when the assistant should always know about the data.
+- Add `lib/ai/context/<feature>.slot.ts` when the assistant should always know about the data.
 - Fetch only user-scoped, compact, relevant data.
 - Keep context human-readable and bounded.
 - Update prompt/tool availability if tier or disabled-tool settings affect the feature.
 
 ## Tiers And Usage
 
-Plan limits live in `types/billing.ts`. Enforcement lives in `lib/tiers/enforce.ts`.
+Plan limits live in `types/billing.ts`. Enforcement lives in `lib/platform/tiers/enforce.ts`.
 
 Use the right limit style:
 
@@ -123,7 +123,7 @@ PATCH /api/settings
 
 When adding a setting:
 
-- Parse it in `lib/settings/user-preferences.logic.ts`.
+- Parse it in `lib/platform/settings/user-preferences.logic.ts`.
 - Accept it in `app/api/settings/route.ts`.
 - Load it in `app/(app)/settings/page.tsx`.
 - Pass it into the owning settings tab.
@@ -142,7 +142,7 @@ Current live examples:
 New provider checklist:
 
 - Pick a stable provider string, for example `gmail` or `microsoft_outlook`.
-- Add `lib/integrations/<provider>/client.ts`.
+- Add `lib/platform/integrations/<provider>/client.ts`.
 - Add provider actions such as `sync.ts`, `events.ts`, or `import.ts`.
 - Add routes under `app/api/integrations/<route-slug>/`.
 - Use a provider-specific OAuth state cookie.
@@ -170,7 +170,7 @@ Weather uses Open-Meteo without a key. `FORCE_GREETING=true` bypasses the daily 
 
 ## Billing And Stripe
 
-Stripe files live in `lib/stripe/` and `app/api/stripe/`.
+Stripe files live in `lib/platform/stripe/` and `app/api/stripe/`.
 
 Local test setup:
 
@@ -208,7 +208,7 @@ GET /api/dev/reset-links
 
 This endpoint returns `404` outside development.
 
-For production, wire a real provider in `lib/auth/auth.ts`, for example Resend or SMTP/Nodemailer, and set a verified `RESET_PASSWORD_FROM_EMAIL`.
+For production, wire a real provider in `lib/core/auth/auth.ts`, for example Resend or SMTP/Nodemailer, and set a verified `RESET_PASSWORD_FROM_EMAIL`.
 
 ## Langfuse
 

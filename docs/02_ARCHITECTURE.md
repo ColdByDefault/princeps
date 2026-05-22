@@ -43,23 +43,23 @@ Most features follow this shape:
 ```text
 app/(app)/<feature>/page.tsx
   -> authenticate
-  -> load initial data through lib/<feature>/
+  -> load initial data through lib/features/<feature>/
   -> render components/<feature>/<Feature>Shell
 
 client action
   -> fetch app/api/<feature>/*
   -> route authenticates, validates, tier-gates
-  -> route delegates to lib/<feature>/
-  -> lib writes/reads Prisma through @/lib/db
+  -> route delegates to lib/features/<feature>/
+  -> lib writes/reads Prisma through @/lib/core/db
 ```
 
-API routes should stay thin. Business logic belongs in `lib/<feature>/`.
+API routes should stay thin. Business logic belongs in `lib/features/<feature>/`.
 
 ## Server And Client Boundary
 
 Server-only code includes:
 
-- Prisma and `@/lib/db`.
+- Prisma and `@/lib/core/db`.
 - Better Auth server helpers.
 - LLM provider calls.
 - Stripe.
@@ -67,7 +67,7 @@ Server-only code includes:
 - Integration clients and tokens.
 - Node-only parsing or filesystem APIs.
 
-Server-only modules should use `import "server-only"`. Client components must not import a chain that reaches `@/lib/db`.
+Server-only modules should use `import "server-only"`. Client components must not import a chain that reaches `@/lib/core/db`.
 
 ## Auth And Security
 
@@ -82,7 +82,7 @@ Important behavior:
 - Email verification is currently disabled.
 - Password reset links are logged unless a real email provider is wired.
 
-Rate limiting lives in `lib/security.ts`. It uses Upstash Redis when `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` exist, otherwise an in-memory fallback.
+Rate limiting lives in `lib/core/security.ts`. It uses Upstash Redis when `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` exist, otherwise an in-memory fallback.
 
 Every server page and API route authenticates independently. `proxy.ts` is not the trust boundary.
 
@@ -104,10 +104,10 @@ Common rules:
 The AI layer is intentionally split:
 
 ```text
-lib/llm-providers/  Provider abstraction
-lib/context/        System prompt slots
-lib/tools/          LLM-callable tools
-lib/chat/           Chat persistence and streaming orchestration
+lib/ai/llm-providers/  Provider abstraction
+lib/ai/context/        System prompt slots
+lib/ai/tools/          LLM-callable tools
+lib/features/chat/           Chat persistence and streaming orchestration
 ```
 
 Providers:
@@ -124,7 +124,7 @@ Tools are feature-agnostic. The registry declares schemas and `minTier`; handler
 
 Settings are mostly stored in `User.preferences`; timezone and tier are direct `User` columns.
 
-Tiers are `free`, `pro`, `premium`, and `enterprise`. Plan values live in `types/billing.ts`. Enforcement lives in `lib/tiers/enforce.ts`.
+Tiers are `free`, `pro`, `premium`, and `enterprise`. Plan values live in `types/billing.ts`. Enforcement lives in `lib/platform/tiers/enforce.ts`.
 
 Stripe owns subscription payment:
 
@@ -150,7 +150,7 @@ Current providers:
 - `google_calendar`: Calendar events to Meetings plus best-effort write-back.
 - `google_drive`: Drive file listing and Knowledge import.
 
-Provider logic belongs in `lib/integrations/<provider>/`; OAuth routes live under `app/api/integrations/<provider>/`.
+Provider logic belongs in `lib/platform/integrations/<provider>/`; OAuth routes live under `app/api/integrations/<provider>/`.
 
 ## Observability
 

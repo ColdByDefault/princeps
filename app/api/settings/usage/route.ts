@@ -1,17 +1,15 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { getUserUsage } from "@/lib/settings";
+import { auth } from "@/lib/core/auth/auth";
+import { getUserUsage } from "@/lib/platform/settings";
 
 // GET /api/settings/usage — return current usage summary for the authed user
 export async function GET() {

@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -21,7 +19,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import type { MeetingRecord } from "@/types/api";
 
 type SummaryDialogProps = {

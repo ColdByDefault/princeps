@@ -6,7 +6,7 @@ Read this before changing model calls, provider settings, streaming, embeddings,
 
 ## Purpose
 
-`lib/llm-providers/` is the server-only abstraction around external and local LLM backends.
+`lib/ai/llm-providers/` is the server-only abstraction around external and local LLM backends.
 
 The rest of the app should call the shared interface:
 
@@ -40,25 +40,25 @@ Important: current live code uses `CHAT_PROVIDER` for both chat and embeddings. 
 ## Main Files
 
 ```text
-lib/llm-providers/index.ts              Barrel export
-lib/llm-providers/provider.ts           Public dispatcher
-lib/llm-providers/observability.ts      Langfuse wrappers
-lib/llm-providers/openai/
+lib/ai/llm-providers/index.ts              Barrel export
+lib/ai/llm-providers/provider.ts           Public dispatcher
+lib/ai/llm-providers/observability.ts      Langfuse wrappers
+lib/ai/llm-providers/openai/
   openai.ts                             Chat + streaming
   openai-embedding.ts                   Single + batch embeddings
   openai-settings.ts                    Env parsing, model lists, errors
-lib/llm-providers/ollama/
+lib/ai/llm-providers/ollama/
   ollama.ts                             Chat + streaming
   ollama-embedding.ts                   Single + batch embeddings
   ollama-settings.ts                    Env parsing, model lists, errors
-lib/llm-providers/groq/
+lib/ai/llm-providers/groq/
   groq.ts                               Chat + streaming
   groq-embedding.ts                     Unsupported embedding stubs
   groq-settings.ts                      Env parsing, model lists, errors
-lib/llm-providers/shared/provider-health.ts
-lib/llm-providers/shared/provider-test.ts
+lib/ai/llm-providers/shared/provider-health.ts
+lib/ai/llm-providers/shared/provider-test.ts
 types/llm.ts                            Shared message, tool, status types
-lib/settings/provider-status.logic.ts   `/settings` provider status payload
+lib/platform/settings/provider-status.logic.ts   `/settings` provider status payload
 ```
 
 All provider implementation files must remain server-only.
@@ -94,7 +94,7 @@ That route:
 
 1. Authenticates and rate-limits the user.
 2. Enforces monthly LLM quotas.
-3. Builds the system prompt from `lib/context/build.ts`.
+3. Builds the system prompt from `lib/ai/context/build.ts`.
 4. Loads tier/user-filtered tools from `lib/tools`.
 5. Streams tokens and tool-call events.
 6. Executes requested tools for up to 6 rounds.
@@ -118,11 +118,11 @@ The route-level executor still handles provider output defensively, but tool-cap
 Knowledge upload and search use:
 
 ```text
-lib/knowledge/create.logic.ts -> embedBatch()
-lib/knowledge/search.logic.ts -> embed()
+lib/features/knowledge/create.logic.ts -> embedBatch()
+lib/features/knowledge/search.logic.ts -> embed()
 ```
 
-Vectors are normalized to `EMBEDDING_DIM = 1536` in `lib/knowledge/shared.logic.ts`, so Ollama vectors with smaller dimensions are padded before storage in pgvector.
+Vectors are normalized to `EMBEDDING_DIM = 1536` in `lib/features/knowledge/shared.logic.ts`, so Ollama vectors with smaller dimensions are padded before storage in pgvector.
 
 OpenAI supports embeddings through `/embeddings`.
 Ollama supports embeddings through `/api/embed`.
@@ -134,7 +134,7 @@ Settings reads provider health through:
 
 ```text
 GET /api/settings/provider-status
-  -> lib/settings/provider-status.logic.ts
+  -> lib/platform/settings/provider-status.logic.ts
   -> shared/provider-health.ts
 ```
 
@@ -195,14 +195,14 @@ Langfuse tracing only runs in production and only when both keys are present.
 
 Checklist:
 
-- Add a provider folder under `lib/llm-providers/<provider>/`.
+- Add a provider folder under `lib/ai/llm-providers/<provider>/`.
 - Implement chat, streaming, settings, and error classes.
 - Implement embeddings or add explicit unsupported stubs.
 - Add the provider to `ActiveProvider` in `types/llm.ts`.
-- Add dispatch cases in `lib/llm-providers/provider.ts`.
+- Add dispatch cases in `lib/ai/llm-providers/provider.ts`.
 - Add health checks in `shared/provider-health.ts`.
-- Add provider status handling in `lib/settings/provider-status.logic.ts`.
+- Add provider status handling in `lib/platform/settings/provider-status.logic.ts`.
 - Update `/settings` provider UI labels and messages in both locales if user-visible.
 - Verify chat, streaming, tool-call behavior, provider health, and knowledge embedding behavior.
 
-Keep provider code feature-agnostic. Feature logic belongs in `lib/<feature>/`, context slots, or tools, not inside provider adapters.
+Keep provider code feature-agnostic. Feature logic belongs in `lib/features/<feature>/`, context slots, or tools, not inside provider adapters.

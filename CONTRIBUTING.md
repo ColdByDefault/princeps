@@ -47,7 +47,7 @@ npm run build
 - Every new feature needs translations in both `messages/de.json` and `messages/en.json`
 - No hardcoded user-facing strings — all copy goes through `next-intl`
 - Server-only modules must include `import "server-only"` at the top
-- Do not let client imports reach `@/lib/db`
+- Do not let client imports reach `@/lib/core/db`
 
 ## Branching
 

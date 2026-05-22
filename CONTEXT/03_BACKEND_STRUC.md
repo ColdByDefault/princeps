@@ -23,12 +23,12 @@ app/api/<feature>/route.ts
   -> auth
   -> rate limit / tier gate when needed
   -> parse and validate input
-  -> call lib/<feature>/
+  -> call lib/features/<feature>/
   -> return JSON or 204
 
-lib/<feature>/
+lib/features/<feature>/
   -> enforce ownership with userId
-  -> read/write Prisma through @/lib/db
+  -> read/write Prisma through @/lib/core/db
   -> map DB rows to client-safe records
 ```
 
@@ -47,20 +47,20 @@ Route handlers should only:
 - Apply write rate limits before mutations.
 - Apply tier gates before writes or expensive work.
 - Parse request JSON as `unknown`.
-- Validate with Zod schemas from `lib/<feature>/schemas.ts`.
-- Delegate to `lib/<feature>/`.
+- Validate with Zod schemas from `lib/features/<feature>/schemas.ts`.
+- Delegate to `lib/features/<feature>/`.
 - Convert logic results into HTTP responses.
 
 Routes should not contain business rules, direct Prisma queries, raw SQL, LLM calls, or reusable transforms.
 
 ## Server Logic
 
-Feature logic lives in `lib/<feature>/`.
+Feature logic lives in `lib/features/<feature>/`.
 
 Common files:
 
 ```text
-lib/<feature>/
+lib/features/<feature>/
   schemas.ts          Zod inputs and inferred TS types
   shared.logic.ts     Prisma select/include and DB-row -> API-record mapper
   create.logic.ts     Create operation and create-side effects
@@ -146,13 +146,13 @@ Standard error body is `{ error: string }`. Error strings are technical route re
 
 ## Rate Limits And Tier Gates
 
-Use `lib/security.ts` for route-level burst protection.
+Use `lib/core/security.ts` for route-level burst protection.
 
 - `writeRateLimiter` for ordinary create/update/delete routes.
 - Specialized limiters for chat, upload, search, briefing, prep pack, auth, or voice routes.
 - Use `getRateLimitIdentifier(req, session.user.id)` and `createRateLimitResponse()`.
 
-Use `lib/tiers/enforce.ts` for plan gates.
+Use `lib/platform/tiers/enforce.ts` for plan gates.
 
 - Count-at-rest limits check current user-owned record counts.
 - Daily/monthly counters live in `UsageCounter`.
@@ -182,7 +182,7 @@ After schema changes, update migrations and regenerate the Prisma client. Do not
 
 Add `import "server-only"` to modules that import or use:
 
-- `@/lib/db`
+- `@/lib/core/db`
 - Better Auth server helpers
 - LLM provider code
 - Stripe server SDK
@@ -217,7 +217,7 @@ Before finishing backend work, verify:
 - Write routes rate-limit.
 - Quota-gated creates or expensive actions call the correct tier gate.
 - Request body is parsed as `unknown` and validated with Zod.
-- Business logic is in `lib/<feature>/`, not the route.
+- Business logic is in `lib/features/<feature>/`, not the route.
 - All DB queries are user-scoped.
 - Server-only modules are marked.
 - Dates and joins are mapped to client-safe records.

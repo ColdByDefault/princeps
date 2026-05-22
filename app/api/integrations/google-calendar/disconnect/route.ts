@@ -1,17 +1,15 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { db } from "@/lib/db";
+import { auth } from "@/lib/core/auth/auth";
+import { db } from "@/lib/core/db";
 
 /**
  * DELETE /api/integrations/google-calendar/disconnect

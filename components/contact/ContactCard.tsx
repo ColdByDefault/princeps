@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -23,7 +21,7 @@ import {
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/core/utils";
 import type { ContactRecord } from "@/types/api";
 import { Button } from "@/components/ui/button";
 import {

@@ -1,18 +1,16 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth/auth";
-import { stripe } from "@/lib/stripe/client";
-import { syncUserTierFromSubscription } from "@/lib/stripe/sync";
+import { auth } from "@/lib/core/auth/auth";
+import { stripe } from "@/lib/platform/stripe/client";
+import { syncUserTierFromSubscription } from "@/lib/platform/stripe/sync";
 
 type Props = {
   searchParams: Promise<Record<string, string | undefined>>;

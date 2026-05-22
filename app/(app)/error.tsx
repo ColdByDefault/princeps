@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -16,7 +14,7 @@ import { useEffect, useSyncExternalStore } from "react";
 import { buttonVariants, Button } from "@/components/ui/button";
 import deMessages from "@/messages/de.json";
 import enMessages from "@/messages/en.json";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import {
   DEFAULT_LANGUAGE,
   isSupportedLanguage,

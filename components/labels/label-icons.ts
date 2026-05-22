@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import {
@@ -30,7 +28,7 @@ import {
   Target,
   Rocket,
 } from "lucide-react";
-import { LABEL_ICON_NAMES, type LabelIconName } from "@/lib/labels/label-icons";
+import { LABEL_ICON_NAMES, type LabelIconName } from "@/lib/features/labels/label-icons";
 
 export { LABEL_ICON_NAMES, type LabelIconName };
 

@@ -1,0 +1,22 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version beta
+ * @since beta
+ */
+
+import "server-only";
+
+import { db } from "@/lib/core/db";
+
+export async function deleteLabel(
+  labelId: string,
+  userId: string,
+): Promise<{ ok: boolean }> {
+  const { count } = await db.label.deleteMany({
+    where: { id: labelId, userId },
+  });
+
+  return { ok: count > 0 };
+}

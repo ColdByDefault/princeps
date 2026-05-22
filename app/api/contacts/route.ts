@@ -1,27 +1,25 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
+import { auth } from "@/lib/core/auth/auth";
 import {
   listContacts,
   createContact,
   createContactSchema,
-} from "@/lib/contacts";
-import { enforceContactsMax, createTierLimitResponse } from "@/lib/tiers";
+} from "@/lib/features/contacts";
+import { enforceContactsMax, createTierLimitResponse } from "@/lib/platform/tiers";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,
   createRateLimitResponse,
-} from "@/lib/security";
+} from "@/lib/core/security";
 
 // GET /api/contact — list all contacts for the current user
 export async function GET() {

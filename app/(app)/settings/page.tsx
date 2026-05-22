@@ -1,26 +1,24 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/i18n";
-import { auth } from "@/lib/auth/auth";
-import { db } from "@/lib/db";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
+import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { auth } from "@/lib/core/auth/auth";
+import { db } from "@/lib/core/db";
+import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import {
   getProviderStatus,
   getUserUsage,
   getUserPreferences,
-} from "@/lib/settings";
-import { TOOL_REGISTRY } from "@/lib/tools";
+} from "@/lib/platform/settings";
+import { TOOL_REGISTRY } from "@/lib/ai/tools";
 import { SettingsShell } from "@/components/settings";
 import type { AppLanguage } from "@/types/i18n";
 import { getPlanLimits, type Tier } from "@/types/billing";

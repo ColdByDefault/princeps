@@ -1,18 +1,16 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
-import { auth } from "@/lib/auth/auth";
-import { db } from "@/lib/db";
-import { getUserPreferences } from "@/lib/settings";
+import { auth } from "@/lib/core/auth/auth";
+import { db } from "@/lib/core/db";
+import { getUserPreferences } from "@/lib/platform/settings";
 import { Navbar, Footer, GlobalSearch } from "@/components/navigation";
 import { LanguageHydrator, ThemeHydrator } from "@/components/shared";
 import { ChatWidgetProvider } from "@/components/chat-widget";

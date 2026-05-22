@@ -26,13 +26,13 @@ The current live providers are:
 prisma/schema.prisma                         Integration + external source fields
 docs/03_FEATURES_REFERENCE.md                Human feature map
 docs/04_DEVELOPER_PLAYBOOK.md                Human provider checklist
-lib/integrations/shared/token.ts             Token lookup, refresh, and integration errors
-lib/integrations/shared/upsert.ts            OAuth upsert + lastSyncedAt helper
-lib/integrations/google-calendar/client.ts   OAuth client, scopes, token exchange
-lib/integrations/google-calendar/sync.ts     Calendar -> Meeting import
-lib/integrations/google-calendar/events.ts   Meeting -> Calendar best-effort writes
-lib/integrations/google-drive/client.ts      Drive OAuth client, scopes, token exchange
-lib/integrations/google-drive/index.ts       Drive listing, extraction, Knowledge import
+lib/platform/integrations/shared/token.ts             Token lookup, refresh, and integration errors
+lib/platform/integrations/shared/upsert.ts            OAuth upsert + lastSyncedAt helper
+lib/platform/integrations/google-calendar/client.ts   OAuth client, scopes, token exchange
+lib/platform/integrations/google-calendar/sync.ts     Calendar -> Meeting import
+lib/platform/integrations/google-calendar/events.ts   Meeting -> Calendar best-effort writes
+lib/platform/integrations/google-drive/client.ts      Drive OAuth client, scopes, token exchange
+lib/platform/integrations/google-drive/index.ts       Drive listing, extraction, Knowledge import
 app/api/integrations/route.ts                Lists connected integrations for settings
 app/api/integrations/<provider>/*/route.ts   Provider connect/callback/disconnect/actions
 components/settings/IntegrationsTab.tsx      Supported provider list
@@ -43,7 +43,7 @@ app/(app)/knowledge/page.tsx                 Passes driveConnected to KnowledgeP
 components/knowledge/DriveFileBrowser.tsx    Drive list/import client UI
 ```
 
-All `lib/integrations/*` modules are server-only. Never import provider clients or `@/lib/db` into client components.
+All `lib/platform/integrations/*` modules are server-only. Never import provider clients or `@/lib/core/db` into client components.
 
 ## Data Model
 
@@ -119,7 +119,7 @@ GOOGLE_DRIVE_REDIRECT_URI  # Drive callback
 
 ## Token Lifecycle
 
-Use `getValidToken(userId, provider, refreshFn)` from `lib/integrations/shared/token.ts`.
+Use `getValidToken(userId, provider, refreshFn)` from `lib/platform/integrations/shared/token.ts`.
 
 Behavior:
 
@@ -161,9 +161,9 @@ Provider string: `google_calendar`
 Files:
 
 ```text
-lib/integrations/google-calendar/client.ts
-lib/integrations/google-calendar/sync.ts
-lib/integrations/google-calendar/events.ts
+lib/platform/integrations/google-calendar/client.ts
+lib/platform/integrations/google-calendar/sync.ts
+lib/platform/integrations/google-calendar/events.ts
 app/api/integrations/google-calendar/*
 ```
 
@@ -200,8 +200,8 @@ Provider string: `google_drive`
 Files:
 
 ```text
-lib/integrations/google-drive/client.ts
-lib/integrations/google-drive/index.ts
+lib/platform/integrations/google-drive/client.ts
+lib/platform/integrations/google-drive/index.ts
 app/api/integrations/google-drive/*
 components/knowledge/DriveFileBrowser.tsx
 ```
@@ -240,10 +240,10 @@ Checklist:
 
 1. Choose a stable provider string, for example `microsoft_outlook`, `gmail`, `slack`, or `notion`.
 2. Decide which Princeps feature owns the imported data: Meetings, Tasks, Contacts, Knowledge, Notifications, or a new feature.
-3. Add `lib/integrations/<provider>/client.ts` with OAuth/client creation and token exchange.
+3. Add `lib/platform/integrations/<provider>/client.ts` with OAuth/client creation and token exchange.
 4. Add provider actions such as `sync.ts`, `events.ts`, `import.ts`, or `messages.ts`.
 5. Add routes under `app/api/integrations/<route-slug>/`.
-6. Use `auth.api.getSession()` in every route and delegate business logic to `lib/integrations/<provider>/`.
+6. Use `auth.api.getSession()` in every route and delegate business logic to `lib/platform/integrations/<provider>/`.
 7. Use a provider-specific OAuth state cookie.
 8. Store tokens with `upsertIntegration()` and read them with `getValidToken()`.
 9. Add settings UI metadata and provider list entries.

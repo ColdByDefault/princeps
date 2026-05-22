@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -13,7 +11,7 @@
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Pencil, CheckCircle2, Clock } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/core/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

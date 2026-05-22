@@ -1,17 +1,15 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.3
  * @since beta
- * @module
- * @description
  */
 
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { Bot, CheckCircle2, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
@@ -19,11 +17,15 @@ import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { type ChatMessageData } from "@/types/chat";
 import { useChatSettings } from "@/hooks/use-chat-settings";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+type ActivityItem =
+  | { kind: "tool"; name: string }
+  | { kind: "agent"; name: string; ok: boolean };
 
 type LiveMessage =
   | ChatMessageData
@@ -45,6 +47,9 @@ type Props = {
 export function ChatWindow({ chatId, initialMessages }: Props) {
   const t = useTranslations("chat");
   const [msgs, setMsgs] = useState<LiveMessage[]>(initialMessages);
+  const [activityMap, setActivityMap] = useState<
+    Record<string, ActivityItem[]>
+  >({});
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
   const inFlightRef = useRef(false);
@@ -117,7 +122,13 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
 
         for (const chunk of chunks) {
           if (!chunk.startsWith("data: ")) continue;
-          let event: { type: string; text?: string; message?: string };
+          let event: {
+            type: string;
+            text?: string;
+            message?: string;
+            name?: string;
+            ok?: boolean;
+          };
           try {
             event = JSON.parse(chunk.slice(6)) as typeof event;
           } catch {
@@ -132,6 +143,22 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
                   : m,
               ),
             );
+          } else if (event.type === "action" && event.name) {
+            setActivityMap((prev) => ({
+              ...prev,
+              [assistantId]: [
+                ...(prev[assistantId] ?? []),
+                { kind: "tool", name: event.name! },
+              ],
+            }));
+          } else if (event.type === "agent" && event.name) {
+            setActivityMap((prev) => ({
+              ...prev,
+              [assistantId]: [
+                ...(prev[assistantId] ?? []),
+                { kind: "agent", name: event.name!, ok: event.ok ?? true },
+              ],
+            }));
           } else if (event.type === "done") {
             setMsgs((prev) =>
               prev.map((m) =>
@@ -189,7 +216,11 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
         ) : (
           <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
             {msgs.map((msg) => (
-              <MessageBubble key={msg.id} msg={msg} />
+              <MessageBubble
+                key={msg.id}
+                msg={msg}
+                activityItems={activityMap[msg.id]}
+              />
             ))}
             <div ref={bottomRef} />
           </div>
@@ -227,14 +258,48 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
 
 // ─── Message Bubble ───────────────────────────────────────────────────────────
 
-function MessageBubble({ msg }: { msg: LiveMessage }) {
+function MessageBubble({
+  msg,
+  activityItems,
+}: {
+  msg: LiveMessage;
+  activityItems?: ActivityItem[];
+}) {
   const isUser = msg.role === "user";
   const isStreamingEmpty = "streaming" in msg && msg.streaming && !msg.content;
+  const items = activityItems ?? [];
 
   return (
     <div
-      className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}
+      className={cn(
+        "flex w-full flex-col gap-1",
+        isUser ? "items-end" : "items-start",
+      )}
     >
+      {/* Activity pills — shown above the assistant bubble when agents/tools ran */}
+      {!isUser && items.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 px-1">
+          {items.map((item, i) =>
+            item.kind === "agent" ? (
+              <span
+                key={i}
+                className="inline-flex items-center gap-1 rounded-full bg-violet-500/10 px-2 py-0.5 text-[11px] font-medium text-violet-600 dark:text-violet-400"
+              >
+                <Bot className="size-3" />
+                {item.name}
+              </span>
+            ) : (
+              <span
+                key={i}
+                className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-400"
+              >
+                <CheckCircle2 className="size-3" />
+                {item.name}
+              </span>
+            ),
+          )}
+        </div>
+      )}
       <div
         className={cn(
           "max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",

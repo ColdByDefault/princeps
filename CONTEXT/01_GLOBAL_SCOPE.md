@@ -35,10 +35,10 @@ Use `package.json` and the current code tree when details conflict with older do
 - PostgreSQL through Prisma, with pgvector for knowledge embeddings.
 - Better Auth for email/password sessions.
 - `next-intl` with German default and English second locale.
-- LLM provider abstraction in `lib/llm-providers/` for OpenAI, Ollama, and Groq.
+- LLM provider abstraction in `lib/ai/llm-providers/` for OpenAI, Ollama, and Groq.
 - Stripe for billing, Langfuse for optional production LLM observability, SSE for notification streaming.
 
-Naming note: some `.github` instructions mention `lib/llm/`; the current implementation uses `lib/llm-providers/`.
+Naming note: some `.github` instructions mention `lib/llm/`; the current implementation uses `lib/ai/llm-providers/`.
 
 ## Source Of Truth Order
 
@@ -68,12 +68,12 @@ Princeps currently spans:
 
 - All user data access is user-scoped unless explicitly admin-only.
 - Server-only code stays server-only: Prisma, Better Auth server helpers, LLM providers, pgvector, Stripe, and Node-only APIs.
-- No client import chain may reach `@/lib/db`.
+- No client import chain may reach `@/lib/core/db`.
 - API routes stay thin: authenticate, rate-limit or tier-gate if needed, parse, validate, delegate, respond.
-- Business logic lives in `lib/<feature>/`, not in route handlers, pages, or JSX components.
+- Business logic lives in `lib/features/<feature>/`, not in route handlers, pages, or JSX components.
 - Client component logic lives in `components/<feature>/logic/`; `.tsx` files should focus on rendering.
-- Tools are feature-agnostic. Registry and handlers live under `lib/tools/`; chat, cron, webhooks, and future agents can all use the same executor.
-- LLM context lives in `lib/context/`; each slot fetches and formats user-scoped workspace data.
+- Tools are feature-agnostic. Registry and handlers live under `lib/ai/tools/`; chat, cron, webhooks, and future agents can all use the same executor.
+- LLM context lives in `lib/ai/context/`; each slot fetches and formats user-scoped workspace data.
 - Chat consumes providers, tools, and context. It does not own them.
 - User-facing UI copy goes in both `messages/de.json` and `messages/en.json`.
 - Logs, validation details, and technical errors stay in English; in-app notices are localized.

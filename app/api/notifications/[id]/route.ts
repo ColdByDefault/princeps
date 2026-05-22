@@ -1,17 +1,15 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { markNotificationRead, deleteNotification } from "@/lib/notifications";
+import { auth } from "@/lib/core/auth/auth";
+import { markNotificationRead, deleteNotification } from "@/lib/features/notifications";
 
 type Params = { params: Promise<{ id: string }> };
 

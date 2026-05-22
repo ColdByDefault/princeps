@@ -17,7 +17,7 @@ Read only what applies:
 - `.github/instructions/features/feature.instructions.md` for full-stack wiring.
 - `.github/instructions/backend/server-data.instructions.md` for server-only and user-scope rules.
 
-Verify live code in `lib/tools/`, `lib/context/`, and the owning `lib/<feature>/` before editing.
+Verify live code in `lib/ai/tools/`, `lib/ai/context/`, and the owning `lib/features/<feature>/` before editing.
 
 ## Tool Workflow
 
@@ -27,22 +27,22 @@ Verify live code in `lib/tools/`, `lib/context/`, and the owning `lib/<feature>/
    - Expensive or destructive actions need clear intent, tier/usage gates, and safe descriptions.
 
 2. Add registry entries:
-   - Create or edit `lib/tools/registry/<feature>.registry.ts`.
+   - Create or edit `lib/ai/tools/registry/<feature>.registry.ts`.
    - Include `minTier`, `group`, OpenAI function schema, stable snake_case names, descriptions, and compact parameters.
    - Use friendly arguments when useful, such as `labelNames`, and resolve them in handlers.
-   - Import and spread the entries in `lib/tools/registry.ts`.
+   - Import and spread the entries in `lib/ai/tools/registry.ts`.
 
 3. Add handlers:
-   - Create or edit `lib/tools/handlers/<feature>.handler.ts`.
+   - Create or edit `lib/ai/tools/handlers/<feature>.handler.ts`.
    - Start with `import "server-only"` when server dependencies are imported.
    - Treat args as untrusted.
    - Resolve names to IDs before server validation when needed.
    - Validate with feature Zod schemas.
    - Prevent obvious duplicates where LLM repetition is likely.
    - Enforce the same feature-specific gates as API routes.
-   - Delegate to `lib/<feature>/`.
+   - Delegate to `lib/features/<feature>/`.
    - Return compact `ActionResult` data.
-   - Import and spread the handler map in `lib/tools/executor.ts`.
+   - Import and spread the handler map in `lib/ai/tools/executor.ts`.
 
 4. Keep orchestration clean:
    - Do not put feature logic in `registry.ts` or `executor.ts`.
@@ -51,7 +51,7 @@ Verify live code in `lib/tools/`, `lib/context/`, and the owning `lib/<feature>/
 
 ## Context Slot Workflow
 
-Add `lib/context/<feature>.slot.ts` when the assistant should know user-scoped feature data in conversations.
+Add `lib/ai/context/<feature>.slot.ts` when the assistant should know user-scoped feature data in conversations.
 
 - Fetch compact, bounded, user-owned data.
 - Include stable record IDs when tools may need them later.

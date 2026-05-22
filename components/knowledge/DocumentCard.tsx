@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -15,7 +13,7 @@ import { FileText, Trash2, Tag, HardDrive } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/core/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {

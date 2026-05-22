@@ -22,19 +22,19 @@ Tier enforcement has two separate jobs:
 - Limit usage volume: record counts, monthly messages, tokens, tool calls, uploads, voice minutes, prep packs, briefings.
 - Shape feature access: some LLM tools or expensive actions are hidden or blocked below a required tier.
 
-The user's current tier is stored on `User.tier` in `prisma/schema.prisma`. Stripe subscription sync updates this field through `lib/stripe/sync.ts`.
+The user's current tier is stored on `User.tier` in `prisma/schema.prisma`. Stripe subscription sync updates this field through `lib/platform/stripe/sync.ts`.
 
 ## Core Files
 
 ```text
 types/billing.ts             Tier type, PLAN_LIMITS, PLAN_PRICES, UsageSummary
-lib/tiers/enforce.ts         enforce* functions and createTierLimitResponse()
-lib/tiers/index.ts           tier barrel exports
+lib/platform/tiers/enforce.ts         enforce* functions and createTierLimitResponse()
+lib/platform/tiers/index.ts           tier barrel exports
 prisma/schema.prisma         User.tier and UsageCounter model
-lib/settings/usage.logic.ts  server-side Settings usage snapshot
+lib/platform/settings/usage.logic.ts  server-side Settings usage snapshot
 components/settings/UsageTab.tsx
-lib/tools/registry.ts        minTier filtering for LLM tools
-lib/tools/executor.ts        defense-in-depth active-tool check
+lib/ai/tools/registry.ts        minTier filtering for LLM tools
+lib/ai/tools/executor.ts        defense-in-depth active-tool check
 ```
 
 ## Plan Limits
@@ -79,7 +79,7 @@ Counters should be incremented only when an action is allowed and actually being
 
 ## Enforcement Helpers
 
-All plan gates live in `lib/tiers/enforce.ts`.
+All plan gates live in `lib/platform/tiers/enforce.ts`.
 
 Common patterns:
 
@@ -169,7 +169,7 @@ Takeaway: non-free features may be protected twice: hidden from the LLM by `minT
 
 LLM tools carry `minTier` in their registry entries.
 
-`lib/tools/registry.ts` filters tools through:
+`lib/ai/tools/registry.ts` filters tools through:
 
 ```text
 getToolsForTier(tier, disabledToolNames)
@@ -213,7 +213,7 @@ If a subscription is inactive, deleted, or has an unknown price ID, the runtime 
 
 ## Usage UI
 
-`lib/settings/usage.logic.ts` produces a `UsageSummary`.
+`lib/platform/settings/usage.logic.ts` produces a `UsageSummary`.
 
 It combines:
 
@@ -240,8 +240,8 @@ For a new quota-gated feature or action:
 1. Add fields to `PlanLimits`.
 2. Add values for all tiers in `PLAN_LIMITS`.
 3. Add `UsageCounter` fields if the quota is daily/monthly/lifetime.
-4. Add an `enforce*()` helper in `lib/tiers/enforce.ts`.
-5. Export the helper from `lib/tiers/index.ts`.
+4. Add an `enforce*()` helper in `lib/platform/tiers/enforce.ts`.
+5. Export the helper from `lib/platform/tiers/index.ts`.
 6. Call it in API routes before writes or expensive work.
 7. Call it in LLM tool handlers before writes or expensive work.
 8. Add `minTier` to tool registry entries if the LLM tool should be hidden below a tier.

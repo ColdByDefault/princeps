@@ -1,19 +1,17 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { auth } from "@/lib/auth/auth";
-import { exchangeGoogleCode } from "@/lib/integrations/google-calendar/client";
-import { upsertIntegration } from "@/lib/integrations/shared/upsert";
+import { auth } from "@/lib/core/auth/auth";
+import { exchangeGoogleCode } from "@/lib/platform/integrations/google-calendar/client";
+import { upsertIntegration } from "@/lib/platform/integrations/shared/upsert";
 
 /**
  * GET /api/integrations/google-calendar/callback?code=...&state=...

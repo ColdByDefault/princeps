@@ -1,18 +1,16 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { listChats, createChat } from "@/lib/chat";
-import { getChatHistoryLimit } from "@/lib/tiers";
+import { auth } from "@/lib/core/auth/auth";
+import { listChats, createChat } from "@/lib/features/chat";
+import { getChatHistoryLimit } from "@/lib/platform/tiers";
 
 // GET /api/chat — list chats for the current user
 export async function GET() {

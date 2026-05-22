@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -36,7 +34,7 @@ import {
   NavbarMobileBar,
   NavbarMobilePanel,
 } from "@/components/navigation/Navbar-Mobile";
-import { authClient } from "@/lib/auth/auth-client";
+import { authClient } from "@/lib/core/auth/auth-client";
 import { GREETING_SESSION_KEY } from "@/hooks/use-notifications";
 
 export { LanguageToggle } from "@/components/shared";

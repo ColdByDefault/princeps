@@ -1,36 +1,37 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.3
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
+import { auth } from "@/lib/core/auth/auth";
 import {
   getChatMessages,
   saveUserMessage,
   saveAssistantMessage,
   touchChat,
   setInitialTitle,
-} from "@/lib/chat";
-import { streamChat } from "@/lib/llm-providers";
-import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/security";
+} from "@/lib/features/chat";
+import { streamChat } from "@/lib/ai/llm-providers";
+import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/core/security";
 import {
   enforceMonthlyLimits,
   accumulateTokens,
   enforceToolCallsMonthly,
-} from "@/lib/tiers";
-import { getUserPreferences } from "@/lib/settings";
-import { buildSystemPrompt } from "@/lib/context/build";
-import { getActiveToolsForUser, executeToolCall } from "@/lib/tools";
-import { createReport } from "@/lib/reports";
+  getUserTier,
+} from "@/lib/platform/tiers";
+import { getUserPreferences } from "@/lib/platform/settings";
+import { buildSystemPrompt } from "@/lib/ai/context/build";
+import { getActiveToolsForUser, executeToolCall } from "@/lib/ai/tools";
+import { createReport } from "@/lib/features/reports";
+import { classifyMessage } from "@/lib/ai/agents/classify";
+import { runAgent } from "@/lib/ai/agents/registry";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
-import type { ReportDetailCall } from "@/lib/reports";
+import type { ReportDetailCall } from "@/lib/features/reports";
 
 type Params = { params: Promise<{ chatId: string }> };
 
@@ -93,9 +94,10 @@ export async function POST(req: Request, { params }: Params) {
   }
 
   // Build message array for LLM
-  const [prefs, activeTools] = await Promise.all([
+  const [prefs, activeTools, userTier] = await Promise.all([
     getUserPreferences(session.user.id),
     getActiveToolsForUser(session.user.id),
+    getUserTier(session.user.id),
   ]);
 
   const systemMessage = await buildSystemPrompt(session.user.id, userMessage, {
@@ -122,6 +124,52 @@ export async function POST(req: Request, { params }: Params) {
     { role: "user" as const, content: userMessage },
   ];
 
+  // ── Sub-agent pre-pass ──────────────────────────────────
+  // Classify the message and run matched agents before streaming.
+  // Results are injected as a synthetic assistant turn so the main LLM
+  // can reference completed work without streaming it to the user.
+  // Agent tool calls are seeded into reportDetails so they appear in reports.
+  const reportDetails: ReportDetailCall[] = [];
+  // Collected for UI events emitted at stream start so clients can show which agents ran.
+  const agentRunSummary: { name: string; ok: boolean }[] = [];
+
+  const agentNames = await classifyMessage(userMessage, userTier);
+  if (agentNames.length > 0) {
+    const agentResults = await Promise.all(
+      agentNames.map((name) =>
+        runAgent(name, { userId: session.user.id, userMessage }),
+      ),
+    );
+
+    // Collect run summary for UI events
+    for (let i = 0; i < agentNames.length; i++) {
+      agentRunSummary.push({ name: agentNames[i], ok: agentResults[i].ok });
+    }
+
+    // Seed reportDetails with every tool call the agents performed
+    for (const agentResult of agentResults) {
+      if (agentResult.agentCalls) {
+        for (const call of agentResult.agentCalls) {
+          reportDetails.push(
+            buildDetailCall(call.toolName, call.args, call.result),
+          );
+        }
+      }
+    }
+
+    const summaries = agentResults
+      .filter((r) => r.ok && r.summary)
+      .map((r) => r.summary)
+      .join("\n\n");
+    if (summaries) {
+      // Insert before the final user message so the main LLM sees the results naturally
+      llmMessages.splice(llmMessages.length - 1, 0, {
+        role: "assistant",
+        content: summaries,
+      });
+    }
+  }
+
   // Stream response as SSE
   const stream = new ReadableStream({
     async start(controller) {
@@ -135,7 +183,12 @@ export async function POST(req: Request, { params }: Params) {
 
       let assistantContent = "";
       let toolCallChars = 0;
-      const reportDetails: ReportDetailCall[] = [];
+      // reportDetails is declared above and pre-seeded with any agent tool calls
+
+      // Emit agent pre-pass events so the client can show which agents ran
+      for (const agentRun of agentRunSummary) {
+        send({ type: "agent", name: agentRun.name, ok: agentRun.ok });
+      }
 
       try {
         // Multi-round tool calling before the final text-only response pass.

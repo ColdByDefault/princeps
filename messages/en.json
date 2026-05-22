@@ -1211,6 +1211,11 @@
         "what": "Searches your personal knowledge base using semantic similarity to find relevant excerpts from uploaded documents.",
         "example": "\"What does my onboarding document say about vacation policy?\""
       },
+      "create_knowledge": {
+        "label": "Save to Knowledge Base",
+        "what": "Saves a new piece of information or note permanently to your personal knowledge base.",
+        "example": "\"Save this to my knowledge base: our enterprise tier starts at €299/month\""
+      },
       "search_drive": {
         "label": "Search Drive",
         "what": "Searches documents indexed from your Google Drive using semantic similarity to find relevant excerpts.",

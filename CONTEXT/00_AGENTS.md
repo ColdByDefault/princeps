@@ -25,7 +25,7 @@ Use this order when sources disagree:
 6. `docs/` for product decisions and developer manuals.
 7. `.github/` for GitHub/Copilot agent behavior and detailed rule packs.
 
-Important: some `.github` instruction files still mention `lib/llm/`. The live implementation uses `lib/llm-providers/`. Prefer live code and `CONTEXT/05_LLM_PROVIDERS.md` for provider paths.
+Important: some `.github` instruction files still mention `lib/llm/`. The live implementation uses `lib/ai/llm-providers/`. Prefer live code and `CONTEXT/05_LLM_PROVIDERS.md` for provider paths.
 
 ## First Reads
 
@@ -261,10 +261,10 @@ Update `.github/` when:
 
 ## Conflict Examples
 
-If `.github` says `lib/llm/` but code uses `lib/llm-providers/`:
+If `.github` says `lib/llm/` but code uses `lib/ai/llm-providers/`:
 
 ```text
-Use lib/llm-providers/.
+Use lib/ai/llm-providers/.
 Mention the stale instruction if editing docs or agent guidance.
 ```
 

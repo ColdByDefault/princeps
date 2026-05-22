@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -27,7 +25,7 @@ import {
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
-import { cn, formatDateTime } from "@/lib/utils";
+import { cn, formatDateTime } from "@/lib/core/utils";
 import type { MeetingRecord } from "@/types/api";
 import {
   Dialog,

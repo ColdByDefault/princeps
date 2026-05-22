@@ -1,20 +1,18 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/i18n";
-import { auth } from "@/lib/auth/auth";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listContacts } from "@/lib/contacts";
-import { listLabels } from "@/lib/labels";
+import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { auth } from "@/lib/core/auth/auth";
+import { defineSEO, getSeoLocale } from "@/lib/core/seo";
+import { listContacts } from "@/lib/features/contacts";
+import { listLabels } from "@/lib/features/labels";
 import { ContactsShell } from "@/components/contact";
 import type { AppLanguage } from "@/types/i18n";
 

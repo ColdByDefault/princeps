@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -30,7 +28,7 @@ import type {
   AssistantTone,
   AddressStyle,
   ResponseLength,
-} from "@/lib/settings/types";
+} from "@/lib/platform/settings/types";
 
 type AssistantTabProps = {
   initialAssistantName: string | null;

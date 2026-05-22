@@ -1,18 +1,16 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-import { stripe } from "@/lib/stripe/client";
-import { syncUserTierFromSubscription } from "@/lib/stripe/sync";
+import { stripe } from "@/lib/platform/stripe/client";
+import { syncUserTierFromSubscription } from "@/lib/platform/stripe/sync";
 import type Stripe from "stripe";
 
 // Stripe sends raw body — must not be parsed by Next.js body parser

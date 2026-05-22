@@ -36,7 +36,7 @@ const mocks = vi.hoisted(() => ({
   taskCreate: vi.fn<(args: TaskCreateArgs) => Promise<DbTaskRow>>(),
 }));
 
-vi.mock("@/lib/db", () => ({
+vi.mock("@/lib/core/db", () => ({
   db: {
     task: {
       create: mocks.taskCreate,
@@ -44,7 +44,7 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
-import { createTask } from "@/lib/tasks/create.logic";
+import { createTask } from "@/lib/features/tasks/create.logic";
 
 describe("createTask", () => {
   beforeEach(() => {

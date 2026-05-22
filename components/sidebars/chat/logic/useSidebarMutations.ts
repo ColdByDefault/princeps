@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -140,7 +138,7 @@ export function useSidebarMutations() {
   const handleSignOut = async () => {
     if (isSigningOut) return;
     setIsSigningOut(true);
-    const { authClient } = await import("@/lib/auth/auth-client");
+    const { authClient } = await import("@/lib/core/auth/auth-client");
     const result = await authClient.signOut();
     if (result.error) {
       setIsSigningOut(false);

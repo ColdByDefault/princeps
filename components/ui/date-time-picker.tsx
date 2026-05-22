@@ -10,7 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 
 interface DateTimePickerProps {
   /** Empty string or "YYYY-MM-DDThh:mm" (datetime-local format). */

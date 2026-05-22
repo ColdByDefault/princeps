@@ -4,15 +4,13 @@
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { auth } from "@/lib/auth/auth";
-import { buildDriveAuthUrl } from "@/lib/integrations/google-drive/client";
+import { auth } from "@/lib/core/auth/auth";
+import { buildDriveAuthUrl } from "@/lib/platform/integrations/google-drive/client";
 import { randomBytes } from "crypto";
 
 /**

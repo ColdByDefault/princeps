@@ -1,22 +1,20 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { createMilestone, createMilestoneSchema } from "@/lib/goals";
+import { auth } from "@/lib/core/auth/auth";
+import { createMilestone, createMilestoneSchema } from "@/lib/features/goals";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,
   createRateLimitResponse,
-} from "@/lib/security";
+} from "@/lib/core/security";
 
 type Params = { params: Promise<{ id: string }> };
 

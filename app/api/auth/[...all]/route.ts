@@ -1,20 +1,18 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
-import { auth } from "@/lib/auth/auth";
+import { auth } from "@/lib/core/auth/auth";
 import { toNextJsHandler } from "better-auth/next-js";
 import {
   authRateLimiter,
   createRateLimitResponse,
   getRateLimitIdentifier,
-} from "@/lib/security";
+} from "@/lib/core/security";
 
 const handler = toNextJsHandler(auth);
 

@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { getRequestConfig } from "next-intl/server";
@@ -15,8 +13,8 @@ import {
   LANGUAGE_COOKIE_NAME,
   isSupportedLanguage,
 } from "@/types/i18n";
-import { auth } from "@/lib/auth/auth";
-import { getUserPreferences } from "@/lib/settings";
+import { auth } from "@/lib/core/auth/auth";
+import { getUserPreferences } from "@/lib/platform/settings";
 
 function getLanguageFromHeader(value: string | null) {
   if (!value) return DEFAULT_LANGUAGE;

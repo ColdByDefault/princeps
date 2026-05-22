@@ -1,8 +1,16 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version canary-v1.0.2
+ * @since canary-v1.0.2
+ */ 
+
 "use client";
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

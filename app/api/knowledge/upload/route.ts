@@ -1,21 +1,19 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { enforceKnowledgeUpload, createTierLimitResponse } from "@/lib/tiers";
+import { auth } from "@/lib/core/auth/auth";
+import { enforceKnowledgeUpload, createTierLimitResponse } from "@/lib/platform/tiers";
 import {
   createKnowledgeDocument,
   createKnowledgeDocumentSchema,
-} from "@/lib/knowledge";
+} from "@/lib/features/knowledge";
 
 // POST /api/knowledge/upload — parse a text/markdown file and index it
 //

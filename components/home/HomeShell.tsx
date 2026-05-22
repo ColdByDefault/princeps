@@ -1,18 +1,16 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
 
 import { useTranslations } from "next-intl";
 import { BriefingCard } from "./BriefingCard";
-import type { WeatherSnapshot } from "@/lib/weather/types";
+import type { WeatherSnapshot } from "@/lib/services/weather/types";
 import type { BriefingRecord } from "@/types/api";
 import Threads from "../backgrounds-effects/BackgroundThread";
 

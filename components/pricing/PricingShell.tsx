@@ -1,18 +1,16 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
 
 import { Check, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { PLAN_LIMITS, PLAN_PRICES } from "@/types/billing";
 import type { Tier } from "@/types/billing";
 

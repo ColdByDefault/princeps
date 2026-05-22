@@ -51,7 +51,7 @@ Do not answer from context or docs alone. Always verify the current implementati
 - Current code, `package.json`, `prisma/schema.prisma`, and migrations are the final source for implementation details.
 - `AGENTS.md`, `CONTEXT/`, `docs/`, and `.github/` explain intent, process, and architecture; use them to guide investigation.
 - If guidance conflicts, call out the conflict explicitly and say which source you are trusting.
-- Some older guidance may mention `lib/llm/`; the live implementation uses `lib/llm-providers/`. Verify provider paths in code and `CONTEXT/05_LLM_PROVIDERS.md`.
+- Some older guidance may mention `lib/llm/`; the live implementation uses `lib/ai/llm-providers/`. Verify provider paths in code and `CONTEXT/05_LLM_PROVIDERS.md`.
 
 ## Approach
 

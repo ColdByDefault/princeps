@@ -1,23 +1,21 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import "server-only";
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/i18n";
-import { auth } from "@/lib/auth/auth";
-import { defineSEO, getSeoLocale } from "@/lib/seo";
-import { listGoals } from "@/lib/goals";
-import { listLabels } from "@/lib/labels";
-import { listTasks } from "@/lib/tasks";
+import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { auth } from "@/lib/core/auth/auth";
+import { defineSEO, getSeoLocale } from "@/lib/core/seo";
+import { listGoals } from "@/lib/features/goals";
+import { listLabels } from "@/lib/features/labels";
+import { listTasks } from "@/lib/features/tasks";
 import { GoalsShell } from "@/components/goals";
 import type { AppLanguage } from "@/types/i18n";
 

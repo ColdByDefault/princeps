@@ -1,22 +1,20 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { listLabels, createLabel, createLabelSchema } from "@/lib/labels";
+import { auth } from "@/lib/core/auth/auth";
+import { listLabels, createLabel, createLabelSchema } from "@/lib/features/labels";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,
   createRateLimitResponse,
-} from "@/lib/security";
+} from "@/lib/core/security";
 
 // GET /api/labels — list labels for the current user
 export async function GET() {

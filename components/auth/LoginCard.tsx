@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -18,8 +16,8 @@ import { useTranslations } from "next-intl";
 import { AuthShell } from "@/components/auth/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth/auth-client";
-import { signInSchema } from "@/lib/auth/auth-schemas";
+import { authClient } from "@/lib/core/auth/auth-client";
+import { signInSchema } from "@/lib/core/auth/auth-schemas";
 
 export default function LoginCard() {
   const t = useTranslations("auth");

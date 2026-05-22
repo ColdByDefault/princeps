@@ -1,23 +1,21 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { listTasks, createTask, createTaskSchema } from "@/lib/tasks";
+import { auth } from "@/lib/core/auth/auth";
+import { listTasks, createTask, createTaskSchema } from "@/lib/features/tasks";
 import {
   writeRateLimiter,
   getRateLimitIdentifier,
   createRateLimitResponse,
-} from "@/lib/security";
-import { enforceTasksMax, createTierLimitResponse } from "@/lib/tiers";
+} from "@/lib/core/security";
+import { enforceTasksMax, createTierLimitResponse } from "@/lib/platform/tiers";
 
 // GET /api/tasks — list tasks for the current user
 export async function GET(req: Request) {

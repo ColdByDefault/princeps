@@ -1,17 +1,15 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { listNotifications, deleteAllNotifications } from "@/lib/notifications";
+import { auth } from "@/lib/core/auth/auth";
+import { listNotifications, deleteAllNotifications } from "@/lib/features/notifications";
 
 // GET /api/notifications — list all non-dismissed notifications
 export async function GET() {

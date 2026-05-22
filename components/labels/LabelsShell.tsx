@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 "use client";
@@ -14,7 +12,7 @@ import { useState, useTransition } from "react";
 import { Pencil, Trash2, Plus, Tag, RefreshCw, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import {
   LABEL_ICON_MAP,
   LABEL_ICON_NAMES,

@@ -1,11 +1,9 @@
-﻿/**
+/**
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
  * @version beta
  * @since beta
- * @module
- * @description
  */
 
 import { NextIntlClientProvider } from "next-intl";
@@ -13,7 +11,7 @@ import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/core/utils";
 import { Geist } from "next/font/google";
 import "./globals.css";
 

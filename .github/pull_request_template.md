@@ -28,6 +28,6 @@ Closes #
 - [ ] i18n strings added to both `messages/de.json` and `messages/en.json` (if applicable)
 - [ ] No hardcoded user-facing strings
 - [ ] Server-only modules use `import "server-only"` (if applicable)
-- [ ] No client import reaches `@/lib/db`
+- [ ] No client import reaches `@/lib/core/db`
 
 ## Screenshots (if applicable)
