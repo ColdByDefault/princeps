@@ -3,14 +3,6 @@ import type { TaskRecord } from "@/types/api";
 import type { CreateTaskInput } from "@/lib/features/tasks/schemas";
 import type * as taskSchemas from "@/lib/features/tasks/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type TaskStatus = "open" | "in_progress" | "done" | "cancelled";
 type ListTasks = (
   userId: string,
@@ -20,17 +12,11 @@ type CreateTask = (
   userId: string,
   input: CreateTaskInput,
 ) => Promise<TaskRecord>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 type EnforceTasksMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createTask: vi.fn<CreateTask>(),
   enforceTasksMax: vi.fn<EnforceTasksMax>(),

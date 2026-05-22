@@ -1,20 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
-
 const cookieStore = {
   delete: vi.fn(),
   get: vi.fn(),
   set: vi.fn(),
 };
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   buildDriveAuthUrl: vi.fn<(state: string) => string>(),
   buildGoogleAuthUrl: vi.fn<(state: string) => string>(),

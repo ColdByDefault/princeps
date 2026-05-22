@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-type HeadersProvider = () => Promise<Headers>;
-
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   constructEvent: vi.fn(),
   headers: vi.fn<HeadersProvider>(),
@@ -120,7 +119,7 @@ describe("/api/stripe/webhook route", () => {
 
     const response = await POST(
       new Request("http://localhost/api/stripe/webhook", {
-        body: "{\"type\":\"checkout.session.completed\"}",
+        body: '{"type":"checkout.session.completed"}',
         method: "POST",
       }),
     );

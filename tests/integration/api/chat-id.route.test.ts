@@ -1,13 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type DeleteChat = (chatId: string, userId: string) => Promise<{ ok: boolean }>;
 type RenameChat = (
   chatId: string,
@@ -15,6 +7,7 @@ type RenameChat = (
   title: string,
 ) => Promise<{ ok: true } | { ok: false; error: string }>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteChat: vi.fn<DeleteChat>(),
   getSession: vi.fn<GetSession>(),

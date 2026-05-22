@@ -1,18 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { NotificationRecord } from "@/types/api";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type GenerateDailyGreeting = (
   userId: string,
 ) => Promise<{ created: boolean; notification: NotificationRecord | null }>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   generateDailyGreeting: vi.fn<GenerateDailyGreeting>(),
   getSession: vi.fn<GetSession>(),

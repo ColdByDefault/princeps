@@ -1,14 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChatSummary } from "@/types/chat";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type ListChats = (userId: string) => Promise<ChatSummary[]>;
 type CreateChat = (
   userId: string,
@@ -18,6 +10,7 @@ type CreateChat = (
   | { ok: false; limitReached: false; error: string }
 >;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createChat: vi.fn<CreateChat>(),
   getChatHistoryLimit: vi.fn<(userId: string) => Promise<number>>(),

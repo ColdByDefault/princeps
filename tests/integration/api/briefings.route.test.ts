@@ -1,29 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { BriefingRecord } from "@/types/api";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type GetBriefing = (userId: string) => Promise<BriefingRecord | null>;
 type GenerateBriefing = (
   userId: string,
 ) => Promise<{ ok: true; briefing: BriefingRecord } | { ok: false; error: string }>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 type EnforceBriefingMonthly = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   enforceBriefingMonthly: vi.fn<EnforceBriefingMonthly>(),
   generateBriefing: vi.fn<GenerateBriefing>(),

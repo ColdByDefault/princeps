@@ -3,14 +3,6 @@ import type { ContactRecord } from "@/types/api";
 import type { UpdateContactInput } from "@/lib/features/contacts/schemas";
 import type * as contactSchemas from "@/lib/features/contacts/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type UpdateContact = (
   contactId: string,
   userId: string,
@@ -20,14 +12,8 @@ type DeleteContact = (
   contactId: string,
   userId: string,
 ) => Promise<{ ok: boolean }>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteContact: vi.fn<DeleteContact>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

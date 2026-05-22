@@ -3,14 +3,6 @@ import type { MilestoneRecord } from "@/types/api";
 import type { UpdateMilestoneInput } from "@/lib/features/goals/schemas";
 import type * as goalSchemas from "@/lib/features/goals/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type UpdateMilestone = (
   milestoneId: string,
   goalId: string,
@@ -22,14 +14,8 @@ type DeleteMilestone = (
   goalId: string,
   userId: string,
 ) => Promise<{ ok: boolean }>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteMilestone: vi.fn<DeleteMilestone>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

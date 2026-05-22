@@ -3,21 +3,6 @@ import type { ContactNoteRecord } from "@/types/api";
 import type { LogInteractionInput } from "@/lib/features/contacts/schemas";
 import type * as contactSchemas from "@/lib/features/contacts/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 type LogContactInteraction = (
   userId: string,
   contactId: string,
@@ -28,6 +13,7 @@ type ListContactInteractions = (
   contactId: string,
 ) => Promise<ContactNoteRecord[]>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),
   getSession: vi.fn<GetSession>(),

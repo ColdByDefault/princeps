@@ -1,15 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { OpenAISettings } from "@/lib/ai/llm-providers/openai/openai-settings";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
-
 const fetchMock = vi.fn<typeof fetch>();
 
 const settings: OpenAISettings = {
@@ -22,6 +13,7 @@ const settings: OpenAISettings = {
   timeoutMs: 30000,
 };
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   enforceVoiceRequests: vi.fn<
     (userId: string) => Promise<{ allowed: boolean; reason?: string }>

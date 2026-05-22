@@ -3,14 +3,6 @@ import type { GoalRecord } from "@/types/api";
 import type { CreateGoalInput } from "@/lib/features/goals/schemas";
 import type * as goalSchemas from "@/lib/features/goals/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type GoalStatus = "open" | "in_progress" | "done" | "cancelled";
 type ListGoals = (
   userId: string,
@@ -20,17 +12,11 @@ type CreateGoal = (
   userId: string,
   input: CreateGoalInput,
 ) => Promise<GoalRecord>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 type EnforceGoalsMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createGoal: vi.fn<CreateGoal>(),
   enforceGoalsMax: vi.fn<EnforceGoalsMax>(),

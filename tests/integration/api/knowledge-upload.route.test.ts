@@ -3,14 +3,6 @@ import type { KnowledgeDocumentRecord } from "@/types/api";
 import type { CreateKnowledgeDocumentInput } from "@/lib/features/knowledge/schemas";
 import type * as knowledgeSchemas from "@/lib/features/knowledge/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type CreateKnowledgeDocument = (
   userId: string,
   input: CreateKnowledgeDocumentInput,
@@ -21,6 +13,7 @@ type EnforceKnowledgeUpload = (
   newCharCount: number,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createKnowledgeDocument: vi.fn<CreateKnowledgeDocument>(),
   enforceKnowledgeUpload: vi.fn<EnforceKnowledgeUpload>(),

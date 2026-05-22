@@ -3,30 +3,16 @@ import type { ContactRecord } from "@/types/api";
 import type { CreateContactInput } from "@/lib/features/contacts/schemas";
 import type * as contactSchemas from "@/lib/features/contacts/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type ListContacts = (userId: string) => Promise<ContactRecord[]>;
 type CreateContact = (
   userId: string,
   input: CreateContactInput,
 ) => Promise<ContactRecord>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 type EnforceContactsMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createContact: vi.fn<CreateContact>(),
   enforceContactsMax: vi.fn<EnforceContactsMax>(),

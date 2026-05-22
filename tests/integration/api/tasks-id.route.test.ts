@@ -3,14 +3,6 @@ import type { TaskRecord } from "@/types/api";
 import type { UpdateTaskInput } from "@/lib/features/tasks/schemas";
 import type * as taskSchemas from "@/lib/features/tasks/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type UpdateTask = (
   taskId: string,
   userId: string,
@@ -24,14 +16,8 @@ type DeleteTask = (
   taskId: string,
   userId: string,
 ) => Promise<{ ok: boolean }>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteTask: vi.fn<DeleteTask>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

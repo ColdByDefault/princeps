@@ -1,15 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { UsageSummary } from "@/types/billing";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
-
 const usage: UsageSummary = {
   tier: "pro",
   messagesUsed: 10,
@@ -49,6 +40,7 @@ const usage: UsageSummary = {
   monthlyResetDate: "2026-05",
 };
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   getSession: vi.fn<GetSession>(),
   getUserUsage: vi.fn<(userId: string) => Promise<UsageSummary>>(),

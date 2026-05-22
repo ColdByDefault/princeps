@@ -1,17 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { NotificationRecord } from "@/types/api";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type ListNotifications = (userId: string) => Promise<NotificationRecord[]>;
 type DeleteAllNotifications = (userId: string) => Promise<{ count: number }>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteAllNotifications: vi.fn<DeleteAllNotifications>(),
   getSession: vi.fn<GetSession>(),

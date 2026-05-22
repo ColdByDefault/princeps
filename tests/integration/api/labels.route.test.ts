@@ -3,14 +3,6 @@ import type { LabelRecord } from "@/types/api";
 import type { CreateLabelInput } from "@/lib/features/labels/schemas";
 import type * as labelSchemas from "@/lib/features/labels/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type ListLabels = (userId: string) => Promise<LabelRecord[]>;
 type CreateLabel = (
   userId: string,
@@ -20,14 +12,8 @@ type CreateLabel = (
   | { ok: false; duplicate: true }
   | { ok: false; duplicate: false; error: string }
 >;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createLabel: vi.fn<CreateLabel>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

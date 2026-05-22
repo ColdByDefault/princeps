@@ -3,14 +3,6 @@ import type { MeetingRecord } from "@/types/api";
 import type { CreateMeetingInput } from "@/lib/features/meetings/schemas";
 import type * as meetingSchemas from "@/lib/features/meetings/schemas";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type MeetingStatus = "upcoming" | "done" | "cancelled";
 type ListMeetings = (
   userId: string,
@@ -20,17 +12,11 @@ type CreateMeeting = (
   userId: string,
   input: CreateMeetingInput,
 ) => Promise<MeetingRecord>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 type EnforceMeetingsMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createMeeting: vi.fn<CreateMeeting>(),
   enforceMeetingsMax: vi.fn<EnforceMeetingsMax>(),
