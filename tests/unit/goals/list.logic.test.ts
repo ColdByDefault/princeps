@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { GoalRecord } from "@/types/api";
+import type { LabelLinkRow, TaskLinkRow } from "@/tests/helpers/db-rows";
 
 type DbGoalRow = {
   id: string;
@@ -18,10 +19,8 @@ type DbGoalRow = {
     createdAt: Date;
     updatedAt: Date;
   }[];
-  taskLinks: { task: { id: string; title: string; status: string } }[];
-  labelLinks: {
-    label: { id: string; name: string; color: string; icon: string | null };
-  }[];
+  taskLinks: TaskLinkRow[];
+  labelLinks: LabelLinkRow[];
 };
 
 type GoalFindManyArgs = {

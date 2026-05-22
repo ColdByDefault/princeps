@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { KnowledgeDocumentRecord } from "@/types/api";
+import type { LabelLinkRow } from "@/tests/helpers/db-rows";
 
 type DbKnowledgeDocumentRow = {
   id: string;
@@ -7,9 +8,7 @@ type DbKnowledgeDocumentRow = {
   charCount: number;
   sourceType: string | null;
   createdAt: Date;
-  labelLinks: {
-    label: { id: string; name: string; color: string; icon: string | null };
-  }[];
+  labelLinks: LabelLinkRow[];
 };
 
 type TransactionClient = {
