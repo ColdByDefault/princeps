@@ -1,9 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import {
-import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
-  IntegrationExpiredError,
-  IntegrationNotFoundError,
-} from "@/lib/platform/integrations/shared/token";
+import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
+
 
 const mocks = vi.hoisted(() => ({
   getSession: vi.fn<GetSession>(),
@@ -37,6 +34,7 @@ vi.mock("@/lib/platform/integrations/google-drive", () => ({
 import { POST as syncCalendar } from "@/app/api/integrations/google-calendar/sync/route";
 import { POST as importDrive } from "@/app/api/integrations/google-drive/import/route";
 import { POST as syncDrive } from "@/app/api/integrations/google-drive/sync/route";
+import { IntegrationExpiredError, IntegrationNotFoundError } from "@/lib/platform/integrations/shared/token";
 
 describe("Google integration action routes", () => {
   beforeEach(() => {

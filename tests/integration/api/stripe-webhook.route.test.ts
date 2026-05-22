@@ -47,6 +47,7 @@ describe("/api/stripe/webhook route", () => {
   });
 
   afterEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     consoleErrorSpy.mockRestore();
     if (originalWebhookSecret === undefined) {
       delete process.env.STRIPE_WEBHOOK_SECRET;

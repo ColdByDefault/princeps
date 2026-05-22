@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { NotificationRecord } from "@/types/api";
-import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
+import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 
 type GenerateDailyGreeting = (
   userId: string,

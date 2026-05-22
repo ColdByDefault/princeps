@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { LabelRecord } from "@/types/api";
 import type { UpdateLabelInput } from "@/lib/features/labels/schemas";
 import type * as labelSchemas from "@/lib/features/labels/schemas";
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
 type UpdateLabel = (
   labelId: string,

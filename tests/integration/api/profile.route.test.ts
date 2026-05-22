@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { UpdateProfileInput } from "@/lib/features/profile/schemas";
 import type * as profileSchemas from "@/lib/features/profile/schemas";
-import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
+import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 
 type UpdateProfile = (
   userId: string,

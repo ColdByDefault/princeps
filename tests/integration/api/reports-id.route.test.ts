@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
+import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 
 type DeleteReport = (userId: string, reportId: string) => Promise<boolean>;
 

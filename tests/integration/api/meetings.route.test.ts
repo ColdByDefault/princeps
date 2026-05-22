@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MeetingRecord } from "@/types/api";
 import type { CreateMeetingInput } from "@/lib/features/meetings/schemas";
 import type * as meetingSchemas from "@/lib/features/meetings/schemas";
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
 type MeetingStatus = "upcoming" | "done" | "cancelled";
 type ListMeetings = (

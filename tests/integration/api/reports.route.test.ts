@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AssistantReportRecord } from "@/lib/features/reports/shared.logic";
-import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
+import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 
 type ListReports = (userId: string) => Promise<AssistantReportRecord[]>;
 type DeleteAllReports = (userId: string) => Promise<number>;

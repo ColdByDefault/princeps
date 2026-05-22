@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { KnowledgeDocumentRecord } from "@/types/api";
 import type { CreateKnowledgeDocumentInput } from "@/lib/features/knowledge/schemas";
 import type * as knowledgeSchemas from "@/lib/features/knowledge/schemas";
-import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
+import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 
 type CreateKnowledgeDocument = (
   userId: string,

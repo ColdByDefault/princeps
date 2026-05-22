@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { KnowledgeDocumentRecord } from "@/types/api";
-import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
-
+import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 type ListKnowledgeDocuments = (
   userId: string,
 ) => Promise<KnowledgeDocumentRecord[]>;

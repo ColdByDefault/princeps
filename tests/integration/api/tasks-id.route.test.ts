@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { TaskRecord } from "@/types/api";
 import type { UpdateTaskInput } from "@/lib/features/tasks/schemas";
 import type * as taskSchemas from "@/lib/features/tasks/schemas";
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
 type UpdateTask = (
   taskId: string,
