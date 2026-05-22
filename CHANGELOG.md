@@ -1,3 +1,40 @@
+## [1.1.3] - 2026-05-22
+
+- feat: update version to canary-v1.1.3 and enhance tool descriptions for clarity; add tool test prompts documentation
+- feat: add create knowledge functionality to knowledge base in English and German translations
+- feat: enhance agent interaction tracking in chat components; update versioning and message handling for agents
+- F1 — Commitment Tracker (promises made and owed) Fixes #86 F2 — Voice Memo → Structured Data (parse and dispatch) Fixes #87 E1 — Decision Outcome Journal (follow-up tracking) Fixes #84 G3 — Structured Weekly Review ritual Fixes #91 G5 — Signal / Intelligence Feed (topic monitoring) Fixes #93
+- feat: implement signal-feed and weekly-review cron handlers; add commitment-tracker agent and enhance agent classification with user tier
+- docs: add known gaps and next steps for sub-agents implementation
+- refactor: update type inference in label schemas and improve test file imports
+- Refactor: Remove unnecessary module and description comments from various files
+- chore: remove unused module and description comments from auth components
+- chore: remove unused module and description comments from route files
+- Refactor code structure and documentation
+- refactor: lib/
+- feat: document implementation status and details for sub-agents phase 1
+- feat: implement sub-agent definitions and routing for decision logging, weekly reviews, and signal feeds
+- feat: update core runner and add task-extractor agent definition
+- test: add types and core runner for Princeps sub-agents system
+- test: add unit tests for meetings API routes and prep pack logic
+- test: add unit tests for meeting deletion and update functionalities
+- test: add unit tests for meeting creation, listing, and schema validation
+- test: add unit tests for goals and milestones CRUD operations
+- test: add unit tests for goal deletion and update functionalities
+- test: add unit tests for goal creation, listing, and schema validation
+- test: add unit tests for report creation, deletion, and listing functionalities
+- test: add unit and integration tests for memory entry creation, update, deletion, and listing functionalities
+- test: add unit tests for label deletion and update functionalities
+- test: add unit tests for label creation, listing, and schema validation
+- test: add unit and integration tests for decision creation, update, deletion, and listing functionalities
+- test: add integration tests for contacts API routes including create and list functionality
+- test: add unit tests for contact deletion and update logic
+- test: add unit tests for contact creation, listing, and schemas
+- feat: introduce sub-agents architecture for enhanced task processing
+- security: fix brace-expansion DoS vulnerability (GHSA-jxxr-4gwj-5jf2)
+
+# Changelog
+
 ## [1.1.2] - 2026-05-21
 
 - chore(deps): bump the npm_and_yarn group across 1 directory with 2 updates
