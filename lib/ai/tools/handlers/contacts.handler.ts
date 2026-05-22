@@ -2,19 +2,24 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
 import "server-only";
 
 import { createContact } from "@/lib/features/contacts/create.logic";
-import { listContacts, getContactById } from "@/lib/features/contacts/list.logic";
+import {
+  listContacts,
+  getContactById,
+} from "@/lib/features/contacts/list.logic";
 import { updateContact } from "@/lib/features/contacts/update.logic";
 import { deleteContact } from "@/lib/features/contacts/delete.logic";
+import { logContactInteraction } from "@/lib/features/contacts/log-interaction.logic";
 import {
   createContactSchema,
   updateContactSchema,
+  logInteractionSchema,
 } from "@/lib/features/contacts/schemas";
 import { resolveOrCreateLabelIdsByNames } from "@/lib/ai/tools/resolvers";
 import { enforceContactsMax } from "@/lib/platform/tiers";
@@ -131,9 +136,50 @@ async function handleDeleteContact(
   return { ok: true, data: { deleted: true, name: contact.name } };
 }
 
+async function handleLogContactInteraction(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  // Resolve contactId from name if not provided directly
+  let contactId = typeof args.contactId === "string" ? args.contactId : null;
+
+  if (!contactId && typeof args.contactName === "string") {
+    const all = await listContacts(userId);
+    const normalized = args.contactName.trim().toLowerCase();
+    const found = all.find((c) => c.name.trim().toLowerCase() === normalized);
+    if (!found) {
+      return {
+        ok: false,
+        error: `No contact found with name "${args.contactName}". Create the contact first or provide the contactId.`,
+      };
+    }
+    contactId = found.id;
+  }
+
+  if (!contactId) {
+    return {
+      ok: false,
+      error: "log_contact_interaction requires contactId or contactName.",
+    };
+  }
+
+  const parsed = logInteractionSchema.safeParse(args);
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error:
+        parsed.error.issues[0]?.message ??
+        "Invalid log_contact_interaction input.",
+    };
+  }
+
+  return logContactInteraction(userId, contactId, parsed.data);
+}
+
 export const contactHandlers: Record<string, ToolHandler> = {
   create_contact: handleCreateContact,
   list_contacts: handleListContacts,
   update_contact: handleUpdateContact,
   delete_contact: handleDeleteContact,
+  log_contact_interaction: handleLogContactInteraction,
 };

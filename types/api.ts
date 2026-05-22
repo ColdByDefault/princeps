@@ -2,8 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
- * @since beta
+ * @version canary-v1.1.4
+ * @since canary-v1.1.4
  */
 
 import type { Tier } from "@/types/billing";
@@ -84,6 +84,17 @@ export interface ContactRecord {
   lastContact: string | null; // ISO string on the client
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
+}
+
+/** Client-safe shape of a manual contact interaction note. */
+export interface ContactNoteRecord {
+  id: string;
+  userId: string;
+  contactId: string;
+  type: string; // "call" | "email" | "meeting" | "note"
+  note: string;
+  date: string; // ISO string on the client
+  createdAt: string; // ISO string on the client
 }
 
 /** Client-safe shape of a meeting participant. */

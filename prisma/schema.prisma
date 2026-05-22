@@ -111,6 +111,7 @@ model User {
   knowledgeDocuments KnowledgeDocument[]
   knowledgeChunks    KnowledgeChunk[]
   contacts           Contact[]
+  contactNotes       ContactNote[]
   meetings           Meeting[]
   tasks              Task[]
   assistantReports   AssistantReport[]
@@ -276,6 +277,7 @@ model Contact {
   user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   meetings     MeetingParticipant[]
   interactions ContactInteraction[]
+  contactNotes ContactNote[]
   labelLinks   LabelOnContact[]
 
   @@index([userId])
@@ -294,6 +296,23 @@ model ContactInteraction {
   @@index([contactId])
   @@index([sourceId])
   @@map("contact_interaction")
+}
+
+model ContactNote {
+  id        String   @id @default(cuid())
+  userId    String
+  contactId String
+  type      String   @default("note") // "call" | "email" | "meeting" | "note"
+  note      String
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([contactId])
+  @@map("contact_note")
 }
 
 // ─── Meetings ─────────────────────────────────────────────

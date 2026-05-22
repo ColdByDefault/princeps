@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -117,6 +117,46 @@ export const contactTools: ToolRegistryEntry[] = [
           },
         },
         required: ["contactId"],
+      },
+    },
+  },
+  {
+    minTier: "free",
+    group: "contacts",
+    type: "function",
+    function: {
+      name: "log_contact_interaction",
+      description:
+        "Log a manual interaction with a contact — e.g. 'I called Marcus today, he confirmed the pilot.' Accepts a contact name or ID. Updates the contact's lastContact date automatically.",
+      parameters: {
+        type: "object",
+        properties: {
+          contactId: {
+            type: "string",
+            description:
+              "ID of the contact. Provide either contactId or contactName.",
+          },
+          contactName: {
+            type: "string",
+            description:
+              "Name of the contact. Used to resolve the ID when contactId is not known.",
+          },
+          type: {
+            type: "string",
+            enum: ["call", "email", "meeting", "note"],
+            description: "Type of interaction. Defaults to 'note'.",
+          },
+          note: {
+            type: "string",
+            description: "Free-text description of the interaction.",
+          },
+          date: {
+            type: "string",
+            description:
+              "ISO 8601 date string for when the interaction occurred. Defaults to now.",
+          },
+        },
+        required: ["note"],
       },
     },
   },
