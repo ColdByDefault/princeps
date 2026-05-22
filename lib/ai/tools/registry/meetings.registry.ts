@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.3
  * @since beta
  */
 
@@ -180,13 +180,15 @@ export const meetingTools: ToolRegistryEntry[] = [
     type: "function",
     function: {
       name: "delete_meeting",
-      description: "Permanently delete a meeting. Requires the meetingId.",
+      description:
+        "Permanently delete a meeting. You must have a real meeting ID returned by list_meetings IN THE CURRENT RESPONSE. Do not use meeting IDs from earlier turns in the conversation — those may belong to different meetings. Do not call this tool if list_meetings returned no results in this turn.",
       parameters: {
         type: "object",
         properties: {
           meetingId: {
             type: "string",
-            description: "ID of the meeting to delete.",
+            description:
+              "The exact meeting ID returned by list_meetings in this response. Never use an ID from a previous conversation turn, a meeting title, or an invented value.",
           },
         },
         required: ["meetingId"],

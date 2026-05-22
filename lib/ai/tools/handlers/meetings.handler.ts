@@ -26,7 +26,10 @@ import {
   resolveContactIdsByRefs,
   resolveOrCreateLabelIdsByNames,
 } from "@/lib/ai/tools/resolvers";
-import { enforceMeetingsMax, enforcePrepPackMonthly } from "@/lib/platform/tiers";
+import {
+  enforceMeetingsMax,
+  enforcePrepPackMonthly,
+} from "@/lib/platform/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/ai/tools/types";
 
 async function handleCreateMeeting(
@@ -197,7 +200,17 @@ async function handleGeneratePrepPack(
       error: "error" in result ? result.error : "Failed to generate prep pack.",
     };
   }
-  return { ok: true, data: result.meeting };
+  // Return a slim confirmation — the full prep pack content is stored in the DB
+  // and visible in the Meetings view. Returning the full meeting object would cause
+  // the LLM to reproduce the entire prep pack markdown in the chat response.
+  return {
+    ok: true,
+    data: {
+      meetingId: args.meetingId,
+      title: result.meeting.title,
+      prepPackGenerated: true,
+    },
+  };
 }
 
 async function handleGetPrepPack(
@@ -309,7 +322,15 @@ async function handleUpdatePrepPack(
       error: "error" in result ? result.error : "Failed to update prep pack.",
     };
   }
-  return { ok: true, data: result.meeting };
+  // Return a slim confirmation only — same reason as generate_meeting_prep_pack.
+  return {
+    ok: true,
+    data: {
+      meetingId: args.meetingId,
+      title: result.meeting.title,
+      prepPackUpdated: true,
+    },
+  };
 }
 
 export const meetingHandlers: Record<string, ToolHandler> = {

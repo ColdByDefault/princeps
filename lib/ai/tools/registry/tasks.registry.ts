@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.3
  * @since beta
  */
 
@@ -92,13 +92,14 @@ export const taskTools: ToolRegistryEntry[] = [
     function: {
       name: "complete_task",
       description:
-        "Mark a task as done. Use when the user says a task is finished, completed, or done.",
+        "Mark a task as done. Use when the user says a task is finished, completed, or done. You must have a real task ID from a prior list_tasks or create_task result before calling this tool. Do not call this tool if list_tasks returned no results.",
       parameters: {
         type: "object",
         properties: {
           taskId: {
             type: "string",
-            description: "The ID of the task to mark as done.",
+            description:
+              "The exact task ID returned by list_tasks or create_task. Never pass a task title or invented value here.",
           },
         },
         required: ["taskId"],

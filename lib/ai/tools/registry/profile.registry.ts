@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.3
  * @since beta
  */
 
@@ -18,7 +18,7 @@ export const profileTools: ToolRegistryEntry[] = [
     function: {
       name: "get_user_info",
       description:
-        "Retrieve the current user's profile information: name, username, email, plan tier, role, timezone, and account creation date. Use this when the user asks about their own account, profile, or plan details.",
+        "Retrieve the current user's profile information: name, username, email, plan tier, role, timezone, and account creation date. Only use this when the user explicitly asks about their own account, profile, or plan details. Do not call this tool proactively or as part of unrelated workflows.",
       parameters: {
         type: "object",
         properties: {},
