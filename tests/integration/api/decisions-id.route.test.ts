@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { DecisionRecord } from "@/types/api";
 import type { UpdateDecisionInput } from "@/lib/features/decisions/schemas";
 import type * as decisionSchemas from "@/lib/features/decisions/schemas";
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
 type UpdateDecision = (
   decisionId: string,
