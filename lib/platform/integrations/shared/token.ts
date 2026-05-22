@@ -2,13 +2,17 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
 import "server-only";
 
 import { db } from "@/lib/core/db";
+import {
+  decryptToken,
+  encryptToken,
+} from "@/lib/platform/integrations/shared/crypto";
 
 export class IntegrationNotFoundError extends Error {
   constructor(provider: string) {
@@ -53,7 +57,7 @@ export async function getValidToken(
     integration.expiresAt.getTime() - Date.now() < fiveMinutes;
 
   if (!isExpiringSoon) {
-    return integration.accessToken;
+    return decryptToken(integration.accessToken);
   }
 
   if (!integration.refreshToken) {
@@ -61,11 +65,11 @@ export async function getValidToken(
   }
 
   try {
-    const refreshed = await refreshFn(integration.refreshToken);
+    const refreshed = await refreshFn(decryptToken(integration.refreshToken));
     await db.integration.update({
       where: { userId_provider: { userId, provider } },
       data: {
-        accessToken: refreshed.accessToken,
+        accessToken: encryptToken(refreshed.accessToken),
         expiresAt: refreshed.expiresAt,
       },
     });
