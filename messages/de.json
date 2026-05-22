@@ -1211,6 +1211,11 @@
         "what": "Durchsucht deine persönliche Wissensdatenbank semantisch und findet relevante Ausschnitte aus hochgeladenen Dokumenten.",
         "example": "\"Was steht in meinem Onboarding-Dokument zur Urlaubsregelung?\""
       },
+      "create_knowledge": {
+        "label": "Wissen speichern",
+        "what": "Speichert eine neue Information oder Notiz dauerhaft in deiner persönlichen Wissensdatenbank.",
+        "example": "\"Speichere folgendes in meiner Wissensdatenbank: Unser Enterprise-Tarif kostet ab 299 €/Monat\""
+      },
       "search_drive": {
         "label": "Drive durchsuchen",
         "what": "Durchsucht Dokumente aus deinem Google Drive semantisch und findet relevante Ausschnitte.",
