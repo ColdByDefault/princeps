@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MilestoneRecord } from "@/types/api";
 import type { UpdateMilestoneInput } from "@/lib/features/goals/schemas";
 import type * as goalSchemas from "@/lib/features/goals/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
 type UpdateMilestone = (
   milestoneId: string,
@@ -15,7 +16,6 @@ type DeleteMilestone = (
   userId: string,
 ) => Promise<{ ok: boolean }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteMilestone: vi.fn<DeleteMilestone>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

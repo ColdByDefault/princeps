@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ProviderStatusPayload } from "@/types/llm";
+import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
 
 const providerStatus: ProviderStatusPayload = {
   active: "openAi",
@@ -17,7 +18,6 @@ const providerStatus: ProviderStatusPayload = {
   ],
 };
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   getProviderStatus: vi.fn<() => Promise<ProviderStatusPayload>>(),
   getSession: vi.fn<GetSession>(),

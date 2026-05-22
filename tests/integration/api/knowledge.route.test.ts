@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { KnowledgeDocumentRecord } from "@/types/api";
+import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
 
 type ListKnowledgeDocuments = (
   userId: string,
 ) => Promise<KnowledgeDocumentRecord[]>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   getSession: vi.fn<GetSession>(),
   headers: vi.fn<HeadersProvider>(),

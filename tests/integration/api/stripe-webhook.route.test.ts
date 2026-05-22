@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { HeadersProvider } from "@/tests/helpers/types";
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   constructEvent: vi.fn(),
   headers: vi.fn<HeadersProvider>(),

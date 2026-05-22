@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { GoalRecord } from "@/types/api";
 import type { CreateGoalInput } from "@/lib/features/goals/schemas";
 import type * as goalSchemas from "@/lib/features/goals/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 
 type GoalStatus = "open" | "in_progress" | "done" | "cancelled";
 type ListGoals = (
@@ -16,7 +17,6 @@ type EnforceGoalsMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createGoal: vi.fn<CreateGoal>(),
   enforceGoalsMax: vi.fn<EnforceGoalsMax>(),

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ContactRecord } from "@/types/api";
 import type { UpdateContactInput } from "@/lib/features/contacts/schemas";
 import type * as contactSchemas from "@/lib/features/contacts/schemas";
-
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 type UpdateContact = (
   contactId: string,
   userId: string,
@@ -13,7 +13,6 @@ type DeleteContact = (
   userId: string,
 ) => Promise<{ ok: boolean }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteContact: vi.fn<DeleteContact>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

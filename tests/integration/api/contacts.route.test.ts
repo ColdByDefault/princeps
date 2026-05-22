@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ContactRecord } from "@/types/api";
 import type { CreateContactInput } from "@/lib/features/contacts/schemas";
 import type * as contactSchemas from "@/lib/features/contacts/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
 type ListContacts = (userId: string) => Promise<ContactRecord[]>;
 type CreateContact = (
@@ -12,7 +13,6 @@ type EnforceContactsMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createContact: vi.fn<CreateContact>(),
   enforceContactsMax: vi.fn<EnforceContactsMax>(),

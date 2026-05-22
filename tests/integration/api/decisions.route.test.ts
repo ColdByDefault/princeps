@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { DecisionRecord } from "@/types/api";
 import type { CreateDecisionInput } from "@/lib/features/decisions/schemas";
 import type * as decisionSchemas from "@/lib/features/decisions/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 
 type DecisionStatus = "open" | "decided" | "reversed";
 type ListDecisions = (
@@ -16,7 +17,6 @@ type EnforceDecisionsMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createDecision: vi.fn<CreateDecision>(),
   enforceDecisionsMax: vi.fn<EnforceDecisionsMax>(),

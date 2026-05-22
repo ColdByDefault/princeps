@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { KnowledgeDocumentRecord } from "@/types/api";
 import type { CreateKnowledgeDocumentInput } from "@/lib/features/knowledge/schemas";
 import type * as knowledgeSchemas from "@/lib/features/knowledge/schemas";
+import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
 
 type CreateKnowledgeDocument = (
   userId: string,
@@ -13,7 +14,6 @@ type EnforceKnowledgeUpload = (
   newCharCount: number,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createKnowledgeDocument: vi.fn<CreateKnowledgeDocument>(),
   enforceKnowledgeUpload: vi.fn<EnforceKnowledgeUpload>(),

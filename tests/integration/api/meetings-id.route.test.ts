@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MeetingRecord } from "@/types/api";
 import type { UpdateMeetingInput } from "@/lib/features/meetings/schemas";
 import type * as meetingSchemas from "@/lib/features/meetings/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 
 type UpdateMeeting = (
   meetingId: string,
@@ -17,7 +18,6 @@ type DeleteMeeting = (
   userId: string,
 ) => Promise<{ ok: boolean }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteMeeting: vi.fn<DeleteMeeting>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

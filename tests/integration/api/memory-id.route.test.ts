@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MemoryEntryRecord } from "@/types/api";
 import type { UpdateMemoryEntryInput } from "@/lib/features/memory/schemas";
 import type * as memorySchemas from "@/lib/features/memory/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 
 type UpdateMemoryEntry = (
   userId: string,
@@ -13,7 +14,6 @@ type DeleteMemoryEntry = (
   id: string,
 ) => Promise<{ ok: boolean }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteMemoryEntry: vi.fn<DeleteMemoryEntry>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { TaskRecord } from "@/types/api";
 import type { CreateTaskInput } from "@/lib/features/tasks/schemas";
 import type * as taskSchemas from "@/lib/features/tasks/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 
 type TaskStatus = "open" | "in_progress" | "done" | "cancelled";
 type ListTasks = (
@@ -16,7 +17,6 @@ type EnforceTasksMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createTask: vi.fn<CreateTask>(),
   enforceTasksMax: vi.fn<EnforceTasksMax>(),

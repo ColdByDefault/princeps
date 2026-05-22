@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { OpenAISettings } from "@/lib/ai/llm-providers/openai/openai-settings";
+import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 
 const fetchMock = vi.fn<typeof fetch>();
 
@@ -13,7 +14,6 @@ const settings: OpenAISettings = {
   timeoutMs: 30000,
 };
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   enforceVoiceRequests: vi.fn<
     (userId: string) => Promise<{ allowed: boolean; reason?: string }>

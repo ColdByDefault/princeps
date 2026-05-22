@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MemoryEntryRecord } from "@/types/api";
 import type { CreateMemoryEntryInput } from "@/lib/features/memory/schemas";
 import type * as memorySchemas from "@/lib/features/memory/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 
 type ListMemoryEntries = (userId: string) => Promise<MemoryEntryRecord[]>;
 type CreateMemoryEntry = (
@@ -13,7 +14,6 @@ type EnforceMemoryMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createMemoryEntry: vi.fn<CreateMemoryEntry>(),
   enforceMemoryMax: vi.fn<EnforceMemoryMax>(),

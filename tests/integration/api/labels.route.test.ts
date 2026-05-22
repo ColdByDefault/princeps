@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { LabelRecord } from "@/types/api";
 import type { CreateLabelInput } from "@/lib/features/labels/schemas";
 import type * as labelSchemas from "@/lib/features/labels/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 
 type ListLabels = (userId: string) => Promise<LabelRecord[]>;
 type CreateLabel = (
@@ -13,7 +14,6 @@ type CreateLabel = (
   | { ok: false; duplicate: false; error: string }
 >;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   createLabel: vi.fn<CreateLabel>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

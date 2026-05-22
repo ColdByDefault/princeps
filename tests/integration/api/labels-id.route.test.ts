@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { LabelRecord } from "@/types/api";
 import type { UpdateLabelInput } from "@/lib/features/labels/schemas";
 import type * as labelSchemas from "@/lib/features/labels/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 
 type UpdateLabel = (
   labelId: string,
@@ -18,7 +19,6 @@ type DeleteLabel = (
   userId: string,
 ) => Promise<{ ok: boolean }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteLabel: vi.fn<DeleteLabel>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ContactNoteRecord } from "@/types/api";
 import type { LogInteractionInput } from "@/lib/features/contacts/schemas";
 import type * as contactSchemas from "@/lib/features/contacts/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
 type LogContactInteraction = (
   userId: string,
@@ -13,7 +14,6 @@ type ListContactInteractions = (
   contactId: string,
 ) => Promise<ContactNoteRecord[]>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),
   getSession: vi.fn<GetSession>(),

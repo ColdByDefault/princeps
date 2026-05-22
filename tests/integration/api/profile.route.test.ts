@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { UpdateProfileInput } from "@/lib/features/profile/schemas";
 import type * as profileSchemas from "@/lib/features/profile/schemas";
+import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
 
 type UpdateProfile = (
   userId: string,
@@ -10,7 +11,6 @@ type UpdateProfile = (
   | { ok: false; error: string }
 >;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   getSession: vi.fn<GetSession>(),
   headers: vi.fn<HeadersProvider>(),

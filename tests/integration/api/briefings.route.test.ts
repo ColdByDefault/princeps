@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { BriefingRecord } from "@/types/api";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
 type GetBriefing = (userId: string) => Promise<BriefingRecord | null>;
 type GenerateBriefing = (
@@ -9,7 +10,6 @@ type EnforceBriefingMonthly = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   enforceBriefingMonthly: vi.fn<EnforceBriefingMonthly>(),
   generateBriefing: vi.fn<GenerateBriefing>(),

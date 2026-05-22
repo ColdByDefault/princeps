@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { NotificationRecord } from "@/types/api";
+import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
 
 type MarkNotificationRead = (
   userId: string,
@@ -10,7 +11,6 @@ type DeleteNotification = (
   notificationId: string,
 ) => Promise<{ ok: boolean }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteNotification: vi.fn<DeleteNotification>(),
   getSession: vi.fn<GetSession>(),

@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
 
 type DeleteReport = (userId: string, reportId: string) => Promise<boolean>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteReport: vi.fn<DeleteReport>(),
   getSession: vi.fn<GetSession>(),

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { TaskRecord } from "@/types/api";
 import type { UpdateTaskInput } from "@/lib/features/tasks/schemas";
 import type * as taskSchemas from "@/lib/features/tasks/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 
 type UpdateTask = (
   taskId: string,
@@ -17,7 +18,6 @@ type DeleteTask = (
   userId: string,
 ) => Promise<{ ok: boolean }>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteTask: vi.fn<DeleteTask>(),
   getRateLimitIdentifier: vi.fn<RateLimitIdentifier>(),

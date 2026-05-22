@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AssistantReportRecord } from "@/lib/features/reports/shared.logic";
+import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
 
 type ListReports = (userId: string) => Promise<AssistantReportRecord[]>;
 type DeleteAllReports = (userId: string) => Promise<number>;
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   deleteAllReports: vi.fn<DeleteAllReports>(),
   getSession: vi.fn<GetSession>(),

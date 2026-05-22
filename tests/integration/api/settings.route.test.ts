@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { GetSession, HeadersProvider, Session } from "@/tests/helpers/types";
 
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier, Session } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   getSession: vi.fn<GetSession>(),
   getUserPreferences: vi.fn<() => Promise<{ assistantName: string | null }>>(),
