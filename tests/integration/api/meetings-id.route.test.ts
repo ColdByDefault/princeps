@@ -2,15 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MeetingRecord } from "@/types/api";
 import type { UpdateMeetingInput } from "@/lib/features/meetings/schemas";
 import type * as meetingSchemas from "@/lib/features/meetings/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type UpdateMeeting = (
   meetingId: string,
   userId: string,
@@ -24,13 +17,6 @@ type DeleteMeeting = (
   meetingId: string,
   userId: string,
 ) => Promise<{ ok: boolean }>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 
 const mocks = vi.hoisted(() => ({
   deleteMeeting: vi.fn<DeleteMeeting>(),

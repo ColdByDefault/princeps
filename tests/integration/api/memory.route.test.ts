@@ -2,28 +2,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MemoryEntryRecord } from "@/types/api";
 import type { CreateMemoryEntryInput } from "@/lib/features/memory/schemas";
 import type * as memorySchemas from "@/lib/features/memory/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type ListMemoryEntries = (userId: string) => Promise<MemoryEntryRecord[]>;
 type CreateMemoryEntry = (
   userId: string,
   input: CreateMemoryEntryInput,
   source?: "llm" | "user",
 ) => Promise<MemoryEntryRecord>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 type EnforceMemoryMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;

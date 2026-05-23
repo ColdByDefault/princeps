@@ -2,13 +2,14 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
- * @since beta
+ * @version canary-v1.1.4
+ * @since canary-v1.1.4
  */
 
 import "server-only";
 
 import { db } from "@/lib/core/db";
+import { encryptToken } from "@/lib/platform/integrations/shared/crypto";
 
 interface UpsertIntegrationInput {
   userId: string;
@@ -35,13 +36,17 @@ export async function upsertIntegration(
     create: {
       userId: input.userId,
       provider: input.provider,
-      accessToken: input.accessToken,
-      refreshToken: input.refreshToken ?? null,
+      accessToken: encryptToken(input.accessToken),
+      refreshToken: input.refreshToken
+        ? encryptToken(input.refreshToken)
+        : null,
       expiresAt: input.expiresAt ?? null,
     },
     update: {
-      accessToken: input.accessToken,
-      refreshToken: input.refreshToken ?? null,
+      accessToken: encryptToken(input.accessToken),
+      refreshToken: input.refreshToken
+        ? encryptToken(input.refreshToken)
+        : null,
       expiresAt: input.expiresAt ?? null,
     },
   });

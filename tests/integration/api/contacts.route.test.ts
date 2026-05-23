@@ -2,27 +2,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ContactRecord } from "@/types/api";
 import type { CreateContactInput } from "@/lib/features/contacts/schemas";
 import type * as contactSchemas from "@/lib/features/contacts/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type ListContacts = (userId: string) => Promise<ContactRecord[]>;
 type CreateContact = (
   userId: string,
   input: CreateContactInput,
 ) => Promise<ContactRecord>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 type EnforceContactsMax = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -16,6 +16,7 @@ import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listGoals } from "@/lib/features/goals";
 import { listLabels } from "@/lib/features/labels";
 import { listTasks } from "@/lib/features/tasks";
+import { listContacts } from "@/lib/features/contacts";
 import { GoalsShell } from "@/components/goals";
 import type { AppLanguage } from "@/types/i18n";
 
@@ -34,10 +35,11 @@ export default async function GoalsPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
 
-  const [goals, labels, tasks] = await Promise.all([
+  const [goals, labels, tasks, contacts] = await Promise.all([
     listGoals(session.user.id),
     listLabels(session.user.id),
     listTasks(session.user.id),
+    listContacts(session.user.id),
   ]);
 
   return (
@@ -49,6 +51,7 @@ export default async function GoalsPage() {
         title: t.title,
         status: t.status,
       }))}
+      availableContacts={contacts.map((c) => ({ id: c.id, name: c.name }))}
     />
   );
 }

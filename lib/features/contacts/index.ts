@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -12,3 +12,4 @@ export * from "./create.logic";
 export * from "./list.logic";
 export * from "./update.logic";
 export * from "./delete.logic";
+export * from "./log-interaction.logic";

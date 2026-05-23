@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -46,6 +46,8 @@ type EditTaskDialogProps = {
       dueDate: string | null;
       labelIds: string[];
       goalIds: string[];
+      delegatedTo: string | null;
+      delegateNotes: string | null;
     }>,
   ) => Promise<boolean>;
   updating: boolean;
@@ -76,6 +78,8 @@ export function EditTaskDialog({
   const [selectedGoalIds, setSelectedGoalIds] = useState<string[]>(
     task?.goals.map((g) => g.id) ?? [],
   );
+  const [delegatedTo, setDelegatedTo] = useState(task?.delegatedTo ?? "");
+  const [delegateNotes, setDelegateNotes] = useState(task?.delegateNotes ?? "");
 
   function toggleLabel(id: string) {
     setSelectedLabelIds((prev) =>
@@ -101,6 +105,8 @@ export function EditTaskDialog({
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
       labelIds: selectedLabelIds,
       goalIds: selectedGoalIds,
+      delegatedTo: delegatedTo.trim() || null,
+      delegateNotes: delegateNotes.trim() || null,
     });
 
     if (ok) onOpenChange(false);
@@ -315,6 +321,48 @@ export function EditTaskDialog({
                   </button>
                 ))}
               </div>
+            </div>
+          )}
+
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-task-delegated-to">
+              {t("fields.delegatedTo")}
+              <span className="ml-1 text-xs font-normal text-muted-foreground">
+                ({t("fields.optional")})
+              </span>
+            </Label>
+            <Input
+              id="edit-task-delegated-to"
+              value={delegatedTo}
+              onChange={(e) => {
+                if (e.target.value.length <= 150)
+                  setDelegatedTo(e.target.value);
+              }}
+              placeholder={t("fields.delegatedToPlaceholder")}
+              maxLength={150}
+            />
+          </div>
+
+          {delegatedTo.trim() && (
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-task-delegate-notes">
+                {t("fields.delegateNotes")}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">
+                  ({t("fields.optional")})
+                </span>
+              </Label>
+              <Textarea
+                id="edit-task-delegate-notes"
+                value={delegateNotes}
+                onChange={(e) => {
+                  if (e.target.value.length <= 250)
+                    setDelegateNotes(e.target.value);
+                }}
+                placeholder={t("fields.delegateNotesPlaceholder")}
+                rows={2}
+                className="resize-none"
+                maxLength={250}
+              />
             </div>
           )}
 

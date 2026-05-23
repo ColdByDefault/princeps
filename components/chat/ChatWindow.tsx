@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -256,6 +256,53 @@ export function ChatWindow({ chatId, initialMessages }: Props) {
   );
 }
 
+// ─── Activity Bar ─────────────────────────────────────────────────────────────
+
+/**
+ * Single-line activity indicator shown above an assistant bubble.
+ * While the message is still streaming it shows the latest tool / agent name
+ * with an animated pulse dot and a "+N more" count.  Once streaming ends it
+ * settles to a compact static summary line.
+ */
+function ActivityBar({
+  items,
+  isStreaming,
+}: {
+  items: ActivityItem[];
+  isStreaming: boolean;
+}) {
+  if (items.length === 0) return null;
+
+  const latest = items[items.length - 1];
+  const count = items.length;
+  const isAgent = latest.kind === "agent";
+
+  return (
+    <div className="flex items-center gap-1.5 px-1 py-0.5 text-[11px]">
+      {isStreaming ? (
+        <span className="size-1.5 shrink-0 rounded-full bg-emerald-500 animate-pulse" />
+      ) : isAgent ? (
+        <Bot className="size-3 shrink-0 text-violet-500 dark:text-violet-400" />
+      ) : (
+        <CheckCircle2 className="size-3 shrink-0 text-emerald-600 dark:text-emerald-400" />
+      )}
+      <span
+        className={cn(
+          "font-medium",
+          isAgent
+            ? "text-violet-600 dark:text-violet-400"
+            : "text-emerald-700 dark:text-emerald-400",
+        )}
+      >
+        {latest.name}
+      </span>
+      {count > 1 && (
+        <span className="text-muted-foreground">· +{count - 1} more</span>
+      )}
+    </div>
+  );
+}
+
 // ─── Message Bubble ───────────────────────────────────────────────────────────
 
 function MessageBubble({
@@ -267,6 +314,7 @@ function MessageBubble({
 }) {
   const isUser = msg.role === "user";
   const isStreamingEmpty = "streaming" in msg && msg.streaming && !msg.content;
+  const isStreaming = "streaming" in msg && !!msg.streaming;
   const items = activityItems ?? [];
 
   return (
@@ -276,29 +324,9 @@ function MessageBubble({
         isUser ? "items-end" : "items-start",
       )}
     >
-      {/* Activity pills — shown above the assistant bubble when agents/tools ran */}
+      {/* Single-line activity bar — replaces the old stacking pill group */}
       {!isUser && items.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 px-1">
-          {items.map((item, i) =>
-            item.kind === "agent" ? (
-              <span
-                key={i}
-                className="inline-flex items-center gap-1 rounded-full bg-violet-500/10 px-2 py-0.5 text-[11px] font-medium text-violet-600 dark:text-violet-400"
-              >
-                <Bot className="size-3" />
-                {item.name}
-              </span>
-            ) : (
-              <span
-                key={i}
-                className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-400"
-              >
-                <CheckCircle2 className="size-3" />
-                {item.name}
-              </span>
-            ),
-          )}
-        </div>
+        <ActivityBar items={items} isStreaming={isStreaming} />
       )}
       <div
         className={cn(

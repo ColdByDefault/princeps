@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -39,6 +39,20 @@ export const GOAL_SELECT = {
       label: { select: { id: true, name: true, color: true, icon: true } },
     },
   },
+  stakeholderEntries: {
+    select: {
+      id: true,
+      goalId: true,
+      contactId: true,
+      role: true,
+      health: true,
+      notes: true,
+      createdAt: true,
+      updatedAt: true,
+      contact: { select: { name: true } },
+    },
+    orderBy: { createdAt: "asc" as const },
+  },
 };
 
 type GoalRow = {
@@ -61,6 +75,17 @@ type GoalRow = {
   taskLinks: { task: { id: string; title: string; status: string } }[];
   labelLinks: {
     label: { id: string; name: string; color: string; icon?: string | null };
+  }[];
+  stakeholderEntries: {
+    id: string;
+    goalId: string | null;
+    contactId: string;
+    role: string | null;
+    health: string;
+    notes: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    contact: { name: string };
   }[];
 };
 
@@ -86,6 +111,17 @@ export function toGoalRecord(row: GoalRow): GoalRecord {
     milestones: row.milestones.map(toMilestoneRecord),
     tasks: row.taskLinks.map((t) => t.task),
     labels: row.labelLinks.map((l) => l.label),
+    stakeholders: row.stakeholderEntries.map((s) => ({
+      id: s.id,
+      goalId: s.goalId,
+      contactId: s.contactId,
+      contactName: s.contact.name,
+      role: s.role,
+      health: s.health,
+      notes: s.notes,
+      createdAt: s.createdAt.toISOString(),
+      updatedAt: s.updatedAt.toISOString(),
+    })),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };

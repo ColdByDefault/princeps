@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -57,6 +57,16 @@ export const taskTools: ToolRegistryEntry[] = [
             items: { type: "string" },
             description:
               "Optional list of goal IDs or exact goal titles to link this task to. Use list_goals to find goal IDs first. Pass an empty array to remove all goal links.",
+          },
+          delegatedTo: {
+            type: "string",
+            description:
+              'Name of the person this task is delegated to (free-text, e.g. "Marcus" or "Sarah Chen"). Set when the user says they are handing off this task to someone else.',
+          },
+          delegateNotes: {
+            type: "string",
+            description:
+              "Optional notes about the delegation context or handoff details.",
           },
         },
         required: ["title"],
@@ -151,6 +161,16 @@ export const taskTools: ToolRegistryEntry[] = [
             items: { type: "string" },
             description:
               "Replacement set of goal IDs or exact goal titles to link this task to. Pass an empty array to remove all goal links. Use list_goals to find goal IDs.",
+          },
+          delegatedTo: {
+            type: "string",
+            description:
+              "Name of the person this task is delegated to. Pass null to clear delegation.",
+          },
+          delegateNotes: {
+            type: "string",
+            description:
+              "Notes about the delegation handoff. Pass null to clear.",
           },
         },
         required: ["taskId"],

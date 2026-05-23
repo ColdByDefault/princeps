@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -14,6 +14,7 @@ import type { TaskRecord } from "@/types/api";
 
 type ListTasksFilter = {
   status?: "open" | "in_progress" | "done" | "cancelled";
+  delegated?: boolean;
 };
 
 export async function listTasks(
@@ -24,6 +25,7 @@ export async function listTasks(
     where: {
       userId,
       ...(filter.status ? { status: filter.status } : {}),
+      ...(filter.delegated === true ? { delegatedTo: { not: null } } : {}),
     },
     orderBy: [{ dueDate: "asc" }, { createdAt: "desc" }],
     select: TASK_SELECT,

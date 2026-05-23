@@ -2,27 +2,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MilestoneRecord } from "@/types/api";
 import type { CreateMilestoneInput } from "@/lib/features/goals/schemas";
 import type * as goalSchemas from "@/lib/features/goals/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type CreateMilestone = (
   goalId: string,
   userId: string,
   input: CreateMilestoneInput,
 ) => Promise<MilestoneRecord | null>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 
 const mocks = vi.hoisted(() => ({
   createMilestone: vi.fn<CreateMilestone>(),

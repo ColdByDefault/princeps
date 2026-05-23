@@ -41,14 +41,17 @@ One prompt per tool. Each prompt should trigger exactly that tool and nothing el
 
 ### Goals
 
-| Tool                      | Test Prompt                                                                 |
-| ------------------------- | --------------------------------------------------------------------------- |
-| `create_goal`             | "Create a new goal: launch the beta by end of June 2026."                   |
-| `list_goals`              | "What are my current goals?"                                                |
-| `update_goal`             | "Push the beta launch goal deadline to July 15, 2026."                      |
-| `add_goal_milestone`      | "Add a milestone to my beta launch goal: finish onboarding flow by June 1." |
-| `complete_goal_milestone` | "Mark the 'finish onboarding flow' milestone as complete."                  |
-| `delete_goal`             | "Delete my beta launch goal."                                               |
+| Tool                        | Test Prompt                                                                 |
+| --------------------------- | --------------------------------------------------------------------------- |
+| `create_goal`               | "Create a new goal: launch the beta by end of June 2026."                   |
+| `list_goals`                | "What are my current goals?"                                                |
+| `update_goal`               | "Push the beta launch goal deadline to July 15, 2026."                      |
+| `add_goal_milestone`        | "Add a milestone to my beta launch goal: finish onboarding flow by June 1." |
+| `complete_goal_milestone`   | "Mark the 'finish onboarding flow' milestone as complete."                  |
+| `add_stakeholder`           | "Add Sarah Chen as a sponsor on my beta launch goal."                       |
+| `list_stakeholders`         | "Who are the stakeholders on my revenue goal?"                              |
+| `update_stakeholder_health` | "Mark Sarah Chen as cold on the beta launch goal."                          |
+| `delete_goal`               | "Delete my beta launch goal."                                               |
 
 ### Knowledge
 
@@ -160,4 +163,3 @@ One prompt per tool. Each prompt should trigger exactly that tool and nothing el
 12. `create_task` → draft investor deck outline, urgent, due June 8, linked to goal + meeting
 13. `create_task` → book intro calls with top 3 VCs, linked to goal + meeting
 14. `remember_fact` → Series B is top priority for June 2026
-

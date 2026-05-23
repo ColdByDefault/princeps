@@ -177,11 +177,11 @@ Up to 6 rounds of tool→response cycles
 
 **How it's built**:
 
-- **Model**: `Task` (id, userId, title, notes, status, priority, dueDate, meetingId)
+- **Model**: `Task` (id, userId, title, notes, status, priority, dueDate, meetingId, delegatedTo, delegatedAt, delegateNotes)
 - **Server logic**: `lib/features/tasks/` (create, list, update, delete, shared)
 - **API routes**: `GET|POST /api/tasks`, `PATCH|DELETE /api/tasks/[id]`
-- **UI**: `components/tasks/TasksShell.tsx` + cards, dialogs, mutation hook
-- **Tools**: `create_task`, `list_tasks`, `update_task`, `delete_task` (LLM-callable)
+- **UI**: `components/tasks/TasksShell.tsx` + cards, dialogs, mutation hook; "Delegated" filter tab surfaces tasks where `delegatedTo !== null`
+- **Tools**: `create_task`, `list_tasks`, `update_task`, `delete_task` (LLM-callable); `create_task`/`update_task` accept `delegatedTo` + `delegateNotes`; handler auto-stamps `delegatedAt = now()` when a name is set
 - **Context slot**: `lib/ai/context/tasks.slot.ts` — open + in_progress tasks in system prompt
 - **Tier gate**: `tasksMax` enforced before create (free: 20, pro: 100, premium: 500, enterprise: unlimited)
 
@@ -282,15 +282,15 @@ POST /api/decisions
 
 ### Goals
 
-**What it does**: Define goals with milestones, track progress, link to tasks.
+**What it does**: Define goals with milestones, track progress, link to tasks, and map stakeholder relationships per goal.
 
 **How it's built**:
 
-- **Model**: `Goal` (id, userId, title, description, targetDate, status, progress, meetingId), `Milestone` (id, goalId, title, targetDate, completedAt), `TaskOnGoal` join table
-- **Server logic**: `lib/features/goals/` (create, list, update, delete, milestones, shared)
-- **API routes**: `GET|POST /api/goals`, `PATCH|DELETE /api/goals/[id]`, `POST /api/goals/[id]/milestones`, `PATCH|DELETE /api/goals/[id]/milestones/[milestoneId]`
-- **UI**: `components/goals/GoalsShell.tsx` + dialogs, milestone management
-- **Tools**: `create_goal`, `list_goals`, `update_goal`, `delete_goal`, `add_milestone`, `complete_milestone`
+- **Model**: `Goal`, `Milestone`, `TaskOnGoal`, `StakeholderEntry` (id, userId, goalId?, contactId, role?, health, notes?)
+- **Server logic**: `lib/features/goals/` (create, list, update, delete, milestones, shared), `lib/features/stakeholders/` (create, list, update, delete, shared, schemas)
+- **API routes**: `GET|POST /api/goals`, `PATCH|DELETE /api/goals/[id]`, `POST /api/goals/[id]/milestones`, `PATCH|DELETE /api/goals/[id]/milestones/[milestoneId]`, `GET|POST /api/stakeholders`, `PATCH|DELETE /api/stakeholders/[id]`
+- **UI**: `components/goals/GoalsShell.tsx` + dialogs, milestone management, `StakeholderMapDialog`
+- **Tools**: `create_goal`, `list_goals`, `update_goal`, `delete_goal`, `add_milestone`, `complete_milestone`, `add_stakeholder`, `list_stakeholders`, `update_stakeholder_health`
 - **Context slot**: `lib/ai/context/goals.slot.ts` — open + in_progress goals in system prompt
 - **Tier gate**: `goalsMax` enforced (free: 5, pro: 25, premium: 100, enterprise: unlimited)
 

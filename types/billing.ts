@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -101,6 +101,11 @@ export interface PlanLimits {
    * `0` = feature disabled for this tier (free).
    */
   voiceMinutesPerMonth: number;
+  /**
+   * Max total reading queue items stored at once (no monthly reset).
+   * `0` = feature disabled for this tier (free). `-1` = unlimited.
+   */
+  readingQueueMax: number;
 }
 
 /**
@@ -136,6 +141,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     voiceRequestsPerDay: 0,
     voiceRequestsPerMonth: 0,
     voiceMinutesPerMonth: 0,
+    readingQueueMax: 0,
   },
   pro: {
     knowledgeDocs: 25,
@@ -161,6 +167,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     voiceRequestsPerDay: 30,
     voiceRequestsPerMonth: 200,
     voiceMinutesPerMonth: 60,
+    readingQueueMax: 50,
   },
   premium: {
     knowledgeDocs: 50,
@@ -186,6 +193,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     voiceRequestsPerDay: 60,
     voiceRequestsPerMonth: 500,
     voiceMinutesPerMonth: 150,
+    readingQueueMax: 200,
   },
   enterprise: {
     knowledgeDocs: 200,
@@ -211,6 +219,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     voiceRequestsPerDay: 150,
     voiceRequestsPerMonth: 2_000,
     voiceMinutesPerMonth: 600,
+    readingQueueMax: -1,
   },
 };
 
@@ -309,4 +318,8 @@ export interface UsageSummary {
   voiceMinutesLimit: number;
   /** "YYYY-MM" string of the current billing month, or null if never tracked. */
   monthlyResetDate: string | null;
+  /** Current count of reading queue items at rest. */
+  readingQueueStored: number;
+  /** Plan maximum for reading queue items. `0` = feature disabled. `-1` = unlimited. */
+  readingQueueLimit: number;
 }

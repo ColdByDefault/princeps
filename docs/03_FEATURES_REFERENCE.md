@@ -88,7 +88,9 @@ Manual uploads and Drive imports both enforce knowledge quotas. Raw uploaded fil
 
 Purpose:
 
-- Track work with title, notes, status, priority, due date, labels, meeting links, and goal links.
+- Track work with title, notes, status, priority, due date, labels, meeting links, goal links, and delegation (hand off to a named person with optional handoff notes).
+
+Delegation fields on `Task`: `delegatedTo` (free-text name), `delegatedAt` (timestamp), `delegateNotes` (optional context). The **Delegated** filter tab in the UI surfaces all tasks where `delegatedTo` is set. The LLM auto-stamps `delegatedAt = now()` when a name is provided without an explicit date.
 
 Key files:
 
@@ -143,6 +145,10 @@ lib/ai/context/contacts.slot.ts
 The component folder is singular legacy naming. New features should prefer `components/<feature>/`.
 
 ## Decisions, Goals, Labels, Memory
+
+### Goals — Stakeholder Map
+
+Each goal can have a stakeholder map: a list of contacts linked with a relationship health (`warm` / `neutral` / `cold`) and an optional role string (e.g. Sponsor, Blocker, Champion). Stakeholders are shown as color-coded chips inline on each GoalCard and managed via the StakeholderMapDialog. The LLM can add, list, and update stakeholder health via `add_stakeholder`, `list_stakeholders`, and `update_stakeholder_health` tools (all free tier, group: goals). Server logic lives in `lib/features/stakeholders/`; API at `GET|POST /api/stakeholders` and `PATCH|DELETE /api/stakeholders/[id]`.
 
 Purpose:
 

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -16,6 +16,7 @@ import {
   Target,
   Trash2,
   CalendarDays,
+  UserCheck,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
@@ -165,6 +166,12 @@ export function TaskCard({
             <span className="inline-flex h-5 items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-2 text-[10px] font-medium text-muted-foreground">
               <CalendarDays className="size-2.5 shrink-0" />
               {task.meetingTitle}
+            </span>
+          )}
+          {task.delegatedTo && (
+            <span className="inline-flex h-5 items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 dark:border-indigo-800 dark:bg-indigo-950/30 px-2 text-[10px] font-medium text-indigo-600 dark:text-indigo-400">
+              <UserCheck className="size-2.5 shrink-0" />
+              {task.delegatedTo}
             </span>
           )}
         </div>

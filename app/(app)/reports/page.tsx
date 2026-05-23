@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
-import { listReports } from "@/lib/features/reports";
+import { listReports, getToolFrequency } from "@/lib/features/reports";
 import { ReportsShell } from "@/components/reports";
 import type { AppLanguage } from "@/types/i18n";
 
@@ -34,7 +34,12 @@ export default async function ReportsPage() {
     redirect("/login");
   }
 
-  const reports = await listReports(session.user.id);
+  const [reports, frequencyData] = await Promise.all([
+    listReports(session.user.id),
+    getToolFrequency(session.user.id),
+  ]);
 
-  return <ReportsShell initialReports={reports} />;
+  return (
+    <ReportsShell initialReports={reports} frequencyData={frequencyData} />
+  );
 }

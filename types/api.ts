@@ -2,8 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
- * @since beta
+ * @version canary-v1.1.4
+ * @since canary-v1.1.4
  */
 
 import type { Tier } from "@/types/billing";
@@ -27,6 +27,19 @@ export interface AssistantReportRecord {
   tokenUsage: number;
   details: ReportDetailCall[];
   createdAt: string; // ISO string on the client
+}
+
+/** One entry in the tool frequency breakdown. */
+export interface ToolFrequencyEntry {
+  tool: string;
+  count: number;
+}
+
+/** Aggregated tool-call frequency data for the reports page. */
+export interface ToolFrequencyData {
+  top: ToolFrequencyEntry[];
+  total: number;
+  sessionCount: number;
 }
 
 /** Client-safe shape of a Notification record (matches the Prisma model). */
@@ -86,6 +99,17 @@ export interface ContactRecord {
   updatedAt: string; // ISO string on the client
 }
 
+/** Client-safe shape of a manual contact interaction note. */
+export interface ContactNoteRecord {
+  id: string;
+  userId: string;
+  contactId: string;
+  type: string; // "call" | "email" | "meeting" | "note"
+  note: string;
+  date: string; // ISO string on the client
+  createdAt: string; // ISO string on the client
+}
+
 /** Client-safe shape of a meeting participant. */
 export interface MeetingParticipantRecord {
   id: string;
@@ -124,6 +148,9 @@ export interface TaskRecord {
   dueDate: string | null; // ISO string on the client
   meetingId: string | null;
   meetingTitle: string | null;
+  delegatedTo: string | null;
+  delegatedAt: string | null; // ISO string on the client
+  delegateNotes: string | null;
   goals: { id: string; title: string }[];
   labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client
@@ -172,6 +199,20 @@ export interface GoalRecord {
   milestones: MilestoneRecord[];
   tasks: { id: string; title: string; status: string }[];
   labels: LabelOptionRecord[];
+  stakeholders: StakeholderRecord[];
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}
+
+/** Client-safe shape of a StakeholderEntry record. */
+export interface StakeholderRecord {
+  id: string;
+  goalId: string | null;
+  contactId: string;
+  contactName: string;
+  role: string | null; // "sponsor" | "blocker" | "champion" | "neutral" | custom
+  health: string; // "warm" | "neutral" | "cold"
+  notes: string | null;
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }
@@ -191,4 +232,17 @@ export interface BriefingRecord {
   id: string;
   content: string;
   generatedAt: string; // ISO string on the client
+}
+
+/** Client-safe shape of a ReadingItem record. */
+export interface ReadingItemRecord {
+  id: string;
+  url: string;
+  title: string | null;
+  aiSummary: string | null;
+  relevanceScore: number | null; // 0–1
+  status: string; // "unread" | "read" | "archived"
+  addedAt: string; // ISO string on the client
+  readAt: string | null; // ISO string on the client
+  updatedAt: string; // ISO string on the client
 }

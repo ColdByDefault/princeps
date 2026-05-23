@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { TaskRecord } from "@/types/api";
+import type { GoalLinkRow, LabelLinkRow } from "@/tests/helpers/db-rows";
 
 type DbTaskRow = {
   id: string;
@@ -12,10 +13,8 @@ type DbTaskRow = {
   meeting: { title: string } | null;
   createdAt: Date;
   updatedAt: Date;
-  goalLinks: { goal: { id: string; title: string } }[];
-  labelLinks: {
-    label: { id: string; name: string; color: string; icon: string | null };
-  }[];
+  goalLinks: GoalLinkRow[];
+  labelLinks: LabelLinkRow[];
 };
 
 type TaskUpdateArgs = {
@@ -133,9 +132,10 @@ describe("updateTask", () => {
       meetingId: null,
       meetingTitle: null,
       goals: [{ id: "goal-1", title: "Board readiness" }],
-      labels: [
-        { id: "label-1", name: "Board", color: "#64748b", icon: null },
-      ],
+      labels: [{ id: "label-1", name: "Board", color: "#64748b", icon: null }],
+      delegatedTo: null,
+      delegatedAt: null,
+      delegateNotes: null,
       createdAt: "2026-05-08T06:00:00.000Z",
       updatedAt: "2026-05-08T06:30:00.000Z",
     };

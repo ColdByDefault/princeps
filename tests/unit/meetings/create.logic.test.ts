@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MeetingRecord } from "@/types/api";
+import type { LabelLinkRow } from "@/tests/helpers/db-rows";
 
 type DbMeetingRow = {
   id: string;
@@ -16,9 +17,7 @@ type DbMeetingRow = {
   prepPack: string | null;
   createdAt: Date;
   updatedAt: Date;
-  labelLinks: {
-    label: { id: string; name: string; color: string; icon: string | null };
-  }[];
+  labelLinks: LabelLinkRow[];
   participants: {
     id: string;
     contactId: string;

@@ -54,6 +54,10 @@
       "bodyIntro": "These tasks are past their due date:",
       "remainingOne": "And 1 more.",
       "remainingOther": "And {count} more."
+    },
+    "weeklyDigest": {
+      "title": "Weekly Digest",
+      "fallbackBody": "Your weekly digest could not be generated this time. Please try again or contact support."
     }
   },
   "auth": {
@@ -304,6 +308,8 @@
       "goalsNote": "Number of goals currently stored.",
       "memoryTitle": "Memory facts (stored)",
       "memoryNote": "Number of memory facts currently stored.",
+      "readingQueueTitle": "Reading queue (saved)",
+      "readingQueueNote": "Number of articles currently saved in your reading queue.",
       "voiceRequestsTitle": "Voice transcriptions (today)",
       "voiceRequestsNote": "Number of voice-to-text transcriptions used today. Resets daily.",
       "voiceRequestsMonthlyTitle": "Voice transcriptions (month)",
@@ -438,6 +444,7 @@
       "labels": "Labels",
       "intel": "Intelligence",
       "memory": "Memory",
+      "readingQueue": "Reading Queue",
       "briefings": "Daily Briefing",
       "reports": "Reports",
       "comingSoon": "Coming soon"
@@ -468,7 +475,7 @@
       "cookiePolicy": "Cookie policy",
       "security": "Security",
       "versionTitle": "Application version",
-      "beta": "Beta",
+      "beta": "Stable",
       "copyright": "© 2026 PRINCEPS All rights reserved.",
       "authors": " Made by AnotherProject™ - ColdByDefault"
     }
@@ -678,7 +685,55 @@
     },
     "actionsLabel": "Goal actions",
     "editLabel": "Edit",
-    "deleteLabel": "Delete"
+    "deleteLabel": "Delete",
+    "horizon": {
+      "link": "Horizons",
+      "metadata": {
+        "title": "Horizon Planning",
+        "description": "Your goals viewed across strategic time horizons."
+      },
+      "pageTitle": "Horizon Planning",
+      "pageDescription": "Strategic altitude view — Now, Medium-term, and Long-term goals at a glance.",
+      "backToGoals": "Back to goals",
+      "totalGoals": "{count} goals total",
+      "now": "Now",
+      "nowSub": "Next 90 days",
+      "medium": "Medium-term",
+      "mediumSub": "3\u201318 months",
+      "long": "Long-term",
+      "longSub": "Beyond 18 months",
+      "unplaced": "Unplaced",
+      "unplacedSub": "No target date set",
+      "empty": "No goals in this horizon."
+    },
+    "stakeholders": {
+      "dialogTitle": "Stakeholder Map",
+      "dialogDescription": "Manage the key people for this goal.",
+      "empty": "No stakeholders yet.",
+      "addFirst": "Add a stakeholder",
+      "addSection": "Add stakeholder",
+      "contactLabel": "Contact",
+      "contactPlaceholder": "Select a contact…",
+      "healthLabel": "Relationship health",
+      "roleLabel": "Role",
+      "rolePlaceholder": "e.g. Sponsor, Blocker…",
+      "addButton": "Add",
+      "adding": "Adding…",
+      "addSuccess": "Stakeholder added.",
+      "addError": "Failed to add stakeholder.",
+      "removeLabel": "Remove",
+      "removeSuccess": "Stakeholder removed.",
+      "removeError": "Failed to remove stakeholder.",
+      "updateError": "Failed to update stakeholder.",
+      "changeHealth": "Change health",
+      "openLabel": "Open stakeholder map",
+      "menuLabel": "Stakeholders",
+      "health": {
+        "warm": "Warm",
+        "neutral": "Neutral",
+        "cold": "Cold"
+      }
+    }
   },
   "memory": {
     "metadata": {
@@ -861,7 +916,8 @@
       "open": "Open",
       "inProgress": "In Progress",
       "done": "Done",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "delegated": "Delegated"
     },
     "priority": {
       "low": "Low",
@@ -885,6 +941,10 @@
       "status": "Status",
       "labels": "Labels",
       "linkedGoals": "Linked goals",
+      "delegatedTo": "Delegated to",
+      "delegatedToPlaceholder": "Name of person (e.g. Marcus)",
+      "delegateNotes": "Handoff notes",
+      "delegateNotesPlaceholder": "Context for the handoff\u2026",
       "optional": "Optional"
     },
     "createDialog": {
@@ -920,7 +980,9 @@
     "markDoneLabel": "Mark as done",
     "reopenLabel": "Reopen",
     "refresh": "Refresh",
-    "refreshing": "Refreshing…"
+    "refreshing": "Refreshing…",
+    "delegatedBadge": "Delegated to {name}",
+    "emptyDelegated": "No delegated tasks."
   },
   "contacts": {
     "metadata": {
@@ -1043,13 +1105,14 @@
       "memory": "Memory",
       "briefings": "Briefings",
       "web-research": "Web Research",
-      "integrations": "Integrations"
+      "integrations": "Integrations",
+      "reading-queue": "Reading Queue"
     },
     "catalog": {
       "create_task": {
         "label": "Create Task",
-        "what": "Creates a new task with optional priority, due date, and labels.",
-        "example": "\"Add a task: review the Q2 report, high priority, due Friday\""
+        "what": "Creates a new task with optional priority, due date, labels, and delegation (hand off to a named person).",
+        "example": "\"Add a task: review the Q2 report, high priority, due Friday\" or \"Create a task to send the brief — delegate it to Marcus\""
       },
       "list_tasks": {
         "label": "List Tasks",
@@ -1063,8 +1126,8 @@
       },
       "update_task": {
         "label": "Update Task",
-        "what": "Changes a task's title, notes, priority, due date, status, or labels.",
-        "example": "\"Change the report task to urgent and move the due date to Monday\""
+        "what": "Changes a task's title, notes, priority, due date, status, labels, or delegates it to a named person.",
+        "example": "\"Change the report task to urgent and move the due date to Monday\" or \"Delegate the board packet task to Sarah\""
       },
       "delete_task": {
         "label": "Delete Task",
@@ -1115,6 +1178,11 @@
         "label": "Delete Contact",
         "what": "Permanently deletes a contact.",
         "example": "\"Delete the contact Jane Doe\""
+      },
+      "log_contact_interaction": {
+        "label": "Log Interaction",
+        "what": "Records a manual interaction with a contact — call, email, meeting, or note — and updates their last-contact date.",
+        "example": "\"I called Marcus today, he confirmed the pilot\""
       },
       "create_meeting": {
         "label": "Create Meeting",
@@ -1206,6 +1274,21 @@
         "what": "Marks a goal milestone as completed or uncompleted.",
         "example": "\"Mark the design complete milestone as done\""
       },
+      "add_stakeholder": {
+        "label": "Add Stakeholder",
+        "what": "Links a contact as a stakeholder on a goal with a relationship health (warm/neutral/cold) and optional role.",
+        "example": "\"Add Sarah Chen as sponsor on my launch goal\""
+      },
+      "list_stakeholders": {
+        "label": "List Stakeholders",
+        "what": "Lists the stakeholders on a goal, or all stakeholders across goals.",
+        "example": "\"Who are the stakeholders on my revenue goal?\""
+      },
+      "update_stakeholder_health": {
+        "label": "Update Stakeholder Health",
+        "what": "Changes the relationship health, role, or notes of a stakeholder entry.",
+        "example": "\"Mark Sarah Chen as cold on the launch goal\""
+      },
       "search_knowledge": {
         "label": "Search Knowledge",
         "what": "Searches your personal knowledge base using semantic similarity to find relevant excerpts from uploaded documents.",
@@ -1220,6 +1303,31 @@
         "label": "Search Drive",
         "what": "Searches documents indexed from your Google Drive using semantic similarity to find relevant excerpts.",
         "example": "\"What does my Q1 report say about revenue?\""
+      },
+      "add_to_reading_queue": {
+        "label": "Save to Reading Queue",
+        "what": "Fetches the page, generates an AI summary, and scores relevance against your open goals. The item appears in your reading queue.",
+        "example": "\"Save this for later: https://example.com/article\" or \"Add to my reading list\""
+      },
+      "list_reading_queue": {
+        "label": "List Reading Queue",
+        "what": "Returns your saved reading items, optionally filtered by status (unread / read / archived), ordered by relevance score.",
+        "example": "\"What do I have in my reading queue?\" or \"Show my unread articles\""
+      },
+      "mark_reading_item_read": {
+        "label": "Mark Item Read",
+        "what": "Marks a saved reading item as read.",
+        "example": "\"Mark that article as read\""
+      },
+      "archive_reading_item": {
+        "label": "Archive Reading Item",
+        "what": "Archives a reading item, removing it from the active queue without deleting it.",
+        "example": "\"Archive the article about TypeScript\""
+      },
+      "delete_reading_item": {
+        "label": "Delete Reading Item",
+        "what": "Permanently deletes a reading item. Confirmation is required before proceeding.",
+        "example": "\"Delete that article from my reading list\""
       },
       "web_search": {
         "label": "Web Search",
@@ -1255,6 +1363,31 @@
         "label": "Regenerate Briefing",
         "what": "Generates a fresh daily briefing from your tasks, meetings, and decisions.",
         "example": "\"Regenerate my briefing\" or \"Create a new daily summary\""
+      },
+      "add_to_reading_queue": {
+        "label": "Add to Reading Queue",
+        "what": "Saves a URL to your reading queue and generates an AI summary with a relevance score.",
+        "example": "\"Save https://example.com/article to my reading queue\" or \"Add this link to my reading list\""
+      },
+      "list_reading_queue": {
+        "label": "List Reading Queue",
+        "what": "Shows articles in your reading queue, optionally filtered by status (unread, read, archived).",
+        "example": "\"What's in my reading queue?\" or \"Show me my unread articles\""
+      },
+      "mark_reading_item_read": {
+        "label": "Mark Article as Read",
+        "what": "Marks a reading queue item as read.",
+        "example": "\"Mark the TechCrunch article as read\""
+      },
+      "archive_reading_item": {
+        "label": "Archive Article",
+        "what": "Archives a reading queue item.",
+        "example": "\"Archive the article about AI trends\""
+      },
+      "delete_reading_item": {
+        "label": "Delete Reading Item",
+        "what": "Permanently removes an item from your reading queue.",
+        "example": "\"Delete the article about JavaScript frameworks from my reading queue\""
       }
     }
   },
@@ -1426,7 +1559,64 @@
     "empty": "No reports yet.",
     "emptyHint": "Reports appear here after your assistant uses tools.",
     "toolCalls": "tool calls",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "frequency": {
+      "title": "Most-used Tools",
+      "totalCalls": "{count} total calls",
+      "sessions": "{count} sessions"
+    }
+  },
+  "readingQueue": {
+    "metadata": {
+      "title": "Reading Queue",
+      "description": "Save articles and web pages for later — AI scores their relevance against your goals."
+    },
+    "pageTitle": "Reading Queue",
+    "addItem": "Add",
+    "refresh": "Refresh",
+    "empty": "No saved articles yet.",
+    "emptyFiltered": "No articles in this category.",
+    "filter": {
+      "all": "All",
+      "unread": "Unread",
+      "read": "Read",
+      "archived": "Archived"
+    },
+    "fields": {
+      "url": "URL",
+      "urlPlaceholder": "https://example.com/article",
+      "title": "Title",
+      "titlePlaceholder": "Optional title",
+      "titleOptional": "optional",
+      "openLink": "Open article"
+    },
+    "addDialog": {
+      "title": "Save article",
+      "description": "Enter the URL. The assistant will fetch the content, create a summary, and score its relevance against your current goals.",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "success": "Article saved.",
+      "error": "Could not save the article. Please try again."
+    },
+    "deleteDialog": {
+      "trigger": "Delete",
+      "title": "Delete article?",
+      "description": "This article will be permanently removed from your reading queue. This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Article deleted.",
+      "error": "Could not delete the article."
+    },
+    "status": {
+      "markRead": "Mark as read",
+      "markReadSuccess": "Marked as read.",
+      "markReadError": "Could not update status.",
+      "archive": "Archive",
+      "archiveSuccess": "Article archived.",
+      "archiveError": "Could not archive the article."
+    },
+    "scoreLabel": "Relevance"
   },
   "briefings": {
     "metadata": {

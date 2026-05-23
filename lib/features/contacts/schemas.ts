@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -43,3 +43,11 @@ export const contactSchema = z.object({
 export type CreateContactInput = z.infer<typeof createContactSchema>;
 export type UpdateContactInput = z.infer<typeof updateContactSchema>;
 export type Contact = z.infer<typeof contactSchema>;
+
+export const logInteractionSchema = z.object({
+  type: z.enum(["call", "email", "meeting", "note"]).optional().default("note"),
+  note: z.string().min(1, "Note is required").max(2000, "Note is too long"),
+  date: z.coerce.date().optional(),
+});
+
+export type LogInteractionInput = z.infer<typeof logInteractionSchema>;

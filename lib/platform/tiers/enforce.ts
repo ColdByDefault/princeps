@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -751,4 +751,39 @@ export async function enforceMemoryMax(userId: string): Promise<EnforceResult> {
 // ─── Response factory ─────────────────────────────────────
 export function createTierLimitResponse(reason = "Plan limit reached.") {
   return NextResponse.json({ error: reason }, { status: 403 });
+}
+
+// ─── Reading queue limit ──────────────────────────────────
+
+/**
+ * Checks whether the user is allowed to add another reading queue item.
+ * `0` = feature disabled for that tier (free).
+ * `-1` = unlimited.
+ */
+export async function enforceReadingQueueMax(
+  userId: string,
+): Promise<EnforceResult> {
+  const [tier, count] = await Promise.all([
+    getUserTier(userId),
+    db.readingItem.count({ where: { userId } }),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (limits.readingQueueMax === 0) {
+    return {
+      allowed: false,
+      reason:
+        "The reading queue is not available on the free plan. Upgrade to Pro or above.",
+    };
+  }
+
+  if (limits.readingQueueMax !== -1 && count >= limits.readingQueueMax) {
+    return {
+      allowed: false,
+      reason: "Reading queue limit reached for your plan.",
+    };
+  }
+
+  return { allowed: true };
 }

@@ -111,6 +111,7 @@ model User {
   knowledgeDocuments KnowledgeDocument[]
   knowledgeChunks    KnowledgeChunk[]
   contacts           Contact[]
+  contactNotes       ContactNote[]
   meetings           Meeting[]
   tasks              Task[]
   assistantReports   AssistantReport[]
@@ -122,6 +123,8 @@ model User {
   labels             Label[]
   usageCounter       UsageCounter?
   memoryEntries      MemoryEntry[]
+  stakeholderEntries StakeholderEntry[]
+  readingItems       ReadingItem[]
 
   @@map("user")
 }
@@ -276,7 +279,9 @@ model Contact {
   user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   meetings     MeetingParticipant[]
   interactions ContactInteraction[]
+  contactNotes ContactNote[]
   labelLinks   LabelOnContact[]
+  stakeholderEntries StakeholderEntry[]
 
   @@index([userId])
   @@map("contact")
@@ -294,6 +299,23 @@ model ContactInteraction {
   @@index([contactId])
   @@index([sourceId])
   @@map("contact_interaction")
+}
+
+model ContactNote {
+  id        String   @id @default(cuid())
+  userId    String
+  contactId String
+  type      String   @default("note") // "call" | "email" | "meeting" | "note"
+  note      String
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([contactId])
+  @@map("contact_note")
 }
 
 // ─── Meetings ─────────────────────────────────────────────
@@ -359,16 +381,19 @@ model AssistantReport {
 // ─── Tasks ────────────────────────────────────────────────
 
 model Task {
-  id        String    @id @default(cuid())
-  userId    String
-  title     String
-  notes     String?
-  status    TaskStatus   @default(open)
-  priority  TaskPriority @default(normal)
-  dueDate   DateTime?
-  meetingId String?
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id             String    @id @default(cuid())
+  userId         String
+  title          String
+  notes          String?
+  status         TaskStatus   @default(open)
+  priority       TaskPriority @default(normal)
+  dueDate        DateTime?
+  meetingId      String?
+  delegatedTo    String?
+  delegatedAt    DateTime?
+  delegateNotes  String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)
@@ -569,11 +594,12 @@ model Goal {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  meeting    Meeting?      @relation(fields: [meetingId], references: [id], onDelete: SetNull)
-  milestones Milestone[]
-  taskLinks  TaskOnGoal[]
-  labelLinks LabelOnGoal[]
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meeting            Meeting?           @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  milestones         Milestone[]
+  taskLinks          TaskOnGoal[]
+  labelLinks         LabelOnGoal[]
+  stakeholderEntries StakeholderEntry[]
 
   @@index([userId])
   @@index([meetingId])
@@ -615,6 +641,48 @@ model LabelOnGoal {
 
   @@id([labelId, goalId])
   @@map("label_on_goal")
+}
+
+model StakeholderEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  goalId    String?
+  contactId String
+  role      String?  // "sponsor" | "blocker" | "champion" | "neutral" | custom free-text
+  health    String   @default("neutral") // "warm" | "neutral" | "cold"
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal    Goal?   @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([goalId])
+  @@index([contactId])
+  @@map("stakeholder_entry")
+}
+
+// ─── Reading Queue ────────────────────────────────────────
+
+model ReadingItem {
+  id             String    @id @default(cuid())
+  userId         String
+  url            String
+  title          String?
+  aiSummary      String?
+  relevanceScore Float?    // 0–1, scored against open goals
+  status         String    @default("unread") // "unread" | "read" | "archived"
+  addedAt        DateTime  @default(now())
+  readAt         DateTime?
+  updatedAt      DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, status])
+  @@map("reading_item")
 }
 
 // ─── Memory ───────────────────────────────────────────────

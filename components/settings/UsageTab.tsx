@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -205,6 +205,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           used={usage.memoryStored}
           limit={usage.memoryLimit}
           note={t("memoryNote")}
+        />
+        <QuotaCard
+          label={t("readingQueueTitle")}
+          used={usage.readingQueueStored}
+          limit={usage.readingQueueLimit}
+          note={t("readingQueueNote")}
         />
 
         {/* Generation */}

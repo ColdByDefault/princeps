@@ -54,6 +54,10 @@
       "bodyIntro": "Diese Aufgaben sind überfällig:",
       "remainingOne": "Und 1 weitere.",
       "remainingOther": "Und {count} weitere."
+    },
+    "weeklyDigest": {
+      "title": "Wöchentliche Zusammenfassung",
+      "fallbackBody": "Dein wöchentlicher Rückblick konnte diesmal nicht erstellt werden. Versuche es erneut oder melde dich beim Support."
     }
   },
   "auth": {
@@ -304,6 +308,8 @@
       "goalsNote": "Anzahl der aktuell gespeicherten Ziele.",
       "memoryTitle": "Gedächtnis-Fakten (gespeichert)",
       "memoryNote": "Anzahl der aktuell gespeicherten Gedächtnis-Fakten.",
+      "readingQueueTitle": "Leseliste (gespeichert)",
+      "readingQueueNote": "Anzahl der aktuell in der Leseliste gespeicherten Artikel.",
       "voiceRequestsTitle": "Sprachtranskriptionen (heute)",
       "voiceRequestsNote": "Anzahl der heute verwendeten Sprache-zu-Text-Transkriptionen. Wird täglich zurückgesetzt.",
       "voiceRequestsMonthlyTitle": "Sprachtranskriptionen (Monat)",
@@ -438,6 +444,7 @@
       "labels": "Labels",
       "intel": "Intelligenz",
       "memory": "Gedächtnis",
+      "readingQueue": "Leseliste",
       "briefings": "Tagesbriefing",
       "reports": "Berichte",
       "comingSoon": "Bald verfügbar"
@@ -468,7 +475,7 @@
       "cookiePolicy": "Cookie-Richtlinie",
       "security": "Sicherheit",
       "versionTitle": "Anwendungsversion",
-      "beta": "Beta",
+      "beta": "Stabil",
       "copyright": "© 2026 PRINCEPS Alle Rechte vorbehalten.",
       "authors": "Erstellt von AnotherProject™ – ColdByDefault"
     }
@@ -678,7 +685,55 @@
     },
     "actionsLabel": "Zielaktionen",
     "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen"
+    "deleteLabel": "L\u00f6schen",
+    "horizon": {
+      "link": "Zeithorizonte",
+      "metadata": {
+        "title": "Zeithorizonte",
+        "description": "Deine Ziele nach strategischem Zeithorizont."
+      },
+      "pageTitle": "Zeithorizonte",
+      "pageDescription": "Strategische Sicht auf deine Ziele — jetzt, mittelfristig und langfristig.",
+      "backToGoals": "Zur\u00fcck zu Zielen",
+      "totalGoals": "{count} Ziele gesamt",
+      "now": "Jetzt",
+      "nowSub": "N\u00e4chste 90 Tage",
+      "medium": "Mittelfristig",
+      "mediumSub": "3\u201318 Monate",
+      "long": "Langfristig",
+      "longSub": "\u00dcber 18 Monate",
+      "unplaced": "Nicht eingeordnet",
+      "unplacedSub": "Kein Zieldatum gesetzt",
+      "empty": "Keine Ziele in diesem Horizont."
+    },
+    "stakeholders": {
+      "dialogTitle": "Stakeholder-Karte",
+      "dialogDescription": "Verwalte die wichtigsten Personen für dieses Ziel.",
+      "empty": "Noch keine Stakeholder.",
+      "addFirst": "Stakeholder hinzufügen",
+      "addSection": "Stakeholder hinzufügen",
+      "contactLabel": "Kontakt",
+      "contactPlaceholder": "Kontakt auswählen…",
+      "healthLabel": "Beziehungsstatus",
+      "roleLabel": "Rolle",
+      "rolePlaceholder": "z. B. Sponsor, Blocker…",
+      "addButton": "Hinzufügen",
+      "adding": "Wird hinzugefügt…",
+      "addSuccess": "Stakeholder hinzugefügt.",
+      "addError": "Fehler beim Hinzufügen.",
+      "removeLabel": "Entfernen",
+      "removeSuccess": "Stakeholder entfernt.",
+      "removeError": "Fehler beim Entfernen.",
+      "updateError": "Fehler beim Aktualisieren.",
+      "changeHealth": "Status ändern",
+      "openLabel": "Stakeholder-Karte öffnen",
+      "menuLabel": "Stakeholder",
+      "health": {
+        "warm": "Warm",
+        "neutral": "Neutral",
+        "cold": "Kalt"
+      }
+    }
   },
   "memory": {
     "metadata": {
@@ -861,7 +916,8 @@
       "open": "Offen",
       "inProgress": "In Bearbeitung",
       "done": "Erledigt",
-      "cancelled": "Abgebrochen"
+      "cancelled": "Abgebrochen",
+      "delegated": "Delegiert"
     },
     "priority": {
       "low": "Niedrig",
@@ -885,6 +941,10 @@
       "status": "Status",
       "labels": "Labels",
       "linkedGoals": "Verknüpfte Ziele",
+      "delegatedTo": "Delegiert an",
+      "delegatedToPlaceholder": "Name der Person (z.\u00a0B. Markus)",
+      "delegateNotes": "\u00dcbergabenotizen",
+      "delegateNotesPlaceholder": "Kontext zur \u00dcbergabe\u2026",
       "optional": "Optional"
     },
     "createDialog": {
@@ -920,7 +980,9 @@
     "markDoneLabel": "Als erledigt markieren",
     "reopenLabel": "Wiedereröffnen",
     "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert…"
+    "refreshing": "Wird aktualisiert…",
+    "delegatedBadge": "Delegiert an {name}",
+    "emptyDelegated": "Keine delegierten Aufgaben."
   },
   "contacts": {
     "metadata": {
@@ -1043,13 +1105,14 @@
       "memory": "Gedächtnis",
       "briefings": "Briefings",
       "web-research": "Webrecherche",
-      "integrations": "Integrationen"
+      "integrations": "Integrationen",
+      "reading-queue": "Leseliste"
     },
     "catalog": {
       "create_task": {
         "label": "Aufgabe erstellen",
-        "what": "Erstellt eine neue Aufgabe mit optionaler Priorität, Fälligkeitsdatum und Labels.",
-        "example": "\"Aufgabe hinzufügen: Q2-Bericht prüfen, hohe Priorität, fällig Freitag\""
+        "what": "Erstellt eine neue Aufgabe mit optionaler Priorität, Fälligkeitsdatum, Labels und Delegation (Übergabe an eine benannte Person).",
+        "example": "\"Aufgabe hinzufügen: Q2-Bericht prüfen, hohe Priorität, fällig Freitag\" oder \"Aufgabe erstellen: Bericht senden — an Markus delegieren\""
       },
       "list_tasks": {
         "label": "Aufgaben anzeigen",
@@ -1063,8 +1126,8 @@
       },
       "update_task": {
         "label": "Aufgabe bearbeiten",
-        "what": "Ändert Titel, Notizen, Priorität, Fälligkeitsdatum, Status oder Labels einer Aufgabe.",
-        "example": "\"Setze die Bericht-Aufgabe auf dringend und verschiebe das Datum auf Montag\""
+        "what": "Ändert Titel, Notizen, Priorität, Fälligkeitsdatum, Status oder Labels einer Aufgabe oder delegiert sie an eine benannte Person.",
+        "example": "\"Setze die Bericht-Aufgabe auf dringend und verschiebe das Datum auf Montag\" oder \"Delegiere die Board-Packet-Aufgabe an Sarah\""
       },
       "delete_task": {
         "label": "Aufgabe löschen",
@@ -1115,6 +1178,11 @@
         "label": "Kontakt löschen",
         "what": "Löscht einen Kontakt dauerhaft.",
         "example": "\"Lösche den Kontakt Jana Müller\""
+      },
+      "log_contact_interaction": {
+        "label": "Interaktion protokollieren",
+        "what": "Protokolliert eine manuelle Interaktion mit einem Kontakt — Anruf, E-Mail, Meeting oder Notiz — und aktualisiert das Datum des letzten Kontakts.",
+        "example": "\"Ich habe Marcus heute angerufen, er hat das Pilotprojekt bestätigt\""
       },
       "create_meeting": {
         "label": "Meeting erstellen",
@@ -1206,6 +1274,21 @@
         "what": "Markiert einen Meilenstein als abgeschlossen oder nicht abgeschlossen.",
         "example": "\"Markiere den Meilenstein 'Design abgeschlossen' als erledigt\""
       },
+      "add_stakeholder": {
+        "label": "Stakeholder hinzufügen",
+        "what": "Verknüpft einen Kontakt als Stakeholder mit einem Ziel und setzt Beziehungsstatus (warm/neutral/kalt) sowie eine optionale Rolle.",
+        "example": "\"Füge Sarah Chen als Sponsor bei meinem Launch-Ziel hinzu\""
+      },
+      "list_stakeholders": {
+        "label": "Stakeholder anzeigen",
+        "what": "Listet die Stakeholder eines Ziels oder alle Stakeholder auf.",
+        "example": "\"Wer sind die Stakeholder bei meinem Umsatzziel?\""
+      },
+      "update_stakeholder_health": {
+        "label": "Stakeholder-Status aktualisieren",
+        "what": "Ändert Beziehungsstatus, Rolle oder Notizen eines Stakeholders.",
+        "example": "\"Markiere Sarah Chen als kalt beim Launch-Ziel\""
+      },
       "search_knowledge": {
         "label": "Wissen durchsuchen",
         "what": "Durchsucht deine persönliche Wissensdatenbank semantisch und findet relevante Ausschnitte aus hochgeladenen Dokumenten.",
@@ -1220,6 +1303,31 @@
         "label": "Drive durchsuchen",
         "what": "Durchsucht Dokumente aus deinem Google Drive semantisch und findet relevante Ausschnitte.",
         "example": "\"Was steht in meinem Q1-Bericht über den Umsatz?\""
+      },
+      "add_to_reading_queue": {
+        "label": "Zur Leseliste hinzufügen",
+        "what": "Ruft die Seite ab, erstellt eine KI-Zusammenfassung und bewertet die Relevanz gegenüber deinen offenen Zielen. Der Artikel erscheint in deiner Leseliste.",
+        "example": "\"Für später speichern: https://example.com/artikel\" oder \"Zur Leseliste hinzufügen\""
+      },
+      "list_reading_queue": {
+        "label": "Leseliste anzeigen",
+        "what": "Gibt die gespeicherten Artikel zurück, optional gefiltert nach Status (ungelesen / gelesen / archiviert), sortiert nach Relevanz.",
+        "example": "\"Was ist in meiner Leseliste?\" oder \"Zeige meine ungelesenen Artikel\""
+      },
+      "mark_reading_item_read": {
+        "label": "Artikel als gelesen markieren",
+        "what": "Markiert einen gespeicherten Artikel als gelesen.",
+        "example": "\"Markiere diesen Artikel als gelesen\""
+      },
+      "archive_reading_item": {
+        "label": "Artikel archivieren",
+        "what": "Archiviert einen Artikel und entfernt ihn aus der aktiven Leseliste, ohne ihn zu löschen.",
+        "example": "\"Archiviere den Artikel über TypeScript\""
+      },
+      "delete_reading_item": {
+        "label": "Artikel löschen",
+        "what": "Löscht einen Artikel dauerhaft. Vor dem Löschen wird eine Bestätigung eingeholt.",
+        "example": "\"Lösche diesen Artikel aus meiner Leseliste\""
       },
       "web_search": {
         "label": "Websuche",
@@ -1255,6 +1363,31 @@
         "label": "Briefing neu generieren",
         "what": "Erstellt ein neues tägliches Briefing aus deinen Aufgaben, Meetings und offenen Entscheidungen.",
         "example": "\"Briefing neu erstellen\" oder \"Erstelle eine neue Tageszusammenfassung\""
+      },
+      "add_to_reading_queue": {
+        "label": "Zur Leseliste hinzufügen",
+        "what": "Speichert eine URL in deiner Leseliste und erstellt eine KI-Zusammenfassung mit Relevanzbewertung.",
+        "example": "\"Speichere https://example.com/artikel in meiner Leseliste\" oder \"Füge diesen Link meiner Leseliste hinzu\""
+      },
+      "list_reading_queue": {
+        "label": "Leseliste anzeigen",
+        "what": "Zeigt Artikel in deiner Leseliste, optional gefiltert nach Status (ungelesen, gelesen, archiviert).",
+        "example": "\"Was ist in meiner Leseliste?\" oder \"Zeig mir meine ungelesenen Artikel\""
+      },
+      "mark_reading_item_read": {
+        "label": "Artikel als gelesen markieren",
+        "what": "Markiert einen Eintrag in der Leseliste als gelesen.",
+        "example": "\"Markiere den TechCrunch-Artikel als gelesen\""
+      },
+      "archive_reading_item": {
+        "label": "Artikel archivieren",
+        "what": "Archiviert einen Eintrag in der Leseliste.",
+        "example": "\"Archiviere den Artikel über KI-Trends\""
+      },
+      "delete_reading_item": {
+        "label": "Leselisteneintrag löschen",
+        "what": "Entfernt einen Eintrag dauerhaft aus deiner Leseliste.",
+        "example": "\"Lösche den Artikel über JavaScript-Frameworks aus meiner Leseliste\""
       }
     }
   },
@@ -1426,7 +1559,64 @@
     "empty": "Noch keine Berichte vorhanden.",
     "emptyHint": "Berichte erscheinen hier, sobald dein Assistent Tools verwendet.",
     "toolCalls": "Tool-Aufrufe",
-    "tokens": "Tokens"
+    "tokens": "Tokens",
+    "frequency": {
+      "title": "Häufigste Tools",
+      "totalCalls": "{count} Aufrufe gesamt",
+      "sessions": "{count} Sitzungen"
+    }
+  },
+  "readingQueue": {
+    "metadata": {
+      "title": "Leseliste",
+      "description": "Speichere Artikel und Webseiten für später – KI bewertet ihre Relevanz für deine Ziele."
+    },
+    "pageTitle": "Leseliste",
+    "addItem": "Hinzufügen",
+    "refresh": "Aktualisieren",
+    "empty": "Noch keine gespeicherten Artikel.",
+    "emptyFiltered": "Keine Artikel in dieser Kategorie.",
+    "filter": {
+      "all": "Alle",
+      "unread": "Ungelesen",
+      "read": "Gelesen",
+      "archived": "Archiviert"
+    },
+    "fields": {
+      "url": "URL",
+      "urlPlaceholder": "https://example.com/artikel",
+      "title": "Titel",
+      "titlePlaceholder": "Optionaler Titel",
+      "titleOptional": "optional",
+      "openLink": "Artikel öffnen"
+    },
+    "addDialog": {
+      "title": "Artikel speichern",
+      "description": "Gib die URL ein. Der Assistent ruft den Inhalt ab, erstellt eine Zusammenfassung und bewertet die Relevanz für deine aktuellen Ziele.",
+      "save": "Speichern",
+      "saving": "Wird gespeichert…",
+      "cancel": "Abbrechen",
+      "success": "Artikel wurde gespeichert.",
+      "error": "Artikel konnte nicht gespeichert werden. Bitte erneut versuchen."
+    },
+    "deleteDialog": {
+      "trigger": "Löschen",
+      "title": "Artikel löschen?",
+      "description": "Dieser Artikel wird dauerhaft aus deiner Leseliste entfernt. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirm": "Löschen",
+      "cancel": "Abbrechen",
+      "success": "Artikel wurde gelöscht.",
+      "error": "Artikel konnte nicht gelöscht werden."
+    },
+    "status": {
+      "markRead": "Als gelesen markieren",
+      "markReadSuccess": "Als gelesen markiert.",
+      "markReadError": "Status konnte nicht aktualisiert werden.",
+      "archive": "Archivieren",
+      "archiveSuccess": "Artikel archiviert.",
+      "archiveError": "Artikel konnte nicht archiviert werden."
+    },
+    "scoreLabel": "Relevanz"
   },
   "briefings": {
     "metadata": {

@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ContactRecord } from "@/types/api";
+import type { LabelLinkRow } from "@/tests/helpers/db-rows";
 
 type DbContactRow = {
   id: string;
@@ -12,9 +13,7 @@ type DbContactRow = {
   lastContact: Date | null;
   createdAt: Date;
   updatedAt: Date;
-  labelLinks: {
-    label: { id: string; name: string; color: string; icon: string | null };
-  }[];
+  labelLinks: LabelLinkRow[];
 };
 
 type ContactUpdateArgs = {

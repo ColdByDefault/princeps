@@ -2,15 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { DecisionRecord } from "@/types/api";
 import type { UpdateDecisionInput } from "@/lib/features/decisions/schemas";
 import type * as decisionSchemas from "@/lib/features/decisions/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type UpdateDecision = (
   decisionId: string,
   userId: string,
@@ -24,13 +17,6 @@ type DeleteDecision = (
   decisionId: string,
   userId: string,
 ) => Promise<{ ok: boolean }>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 
 const mocks = vi.hoisted(() => ({
   deleteDecision: vi.fn<DeleteDecision>(),

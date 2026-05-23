@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -212,6 +212,96 @@ export const goalTools: ToolRegistryEntry[] = [
           },
         },
         required: ["goalId", "milestoneId"],
+      },
+    },
+  },
+  {
+    minTier: "free",
+    group: "goals",
+    type: "function",
+    function: {
+      name: "add_stakeholder",
+      description:
+        "Link a contact to a goal as a stakeholder with a role and relationship health. Use when the user says things like 'Marcus is a champion for this goal', 'add Lena as a blocker', or 'mark the CEO as sponsor'. Use list_goals to find the goalId.",
+      parameters: {
+        type: "object",
+        properties: {
+          contactName: {
+            type: "string",
+            description: "Name of the contact to add as a stakeholder. Must match an existing contact.",
+          },
+          goalId: {
+            type: "string",
+            description: "ID of the goal to link the stakeholder to. Omit for a global (goal-independent) stakeholder entry.",
+          },
+          role: {
+            type: "string",
+            description: "Role of the stakeholder, e.g. 'sponsor', 'blocker', 'champion', 'neutral', or any custom label.",
+          },
+          health: {
+            type: "string",
+            enum: ["warm", "neutral", "cold"],
+            description: "Relationship health. 'warm' = supportive, 'cold' = at risk or opposed. Defaults to 'neutral'.",
+          },
+          notes: {
+            type: "string",
+            description: "Optional notes about this stakeholder's involvement.",
+          },
+        },
+        required: ["contactName"],
+      },
+    },
+  },
+  {
+    minTier: "free",
+    group: "goals",
+    type: "function",
+    function: {
+      name: "list_stakeholders",
+      description:
+        "List stakeholders linked to a goal or all stakeholders globally. Use when the user asks 'who are the stakeholders for this goal?' or 'show me the political map'.",
+      parameters: {
+        type: "object",
+        properties: {
+          goalId: {
+            type: "string",
+            description: "Filter by goal ID. Omit to list all stakeholders across all goals.",
+          },
+        },
+        required: [],
+      },
+    },
+  },
+  {
+    minTier: "free",
+    group: "goals",
+    type: "function",
+    function: {
+      name: "update_stakeholder_health",
+      description:
+        "Update the health or role of an existing stakeholder entry. Use when the user says things like 'Marcus turned cold' or 'Lena is now a champion'.",
+      parameters: {
+        type: "object",
+        properties: {
+          stakeholderId: {
+            type: "string",
+            description: "ID of the stakeholder entry to update. Use list_stakeholders to find it.",
+          },
+          health: {
+            type: "string",
+            enum: ["warm", "neutral", "cold"],
+            description: "Updated relationship health.",
+          },
+          role: {
+            type: "string",
+            description: "Updated role for the stakeholder.",
+          },
+          notes: {
+            type: "string",
+            description: "Updated notes.",
+          },
+        },
+        required: ["stakeholderId"],
       },
     },
   },

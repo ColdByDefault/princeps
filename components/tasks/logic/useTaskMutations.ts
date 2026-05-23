@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -68,6 +68,8 @@ export function useTaskMutations(
       dueDate: string | null;
       labelIds: string[];
       goalIds: string[];
+      delegatedTo: string | null;
+      delegateNotes: string | null;
     }>,
     silent = false,
   ) {

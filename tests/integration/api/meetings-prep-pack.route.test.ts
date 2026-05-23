@@ -1,14 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MeetingRecord } from "@/types/api";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type GeneratePrepPack = (
   meetingId: string,
   userId: string,
@@ -25,13 +18,6 @@ type ClearMeetingPrepPack = (
   | { ok: false; notFound: true }
   | { ok: false; notFound: false; error: string }
 >;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 type EnforceMonthly = (
   userId: string,
 ) => Promise<{ allowed: boolean; reason?: string }>;

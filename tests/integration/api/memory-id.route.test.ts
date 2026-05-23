@@ -2,15 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MemoryEntryRecord } from "@/types/api";
 import type { UpdateMemoryEntryInput } from "@/lib/features/memory/schemas";
 import type * as memorySchemas from "@/lib/features/memory/schemas";
+import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
 
-type Session = {
-  user: {
-    id: string;
-  };
-};
-
-type HeadersProvider = () => Promise<Headers>;
-type GetSession = (args: { headers: Headers }) => Promise<Session | null>;
 type UpdateMemoryEntry = (
   userId: string,
   id: string,
@@ -20,13 +13,6 @@ type DeleteMemoryEntry = (
   userId: string,
   id: string,
 ) => Promise<{ ok: boolean }>;
-type RateLimitCheck = (
-  identifier: string,
-) => Promise<{ allowed: boolean; retryAfterSeconds: number }>;
-type RateLimitIdentifier = (
-  req: Request,
-  fallbackIdentifier: string,
-) => string;
 
 const mocks = vi.hoisted(() => ({
   deleteMemoryEntry: vi.fn<DeleteMemoryEntry>(),

@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { DecisionRecord } from "@/types/api";
+import type { LabelLinkRow } from "@/tests/helpers/db-rows";
 
 type DbDecisionRow = {
   id: string;
@@ -12,9 +13,7 @@ type DbDecisionRow = {
   meeting: { title: string } | null;
   createdAt: Date;
   updatedAt: Date;
-  labelLinks: {
-    label: { id: string; name: string; color: string; icon: string | null };
-  }[];
+  labelLinks: LabelLinkRow[];
 };
 
 type DecisionUpdateArgs = {
