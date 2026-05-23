@@ -2,36 +2,19 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.6
  * @since beta
  */
 
 "use client";
 
-import { useState } from "react";
-import { FileText, Trash2, Tag, HardDrive } from "lucide-react";
+import { FileText, Tag, HardDrive } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
 import { formatDate } from "@/lib/core/utils";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { ItemCard } from "@/components/shared/ItemCard";
 import type { KnowledgeDocumentRecord } from "@/types/api";
 
 type DocumentCardProps = {
@@ -59,17 +42,29 @@ export function DocumentCard({
 }: DocumentCardProps) {
   const t = useTranslations("knowledge");
   const locale = useLocale();
-  const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
-    <div className="flex items-start gap-3 rounded-xl border border-border/60 bg-card p-4 transition-colors hover:bg-accent/30">
-      {/* Icon */}
-      <div className="mt-0.5 shrink-0 rounded-lg bg-primary/10 p-2">
-        <FileText className="size-4 text-primary" aria-hidden="true" />
-      </div>
-
-      {/* Content */}
-      <div className="min-w-0 flex-1 space-y-1">
+    <ItemCard
+      isDisabled={deleting}
+      className="p-4 hover:bg-accent/30"
+      leading={
+        <div className="mt-0.5 shrink-0 rounded-lg bg-primary/10 p-2">
+          <FileText className="size-4 text-primary" aria-hidden="true" />
+        </div>
+      }
+      {...(document.sourceType !== "drive" && {
+        onDelete: () => onDelete(document.id),
+        deleteLabel: t("deleteTooltip"),
+        deleteTitle: t("deleteDialog.title"),
+        deleteDescription: t("deleteDialog.description", {
+          name: document.name,
+        }),
+        deleteCancelLabel: t("deleteDialog.cancel"),
+        deleteConfirmLabel: t("deleteDialog.confirm"),
+        actionsAriaLabel: t("deleteAriaLabel", { name: document.name }),
+      })}
+    >
+      <div className="space-y-1">
         <p className="truncate text-sm font-medium" title={document.name}>
           {document.name}
         </p>
@@ -119,51 +114,6 @@ export function DocumentCard({
           </div>
         )}
       </div>
-
-      {/* Delete action — hidden for Drive-sourced docs (managed by sync) */}
-      {document.sourceType !== "drive" && (
-        <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="shrink-0 cursor-pointer text-muted-foreground hover:text-destructive"
-                    disabled={deleting}
-                    aria-label={t("deleteAriaLabel", { name: document.name })}
-                    onClick={() => setConfirmOpen(true)}
-                  />
-                }
-              >
-                <Trash2 className="size-4" aria-hidden="true" />
-              </TooltipTrigger>
-              <TooltipContent>{t("deleteTooltip")}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {t("deleteDialog.description", { name: document.name })}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel className="cursor-pointer">
-                {t("deleteDialog.cancel")}
-              </AlertDialogCancel>
-              <AlertDialogAction
-                className="cursor-pointer"
-                onClick={() => onDelete(document.id)}
-              >
-                {t("deleteDialog.confirm")}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
-    </div>
+    </ItemCard>
   );
 }
