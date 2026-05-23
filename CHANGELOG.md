@@ -1,3 +1,20 @@
+## [1.1.6] - 2026-05-23
+
+- feat: update Checkbox component to use rounded-lg for improved styling
+- feat: refactor CreateTaskDialog and EditTaskDialog to use Checkbox component for goal selection
+- feat: refactor ContactCard component and update localization files to include actionsLabel
+- feat: update version to canary-v1.1.6 and refactor LabelsShell and ContactList components for improved structure and UI
+- feat: remove unused reading queue entries from localization files
+- feat: refactor DocumentCard to use ItemCard component and remove unused code
+- feat: refactor DocumentCard and MeetingCard to use ItemCard component for improved structure and UI
+- feat: refactor GoalCard to use ItemCard component and simplify structure
+- feat: update TaskCard to use ItemCard component and streamline structure
+- feat: update DecisionCard to use ItemCard component and improve structure
+- feat: update MemoryEntryCard to use ItemCard component and enhance UI interactions feat: add cancel label to delete confirmation dialog in English and German translations feat: introduce CardIconButton component for reusable icon button functionality feat: add ItemCard component for improved card layout and action handling
+- feat: add step to generate Prisma client before running tests
+
+# Changelog
+
 ## [1.1.5] - 2026-05-23
 
 - feat: add stakeholderEntries to goal and task data structures for enhanced tracking
