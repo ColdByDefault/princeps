@@ -78,6 +78,7 @@ const goalRecord: GoalRecord = {
   milestones: [],
   tasks: [],
   labels: [],
+  stakeholders: [],
   createdAt: "2026-05-08T06:00:00.000Z",
   updatedAt: "2026-05-08T06:30:00.000Z",
 };
