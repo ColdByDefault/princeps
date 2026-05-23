@@ -195,6 +195,7 @@ export function GoalsShell({
             variant="outline"
             size="sm"
             className="cursor-pointer"
+            nativeButton={false}
             render={<Link href="/goals/horizon" />}
             aria-label={t("horizon.link")}
           >
