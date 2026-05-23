@@ -138,7 +138,7 @@
       "confirmPasswordLabel": "Passwort bestätigen",
       "confirmPasswordPlaceholder": "••••••••",
       "submit": "Passwort speichern",
-      "submitting": "Wird gespeichert …",
+      "submitting": "Wird gespeichert…",
       "successTitle": "Passwort geändert",
       "successMessage": "Dein Passwort wurde erfolgreich aktualisiert. Du kannst dich jetzt anmelden.",
       "errorFallback": "Zurücksetzen fehlgeschlagen. Bitte fordere einen neuen Link an.",
@@ -1416,7 +1416,7 @@
       "usernameHint": "Nur Buchstaben, Zahlen, Unterstriche und Punkte. 3–30 Zeichen.",
       "cancel": "Abbrechen",
       "submit": "Änderungen speichern",
-      "submitting": "Wird gespeichert …",
+      "submitting": "Wird gespeichert…",
       "updateSuccess": "Profil aktualisiert.",
       "updateError": "Profil konnte nicht aktualisiert werden. Bitte erneut versuchen.",
       "usernameTaken": "Dieser Benutzername ist bereits vergeben."
