@@ -977,6 +977,11 @@
     "actionsLabel": "Task actions",
     "editLabel": "Edit",
     "deleteLabel": "Delete",
+    "viewLabel": "View details",
+    "viewDialog": {
+      "meeting": "Meeting",
+      "createdAt": "Created"
+    },
     "markDoneLabel": "Mark as done",
     "reopenLabel": "Reopen",
     "refresh": "Refresh",
@@ -1303,31 +1308,6 @@
         "label": "Search Drive",
         "what": "Searches documents indexed from your Google Drive using semantic similarity to find relevant excerpts.",
         "example": "\"What does my Q1 report say about revenue?\""
-      },
-      "add_to_reading_queue": {
-        "label": "Save to Reading Queue",
-        "what": "Fetches the page, generates an AI summary, and scores relevance against your open goals. The item appears in your reading queue.",
-        "example": "\"Save this for later: https://example.com/article\" or \"Add to my reading list\""
-      },
-      "list_reading_queue": {
-        "label": "List Reading Queue",
-        "what": "Returns your saved reading items, optionally filtered by status (unread / read / archived), ordered by relevance score.",
-        "example": "\"What do I have in my reading queue?\" or \"Show my unread articles\""
-      },
-      "mark_reading_item_read": {
-        "label": "Mark Item Read",
-        "what": "Marks a saved reading item as read.",
-        "example": "\"Mark that article as read\""
-      },
-      "archive_reading_item": {
-        "label": "Archive Reading Item",
-        "what": "Archives a reading item, removing it from the active queue without deleting it.",
-        "example": "\"Archive the article about TypeScript\""
-      },
-      "delete_reading_item": {
-        "label": "Delete Reading Item",
-        "what": "Permanently deletes a reading item. Confirmation is required before proceeding.",
-        "example": "\"Delete that article from my reading list\""
       },
       "web_search": {
         "label": "Web Search",

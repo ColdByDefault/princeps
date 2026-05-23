@@ -977,6 +977,11 @@
     "actionsLabel": "Aufgabenaktionen",
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen",
+    "viewLabel": "Details ansehen",
+    "viewDialog": {
+      "meeting": "Meeting",
+      "createdAt": "Erstellt"
+    },
     "markDoneLabel": "Als erledigt markieren",
     "reopenLabel": "Wiedereröffnen",
     "refresh": "Aktualisieren",
@@ -1303,31 +1308,6 @@
         "label": "Drive durchsuchen",
         "what": "Durchsucht Dokumente aus deinem Google Drive semantisch und findet relevante Ausschnitte.",
         "example": "\"Was steht in meinem Q1-Bericht über den Umsatz?\""
-      },
-      "add_to_reading_queue": {
-        "label": "Zur Leseliste hinzufügen",
-        "what": "Ruft die Seite ab, erstellt eine KI-Zusammenfassung und bewertet die Relevanz gegenüber deinen offenen Zielen. Der Artikel erscheint in deiner Leseliste.",
-        "example": "\"Für später speichern: https://example.com/artikel\" oder \"Zur Leseliste hinzufügen\""
-      },
-      "list_reading_queue": {
-        "label": "Leseliste anzeigen",
-        "what": "Gibt die gespeicherten Artikel zurück, optional gefiltert nach Status (ungelesen / gelesen / archiviert), sortiert nach Relevanz.",
-        "example": "\"Was ist in meiner Leseliste?\" oder \"Zeige meine ungelesenen Artikel\""
-      },
-      "mark_reading_item_read": {
-        "label": "Artikel als gelesen markieren",
-        "what": "Markiert einen gespeicherten Artikel als gelesen.",
-        "example": "\"Markiere diesen Artikel als gelesen\""
-      },
-      "archive_reading_item": {
-        "label": "Artikel archivieren",
-        "what": "Archiviert einen Artikel und entfernt ihn aus der aktiven Leseliste, ohne ihn zu löschen.",
-        "example": "\"Archiviere den Artikel über TypeScript\""
-      },
-      "delete_reading_item": {
-        "label": "Artikel löschen",
-        "what": "Löscht einen Artikel dauerhaft. Vor dem Löschen wird eine Bestätigung eingeholt.",
-        "example": "\"Lösche diesen Artikel aus meiner Leseliste\""
       },
       "web_search": {
         "label": "Websuche",
