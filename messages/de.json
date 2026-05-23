@@ -690,7 +690,11 @@
     },
     "actionsLabel": "Zielaktionen",
     "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen",
+    "deleteLabel": "Löschen",
+    "viewLabel": "Details ansehen",
+    "viewDialog": {
+      "createdAt": "Erstellt"
+    },
     "horizon": {
       "link": "Zeithorizonte",
       "metadata": {

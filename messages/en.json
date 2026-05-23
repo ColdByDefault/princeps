@@ -691,6 +691,10 @@
     "actionsLabel": "Goal actions",
     "editLabel": "Edit",
     "deleteLabel": "Delete",
+    "viewLabel": "View details",
+    "viewDialog": {
+      "createdAt": "Created"
+    },
     "horizon": {
       "link": "Horizons",
       "metadata": {
