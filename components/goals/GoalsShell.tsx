@@ -28,7 +28,11 @@ import { CreateGoalDialog } from "./CreateGoalDialog";
 import { EditGoalDialog } from "./EditGoalDialog";
 import { StakeholderMapDialog } from "./StakeholderMapDialog";
 import { useGoalMutations } from "./logic/useGoalMutations";
-import type { GoalRecord, LabelOptionRecord, StakeholderRecord } from "@/types/api";
+import type {
+  GoalRecord,
+  LabelOptionRecord,
+  StakeholderRecord,
+} from "@/types/api";
 
 type Filter = "all" | "open" | "in_progress" | "done" | "cancelled";
 
@@ -52,7 +56,9 @@ export function GoalsShell({
   const [editOpen, setEditOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [stakeholderGoal, setStakeholderGoal] = useState<GoalRecord | null>(null);
+  const [stakeholderGoal, setStakeholderGoal] = useState<GoalRecord | null>(
+    null,
+  );
   const [stakeholderOpen, setStakeholderOpen] = useState(false);
 
   const [isPendingRefresh, startRefresh] = useTransition();
@@ -110,7 +116,10 @@ export function GoalsShell({
     setStakeholderOpen(true);
   }
 
-  function handleStakeholderAdded(goalId: string, stakeholder: StakeholderRecord) {
+  function handleStakeholderAdded(
+    goalId: string,
+    stakeholder: StakeholderRecord,
+  ) {
     setGoals((prev) =>
       prev.map((g) =>
         g.id === goalId
@@ -125,7 +134,10 @@ export function GoalsShell({
     );
   }
 
-  function handleStakeholderUpdated(goalId: string, stakeholder: StakeholderRecord) {
+  function handleStakeholderUpdated(
+    goalId: string,
+    stakeholder: StakeholderRecord,
+  ) {
     setGoals((prev) =>
       prev.map((g) =>
         g.id === goalId
@@ -154,13 +166,23 @@ export function GoalsShell({
     setGoals((prev) =>
       prev.map((g) =>
         g.id === goalId
-          ? { ...g, stakeholders: g.stakeholders.filter((s) => s.id !== stakeholderId) }
+          ? {
+              ...g,
+              stakeholders: g.stakeholders.filter(
+                (s) => s.id !== stakeholderId,
+              ),
+            }
           : g,
       ),
     );
     setStakeholderGoal((prev) =>
       prev?.id === goalId
-        ? { ...prev, stakeholders: prev.stakeholders.filter((s) => s.id !== stakeholderId) }
+        ? {
+            ...prev,
+            stakeholders: prev.stakeholders.filter(
+              (s) => s.id !== stakeholderId,
+            ),
+          }
         : prev,
     );
   }
@@ -318,7 +340,7 @@ export function GoalsShell({
       {/* Stakeholder map dialog */}
       {stakeholderGoal && (
         <StakeholderMapDialog
-          key={stakeholderGoal.id}
+          key={`stakeholders-${stakeholderGoal.id}`}
           goal={stakeholderGoal}
           open={stakeholderOpen}
           onOpenChange={setStakeholderOpen}

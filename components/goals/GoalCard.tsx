@@ -33,6 +33,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { GoalRecord } from "@/types/api";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -217,19 +223,6 @@ export function GoalCard({
           </button>
         )}
 
-        {/* Stakeholder count chip (when none shown yet) — just the icon link */}
-        {goal.stakeholders.length === 0 && (
-          <button
-            type="button"
-            onClick={() => onOpenStakeholders(goal)}
-            aria-label={t("stakeholders.openLabel")}
-            className="inline-flex h-5 items-center gap-1 rounded-full border border-dashed border-border/60 px-2 text-[10px] font-medium text-muted-foreground cursor-pointer hover:border-border transition-colors"
-          >
-            <Users className="size-2.5 shrink-0" />
-            {t("stakeholders.addFirst")}
-          </button>
-        )}
-
         {/* Status + labels */}
         <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
           <Badge
@@ -263,45 +256,59 @@ export function GoalCard({
       </div>
 
       {/* Actions */}
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={t("actionsLabel")}
-              title={t("actionsLabel")}
-              className="size-7 cursor-pointer shrink-0 text-muted-foreground"
-            />
-          }
-        >
-          <MoreHorizontal className="size-4" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={() => onEdit(goal)}
-            className="cursor-pointer"
+      <div className="flex shrink-0 items-center gap-0.5">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label={t("stakeholders.openLabel")}
+                  className="size-7 cursor-pointer text-muted-foreground"
+                  onClick={() => onOpenStakeholders(goal)}
+                />
+              }
+            >
+              <Users className="size-4" />
+            </TooltipTrigger>
+            <TooltipContent>{t("stakeholders.openLabel")}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                aria-label={t("actionsLabel")}
+                title={t("actionsLabel")}
+                className="size-7 cursor-pointer shrink-0 text-muted-foreground"
+              />
+            }
           >
-            <Pencil className="mr-2 size-3.5" />
-            {t("editLabel")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => onOpenStakeholders(goal)}
-            className="cursor-pointer"
-          >
-            <Users className="mr-2 size-3.5" />
-            {t("stakeholders.menuLabel")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => onDelete(goal.id)}
-            className="cursor-pointer text-destructive focus:text-destructive"
-          >
-            <Trash2 className="mr-2 size-3.5" />
-            {t("deleteLabel")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <MoreHorizontal className="size-4" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => onEdit(goal)}
+              className="cursor-pointer"
+            >
+              <Pencil className="mr-2 size-3.5" />
+              {t("editLabel")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => onDelete(goal.id)}
+              className="cursor-pointer text-destructive focus:text-destructive"
+            >
+              <Trash2 className="mr-2 size-3.5" />
+              {t("deleteLabel")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 }

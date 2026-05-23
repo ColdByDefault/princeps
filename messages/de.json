@@ -1258,6 +1258,21 @@
         "what": "Markiert einen Meilenstein als abgeschlossen oder nicht abgeschlossen.",
         "example": "\"Markiere den Meilenstein 'Design abgeschlossen' als erledigt\""
       },
+      "add_stakeholder": {
+        "label": "Stakeholder hinzufügen",
+        "what": "Verknüpft einen Kontakt als Stakeholder mit einem Ziel und setzt Beziehungsstatus (warm/neutral/kalt) sowie eine optionale Rolle.",
+        "example": "\"Füge Sarah Chen als Sponsor bei meinem Launch-Ziel hinzu\""
+      },
+      "list_stakeholders": {
+        "label": "Stakeholder anzeigen",
+        "what": "Listet die Stakeholder eines Ziels oder alle Stakeholder auf.",
+        "example": "\"Wer sind die Stakeholder bei meinem Umsatzziel?\""
+      },
+      "update_stakeholder_health": {
+        "label": "Stakeholder-Status aktualisieren",
+        "what": "Ändert Beziehungsstatus, Rolle oder Notizen eines Stakeholders.",
+        "example": "\"Markiere Sarah Chen als kalt beim Launch-Ziel\""
+      },
       "search_knowledge": {
         "label": "Wissen durchsuchen",
         "what": "Durchsucht deine persönliche Wissensdatenbank semantisch und findet relevante Ausschnitte aus hochgeladenen Dokumenten.",
