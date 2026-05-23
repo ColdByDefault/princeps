@@ -2,21 +2,13 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
 "use client";
 
-import {
-  Mail,
-  Phone,
-  Building2,
-  Briefcase,
-  CalendarDays,
-  Pencil,
-  Trash2,
-} from "lucide-react";
+import { Mail, Phone, Building2, Briefcase, CalendarDays } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
@@ -29,7 +21,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 const AVATAR_COLORS = [
@@ -62,16 +53,12 @@ interface ContactDetailDialogProps {
   contact: ContactRecord | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onEdit: (contact: ContactRecord) => void;
-  onDelete: (contactId: string) => void;
 }
 
 export function ContactDetailDialog({
   contact,
   open,
   onOpenChange,
-  onEdit,
-  onDelete,
 }: ContactDetailDialogProps) {
   const t = useTranslations("contacts");
   const locale = useLocale();
@@ -125,33 +112,6 @@ export function ContactDetailDialog({
                 </div>
               )}
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="cursor-pointer"
-              aria-label={t("editLabel")}
-              onClick={() => {
-                onOpenChange(false);
-                onEdit(contact);
-              }}
-            >
-              <Pencil className="mr-1.5 size-3.5" />
-              {t("editLabel")}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="cursor-pointer text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
-              aria-label={t("deleteLabel")}
-              onClick={() => {
-                onOpenChange(false);
-                onDelete(contact.id);
-              }}
-            >
-              <Trash2 className="mr-1.5 size-3.5" />
-            </Button>
           </div>
         </div>
 

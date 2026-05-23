@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -30,6 +30,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { ContactDetailDialog } from "./ContactDetailDialog";
 
@@ -82,17 +88,10 @@ export function ContactCard({
   return (
     <>
       <div
-        role="button"
-        tabIndex={0}
-        aria-label={t("viewLabel", { name: contact.name })}
         className={cn(
-          "group flex cursor-pointer items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/40",
+          "group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/40",
           isDeleting && "opacity-60 pointer-events-none",
         )}
-        onClick={() => setShowDetailDialog(true)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") setShowDetailDialog(true);
-        }}
       >
         {/* Avatar */}
         <div
@@ -182,7 +181,25 @@ export function ContactCard({
         </div>
 
         {/* Actions */}
-        <div className="ml-auto shrink-0" onClick={(e) => e.stopPropagation()}>
+        <div className="ml-auto shrink-0 flex items-center gap-0.5">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    className="cursor-pointer"
+                    aria-label={t("viewLabel")}
+                    onClick={() => setShowDetailDialog(true)}
+                  />
+                }
+              >
+                <Eye className="size-3.5" />
+              </TooltipTrigger>
+              <TooltipContent>{t("viewLabel")}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -197,13 +214,6 @@ export function ContactCard({
               <MoreHorizontal className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => setShowDetailDialog(true)}
-                className="cursor-pointer"
-              >
-                <Eye className="mr-2 size-4" />
-                {t("viewLabel")}
-              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => onEdit(contact)}
                 className="cursor-pointer"
@@ -227,8 +237,6 @@ export function ContactCard({
         contact={contact}
         open={showDetailDialog}
         onOpenChange={setShowDetailDialog}
-        onEdit={onEdit}
-        onDelete={onDelete}
       />
     </>
   );
