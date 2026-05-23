@@ -1,3 +1,35 @@
+## [1.1.4] - 2026-05-23
+
+- F3 — Reading Queue with AI relevance scoring Fixes #88
+- feat: enhance task management with delegation fields and updated UI filters
+- G4 — Stakeholder Map (relationship intelligence per goal) Fixes #92
+- feat: refactor ChatWidget to use custom useChatWidget hook for improved state management
+- feat: update version to canary-v1.1.4 and implement activity bar for assistant interactions
+- feat: add log_contact_interaction action to record interactions with contacts
+- feat: enhance stakeholder management with new actions and translations
+- feat: add nativeButton prop to GoalsShell component
+- G4 — Stakeholder Map (relationship intelligence per goal) Fixes #92
+- feat: add stakeholders field to goal test data
+- feat: implement StakeholderMapDialog component for managing stakeholders
+- feat: add stakeholder management functionality
+- refactor(tests): remove unused Session type imports from integration tests
+- refactor(tests): replace inline labelLinks type with LabelLinkRow in unit tests
+- refactor(tests): remove unused Session type imports from integration tests
+- refactor(tests): streamline type imports in integration tests
+- Refactor integration tests to use shared types and consolidate delete logic tests
+- E2 — Reports: add per-tool call frequency breakdown Fixes #85 G2 — Horizon Planning view (Now / Next 6mo / 2-5yr) Fixes #90
+- D2 — Add log_contact_interaction tool Fixes #83
+- D1 — Add briefings context slot to system prompt Fixes #82
+- feat: update callChat type definitions in briefing and greeting tests
+- A2a — Create missing cron route: /api/cron/tasks-overdue Fixes #77 C1 — Implement overdue tasks nudge logic Fixes #80 C2 — Implement weekly digest nudge logic Fixes #81
+- feat: add integration and unit tests for knowledge document management and shared logic
+- feat: implement token encryption and decryption for integration tokens A1 — Fix widget chat tier enforcement (all tools exposed to free users) Fixes #76 Encrypt integration tokens before production deployment Fixes #102
+- feat: add integration tests for overdue task nudges and daily greeting notifications
+- feat: notifications tests
+- feat: update README with new environment setup instructions, enhance tool descriptions, and clarify notification system
+
+# Changelog
+
 ## [1.1.3] - 2026-05-22
 
 - feat: update version to canary-v1.1.3 and enhance tool descriptions for clarity; add tool test prompts documentation
