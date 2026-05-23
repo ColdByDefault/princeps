@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.6
  * @since beta
  */
 
@@ -28,9 +28,19 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ContactDetailDialog } from "./ContactDetailDialog";
 
 const AVATAR_COLORS = [
@@ -74,6 +84,7 @@ export function ContactCard({
 }: ContactCardProps) {
   const t = useTranslations("contacts");
   const [showDetailDialog, setShowDetailDialog] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const locale = useLocale();
   const initials = getInitials(contact.name);
@@ -189,7 +200,7 @@ export function ContactCard({
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  className="cursor-pointer"
+                  className="size-7 cursor-pointer"
                   aria-label={t("actionsLabel")}
                 />
               }
@@ -201,21 +212,22 @@ export function ContactCard({
                 onClick={() => setShowDetailDialog(true)}
                 className="cursor-pointer"
               >
-                <Eye className="mr-2 size-4" />
+                <Eye className="mr-2 size-3.5" />
                 {t("viewLabel")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => onEdit(contact)}
                 className="cursor-pointer"
               >
-                <Pencil className="mr-2 size-4" />
+                <Pencil className="mr-2 size-3.5" />
                 {t("editLabel")}
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => onDelete(contact.id)}
+                onClick={() => setConfirmOpen(true)}
                 className="cursor-pointer text-destructive focus:text-destructive"
               >
-                <Trash2 className="mr-2 size-4" />
+                <Trash2 className="mr-2 size-3.5" />
                 {t("deleteLabel")}
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -230,6 +242,31 @@ export function ContactCard({
         onEdit={onEdit}
         onDelete={onDelete}
       />
+
+      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("deleteDialog.description")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="cursor-pointer">
+              {t("deleteDialog.cancel")}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="cursor-pointer"
+              onClick={() => {
+                setConfirmOpen(false);
+                onDelete(contact.id);
+              }}
+            >
+              {t("deleteDialog.confirm")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
