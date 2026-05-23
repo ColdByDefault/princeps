@@ -144,6 +144,10 @@ The component folder is singular legacy naming. New features should prefer `comp
 
 ## Decisions, Goals, Labels, Memory
 
+### Goals — Stakeholder Map
+
+Each goal can have a stakeholder map: a list of contacts linked with a relationship health (`warm` / `neutral` / `cold`) and an optional role string (e.g. Sponsor, Blocker, Champion). Stakeholders are shown as color-coded chips inline on each GoalCard and managed via the StakeholderMapDialog. The LLM can add, list, and update stakeholder health via `add_stakeholder`, `list_stakeholders`, and `update_stakeholder_health` tools (all free tier, group: goals). Server logic lives in `lib/features/stakeholders/`; API at `GET|POST /api/stakeholders` and `PATCH|DELETE /api/stakeholders/[id]`.
+
 Purpose:
 
 - Decisions capture choices and rationale.
