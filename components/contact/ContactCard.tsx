@@ -36,8 +36,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-import { ContactDetailDialog } from "./ContactDetailDialog";
+import {
+  ViewDetailDialog,
+  type DetailField,
+} from "@/components/shared/ViewDetailDialog";
 
 const AVATAR_COLORS = [
   "bg-blue-500",
@@ -79,24 +81,77 @@ export function ContactCard({
   onDelete,
 }: ContactCardProps) {
   const t = useTranslations("contacts");
-  const [showDetailDialog, setShowDetailDialog] = useState(false);
-
+  const [viewOpen, setViewOpen] = useState(false);
   const locale = useLocale();
   const initials = getInitials(contact.name);
   const avatarColor = getAvatarColor(contact.name);
+
+  const fields: DetailField[] = [
+    { label: t("fields.role"), value: contact.role, hidden: !contact.role },
+    {
+      label: t("fields.company"),
+      value: contact.company,
+      hidden: !contact.company,
+    },
+    { label: t("fields.email"), value: contact.email, hidden: !contact.email },
+    { label: t("fields.phone"), value: contact.phone, hidden: !contact.phone },
+    {
+      label: t("fields.notes"),
+      value: <p className="whitespace-pre-wrap">{contact.notes}</p>,
+      hidden: !contact.notes,
+    },
+    {
+      label: t("lastContactLabel"),
+      value: contact.lastContact
+        ? formatDate(contact.lastContact, locale)
+        : null,
+      hidden: !contact.lastContact,
+    },
+    {
+      label: t("fields.labels"),
+      value: (
+        <div className="flex flex-wrap gap-1">
+          {contact.labels.map((lbl) => {
+            const Icon = lbl.icon
+              ? LABEL_ICON_MAP[lbl.icon as LabelIconName]
+              : null;
+            return (
+              <span
+                key={lbl.id}
+                className="inline-flex h-5 items-center gap-1 rounded-full px-2 text-[10px] font-medium"
+                style={{
+                  backgroundColor: `${lbl.color}22`,
+                  color: lbl.color,
+                  border: `1px solid ${lbl.color}44`,
+                }}
+              >
+                {Icon && <Icon className="size-3 shrink-0" />}
+                {lbl.name}
+              </span>
+            );
+          })}
+        </div>
+      ),
+      hidden: !contact.labels.length,
+    },
+    {
+      label: t("viewDialog.createdAt"),
+      value: formatDate(contact.createdAt, locale),
+    },
+  ];
 
   return (
     <>
       <div
         className={cn(
-          "group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/40",
+          "flex items-start gap-3 rounded-xl border border-border/60 bg-card px-4 py-3 transition-opacity",
           isDeleting && "opacity-60 pointer-events-none",
         )}
       >
         {/* Avatar */}
         <div
           className={cn(
-            "flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white",
+            "mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white",
             avatarColor,
           )}
           aria-hidden="true"
@@ -104,94 +159,93 @@ export function ContactCard({
           {initials}
         </div>
 
-        {/* Name + role/company — fixed width column */}
-        <div className="min-w-0 w-48 shrink-0">
-          <p className="truncate text-sm font-medium">{contact.name}</p>
-          {(contact.role || contact.company) && (
-            <p className="text-muted-foreground truncate text-xs">
-              {[contact.role, contact.company].filter(Boolean).join(" · ")}
+        {/* Body */}
+        <div className="min-w-0 flex-1 space-y-1.5">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium leading-snug">
+              {contact.name}
             </p>
+            {(contact.role || contact.company) && (
+              <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                {[contact.role, contact.company].filter(Boolean).join(" · ")}
+              </p>
+            )}
+          </div>
+
+          {(contact.email || contact.phone || contact.lastContact) && (
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+              {contact.email && (
+                <a
+                  href={`mailto:${contact.email}`}
+                  className="inline-flex min-w-0 max-w-full items-center gap-1.5 transition-colors hover:text-foreground sm:max-w-[18rem]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Mail className="size-3.5 shrink-0" />
+                  <span className="truncate">{contact.email}</span>
+                </a>
+              )}
+              {contact.phone && (
+                <a
+                  href={`tel:${contact.phone}`}
+                  className="inline-flex min-w-0 max-w-full items-center gap-1.5 transition-colors hover:text-foreground sm:max-w-48"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Phone className="size-3.5 shrink-0" />
+                  <span className="truncate">{contact.phone}</span>
+                </a>
+              )}
+              {contact.lastContact && (
+                <span className="inline-flex items-center gap-1.5">
+                  <CalendarDays className="size-3.5 shrink-0" />
+                  {formatDate(contact.lastContact, locale)}
+                </span>
+              )}
+            </div>
           )}
-        </div>
 
-        {/* Email */}
-        <div className="hidden min-w-0 flex-1 sm:block">
-          {contact.email ? (
-            <a
-              href={`mailto:${contact.email}`}
-              className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-sm transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Mail className="size-3.5 shrink-0" />
-              <span className="truncate">{contact.email}</span>
-            </a>
-          ) : null}
-        </div>
-
-        {/* Phone */}
-        <div className="hidden w-36 shrink-0 lg:block">
-          {contact.phone ? (
-            <a
-              href={`tel:${contact.phone}`}
-              className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-sm transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Phone className="size-3.5 shrink-0" />
-              <span className="truncate">{contact.phone}</span>
-            </a>
-          ) : null}
-        </div>
-
-        {/* Labels */}
-        <div className="hidden w-40 shrink-0 items-center gap-1 xl:flex">
-          {contact.labels.slice(0, 2).map((label) => {
-            const Icon = label.icon
-              ? LABEL_ICON_MAP[label.icon as LabelIconName]
-              : null;
-            return (
-              <span
-                key={label.id}
-                className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium"
-                style={{
-                  backgroundColor: `${label.color}22`,
-                  color: label.color,
-                  border: `1px solid ${label.color}44`,
-                }}
-              >
-                {Icon && <Icon className="size-3 shrink-0" />}
-                {label.name}
-              </span>
-            );
-          })}
-          {contact.labels.length > 2 && (
-            <span className="text-muted-foreground inline-flex h-5 shrink-0 items-center rounded-full border border-border px-2 text-[10px] font-medium">
-              +{contact.labels.length - 2}
-            </span>
+          {contact.labels.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+              {contact.labels.slice(0, 3).map((label) => {
+                const Icon = label.icon
+                  ? LABEL_ICON_MAP[label.icon as LabelIconName]
+                  : null;
+                return (
+                  <span
+                    key={label.id}
+                    className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium"
+                    style={{
+                      backgroundColor: `${label.color}22`,
+                      color: label.color,
+                      border: `1px solid ${label.color}44`,
+                    }}
+                  >
+                    {Icon && <Icon className="size-3 shrink-0" />}
+                    {label.name}
+                  </span>
+                );
+              })}
+              {contact.labels.length > 3 && (
+                <span className="inline-flex h-5 shrink-0 items-center rounded-full border border-border px-2 text-[10px] font-medium text-muted-foreground">
+                  +{contact.labels.length - 3}
+                </span>
+              )}
+            </div>
           )}
-        </div>
-
-        {/* Last contact date */}
-        <div className="text-muted-foreground hidden w-28 shrink-0 items-center gap-1 text-xs lg:flex">
-          {contact.lastContact ? (
-            <>
-              <CalendarDays className="size-3 shrink-0" />
-              {formatDate(contact.lastContact, locale)}
-            </>
-          ) : null}
         </div>
 
         {/* Actions */}
-        <div className="ml-auto shrink-0 flex items-center gap-0.5">
+        <div className="flex shrink-0 items-center gap-0.5">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger
                 render={
                   <Button
+                    type="button"
                     variant="ghost"
-                    size="icon-sm"
-                    className="cursor-pointer"
+                    size="icon"
                     aria-label={t("viewLabel")}
-                    onClick={() => setShowDetailDialog(true)}
+                    className="size-7 cursor-pointer shrink-0 text-muted-foreground"
+                    onClick={() => setViewOpen(true)}
                   />
                 }
               >
@@ -204,10 +258,12 @@ export function ContactCard({
             <DropdownMenuTrigger
               render={
                 <Button
+                  type="button"
                   variant="ghost"
-                  size="icon-sm"
-                  className="cursor-pointer"
+                  size="icon"
                   aria-label={t("actionsLabel")}
+                  title={t("actionsLabel")}
+                  className="size-7 cursor-pointer shrink-0 text-muted-foreground"
                 />
               }
             >
@@ -218,14 +274,14 @@ export function ContactCard({
                 onClick={() => onEdit(contact)}
                 className="cursor-pointer"
               >
-                <Pencil className="mr-2 size-4" />
+                <Pencil className="mr-2 size-3.5" />
                 {t("editLabel")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => onDelete(contact.id)}
                 className="cursor-pointer text-destructive focus:text-destructive"
               >
-                <Trash2 className="mr-2 size-4" />
+                <Trash2 className="mr-2 size-3.5" />
                 {t("deleteLabel")}
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -233,10 +289,11 @@ export function ContactCard({
         </div>
       </div>
 
-      <ContactDetailDialog
-        contact={contact}
-        open={showDetailDialog}
-        onOpenChange={setShowDetailDialog}
+      <ViewDetailDialog
+        open={viewOpen}
+        onOpenChange={setViewOpen}
+        title={contact.name}
+        fields={fields}
       />
     </>
   );

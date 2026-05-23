@@ -1061,6 +1061,9 @@
     "editLabel": "Bearbeiten",
     "deleteLabel": "Löschen",
     "lastContactLabel": "Letzter Kontakt",
+    "viewDialog": {
+      "createdAt": "Erstellt"
+    },
     "refresh": "Aktualisieren",
     "refreshing": "Wird aktualisiert…"
   },
