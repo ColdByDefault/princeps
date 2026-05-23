@@ -1168,6 +1168,11 @@
         "what": "Löscht einen Kontakt dauerhaft.",
         "example": "\"Lösche den Kontakt Jana Müller\""
       },
+      "log_contact_interaction": {
+        "label": "Interaktion protokollieren",
+        "what": "Protokolliert eine manuelle Interaktion mit einem Kontakt — Anruf, E-Mail, Meeting oder Notiz — und aktualisiert das Datum des letzten Kontakts.",
+        "example": "\"Ich habe Marcus heute angerufen, er hat das Pilotprojekt bestätigt\""
+      },
       "create_meeting": {
         "label": "Meeting erstellen",
         "what": "Plant ein neues Meeting mit optionaler Dauer, Ort und Labels.",

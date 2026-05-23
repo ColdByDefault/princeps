@@ -1168,6 +1168,11 @@
         "what": "Permanently deletes a contact.",
         "example": "\"Delete the contact Jane Doe\""
       },
+      "log_contact_interaction": {
+        "label": "Log Interaction",
+        "what": "Records a manual interaction with a contact — call, email, meeting, or note — and updates their last-contact date.",
+        "example": "\"I called Marcus today, he confirmed the pilot\""
+      },
       "create_meeting": {
         "label": "Create Meeting",
         "what": "Schedules a new meeting with optional duration, location, and labels.",
