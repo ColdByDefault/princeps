@@ -380,16 +380,19 @@ model AssistantReport {
 // ─── Tasks ────────────────────────────────────────────────
 
 model Task {
-  id        String    @id @default(cuid())
-  userId    String
-  title     String
-  notes     String?
-  status    TaskStatus   @default(open)
-  priority  TaskPriority @default(normal)
-  dueDate   DateTime?
-  meetingId String?
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id             String    @id @default(cuid())
+  userId         String
+  title          String
+  notes          String?
+  status         TaskStatus   @default(open)
+  priority       TaskPriority @default(normal)
+  dueDate        DateTime?
+  meetingId      String?
+  delegatedTo    String?
+  delegatedAt    DateTime?
+  delegateNotes  String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   meeting Meeting? @relation(fields: [meetingId], references: [id], onDelete: SetNull)

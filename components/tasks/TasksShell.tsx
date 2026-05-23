@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -28,7 +28,13 @@ import {
 import { useTaskMutations } from "./logic/useTaskMutations";
 import type { LabelOptionRecord, TaskRecord } from "@/types/api";
 
-type Filter = "all" | "open" | "in_progress" | "done" | "cancelled";
+type Filter =
+  | "all"
+  | "open"
+  | "in_progress"
+  | "done"
+  | "cancelled"
+  | "delegated";
 
 type TasksShellProps = {
   initialTasks: TaskRecord[];
@@ -89,10 +95,15 @@ export function TasksShell({
     { key: "in_progress", label: t("filter.inProgress") },
     { key: "done", label: t("filter.done") },
     { key: "cancelled", label: t("filter.cancelled") },
+    { key: "delegated", label: t("filter.delegated") },
   ];
 
   const visible =
-    filter === "all" ? tasks : tasks.filter((t) => t.status === filter);
+    filter === "all"
+      ? tasks
+      : filter === "delegated"
+        ? tasks.filter((t) => t.delegatedTo !== null)
+        : tasks.filter((t) => t.status === filter);
 
   function handleEdit(task: TaskRecord) {
     setEditTask(task);
@@ -175,7 +186,11 @@ export function TasksShell({
       {visible.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/60 px-6 py-16 text-center">
           <p className="text-sm text-muted-foreground">
-            {filter === "all" ? t("empty") : t("emptyFiltered")}
+            {filter === "all"
+              ? t("empty")
+              : filter === "delegated"
+                ? t("emptyDelegated")
+                : t("emptyFiltered")}
           </p>
           {filter === "all" && (
             <CreateTaskDialog

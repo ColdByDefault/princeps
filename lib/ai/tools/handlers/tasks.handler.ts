@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -12,7 +12,10 @@ import { createTask } from "@/lib/features/tasks/create.logic";
 import { listTasks } from "@/lib/features/tasks/list.logic";
 import { updateTask } from "@/lib/features/tasks/update.logic";
 import { deleteTask } from "@/lib/features/tasks/delete.logic";
-import { createTaskSchema, updateTaskSchema } from "@/lib/features/tasks/schemas";
+import {
+  createTaskSchema,
+  updateTaskSchema,
+} from "@/lib/features/tasks/schemas";
 import {
   resolveGoalIdsByRefs,
   resolveMeetingIdByRef,
@@ -35,7 +38,11 @@ async function handleCreateTask(
     typeof args.meetingId === "string" && args.meetingId.trim()
       ? await resolveMeetingIdByRef(userId, args.meetingId)
       : undefined;
-  if (typeof args.meetingId === "string" && args.meetingId.trim() && !meetingId) {
+  if (
+    typeof args.meetingId === "string" &&
+    args.meetingId.trim() &&
+    !meetingId
+  ) {
     return {
       ok: false,
       error: `Meeting not found for create_task: ${args.meetingId}. Use list_meetings or the create_meeting result before linking a task.`,
@@ -48,7 +55,9 @@ async function handleCreateTask(
       )
     : undefined;
   const goalIds =
-    goalRefs !== undefined ? await resolveGoalIdsByRefs(userId, goalRefs) : undefined;
+    goalRefs !== undefined
+      ? await resolveGoalIdsByRefs(userId, goalRefs)
+      : undefined;
   if (goalIds?.missing.length) {
     return {
       ok: false,
@@ -61,6 +70,10 @@ async function handleCreateTask(
     labelIds,
     ...(meetingId !== undefined ? { meetingId } : {}),
     ...(goalIds !== undefined ? { goalIds: goalIds.ids } : {}),
+    // Auto-stamp delegatedAt when delegating and no date given
+    ...(args.delegatedTo && !args.delegatedAt
+      ? { delegatedAt: new Date().toISOString() }
+      : {}),
   });
   if (!parsed.success) {
     return {
@@ -162,7 +175,11 @@ async function handleUpdateTask(
     typeof args.meetingId === "string" && args.meetingId.trim()
       ? await resolveMeetingIdByRef(userId, args.meetingId)
       : undefined;
-  if (typeof args.meetingId === "string" && args.meetingId.trim() && !meetingId) {
+  if (
+    typeof args.meetingId === "string" &&
+    args.meetingId.trim() &&
+    !meetingId
+  ) {
     return {
       ok: false,
       error: `Meeting not found for update_task: ${args.meetingId}. Use list_meetings or the create_meeting result before linking a task.`,
@@ -175,7 +192,9 @@ async function handleUpdateTask(
       )
     : undefined;
   const goalIds =
-    goalRefs !== undefined ? await resolveGoalIdsByRefs(userId, goalRefs) : undefined;
+    goalRefs !== undefined
+      ? await resolveGoalIdsByRefs(userId, goalRefs)
+      : undefined;
   if (goalIds?.missing.length) {
     return {
       ok: false,
@@ -189,6 +208,10 @@ async function handleUpdateTask(
     ...(labelIds !== undefined ? { labelIds } : {}),
     ...(meetingId !== undefined ? { meetingId } : {}),
     ...(goalIds !== undefined ? { goalIds: goalIds.ids } : {}),
+    // Auto-stamp delegatedAt when delegating and no date given
+    ...(rest.delegatedTo && !rest.delegatedAt
+      ? { delegatedAt: new Date().toISOString() }
+      : {}),
   });
   if (!parsed.success) {
     return {

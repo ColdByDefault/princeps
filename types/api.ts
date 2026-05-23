@@ -148,6 +148,9 @@ export interface TaskRecord {
   dueDate: string | null; // ISO string on the client
   meetingId: string | null;
   meetingTitle: string | null;
+  delegatedTo: string | null;
+  delegatedAt: string | null; // ISO string on the client
+  delegateNotes: string | null;
   goals: { id: string; title: string }[];
   labels: LabelOptionRecord[];
   createdAt: string; // ISO string on the client

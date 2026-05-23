@@ -2,7 +2,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { TaskRecord } from "@/types/api";
 import type { UpdateTaskInput } from "@/lib/features/tasks/schemas";
 import type * as taskSchemas from "@/lib/features/tasks/schemas";
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
+import type {
+  GetSession,
+  HeadersProvider,
+  RateLimitCheck,
+  RateLimitIdentifier,
+} from "@/tests/helpers/types";
 
 type UpdateTask = (
   taskId: string,
@@ -13,10 +18,7 @@ type UpdateTask = (
   | { ok: false; notFound: true }
   | { ok: false; notFound: false; error: string }
 >;
-type DeleteTask = (
-  taskId: string,
-  userId: string,
-) => Promise<{ ok: boolean }>;
+type DeleteTask = (taskId: string, userId: string) => Promise<{ ok: boolean }>;
 
 const mocks = vi.hoisted(() => ({
   deleteTask: vi.fn<DeleteTask>(),
@@ -79,6 +81,9 @@ const taskRecord: TaskRecord = {
   meetingTitle: null,
   goals: [],
   labels: [],
+  delegatedTo: null,
+  delegatedAt: null,
+  delegateNotes: null,
   createdAt: "2026-05-08T06:00:00.000Z",
   updatedAt: "2026-05-08T06:30:00.000Z",
 };

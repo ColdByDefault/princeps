@@ -913,7 +913,8 @@
       "open": "Open",
       "inProgress": "In Progress",
       "done": "Done",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "delegated": "Delegated"
     },
     "priority": {
       "low": "Low",
@@ -937,6 +938,10 @@
       "status": "Status",
       "labels": "Labels",
       "linkedGoals": "Linked goals",
+      "delegatedTo": "Delegated to",
+      "delegatedToPlaceholder": "Name of person (e.g. Marcus)",
+      "delegateNotes": "Handoff notes",
+      "delegateNotesPlaceholder": "Context for the handoff\u2026",
       "optional": "Optional"
     },
     "createDialog": {
@@ -972,7 +977,9 @@
     "markDoneLabel": "Mark as done",
     "reopenLabel": "Reopen",
     "refresh": "Refresh",
-    "refreshing": "Refreshing…"
+    "refreshing": "Refreshing…",
+    "delegatedBadge": "Delegated to {name}",
+    "emptyDelegated": "No delegated tasks."
   },
   "contacts": {
     "metadata": {

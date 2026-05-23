@@ -913,7 +913,8 @@
       "open": "Offen",
       "inProgress": "In Bearbeitung",
       "done": "Erledigt",
-      "cancelled": "Abgebrochen"
+      "cancelled": "Abgebrochen",
+      "delegated": "Delegiert"
     },
     "priority": {
       "low": "Niedrig",
@@ -937,6 +938,10 @@
       "status": "Status",
       "labels": "Labels",
       "linkedGoals": "Verknüpfte Ziele",
+      "delegatedTo": "Delegiert an",
+      "delegatedToPlaceholder": "Name der Person (z.\u00a0B. Markus)",
+      "delegateNotes": "\u00dcbergabenotizen",
+      "delegateNotesPlaceholder": "Kontext zur \u00dcbergabe\u2026",
       "optional": "Optional"
     },
     "createDialog": {
@@ -972,7 +977,9 @@
     "markDoneLabel": "Als erledigt markieren",
     "reopenLabel": "Wiedereröffnen",
     "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert…"
+    "refreshing": "Wird aktualisiert…",
+    "delegatedBadge": "Delegiert an {name}",
+    "emptyDelegated": "Keine delegierten Aufgaben."
   },
   "contacts": {
     "metadata": {

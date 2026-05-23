@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -27,6 +27,9 @@ export const createTaskSchema = z.object({
   meetingId: z.string().optional().nullable(),
   labelIds: z.array(z.string()).optional(),
   goalIds: z.array(z.string()).optional(),
+  delegatedTo: z.string().max(150).optional().nullable(),
+  delegatedAt: isoDatetimeField.optional().nullable(),
+  delegateNotes: z.string().max(250).optional().nullable(),
 });
 
 export const updateTaskSchema = z.object({
@@ -38,6 +41,9 @@ export const updateTaskSchema = z.object({
   meetingId: z.string().optional().nullable(),
   labelIds: z.array(z.string()).optional(),
   goalIds: z.array(z.string()).optional(),
+  delegatedTo: z.string().max(150).optional().nullable(),
+  delegatedAt: isoDatetimeField.optional().nullable(),
+  delegateNotes: z.string().max(250).optional().nullable(),
 });
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;

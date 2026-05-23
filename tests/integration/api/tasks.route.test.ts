@@ -2,7 +2,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { TaskRecord } from "@/types/api";
 import type { CreateTaskInput } from "@/lib/features/tasks/schemas";
 import type * as taskSchemas from "@/lib/features/tasks/schemas";
-import type { GetSession, HeadersProvider, RateLimitCheck, RateLimitIdentifier } from "@/tests/helpers/types";
+import type {
+  GetSession,
+  HeadersProvider,
+  RateLimitCheck,
+  RateLimitIdentifier,
+} from "@/tests/helpers/types";
 
 type TaskStatus = "open" | "in_progress" | "done" | "cancelled";
 type ListTasks = (
@@ -85,6 +90,9 @@ const taskRecord: TaskRecord = {
   meetingTitle: null,
   goals: [],
   labels: [],
+  delegatedTo: null,
+  delegatedAt: null,
+  delegateNotes: null,
   createdAt: "2026-05-08T06:00:00.000Z",
   updatedAt: "2026-05-08T06:30:00.000Z",
 };
@@ -137,8 +145,7 @@ describe("/api/tasks route", () => {
     expect(response.status).toBe(201);
     await expect(response.json()).resolves.toEqual({ task: taskRecord });
     expect(mocks.getRateLimitIdentifier).toHaveBeenCalledTimes(1);
-    const rateLimitIdentifierArgs =
-      mocks.getRateLimitIdentifier.mock.calls[0];
+    const rateLimitIdentifierArgs = mocks.getRateLimitIdentifier.mock.calls[0];
     expect(rateLimitIdentifierArgs?.[0]).toBeInstanceOf(Request);
     expect(rateLimitIdentifierArgs?.[1]).toBe("user-1");
     expect(mocks.rateLimitCheck).toHaveBeenCalledWith("user-1:127.0.0.1");

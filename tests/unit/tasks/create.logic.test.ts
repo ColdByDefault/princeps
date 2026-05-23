@@ -114,9 +114,10 @@ describe("createTask", () => {
       meetingId: null,
       meetingTitle: null,
       goals: [{ id: "goal-1", title: "Board readiness" }],
-      labels: [
-        { id: "label-1", name: "Board", color: "#64748b", icon: null },
-      ],
+      labels: [{ id: "label-1", name: "Board", color: "#64748b", icon: null }],
+      delegatedTo: null,
+      delegatedAt: null,
+      delegateNotes: null,
       createdAt: "2026-05-08T06:00:00.000Z",
       updatedAt: "2026-05-08T06:30:00.000Z",
     };

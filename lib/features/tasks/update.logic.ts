@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -42,6 +42,15 @@ export async function updateTask(
           dueDate: input.dueDate ? new Date(input.dueDate) : null,
         }),
         ...(input.meetingId !== undefined && { meetingId: input.meetingId }),
+        ...(input.delegatedTo !== undefined && {
+          delegatedTo: input.delegatedTo,
+        }),
+        ...(input.delegatedAt !== undefined && {
+          delegatedAt: input.delegatedAt ? new Date(input.delegatedAt) : null,
+        }),
+        ...(input.delegateNotes !== undefined && {
+          delegateNotes: input.delegateNotes,
+        }),
         ...(labelIds !== undefined && {
           labelLinks: {
             deleteMany: {},
