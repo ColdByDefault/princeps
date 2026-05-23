@@ -1093,7 +1093,11 @@
       "error": "Label konnte nicht gelöscht werden."
     },
     "editLabel": "Bearbeiten",
-    "deleteLabel": "Löschen"
+    "deleteLabel": "Löschen",
+    "viewLabel": "Details ansehen",
+    "viewDialog": {
+      "createdAt": "Erstellt"
+    }
   },
   "tools": {
     "title": "Verfügbare Werkzeuge",

@@ -1093,7 +1093,11 @@
       "error": "Failed to delete label."
     },
     "editLabel": "Edit",
-    "deleteLabel": "Delete"
+    "deleteLabel": "Delete",
+    "viewLabel": "View details",
+    "viewDialog": {
+      "createdAt": "Created"
+    }
   },
   "tools": {
     "title": "Available Tools",

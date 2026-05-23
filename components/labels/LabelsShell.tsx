@@ -2,17 +2,21 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
 "use client";
 
 import { useState, useTransition } from "react";
-import { Pencil, Trash2, Plus, Tag, RefreshCw, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { Eye, Pencil, Trash2, Plus, Tag, RefreshCw, X } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 import { toast } from "sonner";
-import { cn } from "@/lib/core/utils";
+import { cn, formatDate } from "@/lib/core/utils";
+import {
+  ViewDetailDialog,
+  type DetailField,
+} from "@/components/shared/ViewDetailDialog";
 import {
   LABEL_ICON_MAP,
   LABEL_ICON_NAMES,
@@ -145,6 +149,7 @@ type LabelsShellProps = {
 
 export function LabelsShell({ initialLabels }: LabelsShellProps) {
   const t = useTranslations("labels");
+  const locale = useLocale();
 
   const [labels, setLabels] = useState<LabelRecord[]>(initialLabels);
 
@@ -165,6 +170,9 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
   // Delete dialog
   const [deletingLabel, setDeletingLabel] = useState<LabelRecord | null>(null);
   const [isPendingDelete, startDelete] = useTransition();
+
+  // View dialog
+  const [viewingLabel, setViewingLabel] = useState<LabelRecord | null>(null);
 
   // Refresh
   const [isPendingRefresh, startRefresh] = useTransition();
@@ -364,6 +372,16 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
                     variant="ghost"
                     size="icon"
                     className="size-8 cursor-pointer"
+                    aria-label={t("viewLabel")}
+                    onClick={() => setViewingLabel(label)}
+                  >
+                    <Eye className="size-3.5" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 cursor-pointer"
                     aria-label={t("editLabel")}
                     onClick={() => openEdit(label)}
                   >
@@ -385,6 +403,57 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
           })}
         </div>
       )}
+
+      {/* ── View dialog ─────────────────────────────────────────────────── */}
+      {viewingLabel &&
+        (() => {
+          const VIcon = viewingLabel.icon
+            ? LABEL_ICON_MAP[viewingLabel.icon as LabelIconName]
+            : null;
+          const fields: DetailField[] = [
+            {
+              label: t("fields.color"),
+              value: (
+                <div className="flex items-center gap-2">
+                  <span
+                    className="inline-block size-4 shrink-0 rounded-full border border-border/40"
+                    style={{ backgroundColor: viewingLabel.color }}
+                  />
+                  <span className="text-xs text-muted-foreground font-mono">
+                    {viewingLabel.color}
+                  </span>
+                </div>
+              ),
+            },
+            {
+              label: t("fields.icon"),
+              value: VIcon ? (
+                <div className="flex items-center gap-1.5">
+                  <VIcon className="size-4" />
+                  <span className="text-xs text-muted-foreground">
+                    {viewingLabel.icon}
+                  </span>
+                </div>
+              ) : (
+                t("fields.iconNone")
+              ),
+            },
+            {
+              label: t("viewDialog.createdAt"),
+              value: formatDate(viewingLabel.createdAt, locale),
+            },
+          ];
+          return (
+            <ViewDetailDialog
+              open={viewingLabel !== null}
+              onOpenChange={(open) => {
+                if (!open) setViewingLabel(null);
+              }}
+              title={viewingLabel.name}
+              fields={fields}
+            />
+          );
+        })()}
 
       {/* ── Create dialog ───────────────────────────────────────────────── */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
