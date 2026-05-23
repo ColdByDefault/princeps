@@ -2,17 +2,14 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.6
  * @since canary-v1.0.2
- */ 
+ */
 
 "use client";
 
 import {
   Target,
-  MoreHorizontal,
-  Pencil,
-  Trash2,
   CheckCircle2,
   Circle,
   ListChecks,
@@ -26,19 +23,8 @@ import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
 import { cn, formatDate } from "@/lib/core/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { ItemCard } from "@/components/shared/ItemCard";
+import { CardIconButton } from "@/components/shared/CardIconButton";
 import type { GoalRecord } from "@/types/api";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -86,19 +72,31 @@ export function GoalCard({
   const locale = useLocale();
 
   return (
-    <div
-      className={cn(
-        "flex items-start gap-3 rounded-xl border border-border/60 bg-card px-4 py-3 transition-opacity",
-        (isUpdating || isDeleting) && "opacity-60 pointer-events-none",
-      )}
+    <ItemCard
+      isDisabled={isUpdating || isDeleting}
+      leading={
+        <div className="mt-0.5 shrink-0 text-muted-foreground">
+          <Target className="size-5" />
+        </div>
+      }
+      inlineActions={
+        <CardIconButton
+          icon={<Users className="size-3.5" />}
+          label={t("stakeholders.openLabel")}
+          onClick={() => onOpenStakeholders(goal)}
+        />
+      }
+      onEdit={() => onEdit(goal)}
+      editLabel={t("editLabel")}
+      onDelete={() => onDelete(goal.id)}
+      deleteLabel={t("deleteLabel")}
+      deleteTitle={t("deleteDialog.heading")}
+      deleteDescription={t("deleteDialog.body")}
+      deleteCancelLabel={t("deleteDialog.cancel")}
+      deleteConfirmLabel={t("deleteDialog.confirm")}
+      actionsAriaLabel={t("actionsLabel")}
     >
-      {/* Icon */}
-      <div className="mt-0.5 shrink-0 text-muted-foreground">
-        <Target className="size-5" />
-      </div>
-
-      {/* Body */}
-      <div className="min-w-0 flex-1 space-y-1.5">
+      <div className="space-y-1.5">
         <p
           className={cn(
             "text-sm font-medium leading-snug",
@@ -155,7 +153,7 @@ export function GoalCard({
           </div>
         )}
 
-        {/* Meta: target date + linked tasks */}
+        {/* Meta: target date */}
         <div className="flex flex-wrap items-center gap-2 text-[10px] text-muted-foreground">
           {goal.targetDate && (
             <span>
@@ -184,7 +182,7 @@ export function GoalCard({
           </div>
         )}
 
-        {/* Stakeholder summary */}
+        {/* Stakeholder summary — clickable row */}
         {goal.stakeholders.length > 0 && (
           <button
             type="button"
@@ -195,13 +193,17 @@ export function GoalCard({
             {goal.stakeholders.slice(0, 4).map((s) => {
               const health = s.health as "warm" | "neutral" | "cold";
               const Icon =
-                health === "warm" ? Flame : health === "cold" ? Snowflake : Minus;
+                health === "warm"
+                  ? Flame
+                  : health === "cold"
+                    ? Snowflake
+                    : Minus;
               const colorClass =
                 health === "warm"
                   ? "text-green-600 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30"
                   : health === "cold"
-                  ? "text-blue-600 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30"
-                  : "text-amber-600 border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30";
+                    ? "text-blue-600 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30"
+                    : "text-amber-600 border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30";
               return (
                 <span
                   key={s.id}
@@ -254,61 +256,6 @@ export function GoalCard({
           )}
         </div>
       </div>
-
-      {/* Actions */}
-      <div className="flex shrink-0 items-center gap-0.5">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  aria-label={t("stakeholders.openLabel")}
-                  className="size-7 cursor-pointer text-muted-foreground"
-                  onClick={() => onOpenStakeholders(goal)}
-                />
-              }
-            >
-              <Users className="size-4" />
-            </TooltipTrigger>
-            <TooltipContent>{t("stakeholders.openLabel")}</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                aria-label={t("actionsLabel")}
-                title={t("actionsLabel")}
-                className="size-7 cursor-pointer shrink-0 text-muted-foreground"
-              />
-            }
-          >
-            <MoreHorizontal className="size-4" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => onEdit(goal)}
-              className="cursor-pointer"
-            >
-              <Pencil className="mr-2 size-3.5" />
-              {t("editLabel")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => onDelete(goal.id)}
-              className="cursor-pointer text-destructive focus:text-destructive"
-            >
-              <Trash2 className="mr-2 size-3.5" />
-              {t("deleteLabel")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </div>
+    </ItemCard>
   );
 }
