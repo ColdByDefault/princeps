@@ -10,6 +10,9 @@ type DbTaskRow = {
   priority: string;
   dueDate: Date | null;
   meetingId: string | null;
+  delegatedTo: string | null;
+  delegatedAt: Date | null;
+  delegateNotes: string | null;
   meeting: { title: string } | null;
   createdAt: Date;
   updatedAt: Date;
@@ -63,6 +66,9 @@ function makeTaskRow(overrides: Partial<DbTaskRow> = {}): DbTaskRow {
     priority: "urgent",
     dueDate: new Date("2026-06-01T08:00:00.000Z"),
     meetingId: null,
+    delegatedTo: null,
+    delegatedAt: null,
+    delegateNotes: null,
     meeting: null,
     createdAt: new Date("2026-05-08T06:00:00.000Z"),
     updatedAt,

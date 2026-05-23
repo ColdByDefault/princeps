@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   knowledgeDocumentCount: vi.fn<() => Promise<number>>(),
   meetingCount: vi.fn<() => Promise<number>>(),
   memoryEntryCount: vi.fn<() => Promise<number>>(),
+  readingItemCount: vi.fn<() => Promise<number>>(),
   taskCount: vi.fn<() => Promise<number>>(),
   usageCounterFindUnique:
     vi.fn<() => Promise<Record<string, unknown> | null>>(),
@@ -24,6 +25,7 @@ vi.mock("@/lib/core/db", () => ({
     knowledgeDocument: { count: mocks.knowledgeDocumentCount },
     meeting: { count: mocks.meetingCount },
     memoryEntry: { count: mocks.memoryEntryCount },
+    readingItem: { count: mocks.readingItemCount },
     task: { count: mocks.taskCount },
     usageCounter: { findUnique: mocks.usageCounterFindUnique },
     user: { findUniqueOrThrow: mocks.userFindUniqueOrThrow },
@@ -49,6 +51,7 @@ describe("getUserUsage", () => {
     mocks.decisionCount.mockResolvedValue(7);
     mocks.goalCount.mockResolvedValue(8);
     mocks.memoryEntryCount.mockResolvedValue(9);
+    mocks.readingItemCount.mockResolvedValue(0);
     mocks.usageCounterFindUnique.mockResolvedValue({
       messageMonthlyCount: 10,
       tokenMonthlyCount: 11,

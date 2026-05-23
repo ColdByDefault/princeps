@@ -21,6 +21,17 @@ type DbGoalRow = {
   }[];
   taskLinks: TaskLinkRow[];
   labelLinks: LabelLinkRow[];
+  stakeholderEntries: {
+    id: string;
+    goalId: string | null;
+    contactId: string;
+    role: string | null;
+    health: string;
+    notes: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    contact: { name: string };
+  }[];
 };
 
 type GoalUpdateArgs = {
@@ -85,7 +96,13 @@ function makeGoalRow(overrides: Partial<DbGoalRow> = {}): DbGoalRow {
       },
     ],
     taskLinks: [
-      { task: { id: "task-1", title: "Prepare launch checklist", status: "open" } },
+      {
+        task: {
+          id: "task-1",
+          title: "Prepare launch checklist",
+          status: "open",
+        },
+      },
     ],
     labelLinks: [
       {
@@ -97,6 +114,7 @@ function makeGoalRow(overrides: Partial<DbGoalRow> = {}): DbGoalRow {
         },
       },
     ],
+    stakeholderEntries: [],
     ...overrides,
   };
 }
@@ -162,7 +180,9 @@ describe("updateGoal", () => {
           updatedAt: "2026-05-08T06:30:00.000Z",
         },
       ],
-      tasks: [{ id: "task-1", title: "Prepare launch checklist", status: "open" }],
+      tasks: [
+        { id: "task-1", title: "Prepare launch checklist", status: "open" },
+      ],
       labels: [
         { id: "label-1", name: "Product", color: "#2563eb", icon: null },
       ],
