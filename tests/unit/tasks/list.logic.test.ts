@@ -10,6 +10,9 @@ type DbTaskRow = {
   priority: string;
   dueDate: Date | null;
   meetingId: string | null;
+  delegatedTo: string | null;
+  delegatedAt: Date | null;
+  delegateNotes: string | null;
   meeting: { title: string } | null;
   createdAt: Date;
   updatedAt: Date;
@@ -54,6 +57,9 @@ describe("listTasks", () => {
       priority: "high",
       dueDate: new Date("2026-06-01T08:00:00.000Z"),
       meetingId: "meeting-1",
+      delegatedTo: null,
+      delegatedAt: null,
+      delegateNotes: null,
       meeting: { title: "Board prep" },
       createdAt: new Date("2026-05-08T06:00:00.000Z"),
       updatedAt: new Date("2026-05-08T06:30:00.000Z"),

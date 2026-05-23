@@ -27,18 +27,23 @@ type BriefingCallChat = (
 }>;
 
 const mocks = vi.hoisted(() => ({
-  briefingUpsert: vi.fn<
-    (
-      args: BriefingUpsertArgs,
-    ) => Promise<{ id: string; content: string; generatedAt: Date }>
-  >(),
+  briefingUpsert:
+    vi.fn<
+      (
+        args: BriefingUpsertArgs,
+      ) => Promise<{ id: string; content: string; generatedAt: Date }>
+    >(),
   callChat: vi.fn<BriefingCallChat>(),
-  listDecisions: vi.fn<(userId: string, filter: ListFilter) => Promise<unknown[]>>(),
-  listMeetings: vi.fn<(userId: string, filter: ListFilter) => Promise<unknown[]>>(),
-  listTasks: vi.fn<(userId: string, filter: ListFilter) => Promise<unknown[]>>(),
-  usageCounterUpsert: vi.fn<
-    (args: UsageCounterUpsertArgs) => Promise<unknown>
-  >(),
+  listDecisions:
+    vi.fn<(userId: string, filter: ListFilter) => Promise<unknown[]>>(),
+  listMeetings:
+    vi.fn<(userId: string, filter: ListFilter) => Promise<unknown[]>>(),
+  listReadingItems:
+    vi.fn<(userId: string, filter?: unknown) => Promise<unknown[]>>(),
+  listTasks:
+    vi.fn<(userId: string, filter: ListFilter) => Promise<unknown[]>>(),
+  usageCounterUpsert:
+    vi.fn<(args: UsageCounterUpsertArgs) => Promise<unknown>>(),
 }));
 
 vi.mock("@/lib/core/db", () => ({
@@ -66,6 +71,10 @@ vi.mock("@/lib/features/meetings", () => ({
 
 vi.mock("@/lib/features/decisions", () => ({
   listDecisions: mocks.listDecisions,
+}));
+
+vi.mock("@/lib/features/reading-queue", () => ({
+  listReadingItems: mocks.listReadingItems,
 }));
 
 import { generateBriefing } from "@/lib/features/briefings/generate.logic";
@@ -105,6 +114,7 @@ describe("generateBriefing", () => {
       },
     ]);
     mocks.listDecisions.mockResolvedValue([{ title: "Approve launch" }]);
+    mocks.listReadingItems.mockResolvedValue([]);
     mocks.callChat.mockResolvedValue({
       content: "  ### Good morning\nFocus on launch readiness.  ",
       promptTokens: 30,
