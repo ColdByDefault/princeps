@@ -114,11 +114,11 @@ export function ReadingItemCard({
                       onClick={onMarkRead}
                       disabled={isUpdating}
                       aria-label={t("status.markRead")}
-                      className="h-7 w-7 cursor-pointer"
+                      className="size-7 cursor-pointer"
                     />
                   }
                 >
-                  <BookCheck className="h-4 w-4" />
+                  <BookCheck className="size-3.5" />
                 </TooltipTrigger>
                 <TooltipContent>{t("status.markRead")}</TooltipContent>
               </Tooltip>
@@ -136,11 +136,11 @@ export function ReadingItemCard({
                       onClick={onArchive}
                       disabled={isUpdating}
                       aria-label={t("status.archive")}
-                      className="h-7 w-7 cursor-pointer"
+                      className="size-7 cursor-pointer"
                     />
                   }
                 >
-                  <Archive className="h-4 w-4" />
+                  <Archive className="size-3.5" />
                 </TooltipTrigger>
                 <TooltipContent>{t("status.archive")}</TooltipContent>
               </Tooltip>
@@ -157,11 +157,11 @@ export function ReadingItemCard({
                     onClick={onDelete}
                     disabled={isDeleting || isUpdating}
                     aria-label={t("deleteDialog.trigger")}
-                    className="h-7 w-7 cursor-pointer text-destructive hover:text-destructive"
+                    className="size-7 cursor-pointer text-destructive hover:text-destructive"
                   />
                 }
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="size-3.5" />
               </TooltipTrigger>
               <TooltipContent>{t("deleteDialog.trigger")}</TooltipContent>
             </Tooltip>

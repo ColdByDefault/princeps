@@ -773,6 +773,7 @@
       "title": "Diesen Fakt l\u00f6schen?",
       "description": "Der Fakt wird dauerhaft aus dem Ged\u00e4chtnis entfernt. Der Assistent hat dann keinen Zugriff mehr darauf.",
       "confirm": "L\u00f6schen",
+      "cancel": "Abbrechen",
       "success": "Fakt gel\u00f6scht.",
       "error": "Fakt konnte nicht gel\u00f6scht werden."
     }
@@ -1088,7 +1089,8 @@
       "error": "Label konnte nicht gelöscht werden."
     },
     "editLabel": "Bearbeiten",
-    "deleteLabel": "Löschen"
+    "deleteLabel": "Löschen",
+    "actionsLabel": "Label-Aktionen"
   },
   "tools": {
     "title": "Verfügbare Werkzeuge",
@@ -1363,31 +1365,6 @@
         "label": "Briefing neu generieren",
         "what": "Erstellt ein neues tägliches Briefing aus deinen Aufgaben, Meetings und offenen Entscheidungen.",
         "example": "\"Briefing neu erstellen\" oder \"Erstelle eine neue Tageszusammenfassung\""
-      },
-      "add_to_reading_queue": {
-        "label": "Zur Leseliste hinzufügen",
-        "what": "Speichert eine URL in deiner Leseliste und erstellt eine KI-Zusammenfassung mit Relevanzbewertung.",
-        "example": "\"Speichere https://example.com/artikel in meiner Leseliste\" oder \"Füge diesen Link meiner Leseliste hinzu\""
-      },
-      "list_reading_queue": {
-        "label": "Leseliste anzeigen",
-        "what": "Zeigt Artikel in deiner Leseliste, optional gefiltert nach Status (ungelesen, gelesen, archiviert).",
-        "example": "\"Was ist in meiner Leseliste?\" oder \"Zeig mir meine ungelesenen Artikel\""
-      },
-      "mark_reading_item_read": {
-        "label": "Artikel als gelesen markieren",
-        "what": "Markiert einen Eintrag in der Leseliste als gelesen.",
-        "example": "\"Markiere den TechCrunch-Artikel als gelesen\""
-      },
-      "archive_reading_item": {
-        "label": "Artikel archivieren",
-        "what": "Archiviert einen Eintrag in der Leseliste.",
-        "example": "\"Archiviere den Artikel über KI-Trends\""
-      },
-      "delete_reading_item": {
-        "label": "Leselisteneintrag löschen",
-        "what": "Entfernt einen Eintrag dauerhaft aus deiner Leseliste.",
-        "example": "\"Lösche den Artikel über JavaScript-Frameworks aus meiner Leseliste\""
       }
     }
   },

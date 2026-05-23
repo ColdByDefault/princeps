@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/select";
 import type { LabelOptionRecord } from "@/types/api";
 import { DatePicker } from "@/components/ui/date-picker";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type CreateTaskDialogProps = {
   onSubmit: (input: {
@@ -257,40 +258,17 @@ export function CreateTaskDialog({
               </Label>
               <div className="max-h-36 overflow-y-auto space-y-0.5 rounded-md border border-border/60 p-2">
                 {availableGoals.map((goal) => (
-                  <button
+                  <label
                     key={goal.id}
-                    type="button"
-                    onClick={() => toggleGoal(goal.id)}
-                    aria-pressed={selectedGoalIds.includes(goal.id)}
-                    aria-label={goal.title}
-                    className="flex w-full items-center gap-2 rounded px-1.5 py-1 text-left text-sm cursor-pointer hover:bg-muted/60 transition-colors"
+                    className="flex cursor-pointer items-center gap-2 rounded px-1.5 py-1 text-sm hover:bg-muted/60 transition-colors"
                   >
-                    <span
-                      className="flex size-4 shrink-0 items-center justify-center rounded border border-border"
-                      style={{
-                        backgroundColor: selectedGoalIds.includes(goal.id)
-                          ? "hsl(var(--primary))"
-                          : "transparent",
-                      }}
-                    >
-                      {selectedGoalIds.includes(goal.id) && (
-                        <svg
-                          viewBox="0 0 10 8"
-                          className="size-2.5"
-                          fill="none"
-                        >
-                          <path
-                            d="M1 4l2.5 2.5L9 1"
-                            stroke="white"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </span>
+                    <Checkbox
+                      checked={selectedGoalIds.includes(goal.id)}
+                      onCheckedChange={() => toggleGoal(goal.id)}
+                      aria-label={goal.title}
+                    />
                     <span className="flex-1 truncate">{goal.title}</span>
-                  </button>
+                  </label>
                 ))}
               </div>
             </div>

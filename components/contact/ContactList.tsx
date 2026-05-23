@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.6
  * @since beta
  */
 
@@ -40,7 +40,7 @@ export function ContactList({
 
   if (isLoading) {
     return (
-      <div className="divide-y rounded-xl border">
+      <div className="space-y-2">
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex items-center gap-4 px-4 py-3">
             <Skeleton className="size-9 rounded-full shrink-0" />
@@ -71,7 +71,7 @@ export function ContactList({
   }
 
   return (
-    <div className="divide-y rounded-xl border overflow-hidden">
+    <div className="space-y-2">
       {contacts.map((contact) => (
         <ContactCard
           key={contact.id}

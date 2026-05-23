@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.6
  * @since beta
  */
 
@@ -11,10 +11,7 @@
 import {
   CheckCircle2,
   Circle,
-  MoreHorizontal,
-  Pencil,
   Target,
-  Trash2,
   CalendarDays,
   UserCheck,
 } from "lucide-react";
@@ -25,17 +22,12 @@ import { cn, formatDate } from "@/lib/core/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ItemCard } from "@/components/shared/ItemCard";
 import type { TaskRecord } from "@/types/api";
 
 const PRIORITY_COLORS: Record<string, string> = {
@@ -66,45 +58,49 @@ export function TaskCard({
 }: TaskCardProps) {
   const t = useTranslations("tasks");
   const isDone = task.status === "done";
-
   const locale = useLocale();
 
   return (
-    <div
-      className={cn(
-        "flex items-start gap-3 rounded-xl border border-border/60 bg-card px-4 py-3 transition-opacity",
-        (isUpdating || isDeleting) && "opacity-60 pointer-events-none",
-      )}
+    <ItemCard
+      isDisabled={isUpdating || isDeleting}
+      leading={
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label={isDone ? t("reopenLabel") : t("markDoneLabel")}
+                  className="mt-0.5 size-7 cursor-pointer shrink-0 text-muted-foreground hover:text-primary"
+                  onClick={() => onToggleDone(task)}
+                />
+              }
+            >
+              {isDone ? (
+                <CheckCircle2 className="size-5 text-green-500" />
+              ) : (
+                <Circle className="size-5" />
+              )}
+            </TooltipTrigger>
+            <TooltipContent>
+              {isDone ? t("reopenLabel") : t("markDoneLabel")}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      }
+      onEdit={() => onEdit(task)}
+      editLabel={t("editLabel")}
+      onDelete={() => onDelete(task.id)}
+      deleteLabel={t("deleteLabel")}
+      deleteTitle={t("deleteDialog.title")}
+      deleteDescription={t("deleteDialog.description")}
+      deleteCancelLabel={t("deleteDialog.cancel")}
+      deleteConfirmLabel={t("deleteDialog.confirm")}
+      actionsAriaLabel={t("actionsLabel")}
     >
-      {/* Done toggle */}
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                aria-label={isDone ? t("reopenLabel") : t("markDoneLabel")}
-                className="mt-0.5 size-7 cursor-pointer shrink-0 text-muted-foreground hover:text-primary"
-                onClick={() => onToggleDone(task)}
-              />
-            }
-          >
-            {isDone ? (
-              <CheckCircle2 className="size-5 text-green-500" />
-            ) : (
-              <Circle className="size-5" />
-            )}
-          </TooltipTrigger>
-          <TooltipContent>
-            {isDone ? t("reopenLabel") : t("markDoneLabel")}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-
-      {/* Content */}
-      <div className="min-w-0 flex-1">
+      <div>
         <p
           className={cn(
             "text-sm font-medium leading-snug",
@@ -176,40 +172,7 @@ export function TaskCard({
           )}
         </div>
       </div>
-
-      {/* Actions */}
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={t("actionsLabel")}
-              title={t("actionsLabel")}
-              className="size-7 cursor-pointer shrink-0 text-muted-foreground"
-            />
-          }
-        >
-          <MoreHorizontal className="size-4" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => onEdit(task)}
-          >
-            <Pencil className="mr-2 size-3.5" />
-            {t("editLabel")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="cursor-pointer text-destructive focus:text-destructive"
-            onClick={() => onDelete(task.id)}
-          >
-            <Trash2 className="mr-2 size-3.5" />
-            {t("deleteLabel")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    </ItemCard>
   );
 }
+

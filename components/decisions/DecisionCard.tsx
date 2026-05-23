@@ -2,31 +2,19 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.1.6
  * @since canary-v1.0.2
- */ 
+ */
 
 "use client";
 
-import {
-  Scale,
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-  CalendarDays,
-} from "lucide-react";
+import { Scale, CalendarDays } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
 import { cn, formatDate } from "@/lib/core/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ItemCard } from "@/components/shared/ItemCard";
 import type { DecisionRecord } from "@/types/api";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -55,19 +43,24 @@ export function DecisionCard({
   const locale = useLocale();
 
   return (
-    <div
-      className={cn(
-        "flex items-start gap-3 rounded-xl border border-border/60 bg-card px-4 py-3 transition-opacity",
-        (isUpdating || isDeleting) && "opacity-60 pointer-events-none",
-      )}
+    <ItemCard
+      isDisabled={isUpdating || isDeleting}
+      leading={
+        <div className="mt-0.5 shrink-0 text-muted-foreground">
+          <Scale className="size-5" />
+        </div>
+      }
+      onEdit={() => onEdit(decision)}
+      editLabel={t("editLabel")}
+      onDelete={() => onDelete(decision.id)}
+      deleteLabel={t("deleteLabel")}
+      deleteTitle={t("deleteDialog.title")}
+      deleteDescription={t("deleteDialog.description")}
+      deleteCancelLabel={t("deleteDialog.cancel")}
+      deleteConfirmLabel={t("deleteDialog.confirm")}
+      actionsAriaLabel={t("actionsLabel")}
     >
-      {/* Icon */}
-      <div className="mt-0.5 shrink-0 text-muted-foreground">
-        <Scale className="size-5" />
-      </div>
-
-      {/* Body */}
-      <div className="min-w-0 flex-1 space-y-1">
+      <div className="space-y-1">
         <p
           className={cn(
             "text-sm font-medium leading-snug",
@@ -137,40 +130,6 @@ export function DecisionCard({
           )}
         </div>
       </div>
-
-      {/* Actions */}
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={t("actionsLabel")}
-              title={t("actionsLabel")}
-              className="size-7 cursor-pointer shrink-0 text-muted-foreground"
-            />
-          }
-        >
-          <MoreHorizontal className="size-4" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={() => onEdit(decision)}
-            className="cursor-pointer"
-          >
-            <Pencil className="mr-2 size-3.5" />
-            {t("editLabel")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => onDelete(decision.id)}
-            className="cursor-pointer text-destructive focus:text-destructive"
-          >
-            <Trash2 className="mr-2 size-3.5" />
-            {t("deleteLabel")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    </ItemCard>
   );
 }

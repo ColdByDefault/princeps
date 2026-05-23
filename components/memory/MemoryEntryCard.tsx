@@ -2,23 +2,17 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.1.6
  * @since canary-v1.0.2
  */
 
 "use client";
 
-import { Brain, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Brain } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/core/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ItemCard } from "@/components/shared/ItemCard";
 import type { MemoryEntryRecord } from "@/types/api";
 
 type MemoryEntryCardProps = {
@@ -39,19 +33,24 @@ export function MemoryEntryCard({
   const t = useTranslations("memory");
 
   return (
-    <div
-      className={cn(
-        "flex items-start gap-3 rounded-xl border border-border/60 bg-card px-4 py-3 transition-opacity",
-        (isUpdating || isDeleting) && "opacity-60 pointer-events-none",
-      )}
+    <ItemCard
+      isDisabled={isUpdating || isDeleting}
+      leading={
+        <div className="mt-0.5 shrink-0 text-muted-foreground">
+          <Brain className="size-5" />
+        </div>
+      }
+      onEdit={() => onEdit(entry)}
+      editLabel={t("edit")}
+      onDelete={() => onDelete(entry.id)}
+      deleteLabel={t("delete")}
+      deleteTitle={t("deleteDialog.title")}
+      deleteDescription={t("deleteDialog.description")}
+      deleteCancelLabel={t("deleteDialog.cancel")}
+      deleteConfirmLabel={t("deleteDialog.confirm")}
+      actionsAriaLabel={t("actions")}
     >
-      {/* Icon */}
-      <div className="mt-0.5 shrink-0 text-muted-foreground">
-        <Brain className="size-5" />
-      </div>
-
-      {/* Body */}
-      <div className="min-w-0 flex-1 space-y-0.5">
+      <div className="space-y-0.5">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {entry.key}
         </p>
@@ -70,39 +69,6 @@ export function MemoryEntryCard({
           </Badge>
         </div>
       </div>
-
-      {/* Actions */}
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="cursor-pointer shrink-0 size-8 text-muted-foreground"
-              aria-label={t("actions")}
-            />
-          }
-        >
-          <MoreHorizontal className="size-4" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => onEdit(entry)}
-          >
-            <Pencil className="mr-2 size-4" />
-            {t("edit")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="cursor-pointer text-destructive focus:text-destructive"
-            onClick={() => onDelete(entry.id)}
-          >
-            <Trash2 className="mr-2 size-4" />
-            {t("delete")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    </ItemCard>
   );
 }

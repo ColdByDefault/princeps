@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.6
  * @since beta
  */
 
@@ -12,9 +12,6 @@ import {
   CalendarClock,
   CalendarDays,
   MapPin,
-  MoreHorizontal,
-  Pencil,
-  Trash2,
   Clock,
   Users,
   NotebookPen,
@@ -29,19 +26,8 @@ import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
 import { cn, formatDateTime } from "@/lib/core/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ItemCard } from "@/components/shared/ItemCard";
+import { CardIconButton } from "@/components/shared/CardIconButton";
 import type { MeetingRecord } from "@/types/api";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -82,131 +68,59 @@ export function MeetingCard({
   onDetail,
 }: MeetingCardProps) {
   const t = useTranslations("meetings");
-
   const locale = useLocale();
 
   return (
-    <div
-      className={cn(
-        "flex items-start gap-3 rounded-xl border border-border/60 bg-card px-4 py-3 transition-opacity",
-        (isUpdating || isDeleting || isGeneratingPrepPack) &&
-          "opacity-60 pointer-events-none",
-      )}
-    >
-      {/* Icon */}
-      <div className="mt-0.5 shrink-0 text-muted-foreground">
-        {meeting.kind === "appointment" ? (
-          <CalendarDays className="size-5" />
-        ) : (
-          <CalendarClock className="size-5" />
-        )}
-      </div>
-
-      {/* Body */}
-      <div className="min-w-0 flex-1 space-y-1">
-        <div className="flex items-start justify-between gap-2">
-          <p
-            className={cn(
-              "text-sm font-medium leading-snug",
-              meeting.status === "cancelled" &&
-                "line-through text-muted-foreground",
-            )}
-          >
-            {meeting.title}
-          </p>
-
-          {/* Actions */}
-          <div className="flex shrink-0 items-center gap-0.5">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("detailLabel")}
-                      className="size-7 cursor-pointer text-muted-foreground"
-                      onClick={() => onDetail(meeting)}
-                    />
-                  }
-                >
-                  <Eye className="size-3.5" />
-                </TooltipTrigger>
-                <TooltipContent>{t("detailLabel")}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("prepPackDialog.trigger")}
-                      className="size-7 cursor-pointer text-muted-foreground"
-                      onClick={() => onPrepPack(meeting)}
-                    />
-                  }
-                >
-                  <BriefcaseBusiness className="size-3.5" />
-                </TooltipTrigger>
-                <TooltipContent>{t("prepPackDialog.trigger")}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("summaryDialog.trigger")}
-                      className="size-7 cursor-pointer text-muted-foreground"
-                      onClick={() => onSummary(meeting)}
-                    />
-                  }
-                >
-                  <NotebookPen className="size-3.5" />
-                </TooltipTrigger>
-                <TooltipContent>{t("summaryDialog.trigger")}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t("actionsLabel")}
-                    className="size-7 cursor-pointer text-muted-foreground"
-                  />
-                }
-              >
-                <MoreHorizontal className="size-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={() => onEdit(meeting)}
-                  className="cursor-pointer"
-                >
-                  <Pencil className="mr-2 size-3.5" />
-                  {t("editLabel")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => onDelete(meeting.id)}
-                  className="cursor-pointer text-destructive focus:text-destructive"
-                >
-                  <Trash2 className="mr-2 size-3.5" />
-                  {t("deleteLabel")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+    <ItemCard
+      isDisabled={isUpdating || isDeleting || isGeneratingPrepPack}
+      leading={
+        <div className="mt-0.5 shrink-0 text-muted-foreground">
+          {meeting.kind === "appointment" ? (
+            <CalendarDays className="size-5" />
+          ) : (
+            <CalendarClock className="size-5" />
+          )}
         </div>
+      }
+      inlineActions={
+        <>
+          <CardIconButton
+            icon={<Eye className="size-3.5" />}
+            label={t("detailLabel")}
+            onClick={() => onDetail(meeting)}
+          />
+          <CardIconButton
+            icon={<BriefcaseBusiness className="size-3.5" />}
+            label={t("prepPackDialog.trigger")}
+            onClick={() => onPrepPack(meeting)}
+          />
+          <CardIconButton
+            icon={<NotebookPen className="size-3.5" />}
+            label={t("summaryDialog.trigger")}
+            onClick={() => onSummary(meeting)}
+          />
+        </>
+      }
+      onEdit={() => onEdit(meeting)}
+      editLabel={t("editLabel")}
+      onDelete={() => onDelete(meeting.id)}
+      deleteLabel={t("deleteLabel")}
+      deleteTitle={t("deleteDialog.title")}
+      deleteDescription={t("deleteDialog.description")}
+      deleteCancelLabel={t("deleteDialog.cancel")}
+      deleteConfirmLabel={t("deleteDialog.confirm")}
+      actionsAriaLabel={t("actionsLabel")}
+    >
+      <div className="space-y-1">
+        <p
+          className={cn(
+            "text-sm font-medium leading-snug",
+            meeting.status === "cancelled" &&
+              "line-through text-muted-foreground",
+          )}
+        >
+          {meeting.title}
+        </p>
 
         {meeting.summary && (
           <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
@@ -307,6 +221,6 @@ export function MeetingCard({
           })()}
         </div>
       </div>
-    </div>
+    </ItemCard>
   );
 }
