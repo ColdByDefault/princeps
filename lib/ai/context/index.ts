@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -17,6 +17,7 @@ import { decisionsSlot } from "@/lib/ai/context/decisions.slot";
 import { goalsSlot } from "@/lib/ai/context/goals.slot";
 import { memorySlot } from "@/lib/ai/context/memory.slot";
 import { briefingsSlot } from "@/lib/ai/context/briefings.slot";
+import { readingQueueSlot } from "@/lib/ai/context/reading-queue.slot";
 
 /**
  * A context slot contributes one labeled section to the LLM system prompt.
@@ -45,4 +46,5 @@ export const SLOT_REGISTRY: ContextSlot[] = [
   goalsSlot,
   memorySlot,
   briefingsSlot,
+  readingQueueSlot,
 ];

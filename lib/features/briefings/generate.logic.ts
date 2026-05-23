@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -13,6 +13,7 @@ import { callChat } from "@/lib/ai/llm-providers/provider";
 import { listTasks } from "@/lib/features/tasks";
 import { listMeetings } from "@/lib/features/meetings";
 import { listDecisions } from "@/lib/features/decisions";
+import { listReadingItems } from "@/lib/features/reading-queue";
 import type { BriefingRecord } from "@/types/api";
 
 export type GenerateBriefingResult =
@@ -30,12 +31,14 @@ export async function generateBriefing(
 ): Promise<GenerateBriefingResult> {
   const today = new Date().toISOString().slice(0, 10);
 
-  const [tasks, inProgress, meetings, decisions] = await Promise.all([
-    listTasks(userId, { status: "open" }),
-    listTasks(userId, { status: "in_progress" }),
-    listMeetings(userId, { status: "upcoming" }),
-    listDecisions(userId, { status: "open" }),
-  ]);
+  const [tasks, inProgress, meetings, decisions, unreadItems] =
+    await Promise.all([
+      listTasks(userId, { status: "open" }),
+      listTasks(userId, { status: "in_progress" }),
+      listMeetings(userId, { status: "upcoming" }),
+      listDecisions(userId, { status: "open" }),
+      listReadingItems(userId, { status: "unread" }),
+    ]);
 
   const allTasks = [...inProgress, ...tasks];
 
@@ -78,6 +81,22 @@ export async function generateBriefing(
       ? decisions.map((d) => `- ${d.title}`).join("\n")
       : "No open decisions pending.";
 
+  // Top 3 unread reading items with meaningful relevance score
+  const topReadingItems = unreadItems
+    .filter(
+      (item) => item.relevanceScore !== null && item.relevanceScore >= 0.6,
+    )
+    .slice(0, 3);
+  const readingSection =
+    topReadingItems.length > 0
+      ? topReadingItems
+          .map(
+            (item) =>
+              `- ${item.title ?? item.url} (score: ${item.relevanceScore!.toFixed(2)})`,
+          )
+          .join("\n")
+      : null;
+
   const prompt = `You are a chief-of-staff assistant preparing the user's daily executive briefing.
 Today is ${today}.
 
@@ -89,7 +108,7 @@ ${meetingSection}
 
 ## Pending Decisions
 ${decisionSection}
-
+${readingSection ? `\n## Recommended Reading\n${readingSection}\n` : ""}
 Write a concise daily briefing in Markdown (under 350 words). Structure it as:
 
 ### Good morning
@@ -103,6 +122,9 @@ Key meetings or deadlines in the next 3 days, if any.
 
 ### Pending decisions
 1–2 sentences on the most pressing open decisions, if any.
+
+### Recommended reading
+Only include this section if there are recommended reading items. 1–2 bullet points with the highest-scored articles relevant to the user's current focus.
 
 Be direct, practical, and actionable. Do not repeat all data — synthesise what matters most.`;
 

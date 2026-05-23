@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -22,6 +22,7 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     decisionsStored,
     goalsStored,
     memoryStored,
+    readingQueueStored,
     counter,
   ] = await Promise.all([
     db.user.findUniqueOrThrow({
@@ -36,6 +37,7 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     db.decision.count({ where: { userId } }),
     db.goal.count({ where: { userId } }),
     db.memoryEntry.count({ where: { userId } }),
+    db.readingItem.count({ where: { userId } }),
     db.usageCounter.findUnique({
       where: { userId },
       select: {
@@ -81,6 +83,8 @@ export async function getUserUsage(userId: string): Promise<UsageSummary> {
     goalsLimit: limits.goalsMax,
     memoryStored,
     memoryLimit: limits.memoryMax,
+    readingQueueStored,
+    readingQueueLimit: limits.readingQueueMax,
     prepPacksGenerated: counter?.prepPackMonthlyCount ?? 0,
     prepPacksLimit: limits.prepPacksPerMonth,
     briefingsGenerated: counter?.briefingMonthlyCount ?? 0,

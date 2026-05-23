@@ -9,10 +9,10 @@ const mocks = vi.hoisted(() => ({
   meetingCount: vi.fn<() => Promise<number>>(),
   memoryEntryCount: vi.fn<() => Promise<number>>(),
   taskCount: vi.fn<() => Promise<number>>(),
-  usageCounterFindUnique: vi.fn<() => Promise<Record<string, unknown> | null>>(),
-  userFindUniqueOrThrow: vi.fn<
-    () => Promise<{ tier: string; knowledgeCharsUsed: number }>
-  >(),
+  usageCounterFindUnique:
+    vi.fn<() => Promise<Record<string, unknown> | null>>(),
+  userFindUniqueOrThrow:
+    vi.fn<() => Promise<{ tier: string; knowledgeCharsUsed: number }>>(),
 }));
 
 vi.mock("@/lib/core/db", () => ({
@@ -85,6 +85,8 @@ describe("getUserUsage", () => {
       decisionsStored: 7,
       goalsStored: 8,
       memoryStored: 9,
+      readingQueueStored: 0,
+      readingQueueLimit: 50,
       prepPacksGenerated: 13,
       briefingsGenerated: 14,
       voiceRequestsUsed: 15,

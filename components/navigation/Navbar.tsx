@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -25,6 +25,7 @@ import {
   BookMarked,
   Newspaper,
   FileBarChart2,
+  BookOpen,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -97,6 +98,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
     { href: "/meetings", icon: CalendarDays, label: t("nav.meetings") },
     { href: "/decisions", icon: Scale, label: t("nav.decisions") },
     { href: "/memory", icon: BookMarked, label: t("nav.memory") },
+    { href: "/reading-queue", icon: BookOpen, label: t("nav.readingQueue") },
     { href: "/briefings", icon: Newspaper, label: t("nav.briefings") },
     { href: "/reports", icon: FileBarChart2, label: t("nav.reports") },
     { href: "/settings", icon: Settings, label: t("nav.settings") },

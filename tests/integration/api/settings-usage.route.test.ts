@@ -28,6 +28,8 @@ const usage: UsageSummary = {
   goalsLimit: 25,
   memoryStored: 9,
   memoryLimit: 100,
+  readingQueueStored: 3,
+  readingQueueLimit: 50,
   prepPacksGenerated: 1,
   prepPacksLimit: 10,
   briefingsGenerated: 2,

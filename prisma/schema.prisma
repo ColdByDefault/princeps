@@ -124,6 +124,7 @@ model User {
   usageCounter       UsageCounter?
   memoryEntries      MemoryEntry[]
   stakeholderEntries StakeholderEntry[]
+  readingItems       ReadingItem[]
 
   @@map("user")
 }
@@ -661,6 +662,27 @@ model StakeholderEntry {
   @@index([goalId])
   @@index([contactId])
   @@map("stakeholder_entry")
+}
+
+// ─── Reading Queue ────────────────────────────────────────
+
+model ReadingItem {
+  id             String    @id @default(cuid())
+  userId         String
+  url            String
+  title          String?
+  aiSummary      String?
+  relevanceScore Float?    // 0–1, scored against open goals
+  status         String    @default("unread") // "unread" | "read" | "archived"
+  addedAt        DateTime  @default(now())
+  readAt         DateTime?
+  updatedAt      DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, status])
+  @@map("reading_item")
 }
 
 // ─── Memory ───────────────────────────────────────────────

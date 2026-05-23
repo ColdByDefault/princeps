@@ -233,3 +233,16 @@ export interface BriefingRecord {
   content: string;
   generatedAt: string; // ISO string on the client
 }
+
+/** Client-safe shape of a ReadingItem record. */
+export interface ReadingItemRecord {
+  id: string;
+  url: string;
+  title: string | null;
+  aiSummary: string | null;
+  relevanceScore: number | null; // 0–1
+  status: string; // "unread" | "read" | "archived"
+  addedAt: string; // ISO string on the client
+  readAt: string | null; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}

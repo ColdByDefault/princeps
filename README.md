@@ -292,6 +292,8 @@ You may run, study, modify, and redistribute Princeps under the terms of that li
 
 See [LICENSE](LICENSE) for the governing terms.
 
+Copyright © 2026 Yazan Abo-Ayash (ColdByDefault © AnotherProject™). All rights reserved.
+
 ---
 
 ## Acceptable Use

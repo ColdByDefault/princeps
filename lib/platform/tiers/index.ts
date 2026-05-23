@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -21,6 +21,7 @@ export {
   enforceDecisionsMax,
   enforceGoalsMax,
   enforceMemoryMax,
+  enforceReadingQueueMax,
   enforceVoiceRequests,
   recordVoiceDuration,
   accumulateTokens,

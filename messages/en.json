@@ -308,6 +308,8 @@
       "goalsNote": "Number of goals currently stored.",
       "memoryTitle": "Memory facts (stored)",
       "memoryNote": "Number of memory facts currently stored.",
+      "readingQueueTitle": "Reading queue (saved)",
+      "readingQueueNote": "Number of articles currently saved in your reading queue.",
       "voiceRequestsTitle": "Voice transcriptions (today)",
       "voiceRequestsNote": "Number of voice-to-text transcriptions used today. Resets daily.",
       "voiceRequestsMonthlyTitle": "Voice transcriptions (month)",
@@ -442,6 +444,7 @@
       "labels": "Labels",
       "intel": "Intelligence",
       "memory": "Memory",
+      "readingQueue": "Reading Queue",
       "briefings": "Daily Briefing",
       "reports": "Reports",
       "comingSoon": "Coming soon"
@@ -472,7 +475,7 @@
       "cookiePolicy": "Cookie policy",
       "security": "Security",
       "versionTitle": "Application version",
-      "beta": "Beta",
+      "beta": "Stable",
       "copyright": "© 2026 PRINCEPS All rights reserved.",
       "authors": " Made by AnotherProject™ - ColdByDefault"
     }
@@ -1102,7 +1105,8 @@
       "memory": "Memory",
       "briefings": "Briefings",
       "web-research": "Web Research",
-      "integrations": "Integrations"
+      "integrations": "Integrations",
+      "reading-queue": "Reading Queue"
     },
     "catalog": {
       "create_task": {
@@ -1300,6 +1304,31 @@
         "what": "Searches documents indexed from your Google Drive using semantic similarity to find relevant excerpts.",
         "example": "\"What does my Q1 report say about revenue?\""
       },
+      "add_to_reading_queue": {
+        "label": "Save to Reading Queue",
+        "what": "Fetches the page, generates an AI summary, and scores relevance against your open goals. The item appears in your reading queue.",
+        "example": "\"Save this for later: https://example.com/article\" or \"Add to my reading list\""
+      },
+      "list_reading_queue": {
+        "label": "List Reading Queue",
+        "what": "Returns your saved reading items, optionally filtered by status (unread / read / archived), ordered by relevance score.",
+        "example": "\"What do I have in my reading queue?\" or \"Show my unread articles\""
+      },
+      "mark_reading_item_read": {
+        "label": "Mark Item Read",
+        "what": "Marks a saved reading item as read.",
+        "example": "\"Mark that article as read\""
+      },
+      "archive_reading_item": {
+        "label": "Archive Reading Item",
+        "what": "Archives a reading item, removing it from the active queue without deleting it.",
+        "example": "\"Archive the article about TypeScript\""
+      },
+      "delete_reading_item": {
+        "label": "Delete Reading Item",
+        "what": "Permanently deletes a reading item. Confirmation is required before proceeding.",
+        "example": "\"Delete that article from my reading list\""
+      },
       "web_search": {
         "label": "Web Search",
         "what": "Searches the web for current information, news, or topics not covered by your knowledge base.",
@@ -1334,6 +1363,31 @@
         "label": "Regenerate Briefing",
         "what": "Generates a fresh daily briefing from your tasks, meetings, and decisions.",
         "example": "\"Regenerate my briefing\" or \"Create a new daily summary\""
+      },
+      "add_to_reading_queue": {
+        "label": "Add to Reading Queue",
+        "what": "Saves a URL to your reading queue and generates an AI summary with a relevance score.",
+        "example": "\"Save https://example.com/article to my reading queue\" or \"Add this link to my reading list\""
+      },
+      "list_reading_queue": {
+        "label": "List Reading Queue",
+        "what": "Shows articles in your reading queue, optionally filtered by status (unread, read, archived).",
+        "example": "\"What's in my reading queue?\" or \"Show me my unread articles\""
+      },
+      "mark_reading_item_read": {
+        "label": "Mark Article as Read",
+        "what": "Marks a reading queue item as read.",
+        "example": "\"Mark the TechCrunch article as read\""
+      },
+      "archive_reading_item": {
+        "label": "Archive Article",
+        "what": "Archives a reading queue item.",
+        "example": "\"Archive the article about AI trends\""
+      },
+      "delete_reading_item": {
+        "label": "Delete Reading Item",
+        "what": "Permanently removes an item from your reading queue.",
+        "example": "\"Delete the article about JavaScript frameworks from my reading queue\""
       }
     }
   },
@@ -1511,6 +1565,58 @@
       "totalCalls": "{count} total calls",
       "sessions": "{count} sessions"
     }
+  },
+  "readingQueue": {
+    "metadata": {
+      "title": "Reading Queue",
+      "description": "Save articles and web pages for later — AI scores their relevance against your goals."
+    },
+    "pageTitle": "Reading Queue",
+    "addItem": "Add",
+    "refresh": "Refresh",
+    "empty": "No saved articles yet.",
+    "emptyFiltered": "No articles in this category.",
+    "filter": {
+      "all": "All",
+      "unread": "Unread",
+      "read": "Read",
+      "archived": "Archived"
+    },
+    "fields": {
+      "url": "URL",
+      "urlPlaceholder": "https://example.com/article",
+      "title": "Title",
+      "titlePlaceholder": "Optional title",
+      "titleOptional": "optional",
+      "openLink": "Open article"
+    },
+    "addDialog": {
+      "title": "Save article",
+      "description": "Enter the URL. The assistant will fetch the content, create a summary, and score its relevance against your current goals.",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "success": "Article saved.",
+      "error": "Could not save the article. Please try again."
+    },
+    "deleteDialog": {
+      "trigger": "Delete",
+      "title": "Delete article?",
+      "description": "This article will be permanently removed from your reading queue. This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Article deleted.",
+      "error": "Could not delete the article."
+    },
+    "status": {
+      "markRead": "Mark as read",
+      "markReadSuccess": "Marked as read.",
+      "markReadError": "Could not update status.",
+      "archive": "Archive",
+      "archiveSuccess": "Article archived.",
+      "archiveError": "Could not archive the article."
+    },
+    "scoreLabel": "Relevance"
   },
   "briefings": {
     "metadata": {
