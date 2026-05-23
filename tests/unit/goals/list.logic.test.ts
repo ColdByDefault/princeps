@@ -120,6 +120,7 @@ describe("listGoals", () => {
         labels: [
           { id: "label-1", name: "Product", color: "#2563eb", icon: null },
         ],
+        stakeholders: [],
         createdAt: "2026-05-08T06:00:00.000Z",
         updatedAt: "2026-05-08T06:30:00.000Z",
       },
