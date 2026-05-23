@@ -1,3 +1,9 @@
+## [1.1.5] - 2026-05-23
+
+- feat: add stakeholderEntries to goal and task data structures for enhanced tracking
+
+# Changelog
+
 ## [1.1.4] - 2026-05-23
 
 - F3 — Reading Queue with AI relevance scoring Fixes #88
