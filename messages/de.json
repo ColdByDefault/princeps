@@ -607,7 +607,12 @@
     },
     "actionsLabel": "Entscheidungsaktionen",
     "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen",
+    "deleteLabel": "Löschen",
+    "viewLabel": "Details ansehen",
+    "viewDialog": {
+      "meeting": "Meeting",
+      "createdAt": "Erstellt"
+    },
     "refresh": "Aktualisieren",
     "refreshing": "Wird aktualisiert\u2026"
   },

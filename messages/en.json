@@ -608,6 +608,11 @@
     "actionsLabel": "Decision actions",
     "editLabel": "Edit",
     "deleteLabel": "Delete",
+    "viewLabel": "View details",
+    "viewDialog": {
+      "meeting": "Meeting",
+      "createdAt": "Created"
+    },
     "refresh": "Refresh",
     "refreshing": "Refreshing…"
   },
