@@ -702,6 +702,34 @@
       "unplaced": "Unplaced",
       "unplacedSub": "No target date set",
       "empty": "No goals in this horizon."
+    },
+    "stakeholders": {
+      "dialogTitle": "Stakeholder Map",
+      "dialogDescription": "Manage the key people for this goal.",
+      "empty": "No stakeholders yet.",
+      "addFirst": "Add a stakeholder",
+      "addSection": "Add stakeholder",
+      "contactLabel": "Contact",
+      "contactPlaceholder": "Select a contact…",
+      "healthLabel": "Relationship health",
+      "roleLabel": "Role",
+      "rolePlaceholder": "e.g. Sponsor, Blocker…",
+      "addButton": "Add",
+      "adding": "Adding…",
+      "addSuccess": "Stakeholder added.",
+      "addError": "Failed to add stakeholder.",
+      "removeLabel": "Remove",
+      "removeSuccess": "Stakeholder removed.",
+      "removeError": "Failed to remove stakeholder.",
+      "updateError": "Failed to update stakeholder.",
+      "changeHealth": "Change health",
+      "openLabel": "Open stakeholder map",
+      "menuLabel": "Stakeholders",
+      "health": {
+        "warm": "Warm",
+        "neutral": "Neutral",
+        "cold": "Cold"
+      }
     }
   },
   "memory": {

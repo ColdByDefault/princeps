@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.1.4
  * @since canary-v1.0.2
  */ 
 
@@ -16,6 +16,10 @@ import {
   CheckCircle2,
   Circle,
   ListChecks,
+  Users,
+  Flame,
+  Minus,
+  Snowflake,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
@@ -51,6 +55,7 @@ type GoalCardProps = {
     milestoneId: string,
     completed: boolean,
   ) => Promise<boolean>;
+  onOpenStakeholders: (goal: GoalRecord) => void;
 };
 
 export function GoalCard({
@@ -61,6 +66,7 @@ export function GoalCard({
   onEdit,
   onDelete,
   onToggleMilestone,
+  onOpenStakeholders,
 }: GoalCardProps) {
   const t = useTranslations("goals");
 
@@ -172,6 +178,58 @@ export function GoalCard({
           </div>
         )}
 
+        {/* Stakeholder summary */}
+        {goal.stakeholders.length > 0 && (
+          <button
+            type="button"
+            onClick={() => onOpenStakeholders(goal)}
+            aria-label={t("stakeholders.openLabel")}
+            className="flex flex-wrap items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity text-left"
+          >
+            {goal.stakeholders.slice(0, 4).map((s) => {
+              const health = s.health as "warm" | "neutral" | "cold";
+              const Icon =
+                health === "warm" ? Flame : health === "cold" ? Snowflake : Minus;
+              const colorClass =
+                health === "warm"
+                  ? "text-green-600 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30"
+                  : health === "cold"
+                  ? "text-blue-600 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30"
+                  : "text-amber-600 border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30";
+              return (
+                <span
+                  key={s.id}
+                  className={cn(
+                    "inline-flex h-5 items-center gap-1 rounded-full border px-2 text-[10px] font-medium",
+                    colorClass,
+                  )}
+                >
+                  <Icon className="size-2.5 shrink-0" />
+                  {s.contactName}
+                </span>
+              );
+            })}
+            {goal.stakeholders.length > 4 && (
+              <span className="inline-flex h-5 items-center rounded-full border border-border px-2 text-[10px] font-medium text-muted-foreground">
+                +{goal.stakeholders.length - 4}
+              </span>
+            )}
+          </button>
+        )}
+
+        {/* Stakeholder count chip (when none shown yet) — just the icon link */}
+        {goal.stakeholders.length === 0 && (
+          <button
+            type="button"
+            onClick={() => onOpenStakeholders(goal)}
+            aria-label={t("stakeholders.openLabel")}
+            className="inline-flex h-5 items-center gap-1 rounded-full border border-dashed border-border/60 px-2 text-[10px] font-medium text-muted-foreground cursor-pointer hover:border-border transition-colors"
+          >
+            <Users className="size-2.5 shrink-0" />
+            {t("stakeholders.addFirst")}
+          </button>
+        )}
+
         {/* Status + labels */}
         <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
           <Badge
@@ -227,6 +285,13 @@ export function GoalCard({
           >
             <Pencil className="mr-2 size-3.5" />
             {t("editLabel")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => onOpenStakeholders(goal)}
+            className="cursor-pointer"
+          >
+            <Users className="mr-2 size-3.5" />
+            {t("stakeholders.menuLabel")}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => onDelete(goal.id)}

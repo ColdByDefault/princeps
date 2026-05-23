@@ -123,6 +123,7 @@ model User {
   labels             Label[]
   usageCounter       UsageCounter?
   memoryEntries      MemoryEntry[]
+  stakeholderEntries StakeholderEntry[]
 
   @@map("user")
 }
@@ -279,6 +280,7 @@ model Contact {
   interactions ContactInteraction[]
   contactNotes ContactNote[]
   labelLinks   LabelOnContact[]
+  stakeholderEntries StakeholderEntry[]
 
   @@index([userId])
   @@map("contact")
@@ -588,11 +590,12 @@ model Goal {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  meeting    Meeting?      @relation(fields: [meetingId], references: [id], onDelete: SetNull)
-  milestones Milestone[]
-  taskLinks  TaskOnGoal[]
-  labelLinks LabelOnGoal[]
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meeting            Meeting?           @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  milestones         Milestone[]
+  taskLinks          TaskOnGoal[]
+  labelLinks         LabelOnGoal[]
+  stakeholderEntries StakeholderEntry[]
 
   @@index([userId])
   @@index([meetingId])
@@ -634,6 +637,27 @@ model LabelOnGoal {
 
   @@id([labelId, goalId])
   @@map("label_on_goal")
+}
+
+model StakeholderEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  goalId    String?
+  contactId String
+  role      String?  // "sponsor" | "blocker" | "champion" | "neutral" | custom free-text
+  health    String   @default("neutral") // "warm" | "neutral" | "cold"
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal    Goal?   @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([goalId])
+  @@index([contactId])
+  @@map("stakeholder_entry")
 }
 
 // ─── Memory ───────────────────────────────────────────────

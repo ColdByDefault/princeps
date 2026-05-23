@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.1.4
  * @since canary-v1.0.2
  */
 
@@ -11,3 +11,4 @@ export { GoalCard } from "./GoalCard";
 export { CreateGoalDialog } from "./CreateGoalDialog";
 export { EditGoalDialog } from "./EditGoalDialog";
 export { HorizonView } from "./HorizonView";
+export { StakeholderMapDialog } from "./StakeholderMapDialog";

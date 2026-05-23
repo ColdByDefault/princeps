@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -13,10 +13,13 @@ import { updateGoal } from "@/lib/features/goals/update.logic";
 import { deleteGoal } from "@/lib/features/goals/delete.logic";
 import { createMilestone, updateMilestone } from "@/lib/features/goals/milestones.logic";
 import { createGoalSchema, updateGoalSchema } from "@/lib/features/goals/schemas";
+import { createStakeholder, listStakeholders, updateStakeholder } from "@/lib/features/stakeholders";
+import { createStakeholderSchema, updateStakeholderSchema } from "@/lib/features/stakeholders/schemas";
 import {
   resolveOrCreateLabelIdsByNames,
   resolveTaskIdsByRefs,
   resolveMeetingIdByRef,
+  resolveContactIdsByRefs,
 } from "@/lib/ai/tools/resolvers";
 import { enforceGoalsMax } from "@/lib/platform/tiers";
 import type { ActionResult, ToolHandler } from "@/lib/ai/tools/types";
@@ -237,6 +240,75 @@ async function handleCompleteGoalMilestone(
   return { ok: true, data: milestone };
 }
 
+async function handleAddStakeholder(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.contactName !== "string" || !args.contactName.trim()) {
+    return { ok: false, error: "add_stakeholder requires contactName." };
+  }
+
+  const resolved = await resolveContactIdsByRefs(userId, [args.contactName]);
+  if (resolved.missing.length) {
+    return {
+      ok: false,
+      error: `Contact not found for add_stakeholder: ${resolved.missing.join(", ")}. Use list_contacts to find the correct contact name.`,
+    };
+  }
+
+  const parsed = createStakeholderSchema.safeParse({
+    contactId: resolved.ids[0],
+    goalId: typeof args.goalId === "string" ? args.goalId : null,
+    role: typeof args.role === "string" ? args.role : null,
+    health: typeof args.health === "string" ? args.health : "neutral",
+    notes: typeof args.notes === "string" ? args.notes : null,
+  });
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error: parsed.error.issues[0]?.message ?? "Invalid add_stakeholder input.",
+    };
+  }
+
+  const result = await createStakeholder(userId, parsed.data);
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, data: result.stakeholder };
+}
+
+async function handleListStakeholders(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  const goalId = typeof args.goalId === "string" ? args.goalId : undefined;
+  const stakeholders = await listStakeholders(userId, goalId ? { goalId } : {});
+  return { ok: true, data: stakeholders };
+}
+
+async function handleUpdateStakeholderHealth(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.stakeholderId !== "string") {
+    return { ok: false, error: "update_stakeholder_health requires stakeholderId." };
+  }
+
+  const parsed = updateStakeholderSchema.safeParse({
+    health: typeof args.health === "string" ? args.health : undefined,
+    role: typeof args.role === "string" ? args.role : undefined,
+    notes: typeof args.notes === "string" ? args.notes : undefined,
+  });
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error: parsed.error.issues[0]?.message ?? "Invalid update_stakeholder_health input.",
+    };
+  }
+
+  const result = await updateStakeholder(args.stakeholderId, userId, parsed.data);
+  if (!result.ok) return { ok: false, error: "Stakeholder not found." };
+  return { ok: true, data: result.stakeholder };
+}
+
 export const goalHandlers: Record<string, ToolHandler> = {
   create_goal: handleCreateGoal,
   list_goals: handleListGoals,
@@ -244,4 +316,7 @@ export const goalHandlers: Record<string, ToolHandler> = {
   delete_goal: handleDeleteGoal,
   add_goal_milestone: handleAddGoalMilestone,
   complete_goal_milestone: handleCompleteGoalMilestone,
+  add_stakeholder: handleAddStakeholder,
+  list_stakeholders: handleListStakeholders,
+  update_stakeholder_health: handleUpdateStakeholderHealth,
 };

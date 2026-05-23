@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.1.4
  * @since canary-v1.0.2
  */
 
@@ -26,8 +26,9 @@ import {
 import { GoalCard } from "./GoalCard";
 import { CreateGoalDialog } from "./CreateGoalDialog";
 import { EditGoalDialog } from "./EditGoalDialog";
+import { StakeholderMapDialog } from "./StakeholderMapDialog";
 import { useGoalMutations } from "./logic/useGoalMutations";
-import type { GoalRecord, LabelOptionRecord } from "@/types/api";
+import type { GoalRecord, LabelOptionRecord, StakeholderRecord } from "@/types/api";
 
 type Filter = "all" | "open" | "in_progress" | "done" | "cancelled";
 
@@ -35,12 +36,14 @@ type GoalsShellProps = {
   initialGoals: GoalRecord[];
   availableLabels: LabelOptionRecord[];
   availableTasks: { id: string; title: string; status: string }[];
+  availableContacts: { id: string; name: string }[];
 };
 
 export function GoalsShell({
   initialGoals,
   availableLabels,
   availableTasks,
+  availableContacts,
 }: GoalsShellProps) {
   const t = useTranslations("goals");
   const [goals, setGoals] = useState<GoalRecord[]>(initialGoals);
@@ -49,6 +52,8 @@ export function GoalsShell({
   const [editOpen, setEditOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [stakeholderGoal, setStakeholderGoal] = useState<GoalRecord | null>(null);
+  const [stakeholderOpen, setStakeholderOpen] = useState(false);
 
   const [isPendingRefresh, startRefresh] = useTransition();
 
@@ -98,6 +103,66 @@ export function GoalsShell({
   function handleEdit(goal: GoalRecord) {
     setEditGoal(goal);
     setEditOpen(true);
+  }
+
+  function handleOpenStakeholders(goal: GoalRecord) {
+    setStakeholderGoal(goal);
+    setStakeholderOpen(true);
+  }
+
+  function handleStakeholderAdded(goalId: string, stakeholder: StakeholderRecord) {
+    setGoals((prev) =>
+      prev.map((g) =>
+        g.id === goalId
+          ? { ...g, stakeholders: [...g.stakeholders, stakeholder] }
+          : g,
+      ),
+    );
+    setStakeholderGoal((prev) =>
+      prev?.id === goalId
+        ? { ...prev, stakeholders: [...prev.stakeholders, stakeholder] }
+        : prev,
+    );
+  }
+
+  function handleStakeholderUpdated(goalId: string, stakeholder: StakeholderRecord) {
+    setGoals((prev) =>
+      prev.map((g) =>
+        g.id === goalId
+          ? {
+              ...g,
+              stakeholders: g.stakeholders.map((s) =>
+                s.id === stakeholder.id ? stakeholder : s,
+              ),
+            }
+          : g,
+      ),
+    );
+    setStakeholderGoal((prev) =>
+      prev?.id === goalId
+        ? {
+            ...prev,
+            stakeholders: prev.stakeholders.map((s) =>
+              s.id === stakeholder.id ? stakeholder : s,
+            ),
+          }
+        : prev,
+    );
+  }
+
+  function handleStakeholderRemoved(goalId: string, stakeholderId: string) {
+    setGoals((prev) =>
+      prev.map((g) =>
+        g.id === goalId
+          ? { ...g, stakeholders: g.stakeholders.filter((s) => s.id !== stakeholderId) }
+          : g,
+      ),
+    );
+    setStakeholderGoal((prev) =>
+      prev?.id === goalId
+        ? { ...prev, stakeholders: prev.stakeholders.filter((s) => s.id !== stakeholderId) }
+        : prev,
+    );
   }
 
   function handleDeleteRequest(goalId: string) {
@@ -225,6 +290,7 @@ export function GoalsShell({
               onEdit={handleEdit}
               onDelete={handleDeleteRequest}
               onToggleMilestone={toggleMilestone}
+              onOpenStakeholders={handleOpenStakeholders}
             />
           ))}
         </div>
@@ -245,6 +311,20 @@ export function GoalsShell({
           milestonePending={milestonePending}
           availableLabels={availableLabels}
           availableTasks={availableTasks}
+        />
+      )}
+
+      {/* Stakeholder map dialog */}
+      {stakeholderGoal && (
+        <StakeholderMapDialog
+          key={stakeholderGoal.id}
+          goal={stakeholderGoal}
+          open={stakeholderOpen}
+          onOpenChange={setStakeholderOpen}
+          availableContacts={availableContacts}
+          onStakeholderAdded={handleStakeholderAdded}
+          onStakeholderUpdated={handleStakeholderUpdated}
+          onStakeholderRemoved={handleStakeholderRemoved}
         />
       )}
 

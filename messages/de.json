@@ -702,6 +702,34 @@
       "unplaced": "Nicht eingeordnet",
       "unplacedSub": "Kein Zieldatum gesetzt",
       "empty": "Keine Ziele in diesem Horizont."
+    },
+    "stakeholders": {
+      "dialogTitle": "Stakeholder-Karte",
+      "dialogDescription": "Verwalte die wichtigsten Personen für dieses Ziel.",
+      "empty": "Noch keine Stakeholder.",
+      "addFirst": "Stakeholder hinzufügen",
+      "addSection": "Stakeholder hinzufügen",
+      "contactLabel": "Kontakt",
+      "contactPlaceholder": "Kontakt auswählen…",
+      "healthLabel": "Beziehungsstatus",
+      "roleLabel": "Rolle",
+      "rolePlaceholder": "z. B. Sponsor, Blocker…",
+      "addButton": "Hinzufügen",
+      "adding": "Wird hinzugefügt…",
+      "addSuccess": "Stakeholder hinzugefügt.",
+      "addError": "Fehler beim Hinzufügen.",
+      "removeLabel": "Entfernen",
+      "removeSuccess": "Stakeholder entfernt.",
+      "removeError": "Fehler beim Entfernen.",
+      "updateError": "Fehler beim Aktualisieren.",
+      "changeHealth": "Status ändern",
+      "openLabel": "Stakeholder-Karte öffnen",
+      "menuLabel": "Stakeholder",
+      "health": {
+        "warm": "Warm",
+        "neutral": "Neutral",
+        "cold": "Kalt"
+      }
     }
   },
   "memory": {

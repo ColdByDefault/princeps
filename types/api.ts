@@ -196,6 +196,20 @@ export interface GoalRecord {
   milestones: MilestoneRecord[];
   tasks: { id: string; title: string; status: string }[];
   labels: LabelOptionRecord[];
+  stakeholders: StakeholderRecord[];
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}
+
+/** Client-safe shape of a StakeholderEntry record. */
+export interface StakeholderRecord {
+  id: string;
+  goalId: string | null;
+  contactId: string;
+  contactName: string;
+  role: string | null; // "sponsor" | "blocker" | "champion" | "neutral" | custom
+  health: string; // "warm" | "neutral" | "cold"
+  notes: string | null;
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }
