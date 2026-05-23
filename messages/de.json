@@ -775,11 +775,18 @@
       "error": "Fakt konnte nicht aktualisiert werden."
     },
     "deleteDialog": {
-      "title": "Diesen Fakt l\u00f6schen?",
-      "description": "Der Fakt wird dauerhaft aus dem Ged\u00e4chtnis entfernt. Der Assistent hat dann keinen Zugriff mehr darauf.",
-      "confirm": "L\u00f6schen",
-      "success": "Fakt gel\u00f6scht.",
-      "error": "Fakt konnte nicht gel\u00f6scht werden."
+      "title": "Diesen Fakt löschen?",
+      "description": "Der Fakt wird dauerhaft aus dem Gedächtnis entfernt. Der Assistent hat dann keinen Zugriff mehr darauf.",
+      "confirm": "Löschen",
+      "success": "Fakt gelöscht.",
+      "error": "Fakt konnte nicht gelöscht werden."
+    },
+    "viewLabel": "Details ansehen",
+    "viewDialog": {
+      "topic": "Thema",
+      "fact": "Fakt",
+      "source": "Quelle",
+      "createdAt": "Erstellt"
     }
   },
   "meetings": {

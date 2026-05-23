@@ -780,6 +780,13 @@
       "confirm": "Delete",
       "success": "Fact deleted.",
       "error": "Failed to delete fact."
+    },
+    "viewLabel": "View details",
+    "viewDialog": {
+      "topic": "Topic",
+      "fact": "Fact",
+      "source": "Source",
+      "createdAt": "Created"
     }
   },
   "meetings": {
