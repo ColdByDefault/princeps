@@ -1,0 +1,11 @@
+{
+  "global": {
+    "badge": "Application recovery",
+    "title": "Something went wrong.",
+    "body": "The workspace hit an unexpected problem. Try again, or return to a stable page.",
+    "reference": "Reference",
+    "retry": "Try again",
+    "goHome": "Open workspace",
+    "goLogin": "Open sign in"
+  }
+}

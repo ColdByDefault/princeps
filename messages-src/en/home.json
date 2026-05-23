@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "title": "Home",
+    "description": "Your workspace"
+  },
+  "welcome": "Welcome back",
+  "weather": {
+    "location": "Location",
+    "noWeather": "Weather unavailable"
+  },
+  "briefing": {
+    "title": "Daily Briefing",
+    "readMore": "...read more",
+    "refresh": "Refresh briefing",
+    "refreshing": "Refreshing…",
+    "empty": "No briefing yet. Click refresh to generate one.",
+    "generatedAt": "Generated",
+    "generateSuccess": "Briefing refreshed.",
+    "generateError": "Failed to refresh briefing.",
+    "autoOff": "Automatic daily briefing is turned off.",
+    "autoOffHint": "Enable it in Settings → Assistant to see your briefing here.",
+    "goToSettings": "Open Settings"
+  }
+}

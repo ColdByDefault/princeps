@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "title": "Startseite",
+    "description": "Dein Arbeitsbereich"
+  },
+  "welcome": "Willkommen zurück",
+  "weather": {
+    "location": "Standort",
+    "noWeather": "Kein Wetter verfügbar"
+  },
+  "briefing": {
+    "title": "Tagesbriefing",
+    "readMore": "…weiterlesen",
+    "refresh": "Briefing aktualisieren",
+    "refreshing": "Wird aktualisiert…",
+    "empty": "Kein Briefing vorhanden. Klicke auf Aktualisieren, um eines zu erstellen.",
+    "generatedAt": "Erstellt",
+    "generateSuccess": "Briefing aktualisiert.",
+    "generateError": "Briefing konnte nicht aktualisiert werden.",
+    "autoOff": "Automatisches Tagesbriefing ist deaktiviert.",
+    "autoOffHint": "Aktiviere es in Einstellungen → Assistent, um dein Briefing hier zu sehen.",
+    "goToSettings": "Einstellungen öffnen"
+  }
+}

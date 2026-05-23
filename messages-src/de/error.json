@@ -1,0 +1,11 @@
+{
+  "global": {
+    "badge": "Fehlerbehebung",
+    "title": "Etwas ist schiefgelaufen.",
+    "body": "Der Arbeitsbereich hat ein unerwartetes Problem festgestellt. Bitte versuche es erneut oder kehre zu einer stabilen Seite zurück.",
+    "reference": "Referenz",
+    "retry": "Erneut versuchen",
+    "goHome": "Zum Arbeitsbereich",
+    "goLogin": "Zur Anmeldung"
+  }
+}

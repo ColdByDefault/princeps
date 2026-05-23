@@ -1,0 +1,125 @@
+{
+  "metadata": {
+    "title": "Meetings",
+    "description": "Verwalte deine Meetings."
+  },
+  "pageTitle": "Meetings",
+  "newMeeting": "Neues Meeting",
+  "empty": "Noch keine Meetings.",
+  "emptyFiltered": "Keine Meetings mit diesem Status.",
+  "filter": {
+    "all": "Alle",
+    "upcoming": "Bevorstehend",
+    "done": "Erledigt",
+    "cancelled": "Abgesagt"
+  },
+  "status": {
+    "upcoming": "Bevorstehend",
+    "done": "Erledigt",
+    "cancelled": "Abgesagt"
+  },
+  "fields": {
+    "title": "Titel",
+    "titlePlaceholder": "Meeting-Titel",
+    "scheduledAt": "Datum & Uhrzeit",
+    "scheduledAtPlaceholder": "Datum & Uhrzeit wählen",
+    "durationMin": "Dauer (Min.)",
+    "durationPlaceholder": "z.B. 60",
+    "minutesShort": "Min.",
+    "location": "Ort",
+    "locationPlaceholder": "Raum, Link oder Adresse",
+    "status": "Status",
+    "labels": "Labels",
+    "agenda": "Agenda",
+    "agendaPlaceholder": "Besprechungsagenda…",
+    "summary": "Zusammenfassung",
+    "summaryPlaceholder": "Zusammenfassung oder Notizen…",
+    "participants": "Teilnehmer",
+    "addParticipant": "Teilnehmer hinzufügen",
+    "removeParticipant": "Teilnehmer entfernen",
+    "newContact": "Neuer Kontakt",
+    "noMoreContacts": "Keine weiteren Kontakte verfügbar.",
+    "linkedTasks": "Verknüpfte Aufgaben",
+    "addTask": "Aufgabe verknüpfen",
+    "removeTask": "Aufgabe entfernen",
+    "noMoreTasks": "Keine weiteren Aufgaben verfügbar.",
+    "optional": "Optional",
+    "kind": "Typ"
+  },
+  "createDialog": {
+    "heading": "Neues Meeting",
+    "submit": "Erstellen",
+    "submitting": "Wird erstellt…",
+    "cancel": "Abbrechen",
+    "syncGoogle": "Auch in Google Calendar erstellen",
+    "success": "Meeting erstellt.",
+    "error": "Meeting konnte nicht erstellt werden."
+  },
+  "editDialog": {
+    "heading": "Meeting bearbeiten",
+    "submit": "Speichern",
+    "submitting": "Wird gespeichert…",
+    "cancel": "Abbrechen",
+    "syncGoogle": "Auch zu Google Calendar hinzufügen",
+    "success": "Meeting gespeichert.",
+    "error": "Meeting konnte nicht gespeichert werden."
+  },
+  "deleteDialog": {
+    "title": "Dieses Meeting löschen?",
+    "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirm": "Löschen",
+    "cancel": "Abbrechen",
+    "success": "Meeting gelöscht.",
+    "error": "Meeting konnte nicht gelöscht werden."
+  },
+  "actionsLabel": "Meeting-Aktionen",
+  "editLabel": "Bearbeiten",
+  "deleteLabel": "Löschen",
+  "detailLabel": "Meeting-Details anzeigen",
+  "refresh": "Aktualisieren",
+  "refreshing": "Wird aktualisiert…",
+  "detailDialog": {
+    "description": "Meeting-Details"
+  },
+  "source": {
+    "google_calendar": "Google",
+    "llm": "KI"
+  },
+  "kind": {
+    "meeting": "Meeting",
+    "appointment": "Termin"
+  },
+  "summaryDialog": {
+    "trigger": "Zusammenfassung hinzufügen",
+    "heading": "Besprechungszusammenfassung",
+    "submit": "Speichern",
+    "submitting": "Wird gespeichert…",
+    "cancel": "Abbrechen"
+  },
+  "prepPackDialog": {
+    "trigger": "Vorbereitung",
+    "heading": "Meeting-Vorbereitung",
+    "empty": "Noch keine Vorbereitung generiert. Klicke auf \"Generieren\", um eine KI-Zusammenfassung zu erstellen.",
+    "generate": "Generieren",
+    "regenerate": "Neu generieren",
+    "generating": "Wird generiert…",
+    "close": "Schließen",
+    "delete": "Löschen",
+    "success": "Vorbereitung generiert.",
+    "error": "Vorbereitung konnte nicht generiert werden.",
+    "deleteSuccess": "Vorbereitung gelöscht.",
+    "deleteError": "Vorbereitung konnte nicht gelöscht werden."
+  },
+  "quickContact": {
+    "heading": "Neuer Kontakt",
+    "name": "Name",
+    "namePlaceholder": "Vollständiger Name",
+    "company": "Unternehmen",
+    "companyPlaceholder": "Unternehmensname",
+    "email": "E-Mail",
+    "emailPlaceholder": "email@beispiel.de",
+    "submit": "Erstellen & hinzufügen",
+    "submitting": "Wird erstellt…",
+    "cancel": "Abbrechen"
+  }
+}

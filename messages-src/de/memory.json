@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "title": "Gedächtnis",
+    "description": "Fakten, die sich der Assistent über dich merkt."
+  },
+  "pageTitle": "Gedächtnis",
+  "pageSubtitle": "Fakten, die sich der Assistent über dich merkt.",
+  "addEntry": "Fakt hinzufügen",
+  "refresh": "Aktualisieren",
+  "refreshing": "Wird aktualisiert…",
+  "empty": "Noch keine Fakten gespeichert.",
+  "emptyHint": "Bitte den Assistenten, sich etwas zu merken, oder füge einen Fakt manuell hinzu.",
+  "sourceAI": "KI",
+  "sourceUser": "Du",
+  "actions": "Aktionen",
+  "edit": "Bearbeiten",
+  "delete": "Löschen",
+  "cancel": "Abbrechen",
+  "save": "Speichern",
+  "saving": "Wird gespeichert…",
+  "keyLabel": "Thema",
+  "keyPlaceholder": "z. B. Berufsbezeichnung",
+  "valueLabel": "Fakt",
+  "valuePlaceholder": "z. B. Senior Engineer bei Acme",
+  "createTitle": "Fakt hinzufügen",
+  "editTitle": "Fakt bearbeiten",
+  "createDialog": {
+    "success": "Fakt gespeichert.",
+    "error": "Fakt konnte nicht gespeichert werden."
+  },
+  "editDialog": {
+    "success": "Fakt aktualisiert.",
+    "error": "Fakt konnte nicht aktualisiert werden."
+  },
+  "deleteDialog": {
+    "title": "Diesen Fakt löschen?",
+    "description": "Der Fakt wird dauerhaft aus dem Gedächtnis entfernt. Der Assistent hat dann keinen Zugriff mehr darauf.",
+    "confirm": "Löschen",
+    "success": "Fakt gelöscht.",
+    "error": "Fakt konnte nicht gelöscht werden."
+  },
+  "viewLabel": "Details ansehen",
+  "viewDialog": {
+    "topic": "Thema",
+    "fact": "Fakt",
+    "source": "Quelle",
+    "createdAt": "Erstellt"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "title": "Reading Queue",
+    "description": "Save articles and web pages for later — AI scores their relevance against your goals."
+  },
+  "pageTitle": "Reading Queue",
+  "addItem": "Add",
+  "refresh": "Refresh",
+  "empty": "No saved articles yet.",
+  "emptyFiltered": "No articles in this category.",
+  "filter": {
+    "all": "All",
+    "unread": "Unread",
+    "read": "Read",
+    "archived": "Archived"
+  },
+  "fields": {
+    "url": "URL",
+    "urlPlaceholder": "https://example.com/article",
+    "title": "Title",
+    "titlePlaceholder": "Optional title",
+    "titleOptional": "optional",
+    "openLink": "Open article"
+  },
+  "addDialog": {
+    "title": "Save article",
+    "description": "Enter the URL. The assistant will fetch the content, create a summary, and score its relevance against your current goals.",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "success": "Article saved.",
+    "error": "Could not save the article. Please try again."
+  },
+  "deleteDialog": {
+    "trigger": "Delete",
+    "title": "Delete article?",
+    "description": "This article will be permanently removed from your reading queue. This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "success": "Article deleted.",
+    "error": "Could not delete the article."
+  },
+  "status": {
+    "markRead": "Mark as read",
+    "markReadSuccess": "Marked as read.",
+    "markReadError": "Could not update status.",
+    "archive": "Archive",
+    "archiveSuccess": "Article archived.",
+    "archiveError": "Could not archive the article."
+  },
+  "scoreLabel": "Relevance"
+}

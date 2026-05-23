@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "title": "Daily Briefing",
+    "description": "Your daily AI-generated executive briefing."
+  },
+  "pageTitle": "Daily Briefing",
+  "generate": "Generate",
+  "generating": "Generating…",
+  "refresh": "Refresh",
+  "refreshing": "Refreshing…",
+  "empty": "No briefing yet. Generate your first daily briefing.",
+  "generatedAt": "Generated on {date}",
+  "generateSuccess": "Briefing generated.",
+  "generateError": "Failed to generate briefing. Please try again.",
+  "autoOff": "Automatic daily briefing is off.",
+  "autoOffHint": "Your briefing won't be generated automatically. You can still generate it here or ask your assistant.",
+  "goToSettings": "Open Settings"
+}

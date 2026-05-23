@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "title": "Kontakte",
+    "description": "Verwalte deine beruflichen Kontakte."
+  },
+  "pageTitle": "Kontakte",
+  "countSingular": "1 Kontakt",
+  "countPlural": "{count} Kontakte",
+  "newContact": "Neuer Kontakt",
+  "empty": "Noch keine Kontakte.",
+  "fields": {
+    "name": "Name",
+    "namePlaceholder": "Jane Doe",
+    "role": "Rolle",
+    "rolePlaceholder": "Software Engineer",
+    "company": "Unternehmen",
+    "companyPlaceholder": "Acme GmbH",
+    "email": "E-Mail",
+    "emailPlaceholder": "jane@beispiel.de",
+    "phone": "Telefon",
+    "phonePlaceholder": "+49 (0)89 123456",
+    "notes": "Notizen",
+    "notesPlaceholder": "Optionale Notizen…",
+    "lastContact": "Letzter Kontakt",
+    "labels": "Labels",
+    "optional": "Optional"
+  },
+  "createDialog": {
+    "heading": "Neuer Kontakt",
+    "description": "Fülle die Details unten aus, um einen neuen Kontakt hinzuzufügen.",
+    "submit": "Erstellen",
+    "submitting": "Wird erstellt…",
+    "success": "Kontakt erstellt.",
+    "error": "Kontakt konnte nicht erstellt werden."
+  },
+  "editDialog": {
+    "heading": "Kontakt bearbeiten",
+    "description": "Aktualisiere die Kontaktdaten unten.",
+    "submit": "Speichern",
+    "submitting": "Wird gespeichert…",
+    "success": "Kontakt gespeichert.",
+    "error": "Kontakt konnte nicht gespeichert werden."
+  },
+  "deleteDialog": {
+    "title": "Diesen Kontakt löschen?",
+    "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirm": "Löschen",
+    "cancel": "Abbrechen",
+    "success": "Kontakt gelöscht.",
+    "error": "Kontakt konnte nicht gelöscht werden."
+  },
+  "actionsLabel": "Kontaktaktionen",
+  "viewLabel": "Details ansehen",
+  "editLabel": "Bearbeiten",
+  "deleteLabel": "Löschen",
+  "lastContactLabel": "Letzter Kontakt",
+  "viewDialog": {
+    "createdAt": "Erstellt"
+  },
+  "refresh": "Aktualisieren",
+  "refreshing": "Wird aktualisiert…"
+}

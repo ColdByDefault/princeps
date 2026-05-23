@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "title": "Tagesbriefing",
+    "description": "Dein täglich KI-generiertes Executive-Briefing."
+  },
+  "pageTitle": "Tagesbriefing",
+  "generate": "Generieren",
+  "generating": "Wird generiert…",
+  "refresh": "Aktualisieren",
+  "refreshing": "Wird aktualisiert…",
+  "empty": "Noch kein Briefing vorhanden. Erstelle dein erstes Tagesbriefing.",
+  "generatedAt": "Generiert am {date}",
+  "generateSuccess": "Briefing wurde generiert.",
+  "generateError": "Briefing konnte nicht generiert werden. Bitte erneut versuchen.",
+  "autoOff": "Automatisches Tagesbriefing ist deaktiviert.",
+  "autoOffHint": "Dein Briefing wird nicht automatisch generiert. Du kannst es hier oder über deinen Assistenten erstellen.",
+  "goToSettings": "Einstellungen öffnen"
+}

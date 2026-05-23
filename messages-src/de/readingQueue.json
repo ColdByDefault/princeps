@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "title": "Leseliste",
+    "description": "Speichere Artikel und Webseiten für später – KI bewertet ihre Relevanz für deine Ziele."
+  },
+  "pageTitle": "Leseliste",
+  "addItem": "Hinzufügen",
+  "refresh": "Aktualisieren",
+  "empty": "Noch keine gespeicherten Artikel.",
+  "emptyFiltered": "Keine Artikel in dieser Kategorie.",
+  "filter": {
+    "all": "Alle",
+    "unread": "Ungelesen",
+    "read": "Gelesen",
+    "archived": "Archiviert"
+  },
+  "fields": {
+    "url": "URL",
+    "urlPlaceholder": "https://example.com/artikel",
+    "title": "Titel",
+    "titlePlaceholder": "Optionaler Titel",
+    "titleOptional": "optional",
+    "openLink": "Artikel öffnen"
+  },
+  "addDialog": {
+    "title": "Artikel speichern",
+    "description": "Gib die URL ein. Der Assistent ruft den Inhalt ab, erstellt eine Zusammenfassung und bewertet die Relevanz für deine aktuellen Ziele.",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "cancel": "Abbrechen",
+    "success": "Artikel wurde gespeichert.",
+    "error": "Artikel konnte nicht gespeichert werden. Bitte erneut versuchen."
+  },
+  "deleteDialog": {
+    "trigger": "Löschen",
+    "title": "Artikel löschen?",
+    "description": "Dieser Artikel wird dauerhaft aus deiner Leseliste entfernt. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirm": "Löschen",
+    "cancel": "Abbrechen",
+    "success": "Artikel wurde gelöscht.",
+    "error": "Artikel konnte nicht gelöscht werden."
+  },
+  "status": {
+    "markRead": "Als gelesen markieren",
+    "markReadSuccess": "Als gelesen markiert.",
+    "markReadError": "Status konnte nicht aktualisiert werden.",
+    "archive": "Archivieren",
+    "archiveSuccess": "Artikel archiviert.",
+    "archiveError": "Artikel konnte nicht archiviert werden."
+  },
+  "scoreLabel": "Relevanz"
+}

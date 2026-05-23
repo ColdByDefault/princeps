@@ -1,0 +1,24 @@
+{
+  "title": "Messages",
+  "empty": "No new messages",
+  "emptyHint": "Your assistant will reach out here.",
+  "clearAll": "Clear all",
+  "bell": {
+    "ariaLabel": "Open messages",
+    "unread": "{count} unread"
+  },
+  "deleteOne": {
+    "ariaLabel": "Delete message"
+  },
+  "overdueTasks": {
+    "titleOne": "1 overdue task",
+    "titleOther": "{count} overdue tasks",
+    "bodyIntro": "These tasks are past their due date:",
+    "remainingOne": "And 1 more.",
+    "remainingOther": "And {count} more."
+  },
+  "weeklyDigest": {
+    "title": "Weekly Digest",
+    "fallbackBody": "Your weekly digest could not be generated this time. Please try again or contact support."
+  }
+}

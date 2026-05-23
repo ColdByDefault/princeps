@@ -1,0 +1,9 @@
+{
+  "selector": {
+    "groupLabel": "Designauswahl",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System",
+    "current": "Aktiv"
+  }
+}

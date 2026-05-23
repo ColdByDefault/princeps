@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "title": "Plans",
+    "description": "Available plans and quotas for Princeps."
+  },
+  "pageTitle": "Plans & Quotas",
+  "pageSubtitle": "Your current plan and all available options.",
+  "currentPlan": "Current plan",
+  "price": {
+    "free": "Free",
+    "perMonth": "/month",
+    "annual": "€{price}/yr billed annually",
+    "enterprise": "Contact us"
+  },
+  "planNames": {
+    "free": "Free",
+    "pro": "Pro",
+    "premium": "Premium",
+    "enterprise": "Enterprise"
+  },
+  "sections": {
+    "ai": "AI Usage",
+    "data": "Stored Data",
+    "widget": "Widget"
+  },
+  "limits": {
+    "messagesPerMonth": "Messages / month",
+    "tokensPerMonth": "Tokens / month (approx.)",
+    "chatsPerDay": "New chats / day",
+    "chatHistoryTotal": "Saved chats",
+    "tasksMax": "Tasks",
+    "meetingsMax": "Meetings",
+    "decisionsMax": "Decisions",
+    "contactsMax": "Contacts",
+    "memoryMax": "Memory facts",
+    "knowledgeDocs": "Knowledge docs",
+    "knowledgeFileSize": "Max file size",
+    "toolCallsPerMonth": "Tool calls / month",
+    "widgetChatsPerDay": "Widget chats / day",
+    "widgetToolsPerDay": "Widget tools / day",
+    "nudgesEnabled": "Proactive nudges"
+  },
+  "yes": "Yes",
+  "no": "No",
+  "billing": {
+    "title": "Billing & Terms",
+    "sections": [
+      {
+        "heading": "Billing Cycle",
+        "content": "Monthly plans are billed on the same date each month. Annual plans are billed once per year, in advance. You will receive an invoice by email."
+      },
+      {
+        "heading": "Cancellation & Refunds",
+        "content": "You can cancel your plan at any time. Access remains active until the end of the current billing period. No refunds are issued for already-billed periods."
+      },
+      {
+        "heading": "Trial Terms",
+        "content": "The Free plan is permanently available with no time limit. Paid plans begin immediately after checkout. A free trial for paid plans is not currently available."
+      }
+    ]
+  }
+}

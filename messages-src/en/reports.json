@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "title": "Reports",
+    "description": "Activity reports for your assistant's tool interactions."
+  },
+  "pageTitle": "Activity Reports",
+  "pageDescription": "A log of every tools interaction your assistant performed.",
+  "refresh": "Refresh reports",
+  "delete": "Delete",
+  "deleteAriaLabel": "Delete report",
+  "deleteSuccess": "Report deleted.",
+  "deleteError": "Failed to delete report.",
+  "clearAll": "Clear all",
+  "clearingAll": "Clearing…",
+  "clearAllAriaLabel": "Delete all reports",
+  "clearAllSuccess": "All reports deleted.",
+  "clearAllError": "Failed to delete reports.",
+  "empty": "No reports yet.",
+  "emptyHint": "Reports appear here after your assistant uses tools.",
+  "toolCalls": "tool calls",
+  "tokens": "tokens",
+  "frequency": {
+    "title": "Most-used Tools",
+    "totalCalls": "{count} total calls",
+    "sessions": "{count} sessions"
+  }
+}

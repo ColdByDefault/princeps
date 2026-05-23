@@ -1,0 +1,50 @@
+{
+  "plan": {
+    "metadata": {
+      "title": "Choose a plan",
+      "description": "Pick the plan that fits your workflow."
+    },
+    "title": "Choose your plan",
+    "subtitle": "Pick the plan that fits your workflow. You can change it at any time.",
+    "billingMonthly": "Monthly",
+    "billingAnnual": "Annual",
+    "annualSavings": "Save ~{percent}%",
+    "currentPlan": "Selected",
+    "planFree": "Free",
+    "planNames": {
+      "free": "Free",
+      "pro": "Pro",
+      "premium": "Premium",
+      "enterprise": "Enterprise"
+    },
+    "free": {
+      "cta": "Continue for free"
+    },
+    "paid": {
+      "cta": "Subscribe",
+      "subscribing": "Redirecting…",
+      "ariaLabel": "Subscribe to {tier}"
+    },
+    "enterprise": {
+      "cta": "Contact us",
+      "price": "Custom pricing"
+    },
+    "limits": {
+      "messagesPerMonth": "Messages / month",
+      "chatsSaved": "Saved chats",
+      "contacts": "Contacts",
+      "tasks": "Tasks",
+      "meetings": "Meetings",
+      "knowledgeDocs": "Knowledge docs",
+      "nudgesEnabled": "Proactive nudges"
+    },
+    "error": "Failed to start checkout. Please try again.",
+    "perMonth": "/mo",
+    "perYear": "/yr"
+  },
+  "success": {
+    "title": "Welcome to Princeps!",
+    "body": "Your plan is being activated — this takes just a moment.",
+    "redirecting": "Taking you to your workspace…"
+  }
+}

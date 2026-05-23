@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "title": "Tasks",
+    "description": "Manage your tasks."
+  },
+  "pageTitle": "Tasks",
+  "newTask": "New task",
+  "empty": "No tasks yet.",
+  "emptyFiltered": "No tasks with this status.",
+  "filter": {
+    "all": "All",
+    "open": "Open",
+    "inProgress": "In Progress",
+    "done": "Done",
+    "cancelled": "Cancelled",
+    "delegated": "Delegated"
+  },
+  "priority": {
+    "low": "Low",
+    "normal": "Normal",
+    "high": "High",
+    "urgent": "Urgent"
+  },
+  "status": {
+    "open": "Open",
+    "inProgress": "In Progress",
+    "done": "Done",
+    "cancelled": "Cancelled"
+  },
+  "fields": {
+    "title": "Title",
+    "titlePlaceholder": "Task title",
+    "notes": "Notes",
+    "notesPlaceholder": "Optional notes…",
+    "priority": "Priority",
+    "dueDate": "Due date",
+    "status": "Status",
+    "labels": "Labels",
+    "linkedGoals": "Linked goals",
+    "delegatedTo": "Delegated to",
+    "delegatedToPlaceholder": "Name of person (e.g. Marcus)",
+    "delegateNotes": "Handoff notes",
+    "delegateNotesPlaceholder": "Context for the handoff…",
+    "optional": "Optional"
+  },
+  "createDialog": {
+    "heading": "New task",
+    "submit": "Create",
+    "submitting": "Creating…",
+    "success": "Task created.",
+    "error": "Failed to create task."
+  },
+  "editDialog": {
+    "heading": "Edit task",
+    "submit": "Save",
+    "submitting": "Saving…",
+    "success": "Task saved.",
+    "error": "Failed to save task."
+  },
+  "deleteDialog": {
+    "title": "Delete this task?",
+    "description": "This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "success": "Task deleted.",
+    "error": "Failed to delete task."
+  },
+  "complete": {
+    "success": "Marked as done.",
+    "reopen": "Task reopened.",
+    "error": "Failed to update task."
+  },
+  "actionsLabel": "Task actions",
+  "editLabel": "Edit",
+  "deleteLabel": "Delete",
+  "viewLabel": "View details",
+  "viewDialog": {
+    "meeting": "Meeting",
+    "createdAt": "Created"
+  },
+  "markDoneLabel": "Mark as done",
+  "reopenLabel": "Reopen",
+  "refresh": "Refresh",
+  "refreshing": "Refreshing…",
+  "delegatedBadge": "Delegated to {name}",
+  "emptyDelegated": "No delegated tasks."
+}

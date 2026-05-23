@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "title": "Profile",
+    "description": "Your account profile."
+  },
+  "title": "Profile",
+  "name": "Name",
+  "username": "Username",
+  "email": "Email",
+  "emailVerified": "Verified",
+  "emailUnverified": "Pending",
+  "plan": "Current plan",
+  "memberSince": "Member since",
+  "timezone": "Timezone",
+  "notSet": "Not set",
+  "editDialog": {
+    "heading": "Edit Profile",
+    "namePlaceholder": "Your full name",
+    "usernamePlaceholder": "your_username",
+    "usernameHint": "Letters, numbers, underscores, and dots only. 3–30 characters.",
+    "cancel": "Cancel",
+    "submit": "Save changes",
+    "submitting": "Saving…",
+    "updateSuccess": "Profile updated.",
+    "updateError": "Failed to update profile. Please try again.",
+    "usernameTaken": "That username is already taken."
+  }
+}

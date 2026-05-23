@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "title": "Berichte",
+    "description": "Aktivitätsberichte für die Tool-Interaktionen deines Assistenten."
+  },
+  "pageTitle": "Aktivitätsberichte",
+  "pageDescription": "Ein Protokoll aller Tool-Aktionen, die dein Assistent durchgeführt hat.",
+  "refresh": "Berichte aktualisieren",
+  "delete": "Löschen",
+  "deleteAriaLabel": "Bericht löschen",
+  "deleteSuccess": "Bericht gelöscht.",
+  "deleteError": "Bericht konnte nicht gelöscht werden.",
+  "clearAll": "Alle löschen",
+  "clearingAll": "Wird gelöscht…",
+  "clearAllAriaLabel": "Alle Berichte löschen",
+  "clearAllSuccess": "Alle Berichte gelöscht.",
+  "clearAllError": "Berichte konnten nicht gelöscht werden.",
+  "empty": "Noch keine Berichte vorhanden.",
+  "emptyHint": "Berichte erscheinen hier, sobald dein Assistent Tools verwendet.",
+  "toolCalls": "Tool-Aufrufe",
+  "tokens": "Tokens",
+  "frequency": {
+    "title": "Häufigste Tools",
+    "totalCalls": "{count} Aufrufe gesamt",
+    "sessions": "{count} Sitzungen"
+  }
+}

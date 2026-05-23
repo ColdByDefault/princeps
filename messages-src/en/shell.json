@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "brand": "Princeps",
+    "home": "Workspace",
+    "chat": "Chat",
+    "knowledge": "Knowledge Base",
+    "tasks": "Tasks",
+    "contacts": "Contacts",
+    "settings": "Settings",
+    "pricing": "Plans",
+    "userFallback": "Workspace user",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "planFree": "Free",
+    "planPro": "Pro",
+    "planPremium": "Premium",
+    "planEnterprise": "Enterprise",
+    "profile": "My profile",
+    "apps": "Apps",
+    "meetings": "Meetings",
+    "decisions": "Decisions",
+    "goals": "Goals",
+    "labels": "Labels",
+    "intel": "Intelligence",
+    "memory": "Memory",
+    "readingQueue": "Reading Queue",
+    "briefings": "Daily Briefing",
+    "reports": "Reports",
+    "comingSoon": "Coming soon"
+  },
+  "language": {
+    "groupLabel": "Language selector",
+    "current": "Current"
+  },
+  "search": {
+    "trigger": "Search workspace",
+    "triggerLabel": "Search…",
+    "title": "Quick navigation",
+    "description": "Navigate pages in your workspace",
+    "placeholder": "Search pages or content…",
+    "empty": "No results found.",
+    "navigation": "Navigation",
+    "tasks": "Tasks",
+    "contacts": "Contacts",
+    "meetings": "Meetings",
+    "decisions": "Decisions",
+    "goals": "Goals"
+  },
+  "footer": {
+    "workspace": "Workspace",
+    "placeholderLinks": "Policies",
+    "privacyPolicy": "Privacy policy",
+    "termsOfUse": "Terms of use",
+    "cookiePolicy": "Cookie policy",
+    "security": "Security",
+    "versionTitle": "Application version",
+    "beta": "Stable",
+    "copyright": "© 2026 PRINCEPS All rights reserved.",
+    "authors": " Made by AnotherProject™ - ColdByDefault"
+  }
+}

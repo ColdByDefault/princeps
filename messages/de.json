@@ -326,8 +326,8 @@
     },
     "tools": {
       "title": "KI-Werkzeuge",
-      "description": "W\u00e4hle, welche F\u00e4higkeiten dein Assistent nutzen darf.",
-      "lockedSection": "Gesperrt \u2014 Upgrade erforderlich",
+      "description": "Wähle, welche Fähigkeiten dein Assistent nutzen darf.",
+      "lockedSection": "Gesperrt — Upgrade erforderlich",
       "saveFailed": "Werkzeugeinstellungen konnten nicht gespeichert werden."
     },
     "assistant": {
@@ -586,24 +586,24 @@
     "createDialog": {
       "heading": "Neue Entscheidung",
       "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
+      "submitting": "Wird erstellt…",
       "success": "Entscheidung erstellt.",
       "error": "Entscheidung konnte nicht erstellt werden."
     },
     "editDialog": {
       "heading": "Entscheidung bearbeiten",
       "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
+      "submitting": "Wird gespeichert…",
       "success": "Entscheidung gespeichert.",
       "error": "Entscheidung konnte nicht gespeichert werden."
     },
     "deleteDialog": {
-      "title": "Entscheidung l\u00f6schen?",
-      "description": "Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden.",
-      "confirm": "L\u00f6schen",
+      "title": "Entscheidung löschen?",
+      "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirm": "Löschen",
       "cancel": "Abbrechen",
-      "success": "Entscheidung gel\u00f6scht.",
-      "error": "Entscheidung konnte nicht gel\u00f6scht werden."
+      "success": "Entscheidung gelöscht.",
+      "error": "Entscheidung konnte nicht gelöscht werden."
     },
     "actionsLabel": "Entscheidungsaktionen",
     "editLabel": "Bearbeiten",
@@ -614,7 +614,7 @@
       "createdAt": "Erstellt"
     },
     "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert\u2026"
+    "refreshing": "Wird aktualisiert…"
   },
   "goals": {
     "metadata": {
@@ -626,7 +626,7 @@
     "empty": "Noch keine Ziele.",
     "emptyFiltered": "Keine Ziele mit diesem Status.",
     "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert\u2026",
+    "refreshing": "Wird aktualisiert…",
     "filter": {
       "all": "Alle",
       "open": "Offen",
@@ -650,7 +650,7 @@
       "labels": "Labels",
       "linkedTasks": "Verknüpfte Aufgaben",
       "milestones": "Meilensteine",
-      "milestonePlaceholder": "Meilenstein hinzufügen\u2026",
+      "milestonePlaceholder": "Meilenstein hinzufügen…",
       "optional": "Optional"
     },
     "milestoneProgress": "Meilensteine",
@@ -666,7 +666,7 @@
       "heading": "Neues Ziel",
       "description": "Fülle die Details unten aus, um ein neues Ziel zu erstellen.",
       "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
+      "submitting": "Wird erstellt…",
       "cancel": "Abbrechen",
       "success": "Ziel erstellt.",
       "error": "Ziel konnte nicht erstellt werden."
@@ -675,18 +675,18 @@
       "heading": "Ziel bearbeiten",
       "description": "Aktualisiere die Details unten.",
       "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
+      "submitting": "Wird gespeichert…",
       "cancel": "Abbrechen",
       "success": "Ziel gespeichert.",
       "error": "Ziel konnte nicht gespeichert werden."
     },
     "deleteDialog": {
-      "heading": "Dieses Ziel l\u00f6schen?",
-      "body": "Das Ziel und alle seine Meilensteine werden dauerhaft gel\u00f6scht. Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden.",
-      "confirm": "L\u00f6schen",
+      "heading": "Dieses Ziel löschen?",
+      "body": "Das Ziel und alle seine Meilensteine werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirm": "Löschen",
       "cancel": "Abbrechen",
-      "success": "Ziel gel\u00f6scht.",
-      "error": "Ziel konnte nicht gel\u00f6scht werden."
+      "success": "Ziel gelöscht.",
+      "error": "Ziel konnte nicht gelöscht werden."
     },
     "actionsLabel": "Zielaktionen",
     "editLabel": "Bearbeiten",
@@ -703,14 +703,14 @@
       },
       "pageTitle": "Zeithorizonte",
       "pageDescription": "Strategische Sicht auf deine Ziele — jetzt, mittelfristig und langfristig.",
-      "backToGoals": "Zur\u00fcck zu Zielen",
+      "backToGoals": "Zurück zu Zielen",
       "totalGoals": "{count} Ziele gesamt",
       "now": "Jetzt",
-      "nowSub": "N\u00e4chste 90 Tage",
+      "nowSub": "Nächste 90 Tage",
       "medium": "Mittelfristig",
-      "mediumSub": "3\u201318 Monate",
+      "mediumSub": "3–18 Monate",
       "long": "Langfristig",
-      "longSub": "\u00dcber 18 Monate",
+      "longSub": "Über 18 Monate",
       "unplaced": "Nicht eingeordnet",
       "unplacedSub": "Kein Zieldatum gesetzt",
       "empty": "Keine Ziele in diesem Horizont."
@@ -746,29 +746,29 @@
   },
   "memory": {
     "metadata": {
-      "title": "Ged\u00e4chtnis",
-      "description": "Fakten, die sich der Assistent \u00fcber dich merkt."
+      "title": "Gedächtnis",
+      "description": "Fakten, die sich der Assistent über dich merkt."
     },
-    "pageTitle": "Ged\u00e4chtnis",
-    "pageSubtitle": "Fakten, die sich der Assistent \u00fcber dich merkt.",
-    "addEntry": "Fakt hinzuf\u00fcgen",
+    "pageTitle": "Gedächtnis",
+    "pageSubtitle": "Fakten, die sich der Assistent über dich merkt.",
+    "addEntry": "Fakt hinzufügen",
     "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert\u2026",
+    "refreshing": "Wird aktualisiert…",
     "empty": "Noch keine Fakten gespeichert.",
-    "emptyHint": "Bitte den Assistenten, sich etwas zu merken, oder f\u00fcge einen Fakt manuell hinzu.",
+    "emptyHint": "Bitte den Assistenten, sich etwas zu merken, oder füge einen Fakt manuell hinzu.",
     "sourceAI": "KI",
     "sourceUser": "Du",
     "actions": "Aktionen",
     "edit": "Bearbeiten",
-    "delete": "L\u00f6schen",
+    "delete": "Löschen",
     "cancel": "Abbrechen",
     "save": "Speichern",
-    "saving": "Wird gespeichert\u2026",
+    "saving": "Wird gespeichert…",
     "keyLabel": "Thema",
-    "keyPlaceholder": "z.\u00a0B. Berufsbezeichnung",
+    "keyPlaceholder": "z. B. Berufsbezeichnung",
     "valueLabel": "Fakt",
-    "valuePlaceholder": "z.\u00a0B. Senior Engineer bei Acme",
-    "createTitle": "Fakt hinzuf\u00fcgen",
+    "valuePlaceholder": "z. B. Senior Engineer bei Acme",
+    "createTitle": "Fakt hinzufügen",
     "editTitle": "Fakt bearbeiten",
     "createDialog": {
       "success": "Fakt gespeichert.",
@@ -834,17 +834,17 @@
       "removeParticipant": "Teilnehmer entfernen",
       "newContact": "Neuer Kontakt",
       "noMoreContacts": "Keine weiteren Kontakte verfügbar.",
-      "linkedTasks": "Verkn\u00fcpfte Aufgaben",
-      "addTask": "Aufgabe verkn\u00fcpfen",
+      "linkedTasks": "Verknüpfte Aufgaben",
+      "addTask": "Aufgabe verknüpfen",
       "removeTask": "Aufgabe entfernen",
-      "noMoreTasks": "Keine weiteren Aufgaben verf\u00fcgbar.",
+      "noMoreTasks": "Keine weiteren Aufgaben verfügbar.",
       "optional": "Optional",
       "kind": "Typ"
     },
     "createDialog": {
       "heading": "Neues Meeting",
       "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
+      "submitting": "Wird erstellt…",
       "cancel": "Abbrechen",
       "syncGoogle": "Auch in Google Calendar erstellen",
       "success": "Meeting erstellt.",
@@ -853,23 +853,23 @@
     "editDialog": {
       "heading": "Meeting bearbeiten",
       "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
+      "submitting": "Wird gespeichert…",
       "cancel": "Abbrechen",
-      "syncGoogle": "Auch zu Google Calendar hinzuf\u00fcgen",
+      "syncGoogle": "Auch zu Google Calendar hinzufügen",
       "success": "Meeting gespeichert.",
       "error": "Meeting konnte nicht gespeichert werden."
     },
     "deleteDialog": {
-      "title": "Dieses Meeting l\u00f6schen?",
-      "description": "Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden.",
-      "confirm": "L\u00f6schen",
+      "title": "Dieses Meeting löschen?",
+      "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirm": "Löschen",
       "cancel": "Abbrechen",
-      "success": "Meeting gel\u00f6scht.",
-      "error": "Meeting konnte nicht gel\u00f6scht werden."
+      "success": "Meeting gelöscht.",
+      "error": "Meeting konnte nicht gelöscht werden."
     },
     "actionsLabel": "Meeting-Aktionen",
     "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen",
+    "deleteLabel": "Löschen",
     "detailLabel": "Meeting-Details anzeigen",
     "refresh": "Aktualisieren",
     "refreshing": "Wird aktualisiert…",
@@ -885,10 +885,10 @@
       "appointment": "Termin"
     },
     "summaryDialog": {
-      "trigger": "Zusammenfassung hinzuf\u00fcgen",
+      "trigger": "Zusammenfassung hinzufügen",
       "heading": "Besprechungszusammenfassung",
       "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
+      "submitting": "Wird gespeichert…",
       "cancel": "Abbrechen"
     },
     "prepPackDialog": {
@@ -897,24 +897,24 @@
       "empty": "Noch keine Vorbereitung generiert. Klicke auf \"Generieren\", um eine KI-Zusammenfassung zu erstellen.",
       "generate": "Generieren",
       "regenerate": "Neu generieren",
-      "generating": "Wird generiert\u2026",
-      "close": "Schlie\u00dfen",
-      "delete": "L\u00f6schen",
+      "generating": "Wird generiert…",
+      "close": "Schließen",
+      "delete": "Löschen",
       "success": "Vorbereitung generiert.",
       "error": "Vorbereitung konnte nicht generiert werden.",
-      "deleteSuccess": "Vorbereitung gel\u00f6scht.",
-      "deleteError": "Vorbereitung konnte nicht gel\u00f6scht werden."
+      "deleteSuccess": "Vorbereitung gelöscht.",
+      "deleteError": "Vorbereitung konnte nicht gelöscht werden."
     },
     "quickContact": {
       "heading": "Neuer Kontakt",
       "name": "Name",
-      "namePlaceholder": "Vollst\u00e4ndiger Name",
+      "namePlaceholder": "Vollständiger Name",
       "company": "Unternehmen",
       "companyPlaceholder": "Unternehmensname",
       "email": "E-Mail",
       "emailPlaceholder": "email@beispiel.de",
-      "submit": "Erstellen & hinzuf\u00fcgen",
-      "submitting": "Wird erstellt\u2026",
+      "submit": "Erstellen & hinzufügen",
+      "submitting": "Wird erstellt…",
       "cancel": "Abbrechen"
     }
   },
@@ -951,29 +951,29 @@
       "title": "Titel",
       "titlePlaceholder": "Aufgabentitel",
       "notes": "Notizen",
-      "notesPlaceholder": "Optionale Notizen\u2026",
+      "notesPlaceholder": "Optionale Notizen…",
       "priority": "Priorität",
-      "dueDate": "F\u00e4lligkeitsdatum",
+      "dueDate": "Fälligkeitsdatum",
       "status": "Status",
       "labels": "Labels",
       "linkedGoals": "Verknüpfte Ziele",
       "delegatedTo": "Delegiert an",
-      "delegatedToPlaceholder": "Name der Person (z.\u00a0B. Markus)",
-      "delegateNotes": "\u00dcbergabenotizen",
-      "delegateNotesPlaceholder": "Kontext zur \u00dcbergabe\u2026",
+      "delegatedToPlaceholder": "Name der Person (z. B. Markus)",
+      "delegateNotes": "Übergabenotizen",
+      "delegateNotesPlaceholder": "Kontext zur Übergabe…",
       "optional": "Optional"
     },
     "createDialog": {
       "heading": "Neue Aufgabe",
       "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
+      "submitting": "Wird erstellt…",
       "success": "Aufgabe erstellt.",
       "error": "Aufgabe konnte nicht erstellt werden."
     },
     "editDialog": {
       "heading": "Aufgabe bearbeiten",
       "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
+      "submitting": "Wird gespeichert…",
       "success": "Aufgabe gespeichert.",
       "error": "Aufgabe konnte nicht gespeichert werden."
     },
@@ -1027,7 +1027,7 @@
       "phone": "Telefon",
       "phonePlaceholder": "+49 (0)89 123456",
       "notes": "Notizen",
-      "notesPlaceholder": "Optionale Notizen\u2026",
+      "notesPlaceholder": "Optionale Notizen…",
       "lastContact": "Letzter Kontakt",
       "labels": "Labels",
       "optional": "Optional"
@@ -1036,7 +1036,7 @@
       "heading": "Neuer Kontakt",
       "description": "Fülle die Details unten aus, um einen neuen Kontakt hinzuzufügen.",
       "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
+      "submitting": "Wird erstellt…",
       "success": "Kontakt erstellt.",
       "error": "Kontakt konnte nicht erstellt werden."
     },
@@ -1044,7 +1044,7 @@
       "heading": "Kontakt bearbeiten",
       "description": "Aktualisiere die Kontaktdaten unten.",
       "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
+      "submitting": "Wird gespeichert…",
       "success": "Kontakt gespeichert.",
       "error": "Kontakt konnte nicht gespeichert werden."
     },
@@ -1515,19 +1515,19 @@
     "drive": {
       "sectionTitle": "Google Drive",
       "sectionDescription": "Durchsuche deine Google-Drive-Dateien und importiere sie gezielt in die Wissensdatenbank.",
-      "loading": "Dateien werden geladen\u2026",
+      "loading": "Dateien werden geladen…",
       "refreshFiles": "Aktualisieren",
       "importFile": "Importieren",
       "reimportFile": "Neu importieren",
       "imported": "Importiert",
-      "importing": "Wird importiert\u2026",
-      "noFiles": "Keine unterst\u00fctzten Dateien in Google Drive gefunden.",
+      "importing": "Wird importiert…",
+      "noFiles": "Keine unterstützten Dateien in Google Drive gefunden.",
       "errorLoad": "Dateien konnten nicht geladen werden.",
       "errorImport": "Import fehlgeschlagen.",
-      "importSuccess": "\u201e{name}\u201c erfolgreich importiert.",
+      "importSuccess": "„{name}“ erfolgreich importiert.",
       "fileTypeDoc": "Dokument",
       "fileTypeSheet": "Tabelle",
-      "fileTypeSlide": "Pr\u00e4sentation",
+      "fileTypeSlide": "Präsentation",
       "fileTypePdf": "PDF",
       "ariaImport": "{name} in die Wissensdatenbank importieren",
       "ariaRefresh": "Google-Drive-Dateiliste aktualisieren",

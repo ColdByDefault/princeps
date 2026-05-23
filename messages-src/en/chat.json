@@ -1,0 +1,69 @@
+{
+  "sidebar": {
+    "navGroup": "Navigation",
+    "navHome": "Workspace",
+    "title": "Chats",
+    "newChat": "New chat",
+    "empty": "No chats yet.",
+    "rename": "Rename",
+    "renamePlaceholder": "Chat title",
+    "delete": "Delete",
+    "deleteTitle": "Delete this chat?",
+    "deleteDescription": "This will permanently delete this chat and all its messages.",
+    "deleteConfirm": "Delete",
+    "deleteCancel": "Cancel",
+    "deleteSuccess": "Chat deleted.",
+    "renameSuccess": "Chat renamed.",
+    "limitReached": "Delete a chat to create a new one.",
+    "pendingEmpty": "Start chatting first — empty chats are not saved.",
+    "actions": "Chat actions",
+    "groups": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "last7": "Last 7 days",
+      "older": "Older"
+    },
+    "navGroupAccount": "Account",
+    "userFallback": "Workspace user",
+    "navTasks": "Tasks",
+    "navGoals": "Goals",
+    "navContacts": "Contacts",
+    "navMeetings": "Meetings",
+    "navKnowledge": "Knowledge Base",
+    "navDecisions": "Decisions",
+    "navMemory": "Memory",
+    "navLabels": "Labels",
+    "navSettings": "Settings",
+    "navPricing": "Pricing",
+    "profile": "My profile",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…"
+  },
+  "empty": {
+    "title": "Start a conversation",
+    "body": "Send a message to begin."
+  },
+  "input": {
+    "placeholder": "Ask anything…",
+    "send": "Send message"
+  },
+  "error": {
+    "providerUnavailable": "AI provider is not available or not configured.",
+    "send": "Failed to send message. Please try again.",
+    "create": "Failed to create chat.",
+    "delete": "Failed to delete chat.",
+    "rename": "Failed to rename chat."
+  },
+  "settings": {
+    "tooltipLabel": "Chat settings",
+    "title": "Chat Settings",
+    "description": "These settings apply to all AI providers.",
+    "temperature": "Temperature",
+    "temperatureDescription": "Controls randomness. Lower = more focused, higher = more creative.",
+    "timeout": "Request Timeout",
+    "timeoutDescription": "Maximum time to wait for a response (in seconds).",
+    "timeoutUnit": "s",
+    "reset": "Reset to defaults",
+    "save": "Save changes"
+  }
+}

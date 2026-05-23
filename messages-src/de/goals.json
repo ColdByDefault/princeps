@@ -1,0 +1,128 @@
+{
+  "metadata": {
+    "title": "Ziele",
+    "description": "Verwalte deine Ziele und Meilensteine."
+  },
+  "pageTitle": "Ziele",
+  "newGoal": "Neues Ziel",
+  "empty": "Noch keine Ziele.",
+  "emptyFiltered": "Keine Ziele mit diesem Status.",
+  "refresh": "Aktualisieren",
+  "refreshing": "Wird aktualisiert…",
+  "filter": {
+    "all": "Alle",
+    "open": "Offen",
+    "in_progress": "In Arbeit",
+    "done": "Erledigt",
+    "cancelled": "Abgebrochen"
+  },
+  "status": {
+    "open": "Offen",
+    "in_progress": "In Arbeit",
+    "done": "Erledigt",
+    "cancelled": "Abgebrochen"
+  },
+  "fields": {
+    "title": "Titel",
+    "titlePlaceholder": "z. B. Neues Produkt launchen",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Wie sieht das Erreichen dieses Ziels aus?",
+    "status": "Status",
+    "targetDate": "Zieldatum",
+    "labels": "Labels",
+    "linkedTasks": "Verknüpfte Aufgaben",
+    "milestones": "Meilensteine",
+    "milestonePlaceholder": "Meilenstein hinzufügen…",
+    "optional": "Optional"
+  },
+  "milestoneProgress": "Meilensteine",
+  "milestoneMark": "Als erledigt markieren",
+  "milestoneUnmark": "Als nicht erledigt markieren",
+  "targetDate": "Ziel",
+  "linkedTasks": "Aufgaben verknüpft",
+  "addMilestoneLabel": "Meilenstein hinzufügen",
+  "removeMilestoneLabel": "Meilenstein entfernen",
+  "completeMilestoneLabel": "Als erledigt markieren",
+  "uncompleteMilestoneLabel": "Als nicht erledigt markieren",
+  "createDialog": {
+    "heading": "Neues Ziel",
+    "description": "Fülle die Details unten aus, um ein neues Ziel zu erstellen.",
+    "submit": "Erstellen",
+    "submitting": "Wird erstellt…",
+    "cancel": "Abbrechen",
+    "success": "Ziel erstellt.",
+    "error": "Ziel konnte nicht erstellt werden."
+  },
+  "editDialog": {
+    "heading": "Ziel bearbeiten",
+    "description": "Aktualisiere die Details unten.",
+    "submit": "Speichern",
+    "submitting": "Wird gespeichert…",
+    "cancel": "Abbrechen",
+    "success": "Ziel gespeichert.",
+    "error": "Ziel konnte nicht gespeichert werden."
+  },
+  "deleteDialog": {
+    "heading": "Dieses Ziel löschen?",
+    "body": "Das Ziel und alle seine Meilensteine werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirm": "Löschen",
+    "cancel": "Abbrechen",
+    "success": "Ziel gelöscht.",
+    "error": "Ziel konnte nicht gelöscht werden."
+  },
+  "actionsLabel": "Zielaktionen",
+  "editLabel": "Bearbeiten",
+  "deleteLabel": "Löschen",
+  "viewLabel": "Details ansehen",
+  "viewDialog": {
+    "createdAt": "Erstellt"
+  },
+  "horizon": {
+    "link": "Zeithorizonte",
+    "metadata": {
+      "title": "Zeithorizonte",
+      "description": "Deine Ziele nach strategischem Zeithorizont."
+    },
+    "pageTitle": "Zeithorizonte",
+    "pageDescription": "Strategische Sicht auf deine Ziele — jetzt, mittelfristig und langfristig.",
+    "backToGoals": "Zurück zu Zielen",
+    "totalGoals": "{count} Ziele gesamt",
+    "now": "Jetzt",
+    "nowSub": "Nächste 90 Tage",
+    "medium": "Mittelfristig",
+    "mediumSub": "3–18 Monate",
+    "long": "Langfristig",
+    "longSub": "Über 18 Monate",
+    "unplaced": "Nicht eingeordnet",
+    "unplacedSub": "Kein Zieldatum gesetzt",
+    "empty": "Keine Ziele in diesem Horizont."
+  },
+  "stakeholders": {
+    "dialogTitle": "Stakeholder-Karte",
+    "dialogDescription": "Verwalte die wichtigsten Personen für dieses Ziel.",
+    "empty": "Noch keine Stakeholder.",
+    "addFirst": "Stakeholder hinzufügen",
+    "addSection": "Stakeholder hinzufügen",
+    "contactLabel": "Kontakt",
+    "contactPlaceholder": "Kontakt auswählen…",
+    "healthLabel": "Beziehungsstatus",
+    "roleLabel": "Rolle",
+    "rolePlaceholder": "z. B. Sponsor, Blocker…",
+    "addButton": "Hinzufügen",
+    "adding": "Wird hinzugefügt…",
+    "addSuccess": "Stakeholder hinzugefügt.",
+    "addError": "Fehler beim Hinzufügen.",
+    "removeLabel": "Entfernen",
+    "removeSuccess": "Stakeholder entfernt.",
+    "removeError": "Fehler beim Entfernen.",
+    "updateError": "Fehler beim Aktualisieren.",
+    "changeHealth": "Status ändern",
+    "openLabel": "Stakeholder-Karte öffnen",
+    "menuLabel": "Stakeholder",
+    "health": {
+      "warm": "Warm",
+      "neutral": "Neutral",
+      "cold": "Kalt"
+    }
+  }
+}

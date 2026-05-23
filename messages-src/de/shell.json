@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "brand": "Princeps",
+    "home": "Arbeitsbereich",
+    "knowledge": "Wissensbasis",
+    "chat": "Chat",
+    "tasks": "Aufgaben",
+    "contacts": "Kontakte",
+    "settings": "Einstellungen",
+    "pricing": "Pläne",
+    "userFallback": "Arbeitsbereich-Nutzer",
+    "signOut": "Abmelden",
+    "signingOut": "Wird abgemeldet…",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "planFree": "Free",
+    "planPro": "Pro",
+    "planPremium": "Premium",
+    "planEnterprise": "Enterprise",
+    "profile": "Mein Profil",
+    "apps": "Apps",
+    "meetings": "Meetings",
+    "decisions": "Entscheidungen",
+    "goals": "Ziele",
+    "labels": "Labels",
+    "intel": "Intelligenz",
+    "memory": "Gedächtnis",
+    "readingQueue": "Leseliste",
+    "briefings": "Tagesbriefing",
+    "reports": "Berichte",
+    "comingSoon": "Bald verfügbar"
+  },
+  "language": {
+    "groupLabel": "Sprachauswahl",
+    "current": "Aktiv"
+  },
+  "search": {
+    "trigger": "Arbeitsbereich durchsuchen",
+    "triggerLabel": "Suchen…",
+    "title": "Schnellnavigation",
+    "description": "Seitennavigation im Arbeitsbereich",
+    "placeholder": "Seite oder Inhalt suchen…",
+    "empty": "Keine Ergebnisse gefunden.",
+    "navigation": "Navigation",
+    "tasks": "Aufgaben",
+    "contacts": "Kontakte",
+    "meetings": "Meetings",
+    "decisions": "Entscheidungen",
+    "goals": "Ziele"
+  },
+  "footer": {
+    "workspace": "Arbeitsbereich",
+    "placeholderLinks": "Richtlinien",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "termsOfUse": "Nutzungsbedingungen",
+    "cookiePolicy": "Cookie-Richtlinie",
+    "security": "Sicherheit",
+    "versionTitle": "Anwendungsversion",
+    "beta": "Stabil",
+    "copyright": "© 2026 PRINCEPS Alle Rechte vorbehalten.",
+    "authors": "Erstellt von AnotherProject™ – ColdByDefault"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "title": "Contacts",
+    "description": "Manage your professional contacts."
+  },
+  "pageTitle": "Contacts",
+  "countSingular": "1 contact",
+  "countPlural": "{count} contacts",
+  "newContact": "New contact",
+  "empty": "No contacts yet.",
+  "fields": {
+    "name": "Name",
+    "namePlaceholder": "Jane Doe",
+    "role": "Role",
+    "rolePlaceholder": "Software Engineer",
+    "company": "Company",
+    "companyPlaceholder": "Acme Inc.",
+    "email": "Email",
+    "emailPlaceholder": "jane@example.com",
+    "phone": "Phone",
+    "phonePlaceholder": "+1 (555) 123-4567",
+    "notes": "Notes",
+    "notesPlaceholder": "Optional notes…",
+    "lastContact": "Last contact",
+    "labels": "Labels",
+    "optional": "Optional"
+  },
+  "createDialog": {
+    "heading": "New contact",
+    "description": "Fill in the details below to add a new contact.",
+    "submit": "Create",
+    "submitting": "Creating…",
+    "success": "Contact created.",
+    "error": "Failed to create contact."
+  },
+  "editDialog": {
+    "heading": "Edit contact",
+    "description": "Update the contact details below.",
+    "submit": "Save",
+    "submitting": "Saving…",
+    "success": "Contact saved.",
+    "error": "Failed to save contact."
+  },
+  "deleteDialog": {
+    "title": "Delete this contact?",
+    "description": "This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "success": "Contact deleted.",
+    "error": "Failed to delete contact."
+  },
+  "actionsLabel": "Contact actions",
+  "viewLabel": "View details",
+  "editLabel": "Edit",
+  "deleteLabel": "Delete",
+  "lastContactLabel": "Last contact",
+  "viewDialog": {
+    "createdAt": "Created"
+  },
+  "refresh": "Refresh",
+  "refreshing": "Refreshing…"
+}

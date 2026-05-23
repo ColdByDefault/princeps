@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "title": "Entscheidungen",
+    "description": "Verwalte deine Entscheidungen."
+  },
+  "pageTitle": "Entscheidungen",
+  "newDecision": "Neue Entscheidung",
+  "empty": "Noch keine Entscheidungen.",
+  "emptyFiltered": "Keine Entscheidungen mit diesem Status.",
+  "filter": {
+    "all": "Alle",
+    "open": "Offen",
+    "decided": "Entschieden",
+    "reversed": "Revidiert"
+  },
+  "status": {
+    "open": "Offen",
+    "decided": "Entschieden",
+    "reversed": "Revidiert"
+  },
+  "fields": {
+    "title": "Titel",
+    "titlePlaceholder": "Entscheidungstitel",
+    "rationale": "Begründung",
+    "rationalePlaceholder": "Warum wurde diese Entscheidung getroffen?",
+    "outcome": "Ergebnis",
+    "outcomePlaceholder": "Was wurde entschieden?",
+    "status": "Status",
+    "decidedAt": "Entscheidungsdatum",
+    "labels": "Labels",
+    "linkedMeeting": "Verknüpftes Meeting",
+    "noMeeting": "Kein Meeting",
+    "optional": "Optional"
+  },
+  "createDialog": {
+    "heading": "Neue Entscheidung",
+    "submit": "Erstellen",
+    "submitting": "Wird erstellt…",
+    "success": "Entscheidung erstellt.",
+    "error": "Entscheidung konnte nicht erstellt werden."
+  },
+  "editDialog": {
+    "heading": "Entscheidung bearbeiten",
+    "submit": "Speichern",
+    "submitting": "Wird gespeichert…",
+    "success": "Entscheidung gespeichert.",
+    "error": "Entscheidung konnte nicht gespeichert werden."
+  },
+  "deleteDialog": {
+    "title": "Entscheidung löschen?",
+    "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirm": "Löschen",
+    "cancel": "Abbrechen",
+    "success": "Entscheidung gelöscht.",
+    "error": "Entscheidung konnte nicht gelöscht werden."
+  },
+  "actionsLabel": "Entscheidungsaktionen",
+  "editLabel": "Bearbeiten",
+  "deleteLabel": "Löschen",
+  "viewLabel": "Details ansehen",
+  "viewDialog": {
+    "meeting": "Meeting",
+    "createdAt": "Erstellt"
+  },
+  "refresh": "Aktualisieren",
+  "refreshing": "Wird aktualisiert…"
+}

@@ -1,0 +1,125 @@
+{
+  "metadata": {
+    "title": "Meetings",
+    "description": "Manage your meetings."
+  },
+  "pageTitle": "Meetings",
+  "newMeeting": "New meeting",
+  "empty": "No meetings yet.",
+  "emptyFiltered": "No meetings with this status.",
+  "filter": {
+    "all": "All",
+    "upcoming": "Upcoming",
+    "done": "Done",
+    "cancelled": "Cancelled"
+  },
+  "status": {
+    "upcoming": "Upcoming",
+    "done": "Done",
+    "cancelled": "Cancelled"
+  },
+  "fields": {
+    "title": "Title",
+    "titlePlaceholder": "Meeting title",
+    "scheduledAt": "Date & time",
+    "scheduledAtPlaceholder": "Pick a date & time",
+    "durationMin": "Duration (min)",
+    "durationPlaceholder": "e.g. 60",
+    "minutesShort": "min",
+    "location": "Location",
+    "locationPlaceholder": "Room, link, or address",
+    "status": "Status",
+    "labels": "Labels",
+    "agenda": "Agenda",
+    "agendaPlaceholder": "Meeting agenda…",
+    "summary": "Summary",
+    "summaryPlaceholder": "Meeting summary or notes…",
+    "participants": "Participants",
+    "addParticipant": "Add participant",
+    "removeParticipant": "Remove participant",
+    "newContact": "New contact",
+    "noMoreContacts": "No more contacts to add.",
+    "linkedTasks": "Linked tasks",
+    "addTask": "Link a task",
+    "removeTask": "Remove task",
+    "noMoreTasks": "No more tasks to link.",
+    "optional": "Optional",
+    "kind": "Type"
+  },
+  "createDialog": {
+    "heading": "New meeting",
+    "submit": "Create",
+    "submitting": "Creating…",
+    "cancel": "Cancel",
+    "syncGoogle": "Also create in Google Calendar",
+    "success": "Meeting created.",
+    "error": "Failed to create meeting."
+  },
+  "editDialog": {
+    "heading": "Edit meeting",
+    "submit": "Save",
+    "submitting": "Saving…",
+    "cancel": "Cancel",
+    "syncGoogle": "Also add to Google Calendar",
+    "success": "Meeting saved.",
+    "error": "Failed to save meeting."
+  },
+  "deleteDialog": {
+    "title": "Delete this meeting?",
+    "description": "This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "success": "Meeting deleted.",
+    "error": "Failed to delete meeting."
+  },
+  "actionsLabel": "Meeting actions",
+  "editLabel": "Edit",
+  "deleteLabel": "Delete",
+  "detailLabel": "View meeting details",
+  "refresh": "Refresh",
+  "refreshing": "Refreshing…",
+  "detailDialog": {
+    "description": "Meeting details"
+  },
+  "source": {
+    "google_calendar": "Google",
+    "llm": "AI"
+  },
+  "kind": {
+    "meeting": "Meeting",
+    "appointment": "Appointment"
+  },
+  "summaryDialog": {
+    "trigger": "Add summary",
+    "heading": "Meeting summary",
+    "submit": "Save",
+    "submitting": "Saving…",
+    "cancel": "Cancel"
+  },
+  "prepPackDialog": {
+    "trigger": "Prep pack",
+    "heading": "Meeting prep pack",
+    "empty": "No prep pack generated yet. Click \"Generate\" to create an AI briefing.",
+    "generate": "Generate",
+    "regenerate": "Regenerate",
+    "generating": "Generating…",
+    "close": "Close",
+    "delete": "Delete",
+    "success": "Prep pack generated.",
+    "error": "Failed to generate prep pack.",
+    "deleteSuccess": "Prep pack deleted.",
+    "deleteError": "Failed to delete prep pack."
+  },
+  "quickContact": {
+    "heading": "New contact",
+    "name": "Name",
+    "namePlaceholder": "Full name",
+    "company": "Company",
+    "companyPlaceholder": "Company name",
+    "email": "Email",
+    "emailPlaceholder": "email@example.com",
+    "submit": "Create & add",
+    "submitting": "Creating…",
+    "cancel": "Cancel"
+  }
+}

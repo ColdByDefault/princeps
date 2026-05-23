@@ -32,7 +32,7 @@
       "generateSuccess": "Briefing refreshed.",
       "generateError": "Failed to refresh briefing.",
       "autoOff": "Automatic daily briefing is turned off.",
-      "autoOffHint": "Enable it in Settings \u2192 Assistant to see your briefing here.",
+      "autoOffHint": "Enable it in Settings → Assistant to see your briefing here.",
       "goToSettings": "Open Settings"
     }
   },
@@ -586,14 +586,14 @@
     "createDialog": {
       "heading": "New decision",
       "submit": "Create",
-      "submitting": "Creating\u2026",
+      "submitting": "Creating…",
       "success": "Decision created.",
       "error": "Failed to create decision."
     },
     "editDialog": {
       "heading": "Edit decision",
       "submit": "Save",
-      "submitting": "Saving\u2026",
+      "submitting": "Saving…",
       "success": "Decision saved.",
       "error": "Failed to save decision."
     },
@@ -708,7 +708,7 @@
       "now": "Now",
       "nowSub": "Next 90 days",
       "medium": "Medium-term",
-      "mediumSub": "3\u201318 months",
+      "mediumSub": "3–18 months",
       "long": "Long-term",
       "longSub": "Beyond 18 months",
       "unplaced": "Unplaced",
@@ -844,7 +844,7 @@
     "createDialog": {
       "heading": "New meeting",
       "submit": "Create",
-      "submitting": "Creating\u2026",
+      "submitting": "Creating…",
       "cancel": "Cancel",
       "syncGoogle": "Also create in Google Calendar",
       "success": "Meeting created.",
@@ -853,7 +853,7 @@
     "editDialog": {
       "heading": "Edit meeting",
       "submit": "Save",
-      "submitting": "Saving\u2026",
+      "submitting": "Saving…",
       "cancel": "Cancel",
       "syncGoogle": "Also add to Google Calendar",
       "success": "Meeting saved.",
@@ -888,7 +888,7 @@
       "trigger": "Add summary",
       "heading": "Meeting summary",
       "submit": "Save",
-      "submitting": "Saving\u2026",
+      "submitting": "Saving…",
       "cancel": "Cancel"
     },
     "prepPackDialog": {
@@ -897,7 +897,7 @@
       "empty": "No prep pack generated yet. Click \"Generate\" to create an AI briefing.",
       "generate": "Generate",
       "regenerate": "Regenerate",
-      "generating": "Generating\u2026",
+      "generating": "Generating…",
       "close": "Close",
       "delete": "Delete",
       "success": "Prep pack generated.",
@@ -914,7 +914,7 @@
       "email": "Email",
       "emailPlaceholder": "email@example.com",
       "submit": "Create & add",
-      "submitting": "Creating\u2026",
+      "submitting": "Creating…",
       "cancel": "Cancel"
     }
   },
@@ -951,7 +951,7 @@
       "title": "Title",
       "titlePlaceholder": "Task title",
       "notes": "Notes",
-      "notesPlaceholder": "Optional notes\u2026",
+      "notesPlaceholder": "Optional notes…",
       "priority": "Priority",
       "dueDate": "Due date",
       "status": "Status",
@@ -960,20 +960,20 @@
       "delegatedTo": "Delegated to",
       "delegatedToPlaceholder": "Name of person (e.g. Marcus)",
       "delegateNotes": "Handoff notes",
-      "delegateNotesPlaceholder": "Context for the handoff\u2026",
+      "delegateNotesPlaceholder": "Context for the handoff…",
       "optional": "Optional"
     },
     "createDialog": {
       "heading": "New task",
       "submit": "Create",
-      "submitting": "Creating\u2026",
+      "submitting": "Creating…",
       "success": "Task created.",
       "error": "Failed to create task."
     },
     "editDialog": {
       "heading": "Edit task",
       "submit": "Save",
-      "submitting": "Saving\u2026",
+      "submitting": "Saving…",
       "success": "Task saved.",
       "error": "Failed to save task."
     },
@@ -1510,21 +1510,21 @@
     "deleteSuccess": "Document deleted.",
     "deleteError": "Delete failed.",
     "deleteTooltip": "Delete document",
-    "deleteAriaLabel": "Delete document \u201c{name}\u201d",
+    "deleteAriaLabel": "Delete document “{name}”",
     "sourceDrive": "Google Drive",
     "drive": {
       "sectionTitle": "Google Drive",
       "sectionDescription": "Browse your Google Drive files and selectively import them into the Knowledge Base.",
-      "loading": "Loading files\u2026",
+      "loading": "Loading files…",
       "refreshFiles": "Refresh",
       "importFile": "Import",
       "reimportFile": "Re-import",
       "imported": "Imported",
-      "importing": "Importing\u2026",
+      "importing": "Importing…",
       "noFiles": "No supported files found in your Drive.",
       "errorLoad": "Failed to load files.",
       "errorImport": "Import failed.",
-      "importSuccess": "\u201c{name}\u201d imported successfully.",
+      "importSuccess": "“{name}” imported successfully.",
       "fileTypeDoc": "Doc",
       "fileTypeSheet": "Sheet",
       "fileTypeSlide": "Slide",
@@ -1537,7 +1537,7 @@
     },
     "deleteDialog": {
       "title": "Delete document?",
-      "description": "\u201c{name}\u201d and all its text chunks will be permanently deleted. The processed character count will remain in your quota.",
+      "description": "“{name}” and all its text chunks will be permanently deleted. The processed character count will remain in your quota.",
       "confirm": "Delete",
       "cancel": "Cancel"
     }

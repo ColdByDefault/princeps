@@ -1,0 +1,276 @@
+{
+  "title": "Verfügbare Werkzeuge",
+  "description": "Formulierungen, mit denen du die einzelnen Werkzeuge aktivieren kannst.",
+  "groups": {
+    "tasks": "Aufgaben",
+    "labels": "Labels",
+    "profile": "Profil",
+    "contacts": "Kontakte",
+    "meetings": "Meetings",
+    "decisions": "Entscheidungen",
+    "goals": "Ziele",
+    "knowledge": "Wissen",
+    "memory": "Gedächtnis",
+    "briefings": "Briefings",
+    "web-research": "Webrecherche",
+    "integrations": "Integrationen",
+    "reading-queue": "Leseliste"
+  },
+  "catalog": {
+    "create_task": {
+      "label": "Aufgabe erstellen",
+      "what": "Erstellt eine neue Aufgabe mit optionaler Priorität, Fälligkeitsdatum, Labels und Delegation (Übergabe an eine benannte Person).",
+      "example": "\"Aufgabe hinzufügen: Q2-Bericht prüfen, hohe Priorität, fällig Freitag\" oder \"Aufgabe erstellen: Bericht senden — an Markus delegieren\""
+    },
+    "list_tasks": {
+      "label": "Aufgaben anzeigen",
+      "what": "Zeigt deine Aufgaben an, optional gefiltert nach Status.",
+      "example": "\"Welche offenen Aufgaben habe ich?\" oder \"Zeige alle dringenden Aufgaben\""
+    },
+    "complete_task": {
+      "label": "Aufgabe abschließen",
+      "what": "Markiert eine Aufgabe als erledigt.",
+      "example": "\"Markiere die Bericht-Aufgabe als erledigt\""
+    },
+    "update_task": {
+      "label": "Aufgabe bearbeiten",
+      "what": "Ändert Titel, Notizen, Priorität, Fälligkeitsdatum, Status oder Labels einer Aufgabe oder delegiert sie an eine benannte Person.",
+      "example": "\"Setze die Bericht-Aufgabe auf dringend und verschiebe das Datum auf Montag\" oder \"Delegiere die Board-Packet-Aufgabe an Sarah\""
+    },
+    "delete_task": {
+      "label": "Aufgabe löschen",
+      "what": "Löscht eine Aufgabe dauerhaft. Der Assistent fragt vor dem Löschen nach einer Bestätigung.",
+      "example": "\"Lösche die Q2-Bericht-Aufgabe\""
+    },
+    "create_label": {
+      "label": "Label erstellen",
+      "what": "Erstellt ein neues globales Label mit optionaler Farbe.",
+      "example": "\"Erstelle ein Label namens Arbeit in Blau\""
+    },
+    "list_labels": {
+      "label": "Labels anzeigen",
+      "what": "Listet alle deine Labels auf.",
+      "example": "\"Welche Labels habe ich?\""
+    },
+    "update_label": {
+      "label": "Label bearbeiten",
+      "what": "Benennt ein Label um oder ändert seine Farbe.",
+      "example": "\"Benenne das Label Arbeit in Professionell um\""
+    },
+    "delete_label": {
+      "label": "Label löschen",
+      "what": "Löscht ein Label und entfernt es von allen verknüpften Einträgen.",
+      "example": "\"Lösche das Label namens Alt\""
+    },
+    "get_user_info": {
+      "label": "Meine Infos abrufen",
+      "what": "Gibt deine Profildaten zurück: Name, E-Mail, Plan, Zeitzone und Mitglied seit.",
+      "example": "\"Welchen Plan habe ich?\" oder \"Zeige meine Profilinfos\""
+    },
+    "create_contact": {
+      "label": "Kontakt erstellen",
+      "what": "Erstellt einen neuen Kontakt mit optionaler Rolle, Firma, E-Mail, Telefon, Notizen und Labels.",
+      "example": "\"Kontakt hinzufügen: Jana Müller, CEO bei Acme, jana@acme.de\""
+    },
+    "list_contacts": {
+      "label": "Kontakte anzeigen",
+      "what": "Zeigt alle deine Kontakte mit Details und IDs an.",
+      "example": "\"Zeige alle meine Kontakte\" oder \"Wer sind meine Kontakte?\""
+    },
+    "update_contact": {
+      "label": "Kontakt bearbeiten",
+      "what": "Aktualisiert die Details oder Labels eines bestehenden Kontakts.",
+      "example": "\"Aktualisiere Janas Telefonnummer auf +49-555-0100\""
+    },
+    "delete_contact": {
+      "label": "Kontakt löschen",
+      "what": "Löscht einen Kontakt dauerhaft.",
+      "example": "\"Lösche den Kontakt Jana Müller\""
+    },
+    "log_contact_interaction": {
+      "label": "Interaktion protokollieren",
+      "what": "Protokolliert eine manuelle Interaktion mit einem Kontakt — Anruf, E-Mail, Meeting oder Notiz — und aktualisiert das Datum des letzten Kontakts.",
+      "example": "\"Ich habe Marcus heute angerufen, er hat das Pilotprojekt bestätigt\""
+    },
+    "create_meeting": {
+      "label": "Meeting erstellen",
+      "what": "Plant ein neues Meeting mit optionaler Dauer, Ort und Labels.",
+      "example": "\"Plane ein Meeting: Q2-Review, morgen um 14 Uhr, 60 Minuten\""
+    },
+    "list_meetings": {
+      "label": "Meetings anzeigen",
+      "what": "Zeigt deine Meetings an, optional gefiltert nach Status.",
+      "example": "\"Welche Meetings habe ich als nächstes?\" oder \"Zeige alle meine Meetings\""
+    },
+    "update_meeting": {
+      "label": "Meeting bearbeiten",
+      "what": "Ändert Titel, Uhrzeit, Dauer, Ort, Status oder Labels eines Meetings.",
+      "example": "\"Verschiebe das Q2-Review auf Freitag um 15 Uhr\""
+    },
+    "delete_meeting": {
+      "label": "Meeting löschen",
+      "what": "Löscht ein Meeting dauerhaft.",
+      "example": "\"Lösche das Q2-Review-Meeting\""
+    },
+    "generate_meeting_prep_pack": {
+      "label": "Meeting-Vorbereitung generieren",
+      "what": "Erstellt ein strukturiertes Vorbereitungsdokument für ein Meeting: Ziel, Kontext, Teilnehmer, offene Punkte, Gesprächsthemen und Fragen.",
+      "example": "\"Bereite mich auf das Q2-Review-Meeting vor\""
+    },
+    "get_meeting_prep_pack": {
+      "label": "Meeting-Vorbereitung lesen",
+      "what": "Zeigt den Inhalt der gespeicherten Vorbereitung für ein Meeting an.",
+      "example": "\"Zeige mir die Vorbereitung für das Q2-Review\""
+    },
+    "clear_meeting_prep_pack": {
+      "label": "Meeting-Vorbereitung löschen",
+      "what": "Löscht die gespeicherte Vorbereitung eines Meetings.",
+      "example": "\"Lösche die Vorbereitung für das Q2-Review\""
+    },
+    "update_meeting_prep_pack": {
+      "label": "Meeting-Vorbereitung bearbeiten",
+      "what": "Bearbeitet den Inhalt einer bestehenden Meeting-Vorbereitung manuell, z. B. um Abschnitte zu ergänzen oder zu korrigieren.",
+      "example": "\"Füge einen Hinweis zu den offenen Punkten in meiner Q2-Review-Vorbereitung hinzu\""
+    },
+    "create_decision": {
+      "label": "Entscheidung erfassen",
+      "what": "Protokolliert eine neue Entscheidung mit optionaler Begründung, Ergebnis und Status.",
+      "example": "\"Entscheidung festhalten: Wechsel zu Postgres, Status entschieden\""
+    },
+    "list_decisions": {
+      "label": "Entscheidungen anzeigen",
+      "what": "Zeigt deine Entscheidungen an, optional gefiltert nach Status.",
+      "example": "\"Welche Entscheidungen sind noch offen?\" oder \"Zeige alle meine Entscheidungen\""
+    },
+    "update_decision": {
+      "label": "Entscheidung bearbeiten",
+      "what": "Ändert Titel, Begründung, Ergebnis, Status oder Labels einer Entscheidung.",
+      "example": "\"Markiere die Postgres-Entscheidung als entschieden\""
+    },
+    "delete_decision": {
+      "label": "Entscheidung löschen",
+      "what": "Löscht eine Entscheidung dauerhaft.",
+      "example": "\"Lösche die Postgres-Entscheidung\""
+    },
+    "create_goal": {
+      "label": "Ziel erstellen",
+      "what": "Erstellt ein neues Ziel mit optionaler Beschreibung, Status, Zieldatum, Labels und Meilensteinen.",
+      "example": "\"Ziel setzen: Beta bis Juni launchen, mit Meilensteinen für Design und Entwicklung\""
+    },
+    "list_goals": {
+      "label": "Ziele anzeigen",
+      "what": "Zeigt deine Ziele an, optional gefiltert nach Status.",
+      "example": "\"Welche offenen Ziele habe ich?\" oder \"Zeige alle meine Ziele\""
+    },
+    "update_goal": {
+      "label": "Ziel bearbeiten",
+      "what": "Ändert Titel, Beschreibung, Status, Zieldatum oder Labels eines Ziels.",
+      "example": "\"Markiere mein Launch-Ziel als in Arbeit\""
+    },
+    "delete_goal": {
+      "label": "Ziel löschen",
+      "what": "Löscht ein Ziel und alle seine Meilensteine dauerhaft.",
+      "example": "\"Lösche das Launch-Ziel\""
+    },
+    "add_goal_milestone": {
+      "label": "Meilenstein hinzufügen",
+      "what": "Fügt einem bestehenden Ziel einen neuen Meilenstein hinzu.",
+      "example": "\"Füge dem Launch-Ziel den Meilenstein 'Design abgeschlossen' hinzu\""
+    },
+    "complete_goal_milestone": {
+      "label": "Meilenstein abschließen",
+      "what": "Markiert einen Meilenstein als abgeschlossen oder nicht abgeschlossen.",
+      "example": "\"Markiere den Meilenstein 'Design abgeschlossen' als erledigt\""
+    },
+    "add_stakeholder": {
+      "label": "Stakeholder hinzufügen",
+      "what": "Verknüpft einen Kontakt als Stakeholder mit einem Ziel und setzt Beziehungsstatus (warm/neutral/kalt) sowie eine optionale Rolle.",
+      "example": "\"Füge Sarah Chen als Sponsor bei meinem Launch-Ziel hinzu\""
+    },
+    "list_stakeholders": {
+      "label": "Stakeholder anzeigen",
+      "what": "Listet die Stakeholder eines Ziels oder alle Stakeholder auf.",
+      "example": "\"Wer sind die Stakeholder bei meinem Umsatzziel?\""
+    },
+    "update_stakeholder_health": {
+      "label": "Stakeholder-Status aktualisieren",
+      "what": "Ändert Beziehungsstatus, Rolle oder Notizen eines Stakeholders.",
+      "example": "\"Markiere Sarah Chen als kalt beim Launch-Ziel\""
+    },
+    "search_knowledge": {
+      "label": "Wissen durchsuchen",
+      "what": "Durchsucht deine persönliche Wissensdatenbank semantisch und findet relevante Ausschnitte aus hochgeladenen Dokumenten.",
+      "example": "\"Was steht in meinem Onboarding-Dokument zur Urlaubsregelung?\""
+    },
+    "create_knowledge": {
+      "label": "Wissen speichern",
+      "what": "Speichert eine neue Information oder Notiz dauerhaft in deiner persönlichen Wissensdatenbank.",
+      "example": "\"Speichere folgendes in meiner Wissensdatenbank: Unser Enterprise-Tarif kostet ab 299 €/Monat\""
+    },
+    "search_drive": {
+      "label": "Drive durchsuchen",
+      "what": "Durchsucht Dokumente aus deinem Google Drive semantisch und findet relevante Ausschnitte.",
+      "example": "\"Was steht in meinem Q1-Bericht über den Umsatz?\""
+    },
+    "web_search": {
+      "label": "Websuche",
+      "what": "Durchsucht das Web nach aktuellen Informationen, Nachrichten oder Themen, die nicht in deiner Wissensdatenbank enthalten sind.",
+      "example": "\"Was ist diese Woche in der Tech-Branche passiert?\""
+    },
+    "fetch_url": {
+      "label": "URL abrufen",
+      "what": "Lädt den Inhalt einer bestimmten URL, damit der Assistent ihn zusammenfassen oder Informationen extrahieren kann.",
+      "example": "\"Fasse diesen Artikel zusammen: https://example.com/artikel\""
+    },
+    "remember_fact": {
+      "label": "Fakt merken",
+      "what": "Speichert einen Schlüssel-Wert-Fakt in deinem persönlichen Gedächtnis, damit der Assistent ihn in zukünftigen Gesprächen abrufen kann.",
+      "example": "\"Merke dir, dass meine bevorzugte Meetings-Zeit 10 Uhr ist\""
+    },
+    "recall_facts": {
+      "label": "Fakten abrufen",
+      "what": "Ruft alle in deinem persönlichen Gedächtnis gespeicherten Fakten ab.",
+      "example": "\"Was weißt du über mich?\" oder \"Was habe ich dir zu merken gebeten?\""
+    },
+    "forget_fact": {
+      "label": "Fakt vergessen",
+      "what": "Löscht einen gespeicherten Gedächtnis-Fakt dauerhaft anhand seiner ID.",
+      "example": "\"Vergiss den Fakt über meine Meeting-Zeit\""
+    },
+    "get_briefing": {
+      "label": "Briefing abrufen",
+      "what": "Zeigt dein aktuelles tägliches Executive-Briefing an.",
+      "example": "\"Zeig mir mein Tagesbriefing\" oder \"Was steht in meinem heutigen Briefing?\""
+    },
+    "regenerate_briefing": {
+      "label": "Briefing neu generieren",
+      "what": "Erstellt ein neues tägliches Briefing aus deinen Aufgaben, Meetings und offenen Entscheidungen.",
+      "example": "\"Briefing neu erstellen\" oder \"Erstelle eine neue Tageszusammenfassung\""
+    },
+    "add_to_reading_queue": {
+      "label": "Zur Leseliste hinzufügen",
+      "what": "Speichert eine URL in deiner Leseliste und erstellt eine KI-Zusammenfassung mit Relevanzbewertung.",
+      "example": "\"Speichere https://example.com/artikel in meiner Leseliste\" oder \"Füge diesen Link meiner Leseliste hinzu\""
+    },
+    "list_reading_queue": {
+      "label": "Leseliste anzeigen",
+      "what": "Zeigt Artikel in deiner Leseliste, optional gefiltert nach Status (ungelesen, gelesen, archiviert).",
+      "example": "\"Was ist in meiner Leseliste?\" oder \"Zeig mir meine ungelesenen Artikel\""
+    },
+    "mark_reading_item_read": {
+      "label": "Artikel als gelesen markieren",
+      "what": "Markiert einen Eintrag in der Leseliste als gelesen.",
+      "example": "\"Markiere den TechCrunch-Artikel als gelesen\""
+    },
+    "archive_reading_item": {
+      "label": "Artikel archivieren",
+      "what": "Archiviert einen Eintrag in der Leseliste.",
+      "example": "\"Archiviere den Artikel über KI-Trends\""
+    },
+    "delete_reading_item": {
+      "label": "Leselisteneintrag löschen",
+      "what": "Entfernt einen Eintrag dauerhaft aus deiner Leseliste.",
+      "example": "\"Lösche den Artikel über JavaScript-Frameworks aus meiner Leseliste\""
+    }
+  }
+}

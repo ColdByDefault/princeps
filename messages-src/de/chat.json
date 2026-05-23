@@ -1,0 +1,69 @@
+{
+  "sidebar": {
+    "navGroup": "Navigation",
+    "navHome": "Arbeitsbereich",
+    "title": "Chats",
+    "newChat": "Neuer Chat",
+    "empty": "Noch keine Chats.",
+    "rename": "Umbenennen",
+    "renamePlaceholder": "Chat-Titel",
+    "delete": "Löschen",
+    "deleteTitle": "Diesen Chat löschen?",
+    "deleteDescription": "Dieser Chat und alle dazugehörigen Nachrichten werden dauerhaft gelöscht.",
+    "deleteConfirm": "Löschen",
+    "deleteCancel": "Abbrechen",
+    "deleteSuccess": "Chat gelöscht.",
+    "renameSuccess": "Chat umbenannt.",
+    "limitReached": "Lösche einen Chat, um einen neuen zu erstellen.",
+    "pendingEmpty": "Schreibe zuerst — leere Chats werden nicht gespeichert.",
+    "actions": "Chat-Aktionen",
+    "groups": {
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "last7": "Letzte 7 Tage",
+      "older": "Älter"
+    },
+    "navGroupAccount": "Konto",
+    "userFallback": "Arbeitsbereich-Nutzer",
+    "navTasks": "Aufgaben",
+    "navGoals": "Ziele",
+    "navContacts": "Kontakte",
+    "navMeetings": "Meetings",
+    "navKnowledge": "Wissensbasis",
+    "navDecisions": "Entscheidungen",
+    "navMemory": "Gedächtnis",
+    "navLabels": "Labels",
+    "navSettings": "Einstellungen",
+    "navPricing": "Preise",
+    "profile": "Mein Profil",
+    "signOut": "Abmelden",
+    "signingOut": "Wird abgemeldet…"
+  },
+  "empty": {
+    "title": "Gespräch starten",
+    "body": "Sende eine Nachricht, um zu beginnen."
+  },
+  "input": {
+    "placeholder": "Frag mich etwas…",
+    "send": "Nachricht senden"
+  },
+  "error": {
+    "send": "Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
+    "providerUnavailable": "KI-Anbieter ist nicht verfügbar oder nicht konfiguriert.",
+    "create": "Chat konnte nicht erstellt werden.",
+    "delete": "Chat konnte nicht gelöscht werden.",
+    "rename": "Chat konnte nicht umbenannt werden."
+  },
+  "settings": {
+    "tooltipLabel": "Chat-Einstellungen",
+    "title": "Chat-Einstellungen",
+    "description": "Diese Einstellungen gelten für alle KI-Anbieter.",
+    "temperature": "Temperatur",
+    "temperatureDescription": "Steuert die Zufälligkeit. Niedriger = fokussierter, höher = kreativer.",
+    "timeout": "Anfrage-Timeout",
+    "timeoutDescription": "Maximale Wartezeit auf eine Antwort (in Sekunden).",
+    "timeoutUnit": "s",
+    "reset": "Auf Standardwerte zurücksetzen",
+    "save": "Änderungen speichern"
+  }
+}

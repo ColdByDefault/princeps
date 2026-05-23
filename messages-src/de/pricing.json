@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "title": "Pläne",
+    "description": "Verfügbare Pläne und Kontingente für Princeps."
+  },
+  "pageTitle": "Pläne & Kontingente",
+  "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",
+  "currentPlan": "Aktueller Plan",
+  "price": {
+    "free": "Kostenlos",
+    "perMonth": "/Monat",
+    "annual": "€{price}/Jahr jährlich",
+    "enterprise": "Kontaktiere uns"
+  },
+  "planNames": {
+    "free": "Free",
+    "pro": "Pro",
+    "premium": "Premium",
+    "enterprise": "Enterprise"
+  },
+  "sections": {
+    "ai": "KI-Nutzung",
+    "data": "Gespeicherte Daten",
+    "widget": "Widget"
+  },
+  "limits": {
+    "messagesPerMonth": "Nachrichten / Monat",
+    "tokensPerMonth": "Token / Monat (ca.)",
+    "chatsPerDay": "Neue Chats / Tag",
+    "chatHistoryTotal": "Gespeicherte Chats",
+    "tasksMax": "Aufgaben",
+    "meetingsMax": "Meetings",
+    "decisionsMax": "Entscheidungen",
+    "contactsMax": "Kontakte",
+    "memoryMax": "Gedächtnis-Fakten",
+    "knowledgeDocs": "Wissensdokumente",
+    "knowledgeFileSize": "Max. Dateigröße",
+    "toolCallsPerMonth": "Werkzeugaufrufe / Monat",
+    "widgetChatsPerDay": "Widget-Chats / Tag",
+    "widgetToolsPerDay": "Widget-Werkzeuge / Tag",
+    "nudgesEnabled": "Proaktive Hinweise"
+  },
+  "yes": "Ja",
+  "no": "Nein",
+  "billing": {
+    "title": "Abrechnung & Konditionen",
+    "sections": [
+      {
+        "heading": "Abrechnungszyklus",
+        "content": "Monatliche Pläne werden monatlich am gleichen Datum abgerechnet. Jährliche Pläne werden einmal pro Jahr im Voraus abgerechnet. Du erhältst eine Rechnung per E-Mail."
+      },
+      {
+        "heading": "Kündigung & Erstattungen",
+        "content": "Du kannst deinen Plan jederzeit kündigen. Der Zugang bleibt bis zum Ende des aktuellen Abrechnungszeitraums erhalten. Für bereits abgerechnete Zeiträume werden keine Erstattungen gewährt."
+      },
+      {
+        "heading": "Testversion",
+        "content": "Der Free-Plan ist dauerhaft ohne Zeitbeschränkung verfügbar. Kostenpflichtige Pläne beginnen sofort nach dem Checkout. Eine kostenlose Testphase für bezahlte Pläne ist aktuell nicht verfügbar."
+      }
+    ]
+  }
+}

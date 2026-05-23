@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "title": "Aufgaben",
+    "description": "Verwalte deine Aufgaben."
+  },
+  "pageTitle": "Aufgaben",
+  "newTask": "Neue Aufgabe",
+  "empty": "Noch keine Aufgaben.",
+  "emptyFiltered": "Keine Aufgaben mit diesem Status.",
+  "filter": {
+    "all": "Alle",
+    "open": "Offen",
+    "inProgress": "In Bearbeitung",
+    "done": "Erledigt",
+    "cancelled": "Abgebrochen",
+    "delegated": "Delegiert"
+  },
+  "priority": {
+    "low": "Niedrig",
+    "normal": "Normal",
+    "high": "Hoch",
+    "urgent": "Dringend"
+  },
+  "status": {
+    "open": "Offen",
+    "inProgress": "In Bearbeitung",
+    "done": "Erledigt",
+    "cancelled": "Abgebrochen"
+  },
+  "fields": {
+    "title": "Titel",
+    "titlePlaceholder": "Aufgabentitel",
+    "notes": "Notizen",
+    "notesPlaceholder": "Optionale Notizen…",
+    "priority": "Priorität",
+    "dueDate": "Fälligkeitsdatum",
+    "status": "Status",
+    "labels": "Labels",
+    "linkedGoals": "Verknüpfte Ziele",
+    "delegatedTo": "Delegiert an",
+    "delegatedToPlaceholder": "Name der Person (z. B. Markus)",
+    "delegateNotes": "Übergabenotizen",
+    "delegateNotesPlaceholder": "Kontext zur Übergabe…",
+    "optional": "Optional"
+  },
+  "createDialog": {
+    "heading": "Neue Aufgabe",
+    "submit": "Erstellen",
+    "submitting": "Wird erstellt…",
+    "success": "Aufgabe erstellt.",
+    "error": "Aufgabe konnte nicht erstellt werden."
+  },
+  "editDialog": {
+    "heading": "Aufgabe bearbeiten",
+    "submit": "Speichern",
+    "submitting": "Wird gespeichert…",
+    "success": "Aufgabe gespeichert.",
+    "error": "Aufgabe konnte nicht gespeichert werden."
+  },
+  "deleteDialog": {
+    "title": "Aufgabe löschen?",
+    "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirm": "Löschen",
+    "cancel": "Abbrechen",
+    "success": "Aufgabe gelöscht.",
+    "error": "Aufgabe konnte nicht gelöscht werden."
+  },
+  "complete": {
+    "success": "Als erledigt markiert.",
+    "reopen": "Aufgabe wiedereröffnet.",
+    "error": "Aufgabe konnte nicht aktualisiert werden."
+  },
+  "actionsLabel": "Aufgabenaktionen",
+  "editLabel": "Bearbeiten",
+  "deleteLabel": "Löschen",
+  "viewLabel": "Details ansehen",
+  "viewDialog": {
+    "meeting": "Meeting",
+    "createdAt": "Erstellt"
+  },
+  "markDoneLabel": "Als erledigt markieren",
+  "reopenLabel": "Wiedereröffnen",
+  "refresh": "Aktualisieren",
+  "refreshing": "Wird aktualisiert…",
+  "delegatedBadge": "Delegiert an {name}",
+  "emptyDelegated": "Keine delegierten Aufgaben."
+}

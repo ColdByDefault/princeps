@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "title": "Labels",
+    "description": "Manage your global labels for tasks, contacts, and other records."
+  },
+  "pageTitle": "Labels",
+  "pageSubtitle": "Global labels used across tasks, meetings, contacts, and decisions.",
+  "title": "Labels",
+  "description": "Global labels for tasks, contacts, and other records.",
+  "newLabel": "New label",
+  "refresh": "Refresh",
+  "refreshing": "Refreshing…",
+  "empty": "No labels yet.",
+  "fields": {
+    "name": "Name",
+    "namePlaceholder": "Label name",
+    "color": "Color",
+    "icon": "Icon",
+    "iconNone": "No icon"
+  },
+  "createDialog": {
+    "heading": "New label",
+    "submit": "Create",
+    "submitting": "Creating…",
+    "success": "Label created.",
+    "error": "Failed to create label.",
+    "duplicateError": "A label with this name already exists."
+  },
+  "editDialog": {
+    "heading": "Edit label",
+    "submit": "Save",
+    "submitting": "Saving…",
+    "success": "Label saved.",
+    "error": "Failed to save label.",
+    "duplicateError": "A label with this name already exists."
+  },
+  "deleteDialog": {
+    "title": "Delete this label?",
+    "description": "The label will be removed from all linked records.",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "success": "Label deleted.",
+    "error": "Failed to delete label."
+  },
+  "editLabel": "Edit",
+  "deleteLabel": "Delete",
+  "viewLabel": "View details",
+  "viewDialog": {
+    "createdAt": "Created"
+  }
+}

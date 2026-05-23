@@ -1,0 +1,50 @@
+{
+  "plan": {
+    "metadata": {
+      "title": "Plan wählen",
+      "description": "Wähle den passenden Plan für deinen Workflow."
+    },
+    "title": "Wähle deinen Plan",
+    "subtitle": "Wähle den Plan, der am besten zu dir passt. Du kannst ihn jederzeit ändern.",
+    "billingMonthly": "Monatlich",
+    "billingAnnual": "Jährlich",
+    "annualSavings": "Spare ~{percent}%",
+    "currentPlan": "Ausgewählt",
+    "planFree": "Kostenlos",
+    "planNames": {
+      "free": "Free",
+      "pro": "Pro",
+      "premium": "Premium",
+      "enterprise": "Enterprise"
+    },
+    "free": {
+      "cta": "Kostenlos fortfahren"
+    },
+    "paid": {
+      "cta": "Abonnieren",
+      "subscribing": "Weiterleitung…",
+      "ariaLabel": "{tier} abonnieren"
+    },
+    "enterprise": {
+      "cta": "Kontaktiere uns",
+      "price": "Individuelles Angebot"
+    },
+    "limits": {
+      "messagesPerMonth": "Nachrichten / Monat",
+      "chatsSaved": "Gespeicherte Chats",
+      "contacts": "Kontakte",
+      "tasks": "Aufgaben",
+      "meetings": "Meetings",
+      "knowledgeDocs": "Wissensdokumente",
+      "nudgesEnabled": "Proaktive Hinweise"
+    },
+    "error": "Checkout konnte nicht gestartet werden. Bitte erneut versuchen.",
+    "perMonth": "/Mo.",
+    "perYear": "/Jahr"
+  },
+  "success": {
+    "title": "Willkommen bei Princeps!",
+    "body": "Dein Plan wird gerade aktiviert – das dauert nur einen Moment.",
+    "redirecting": "Du wirst zu deinem Arbeitsbereich weitergeleitet…"
+  }
+}

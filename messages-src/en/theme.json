@@ -1,0 +1,9 @@
+{
+  "selector": {
+    "groupLabel": "Theme selector",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "current": "Current"
+  }
+}
