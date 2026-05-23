@@ -1,4 +1,4 @@
-{
+﻿{
   "landing": {
     "metadata": {
       "title": "Princeps",
@@ -773,6 +773,7 @@
       "title": "Diesen Fakt l\u00f6schen?",
       "description": "Der Fakt wird dauerhaft aus dem Ged\u00e4chtnis entfernt. Der Assistent hat dann keinen Zugriff mehr darauf.",
       "confirm": "L\u00f6schen",
+      "cancel": "Abbrechen",
       "success": "Fakt gel\u00f6scht.",
       "error": "Fakt konnte nicht gel\u00f6scht werden."
     }

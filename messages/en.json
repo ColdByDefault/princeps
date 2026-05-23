@@ -1,4 +1,4 @@
-{
+﻿{
   "landing": {
     "metadata": {
       "title": "Princeps",
@@ -773,6 +773,7 @@
       "title": "Delete this fact?",
       "description": "This will permanently remove the fact from memory. The assistant will no longer have access to it.",
       "confirm": "Delete",
+      "cancel": "Cancel",
       "success": "Fact deleted.",
       "error": "Failed to delete fact."
     }
