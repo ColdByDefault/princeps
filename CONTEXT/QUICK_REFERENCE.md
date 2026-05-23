@@ -177,11 +177,11 @@ Up to 6 rounds of tool→response cycles
 
 **How it's built**:
 
-- **Model**: `Task` (id, userId, title, notes, status, priority, dueDate, meetingId)
+- **Model**: `Task` (id, userId, title, notes, status, priority, dueDate, meetingId, delegatedTo, delegatedAt, delegateNotes)
 - **Server logic**: `lib/features/tasks/` (create, list, update, delete, shared)
 - **API routes**: `GET|POST /api/tasks`, `PATCH|DELETE /api/tasks/[id]`
-- **UI**: `components/tasks/TasksShell.tsx` + cards, dialogs, mutation hook
-- **Tools**: `create_task`, `list_tasks`, `update_task`, `delete_task` (LLM-callable)
+- **UI**: `components/tasks/TasksShell.tsx` + cards, dialogs, mutation hook; "Delegated" filter tab surfaces tasks where `delegatedTo !== null`
+- **Tools**: `create_task`, `list_tasks`, `update_task`, `delete_task` (LLM-callable); `create_task`/`update_task` accept `delegatedTo` + `delegateNotes`; handler auto-stamps `delegatedAt = now()` when a name is set
 - **Context slot**: `lib/ai/context/tasks.slot.ts` — open + in_progress tasks in system prompt
 - **Tier gate**: `tasksMax` enforced before create (free: 20, pro: 100, premium: 500, enterprise: unlimited)
 

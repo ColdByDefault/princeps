@@ -1107,8 +1107,8 @@
     "catalog": {
       "create_task": {
         "label": "Create Task",
-        "what": "Creates a new task with optional priority, due date, and labels.",
-        "example": "\"Add a task: review the Q2 report, high priority, due Friday\""
+        "what": "Creates a new task with optional priority, due date, labels, and delegation (hand off to a named person).",
+        "example": "\"Add a task: review the Q2 report, high priority, due Friday\" or \"Create a task to send the brief — delegate it to Marcus\""
       },
       "list_tasks": {
         "label": "List Tasks",
@@ -1122,8 +1122,8 @@
       },
       "update_task": {
         "label": "Update Task",
-        "what": "Changes a task's title, notes, priority, due date, status, or labels.",
-        "example": "\"Change the report task to urgent and move the due date to Monday\""
+        "what": "Changes a task's title, notes, priority, due date, status, labels, or delegates it to a named person.",
+        "example": "\"Change the report task to urgent and move the due date to Monday\" or \"Delegate the board packet task to Sarah\""
       },
       "delete_task": {
         "label": "Delete Task",

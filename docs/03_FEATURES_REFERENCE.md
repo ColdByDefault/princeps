@@ -88,7 +88,9 @@ Manual uploads and Drive imports both enforce knowledge quotas. Raw uploaded fil
 
 Purpose:
 
-- Track work with title, notes, status, priority, due date, labels, meeting links, and goal links.
+- Track work with title, notes, status, priority, due date, labels, meeting links, goal links, and delegation (hand off to a named person with optional handoff notes).
+
+Delegation fields on `Task`: `delegatedTo` (free-text name), `delegatedAt` (timestamp), `delegateNotes` (optional context). The **Delegated** filter tab in the UI surfaces all tasks where `delegatedTo` is set. The LLM auto-stamps `delegatedAt = now()` when a name is provided without an explicit date.
 
 Key files:
 

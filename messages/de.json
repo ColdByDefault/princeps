@@ -1107,8 +1107,8 @@
     "catalog": {
       "create_task": {
         "label": "Aufgabe erstellen",
-        "what": "Erstellt eine neue Aufgabe mit optionaler Priorität, Fälligkeitsdatum und Labels.",
-        "example": "\"Aufgabe hinzufügen: Q2-Bericht prüfen, hohe Priorität, fällig Freitag\""
+        "what": "Erstellt eine neue Aufgabe mit optionaler Priorität, Fälligkeitsdatum, Labels und Delegation (Übergabe an eine benannte Person).",
+        "example": "\"Aufgabe hinzufügen: Q2-Bericht prüfen, hohe Priorität, fällig Freitag\" oder \"Aufgabe erstellen: Bericht senden — an Markus delegieren\""
       },
       "list_tasks": {
         "label": "Aufgaben anzeigen",
@@ -1122,8 +1122,8 @@
       },
       "update_task": {
         "label": "Aufgabe bearbeiten",
-        "what": "Ändert Titel, Notizen, Priorität, Fälligkeitsdatum, Status oder Labels einer Aufgabe.",
-        "example": "\"Setze die Bericht-Aufgabe auf dringend und verschiebe das Datum auf Montag\""
+        "what": "Ändert Titel, Notizen, Priorität, Fälligkeitsdatum, Status oder Labels einer Aufgabe oder delegiert sie an eine benannte Person.",
+        "example": "\"Setze die Bericht-Aufgabe auf dringend und verschiebe das Datum auf Montag\" oder \"Delegiere die Board-Packet-Aufgabe an Sarah\""
       },
       "delete_task": {
         "label": "Aufgabe löschen",
