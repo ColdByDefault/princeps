@@ -1089,7 +1089,8 @@
       "error": "Failed to delete label."
     },
     "editLabel": "Edit",
-    "deleteLabel": "Delete"
+    "deleteLabel": "Delete",
+    "actionsLabel": "Label actions"
   },
   "tools": {
     "title": "Available Tools",

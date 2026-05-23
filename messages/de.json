@@ -1089,7 +1089,8 @@
       "error": "Label konnte nicht gelöscht werden."
     },
     "editLabel": "Bearbeiten",
-    "deleteLabel": "Löschen"
+    "deleteLabel": "Löschen",
+    "actionsLabel": "Label-Aktionen"
   },
   "tools": {
     "title": "Verfügbare Werkzeuge",

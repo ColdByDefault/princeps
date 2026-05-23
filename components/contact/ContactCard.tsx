@@ -9,38 +9,14 @@
 "use client";
 
 import { useState } from "react";
-import {
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-  Mail,
-  Phone,
-  CalendarDays,
-  Eye,
-} from "lucide-react";
+import { Mail, Phone, CalendarDays, Eye } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/labels/label-icons";
 import type { LabelIconName } from "@/components/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
 import { cn, formatDate } from "@/lib/core/utils";
 import type { ContactRecord } from "@/types/api";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { ItemCard } from "@/components/shared/ItemCard";
+import { CardIconButton } from "@/components/shared/CardIconButton";
 import { ContactDetailDialog } from "./ContactDetailDialog";
 
 const AVATAR_COLORS = [
@@ -84,156 +60,108 @@ export function ContactCard({
 }: ContactCardProps) {
   const t = useTranslations("contacts");
   const [showDetailDialog, setShowDetailDialog] = useState(false);
-  const [confirmOpen, setConfirmOpen] = useState(false);
-
   const locale = useLocale();
+
   const initials = getInitials(contact.name);
   const avatarColor = getAvatarColor(contact.name);
 
   return (
     <>
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label={t("viewLabel", { name: contact.name })}
-        className={cn(
-          "group flex cursor-pointer items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/40",
-          isDeleting && "opacity-60 pointer-events-none",
-        )}
-        onClick={() => setShowDetailDialog(true)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") setShowDetailDialog(true);
-        }}
+      <ItemCard
+        isDisabled={!!isDeleting}
+        leading={
+          <div
+            className={cn(
+              "flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white",
+              avatarColor,
+            )}
+            aria-hidden="true"
+          >
+            {initials}
+          </div>
+        }
+        inlineActions={
+          <CardIconButton
+            icon={<Eye className="size-3.5" />}
+            label={t("viewLabel")}
+            onClick={() => setShowDetailDialog(true)}
+          />
+        }
+        onEdit={() => onEdit(contact)}
+        editLabel={t("editLabel")}
+        onDelete={() => onDelete(contact.id)}
+        deleteLabel={t("deleteLabel")}
+        deleteTitle={t("deleteDialog.title")}
+        deleteDescription={t("deleteDialog.description")}
+        deleteCancelLabel={t("deleteDialog.cancel")}
+        deleteConfirmLabel={t("deleteDialog.confirm")}
+        actionsAriaLabel={t("actionsLabel")}
       >
-        {/* Avatar */}
-        <div
-          className={cn(
-            "flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white",
-            avatarColor,
-          )}
-          aria-hidden="true"
-        >
-          {initials}
-        </div>
-
-        {/* Name + role/company — fixed width column */}
-        <div className="min-w-0 w-48 shrink-0">
-          <p className="truncate text-sm font-medium">{contact.name}</p>
+        <div className="space-y-1">
+          <p className="text-sm font-medium leading-snug">{contact.name}</p>
           {(contact.role || contact.company) && (
-            <p className="text-muted-foreground truncate text-xs">
+            <p className="text-xs text-muted-foreground">
               {[contact.role, contact.company].filter(Boolean).join(" · ")}
             </p>
           )}
-        </div>
-
-        {/* Email */}
-        <div className="hidden min-w-0 flex-1 sm:block">
-          {contact.email ? (
-            <a
-              href={`mailto:${contact.email}`}
-              className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-sm transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Mail className="size-3.5 shrink-0" />
-              <span className="truncate">{contact.email}</span>
-            </a>
-          ) : null}
-        </div>
-
-        {/* Phone */}
-        <div className="hidden w-36 shrink-0 lg:block">
-          {contact.phone ? (
-            <a
-              href={`tel:${contact.phone}`}
-              className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-sm transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Phone className="size-3.5 shrink-0" />
-              <span className="truncate">{contact.phone}</span>
-            </a>
-          ) : null}
-        </div>
-
-        {/* Labels */}
-        <div className="hidden w-40 shrink-0 items-center gap-1 xl:flex">
-          {contact.labels.slice(0, 2).map((label) => {
-            const Icon = label.icon
-              ? LABEL_ICON_MAP[label.icon as LabelIconName]
-              : null;
-            return (
-              <span
-                key={label.id}
-                className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium"
-                style={{
-                  backgroundColor: `${label.color}22`,
-                  color: label.color,
-                  border: `1px solid ${label.color}44`,
-                }}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+            {contact.email && (
+              <a
+                href={`mailto:${contact.email}`}
+                className="flex items-center gap-1 hover:text-foreground transition-colors"
+                onClick={(e) => e.stopPropagation()}
               >
-                {Icon && <Icon className="size-3 shrink-0" />}
-                {label.name}
+                <Mail className="size-3.5 shrink-0" />
+                {contact.email}
+              </a>
+            )}
+            {contact.phone && (
+              <a
+                href={`tel:${contact.phone}`}
+                className="flex items-center gap-1 hover:text-foreground transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Phone className="size-3.5 shrink-0" />
+                {contact.phone}
+              </a>
+            )}
+            {contact.lastContact && (
+              <span className="flex items-center gap-1">
+                <CalendarDays className="size-3.5 shrink-0" />
+                {formatDate(contact.lastContact, locale)}
               </span>
-            );
-          })}
-          {contact.labels.length > 2 && (
-            <span className="text-muted-foreground inline-flex h-5 shrink-0 items-center rounded-full border border-border px-2 text-[10px] font-medium">
-              +{contact.labels.length - 2}
-            </span>
+            )}
+          </div>
+          {contact.labels.length > 0 && (
+            <div className="flex flex-wrap gap-1 pt-0.5">
+              {contact.labels.slice(0, 4).map((label) => {
+                const Icon = label.icon
+                  ? LABEL_ICON_MAP[label.icon as LabelIconName]
+                  : null;
+                return (
+                  <span
+                    key={label.id}
+                    className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium"
+                    style={{
+                      backgroundColor: `${label.color}22`,
+                      color: label.color,
+                      border: `1px solid ${label.color}44`,
+                    }}
+                  >
+                    {Icon && <Icon className="size-3 shrink-0" />}
+                    {label.name}
+                  </span>
+                );
+              })}
+              {contact.labels.length > 4 && (
+                <span className="text-muted-foreground inline-flex h-5 shrink-0 items-center rounded-full border border-border px-2 text-[10px] font-medium">
+                  +{contact.labels.length - 4}
+                </span>
+              )}
+            </div>
           )}
         </div>
-
-        {/* Last contact date */}
-        <div className="text-muted-foreground hidden w-28 shrink-0 items-center gap-1 text-xs lg:flex">
-          {contact.lastContact ? (
-            <>
-              <CalendarDays className="size-3 shrink-0" />
-              {formatDate(contact.lastContact, locale)}
-            </>
-          ) : null}
-        </div>
-
-        {/* Actions */}
-        <div className="ml-auto shrink-0" onClick={(e) => e.stopPropagation()}>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  className="size-7 cursor-pointer"
-                  aria-label={t("actionsLabel")}
-                />
-              }
-            >
-              <MoreHorizontal className="size-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => setShowDetailDialog(true)}
-                className="cursor-pointer"
-              >
-                <Eye className="mr-2 size-3.5" />
-                {t("viewLabel")}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => onEdit(contact)}
-                className="cursor-pointer"
-              >
-                <Pencil className="mr-2 size-3.5" />
-                {t("editLabel")}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => setConfirmOpen(true)}
-                className="cursor-pointer text-destructive focus:text-destructive"
-              >
-                <Trash2 className="mr-2 size-3.5" />
-                {t("deleteLabel")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+      </ItemCard>
 
       <ContactDetailDialog
         contact={contact}
@@ -242,31 +170,6 @@ export function ContactCard({
         onEdit={onEdit}
         onDelete={onDelete}
       />
-
-      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("deleteDialog.description")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
-            </AlertDialogCancel>
-            <AlertDialogAction
-              className="cursor-pointer"
-              onClick={() => {
-                setConfirmOpen(false);
-                onDelete(contact.id);
-              }}
-            >
-              {t("deleteDialog.confirm")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }
