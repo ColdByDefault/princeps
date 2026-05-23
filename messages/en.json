@@ -1,4 +1,4 @@
-﻿{
+{
   "landing": {
     "metadata": {
       "title": "Princeps",
@@ -1364,31 +1364,6 @@
         "label": "Regenerate Briefing",
         "what": "Generates a fresh daily briefing from your tasks, meetings, and decisions.",
         "example": "\"Regenerate my briefing\" or \"Create a new daily summary\""
-      },
-      "add_to_reading_queue": {
-        "label": "Add to Reading Queue",
-        "what": "Saves a URL to your reading queue and generates an AI summary with a relevance score.",
-        "example": "\"Save https://example.com/article to my reading queue\" or \"Add this link to my reading list\""
-      },
-      "list_reading_queue": {
-        "label": "List Reading Queue",
-        "what": "Shows articles in your reading queue, optionally filtered by status (unread, read, archived).",
-        "example": "\"What's in my reading queue?\" or \"Show me my unread articles\""
-      },
-      "mark_reading_item_read": {
-        "label": "Mark Article as Read",
-        "what": "Marks a reading queue item as read.",
-        "example": "\"Mark the TechCrunch article as read\""
-      },
-      "archive_reading_item": {
-        "label": "Archive Article",
-        "what": "Archives a reading queue item.",
-        "example": "\"Archive the article about AI trends\""
-      },
-      "delete_reading_item": {
-        "label": "Delete Reading Item",
-        "what": "Permanently removes an item from your reading queue.",
-        "example": "\"Delete the article about JavaScript frameworks from my reading queue\""
       }
     }
   },
