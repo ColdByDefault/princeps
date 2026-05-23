@@ -2,14 +2,14 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.6
  * @since beta
  */
 
 "use client";
 
 import { useState, useTransition } from "react";
-import { Pencil, Trash2, Plus, Tag, RefreshCw, X } from "lucide-react";
+import { Plus, Tag, RefreshCw, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { cn } from "@/lib/core/utils";
@@ -26,19 +26,10 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogAction,
-  AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { LabelRecord } from "@/types/api";
+import { ItemCard } from "@/components/shared/ItemCard";
 
 // ─── Preset colors ─────────────────────────────────────────────────────────
 
@@ -162,9 +153,9 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
   const [editIcon, setEditIcon] = useState<string | null>(null);
   const [isPendingEdit, startEdit] = useTransition();
 
-  // Delete dialog
-  const [deletingLabel, setDeletingLabel] = useState<LabelRecord | null>(null);
-  const [isPendingDelete, startDelete] = useTransition();
+  // Delete
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [, startDelete] = useTransition();
 
   // Refresh
   const [isPendingRefresh, startRefresh] = useTransition();
@@ -258,20 +249,19 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
 
   // ── Delete ────────────────────────────────────────────────────────────────
 
-  function handleDelete() {
-    if (!deletingLabel) return;
-    const id = deletingLabel.id;
-
+  function handleDeleteLabel(id: string) {
+    setDeletingId(id);
     startDelete(async () => {
       const res = await fetch(`/api/labels/${id}`, { method: "DELETE" });
 
       if (!res.ok) {
         toast.error(t("deleteDialog.error"));
+        setDeletingId(null);
         return;
       }
 
       setLabels((prev) => prev.filter((l) => l.id !== id));
-      setDeletingLabel(null);
+      setDeletingId(null);
       toast.success(t("deleteDialog.success"));
     });
   }
@@ -336,51 +326,36 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
           </Button>
         </div>
       ) : (
-        <div className="divide-y divide-border/60 rounded-lg border">
+        <div className="space-y-2">
           {labels.map((label) => {
             const Icon = label.icon
               ? LABEL_ICON_MAP[label.icon as LabelIconName]
               : null;
             return (
-              <div
+              <ItemCard
                 key={label.id}
-                className="flex items-center justify-between gap-3 px-4 py-3"
+                isDisabled={deletingId === label.id}
+                leading={
+                  <div className="mt-0.5 shrink-0 flex items-center gap-1.5">
+                    <span
+                      className="size-3 rounded-full"
+                      style={{ backgroundColor: label.color }}
+                    />
+                    {Icon && <Icon className="size-4 text-muted-foreground" />}
+                  </div>
+                }
+                onEdit={() => openEdit(label)}
+                editLabel={t("editLabel")}
+                onDelete={() => handleDeleteLabel(label.id)}
+                deleteLabel={t("deleteLabel")}
+                deleteTitle={t("deleteDialog.title")}
+                deleteDescription={t("deleteDialog.description")}
+                deleteCancelLabel={t("deleteDialog.cancel")}
+                deleteConfirmLabel={t("deleteDialog.confirm")}
+                actionsAriaLabel={t("actionsLabel")}
               >
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <span
-                    className="size-3 shrink-0 rounded-full"
-                    style={{ backgroundColor: label.color }}
-                  />
-                  {Icon && (
-                    <Icon className="size-4 shrink-0 text-muted-foreground" />
-                  )}
-                  <span className="truncate text-sm font-medium">
-                    {label.name}
-                  </span>
-                </div>
-                <div className="flex shrink-0 items-center gap-0.5">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="size-8 cursor-pointer"
-                    aria-label={t("editLabel")}
-                    onClick={() => openEdit(label)}
-                  >
-                    <Pencil className="size-3.5" />
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="size-8 cursor-pointer text-destructive hover:text-destructive"
-                    aria-label={t("deleteLabel")}
-                    onClick={() => setDeletingLabel(label)}
-                  >
-                    <Trash2 className="size-3.5" />
-                  </Button>
-                </div>
-              </div>
+                <p className="text-sm font-medium">{label.name}</p>
+              </ItemCard>
             );
           })}
         </div>
@@ -472,35 +447,6 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
           </form>
         </DialogContent>
       </Dialog>
-
-      {/* ── Delete confirm ──────────────────────────────────────────────── */}
-      <AlertDialog
-        open={deletingLabel !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeletingLabel(null);
-        }}
-      >
-        <AlertDialogContent size="sm">
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("deleteDialog.description")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={isPendingDelete}
-              className="cursor-pointer"
-            >
-              {t("deleteDialog.confirm")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }
