@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.4
  * @since beta
  */
 
@@ -76,6 +76,15 @@ export function ChatWidget({
   const [input, setInput] = useState("");
   const [sessionLoaded, setSessionLoaded] = useState(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
+  // Live tool/agent activity shown inside the thinking indicator.
+  // Updated as each tool fires; cleared (and summarised) once the stream ends.
+  const [widgetActivity, setWidgetActivity] = useState<{
+    labels: string[];
+    latest: string;
+  } | null>(null);
+  const widgetActivityRef = useRef<{ labels: string[]; latest: string } | null>(
+    null,
+  );
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -320,18 +329,12 @@ export function ChatWidget({
                 delete_label: "Label deleted",
               };
               const label = actionNameMap[event.name] ?? event.name;
-              const record = event.record as { name?: string; title?: string };
-              const recordName = record.name ?? record.title ?? null;
-              setMessages((prev) => [
-                ...prev,
-                {
-                  id: Date.now(),
-                  text: recordName ? `${label}: ${recordName}` : label,
-                  sender: "action",
-                  time: getTime(),
-                  actionLabel: label,
-                },
-              ]);
+              const next = {
+                labels: [...(widgetActivityRef.current?.labels ?? []), label],
+                latest: label,
+              };
+              widgetActivityRef.current = next;
+              setWidgetActivity(next);
             } else if (event.type === "agent") {
               const agentLabelMap: Record<string, string> = {
                 "task-extractor": "Task Extractor",
@@ -341,16 +344,12 @@ export function ChatWidget({
                 "signal-feed": "Signal Feed",
               };
               const label = agentLabelMap[event.name] ?? event.name;
-              setMessages((prev) => [
-                ...prev,
-                {
-                  id: Date.now(),
-                  text: label,
-                  sender: "agent",
-                  time: getTime(),
-                  actionLabel: label,
-                },
-              ]);
+              const next = {
+                labels: [...(widgetActivityRef.current?.labels ?? []), label],
+                latest: label,
+              };
+              widgetActivityRef.current = next;
+              setWidgetActivity(next);
             } else if (event.type === "done") {
               break;
             } else if (event.type === "error") {
@@ -382,6 +381,29 @@ export function ChatWidget({
           );
         }
       } finally {
+        // If any tools / agents ran, insert a single compact summary line
+        // immediately before the assistant's response message.
+        const activity = widgetActivityRef.current;
+        if (activity && activity.labels.length > 0) {
+          const unique = [...new Set(activity.labels)];
+          const summaryText =
+            unique.length <= 2
+              ? unique.join(" · ")
+              : `${unique[0]} · +${unique.length - 1} more`;
+          setMessages((prev) => {
+            const idx = prev.findIndex((m) => m.id === assistantId);
+            const summaryMsg: Message = {
+              id: Date.now(),
+              text: summaryText,
+              sender: "action",
+              time: getTime(),
+            };
+            if (idx < 0) return [...prev, summaryMsg];
+            return [...prev.slice(0, idx), summaryMsg, ...prev.slice(idx)];
+          });
+        }
+        widgetActivityRef.current = null;
+        setWidgetActivity(null);
         setThinking(false);
         requestAnimationFrame(() => inputRef.current?.focus());
         window.dispatchEvent(new CustomEvent("notifications:refresh"));
@@ -488,9 +510,11 @@ export function ChatWidget({
                   )}
                 >
                   {msg.sender === "action" ? (
-                    <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
-                      <CheckCircle2 className="size-4 shrink-0" />
-                      <span>{msg.text}</span>
+                    <div className="flex items-center gap-1.5 py-0.5 text-[11px]">
+                      <CheckCircle2 className="size-3 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-emerald-700 dark:text-emerald-400">
+                        {msg.text}
+                      </span>
                     </div>
                   ) : msg.sender === "agent" ? (
                     <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm border border-violet-500/30 bg-violet-500/10 px-3.5 py-2.5 text-sm text-violet-700 dark:text-violet-400">
@@ -567,18 +591,34 @@ export function ChatWidget({
                   </div>
                   <div className="ml-6 flex flex-col gap-2.5 rounded-2xl rounded-bl-sm border border-border bg-card px-4 py-3 shadow-sm">
                     <div className="flex items-center gap-2">
-                      <div className="flex gap-1">
-                        {[0, 1, 2].map((i) => (
-                          <span
-                            key={i}
-                            className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary/50"
-                            style={{ animationDelay: `${i * 0.15}s` }}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-[11px] text-muted-foreground">
-                        Thinking…
-                      </span>
+                      {widgetActivity ? (
+                        <>
+                          <span className="size-1.5 shrink-0 rounded-full bg-emerald-500 animate-pulse" />
+                          <span className="max-w-35 truncate text-[11px] font-medium text-emerald-700 dark:text-emerald-400">
+                            {widgetActivity.latest}
+                          </span>
+                          {widgetActivity.labels.length > 1 && (
+                            <span className="shrink-0 text-[11px] text-muted-foreground">
+                              · +{widgetActivity.labels.length - 1} more
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex gap-1">
+                            {[0, 1, 2].map((i) => (
+                              <span
+                                key={i}
+                                className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary/50"
+                                style={{ animationDelay: `${i * 0.15}s` }}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-[11px] text-muted-foreground">
+                            Thinking…
+                          </span>
+                        </>
+                      )}
                     </div>
                     <div className="h-1 w-28 overflow-hidden rounded-full bg-muted">
                       <div
