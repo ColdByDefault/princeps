@@ -54,10 +54,246 @@ function formatReportDate(value: string): string {
   });
 }
 
+function formatShortDate(value: string | null | undefined): string | null {
+  if (!value) return null;
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date.toLocaleDateString(undefined, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function normalizeForMatch(value: string): string {
+  return value.trim().toLowerCase();
+}
+
+function levenshteinDistance(a: string, b: string): number {
+  if (a === b) return 0;
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+
+  const previous = Array.from({ length: b.length + 1 }, (_, i) => i);
+  const current = Array.from({ length: b.length + 1 }, () => 0);
+
+  for (let i = 1; i <= a.length; i += 1) {
+    current[0] = i;
+
+    for (let j = 1; j <= b.length; j += 1) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+
+      current[j] = Math.min(
+        current[j - 1] + 1,
+        previous[j] + 1,
+        previous[j - 1] + cost,
+      );
+    }
+
+    for (let j = 0; j <= b.length; j += 1) {
+      previous[j] = current[j];
+    }
+  }
+
+  return previous[b.length];
+}
+
+function maxFuzzyDistance(queryLength: number): number {
+  if (queryLength <= 4) return 1;
+  if (queryLength <= 8) return 2;
+  return 3;
+}
+
+function findHighlightRange(
+  text: string,
+  query: string,
+): { start: number; end: number } | null {
+  const normalizedQuery = normalizeForMatch(query);
+
+  if (!normalizedQuery) {
+    return null;
+  }
+
+  const loweredText = text.toLowerCase();
+  const directIndex = loweredText.indexOf(normalizedQuery);
+
+  if (directIndex >= 0) {
+    return {
+      start: directIndex,
+      end: directIndex + normalizedQuery.length,
+    };
+  }
+
+  if (normalizedQuery.length < 3) {
+    return null;
+  }
+
+  const wordMatches = [...text.matchAll(/[\p{L}\p{N}_-]+/gu)];
+  const threshold = maxFuzzyDistance(normalizedQuery.length);
+
+  let bestMatch: { start: number; end: number; distance: number } | null = null;
+
+  for (const match of wordMatches) {
+    const matchedWord = match[0];
+    const start = match.index;
+
+    if (start === undefined) {
+      continue;
+    }
+
+    const distance = levenshteinDistance(
+      normalizedQuery,
+      normalizeForMatch(matchedWord),
+    );
+
+    if (distance > threshold) {
+      continue;
+    }
+
+    if (!bestMatch || distance < bestMatch.distance) {
+      bestMatch = {
+        start,
+        end: start + matchedWord.length,
+        distance,
+      };
+    }
+  }
+
+  return bestMatch ? { start: bestMatch.start, end: bestMatch.end } : null;
+}
+
+function HighlightedText({
+  text,
+  query,
+  className,
+}: {
+  text: string;
+  query: string;
+  className?: string;
+}) {
+  const range = findHighlightRange(text, query);
+
+  if (!range) {
+    return <span className={className}>{text}</span>;
+  }
+
+  return (
+    <span className={className}>
+      {text.slice(0, range.start)}
+      <mark className="rounded-sm bg-amber-200/70 px-0.5 text-foreground">
+        {text.slice(range.start, range.end)}
+      </mark>
+      {text.slice(range.end)}
+    </span>
+  );
+}
+
+function PreviewChips({
+  labels,
+  query,
+}: {
+  labels: string[];
+  query: string;
+}) {
+  const visible = labels.slice(0, 3);
+
+  if (visible.length === 0) {
+    return null;
+  }
+
+  return (
+    <span className="mt-1 flex flex-wrap gap-1">
+      {visible.map((label) => (
+        <span
+          key={label}
+          className="rounded-sm border border-border/70 bg-muted/50 px-1.5 py-0 text-[10px] leading-4 text-muted-foreground"
+        >
+          <HighlightedText text={label} query={query} />
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function joinPreview(parts: Array<string | null | undefined>): string {
+  return parts.filter(Boolean).join(" • ");
+}
+
+function fallbackStatus(status: string): string {
+  return status.replace(/_/g, " ");
+}
+
 export function GlobalSearch() {
-  const { open, setOpen, data, navigate } = useGlobalSearch();
+  const { open, setOpen, data, query, setQuery, navigate } = useGlobalSearch();
   const t = useTranslations("shell");
   const tCommon = useTranslations("common");
+  const tTasks = useTranslations("tasks");
+  const tContacts = useTranslations("contacts");
+  const tMeetings = useTranslations("meetings");
+  const tDecisions = useTranslations("decisions");
+  const tGoals = useTranslations("goals");
+  const tReports = useTranslations("reports");
+
+  const getTaskStatusLabel = (status: string): string => {
+    switch (status) {
+      case "open":
+        return tCommon("status.open");
+      case "in_progress":
+        return tTasks("status.inProgress");
+      case "done":
+        return tCommon("status.done");
+      case "cancelled":
+        return tCommon("status.cancelled");
+      default:
+        return fallbackStatus(status);
+    }
+  };
+
+  const getMeetingStatusLabel = (status: string): string => {
+    switch (status) {
+      case "upcoming":
+        return tMeetings("status.upcoming");
+      case "done":
+        return tCommon("status.done");
+      case "cancelled":
+        return tCommon("status.cancelled");
+      default:
+        return fallbackStatus(status);
+    }
+  };
+
+  const getDecisionStatusLabel = (status: string): string => {
+    switch (status) {
+      case "open":
+        return tCommon("status.open");
+      case "decided":
+        return tDecisions("status.decided");
+      case "reversed":
+        return tDecisions("status.reversed");
+      default:
+        return fallbackStatus(status);
+    }
+  };
+
+  const getGoalStatusLabel = (status: string): string => {
+    switch (status) {
+      case "open":
+        return tCommon("status.open");
+      case "in_progress":
+        return tGoals("status.in_progress");
+      case "done":
+        return tCommon("status.done");
+      case "cancelled":
+        return tCommon("status.cancelled");
+      default:
+        return fallbackStatus(status);
+    }
+  };
 
   const navLinks: { href: string; icon: LucideIcon; label: string }[] = [
     { href: "/home", icon: LayoutDashboard, label: t("nav.home") },
@@ -104,11 +340,20 @@ export function GlobalSearch() {
   return (
     <CommandDialog
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(nextOpen) => {
+        setOpen(nextOpen);
+        if (!nextOpen) {
+          setQuery("");
+        }
+      }}
       title={t("search.title")}
       description={t("search.description")}
     >
-      <CommandInput placeholder={t("search.placeholder")} />
+      <CommandInput
+        value={query}
+        onValueChange={setQuery}
+        placeholder={t("search.placeholder")}
+      />
       <CommandList>
         {open && data === null ? (
           <div className="flex items-center justify-center py-8">
@@ -138,12 +383,17 @@ export function GlobalSearch() {
                   const reportLabel =
                     item.toolsCalled.slice(0, 3).join(" · ") ||
                     tCommon("entities.reports");
+                  const reportPreview = joinPreview([
+                    item.matchedTool,
+                    `${item.toolCallCount} ${tReports("toolCalls")}`,
+                  ]);
 
                   return (
                     <CommandItem
                       key={item.id}
                       value={`${reportDate} ${reportLabel}`}
                       keywords={buildKeywords(
+                        query,
                         "report",
                         "bericht",
                         tCommon("entities.reports"),
@@ -152,8 +402,19 @@ export function GlobalSearch() {
                       )}
                       onSelect={() => navigate(`/reports#report-${item.id}`)}
                     >
-                      <BarChart3 />
-                      <span className="flex-1 truncate">{reportLabel}</span>
+                      <BarChart3 className="self-start mt-0.5" />
+                      <span className="flex min-w-0 flex-1 flex-col">
+                        <HighlightedText
+                          text={reportLabel}
+                          query={query}
+                          className="truncate"
+                        />
+                        {reportPreview && (
+                          <span className="truncate text-xs text-muted-foreground">
+                            <HighlightedText text={reportPreview} query={query} />
+                          </span>
+                        )}
+                      </span>
                       <span className="ml-auto shrink-0 text-xs text-muted-foreground">
                         {reportDate}
                       </span>
@@ -170,13 +431,23 @@ export function GlobalSearch() {
                     key={item.id}
                     value={item.name}
                     keywords={buildKeywords(
+                      query,
                       "label",
                       tCommon("entities.labels"),
                     )}
                     onSelect={() => navigate("/labels")}
                   >
-                    <Tag />
-                    {item.name}
+                    <Tag className="self-start mt-0.5" />
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <HighlightedText
+                        text={item.name}
+                        query={query}
+                        className="truncate"
+                      />
+                      <span className="truncate text-xs text-muted-foreground">
+                        {item.color}
+                      </span>
+                    </span>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -189,14 +460,34 @@ export function GlobalSearch() {
                     key={item.id}
                     value={item.title}
                     keywords={buildKeywords(
+                      query,
                       "task",
                       tCommon("entities.tasks"),
+                      item.status,
                       ...item.labels.map((label) => label.name),
                     )}
                     onSelect={() => navigate("/tasks")}
                   >
-                    <CheckSquare />
-                    {item.title}
+                    <CheckSquare className="self-start mt-0.5" />
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <HighlightedText
+                        text={item.title}
+                        query={query}
+                        className="truncate"
+                      />
+                      <span className="truncate text-xs text-muted-foreground">
+                        {joinPreview([
+                          getTaskStatusLabel(item.status),
+                          item.dueDate
+                            ? `${tTasks("fields.dueDate")}: ${formatShortDate(item.dueDate) ?? ""}`
+                            : null,
+                        ])}
+                      </span>
+                      <PreviewChips
+                        labels={item.labels.map((label) => label.name)}
+                        query={query}
+                      />
+                    </span>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -209,20 +500,35 @@ export function GlobalSearch() {
                     key={item.id}
                     value={item.name}
                     keywords={buildKeywords(
+                      query,
                       "contact",
                       tCommon("entities.contacts"),
+                      item.role,
                       item.company,
                       ...item.labels.map((label) => label.name),
                     )}
                     onSelect={() => navigate("/contacts")}
                   >
-                    <Users />
-                    <span className="flex-1 truncate">{item.name}</span>
-                    {item.company && (
-                      <span className="ml-auto shrink-0 text-xs text-muted-foreground">
-                        {item.company}
+                    <Users className="self-start mt-0.5" />
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <HighlightedText
+                        text={item.name}
+                        query={query}
+                        className="truncate"
+                      />
+                      <span className="truncate text-xs text-muted-foreground">
+                        {joinPreview([
+                          item.role
+                            ? `${tContacts("fields.role")}: ${item.role}`
+                            : null,
+                          item.company,
+                        ])}
                       </span>
-                    )}
+                      <PreviewChips
+                        labels={item.labels.map((label) => label.name)}
+                        query={query}
+                      />
+                    </span>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -235,14 +541,32 @@ export function GlobalSearch() {
                     key={item.id}
                     value={item.title}
                     keywords={buildKeywords(
+                      query,
                       "meeting",
                       tCommon("entities.meetings"),
+                      item.status,
                       ...item.labels.map((label) => label.name),
                     )}
                     onSelect={() => navigate("/meetings")}
                   >
-                    <CalendarDays />
-                    {item.title}
+                    <CalendarDays className="self-start mt-0.5" />
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <HighlightedText
+                        text={item.title}
+                        query={query}
+                        className="truncate"
+                      />
+                      <span className="truncate text-xs text-muted-foreground">
+                        {joinPreview([
+                          getMeetingStatusLabel(item.status),
+                          `${tMeetings("fields.scheduledAt")}: ${formatShortDate(item.scheduledAt) ?? ""}`,
+                        ])}
+                      </span>
+                      <PreviewChips
+                        labels={item.labels.map((label) => label.name)}
+                        query={query}
+                      />
+                    </span>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -255,14 +579,34 @@ export function GlobalSearch() {
                     key={item.id}
                     value={item.title}
                     keywords={buildKeywords(
+                      query,
                       "decision",
                       tCommon("entities.decisions"),
+                      item.status,
                       ...item.labels.map((label) => label.name),
                     )}
                     onSelect={() => navigate("/decisions")}
                   >
-                    <Scale />
-                    {item.title}
+                    <Scale className="self-start mt-0.5" />
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <HighlightedText
+                        text={item.title}
+                        query={query}
+                        className="truncate"
+                      />
+                      <span className="truncate text-xs text-muted-foreground">
+                        {joinPreview([
+                          getDecisionStatusLabel(item.status),
+                          item.decidedAt
+                            ? `${tDecisions("fields.decidedAt")}: ${formatShortDate(item.decidedAt) ?? ""}`
+                            : null,
+                        ])}
+                      </span>
+                      <PreviewChips
+                        labels={item.labels.map((label) => label.name)}
+                        query={query}
+                      />
+                    </span>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -275,14 +619,34 @@ export function GlobalSearch() {
                     key={item.id}
                     value={item.title}
                     keywords={buildKeywords(
+                      query,
                       "goal",
                       tCommon("entities.goals"),
+                      item.status,
                       ...item.labels.map((label) => label.name),
                     )}
                     onSelect={() => navigate("/goals")}
                   >
-                    <Target />
-                    {item.title}
+                    <Target className="self-start mt-0.5" />
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <HighlightedText
+                        text={item.title}
+                        query={query}
+                        className="truncate"
+                      />
+                      <span className="truncate text-xs text-muted-foreground">
+                        {joinPreview([
+                          getGoalStatusLabel(item.status),
+                          item.targetDate
+                            ? `${tGoals("fields.targetDate")}: ${formatShortDate(item.targetDate) ?? ""}`
+                            : null,
+                        ])}
+                      </span>
+                      <PreviewChips
+                        labels={item.labels.map((label) => label.name)}
+                        query={query}
+                      />
+                    </span>
                   </CommandItem>
                 ))}
               </CommandGroup>

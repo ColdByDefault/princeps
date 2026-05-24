@@ -7,4 +7,4 @@
  */
 
 export { listGlobalSearchData } from "./list.logic";
-export type { GlobalSearchData } from "./list.logic";
+export type { GlobalSearchData, GlobalSearchOptions } from "./list.logic";
