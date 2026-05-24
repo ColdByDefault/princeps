@@ -2,14 +2,12 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.7
+ * @version canary-v1.1.8
  * @since beta
  */
 
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   LayoutDashboard,
@@ -37,94 +35,12 @@ import {
   CommandGroup,
   CommandItem,
 } from "@/components/ui/command";
-
-type TaskItem = { id: string; title: string };
-type ContactItem = { id: string; name: string; company: string | null };
-type MeetingItem = { id: string; title: string };
-type DecisionItem = { id: string; title: string };
-type GoalItem = { id: string; title: string };
-
-type SearchData = {
-  tasks: TaskItem[];
-  contacts: ContactItem[];
-  meetings: MeetingItem[];
-  decisions: DecisionItem[];
-  goals: GoalItem[];
-};
+import { buildKeywords, useGlobalSearch } from "./logic/useGlobalSearch";
 
 export function GlobalSearch() {
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState<SearchData | null>(null);
-  const router = useRouter();
+  const { open, setOpen, data, navigate } = useGlobalSearch();
   const t = useTranslations("shell");
   const tCommon = useTranslations("common");
-
-  // cmd+k / ctrl+k keyboard shortcut
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((o) => !o);
-      }
-    };
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, []);
-
-  // custom event from navbar trigger buttons
-  useEffect(() => {
-    const handler = () => setOpen(true);
-    window.addEventListener("global-search:open", handler);
-    return () => window.removeEventListener("global-search:open", handler);
-  }, []);
-
-  // fetch all content once on first open
-  useEffect(() => {
-    if (!open || data !== null) return;
-    Promise.all([
-      fetch("/api/tasks").then(
-        (r) => r.json() as Promise<{ tasks?: TaskItem[] }>,
-      ),
-      fetch("/api/contacts").then(
-        (r) => r.json() as Promise<{ contacts?: ContactItem[] }>,
-      ),
-      fetch("/api/meetings").then(
-        (r) => r.json() as Promise<{ meetings?: MeetingItem[] }>,
-      ),
-      fetch("/api/decisions").then(
-        (r) => r.json() as Promise<{ decisions?: DecisionItem[] }>,
-      ),
-      fetch("/api/goals").then(
-        (r) => r.json() as Promise<{ goals?: GoalItem[] }>,
-      ),
-    ])
-      .then(([taskRes, contactRes, meetingRes, decisionRes, goalRes]) => {
-        setData({
-          tasks: taskRes.tasks ?? [],
-          contacts: contactRes.contacts ?? [],
-          meetings: meetingRes.meetings ?? [],
-          decisions: decisionRes.decisions ?? [],
-          goals: goalRes.goals ?? [],
-        });
-      })
-      .catch(() => {
-        setData({
-          tasks: [],
-          contacts: [],
-          meetings: [],
-          decisions: [],
-          goals: [],
-        });
-      });
-  }, [open, data]);
-
-  const navigate = useCallback(
-    (href: string) => {
-      setOpen(false);
-      router.push(href);
-    },
-    [router],
-  );
 
   const navLinks: { href: string; icon: LucideIcon; label: string }[] = [
     { href: "/home", icon: LayoutDashboard, label: t("nav.home") },
@@ -193,13 +109,36 @@ export function GlobalSearch() {
               ))}
             </CommandGroup>
 
+            {(data?.labels.length ?? 0) > 0 && (
+              <CommandGroup heading={tCommon("entities.labels")}>
+                {data!.labels.map((item) => (
+                  <CommandItem
+                    key={item.id}
+                    value={item.name}
+                    keywords={buildKeywords(
+                      "label",
+                      tCommon("entities.labels"),
+                    )}
+                    onSelect={() => navigate("/labels")}
+                  >
+                    <Tag />
+                    {item.name}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
             {(data?.tasks.length ?? 0) > 0 && (
               <CommandGroup heading={tCommon("entities.tasks")}>
                 {data!.tasks.map((item) => (
                   <CommandItem
                     key={item.id}
                     value={item.title}
-                    keywords={["task"]}
+                    keywords={buildKeywords(
+                      "task",
+                      tCommon("entities.tasks"),
+                      ...item.labels.map((label) => label.name),
+                    )}
                     onSelect={() => navigate("/tasks")}
                   >
                     <CheckSquare />
@@ -215,7 +154,12 @@ export function GlobalSearch() {
                   <CommandItem
                     key={item.id}
                     value={item.name}
-                    keywords={["contact", item.company ?? ""]}
+                    keywords={buildKeywords(
+                      "contact",
+                      tCommon("entities.contacts"),
+                      item.company,
+                      ...item.labels.map((label) => label.name),
+                    )}
                     onSelect={() => navigate("/contacts")}
                   >
                     <Users />
@@ -236,7 +180,11 @@ export function GlobalSearch() {
                   <CommandItem
                     key={item.id}
                     value={item.title}
-                    keywords={["meeting"]}
+                    keywords={buildKeywords(
+                      "meeting",
+                      tCommon("entities.meetings"),
+                      ...item.labels.map((label) => label.name),
+                    )}
                     onSelect={() => navigate("/meetings")}
                   >
                     <CalendarDays />
@@ -252,7 +200,11 @@ export function GlobalSearch() {
                   <CommandItem
                     key={item.id}
                     value={item.title}
-                    keywords={["decision"]}
+                    keywords={buildKeywords(
+                      "decision",
+                      tCommon("entities.decisions"),
+                      ...item.labels.map((label) => label.name),
+                    )}
                     onSelect={() => navigate("/decisions")}
                   >
                     <Scale />
@@ -268,7 +220,11 @@ export function GlobalSearch() {
                   <CommandItem
                     key={item.id}
                     value={item.title}
-                    keywords={["goal"]}
+                    keywords={buildKeywords(
+                      "goal",
+                      tCommon("entities.goals"),
+                      ...item.labels.map((label) => label.name),
+                    )}
                     onSelect={() => navigate("/goals")}
                   >
                     <Target />
