@@ -1,3 +1,20 @@
+## [1.1.8] - 2026-05-24
+
+- feat(GlobalSearch): add forceMount prop to CommandItem for section-specific rendering
+- feat(GlobalSearch): enhance search functionality with section filtering and new tab support
+- refactor(GlobalSearch): simplify PreviewChips function signature and improve formatting of HighlightedText component
+- feat(GlobalSearch): enhance global search functionality with query support and improved data handling
+- feat(GlobalSearch): implement global search API and enhance report handling in UI
+- feat(GlobalSearch): add reports link to navigation in GlobalSearch component
+- refactor(tests): standardize mock function definitions in chat stream and widget tests
+- feat: update version to canary-v1.1.8 and enhance error handling in chat stream and widget routes
+- feat: update version to canary-v1.1.8 and improve error handling in knowledge upload route
+- feat: update version to canary-v1.1.8 and enhance error logging in Google integration routes
+- feat(settings): add Subscription, Tools, and Usage tabs with respective functionalities
+- feat: add GlobalSearch component and related logic for enhanced search functionality
+
+# Changelog
+
 ## [1.1.7] - 2026-05-24
 
 - chore: add dynamic export to AppLayout for improved rendering behavior
