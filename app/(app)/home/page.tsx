@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
 
  */
@@ -15,7 +15,7 @@ import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { fetchWeather } from "@/lib/services/weather";
 import { getUserPreferences } from "@/lib/platform/settings/user-preferences.logic";
 import { getBriefing } from "@/lib/features/briefings";
-import { HomeShell } from "@/components/home";
+import { HomeShell } from "@/components/experience/home";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -111,3 +111,5 @@ export default async function HomePage() {
     />
   );
 }
+
+

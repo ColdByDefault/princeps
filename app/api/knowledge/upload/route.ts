@@ -2,14 +2,17 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/core/auth/auth";
-import { enforceKnowledgeUpload, createTierLimitResponse } from "@/lib/platform/tiers";
+import {
+  enforceKnowledgeUpload,
+  createTierLimitResponse,
+} from "@/lib/platform/tiers";
 import {
   createKnowledgeDocument,
   createKnowledgeDocumentSchema,
@@ -87,25 +90,25 @@ export async function POST(req: Request) {
     );
     return NextResponse.json({ document }, { status: 201 });
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.error(
-      "[knowledge/upload] createKnowledgeDocument failed:",
-      message,
-      err,
-    );
-    if (
-      message.toLowerCase().includes("embed") ||
-      message.toLowerCase().includes("provider") ||
-      message.toLowerCase().includes("api key")
-    ) {
+    const message = err instanceof Error ? err.message : "";
+    const normalized = message.toLowerCase();
+    const isProviderError =
+      normalized.includes("embed") ||
+      normalized.includes("provider") ||
+      normalized.includes("api key");
+    const errorName = err instanceof Error ? err.name : "UnknownError";
+
+    console.error("[knowledge/upload] createKnowledgeDocument failed", {
+      errorName,
+      isProviderError,
+    });
+
+    if (isProviderError) {
       return NextResponse.json(
-        { error: `Embedding provider error: ${message}` },
+        { error: "Embedding provider error." },
         { status: 502 },
       );
     }
-    return NextResponse.json(
-      { error: `Upload failed: ${message}` },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Upload failed." }, { status: 500 });
   }
 }

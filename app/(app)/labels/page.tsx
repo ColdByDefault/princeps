@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -13,7 +13,7 @@ import { getTranslations, getLocale } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listLabels } from "@/lib/features/labels";
-import { LabelsShell } from "@/components/labels";
+import { LabelsShell } from "@/components/settings/labels";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -35,3 +35,5 @@ export default async function LabelsPage() {
 
   return <LabelsShell initialLabels={labels} />;
 }
+
+

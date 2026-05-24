@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -273,9 +273,11 @@ export async function POST(req: Request, { params }: Params) {
           toolRound++;
         }
       } catch (err) {
+        const errorName = err instanceof Error ? err.name : "UnknownError";
+        console.error("[chat/stream] stream failed", { errorName });
         send({
           type: "error",
-          message: err instanceof Error ? err.message : "Stream error",
+          message: "Stream error",
         });
       } finally {
         if (assistantContent) {

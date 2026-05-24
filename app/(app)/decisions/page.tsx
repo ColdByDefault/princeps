@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -14,7 +14,7 @@ import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listDecisions } from "@/lib/features/decisions";
 import { listLabels } from "@/lib/features/labels";
 import { listMeetings } from "@/lib/features/meetings";
-import { DecisionsShell } from "@/components/decisions";
+import { DecisionsShell } from "@/components/features/decisions";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -46,3 +46,5 @@ export default async function DecisionsPage() {
     />
   );
 }
+
+

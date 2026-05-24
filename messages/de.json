@@ -479,6 +479,7 @@
       "title": "Schnellnavigation",
       "description": "Seitennavigation im Arbeitsbereich",
       "placeholder": "Seite oder Inhalt suchen…",
+      "newTabHint": "Tipp: Drücke Strg/Cmd + Enter, um das ausgewählte Ergebnis in einem neuen Tab zu öffnen.",
       "empty": "Keine Ergebnisse gefunden.",
       "navigation": "Navigation"
     },

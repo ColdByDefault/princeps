@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -56,8 +56,10 @@ export async function POST(req: Request) {
         { status: 401 },
       );
     }
-    const message = err instanceof Error ? err.message : "Import failed";
-    console.error("[google-drive/import]", err);
-    return NextResponse.json({ error: message }, { status: 500 });
+    const errorName = err instanceof Error ? err.name : "UnknownError";
+    console.error("[google-drive/import] import failed", {
+      errorName,
+    });
+    return NextResponse.json({ error: "Import failed" }, { status: 500 });
   }
 }

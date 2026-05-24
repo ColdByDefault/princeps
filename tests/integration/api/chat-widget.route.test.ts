@@ -4,23 +4,25 @@ import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   accumulateTokens: vi.fn<() => Promise<void>>(),
   buildSystemPrompt: vi.fn(),
-  chatRateLimitCheck: vi.fn<
-    (identifier: string) => Promise<{ allowed: boolean; retryAfterSeconds: number }>
-  >(),
+  chatRateLimitCheck:
+    vi.fn<
+      (
+        identifier: string,
+      ) => Promise<{ allowed: boolean; retryAfterSeconds: number }>
+    >(),
   createReport: vi.fn<() => Promise<unknown>>(),
-  enforceMonthlyLimits: vi.fn<
-    (userId: string) => Promise<{ allowed: boolean; reason?: string }>
-  >(),
+  enforceMonthlyLimits:
+    vi.fn<(userId: string) => Promise<{ allowed: boolean; reason?: string }>>(),
   enforceToolCallsMonthly: vi.fn(),
-  enforceWidgetChats: vi.fn<
-    (userId: string) => Promise<{ allowed: boolean; reason?: string }>
-  >(),
+  enforceWidgetChats:
+    vi.fn<(userId: string) => Promise<{ allowed: boolean; reason?: string }>>(),
   enforceWidgetTools: vi.fn(),
   executeToolCall: vi.fn(),
   getActiveToolsForUser: vi.fn<() => Promise<unknown[]>>(),
   getRateLimitIdentifier: vi.fn<(req: Request, fallback: string) => string>(),
   getSession: vi.fn<GetSession>(),
-  getUserPreferences: vi.fn<() => Promise<{ language: "en"; reportsEnabled: true }>>(),
+  getUserPreferences:
+    vi.fn<() => Promise<{ language: "en"; reportsEnabled: true }>>(),
   headers: vi.fn<HeadersProvider>(),
   streamChat: vi.fn(),
 }));
@@ -75,6 +77,14 @@ vi.mock("@/lib/features/reports", () => ({
 
 import { POST } from "@/app/api/chat/widget/route";
 
+function parseSseEvents(payload: string): Array<Record<string, unknown>> {
+  return payload
+    .split("\n\n")
+    .map((chunk) => chunk.trim())
+    .filter((chunk) => chunk.startsWith("data: "))
+    .map((chunk) => JSON.parse(chunk.slice(6)) as Record<string, unknown>);
+}
+
 describe("/api/chat/widget route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -90,6 +100,10 @@ describe("/api/chat/widget route", () => {
     mocks.getUserPreferences.mockResolvedValue({
       language: "en",
       reportsEnabled: true,
+    });
+    mocks.buildSystemPrompt.mockResolvedValue({
+      role: "system",
+      content: "You are Princeps.",
     });
     mocks.getActiveToolsForUser.mockResolvedValue([]);
   });
@@ -171,5 +185,33 @@ describe("/api/chat/widget route", () => {
       error: "Monthly limit reached.",
     });
     expect(mocks.getUserPreferences).not.toHaveBeenCalled();
+  });
+
+  it("redacts stream errors in SSE events", async () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    mocks.streamChat.mockImplementationOnce(async function* () {
+      throw new Error("refresh_token leaked in provider error");
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/chat/widget", {
+        body: JSON.stringify({ message: "Hello" }),
+        method: "POST",
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const payload = await response.text();
+    const events = parseSseEvents(payload);
+
+    expect(events).toContainEqual({ type: "error", message: "Stream error" });
+    expect(payload).not.toContain("refresh_token");
+    expect(consoleError).toHaveBeenCalledWith("[chat/widget] stream failed", {
+      errorName: "Error",
+    });
+    consoleError.mockRestore();
   });
 });

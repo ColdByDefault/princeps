@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 
-
 const mocks = vi.hoisted(() => ({
   getSession: vi.fn<GetSession>(),
   headers: vi.fn<HeadersProvider>(),
-  importDriveFile: vi.fn<(userId: string, fileId: string) => Promise<{ name: string }>>(),
+  importDriveFile:
+    vi.fn<(userId: string, fileId: string) => Promise<{ name: string }>>(),
   listDriveFiles: vi.fn<(userId: string) => Promise<unknown[]>>(),
   syncGoogleCalendar: vi.fn<(userId: string) => Promise<unknown>>(),
 }));
@@ -34,7 +34,10 @@ vi.mock("@/lib/platform/integrations/google-drive", () => ({
 import { POST as syncCalendar } from "@/app/api/integrations/google-calendar/sync/route";
 import { POST as importDrive } from "@/app/api/integrations/google-drive/import/route";
 import { POST as syncDrive } from "@/app/api/integrations/google-drive/sync/route";
-import { IntegrationExpiredError, IntegrationNotFoundError } from "@/lib/platform/integrations/shared/token";
+import {
+  IntegrationExpiredError,
+  IntegrationNotFoundError,
+} from "@/lib/platform/integrations/shared/token";
 
 describe("Google integration action routes", () => {
   beforeEach(() => {
@@ -56,6 +59,35 @@ describe("Google integration action routes", () => {
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({ created: 2, updated: 1 });
     expect(mocks.syncGoogleCalendar).toHaveBeenCalledWith("user-1");
+  });
+
+  it("redacts detailed calendar sync errors", async () => {
+    mocks.syncGoogleCalendar.mockResolvedValueOnce({
+      created: 0,
+      updated: 0,
+      skipped: 1,
+      errors: [
+        "Event evt-123: Authorization Bearer super-secret-token",
+        "Event evt-456: refresh_token leaked",
+      ],
+    });
+
+    const response = await syncCalendar(
+      new Request("http://localhost/api/integrations/google-calendar/sync", {
+        method: "POST",
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skipped: 1,
+      errors: [
+        "One or more calendar events failed to sync.",
+        "One or more calendar events failed to sync.",
+      ],
+    });
   });
 
   it("maps missing and expired calendar integrations to API errors", async () => {
@@ -131,5 +163,27 @@ describe("Google integration action routes", () => {
       error: "fileId is required",
     });
     expect(mocks.importDriveFile).not.toHaveBeenCalled();
+  });
+
+  it("does not expose internal Drive import errors", async () => {
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mocks.importDriveFile.mockRejectedValueOnce(
+      new Error("refresh_token=raw-secret-should-not-leak"),
+    );
+
+    const response = await importDrive(
+      new Request("http://localhost/api/integrations/google-drive/import", {
+        body: JSON.stringify({ fileId: "file-1" }),
+        method: "POST",
+      }),
+    );
+
+    expect(response.status).toBe(500);
+    await expect(response.json()).resolves.toEqual({ error: "Import failed" });
+    expect(errorSpy).toHaveBeenCalledWith(
+      "[google-drive/import] import failed",
+      { errorName: "Error" },
+    );
+    errorSpy.mockRestore();
   });
 });

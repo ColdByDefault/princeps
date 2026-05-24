@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -39,7 +39,10 @@ export async function POST(_req: Request) {
         { status: 401 },
       );
     }
-    console.error("[google-drive/sync]", err);
+    const errorName = err instanceof Error ? err.name : "UnknownError";
+    console.error("[google-drive/sync] list files failed", {
+      errorName,
+    });
     return NextResponse.json(
       { error: "Failed to list files" },
       { status: 500 },

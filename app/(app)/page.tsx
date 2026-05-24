@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
-import { LandingHero } from "@/components/landing";
+import { LandingHero } from "@/components/experience/landing";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -41,3 +41,5 @@ export default async function LandingPage() {
     </div>
   );
 }
+
+

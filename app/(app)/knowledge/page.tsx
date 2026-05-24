@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -13,7 +13,7 @@ import { auth } from "@/lib/core/auth/auth";
 import { db } from "@/lib/core/db";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listKnowledgeDocuments } from "@/lib/features/knowledge";
-import { KnowledgePageClient } from "@/components/knowledge";
+import { KnowledgePageClient } from "@/components/features/knowledge";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -55,3 +55,5 @@ export default async function KnowledgePage() {
     />
   );
 }
+
+

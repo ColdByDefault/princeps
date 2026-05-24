@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -60,7 +60,10 @@ export async function GET(req: Request) {
       expiresAt: tokens.expiresAt,
     });
   } catch (err) {
-    console.error("[google-drive/callback] token exchange failed:", err);
+    const errorName = err instanceof Error ? err.name : "UnknownError";
+    console.error("[google-drive/callback] token exchange failed", {
+      errorName,
+    });
     return NextResponse.redirect(
       new URL("/settings?integration_error=token_exchange", req.url),
     );

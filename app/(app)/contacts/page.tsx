@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -13,7 +13,7 @@ import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listContacts } from "@/lib/features/contacts";
 import { listLabels } from "@/lib/features/labels";
-import { ContactsShell } from "@/components/contact";
+import { ContactsShell } from "@/components/features/contact";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -42,3 +42,5 @@ export default async function ContactPage() {
 
   return <ContactsShell initialContacts={contacts} availableLabels={labels} />;
 }
+
+

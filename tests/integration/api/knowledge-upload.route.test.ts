@@ -87,7 +87,9 @@ describe("/api/knowledge/upload route", () => {
     );
 
     expect(response.status).toBe(201);
-    await expect(response.json()).resolves.toEqual({ document: documentRecord });
+    await expect(response.json()).resolves.toEqual({
+      document: documentRecord,
+    });
     expect(mocks.enforceKnowledgeUpload).toHaveBeenCalledWith(
       "user-1",
       content.length,
@@ -202,8 +204,50 @@ describe("/api/knowledge/upload route", () => {
 
     expect(response.status).toBe(502);
     await expect(response.json()).resolves.toEqual({
-      error: "Embedding provider error: Embedding provider missing API key",
+      error: "Embedding provider error.",
     });
+    expect(consoleError).toHaveBeenCalledWith(
+      "[knowledge/upload] createKnowledgeDocument failed",
+      {
+        errorName: "Error",
+        isProviderError: true,
+      },
+    );
+    consoleError.mockRestore();
+  });
+
+  it("does not leak internal upload errors", async () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    const content = "Launch context.";
+    mocks.createKnowledgeDocument.mockRejectedValue(
+      new Error("DB write failed: refresh_token=top-secret"),
+    );
+    const formData = new FormData();
+    formData.set(
+      "file",
+      new File([content], "source.txt", { type: "text/plain" }),
+    );
+
+    const response = await POST(
+      new Request("http://localhost/api/knowledge/upload", {
+        body: formData,
+        method: "POST",
+      }),
+    );
+
+    expect(response.status).toBe(500);
+    await expect(response.json()).resolves.toEqual({
+      error: "Upload failed.",
+    });
+    expect(consoleError).toHaveBeenCalledWith(
+      "[knowledge/upload] createKnowledgeDocument failed",
+      {
+        errorName: "Error",
+        isProviderError: false,
+      },
+    );
     consoleError.mockRestore();
   });
 });

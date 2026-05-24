@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -27,7 +27,19 @@ export async function POST(_req: Request) {
 
   try {
     const result = await syncGoogleCalendar(session.user.id);
-    return NextResponse.json(result);
+    const hasDetailedErrors =
+      Array.isArray(result.errors) && result.errors.length > 0;
+
+    if (!hasDetailedErrors) {
+      return NextResponse.json(result);
+    }
+
+    return NextResponse.json({
+      ...result,
+      errors: result.errors.map(
+        () => "One or more calendar events failed to sync.",
+      ),
+    });
   } catch (err) {
     if (err instanceof IntegrationNotFoundError) {
       return NextResponse.json({ error: "Not connected" }, { status: 400 });

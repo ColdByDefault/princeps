@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.8
  * @since canary-v1.1.4
  */
 
@@ -16,7 +16,7 @@ import { getTranslations, getLocale } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listGoals, bucketGoalsByHorizon } from "@/lib/features/goals";
-import { HorizonView } from "@/components/goals";
+import { HorizonView } from "@/components/features/goals";
 import { cn } from "@/lib/core/utils";
 import type { AppLanguage } from "@/types/i18n";
 
@@ -76,3 +76,5 @@ export default async function HorizonPage() {
     </div>
   );
 }
+
+

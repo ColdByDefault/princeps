@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -11,7 +11,7 @@
 import Link from "next/link";
 import { AlertTriangle, Home, RefreshCw } from "lucide-react";
 import { useEffect, useSyncExternalStore } from "react";
-import { ThemeProvider } from "@/components/theme";
+import { ThemeProvider } from "@/components/core/theme";
 import { Toaster } from "@/components/ui/sonner";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { cn } from "@/lib/core/utils";
@@ -167,3 +167,5 @@ export default function GlobalError({
     </html>
   );
 }
+
+

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -12,7 +12,7 @@ import { getTranslations, getLocale } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listReports, getToolFrequency } from "@/lib/features/reports";
-import { ReportsShell } from "@/components/reports";
+import { ReportsShell } from "@/components/settings/reports";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -43,3 +43,5 @@ export default async function ReportsPage() {
     <ReportsShell initialReports={reports} frequencyData={frequencyData} />
   );
 }
+
+
