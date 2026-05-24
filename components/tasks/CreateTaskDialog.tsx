@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -61,6 +61,7 @@ export function CreateTaskDialog({
   children,
 }: CreateTaskDialogProps) {
   const t = useTranslations("tasks");
+const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
 
   function handleOpenChange(v: boolean) {
@@ -120,7 +121,7 @@ export function CreateTaskDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="task-title">
-              {t("fields.title")}
+              {tCommon("fields.title")}
               <span aria-hidden="true" className="ml-0.5 text-destructive">
                 *
               </span>
@@ -139,7 +140,7 @@ export function CreateTaskDialog({
             <Label htmlFor="task-notes">
               {t("fields.notes")}
               <span className="ml-1 text-xs font-normal text-muted-foreground">
-                ({t("fields.optional")})
+                ({tCommon("fields.optional")})
               </span>
             </Label>
             <Textarea
@@ -170,7 +171,7 @@ export function CreateTaskDialog({
               <Label htmlFor="task-priority">
                 {t("fields.priority")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <Select
@@ -197,7 +198,7 @@ export function CreateTaskDialog({
               <Label htmlFor="task-due">
                 {t("fields.dueDate")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <DatePicker
@@ -211,9 +212,9 @@ export function CreateTaskDialog({
           {availableLabels.length > 0 && (
             <div className="space-y-1.5">
               <Label>
-                {t("fields.labels")}
+                {tCommon("entities.labels")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <div className="flex flex-wrap gap-1.5">
@@ -253,7 +254,7 @@ export function CreateTaskDialog({
               <Label>
                 {t("fields.linkedGoals")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <div className="max-h-36 overflow-y-auto space-y-0.5 rounded-md border border-border/60 p-2">
@@ -281,8 +282,8 @@ export function CreateTaskDialog({
               className="cursor-pointer"
             >
               {creating
-                ? t("createDialog.submitting")
-                : t("createDialog.submit")}
+                ? tCommon("states.creating")
+                : tCommon("actions.create")}
             </Button>
           </DialogFooter>
         </form>

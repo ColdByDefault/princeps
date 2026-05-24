@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -66,6 +66,7 @@ export function EditTaskDialog({
   availableGoals,
 }: EditTaskDialogProps) {
   const t = useTranslations("tasks");
+const tCommon = useTranslations("common");
   const [title, setTitle] = useState(task?.title ?? "");
   const [notes, setNotes] = useState(task?.notes ?? "");
   const [priority, setPriority] = useState(task?.priority ?? "normal");
@@ -122,7 +123,7 @@ export function EditTaskDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="edit-task-title">
-              {t("fields.title")}
+              {tCommon("fields.title")}
               <span aria-hidden="true" className="ml-0.5 text-destructive">
                 *
               </span>
@@ -141,7 +142,7 @@ export function EditTaskDialog({
             <Label htmlFor="edit-task-notes">
               {t("fields.notes")}
               <span className="ml-1 text-xs font-normal text-muted-foreground">
-                ({t("fields.optional")})
+                ({tCommon("fields.optional")})
               </span>
             </Label>
             <Textarea
@@ -172,7 +173,7 @@ export function EditTaskDialog({
               <Label htmlFor="edit-task-priority">
                 {t("fields.priority")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <Select
@@ -196,7 +197,7 @@ export function EditTaskDialog({
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="edit-task-status">{t("fields.status")}</Label>
+              <Label htmlFor="edit-task-status">{tCommon("fields.status")}</Label>
               <Select
                 value={status}
                 onValueChange={(v) => v !== null && setStatus(v)}
@@ -204,18 +205,18 @@ export function EditTaskDialog({
                 <SelectTrigger
                   id="edit-task-status"
                   className="w-full cursor-pointer"
-                  aria-label={t("fields.status")}
+                  aria-label={tCommon("fields.status")}
                 >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="open">{t("status.open")}</SelectItem>
+                  <SelectItem value="open">{tCommon("status.open")}</SelectItem>
                   <SelectItem value="in_progress">
                     {t("status.inProgress")}
                   </SelectItem>
-                  <SelectItem value="done">{t("status.done")}</SelectItem>
+                  <SelectItem value="done">{tCommon("status.done")}</SelectItem>
                   <SelectItem value="cancelled">
-                    {t("status.cancelled")}
+                    {tCommon("status.cancelled")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -226,7 +227,7 @@ export function EditTaskDialog({
             <Label htmlFor="edit-task-due">
               {t("fields.dueDate")}
               <span className="ml-1 text-xs font-normal text-muted-foreground">
-                ({t("fields.optional")})
+                ({tCommon("fields.optional")})
               </span>
             </Label>
             <DatePicker
@@ -239,9 +240,9 @@ export function EditTaskDialog({
           {availableLabels.length > 0 && (
             <div className="space-y-1.5">
               <Label>
-                {t("fields.labels")}
+                {tCommon("entities.labels")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <div className="flex flex-wrap gap-1.5">
@@ -281,7 +282,7 @@ export function EditTaskDialog({
               <Label>
                 {t("fields.linkedGoals")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <div className="max-h-36 overflow-y-auto space-y-0.5 rounded-md border border-border/60 p-2">
@@ -306,7 +307,7 @@ export function EditTaskDialog({
             <Label htmlFor="edit-task-delegated-to">
               {t("fields.delegatedTo")}
               <span className="ml-1 text-xs font-normal text-muted-foreground">
-                ({t("fields.optional")})
+                ({tCommon("fields.optional")})
               </span>
             </Label>
             <Input
@@ -326,7 +327,7 @@ export function EditTaskDialog({
               <Label htmlFor="edit-task-delegate-notes">
                 {t("fields.delegateNotes")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <Textarea
@@ -350,7 +351,7 @@ export function EditTaskDialog({
               disabled={updating || !title.trim()}
               className="cursor-pointer"
             >
-              {updating ? t("editDialog.submitting") : t("editDialog.submit")}
+              {updating ? tCommon("states.saving") : tCommon("actions.save")}
             </Button>
           </DialogFooter>
         </form>

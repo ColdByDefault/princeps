@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -44,6 +44,7 @@ export function ContactForm({
   availableLabels,
 }: ContactFormProps) {
   const t = useTranslations("contacts");
+  const tCommon = useTranslations("common");
 
   const [name, setName] = useState(contact?.name ?? "");
   const [role, setRole] = useState(contact?.role ?? "");
@@ -84,7 +85,7 @@ export function ContactForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <Label htmlFor="contact-name">
-          {t("fields.name")}
+          {tCommon("fields.name")}
           <span aria-hidden="true" className="ml-0.5 text-destructive">
             *
           </span>
@@ -104,7 +105,7 @@ export function ContactForm({
           <Label htmlFor="contact-role">
             {t("fields.role")}
             <span className="ml-1 text-xs font-normal text-muted-foreground">
-              ({t("fields.optional")})
+              ({tCommon("fields.optional")})
             </span>
           </Label>
           <Input
@@ -119,7 +120,7 @@ export function ContactForm({
           <Label htmlFor="contact-company">
             {t("fields.company")}
             <span className="ml-1 text-xs font-normal text-muted-foreground">
-              ({t("fields.optional")})
+              ({tCommon("fields.optional")})
             </span>
           </Label>
           <Input
@@ -134,9 +135,9 @@ export function ContactForm({
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <Label htmlFor="contact-email">
-            {t("fields.email")}
+            {tCommon("fields.email")}
             <span className="ml-1 text-xs font-normal text-muted-foreground">
-              ({t("fields.optional")})
+              ({tCommon("fields.optional")})
             </span>
           </Label>
           <Input
@@ -152,7 +153,7 @@ export function ContactForm({
           <Label htmlFor="contact-phone">
             {t("fields.phone")}
             <span className="ml-1 text-xs font-normal text-muted-foreground">
-              ({t("fields.optional")})
+              ({tCommon("fields.optional")})
             </span>
           </Label>
           <Input
@@ -169,7 +170,7 @@ export function ContactForm({
         <Label htmlFor="contact-last">
           {t("fields.lastContact")}
           <span className="ml-1 text-xs font-normal text-muted-foreground">
-            ({t("fields.optional")})
+            ({tCommon("fields.optional")})
           </span>
         </Label>
         <Input
@@ -186,7 +187,7 @@ export function ContactForm({
         <Label htmlFor="contact-notes">
           {t("fields.notes")}
           <span className="ml-1 text-xs font-normal text-muted-foreground">
-            ({t("fields.optional")})
+            ({tCommon("fields.optional")})
           </span>
         </Label>
         <Textarea
@@ -214,9 +215,9 @@ export function ContactForm({
       {availableLabels.length > 0 && (
         <div className="space-y-1.5">
           <Label>
-            {t("fields.labels")}
+            {tCommon("entities.labels")}
             <span className="ml-1 text-xs font-normal text-muted-foreground">
-              ({t("fields.optional")})
+              ({tCommon("fields.optional")})
             </span>
           </Label>
           <div className="flex flex-wrap gap-1.5">
@@ -253,7 +254,7 @@ export function ContactForm({
             onClick={onCancel}
             className="cursor-pointer"
           >
-            {t("deleteDialog.cancel")}
+            {tCommon("actions.cancel")}
           </Button>
         )}
         <Button
@@ -263,11 +264,11 @@ export function ContactForm({
         >
           {isSubmitting
             ? contact
-              ? t("editDialog.submitting")
-              : t("createDialog.submitting")
+              ? tCommon("states.saving")
+              : tCommon("states.creating")
             : contact
-              ? t("editDialog.submit")
-              : t("createDialog.submit")}
+              ? tCommon("actions.save")
+              : tCommon("actions.create")}
         </Button>
       </div>
     </form>

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.0.7
  * @since canary-v1.0.2
  */ 
 
@@ -46,6 +46,7 @@ export function DecisionsShell({
   availableMeetings,
 }: DecisionsShellProps) {
   const t = useTranslations("decisions");
+const tCommon = useTranslations("common");
   const [decisions, setDecisions] =
     useState<DecisionRecord[]>(initialDecisions);
   const [filter, setFilter] = useState<Filter>("all");
@@ -85,8 +86,8 @@ export function DecisionsShell({
   });
 
   const FILTERS: { key: Filter; label: string }[] = [
-    { key: "all", label: t("filter.all") },
-    { key: "open", label: t("filter.open") },
+    { key: "all", label: tCommon("filters.all") },
+    { key: "open", label: tCommon("status.open") },
     { key: "decided", label: t("filter.decided") },
     { key: "reversed", label: t("filter.reversed") },
   ];
@@ -116,7 +117,7 @@ export function DecisionsShell({
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">
-          {t("pageTitle")}
+          {tCommon("entities.decisions")}
         </h1>
         <div className="flex items-center gap-2">
           <Button
@@ -125,13 +126,13 @@ export function DecisionsShell({
             size="sm"
             disabled={isPendingRefresh}
             onClick={handleRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? t("refreshing") : t("refresh")}
+            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
           </Button>
           <CreateDecisionDialog
             onSubmit={createDecision}
@@ -229,19 +230,19 @@ export function DecisionsShell({
           <AlertDialogHeader>
             <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("deleteDialog.description")}
+              {tCommon("confirmation.cannotUndo")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               className="cursor-pointer"
               onClick={handleDeleteConfirm}
               disabled={!!deleting}
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

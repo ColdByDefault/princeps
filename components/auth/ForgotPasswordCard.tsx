@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -20,6 +20,7 @@ import { forgetPasswordSchema } from "@/lib/core/auth/auth-schemas";
 
 export default function ForgotPasswordCard() {
   const t = useTranslations("auth");
+  const tCommon = useTranslations("common");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -85,7 +86,7 @@ export default function ForgotPasswordCard() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              {t("forgotPassword.emailLabel")}
+              {tCommon("fields.email")}
             </label>
             <Input
               id="email"

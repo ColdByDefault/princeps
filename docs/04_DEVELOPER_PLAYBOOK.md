@@ -70,6 +70,13 @@ Rules:
 - Return client-safe types with ISO date strings.
 - Localize all user-facing copy.
 
+i18n key strategy:
+
+- Keep `common` as the first top-level namespace in `messages/de.json` and `messages/en.json`.
+- Put reusable generic labels in `common.*` (actions, states, entities, fields, filters, status, confirmation).
+- Keep feature/domain-specific copy in feature namespaces.
+- Reuse `common.*` before adding new feature-local labels with the same meaning.
+
 Good references:
 
 - Tasks for clean CRUD.

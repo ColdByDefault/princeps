@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -85,6 +85,7 @@ export function MeetingDetailDialog({
   onPrepPack,
 }: MeetingDetailDialogProps) {
   const t = useTranslations("meetings");
+const tCommon = useTranslations("common");
   const locale = useLocale();
 
   if (!meeting) return null;
@@ -288,27 +289,27 @@ export function MeetingDetailDialog({
             size="sm"
             variant="outline"
             className="cursor-pointer"
-            aria-label={t("editLabel")}
+            aria-label={tCommon("actions.edit")}
             onClick={() => {
               onOpenChange(false);
               onEdit(meeting);
             }}
           >
             <Pencil className="mr-1.5 size-3.5" />
-            {t("editLabel")}
+            {tCommon("actions.edit")}
           </Button>
           <Button
             size="sm"
             variant="ghost"
             className="cursor-pointer text-muted-foreground hover:text-destructive ml-auto"
-            aria-label={t("deleteLabel")}
+            aria-label={tCommon("actions.delete")}
             onClick={() => {
               onOpenChange(false);
               onDelete(meeting.id);
             }}
           >
             <Trash2 className="mr-1.5 size-3.5" />
-            {t("deleteLabel")}
+            {tCommon("actions.delete")}
           </Button>
         </div>
       </DialogContent>

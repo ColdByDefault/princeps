@@ -1,4 +1,53 @@
 {
+  "common": {
+    "actions": {
+      "create": "Create",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "refresh": "Refresh"
+    },
+    "states": {
+      "creating": "Creating…",
+      "saving": "Saving…",
+      "refreshing": "Refreshing…"
+    },
+    "confirmation": {
+      "cannotUndo": "This action cannot be undone."
+    },
+    "fields": {
+      "title": "Title",
+      "name": "Name",
+      "email": "Email",
+      "status": "Status",
+      "currentPlan": "Current plan",
+      "optional": "Optional"
+    },
+    "entities": {
+      "tasks": "Tasks",
+      "meetings": "Meetings",
+      "contacts": "Contacts",
+      "decisions": "Decisions",
+      "goals": "Goals",
+      "labels": "Labels",
+      "knowledge": "Knowledge Base",
+      "memory": "Memory",
+      "readingQueue": "Reading Queue",
+      "dailyBriefing": "Daily Briefing",
+      "reports": "Reports",
+      "settings": "Settings",
+      "plans": "Plans"
+    },
+    "filters": {
+      "all": "All"
+    },
+    "status": {
+      "open": "Open",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    }
+  },
   "landing": {
     "metadata": {
       "title": "Princeps",
@@ -26,13 +75,12 @@
       "title": "Daily Briefing",
       "readMore": "...read more",
       "refresh": "Refresh briefing",
-      "refreshing": "Refreshing…",
       "empty": "No briefing yet. Click refresh to generate one.",
       "generatedAt": "Generated",
       "generateSuccess": "Briefing refreshed.",
       "generateError": "Failed to refresh briefing.",
       "autoOff": "Automatic daily briefing is turned off.",
-      "autoOffHint": "Enable it in Settings \u2192 Assistant to see your briefing here.",
+      "autoOffHint": "Enable it in Settings → Assistant to see your briefing here.",
       "goToSettings": "Open Settings"
     }
   },
@@ -88,12 +136,10 @@
       },
       "title": "Create an account",
       "subtitle": "Sign up with your email address.",
-      "nameLabel": "Name",
       "namePlaceholder": "Your name",
       "usernameLabel": "Username",
       "usernamePlaceholder": "username_123",
       "usernameHint": "Must be unique. You can use it to sign in.",
-      "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
@@ -117,7 +163,6 @@
       },
       "title": "Forgot your password?",
       "subtitle": "Enter your email address and we'll send you a reset link.",
-      "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "submit": "Send reset link",
       "submitting": "Sending...",
@@ -206,7 +251,6 @@
     "subscription": {
       "title": "Plan & Subscription",
       "description": "Manage your current plan and billing.",
-      "currentPlan": "Current plan",
       "managePlan": "Manage subscription",
       "managing": "Opening portal…",
       "manageDescription": "Update payment method, view invoices, or cancel your subscription.",
@@ -225,8 +269,6 @@
       "enterpriseName": "Enterprise",
       "limits": {
         "messagesPerMonth": "Messages / month",
-        "contacts": "Contacts",
-        "tasks": "Tasks",
         "nudgesEnabled": "Proactive nudges"
       },
       "error": "Failed to start checkout. Please try again.",
@@ -265,8 +307,6 @@
       "statusLabel": "Status",
       "statusConnected": "Connected",
       "statusDisconnected": "Disconnected",
-      "refresh": "Refresh",
-      "refreshing": "Refreshing…",
       "noModels": "No models found",
       "nameOpenAi": "OpenAI",
       "nameOllama": "Ollama (local)",
@@ -277,9 +317,6 @@
     "usage": {
       "title": "Usage & Quotas",
       "description": "Your current plan usage for this billing period.",
-      "refresh": "Refresh",
-      "refreshing": "Refreshing…",
-      "planLabel": "Current plan",
       "resetLabel": "Monthly reset",
       "resetUnknown": "Not tracked yet",
       "messagesTitle": "Messages this month",
@@ -399,10 +436,6 @@
     "openTrigger": "Open calendar",
     "close": "Close calendar",
     "loading": "Loading…",
-    "legendTasks": "Tasks",
-    "legendMeetings": "Meetings",
-    "tasksSection": "Tasks",
-    "meetingsSection": "Meetings",
     "noTasksOnDay": "No tasks on this day.",
     "noMeetingsOnDay": "No meetings on this day.",
     "taskDetailDescription": "Task details"
@@ -422,11 +455,6 @@
       "brand": "Princeps",
       "home": "Workspace",
       "chat": "Chat",
-      "knowledge": "Knowledge Base",
-      "tasks": "Tasks",
-      "contacts": "Contacts",
-      "settings": "Settings",
-      "pricing": "Plans",
       "userFallback": "Workspace user",
       "signOut": "Sign out",
       "signingOut": "Signing out…",
@@ -438,15 +466,7 @@
       "planEnterprise": "Enterprise",
       "profile": "My profile",
       "apps": "Apps",
-      "meetings": "Meetings",
-      "decisions": "Decisions",
-      "goals": "Goals",
-      "labels": "Labels",
       "intel": "Intelligence",
-      "memory": "Memory",
-      "readingQueue": "Reading Queue",
-      "briefings": "Daily Briefing",
-      "reports": "Reports",
       "comingSoon": "Coming soon"
     },
     "language": {
@@ -460,12 +480,7 @@
       "description": "Navigate pages in your workspace",
       "placeholder": "Search pages or content…",
       "empty": "No results found.",
-      "navigation": "Navigation",
-      "tasks": "Tasks",
-      "contacts": "Contacts",
-      "meetings": "Meetings",
-      "decisions": "Decisions",
-      "goals": "Goals"
+      "navigation": "Navigation"
     },
     "footer": {
       "workspace": "Workspace",
@@ -489,11 +504,8 @@
       "empty": "No chats yet.",
       "rename": "Rename",
       "renamePlaceholder": "Chat title",
-      "delete": "Delete",
       "deleteTitle": "Delete this chat?",
       "deleteDescription": "This will permanently delete this chat and all its messages.",
-      "deleteConfirm": "Delete",
-      "deleteCancel": "Cancel",
       "deleteSuccess": "Chat deleted.",
       "renameSuccess": "Chat renamed.",
       "limitReached": "Delete a chat to create a new one.",
@@ -507,16 +519,6 @@
       },
       "navGroupAccount": "Account",
       "userFallback": "Workspace user",
-      "navTasks": "Tasks",
-      "navGoals": "Goals",
-      "navContacts": "Contacts",
-      "navMeetings": "Meetings",
-      "navKnowledge": "Knowledge Base",
-      "navDecisions": "Decisions",
-      "navMemory": "Memory",
-      "navLabels": "Labels",
-      "navSettings": "Settings",
-      "navPricing": "Pricing",
       "profile": "My profile",
       "signOut": "Sign out",
       "signingOut": "Signing out…"
@@ -554,99 +556,66 @@
       "title": "Decisions",
       "description": "Manage your decisions."
     },
-    "pageTitle": "Decisions",
     "newDecision": "New decision",
     "empty": "No decisions yet.",
     "emptyFiltered": "No decisions with this status.",
     "filter": {
-      "all": "All",
-      "open": "Open",
       "decided": "Decided",
       "reversed": "Reversed"
     },
     "status": {
-      "open": "Open",
       "decided": "Decided",
       "reversed": "Reversed"
     },
     "fields": {
-      "title": "Title",
       "titlePlaceholder": "Decision title",
       "rationale": "Rationale",
       "rationalePlaceholder": "Why was this decision made?",
       "outcome": "Outcome",
       "outcomePlaceholder": "What was decided?",
-      "status": "Status",
       "decidedAt": "Decision date",
-      "labels": "Labels",
       "linkedMeeting": "Linked meeting",
-      "noMeeting": "No meeting",
-      "optional": "Optional"
+      "noMeeting": "No meeting"
     },
     "createDialog": {
       "heading": "New decision",
-      "submit": "Create",
-      "submitting": "Creating\u2026",
       "success": "Decision created.",
       "error": "Failed to create decision."
     },
     "editDialog": {
       "heading": "Edit decision",
-      "submit": "Save",
-      "submitting": "Saving\u2026",
       "success": "Decision saved.",
       "error": "Failed to save decision."
     },
     "deleteDialog": {
       "title": "Delete this decision?",
-      "description": "This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Decision deleted.",
       "error": "Failed to delete decision."
     },
-    "actionsLabel": "Decision actions",
-    "editLabel": "Edit",
-    "deleteLabel": "Delete",
-    "refresh": "Refresh",
-    "refreshing": "Refreshing…"
+    "actionsLabel": "Decision actions"
   },
   "goals": {
     "metadata": {
       "title": "Goals",
       "description": "Manage your goals and milestones."
     },
-    "pageTitle": "Goals",
     "newGoal": "New goal",
     "empty": "No goals yet.",
     "emptyFiltered": "No goals with this status.",
-    "refresh": "Refresh",
-    "refreshing": "Refreshing…",
     "filter": {
-      "all": "All",
-      "open": "Open",
-      "in_progress": "In progress",
-      "done": "Done",
-      "cancelled": "Cancelled"
+      "in_progress": "In progress"
     },
     "status": {
-      "open": "Open",
-      "in_progress": "In progress",
-      "done": "Done",
-      "cancelled": "Cancelled"
+      "in_progress": "In progress"
     },
     "fields": {
-      "title": "Title",
       "titlePlaceholder": "e.g. Launch new product",
       "description": "Description",
       "descriptionPlaceholder": "What does achieving this goal look like?",
-      "status": "Status",
       "targetDate": "Target date",
-      "labels": "Labels",
       "linkedTasks": "Linked tasks",
       "milestones": "Milestones",
-      "milestonePlaceholder": "Add a milestone…",
-      "optional": "Optional"
+      "milestonePlaceholder": "Add a milestone…"
     },
     "milestoneProgress": "milestones",
     "milestoneMark": "Mark as done",
@@ -660,32 +629,22 @@
     "createDialog": {
       "heading": "New goal",
       "description": "Fill in the details below to create a new goal.",
-      "submit": "Create",
-      "submitting": "Creating…",
-      "cancel": "Cancel",
       "success": "Goal created.",
       "error": "Failed to create goal."
     },
     "editDialog": {
       "heading": "Edit goal",
       "description": "Update the details below.",
-      "submit": "Save",
-      "submitting": "Saving…",
-      "cancel": "Cancel",
       "success": "Goal saved.",
       "error": "Failed to save goal."
     },
     "deleteDialog": {
       "heading": "Delete this goal?",
       "body": "This will permanently delete the goal and all its milestones. This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Goal deleted.",
       "error": "Failed to delete goal."
     },
     "actionsLabel": "Goal actions",
-    "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "horizon": {
       "link": "Horizons",
       "metadata": {
@@ -699,7 +658,7 @@
       "now": "Now",
       "nowSub": "Next 90 days",
       "medium": "Medium-term",
-      "mediumSub": "3\u201318 months",
+      "mediumSub": "3–18 months",
       "long": "Long-term",
       "longSub": "Beyond 18 months",
       "unplaced": "Unplaced",
@@ -740,21 +699,13 @@
       "title": "Memory",
       "description": "Facts the assistant remembers about you."
     },
-    "pageTitle": "Memory",
     "pageSubtitle": "Facts the assistant remembers about you.",
     "addEntry": "Add fact",
-    "refresh": "Refresh",
-    "refreshing": "Refreshing…",
     "empty": "No facts remembered yet.",
     "emptyHint": "Ask the assistant to remember something, or add a fact manually.",
     "sourceAI": "AI",
     "sourceUser": "You",
     "actions": "Actions",
-    "edit": "Edit",
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "save": "Save",
-    "saving": "Saving…",
     "keyLabel": "Topic",
     "keyPlaceholder": "e.g. job title",
     "valueLabel": "Fact",
@@ -772,8 +723,6 @@
     "deleteDialog": {
       "title": "Delete this fact?",
       "description": "This will permanently remove the fact from memory. The assistant will no longer have access to it.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Fact deleted.",
       "error": "Failed to delete fact."
     }
@@ -783,23 +732,16 @@
       "title": "Meetings",
       "description": "Manage your meetings."
     },
-    "pageTitle": "Meetings",
     "newMeeting": "New meeting",
     "empty": "No meetings yet.",
     "emptyFiltered": "No meetings with this status.",
     "filter": {
-      "all": "All",
-      "upcoming": "Upcoming",
-      "done": "Done",
-      "cancelled": "Cancelled"
+      "upcoming": "Upcoming"
     },
     "status": {
-      "upcoming": "Upcoming",
-      "done": "Done",
-      "cancelled": "Cancelled"
+      "upcoming": "Upcoming"
     },
     "fields": {
-      "title": "Title",
       "titlePlaceholder": "Meeting title",
       "scheduledAt": "Date & time",
       "scheduledAtPlaceholder": "Pick a date & time",
@@ -808,8 +750,6 @@
       "minutesShort": "min",
       "location": "Location",
       "locationPlaceholder": "Room, link, or address",
-      "status": "Status",
-      "labels": "Labels",
       "agenda": "Agenda",
       "agendaPlaceholder": "Meeting agenda…",
       "summary": "Summary",
@@ -823,41 +763,27 @@
       "addTask": "Link a task",
       "removeTask": "Remove task",
       "noMoreTasks": "No more tasks to link.",
-      "optional": "Optional",
       "kind": "Type"
     },
     "createDialog": {
       "heading": "New meeting",
-      "submit": "Create",
-      "submitting": "Creating\u2026",
-      "cancel": "Cancel",
       "syncGoogle": "Also create in Google Calendar",
       "success": "Meeting created.",
       "error": "Failed to create meeting."
     },
     "editDialog": {
       "heading": "Edit meeting",
-      "submit": "Save",
-      "submitting": "Saving\u2026",
-      "cancel": "Cancel",
       "syncGoogle": "Also add to Google Calendar",
       "success": "Meeting saved.",
       "error": "Failed to save meeting."
     },
     "deleteDialog": {
       "title": "Delete this meeting?",
-      "description": "This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Meeting deleted.",
       "error": "Failed to delete meeting."
     },
     "actionsLabel": "Meeting actions",
-    "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "detailLabel": "View meeting details",
-    "refresh": "Refresh",
-    "refreshing": "Refreshing…",
     "detailDialog": {
       "description": "Meeting details"
     },
@@ -871,10 +797,7 @@
     },
     "summaryDialog": {
       "trigger": "Add summary",
-      "heading": "Meeting summary",
-      "submit": "Save",
-      "submitting": "Saving\u2026",
-      "cancel": "Cancel"
+      "heading": "Meeting summary"
     },
     "prepPackDialog": {
       "trigger": "Prep pack",
@@ -882,9 +805,8 @@
       "empty": "No prep pack generated yet. Click \"Generate\" to create an AI briefing.",
       "generate": "Generate",
       "regenerate": "Regenerate",
-      "generating": "Generating\u2026",
+      "generating": "Generating…",
       "close": "Close",
-      "delete": "Delete",
       "success": "Prep pack generated.",
       "error": "Failed to generate prep pack.",
       "deleteSuccess": "Prep pack deleted.",
@@ -892,15 +814,12 @@
     },
     "quickContact": {
       "heading": "New contact",
-      "name": "Name",
       "namePlaceholder": "Full name",
       "company": "Company",
       "companyPlaceholder": "Company name",
-      "email": "Email",
       "emailPlaceholder": "email@example.com",
       "submit": "Create & add",
-      "submitting": "Creating\u2026",
-      "cancel": "Cancel"
+      "submitting": "Creating…"
     }
   },
   "tasks": {
@@ -908,16 +827,11 @@
       "title": "Tasks",
       "description": "Manage your tasks."
     },
-    "pageTitle": "Tasks",
     "newTask": "New task",
     "empty": "No tasks yet.",
     "emptyFiltered": "No tasks with this status.",
     "filter": {
-      "all": "All",
-      "open": "Open",
       "inProgress": "In Progress",
-      "done": "Done",
-      "cancelled": "Cancelled",
       "delegated": "Delegated"
     },
     "priority": {
@@ -927,46 +841,32 @@
       "urgent": "Urgent"
     },
     "status": {
-      "open": "Open",
-      "inProgress": "In Progress",
-      "done": "Done",
-      "cancelled": "Cancelled"
+      "inProgress": "In Progress"
     },
     "fields": {
-      "title": "Title",
       "titlePlaceholder": "Task title",
       "notes": "Notes",
-      "notesPlaceholder": "Optional notes\u2026",
+      "notesPlaceholder": "Optional notes…",
       "priority": "Priority",
       "dueDate": "Due date",
-      "status": "Status",
-      "labels": "Labels",
       "linkedGoals": "Linked goals",
       "delegatedTo": "Delegated to",
       "delegatedToPlaceholder": "Name of person (e.g. Marcus)",
       "delegateNotes": "Handoff notes",
-      "delegateNotesPlaceholder": "Context for the handoff\u2026",
-      "optional": "Optional"
+      "delegateNotesPlaceholder": "Context for the handoff…"
     },
     "createDialog": {
       "heading": "New task",
-      "submit": "Create",
-      "submitting": "Creating\u2026",
       "success": "Task created.",
       "error": "Failed to create task."
     },
     "editDialog": {
       "heading": "Edit task",
-      "submit": "Save",
-      "submitting": "Saving\u2026",
       "success": "Task saved.",
       "error": "Failed to save task."
     },
     "deleteDialog": {
       "title": "Delete this task?",
-      "description": "This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Task deleted.",
       "error": "Failed to delete task."
     },
@@ -976,12 +876,8 @@
       "error": "Failed to update task."
     },
     "actionsLabel": "Task actions",
-    "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "markDoneLabel": "Mark as done",
     "reopenLabel": "Reopen",
-    "refresh": "Refresh",
-    "refreshing": "Refreshing…",
     "delegatedBadge": "Delegated to {name}",
     "emptyDelegated": "No delegated tasks."
   },
@@ -990,75 +886,55 @@
       "title": "Contacts",
       "description": "Manage your professional contacts."
     },
-    "pageTitle": "Contacts",
     "countSingular": "1 contact",
     "countPlural": "{count} contacts",
     "newContact": "New contact",
     "empty": "No contacts yet.",
     "fields": {
-      "name": "Name",
       "namePlaceholder": "Jane Doe",
       "role": "Role",
       "rolePlaceholder": "Software Engineer",
       "company": "Company",
       "companyPlaceholder": "Acme Inc.",
-      "email": "Email",
       "emailPlaceholder": "jane@example.com",
       "phone": "Phone",
       "phonePlaceholder": "+1 (555) 123-4567",
       "notes": "Notes",
       "notesPlaceholder": "Optional notes…",
-      "lastContact": "Last contact",
-      "labels": "Labels",
-      "optional": "Optional"
+      "lastContact": "Last contact"
     },
     "createDialog": {
       "heading": "New contact",
       "description": "Fill in the details below to add a new contact.",
-      "submit": "Create",
-      "submitting": "Creating…",
       "success": "Contact created.",
       "error": "Failed to create contact."
     },
     "editDialog": {
       "heading": "Edit contact",
       "description": "Update the contact details below.",
-      "submit": "Save",
-      "submitting": "Saving…",
       "success": "Contact saved.",
       "error": "Failed to save contact."
     },
     "deleteDialog": {
       "title": "Delete this contact?",
-      "description": "This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Contact deleted.",
       "error": "Failed to delete contact."
     },
     "actionsLabel": "Contact actions",
     "viewLabel": "View",
-    "editLabel": "Edit",
-    "deleteLabel": "Delete",
-    "lastContactLabel": "Last contact",
-    "refresh": "Refresh",
-    "refreshing": "Refreshing…"
+    "lastContactLabel": "Last contact"
   },
   "labels": {
     "metadata": {
       "title": "Labels",
       "description": "Manage your global labels for tasks, contacts, and other records."
     },
-    "pageTitle": "Labels",
     "pageSubtitle": "Global labels used across tasks, meetings, contacts, and decisions.",
     "title": "Labels",
     "description": "Global labels for tasks, contacts, and other records.",
     "newLabel": "New label",
-    "refresh": "Refresh",
-    "refreshing": "Refreshing…",
     "empty": "No labels yet.",
     "fields": {
-      "name": "Name",
       "namePlaceholder": "Label name",
       "color": "Color",
       "icon": "Icon",
@@ -1066,16 +942,12 @@
     },
     "createDialog": {
       "heading": "New label",
-      "submit": "Create",
-      "submitting": "Creating…",
       "success": "Label created.",
       "error": "Failed to create label.",
       "duplicateError": "A label with this name already exists."
     },
     "editDialog": {
       "heading": "Edit label",
-      "submit": "Save",
-      "submitting": "Saving…",
       "success": "Label saved.",
       "error": "Failed to save label.",
       "duplicateError": "A label with this name already exists."
@@ -1083,32 +955,18 @@
     "deleteDialog": {
       "title": "Delete this label?",
       "description": "The label will be removed from all linked records.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Label deleted.",
       "error": "Failed to delete label."
     },
-    "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "actionsLabel": "Label actions"
   },
   "tools": {
     "title": "Available Tools",
     "description": "Phrases you can say to the assistant to trigger each capability.",
     "groups": {
-      "tasks": "Tasks",
-      "labels": "Labels",
       "profile": "Profile",
-      "contacts": "Contacts",
-      "meetings": "Meetings",
-      "decisions": "Decisions",
-      "goals": "Goals",
-      "knowledge": "Knowledge",
-      "memory": "Memory",
-      "briefings": "Briefings",
       "web-research": "Web Research",
-      "integrations": "Integrations",
-      "reading-queue": "Reading Queue"
+      "integrations": "Integrations"
     },
     "catalog": {
       "create_task": {
@@ -1374,12 +1232,9 @@
       "description": "Your account profile."
     },
     "title": "Profile",
-    "name": "Name",
     "username": "Username",
-    "email": "Email",
     "emailVerified": "Verified",
     "emailUnverified": "Pending",
-    "plan": "Current plan",
     "memberSince": "Member since",
     "timezone": "Timezone",
     "notSet": "Not set",
@@ -1388,9 +1243,6 @@
       "namePlaceholder": "Your full name",
       "usernamePlaceholder": "your_username",
       "usernameHint": "Letters, numbers, underscores, and dots only. 3–30 characters.",
-      "cancel": "Cancel",
-      "submit": "Save changes",
-      "submitting": "Saving…",
       "updateSuccess": "Profile updated.",
       "updateError": "Failed to update profile. Please try again.",
       "usernameTaken": "That username is already taken."
@@ -1403,7 +1255,6 @@
     },
     "pageTitle": "Plans & Quotas",
     "pageSubtitle": "Your current plan and all available options.",
-    "currentPlan": "Current plan",
     "price": {
       "free": "Free",
       "perMonth": "/month",
@@ -1426,10 +1277,6 @@
       "tokensPerMonth": "Tokens / month (approx.)",
       "chatsPerDay": "New chats / day",
       "chatHistoryTotal": "Saved chats",
-      "tasksMax": "Tasks",
-      "meetingsMax": "Meetings",
-      "decisionsMax": "Decisions",
-      "contactsMax": "Contacts",
       "memoryMax": "Memory facts",
       "knowledgeDocs": "Knowledge docs",
       "knowledgeFileSize": "Max file size",
@@ -1463,7 +1310,6 @@
       "title": "Knowledge Base",
       "description": "Upload documents for the assistant to use as context."
     },
-    "pageTitle": "Knowledge Base",
     "pageDescription": "Upload text or markdown files. The assistant uses these documents as context for your queries.",
     "uploadSection": "Upload document",
     "documentsSection": "Documents",
@@ -1484,21 +1330,21 @@
     "deleteSuccess": "Document deleted.",
     "deleteError": "Delete failed.",
     "deleteTooltip": "Delete document",
-    "deleteAriaLabel": "Delete document \u201c{name}\u201d",
+    "deleteAriaLabel": "Delete document “{name}”",
     "sourceDrive": "Google Drive",
     "drive": {
       "sectionTitle": "Google Drive",
       "sectionDescription": "Browse your Google Drive files and selectively import them into the Knowledge Base.",
-      "loading": "Loading files\u2026",
+      "loading": "Loading files…",
       "refreshFiles": "Refresh",
       "importFile": "Import",
       "reimportFile": "Re-import",
       "imported": "Imported",
-      "importing": "Importing\u2026",
+      "importing": "Importing…",
       "noFiles": "No supported files found in your Drive.",
       "errorLoad": "Failed to load files.",
       "errorImport": "Import failed.",
-      "importSuccess": "\u201c{name}\u201d imported successfully.",
+      "importSuccess": "“{name}” imported successfully.",
       "fileTypeDoc": "Doc",
       "fileTypeSheet": "Sheet",
       "fileTypeSlide": "Slide",
@@ -1511,9 +1357,7 @@
     },
     "deleteDialog": {
       "title": "Delete document?",
-      "description": "\u201c{name}\u201d and all its text chunks will be permanently deleted. The processed character count will remain in your quota.",
-      "confirm": "Delete",
-      "cancel": "Cancel"
+      "description": "“{name}” and all its text chunks will be permanently deleted. The processed character count will remain in your quota."
     }
   },
   "reports": {
@@ -1524,7 +1368,6 @@
     "pageTitle": "Activity Reports",
     "pageDescription": "A log of every tools interaction your assistant performed.",
     "refresh": "Refresh reports",
-    "delete": "Delete",
     "deleteAriaLabel": "Delete report",
     "deleteSuccess": "Report deleted.",
     "deleteError": "Failed to delete report.",
@@ -1548,13 +1391,10 @@
       "title": "Reading Queue",
       "description": "Save articles and web pages for later — AI scores their relevance against your goals."
     },
-    "pageTitle": "Reading Queue",
     "addItem": "Add",
-    "refresh": "Refresh",
     "empty": "No saved articles yet.",
     "emptyFiltered": "No articles in this category.",
     "filter": {
-      "all": "All",
       "unread": "Unread",
       "read": "Read",
       "archived": "Archived"
@@ -1562,7 +1402,6 @@
     "fields": {
       "url": "URL",
       "urlPlaceholder": "https://example.com/article",
-      "title": "Title",
       "titlePlaceholder": "Optional title",
       "titleOptional": "optional",
       "openLink": "Open article"
@@ -1570,18 +1409,12 @@
     "addDialog": {
       "title": "Save article",
       "description": "Enter the URL. The assistant will fetch the content, create a summary, and score its relevance against your current goals.",
-      "save": "Save",
-      "saving": "Saving…",
-      "cancel": "Cancel",
       "success": "Article saved.",
       "error": "Could not save the article. Please try again."
     },
     "deleteDialog": {
-      "trigger": "Delete",
       "title": "Delete article?",
       "description": "This article will be permanently removed from your reading queue. This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Article deleted.",
       "error": "Could not delete the article."
     },
@@ -1600,11 +1433,8 @@
       "title": "Daily Briefing",
       "description": "Your daily AI-generated executive briefing."
     },
-    "pageTitle": "Daily Briefing",
     "generate": "Generate",
     "generating": "Generating…",
-    "refresh": "Refresh",
-    "refreshing": "Refreshing…",
     "empty": "No briefing yet. Generate your first daily briefing.",
     "generatedAt": "Generated on {date}",
     "generateSuccess": "Briefing generated.",
@@ -1647,9 +1477,6 @@
       "limits": {
         "messagesPerMonth": "Messages / month",
         "chatsSaved": "Saved chats",
-        "contacts": "Contacts",
-        "tasks": "Tasks",
-        "meetings": "Meetings",
         "knowledgeDocs": "Knowledge docs",
         "nudgesEnabled": "Proactive nudges"
       },
@@ -1785,7 +1612,7 @@
         },
         {
           "heading": "Reporting Vulnerabilities",
-          "content": "If you discover a security vulnerability in Princeps, please report it responsibly to security@princeps.app. We confirm receipt within 72 hours and work on a resolution promptly."
+          "content": "If you discover a security vulnerability in Princeps, please report it responsibly by opening a support ticket or contacting me directly. We confirm receipt within 72 hours and work on a resolution promptly."
         }
       ]
     }

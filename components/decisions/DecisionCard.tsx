@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.6
+ * @version canary-v1.1.7
  * @since canary-v1.0.2
  */
 
@@ -40,6 +40,7 @@ export function DecisionCard({
   onDelete,
 }: DecisionCardProps) {
   const t = useTranslations("decisions");
+const tCommon = useTranslations("common");
   const locale = useLocale();
 
   return (
@@ -51,13 +52,13 @@ export function DecisionCard({
         </div>
       }
       onEdit={() => onEdit(decision)}
-      editLabel={t("editLabel")}
+      editLabel={tCommon("actions.edit")}
       onDelete={() => onDelete(decision.id)}
-      deleteLabel={t("deleteLabel")}
+      deleteLabel={tCommon("actions.delete")}
       deleteTitle={t("deleteDialog.title")}
-      deleteDescription={t("deleteDialog.description")}
-      deleteCancelLabel={t("deleteDialog.cancel")}
-      deleteConfirmLabel={t("deleteDialog.confirm")}
+      deleteDescription={tCommon("confirmation.cannotUndo")}
+      deleteCancelLabel={tCommon("actions.cancel")}
+      deleteConfirmLabel={tCommon("actions.delete")}
       actionsAriaLabel={t("actionsLabel")}
     >
       <div className="space-y-1">

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.6
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -57,6 +57,7 @@ export function TaskCard({
   onDelete,
 }: TaskCardProps) {
   const t = useTranslations("tasks");
+const tCommon = useTranslations("common");
   const isDone = task.status === "done";
   const locale = useLocale();
 
@@ -91,13 +92,13 @@ export function TaskCard({
         </TooltipProvider>
       }
       onEdit={() => onEdit(task)}
-      editLabel={t("editLabel")}
+      editLabel={tCommon("actions.edit")}
       onDelete={() => onDelete(task.id)}
-      deleteLabel={t("deleteLabel")}
+      deleteLabel={tCommon("actions.delete")}
       deleteTitle={t("deleteDialog.title")}
-      deleteDescription={t("deleteDialog.description")}
-      deleteCancelLabel={t("deleteDialog.cancel")}
-      deleteConfirmLabel={t("deleteDialog.confirm")}
+      deleteDescription={tCommon("confirmation.cannotUndo")}
+      deleteCancelLabel={tCommon("actions.cancel")}
+      deleteConfirmLabel={tCommon("actions.delete")}
       actionsAriaLabel={t("actionsLabel")}
     >
       <div>

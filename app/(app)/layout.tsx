@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -17,13 +17,22 @@ import { ChatWidgetProvider } from "@/components/chat-widget";
 import { CalendarDrawerProvider } from "@/components/calendar";
 import type { AppLanguage } from "@/types/i18n";
 
+export const dynamic = "force-dynamic";
+
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  const sessionUser = session?.user ?? null;
+  type Session = Awaited<ReturnType<typeof auth.api.getSession>>;
+  type SessionUser = NonNullable<Session>["user"];
+  let sessionUser: SessionUser | null = null;
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    sessionUser = session?.user ?? null;
+  } catch (error) {
+    console.error("[AppLayout] Failed to load session", error);
+  }
 
   const locale = (await getLocale()) as AppLanguage;
 
@@ -33,22 +42,29 @@ export default async function AppLayout({
   let hasGoogleCalendar = false;
   let userTier: string = "free";
   if (sessionUser?.id) {
-    const [prefs, gcalIntegration, userRow] = await Promise.all([
-      getUserPreferences(sessionUser.id),
-      db.integration.findFirst({
-        where: { userId: sessionUser.id, provider: "google_calendar" },
-        select: { id: true },
-      }),
-      db.user.findUnique({
-        where: { id: sessionUser.id },
-        select: { tier: true },
-      }),
-    ]);
-    preferredTheme = prefs.theme;
-    preferredLanguage = prefs.language;
-    preferredAssistantName = prefs.assistantName;
-    hasGoogleCalendar = gcalIntegration !== null;
-    userTier = userRow?.tier ?? "free";
+    try {
+      const [prefs, gcalIntegration, userRow] = await Promise.all([
+        getUserPreferences(sessionUser.id),
+        db.integration.findFirst({
+          where: { userId: sessionUser.id, provider: "google_calendar" },
+          select: { id: true },
+        }),
+        db.user.findUnique({
+          where: { id: sessionUser.id },
+          select: { tier: true },
+        }),
+      ]);
+      preferredTheme = prefs.theme;
+      preferredLanguage = prefs.language;
+      preferredAssistantName = prefs.assistantName;
+      hasGoogleCalendar = gcalIntegration !== null;
+      userTier = userRow?.tier ?? "free";
+    } catch (error) {
+      console.error(
+        "[AppLayout] Failed to load user-scoped layout data",
+        error,
+      );
+    }
   }
 
   return (

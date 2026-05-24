@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -68,6 +68,7 @@ function getInitials(
 
 export default function Navbar({ sessionUser }: NavbarProps) {
   const t = useTranslations("shell");
+  const tCommon = useTranslations("common");
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpenForPath, setMenuOpenForPath] = useState<string | null>(null);
@@ -90,19 +91,47 @@ export default function Navbar({ sessionUser }: NavbarProps) {
   const navLinks = [
     { href: "/home", icon: LayoutDashboard, label: t("nav.home") },
     { href: "/chat", icon: MessageSquare, label: t("nav.chat") },
-    { href: "/knowledge", icon: BrainCircuit, label: t("nav.knowledge") },
-    { href: "/labels", icon: Tag, label: t("nav.labels") },
-    { href: "/tasks", icon: CheckSquare, label: t("nav.tasks") },
-    { href: "/goals", icon: Target, label: t("nav.goals") },
-    { href: "/contacts", icon: Users, label: t("nav.contacts") },
-    { href: "/meetings", icon: CalendarDays, label: t("nav.meetings") },
-    { href: "/decisions", icon: Scale, label: t("nav.decisions") },
-    { href: "/memory", icon: BookMarked, label: t("nav.memory") },
-    { href: "/reading-queue", icon: BookOpen, label: t("nav.readingQueue") },
-    { href: "/briefings", icon: Newspaper, label: t("nav.briefings") },
-    { href: "/reports", icon: FileBarChart2, label: t("nav.reports") },
-    { href: "/settings", icon: Settings, label: t("nav.settings") },
-    { href: "/pricing", icon: CreditCard, label: t("nav.pricing") },
+    {
+      href: "/knowledge",
+      icon: BrainCircuit,
+      label: tCommon("entities.knowledge"),
+    },
+    { href: "/labels", icon: Tag, label: tCommon("entities.labels") },
+    { href: "/tasks", icon: CheckSquare, label: tCommon("entities.tasks") },
+    { href: "/goals", icon: Target, label: tCommon("entities.goals") },
+    { href: "/contacts", icon: Users, label: tCommon("entities.contacts") },
+    {
+      href: "/meetings",
+      icon: CalendarDays,
+      label: tCommon("entities.meetings"),
+    },
+    {
+      href: "/decisions",
+      icon: Scale,
+      label: tCommon("entities.decisions"),
+    },
+    { href: "/memory", icon: BookMarked, label: tCommon("entities.memory") },
+    {
+      href: "/reading-queue",
+      icon: BookOpen,
+      label: tCommon("entities.readingQueue"),
+    },
+    {
+      href: "/briefings",
+      icon: Newspaper,
+      label: tCommon("entities.dailyBriefing"),
+    },
+    {
+      href: "/reports",
+      icon: FileBarChart2,
+      label: tCommon("entities.reports"),
+    },
+    {
+      href: "/settings",
+      icon: Settings,
+      label: tCommon("entities.settings"),
+    },
+    { href: "/pricing", icon: CreditCard, label: tCommon("entities.plans") },
   ];
 
   const userLabel =

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.6
+ * @version canary-v1.1.7
  * @since canary-v1.0.2
  */
 
@@ -31,6 +31,7 @@ export function MemoryEntryCard({
   onDelete,
 }: MemoryEntryCardProps) {
   const t = useTranslations("memory");
+  const tCommon = useTranslations("common");
 
   return (
     <ItemCard
@@ -41,13 +42,13 @@ export function MemoryEntryCard({
         </div>
       }
       onEdit={() => onEdit(entry)}
-      editLabel={t("edit")}
+      editLabel={tCommon("actions.edit")}
       onDelete={() => onDelete(entry.id)}
-      deleteLabel={t("delete")}
+      deleteLabel={tCommon("actions.delete")}
       deleteTitle={t("deleteDialog.title")}
-      deleteDescription={t("deleteDialog.description")}
-      deleteCancelLabel={t("deleteDialog.cancel")}
-      deleteConfirmLabel={t("deleteDialog.confirm")}
+      deleteDescription={tCommon("confirmation.cannotUndo")}
+      deleteCancelLabel={tCommon("actions.cancel")}
+      deleteConfirmLabel={tCommon("actions.delete")}
       actionsAriaLabel={t("actions")}
     >
       <div className="space-y-0.5">

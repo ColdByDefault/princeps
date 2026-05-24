@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -48,6 +48,7 @@ export function TasksShell({
   availableGoals,
 }: TasksShellProps) {
   const t = useTranslations("tasks");
+const tCommon = useTranslations("common");
   const [tasks, setTasks] = useState<TaskRecord[]>(initialTasks);
   const [filter, setFilter] = useState<Filter>("all");
   const [editTask, setEditTask] = useState<TaskRecord | null>(null);
@@ -90,11 +91,11 @@ export function TasksShell({
   });
 
   const FILTERS: { key: Filter; label: string }[] = [
-    { key: "all", label: t("filter.all") },
-    { key: "open", label: t("filter.open") },
+    { key: "all", label: tCommon("filters.all") },
+    { key: "open", label: tCommon("status.open") },
     { key: "in_progress", label: t("filter.inProgress") },
-    { key: "done", label: t("filter.done") },
-    { key: "cancelled", label: t("filter.cancelled") },
+    { key: "done", label: tCommon("status.done") },
+    { key: "cancelled", label: tCommon("status.cancelled") },
     { key: "delegated", label: t("filter.delegated") },
   ];
 
@@ -127,7 +128,7 @@ export function TasksShell({
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">
-          {t("pageTitle")}
+          {tCommon("entities.tasks")}
         </h1>
         <div className="flex items-center gap-2">
           <Button
@@ -136,13 +137,13 @@ export function TasksShell({
             size="sm"
             disabled={isPendingRefresh}
             onClick={handleRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? t("refreshing") : t("refresh")}
+            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
           </Button>
           <CreateTaskDialog
             onSubmit={createTask}
@@ -245,19 +246,19 @@ export function TasksShell({
           <AlertDialogHeader>
             <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("deleteDialog.description")}
+              {tCommon("confirmation.cannotUndo")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               className="cursor-pointer"
               onClick={handleDeleteConfirm}
               disabled={!!deleting}
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

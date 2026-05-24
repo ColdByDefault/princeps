@@ -91,6 +91,9 @@ lib/ai/tools/                             Orchestration layer — feature-agnost
 - Uses `next-intl` with middleware-based locale detection.
 - German is the default locale. English is the second locale.
 - Do not hardcode user-facing copy. Every UI string goes in `messages/de.json` and `messages/en.json`.
+- Keep `common` as the first top-level namespace in both locale files.
+- Put reusable generic labels in `common.*` first (actions, states, entities, fields, filters, status, confirmation).
+- Keep feature-specific copy in feature namespaces, and avoid duplicating generic labels there.
 - Technical text, logs, and validation errors stay in English. In-app notices, buttons, labels, placeholders, empty states, tooltips, and other user-facing text are localized.
 
 ### UI and component rules

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -57,6 +57,7 @@ function readLocalJson(key: string): Record<string, boolean> {
 
 export function SidebarNav() {
   const t = useTranslations("chat");
+  const tCommon = useTranslations("common");
   const ts = useTranslations("shell");
   const pathname = usePathname();
 
@@ -83,13 +84,21 @@ export function SidebarNav() {
       icon: LayoutGrid,
       label: ts("nav.apps"),
       items: [
-        { href: "/tasks", icon: CheckSquare, label: t("sidebar.navTasks") },
-        { href: "/goals", icon: Target, label: t("sidebar.navGoals") },
-        { href: "/contacts", icon: Users, label: t("sidebar.navContacts") },
+        {
+          href: "/tasks",
+          icon: CheckSquare,
+          label: tCommon("entities.tasks"),
+        },
+        { href: "/goals", icon: Target, label: tCommon("entities.goals") },
+        {
+          href: "/contacts",
+          icon: Users,
+          label: tCommon("entities.contacts"),
+        },
         {
           href: "/meetings",
           icon: CalendarDays,
-          label: t("sidebar.navMeetings"),
+          label: tCommon("entities.meetings"),
         },
       ],
     },
@@ -101,11 +110,19 @@ export function SidebarNav() {
         {
           href: "/knowledge",
           icon: BrainCircuit,
-          label: t("sidebar.navKnowledge"),
+          label: tCommon("entities.knowledge"),
         },
-        { href: "/decisions", icon: Scale, label: t("sidebar.navDecisions") },
-        { href: "/memory", icon: BookMarked, label: t("sidebar.navMemory") },
-        { href: "/labels", icon: Tag, label: t("sidebar.navLabels") },
+        {
+          href: "/decisions",
+          icon: Scale,
+          label: tCommon("entities.decisions"),
+        },
+        {
+          href: "/memory",
+          icon: BookMarked,
+          label: tCommon("entities.memory"),
+        },
+        { href: "/labels", icon: Tag, label: tCommon("entities.labels") },
       ],
     },
   ] as const;

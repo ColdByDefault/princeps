@@ -2,9 +2,9 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.0.7
  * @since canary-v1.0.2
- */ 
+ */
 
 "use client";
 
@@ -34,6 +34,7 @@ type MemoryShellProps = {
 
 export function MemoryShell({ initialEntries }: MemoryShellProps) {
   const t = useTranslations("memory");
+  const tCommon = useTranslations("common");
   const [entries, setEntries] = useState<MemoryEntryRecord[]>(initialEntries);
   const [editEntry, setEditEntry] = useState<MemoryEntryRecord | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -86,7 +87,7 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">
-          {t("pageTitle")}
+          {tCommon("entities.memory")}
         </h1>
         <div className="flex items-center gap-2">
           <Button
@@ -95,13 +96,15 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
             size="sm"
             disabled={isPendingRefresh}
             onClick={handleRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? t("refreshing") : t("refresh")}
+            {isPendingRefresh
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
           <CreateMemoryEntryDialog onSubmit={createEntry} creating={creating}>
             <Button
@@ -154,19 +157,19 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("deleteDialog.description")}
+              {tCommon("confirmation.cannotUndo")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               className="cursor-pointer"
               onClick={handleDeleteConfirm}
               disabled={!!deleting}
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

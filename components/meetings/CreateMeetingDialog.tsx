@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -66,6 +66,7 @@ export function CreateMeetingDialog({
   children,
 }: CreateMeetingDialogProps) {
   const t = useTranslations("meetings");
+  const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
 
   function handleOpenChange(v: boolean) {
@@ -173,7 +174,7 @@ export function CreateMeetingDialog({
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="meeting-title">
-                {t("fields.title")}
+                {tCommon("fields.title")}
                 <span aria-hidden="true" className="ml-0.5 text-destructive">
                   *
                 </span>
@@ -207,7 +208,7 @@ export function CreateMeetingDialog({
                 <Label htmlFor="meeting-duration">
                   {t("fields.durationMin")}
                   <span className="ml-1 text-xs font-normal text-muted-foreground">
-                    ({t("fields.optional")})
+                    ({tCommon("fields.optional")})
                   </span>
                 </Label>
                 <Input
@@ -225,7 +226,7 @@ export function CreateMeetingDialog({
                 <Label htmlFor="meeting-location">
                   {t("fields.location")}
                   <span className="ml-1 text-xs font-normal text-muted-foreground">
-                    ({t("fields.optional")})
+                    ({tCommon("fields.optional")})
                   </span>
                 </Label>
                 <Input
@@ -342,7 +343,7 @@ export function CreateMeetingDialog({
 
             {availableLabels.length > 0 && (
               <div className="space-y-1.5">
-                <Label>{t("fields.labels")}</Label>
+                <Label>{tCommon("entities.labels")}</Label>
                 <div className="flex flex-wrap gap-1.5">
                   {availableLabels.map((lbl) => (
                     <button
@@ -396,7 +397,7 @@ export function CreateMeetingDialog({
                 }}
                 className="cursor-pointer"
               >
-                {t("createDialog.cancel")}
+                {tCommon("actions.cancel")}
               </Button>
               <Button
                 type="submit"
@@ -404,8 +405,8 @@ export function CreateMeetingDialog({
                 className="cursor-pointer"
               >
                 {creating
-                  ? t("createDialog.submitting")
-                  : t("createDialog.submit")}
+                  ? tCommon("states.creating")
+                  : tCommon("actions.create")}
               </Button>
             </DialogFooter>
           </form>
@@ -420,7 +421,7 @@ export function CreateMeetingDialog({
           </DialogHeader>
           <form onSubmit={handleQuickCreate} className="space-y-3">
             <div className="space-y-1.5">
-              <Label htmlFor="create-qc-name">{t("quickContact.name")}</Label>
+              <Label htmlFor="create-qc-name">{tCommon("fields.name")}</Label>
               <Input
                 id="create-qc-name"
                 value={qcName}
@@ -442,7 +443,7 @@ export function CreateMeetingDialog({
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="create-qc-email">{t("quickContact.email")}</Label>
+              <Label htmlFor="create-qc-email">{tCommon("fields.email")}</Label>
               <Input
                 id="create-qc-email"
                 type="email"
@@ -458,7 +459,7 @@ export function CreateMeetingDialog({
                 onClick={() => setQcOpen(false)}
                 className="cursor-pointer"
               >
-                {t("quickContact.cancel")}
+                {tCommon("actions.cancel")}
               </Button>
               <Button
                 type="submit"

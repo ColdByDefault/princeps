@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -38,6 +38,7 @@ export function SummaryDialog({
   updating,
 }: SummaryDialogProps) {
   const t = useTranslations("meetings");
+const tCommon = useTranslations("common");
   const [summary, setSummary] = useState(meeting?.summary ?? "");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -82,7 +83,7 @@ export function SummaryDialog({
               onClick={() => onOpenChange(false)}
               className="cursor-pointer"
             >
-              {t("summaryDialog.cancel")}
+              {tCommon("actions.cancel")}
             </Button>
             <Button
               type="submit"
@@ -90,8 +91,8 @@ export function SummaryDialog({
               className="cursor-pointer"
             >
               {updating
-                ? t("summaryDialog.submitting")
-                : t("summaryDialog.submit")}
+                ? tCommon("states.saving")
+                : tCommon("actions.save")}
             </Button>
           </DialogFooter>
         </form>

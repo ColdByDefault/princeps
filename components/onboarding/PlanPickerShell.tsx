@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -68,6 +68,7 @@ export function PlanPickerShell({
   priceIds,
 }: Props) {
   const t = useTranslations("onboarding.plan");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const [loading, setLoading] = useState<string | null>(null); // tier being processed
@@ -227,15 +228,15 @@ export function PlanPickerShell({
                   value={fmt(limits.chatHistoryTotal)}
                 />
                 <LimitRow
-                  label={t("limits.contacts")}
+                  label={tCommon("entities.contacts")}
                   value={fmt(limits.contactsMax)}
                 />
                 <LimitRow
-                  label={t("limits.tasks")}
+                  label={tCommon("entities.tasks")}
                   value={fmt(limits.tasksMax)}
                 />
                 <LimitRow
-                  label={t("limits.meetings")}
+                  label={tCommon("entities.meetings")}
                   value={fmt(limits.meetingsMax)}
                 />
                 <LimitRow

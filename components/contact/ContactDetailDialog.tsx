@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -74,6 +74,7 @@ export function ContactDetailDialog({
   onDelete,
 }: ContactDetailDialogProps) {
   const t = useTranslations("contacts");
+const tCommon = useTranslations("common");
   const locale = useLocale();
 
   if (!contact) return null;
@@ -131,20 +132,20 @@ export function ContactDetailDialog({
               variant="outline"
               size="sm"
               className="cursor-pointer"
-              aria-label={t("editLabel")}
+              aria-label={tCommon("actions.edit")}
               onClick={() => {
                 onOpenChange(false);
                 onEdit(contact);
               }}
             >
               <Pencil className="mr-1.5 size-3.5" />
-              {t("editLabel")}
+              {tCommon("actions.edit")}
             </Button>
             <Button
               variant="outline"
               size="sm"
               className="cursor-pointer text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
-              aria-label={t("deleteLabel")}
+              aria-label={tCommon("actions.delete")}
               onClick={() => {
                 onOpenChange(false);
                 onDelete(contact.id);

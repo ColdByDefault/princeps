@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.6
+ * @version canary-v1.1.7
  * @since canary-v1.0.2
  */
 
@@ -61,6 +61,7 @@ export function GoalCard({
   onOpenStakeholders,
 }: GoalCardProps) {
   const t = useTranslations("goals");
+const tCommon = useTranslations("common");
 
   const totalMilestones = goal.milestones.length;
   const doneMilestones = goal.milestones.filter((m) => m.completed).length;
@@ -87,13 +88,13 @@ export function GoalCard({
         />
       }
       onEdit={() => onEdit(goal)}
-      editLabel={t("editLabel")}
+      editLabel={tCommon("actions.edit")}
       onDelete={() => onDelete(goal.id)}
-      deleteLabel={t("deleteLabel")}
+      deleteLabel={tCommon("actions.delete")}
       deleteTitle={t("deleteDialog.heading")}
       deleteDescription={t("deleteDialog.body")}
-      deleteCancelLabel={t("deleteDialog.cancel")}
-      deleteConfirmLabel={t("deleteDialog.confirm")}
+      deleteCancelLabel={tCommon("actions.cancel")}
+      deleteConfirmLabel={tCommon("actions.delete")}
       actionsAriaLabel={t("actionsLabel")}
     >
       <div className="space-y-1.5">

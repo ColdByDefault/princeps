@@ -1,4 +1,53 @@
 {
+  "common": {
+    "actions": {
+      "create": "Erstellen",
+      "save": "Speichern",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "edit": "Bearbeiten",
+      "refresh": "Aktualisieren"
+    },
+    "states": {
+      "creating": "Erstellen…",
+      "saving": "Speichern…",
+      "refreshing": "Wird aktualisiert…"
+    },
+    "confirmation": {
+      "cannotUndo": "Diese Aktion kann nicht rückgängig gemacht werden."
+    },
+    "fields": {
+      "title": "Titel",
+      "name": "Name",
+      "email": "E-Mail",
+      "status": "Status",
+      "currentPlan": "Aktueller Plan",
+      "optional": "Optional"
+    },
+    "entities": {
+      "tasks": "Aufgaben",
+      "meetings": "Meetings",
+      "contacts": "Kontakte",
+      "decisions": "Entscheidungen",
+      "goals": "Ziele",
+      "labels": "Labels",
+      "knowledge": "Wissensbasis",
+      "memory": "Gedächtnis",
+      "readingQueue": "Leseliste",
+      "dailyBriefing": "Tagesbriefing",
+      "reports": "Berichte",
+      "settings": "Einstellungen",
+      "plans": "Pläne"
+    },
+    "filters": {
+      "all": "Alle"
+    },
+    "status": {
+      "open": "Offen",
+      "done": "Erledigt",
+      "cancelled": "Abgebrochen"
+    }
+  },
   "landing": {
     "metadata": {
       "title": "Princeps",
@@ -26,7 +75,6 @@
       "title": "Tagesbriefing",
       "readMore": "…weiterlesen",
       "refresh": "Briefing aktualisieren",
-      "refreshing": "Wird aktualisiert…",
       "empty": "Kein Briefing vorhanden. Klicke auf Aktualisieren, um eines zu erstellen.",
       "generatedAt": "Erstellt",
       "generateSuccess": "Briefing aktualisiert.",
@@ -88,12 +136,10 @@
       },
       "title": "Konto erstellen",
       "subtitle": "Registriere dich mit deiner E-Mail-Adresse.",
-      "nameLabel": "Name",
       "namePlaceholder": "Dein Name",
       "usernameLabel": "Benutzername",
       "usernamePlaceholder": "benutzername_123",
       "usernameHint": "Muss eindeutig sein. Du kannst ihn zum Anmelden verwenden.",
-      "emailLabel": "E-Mail",
       "emailPlaceholder": "du@beispiel.de",
       "passwordLabel": "Passwort",
       "passwordPlaceholder": "••••••••",
@@ -117,7 +163,6 @@
       },
       "title": "Passwort vergessen?",
       "subtitle": "Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen.",
-      "emailLabel": "E-Mail",
       "emailPlaceholder": "du@beispiel.de",
       "submit": "Link senden",
       "submitting": "Wird gesendet …",
@@ -206,7 +251,6 @@
     "subscription": {
       "title": "Plan & Abonnement",
       "description": "Verwalte deinen aktuellen Plan und deine Abrechnung.",
-      "currentPlan": "Aktueller Plan",
       "managePlan": "Abonnement verwalten",
       "managing": "Portal wird geöffnet…",
       "manageDescription": "Zahlungsmethode aktualisieren, Rechnungen einsehen oder Abonnement kündigen.",
@@ -225,8 +269,6 @@
       "enterpriseName": "Enterprise",
       "limits": {
         "messagesPerMonth": "Nachrichten / Monat",
-        "contacts": "Kontakte",
-        "tasks": "Aufgaben",
         "nudgesEnabled": "Proaktive Hinweise"
       },
       "error": "Checkout konnte nicht gestartet werden. Bitte erneut versuchen.",
@@ -265,8 +307,6 @@
       "statusLabel": "Status",
       "statusConnected": "Verbunden",
       "statusDisconnected": "Nicht verbunden",
-      "refresh": "Aktualisieren",
-      "refreshing": "Wird aktualisiert…",
       "noModels": "Keine Modelle gefunden",
       "nameOpenAi": "OpenAI",
       "nameOllama": "Ollama (lokal)",
@@ -277,9 +317,6 @@
     "usage": {
       "title": "Nutzung & Kontingente",
       "description": "Deine aktuelle Plannutzung für diesen Abrechnungszeitraum.",
-      "refresh": "Aktualisieren",
-      "refreshing": "Wird aktualisiert…",
-      "planLabel": "Aktueller Plan",
       "resetLabel": "Monatliche Zurücksetzung",
       "resetUnknown": "Noch nicht erfasst",
       "messagesTitle": "Nachrichten diesen Monat",
@@ -326,8 +363,8 @@
     },
     "tools": {
       "title": "KI-Werkzeuge",
-      "description": "W\u00e4hle, welche F\u00e4higkeiten dein Assistent nutzen darf.",
-      "lockedSection": "Gesperrt \u2014 Upgrade erforderlich",
+      "description": "Wähle, welche Fähigkeiten dein Assistent nutzen darf.",
+      "lockedSection": "Gesperrt — Upgrade erforderlich",
       "saveFailed": "Werkzeugeinstellungen konnten nicht gespeichert werden."
     },
     "assistant": {
@@ -399,10 +436,6 @@
     "openTrigger": "Kalender öffnen",
     "close": "Kalender schließen",
     "loading": "Wird geladen…",
-    "legendTasks": "Aufgaben",
-    "legendMeetings": "Meetings",
-    "tasksSection": "Aufgaben",
-    "meetingsSection": "Meetings",
     "noTasksOnDay": "Keine Aufgaben an diesem Tag.",
     "noMeetingsOnDay": "Keine Meetings an diesem Tag.",
     "taskDetailDescription": "Aufgaben-Details"
@@ -421,12 +454,7 @@
     "nav": {
       "brand": "Princeps",
       "home": "Arbeitsbereich",
-      "knowledge": "Wissensbasis",
       "chat": "Chat",
-      "tasks": "Aufgaben",
-      "contacts": "Kontakte",
-      "settings": "Einstellungen",
-      "pricing": "Pläne",
       "userFallback": "Arbeitsbereich-Nutzer",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…",
@@ -438,15 +466,7 @@
       "planEnterprise": "Enterprise",
       "profile": "Mein Profil",
       "apps": "Apps",
-      "meetings": "Meetings",
-      "decisions": "Entscheidungen",
-      "goals": "Ziele",
-      "labels": "Labels",
       "intel": "Intelligenz",
-      "memory": "Gedächtnis",
-      "readingQueue": "Leseliste",
-      "briefings": "Tagesbriefing",
-      "reports": "Berichte",
       "comingSoon": "Bald verfügbar"
     },
     "language": {
@@ -460,12 +480,7 @@
       "description": "Seitennavigation im Arbeitsbereich",
       "placeholder": "Seite oder Inhalt suchen…",
       "empty": "Keine Ergebnisse gefunden.",
-      "navigation": "Navigation",
-      "tasks": "Aufgaben",
-      "contacts": "Kontakte",
-      "meetings": "Meetings",
-      "decisions": "Entscheidungen",
-      "goals": "Ziele"
+      "navigation": "Navigation"
     },
     "footer": {
       "workspace": "Arbeitsbereich",
@@ -489,11 +504,8 @@
       "empty": "Noch keine Chats.",
       "rename": "Umbenennen",
       "renamePlaceholder": "Chat-Titel",
-      "delete": "Löschen",
       "deleteTitle": "Diesen Chat löschen?",
       "deleteDescription": "Dieser Chat und alle dazugehörigen Nachrichten werden dauerhaft gelöscht.",
-      "deleteConfirm": "Löschen",
-      "deleteCancel": "Abbrechen",
       "deleteSuccess": "Chat gelöscht.",
       "renameSuccess": "Chat umbenannt.",
       "limitReached": "Lösche einen Chat, um einen neuen zu erstellen.",
@@ -507,16 +519,6 @@
       },
       "navGroupAccount": "Konto",
       "userFallback": "Arbeitsbereich-Nutzer",
-      "navTasks": "Aufgaben",
-      "navGoals": "Ziele",
-      "navContacts": "Kontakte",
-      "navMeetings": "Meetings",
-      "navKnowledge": "Wissensbasis",
-      "navDecisions": "Entscheidungen",
-      "navMemory": "Gedächtnis",
-      "navLabels": "Labels",
-      "navSettings": "Einstellungen",
-      "navPricing": "Preise",
       "profile": "Mein Profil",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…"
@@ -554,99 +556,66 @@
       "title": "Entscheidungen",
       "description": "Verwalte deine Entscheidungen."
     },
-    "pageTitle": "Entscheidungen",
     "newDecision": "Neue Entscheidung",
     "empty": "Noch keine Entscheidungen.",
     "emptyFiltered": "Keine Entscheidungen mit diesem Status.",
     "filter": {
-      "all": "Alle",
-      "open": "Offen",
       "decided": "Entschieden",
       "reversed": "Revidiert"
     },
     "status": {
-      "open": "Offen",
       "decided": "Entschieden",
       "reversed": "Revidiert"
     },
     "fields": {
-      "title": "Titel",
       "titlePlaceholder": "Entscheidungstitel",
       "rationale": "Begründung",
       "rationalePlaceholder": "Warum wurde diese Entscheidung getroffen?",
       "outcome": "Ergebnis",
       "outcomePlaceholder": "Was wurde entschieden?",
-      "status": "Status",
       "decidedAt": "Entscheidungsdatum",
-      "labels": "Labels",
       "linkedMeeting": "Verknüpftes Meeting",
-      "noMeeting": "Kein Meeting",
-      "optional": "Optional"
+      "noMeeting": "Kein Meeting"
     },
     "createDialog": {
       "heading": "Neue Entscheidung",
-      "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
       "success": "Entscheidung erstellt.",
       "error": "Entscheidung konnte nicht erstellt werden."
     },
     "editDialog": {
       "heading": "Entscheidung bearbeiten",
-      "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
       "success": "Entscheidung gespeichert.",
       "error": "Entscheidung konnte nicht gespeichert werden."
     },
     "deleteDialog": {
-      "title": "Entscheidung l\u00f6schen?",
-      "description": "Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden.",
-      "confirm": "L\u00f6schen",
-      "cancel": "Abbrechen",
-      "success": "Entscheidung gel\u00f6scht.",
-      "error": "Entscheidung konnte nicht gel\u00f6scht werden."
+      "title": "Entscheidung löschen?",
+      "success": "Entscheidung gelöscht.",
+      "error": "Entscheidung konnte nicht gelöscht werden."
     },
-    "actionsLabel": "Entscheidungsaktionen",
-    "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen",
-    "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert\u2026"
+    "actionsLabel": "Entscheidungsaktionen"
   },
   "goals": {
     "metadata": {
       "title": "Ziele",
       "description": "Verwalte deine Ziele und Meilensteine."
     },
-    "pageTitle": "Ziele",
     "newGoal": "Neues Ziel",
     "empty": "Noch keine Ziele.",
     "emptyFiltered": "Keine Ziele mit diesem Status.",
-    "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert\u2026",
     "filter": {
-      "all": "Alle",
-      "open": "Offen",
-      "in_progress": "In Arbeit",
-      "done": "Erledigt",
-      "cancelled": "Abgebrochen"
+      "in_progress": "In Arbeit"
     },
     "status": {
-      "open": "Offen",
-      "in_progress": "In Arbeit",
-      "done": "Erledigt",
-      "cancelled": "Abgebrochen"
+      "in_progress": "In Arbeit"
     },
     "fields": {
-      "title": "Titel",
       "titlePlaceholder": "z. B. Neues Produkt launchen",
       "description": "Beschreibung",
       "descriptionPlaceholder": "Wie sieht das Erreichen dieses Ziels aus?",
-      "status": "Status",
       "targetDate": "Zieldatum",
-      "labels": "Labels",
       "linkedTasks": "Verknüpfte Aufgaben",
       "milestones": "Meilensteine",
-      "milestonePlaceholder": "Meilenstein hinzufügen\u2026",
-      "optional": "Optional"
+      "milestonePlaceholder": "Meilenstein hinzufügen…"
     },
     "milestoneProgress": "Meilensteine",
     "milestoneMark": "Als erledigt markieren",
@@ -660,32 +629,22 @@
     "createDialog": {
       "heading": "Neues Ziel",
       "description": "Fülle die Details unten aus, um ein neues Ziel zu erstellen.",
-      "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
-      "cancel": "Abbrechen",
       "success": "Ziel erstellt.",
       "error": "Ziel konnte nicht erstellt werden."
     },
     "editDialog": {
       "heading": "Ziel bearbeiten",
       "description": "Aktualisiere die Details unten.",
-      "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
-      "cancel": "Abbrechen",
       "success": "Ziel gespeichert.",
       "error": "Ziel konnte nicht gespeichert werden."
     },
     "deleteDialog": {
-      "heading": "Dieses Ziel l\u00f6schen?",
-      "body": "Das Ziel und alle seine Meilensteine werden dauerhaft gel\u00f6scht. Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden.",
-      "confirm": "L\u00f6schen",
-      "cancel": "Abbrechen",
-      "success": "Ziel gel\u00f6scht.",
-      "error": "Ziel konnte nicht gel\u00f6scht werden."
+      "heading": "Dieses Ziel löschen?",
+      "body": "Das Ziel und alle seine Meilensteine werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "success": "Ziel gelöscht.",
+      "error": "Ziel konnte nicht gelöscht werden."
     },
     "actionsLabel": "Zielaktionen",
-    "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen",
     "horizon": {
       "link": "Zeithorizonte",
       "metadata": {
@@ -694,14 +653,14 @@
       },
       "pageTitle": "Zeithorizonte",
       "pageDescription": "Strategische Sicht auf deine Ziele — jetzt, mittelfristig und langfristig.",
-      "backToGoals": "Zur\u00fcck zu Zielen",
+      "backToGoals": "Zurück zu Zielen",
       "totalGoals": "{count} Ziele gesamt",
       "now": "Jetzt",
-      "nowSub": "N\u00e4chste 90 Tage",
+      "nowSub": "Nächste 90 Tage",
       "medium": "Mittelfristig",
-      "mediumSub": "3\u201318 Monate",
+      "mediumSub": "3–18 Monate",
       "long": "Langfristig",
-      "longSub": "\u00dcber 18 Monate",
+      "longSub": "Über 18 Monate",
       "unplaced": "Nicht eingeordnet",
       "unplacedSub": "Kein Zieldatum gesetzt",
       "empty": "Keine Ziele in diesem Horizont."
@@ -737,29 +696,21 @@
   },
   "memory": {
     "metadata": {
-      "title": "Ged\u00e4chtnis",
-      "description": "Fakten, die sich der Assistent \u00fcber dich merkt."
+      "title": "Gedächtnis",
+      "description": "Fakten, die sich der Assistent über dich merkt."
     },
-    "pageTitle": "Ged\u00e4chtnis",
-    "pageSubtitle": "Fakten, die sich der Assistent \u00fcber dich merkt.",
-    "addEntry": "Fakt hinzuf\u00fcgen",
-    "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert\u2026",
+    "pageSubtitle": "Fakten, die sich der Assistent über dich merkt.",
+    "addEntry": "Fakt hinzufügen",
     "empty": "Noch keine Fakten gespeichert.",
-    "emptyHint": "Bitte den Assistenten, sich etwas zu merken, oder f\u00fcge einen Fakt manuell hinzu.",
+    "emptyHint": "Bitte den Assistenten, sich etwas zu merken, oder füge einen Fakt manuell hinzu.",
     "sourceAI": "KI",
     "sourceUser": "Du",
     "actions": "Aktionen",
-    "edit": "Bearbeiten",
-    "delete": "L\u00f6schen",
-    "cancel": "Abbrechen",
-    "save": "Speichern",
-    "saving": "Wird gespeichert\u2026",
     "keyLabel": "Thema",
-    "keyPlaceholder": "z.\u00a0B. Berufsbezeichnung",
+    "keyPlaceholder": "z. B. Berufsbezeichnung",
     "valueLabel": "Fakt",
-    "valuePlaceholder": "z.\u00a0B. Senior Engineer bei Acme",
-    "createTitle": "Fakt hinzuf\u00fcgen",
+    "valuePlaceholder": "z. B. Senior Engineer bei Acme",
+    "createTitle": "Fakt hinzufügen",
     "editTitle": "Fakt bearbeiten",
     "createDialog": {
       "success": "Fakt gespeichert.",
@@ -770,12 +721,10 @@
       "error": "Fakt konnte nicht aktualisiert werden."
     },
     "deleteDialog": {
-      "title": "Diesen Fakt l\u00f6schen?",
-      "description": "Der Fakt wird dauerhaft aus dem Ged\u00e4chtnis entfernt. Der Assistent hat dann keinen Zugriff mehr darauf.",
-      "confirm": "L\u00f6schen",
-      "cancel": "Abbrechen",
-      "success": "Fakt gel\u00f6scht.",
-      "error": "Fakt konnte nicht gel\u00f6scht werden."
+      "title": "Diesen Fakt löschen?",
+      "description": "Der Fakt wird dauerhaft aus dem Gedächtnis entfernt. Der Assistent hat dann keinen Zugriff mehr darauf.",
+      "success": "Fakt gelöscht.",
+      "error": "Fakt konnte nicht gelöscht werden."
     }
   },
   "meetings": {
@@ -783,23 +732,16 @@
       "title": "Meetings",
       "description": "Verwalte deine Meetings."
     },
-    "pageTitle": "Meetings",
     "newMeeting": "Neues Meeting",
     "empty": "Noch keine Meetings.",
     "emptyFiltered": "Keine Meetings mit diesem Status.",
     "filter": {
-      "all": "Alle",
-      "upcoming": "Bevorstehend",
-      "done": "Erledigt",
-      "cancelled": "Abgesagt"
+      "upcoming": "Bevorstehend"
     },
     "status": {
-      "upcoming": "Bevorstehend",
-      "done": "Erledigt",
-      "cancelled": "Abgesagt"
+      "upcoming": "Bevorstehend"
     },
     "fields": {
-      "title": "Titel",
       "titlePlaceholder": "Meeting-Titel",
       "scheduledAt": "Datum & Uhrzeit",
       "scheduledAtPlaceholder": "Datum & Uhrzeit wählen",
@@ -808,8 +750,6 @@
       "minutesShort": "Min.",
       "location": "Ort",
       "locationPlaceholder": "Raum, Link oder Adresse",
-      "status": "Status",
-      "labels": "Labels",
       "agenda": "Agenda",
       "agendaPlaceholder": "Besprechungsagenda…",
       "summary": "Zusammenfassung",
@@ -819,45 +759,31 @@
       "removeParticipant": "Teilnehmer entfernen",
       "newContact": "Neuer Kontakt",
       "noMoreContacts": "Keine weiteren Kontakte verfügbar.",
-      "linkedTasks": "Verkn\u00fcpfte Aufgaben",
-      "addTask": "Aufgabe verkn\u00fcpfen",
+      "linkedTasks": "Verknüpfte Aufgaben",
+      "addTask": "Aufgabe verknüpfen",
       "removeTask": "Aufgabe entfernen",
-      "noMoreTasks": "Keine weiteren Aufgaben verf\u00fcgbar.",
-      "optional": "Optional",
+      "noMoreTasks": "Keine weiteren Aufgaben verfügbar.",
       "kind": "Typ"
     },
     "createDialog": {
       "heading": "Neues Meeting",
-      "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
-      "cancel": "Abbrechen",
       "syncGoogle": "Auch in Google Calendar erstellen",
       "success": "Meeting erstellt.",
       "error": "Meeting konnte nicht erstellt werden."
     },
     "editDialog": {
       "heading": "Meeting bearbeiten",
-      "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
-      "cancel": "Abbrechen",
-      "syncGoogle": "Auch zu Google Calendar hinzuf\u00fcgen",
+      "syncGoogle": "Auch zu Google Calendar hinzufügen",
       "success": "Meeting gespeichert.",
       "error": "Meeting konnte nicht gespeichert werden."
     },
     "deleteDialog": {
-      "title": "Dieses Meeting l\u00f6schen?",
-      "description": "Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden.",
-      "confirm": "L\u00f6schen",
-      "cancel": "Abbrechen",
-      "success": "Meeting gel\u00f6scht.",
-      "error": "Meeting konnte nicht gel\u00f6scht werden."
+      "title": "Dieses Meeting löschen?",
+      "success": "Meeting gelöscht.",
+      "error": "Meeting konnte nicht gelöscht werden."
     },
     "actionsLabel": "Meeting-Aktionen",
-    "editLabel": "Bearbeiten",
-    "deleteLabel": "L\u00f6schen",
     "detailLabel": "Meeting-Details anzeigen",
-    "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert…",
     "detailDialog": {
       "description": "Meeting-Details"
     },
@@ -870,11 +796,8 @@
       "appointment": "Termin"
     },
     "summaryDialog": {
-      "trigger": "Zusammenfassung hinzuf\u00fcgen",
-      "heading": "Besprechungszusammenfassung",
-      "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
-      "cancel": "Abbrechen"
+      "trigger": "Zusammenfassung hinzufügen",
+      "heading": "Besprechungszusammenfassung"
     },
     "prepPackDialog": {
       "trigger": "Vorbereitung",
@@ -882,25 +805,21 @@
       "empty": "Noch keine Vorbereitung generiert. Klicke auf \"Generieren\", um eine KI-Zusammenfassung zu erstellen.",
       "generate": "Generieren",
       "regenerate": "Neu generieren",
-      "generating": "Wird generiert\u2026",
-      "close": "Schlie\u00dfen",
-      "delete": "L\u00f6schen",
+      "generating": "Wird generiert…",
+      "close": "Schließen",
       "success": "Vorbereitung generiert.",
       "error": "Vorbereitung konnte nicht generiert werden.",
-      "deleteSuccess": "Vorbereitung gel\u00f6scht.",
-      "deleteError": "Vorbereitung konnte nicht gel\u00f6scht werden."
+      "deleteSuccess": "Vorbereitung gelöscht.",
+      "deleteError": "Vorbereitung konnte nicht gelöscht werden."
     },
     "quickContact": {
       "heading": "Neuer Kontakt",
-      "name": "Name",
-      "namePlaceholder": "Vollst\u00e4ndiger Name",
+      "namePlaceholder": "Vollständiger Name",
       "company": "Unternehmen",
       "companyPlaceholder": "Unternehmensname",
-      "email": "E-Mail",
       "emailPlaceholder": "email@beispiel.de",
-      "submit": "Erstellen & hinzuf\u00fcgen",
-      "submitting": "Wird erstellt\u2026",
-      "cancel": "Abbrechen"
+      "submit": "Erstellen & hinzufügen",
+      "submitting": "Wird erstellt…"
     }
   },
   "tasks": {
@@ -908,16 +827,11 @@
       "title": "Aufgaben",
       "description": "Verwalte deine Aufgaben."
     },
-    "pageTitle": "Aufgaben",
     "newTask": "Neue Aufgabe",
     "empty": "Noch keine Aufgaben.",
     "emptyFiltered": "Keine Aufgaben mit diesem Status.",
     "filter": {
-      "all": "Alle",
-      "open": "Offen",
       "inProgress": "In Bearbeitung",
-      "done": "Erledigt",
-      "cancelled": "Abgebrochen",
       "delegated": "Delegiert"
     },
     "priority": {
@@ -927,46 +841,32 @@
       "urgent": "Dringend"
     },
     "status": {
-      "open": "Offen",
-      "inProgress": "In Bearbeitung",
-      "done": "Erledigt",
-      "cancelled": "Abgebrochen"
+      "inProgress": "In Bearbeitung"
     },
     "fields": {
-      "title": "Titel",
       "titlePlaceholder": "Aufgabentitel",
       "notes": "Notizen",
-      "notesPlaceholder": "Optionale Notizen\u2026",
+      "notesPlaceholder": "Optionale Notizen…",
       "priority": "Priorität",
-      "dueDate": "F\u00e4lligkeitsdatum",
-      "status": "Status",
-      "labels": "Labels",
+      "dueDate": "Fälligkeitsdatum",
       "linkedGoals": "Verknüpfte Ziele",
       "delegatedTo": "Delegiert an",
-      "delegatedToPlaceholder": "Name der Person (z.\u00a0B. Markus)",
-      "delegateNotes": "\u00dcbergabenotizen",
-      "delegateNotesPlaceholder": "Kontext zur \u00dcbergabe\u2026",
-      "optional": "Optional"
+      "delegatedToPlaceholder": "Name der Person (z. B. Markus)",
+      "delegateNotes": "Übergabenotizen",
+      "delegateNotesPlaceholder": "Kontext zur Übergabe…"
     },
     "createDialog": {
       "heading": "Neue Aufgabe",
-      "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
       "success": "Aufgabe erstellt.",
       "error": "Aufgabe konnte nicht erstellt werden."
     },
     "editDialog": {
       "heading": "Aufgabe bearbeiten",
-      "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
       "success": "Aufgabe gespeichert.",
       "error": "Aufgabe konnte nicht gespeichert werden."
     },
     "deleteDialog": {
       "title": "Aufgabe löschen?",
-      "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
-      "confirm": "Löschen",
-      "cancel": "Abbrechen",
       "success": "Aufgabe gelöscht.",
       "error": "Aufgabe konnte nicht gelöscht werden."
     },
@@ -976,12 +876,8 @@
       "error": "Aufgabe konnte nicht aktualisiert werden."
     },
     "actionsLabel": "Aufgabenaktionen",
-    "editLabel": "Bearbeiten",
-    "deleteLabel": "Löschen",
     "markDoneLabel": "Als erledigt markieren",
     "reopenLabel": "Wiedereröffnen",
-    "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert…",
     "delegatedBadge": "Delegiert an {name}",
     "emptyDelegated": "Keine delegierten Aufgaben."
   },
@@ -990,75 +886,55 @@
       "title": "Kontakte",
       "description": "Verwalte deine beruflichen Kontakte."
     },
-    "pageTitle": "Kontakte",
     "countSingular": "1 Kontakt",
     "countPlural": "{count} Kontakte",
     "newContact": "Neuer Kontakt",
     "empty": "Noch keine Kontakte.",
     "fields": {
-      "name": "Name",
       "namePlaceholder": "Jane Doe",
       "role": "Rolle",
       "rolePlaceholder": "Software Engineer",
       "company": "Unternehmen",
       "companyPlaceholder": "Acme GmbH",
-      "email": "E-Mail",
       "emailPlaceholder": "jane@beispiel.de",
       "phone": "Telefon",
       "phonePlaceholder": "+49 (0)89 123456",
       "notes": "Notizen",
-      "notesPlaceholder": "Optionale Notizen\u2026",
-      "lastContact": "Letzter Kontakt",
-      "labels": "Labels",
-      "optional": "Optional"
+      "notesPlaceholder": "Optionale Notizen…",
+      "lastContact": "Letzter Kontakt"
     },
     "createDialog": {
       "heading": "Neuer Kontakt",
       "description": "Fülle die Details unten aus, um einen neuen Kontakt hinzuzufügen.",
-      "submit": "Erstellen",
-      "submitting": "Wird erstellt\u2026",
       "success": "Kontakt erstellt.",
       "error": "Kontakt konnte nicht erstellt werden."
     },
     "editDialog": {
       "heading": "Kontakt bearbeiten",
       "description": "Aktualisiere die Kontaktdaten unten.",
-      "submit": "Speichern",
-      "submitting": "Wird gespeichert\u2026",
       "success": "Kontakt gespeichert.",
       "error": "Kontakt konnte nicht gespeichert werden."
     },
     "deleteDialog": {
       "title": "Diesen Kontakt löschen?",
-      "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
-      "confirm": "Löschen",
-      "cancel": "Abbrechen",
       "success": "Kontakt gelöscht.",
       "error": "Kontakt konnte nicht gelöscht werden."
     },
     "actionsLabel": "Kontaktaktionen",
     "viewLabel": "Ansehen",
-    "editLabel": "Bearbeiten",
-    "deleteLabel": "Löschen",
-    "lastContactLabel": "Letzter Kontakt",
-    "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert…"
+    "lastContactLabel": "Letzter Kontakt"
   },
   "labels": {
     "metadata": {
       "title": "Labels",
       "description": "Verwalte deine globalen Labels für Aufgaben, Kontakte und weitere Einträge."
     },
-    "pageTitle": "Labels",
     "pageSubtitle": "Globale Labels für Aufgaben, Meetings, Kontakte und Entscheidungen.",
     "title": "Labels",
     "description": "Globale Labels für Aufgaben, Kontakte und weitere Einträge.",
     "newLabel": "Neues Label",
-    "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert…",
     "empty": "Noch keine Labels.",
     "fields": {
-      "name": "Name",
       "namePlaceholder": "Label-Name",
       "color": "Farbe",
       "icon": "Symbol",
@@ -1066,16 +942,12 @@
     },
     "createDialog": {
       "heading": "Neues Label",
-      "submit": "Erstellen",
-      "submitting": "Wird erstellt…",
       "success": "Label erstellt.",
       "error": "Label konnte nicht erstellt werden.",
       "duplicateError": "Ein Label mit diesem Namen existiert bereits."
     },
     "editDialog": {
       "heading": "Label bearbeiten",
-      "submit": "Speichern",
-      "submitting": "Wird gespeichert…",
       "success": "Label gespeichert.",
       "error": "Label konnte nicht gespeichert werden.",
       "duplicateError": "Ein Label mit diesem Namen existiert bereits."
@@ -1083,32 +955,18 @@
     "deleteDialog": {
       "title": "Label löschen?",
       "description": "Das Label wird von allen verknüpften Einträgen entfernt.",
-      "confirm": "Löschen",
-      "cancel": "Abbrechen",
       "success": "Label gelöscht.",
       "error": "Label konnte nicht gelöscht werden."
     },
-    "editLabel": "Bearbeiten",
-    "deleteLabel": "Löschen",
     "actionsLabel": "Label-Aktionen"
   },
   "tools": {
     "title": "Verfügbare Werkzeuge",
     "description": "Formulierungen, mit denen du die einzelnen Werkzeuge aktivieren kannst.",
     "groups": {
-      "tasks": "Aufgaben",
-      "labels": "Labels",
       "profile": "Profil",
-      "contacts": "Kontakte",
-      "meetings": "Meetings",
-      "decisions": "Entscheidungen",
-      "goals": "Ziele",
-      "knowledge": "Wissen",
-      "memory": "Gedächtnis",
-      "briefings": "Briefings",
       "web-research": "Webrecherche",
-      "integrations": "Integrationen",
-      "reading-queue": "Leseliste"
+      "integrations": "Integrationen"
     },
     "catalog": {
       "create_task": {
@@ -1374,12 +1232,9 @@
       "description": "Dein Kontoprofil."
     },
     "title": "Profil",
-    "name": "Name",
     "username": "Benutzername",
-    "email": "E-Mail",
     "emailVerified": "Bestätigt",
     "emailUnverified": "Ausstehend",
-    "plan": "Aktueller Plan",
     "memberSince": "Mitglied seit",
     "timezone": "Zeitzone",
     "notSet": "Nicht gesetzt",
@@ -1388,9 +1243,6 @@
       "namePlaceholder": "Dein vollständiger Name",
       "usernamePlaceholder": "dein_benutzername",
       "usernameHint": "Nur Buchstaben, Zahlen, Unterstriche und Punkte. 3–30 Zeichen.",
-      "cancel": "Abbrechen",
-      "submit": "Änderungen speichern",
-      "submitting": "Wird gespeichert …",
       "updateSuccess": "Profil aktualisiert.",
       "updateError": "Profil konnte nicht aktualisiert werden. Bitte erneut versuchen.",
       "usernameTaken": "Dieser Benutzername ist bereits vergeben."
@@ -1403,7 +1255,6 @@
     },
     "pageTitle": "Pläne & Kontingente",
     "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",
-    "currentPlan": "Aktueller Plan",
     "price": {
       "free": "Kostenlos",
       "perMonth": "/Monat",
@@ -1426,10 +1277,6 @@
       "tokensPerMonth": "Token / Monat (ca.)",
       "chatsPerDay": "Neue Chats / Tag",
       "chatHistoryTotal": "Gespeicherte Chats",
-      "tasksMax": "Aufgaben",
-      "meetingsMax": "Meetings",
-      "decisionsMax": "Entscheidungen",
-      "contactsMax": "Kontakte",
       "memoryMax": "Gedächtnis-Fakten",
       "knowledgeDocs": "Wissensdokumente",
       "knowledgeFileSize": "Max. Dateigröße",
@@ -1463,7 +1310,6 @@
       "title": "Wissensbasis",
       "description": "Lade Dokumente hoch, die der Assistent als Kontext verwenden soll."
     },
-    "pageTitle": "Wissensbasis",
     "pageDescription": "Lade Text- oder Markdown-Dateien hoch. Der Assistent nutzt diese Dokumente als Kontext für deine Anfragen.",
     "uploadSection": "Dokument hochladen",
     "documentsSection": "Dokumente",
@@ -1489,19 +1335,19 @@
     "drive": {
       "sectionTitle": "Google Drive",
       "sectionDescription": "Durchsuche deine Google-Drive-Dateien und importiere sie gezielt in die Wissensdatenbank.",
-      "loading": "Dateien werden geladen\u2026",
+      "loading": "Dateien werden geladen…",
       "refreshFiles": "Aktualisieren",
       "importFile": "Importieren",
       "reimportFile": "Neu importieren",
       "imported": "Importiert",
-      "importing": "Wird importiert\u2026",
-      "noFiles": "Keine unterst\u00fctzten Dateien in Google Drive gefunden.",
+      "importing": "Wird importiert…",
+      "noFiles": "Keine unterstützten Dateien in Google Drive gefunden.",
       "errorLoad": "Dateien konnten nicht geladen werden.",
       "errorImport": "Import fehlgeschlagen.",
-      "importSuccess": "\u201e{name}\u201c erfolgreich importiert.",
+      "importSuccess": "„{name}“ erfolgreich importiert.",
       "fileTypeDoc": "Dokument",
       "fileTypeSheet": "Tabelle",
-      "fileTypeSlide": "Pr\u00e4sentation",
+      "fileTypeSlide": "Präsentation",
       "fileTypePdf": "PDF",
       "ariaImport": "{name} in die Wissensdatenbank importieren",
       "ariaRefresh": "Google-Drive-Dateiliste aktualisieren",
@@ -1511,9 +1357,7 @@
     },
     "deleteDialog": {
       "title": "Dokument löschen?",
-      "description": "Das Dokument \"{name}\" und alle seine Textbausteine werden dauerhaft gelöscht. Der verarbeitete Textumfang bleibt in deinem Kontingent angerechnet.",
-      "confirm": "Löschen",
-      "cancel": "Abbrechen"
+      "description": "Das Dokument \"{name}\" und alle seine Textbausteine werden dauerhaft gelöscht. Der verarbeitete Textumfang bleibt in deinem Kontingent angerechnet."
     }
   },
   "reports": {
@@ -1524,7 +1368,6 @@
     "pageTitle": "Aktivitätsberichte",
     "pageDescription": "Ein Protokoll aller Tool-Aktionen, die dein Assistent durchgeführt hat.",
     "refresh": "Berichte aktualisieren",
-    "delete": "Löschen",
     "deleteAriaLabel": "Bericht löschen",
     "deleteSuccess": "Bericht gelöscht.",
     "deleteError": "Bericht konnte nicht gelöscht werden.",
@@ -1548,13 +1391,10 @@
       "title": "Leseliste",
       "description": "Speichere Artikel und Webseiten für später – KI bewertet ihre Relevanz für deine Ziele."
     },
-    "pageTitle": "Leseliste",
     "addItem": "Hinzufügen",
-    "refresh": "Aktualisieren",
     "empty": "Noch keine gespeicherten Artikel.",
     "emptyFiltered": "Keine Artikel in dieser Kategorie.",
     "filter": {
-      "all": "Alle",
       "unread": "Ungelesen",
       "read": "Gelesen",
       "archived": "Archiviert"
@@ -1562,7 +1402,6 @@
     "fields": {
       "url": "URL",
       "urlPlaceholder": "https://example.com/artikel",
-      "title": "Titel",
       "titlePlaceholder": "Optionaler Titel",
       "titleOptional": "optional",
       "openLink": "Artikel öffnen"
@@ -1570,18 +1409,12 @@
     "addDialog": {
       "title": "Artikel speichern",
       "description": "Gib die URL ein. Der Assistent ruft den Inhalt ab, erstellt eine Zusammenfassung und bewertet die Relevanz für deine aktuellen Ziele.",
-      "save": "Speichern",
-      "saving": "Wird gespeichert…",
-      "cancel": "Abbrechen",
       "success": "Artikel wurde gespeichert.",
       "error": "Artikel konnte nicht gespeichert werden. Bitte erneut versuchen."
     },
     "deleteDialog": {
-      "trigger": "Löschen",
       "title": "Artikel löschen?",
       "description": "Dieser Artikel wird dauerhaft aus deiner Leseliste entfernt. Diese Aktion kann nicht rückgängig gemacht werden.",
-      "confirm": "Löschen",
-      "cancel": "Abbrechen",
       "success": "Artikel wurde gelöscht.",
       "error": "Artikel konnte nicht gelöscht werden."
     },
@@ -1600,11 +1433,8 @@
       "title": "Tagesbriefing",
       "description": "Dein täglich KI-generiertes Executive-Briefing."
     },
-    "pageTitle": "Tagesbriefing",
     "generate": "Generieren",
     "generating": "Wird generiert…",
-    "refresh": "Aktualisieren",
-    "refreshing": "Wird aktualisiert…",
     "empty": "Noch kein Briefing vorhanden. Erstelle dein erstes Tagesbriefing.",
     "generatedAt": "Generiert am {date}",
     "generateSuccess": "Briefing wurde generiert.",
@@ -1647,9 +1477,6 @@
       "limits": {
         "messagesPerMonth": "Nachrichten / Monat",
         "chatsSaved": "Gespeicherte Chats",
-        "contacts": "Kontakte",
-        "tasks": "Aufgaben",
-        "meetings": "Meetings",
         "knowledgeDocs": "Wissensdokumente",
         "nudgesEnabled": "Proaktive Hinweise"
       },
@@ -1785,7 +1612,7 @@
         },
         {
           "heading": "Schwachstellen melden",
-          "content": "Entdeckst du eine Sicherheitslücke in Princeps, melde sie bitte verantwortungsvoll an security@princeps.app. Wir bestätigen den Eingang innerhalb von 72 Stunden und arbeiten umgehend an einer Lösung."
+          "content": "Entdeckst du eine Sicherheitslücke in Princeps, melde sie bitte verantwortungsvoll, indem du ein Support-Ticket öffnest oder mich direkt kontaktierst. Wir bestätigen den Eingang innerhalb von 72 Stunden und arbeiten umgehend an einer Lösung."
         }
       ]
     }

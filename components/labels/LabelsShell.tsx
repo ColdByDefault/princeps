@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.6
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -136,6 +136,7 @@ type LabelsShellProps = {
 
 export function LabelsShell({ initialLabels }: LabelsShellProps) {
   const t = useTranslations("labels");
+  const tCommon = useTranslations("common");
 
   const [labels, setLabels] = useState<LabelRecord[]>(initialLabels);
 
@@ -274,7 +275,7 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">
-            {t("pageTitle")}
+            {tCommon("entities.labels")}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {t("pageSubtitle")}
@@ -288,12 +289,14 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
             className="cursor-pointer rounded-full border-border/70"
             disabled={isPendingRefresh}
             onClick={handleRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
           >
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? t("refreshing") : t("refresh")}
+            {isPendingRefresh
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
           <Button
             type="button"
@@ -345,13 +348,13 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
                   </div>
                 }
                 onEdit={() => openEdit(label)}
-                editLabel={t("editLabel")}
+                editLabel={tCommon("actions.edit")}
                 onDelete={() => handleDeleteLabel(label.id)}
-                deleteLabel={t("deleteLabel")}
+                deleteLabel={tCommon("actions.delete")}
                 deleteTitle={t("deleteDialog.title")}
-                deleteDescription={t("deleteDialog.description")}
-                deleteCancelLabel={t("deleteDialog.cancel")}
-                deleteConfirmLabel={t("deleteDialog.confirm")}
+                deleteDescription={tCommon("confirmation.cannotUndo")}
+                deleteCancelLabel={tCommon("actions.cancel")}
+                deleteConfirmLabel={tCommon("actions.delete")}
                 actionsAriaLabel={t("actionsLabel")}
               >
                 <p className="text-sm font-medium">{label.name}</p>
@@ -369,7 +372,9 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="label-create-name">{t("fields.name")}</Label>
+              <Label htmlFor="label-create-name">
+                {tCommon("fields.name")}
+              </Label>
               <Input
                 id="label-create-name"
                 value={createName}
@@ -394,8 +399,8 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
                 className="cursor-pointer"
               >
                 {isPendingCreate
-                  ? t("createDialog.submitting")
-                  : t("createDialog.submit")}
+                  ? tCommon("states.creating")
+                  : tCommon("actions.create")}
               </Button>
             </DialogFooter>
           </form>
@@ -415,7 +420,7 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
           </DialogHeader>
           <form onSubmit={handleEdit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="label-edit-name">{t("fields.name")}</Label>
+              <Label htmlFor="label-edit-name">{tCommon("fields.name")}</Label>
               <Input
                 id="label-edit-name"
                 value={editName}
@@ -440,8 +445,8 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
                 className="cursor-pointer"
               >
                 {isPendingEdit
-                  ? t("editDialog.submitting")
-                  : t("editDialog.submit")}
+                  ? tCommon("states.saving")
+                  : tCommon("actions.save")}
               </Button>
             </DialogFooter>
           </form>

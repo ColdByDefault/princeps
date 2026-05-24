@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -21,6 +21,7 @@ import { signUpSchema } from "@/lib/core/auth/auth-schemas";
 
 export default function SignUpCard() {
   const t = useTranslations("auth");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -76,7 +77,7 @@ export default function SignUpCard() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
-              {t("signUp.nameLabel")}
+              {tCommon("fields.name")}
             </label>
             <Input
               id="name"
@@ -111,7 +112,7 @@ export default function SignUpCard() {
 
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
-              {t("signUp.emailLabel")}
+              {tCommon("fields.email")}
             </label>
             <Input
               id="email"

@@ -2,7 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
+ * @since canary-v1.1.4
  */
 
 "use client";
@@ -35,6 +36,7 @@ export function AddReadingItemDialog({
   isAdding,
 }: AddReadingItemDialogProps) {
   const t = useTranslations("readingQueue");
+const tCommon = useTranslations("common");
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
 
@@ -71,7 +73,7 @@ export function AddReadingItemDialog({
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="rq-title">
-              {t("fields.title")}{" "}
+              {tCommon("fields.title")}{" "}
               <span className="text-xs text-muted-foreground">
                 ({t("fields.titleOptional")})
               </span>
@@ -82,7 +84,7 @@ export function AddReadingItemDialog({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder={t("fields.titlePlaceholder")}
-              aria-label={t("fields.title")}
+              aria-label={tCommon("fields.title")}
               maxLength={255}
             />
           </div>
@@ -94,14 +96,14 @@ export function AddReadingItemDialog({
               onClick={() => onOpenChange(false)}
               className="cursor-pointer"
             >
-              {t("addDialog.cancel")}
+              {tCommon("actions.cancel")}
             </Button>
             <Button
               type="submit"
               disabled={isAdding || !url.trim()}
               className="cursor-pointer"
             >
-              {isAdding ? t("addDialog.saving") : t("addDialog.save")}
+              {isAdding ? tCommon("states.saving") : tCommon("actions.save")}
             </Button>
           </DialogFooter>
         </form>

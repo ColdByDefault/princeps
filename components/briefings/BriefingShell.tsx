@@ -1,3 +1,11 @@
+/**
+ * @author ColdByDefault
+ * @copyright 2026 ColdByDefault
+ * @license See License
+ * @version canary-v1.1.7
+ * @since beta
+ */
+
 "use client";
 
 import { useState, useTransition } from "react";
@@ -20,6 +28,7 @@ export function BriefingShell({
   autoBriefingEnabled,
 }: BriefingShellProps) {
   const t = useTranslations("briefings");
+  const tCommon = useTranslations("common");
   const [briefing, setBriefing] = useState<BriefingRecord | null>(
     initialBriefing,
   );
@@ -77,7 +86,7 @@ export function BriefingShell({
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">
-            {t("pageTitle")}
+            {tCommon("entities.dailyBriefing")}
           </h1>
           {formattedDate && (
             <p className="mt-0.5 text-xs text-muted-foreground">
@@ -92,13 +101,15 @@ export function BriefingShell({
             size="sm"
             disabled={isPendingRefresh || generating}
             onClick={handleRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? t("refreshing") : t("refresh")}
+            {isPendingRefresh
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
           <Button
             type="button"

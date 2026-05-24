@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -45,6 +45,7 @@ function EditForm({
   updating: boolean;
 }) {
   const t = useTranslations("profile");
+  const tCommon = useTranslations("common");
 
   const [draftName, setDraftName] = useState(name ?? "");
   const [draftUsername, setDraftUsername] = useState(username ?? "");
@@ -77,7 +78,7 @@ function EditForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       <div className="space-y-1.5">
-        <Label htmlFor="profile-name">{t("name")}</Label>
+        <Label htmlFor="profile-name">{tCommon("fields.name")}</Label>
         <Input
           id="profile-name"
           value={draftName}
@@ -86,7 +87,7 @@ function EditForm({
           minLength={2}
           maxLength={100}
           autoFocus
-          aria-label={t("name")}
+          aria-label={tCommon("fields.name")}
         />
       </div>
 
@@ -114,10 +115,10 @@ function EditForm({
           onClick={onClose}
           disabled={updating}
         >
-          {t("editDialog.cancel")}
+          {tCommon("actions.cancel")}
         </Button>
         <Button type="submit" className="cursor-pointer" disabled={updating}>
-          {updating ? t("editDialog.submitting") : t("editDialog.submit")}
+          {updating ? tCommon("states.saving") : tCommon("actions.save")}
         </Button>
       </DialogFooter>
     </form>

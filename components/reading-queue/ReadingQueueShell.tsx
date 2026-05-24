@@ -2,7 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
+ * @since canary-v1.1.4
  */
 
 "use client";
@@ -34,6 +35,7 @@ type ReadingQueueShellProps = {
 
 export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
   const t = useTranslations("readingQueue");
+  const tCommon = useTranslations("common");
   const [items, setItems] = useState<ReadingItemRecord[]>(initialItems);
   const [filter, setFilter] = useState<StatusFilter>("unread");
   const [addOpen, setAddOpen] = useState(false);
@@ -74,7 +76,7 @@ export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
   });
 
   const FILTERS: { key: StatusFilter; label: string }[] = [
-    { key: "all", label: t("filter.all") },
+    { key: "all", label: tCommon("filters.all") },
     { key: "unread", label: t("filter.unread") },
     { key: "read", label: t("filter.read") },
     { key: "archived", label: t("filter.archived") },
@@ -101,7 +103,9 @@ export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <BookOpen className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-xl font-semibold">{t("pageTitle")}</h1>
+          <h1 className="text-xl font-semibold">
+            {tCommon("entities.readingQueue")}
+          </h1>
           <span className="text-sm text-muted-foreground">
             ({items.filter((i) => i.status === "unread").length})
           </span>
@@ -112,7 +116,7 @@ export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
             size="icon"
             onClick={handleRefresh}
             disabled={isPendingRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
@@ -183,18 +187,18 @@ export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("deleteDialog.description")}
+              {tCommon("confirmation.cannotUndo")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

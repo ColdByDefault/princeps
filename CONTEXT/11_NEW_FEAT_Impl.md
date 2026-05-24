@@ -172,11 +172,11 @@ return JSON
 Use:
 
 ```ts
-auth.api.getSession({ headers: await headers() })
-writeRateLimiter
-getRateLimitIdentifier()
-createRateLimitResponse()
-createTierLimitResponse()
+auth.api.getSession({ headers: await headers() });
+writeRateLimiter;
+getRateLimitIdentifier();
+createRateLimitResponse();
+createTierLimitResponse();
 ```
 
 Status codes:
@@ -245,19 +245,27 @@ messages/en.json
 Typical namespace:
 
 ```text
-<feature>.metadata.title
-<feature>.metadata.description
-<feature>.pageTitle
+common.actions.*
+common.states.*
+common.entities.*
+common.fields.*
+common.filters.*
+common.status.*
+common.confirmation.*
+<feature>.metadata.*
 <feature>.newX
-<feature>.refresh
-<feature>.refreshing
-<feature>.empty
-<feature>.emptyFiltered
+<feature>.empty*
 <feature>.fields.*
 <feature>.createDialog.*
 <feature>.editDialog.*
 <feature>.deleteDialog.*
 ```
+
+Rules:
+
+- Keep `common` as the first top-level namespace in both locale files.
+- Reuse `common.*` for generic labels before adding feature-local duplicates.
+- Keep feature/domain-specific copy in the feature namespace.
 
 Add navigation only when the feature has a first-class page:
 

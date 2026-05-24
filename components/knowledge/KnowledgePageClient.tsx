@@ -26,6 +26,7 @@ export function KnowledgePageClient({
   driveConnected,
 }: KnowledgePageClientProps) {
   const t = useTranslations("knowledge");
+  const tCommon = useTranslations("common");
   const [documents, setDocuments] =
     useState<KnowledgeDocumentRecord[]>(initialDocuments);
 
@@ -53,7 +54,7 @@ export function KnowledgePageClient({
       {/* Page header */}
       <div className="mb-8 space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">
-          {t("pageTitle")}
+          {tCommon("entities.knowledge")}
         </h1>
         <p className="text-sm text-muted-foreground">{t("pageDescription")}</p>
       </div>

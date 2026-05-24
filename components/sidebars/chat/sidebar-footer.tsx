@@ -46,6 +46,7 @@ export function SidebarFooterSection({
   handleSignOut,
 }: SidebarFooterSectionProps) {
   const t = useTranslations("chat");
+  const tCommon = useTranslations("common");
   const pathname = usePathname();
 
   const userLabel =
@@ -77,7 +78,7 @@ export function SidebarFooterSection({
             <SidebarMenuButton
               render={<Link href="/settings" />}
               isActive={pathname.startsWith("/settings")}
-              tooltip={t("sidebar.navSettings")}
+              tooltip={tCommon("entities.settings")}
               className="cursor-pointer"
             >
               <Settings className="size-4 shrink-0" />
@@ -87,7 +88,7 @@ export function SidebarFooterSection({
             <SidebarMenuButton
               render={<Link href="/pricing" />}
               isActive={pathname.startsWith("/pricing")}
-              tooltip={t("sidebar.navPricing")}
+              tooltip={tCommon("entities.plans")}
               className="cursor-pointer"
             >
               <CreditCard className="size-4 shrink-0" />
@@ -138,28 +139,28 @@ export function SidebarFooterSection({
               render={
                 <Link
                   href="/settings"
-                  aria-label={t("sidebar.navSettings")}
+                  aria-label={tCommon("entities.settings")}
                   className="inline-flex h-7 cursor-pointer items-center justify-center rounded-full border border-border/70 bg-background/70 px-2.5 text-sm backdrop-blur-sm hover:bg-muted transition-colors"
                 />
               }
             >
               <Settings className="size-3.5" />
             </TooltipTrigger>
-            <TooltipContent>{t("sidebar.navSettings")}</TooltipContent>
+            <TooltipContent>{tCommon("entities.settings")}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger
               render={
                 <Link
                   href="/pricing"
-                  aria-label={t("sidebar.navPricing")}
+                  aria-label={tCommon("entities.plans")}
                   className="inline-flex h-7 cursor-pointer items-center justify-center rounded-full border border-border/70 bg-background/70 px-2.5 text-sm backdrop-blur-sm hover:bg-muted transition-colors"
                 />
               }
             >
               <CreditCard className="size-3.5" />
             </TooltipTrigger>
-            <TooltipContent>{t("sidebar.navPricing")}</TooltipContent>
+            <TooltipContent>{tCommon("entities.plans")}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger

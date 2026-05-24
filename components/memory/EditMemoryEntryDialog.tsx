@@ -49,6 +49,7 @@ function EditForm({
   updating: string | null;
 }) {
   const t = useTranslations("memory");
+const tCommon = useTranslations("common");
   const [key, setKey] = useState(entry.key);
   const [value, setValue] = useState(entry.value);
   const isUpdating = updating === entry.id;
@@ -96,14 +97,14 @@ function EditForm({
           className="cursor-pointer"
           onClick={onClose}
         >
-          {t("cancel")}
+          {tCommon("actions.cancel")}
         </Button>
         <Button
           type="submit"
           className="cursor-pointer"
           disabled={isUpdating || !key.trim() || !value.trim()}
         >
-          {isUpdating ? t("saving") : t("save")}
+          {isUpdating ? tCommon("states.saving") : tCommon("actions.save")}
         </Button>
       </DialogFooter>
     </form>

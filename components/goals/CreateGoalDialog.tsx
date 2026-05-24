@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.0.7
  * @since canary-v1.0.2
  */ 
 
@@ -59,6 +59,7 @@ export function CreateGoalDialog({
   children,
 }: CreateGoalDialogProps) {
   const t = useTranslations("goals");
+const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -133,7 +134,7 @@ export function CreateGoalDialog({
           {/* Title */}
           <div className="space-y-1.5">
             <Label htmlFor="goal-title">
-              {t("fields.title")}
+              {tCommon("fields.title")}
               <span aria-hidden="true" className="ml-0.5 text-destructive">
                 *
               </span>
@@ -153,7 +154,7 @@ export function CreateGoalDialog({
             <Label htmlFor="goal-description">
               {t("fields.description")}
               <span className="ml-1 text-xs font-normal text-muted-foreground">
-                ({t("fields.optional")})
+                ({tCommon("fields.optional")})
               </span>
             </Label>
             <Textarea
@@ -183,7 +184,7 @@ export function CreateGoalDialog({
           {/* Status + Target date */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="goal-status">{t("fields.status")}</Label>
+              <Label htmlFor="goal-status">{tCommon("fields.status")}</Label>
               <Select
                 value={status}
                 onValueChange={(v) => v !== null && setStatus(v)}
@@ -191,18 +192,18 @@ export function CreateGoalDialog({
                 <SelectTrigger
                   id="goal-status"
                   className="w-full cursor-pointer"
-                  aria-label={t("fields.status")}
+                  aria-label={tCommon("fields.status")}
                 >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="open">{t("status.open")}</SelectItem>
+                  <SelectItem value="open">{tCommon("status.open")}</SelectItem>
                   <SelectItem value="in_progress">
                     {t("status.in_progress")}
                   </SelectItem>
-                  <SelectItem value="done">{t("status.done")}</SelectItem>
+                  <SelectItem value="done">{tCommon("status.done")}</SelectItem>
                   <SelectItem value="cancelled">
-                    {t("status.cancelled")}
+                    {tCommon("status.cancelled")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -212,7 +213,7 @@ export function CreateGoalDialog({
               <Label htmlFor="goal-target-date">
                 {t("fields.targetDate")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <DatePicker
@@ -226,7 +227,7 @@ export function CreateGoalDialog({
           {/* Labels */}
           {availableLabels.length > 0 && (
             <div className="space-y-1.5">
-              <Label>{t("fields.labels")}</Label>
+              <Label>{tCommon("entities.labels")}</Label>
               <div className="flex flex-wrap gap-1.5">
                 {availableLabels.map((lbl) => (
                   <button
@@ -303,7 +304,7 @@ export function CreateGoalDialog({
             <Label>
               {t("fields.milestones")}
               <span className="ml-1 text-xs font-normal text-muted-foreground">
-                ({t("fields.optional")})
+                ({tCommon("fields.optional")})
               </span>
             </Label>
             <div className="space-y-1">
@@ -358,7 +359,7 @@ export function CreateGoalDialog({
               onClick={() => setOpen(false)}
               className="cursor-pointer"
             >
-              {t("createDialog.cancel")}
+              {tCommon("actions.cancel")}
             </Button>
             <Button
               type="submit"
@@ -366,8 +367,8 @@ export function CreateGoalDialog({
               className="cursor-pointer"
             >
               {creating
-                ? t("createDialog.submitting")
-                : t("createDialog.submit")}
+                ? tCommon("states.creating")
+                : tCommon("actions.create")}
             </Button>
           </DialogFooter>
         </form>

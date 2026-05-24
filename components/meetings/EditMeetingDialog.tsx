@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -84,6 +84,7 @@ export function EditMeetingDialog({
   hasGoogleCalendar = false,
 }: EditMeetingDialogProps) {
   const t = useTranslations("meetings");
+  const tCommon = useTranslations("common");
   const [title, setTitle] = useState(meeting?.title ?? "");
   const [scheduledAt, setScheduledAt] = useState(
     meeting ? toDatetimeLocal(meeting.scheduledAt) : "",
@@ -185,7 +186,9 @@ export function EditMeetingDialog({
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="edit-meeting-title">{t("fields.title")}</Label>
+              <Label htmlFor="edit-meeting-title">
+                {tCommon("fields.title")}
+              </Label>
               <Input
                 id="edit-meeting-title"
                 value={title}
@@ -224,7 +227,7 @@ export function EditMeetingDialog({
 
               <div className="space-y-1.5">
                 <Label htmlFor="edit-meeting-status">
-                  {t("fields.status")}
+                  {tCommon("fields.status")}
                 </Label>
                 <Select
                   value={status}
@@ -242,9 +245,11 @@ export function EditMeetingDialog({
                     <SelectItem value="upcoming">
                       {t("status.upcoming")}
                     </SelectItem>
-                    <SelectItem value="done">{t("status.done")}</SelectItem>
+                    <SelectItem value="done">
+                      {tCommon("status.done")}
+                    </SelectItem>
                     <SelectItem value="cancelled">
-                      {t("status.cancelled")}
+                      {tCommon("status.cancelled")}
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -469,7 +474,7 @@ export function EditMeetingDialog({
 
             {availableLabels.length > 0 && (
               <div className="space-y-1.5">
-                <Label>{t("fields.labels")}</Label>
+                <Label>{tCommon("entities.labels")}</Label>
                 <div className="flex flex-wrap gap-1.5">
                   {availableLabels.map((lbl) => (
                     <button
@@ -520,14 +525,14 @@ export function EditMeetingDialog({
                 onClick={() => onOpenChange(false)}
                 className="cursor-pointer"
               >
-                {t("editDialog.cancel")}
+                {tCommon("actions.cancel")}
               </Button>
               <Button
                 type="submit"
                 disabled={updating || !title.trim() || !scheduledAt}
                 className="cursor-pointer"
               >
-                {updating ? t("editDialog.submitting") : t("editDialog.submit")}
+                {updating ? tCommon("states.saving") : tCommon("actions.save")}
               </Button>
             </DialogFooter>
           </form>
@@ -542,7 +547,7 @@ export function EditMeetingDialog({
           </DialogHeader>
           <form onSubmit={handleQuickCreate} className="space-y-3">
             <div className="space-y-1.5">
-              <Label htmlFor="qc-name">{t("quickContact.name")}</Label>
+              <Label htmlFor="qc-name">{tCommon("fields.name")}</Label>
               <Input
                 id="qc-name"
                 value={qcName}
@@ -562,7 +567,7 @@ export function EditMeetingDialog({
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="qc-email">{t("quickContact.email")}</Label>
+              <Label htmlFor="qc-email">{tCommon("fields.email")}</Label>
               <Input
                 id="qc-email"
                 type="email"
@@ -578,7 +583,7 @@ export function EditMeetingDialog({
                 onClick={() => setQcOpen(false)}
                 className="cursor-pointer"
               >
-                {t("quickContact.cancel")}
+                {tCommon("actions.cancel")}
               </Button>
               <Button
                 type="submit"
