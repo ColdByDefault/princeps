@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -83,7 +83,7 @@ const tCommon = useTranslations("common");
               onClick={() => onOpenChange(false)}
               className="cursor-pointer"
             >
-              {t("summaryDialog.cancel")}
+              {tCommon("actions.cancel")}
             </Button>
             <Button
               type="submit"

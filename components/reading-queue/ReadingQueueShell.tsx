@@ -2,7 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
+ * @since canary-v1.1.4
  */
 
 "use client";
@@ -75,7 +76,7 @@ const tCommon = useTranslations("common");
   });
 
   const FILTERS: { key: StatusFilter; label: string }[] = [
-    { key: "all", label: t("filter.all") },
+    { key: "all", label: tCommon("filters.all") },
     { key: "unread", label: t("filter.unread") },
     { key: "read", label: t("filter.read") },
     { key: "archived", label: t("filter.archived") },
@@ -113,7 +114,7 @@ const tCommon = useTranslations("common");
             size="icon"
             onClick={handleRefresh}
             disabled={isPendingRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
@@ -184,7 +185,7 @@ const tCommon = useTranslations("common");
           <AlertDialogHeader>
             <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("deleteDialog.description")}
+              {tCommon("confirmation.cannotUndo")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

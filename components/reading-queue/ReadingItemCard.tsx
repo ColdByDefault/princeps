@@ -2,7 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
+ * @since canary-v1.1.4
  */
 
 "use client";
@@ -62,6 +63,7 @@ export function ReadingItemCard({
   isDeleting,
 }: ReadingItemCardProps) {
   const t = useTranslations("readingQueue");
+  const tCommon = useTranslations("common");
 
   const hostname = (() => {
     try {
@@ -156,14 +158,14 @@ export function ReadingItemCard({
                     size="icon"
                     onClick={onDelete}
                     disabled={isDeleting || isUpdating}
-                    aria-label={t("deleteDialog.trigger")}
+                    aria-label={tCommon("actions.delete")}
                     className="size-7 cursor-pointer text-destructive hover:text-destructive"
                   />
                 }
               >
                 <Trash2 className="size-3.5" />
               </TooltipTrigger>
-              <TooltipContent>{t("deleteDialog.trigger")}</TooltipContent>
+              <TooltipContent>{tCommon("actions.delete")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>

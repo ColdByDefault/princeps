@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.6
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -275,7 +275,7 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">
-            {t("pageTitle")}
+            {tCommon("entities.labels")}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {t("pageSubtitle")}
@@ -289,12 +289,12 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
             className="cursor-pointer rounded-full border-border/70"
             disabled={isPendingRefresh}
             onClick={handleRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
           >
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? t("refreshing") : t("refresh")}
+            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
           </Button>
           <Button
             type="button"
@@ -346,11 +346,11 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
                   </div>
                 }
                 onEdit={() => openEdit(label)}
-                editLabel={t("editLabel")}
+                editLabel={tCommon("actions.edit")}
                 onDelete={() => handleDeleteLabel(label.id)}
                 deleteLabel={tCommon("actions.delete")}
                 deleteTitle={t("deleteDialog.title")}
-                deleteDescription={t("deleteDialog.description")}
+                deleteDescription={tCommon("confirmation.cannotUndo")}
                 deleteCancelLabel={tCommon("actions.cancel")}
                 deleteConfirmLabel={tCommon("actions.delete")}
                 actionsAriaLabel={t("actionsLabel")}

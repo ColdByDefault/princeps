@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
  * @since canary-v1.0.2
  */
 
@@ -97,11 +97,11 @@ const tCommon = useTranslations("common");
   });
 
   const FILTERS: { key: Filter; label: string }[] = [
-    { key: "all", label: t("filter.all") },
-    { key: "open", label: t("filter.open") },
+    { key: "all", label: tCommon("filters.all") },
+    { key: "open", label: tCommon("status.open") },
     { key: "in_progress", label: t("filter.in_progress") },
-    { key: "done", label: t("filter.done") },
-    { key: "cancelled", label: t("filter.cancelled") },
+    { key: "done", label: tCommon("status.done") },
+    { key: "cancelled", label: tCommon("status.cancelled") },
   ];
 
   const visible =
@@ -210,7 +210,7 @@ const tCommon = useTranslations("common");
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">
-          {t("pageTitle")}
+          {tCommon("entities.goals")}
         </h1>
         <div className="flex items-center gap-2">
           <Button
@@ -231,13 +231,13 @@ const tCommon = useTranslations("common");
             size="sm"
             disabled={isPendingRefresh}
             onClick={handleRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? t("refreshing") : t("refresh")}
+            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
           </Button>
           <CreateGoalDialog
             onSubmit={createGoal}

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.6
+ * @version canary-v1.1.7
  * @since canary-v1.0.2
  */
 
@@ -88,7 +88,7 @@ const tCommon = useTranslations("common");
         />
       }
       onEdit={() => onEdit(goal)}
-      editLabel={t("editLabel")}
+      editLabel={tCommon("actions.edit")}
       onDelete={() => onDelete(goal.id)}
       deleteLabel={tCommon("actions.delete")}
       deleteTitle={t("deleteDialog.heading")}

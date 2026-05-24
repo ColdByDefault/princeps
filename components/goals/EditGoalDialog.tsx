@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.0.7
  * @since canary-v1.0.2
  */ 
 
@@ -146,7 +146,7 @@ const tCommon = useTranslations("common");
           {/* Title */}
           <div className="space-y-1.5">
             <Label htmlFor="edit-goal-title">
-              {t("fields.title")}
+              {tCommon("fields.title")}
               <span aria-hidden="true" className="ml-0.5 text-destructive">
                 *
               </span>
@@ -165,7 +165,7 @@ const tCommon = useTranslations("common");
             <Label htmlFor="edit-goal-description">
               {t("fields.description")}
               <span className="ml-1 text-xs font-normal text-muted-foreground">
-                ({t("fields.optional")})
+                ({tCommon("fields.optional")})
               </span>
             </Label>
             <Textarea
@@ -195,7 +195,7 @@ const tCommon = useTranslations("common");
           {/* Status + Target date */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="edit-goal-status">{t("fields.status")}</Label>
+              <Label htmlFor="edit-goal-status">{tCommon("fields.status")}</Label>
               <Select
                 value={status}
                 onValueChange={(v) => v !== null && setStatus(v)}
@@ -203,18 +203,18 @@ const tCommon = useTranslations("common");
                 <SelectTrigger
                   id="edit-goal-status"
                   className="w-full cursor-pointer"
-                  aria-label={t("fields.status")}
+                  aria-label={tCommon("fields.status")}
                 >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="open">{t("status.open")}</SelectItem>
+                  <SelectItem value="open">{tCommon("status.open")}</SelectItem>
                   <SelectItem value="in_progress">
                     {t("status.in_progress")}
                   </SelectItem>
-                  <SelectItem value="done">{t("status.done")}</SelectItem>
+                  <SelectItem value="done">{tCommon("status.done")}</SelectItem>
                   <SelectItem value="cancelled">
-                    {t("status.cancelled")}
+                    {tCommon("status.cancelled")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -224,7 +224,7 @@ const tCommon = useTranslations("common");
               <Label htmlFor="edit-goal-target-date">
                 {t("fields.targetDate")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <DatePicker
@@ -238,7 +238,7 @@ const tCommon = useTranslations("common");
           {/* Labels */}
           {availableLabels.length > 0 && (
             <div className="space-y-1.5">
-              <Label>{t("fields.labels")}</Label>
+              <Label>{tCommon("entities.labels")}</Label>
               <div className="flex flex-wrap gap-1.5">
                 {availableLabels.map((lbl) => (
                   <button
@@ -271,7 +271,7 @@ const tCommon = useTranslations("common");
               <Label>
                 {t("fields.linkedTasks")}
                 <span className="ml-1 text-xs font-normal text-muted-foreground">
-                  ({t("fields.optional")})
+                  ({tCommon("fields.optional")})
                 </span>
               </Label>
               <div className="max-h-32 overflow-y-auto space-y-1 rounded-md border border-border/60 p-2">
@@ -391,7 +391,7 @@ const tCommon = useTranslations("common");
               onClick={() => onOpenChange(false)}
               className="cursor-pointer"
             >
-              {t("editDialog.cancel")}
+              {tCommon("actions.cancel")}
             </Button>
             <Button
               type="submit"

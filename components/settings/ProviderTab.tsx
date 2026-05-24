@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -37,6 +37,7 @@ type ProviderTabProps = {
 
 export function ProviderTab({ initialStatus }: ProviderTabProps) {
   const t = useTranslations("settings.provider");
+  const tCommon = useTranslations("common");
   const [status, setStatus] = useState<ProviderStatusPayload>(initialStatus);
   const [isPending, startTransition] = useTransition();
 
@@ -82,7 +83,9 @@ export function ProviderTab({ initialStatus }: ProviderTabProps) {
             <RefreshCw
               className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
             />
-            {isPending ? t("refreshing") : t("refresh")}
+            {isPending
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
         </div>
 

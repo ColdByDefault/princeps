@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -39,6 +39,7 @@ export function BriefingCard({
   autoBriefingEnabled,
 }: BriefingCardProps) {
   const t = useTranslations("home.briefing");
+  const tCommon = useTranslations("common");
   const [briefing, setBriefing] = useState<BriefingRecord | null>(
     initialBriefing,
   );
@@ -82,7 +83,7 @@ export function BriefingCard({
             disabled={refreshing}
             className="cursor-pointer rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label={t("refresh")}
-            title={refreshing ? t("refreshing") : t("refresh")}
+            title={refreshing ? tCommon("states.refreshing") : t("refresh")}
           >
             <RefreshCw
               className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`}
@@ -133,5 +134,3 @@ export function BriefingCard({
     </div>
   );
 }
-
- 

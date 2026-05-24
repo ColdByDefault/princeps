@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -174,7 +174,7 @@ const tCommon = useTranslations("common");
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="meeting-title">
-                {t("fields.title")}
+                {tCommon("fields.title")}
                 <span aria-hidden="true" className="ml-0.5 text-destructive">
                   *
                 </span>
@@ -208,7 +208,7 @@ const tCommon = useTranslations("common");
                 <Label htmlFor="meeting-duration">
                   {t("fields.durationMin")}
                   <span className="ml-1 text-xs font-normal text-muted-foreground">
-                    ({t("fields.optional")})
+                    ({tCommon("fields.optional")})
                   </span>
                 </Label>
                 <Input
@@ -226,7 +226,7 @@ const tCommon = useTranslations("common");
                 <Label htmlFor="meeting-location">
                   {t("fields.location")}
                   <span className="ml-1 text-xs font-normal text-muted-foreground">
-                    ({t("fields.optional")})
+                    ({tCommon("fields.optional")})
                   </span>
                 </Label>
                 <Input
@@ -343,7 +343,7 @@ const tCommon = useTranslations("common");
 
             {availableLabels.length > 0 && (
               <div className="space-y-1.5">
-                <Label>{t("fields.labels")}</Label>
+                <Label>{tCommon("entities.labels")}</Label>
                 <div className="flex flex-wrap gap-1.5">
                   {availableLabels.map((lbl) => (
                     <button
@@ -397,7 +397,7 @@ const tCommon = useTranslations("common");
                 }}
                 className="cursor-pointer"
               >
-                {t("createDialog.cancel")}
+                {tCommon("actions.cancel")}
               </Button>
               <Button
                 type="submit"
@@ -459,7 +459,7 @@ const tCommon = useTranslations("common");
                 onClick={() => setQcOpen(false)}
                 className="cursor-pointer"
               >
-                {t("quickContact.cancel")}
+                {tCommon("actions.cancel")}
               </Button>
               <Button
                 type="submit"

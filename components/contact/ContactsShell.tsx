@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -104,7 +104,7 @@ const tCommon = useTranslations("common");
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">
-          {t("pageTitle")}
+          {tCommon("entities.contacts")}
         </h1>
         <div className="flex items-center gap-2">
           <Button
@@ -113,13 +113,13 @@ const tCommon = useTranslations("common");
             size="sm"
             disabled={isPendingRefresh}
             onClick={handleRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? t("refreshing") : t("refresh")}
+            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
           </Button>
           <Button
             type="button"
@@ -187,7 +187,7 @@ const tCommon = useTranslations("common");
           <AlertDialogHeader>
             <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("deleteDialog.description")}
+              {tCommon("confirmation.cannotUndo")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

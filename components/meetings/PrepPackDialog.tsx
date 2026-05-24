@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -43,6 +43,7 @@ export function PrepPackDialog({
   deleting,
 }: PrepPackDialogProps) {
   const t = useTranslations("meetings");
+  const tCommon = useTranslations("common");
 
   // The key prop on this dialog (keyed by meeting ID) remounts the component
   // when a different meeting is opened, so no manual sync state is needed.
@@ -115,14 +116,14 @@ export function PrepPackDialog({
                 onClick={handleDelete}
                 disabled={deleting || generating || !meeting}
                 className="cursor-pointer"
-                aria-label={t("prepPackDialog.delete")}
+                aria-label={tCommon("actions.delete")}
               >
                 {deleting ? (
                   <Loader2 className="mr-2 size-4 animate-spin" />
                 ) : (
                   <Trash2 className="mr-2 size-4" />
                 )}
-                {t("prepPackDialog.delete")}
+                {tCommon("actions.delete")}
               </Button>
             )}
           </div>

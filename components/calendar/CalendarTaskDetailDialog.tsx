@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -134,7 +134,7 @@ const tCommon = useTranslations("common");
             <div>
               <p className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-foreground">
                 <Tag className="size-3.5" />
-                {t("fields.labels")}
+                {tCommon("entities.labels")}
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {task.labels.map((label) => {
@@ -216,7 +216,7 @@ const tCommon = useTranslations("common");
             }}
           >
             <Pencil className="size-3.5" />
-            {t("editLabel")}
+            {tCommon("actions.edit")}
           </Button>
         </div>
       </DialogContent>

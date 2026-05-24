@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -167,7 +167,7 @@ export function CalendarDrawer({
   deleteMeeting,
 }: CalendarDrawerProps) {
   const t = useTranslations("calendar");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const tTasks = useTranslations("tasks");
   const tMeetings = useTranslations("meetings");
 
@@ -331,11 +331,11 @@ const tCommon = useTranslations("common");
         <div className="flex flex-col gap-1 px-1">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <i className="size-2 block rounded-full bg-blue-400 shrink-0" />
-            {t("legendTasks")}
+            {tCommon("entities.tasks")}
           </div>
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <i className="size-2 block rounded-full bg-emerald-400 shrink-0" />
-            {t("legendMeetings")}
+            {tCommon("entities.meetings")}
           </div>
         </div>
       </div>
@@ -385,7 +385,7 @@ const tCommon = useTranslations("common");
               <section>
                 <div className="mb-2.5 flex items-center justify-between">
                   <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    {t("tasksSection")}
+                    {tCommon("entities.tasks")}
                     {selectedDayTasks.length > 0 && (
                       <span className="ml-1.5 tabular-nums">
                         ({selectedDayTasks.length})
@@ -471,7 +471,7 @@ const tCommon = useTranslations("common");
                                     type="button"
                                     variant="ghost"
                                     size="icon-sm"
-                                    aria-label={tTasks("editLabel")}
+                                    aria-label={tCommon("actions.edit")}
                                     onClick={() => openEditTask(task)}
                                     disabled={anyChildOpen}
                                     className="cursor-pointer"
@@ -481,7 +481,7 @@ const tCommon = useTranslations("common");
                                 <Pencil className="size-3" />
                               </TooltipTrigger>
                               <TooltipContent>
-                                {tTasks("editLabel")}
+                                {tCommon("actions.edit")}
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
@@ -523,7 +523,7 @@ const tCommon = useTranslations("common");
               <section>
                 <div className="mb-2.5 flex items-center justify-between">
                   <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    {t("meetingsSection")}
+                    {tCommon("entities.meetings")}
                     {selectedDayMeetings.length > 0 && (
                       <span className="ml-1.5 tabular-nums">
                         ({selectedDayMeetings.length})
@@ -607,7 +607,7 @@ const tCommon = useTranslations("common");
                                     type="button"
                                     variant="ghost"
                                     size="icon-sm"
-                                    aria-label={tMeetings("editLabel")}
+                                    aria-label={tCommon("actions.edit")}
                                     onClick={() => openEditMeeting(meeting)}
                                     disabled={anyChildOpen}
                                     className="cursor-pointer"
@@ -617,7 +617,7 @@ const tCommon = useTranslations("common");
                                 <Pencil className="size-3" />
                               </TooltipTrigger>
                               <TooltipContent>
-                                {tMeetings("editLabel")}
+                                {tCommon("actions.edit")}
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
@@ -743,7 +743,7 @@ const tCommon = useTranslations("common");
           <AlertDialogHeader>
             <AlertDialogTitle>{tTasks("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {tTasks("deleteDialog.description")}
+              {tCommon("confirmation.cannotUndo")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -773,7 +773,7 @@ const tCommon = useTranslations("common");
               {tMeetings("deleteDialog.title")}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {tMeetings("deleteDialog.description")}
+              {tCommon("confirmation.cannotUndo")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

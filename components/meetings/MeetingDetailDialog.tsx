@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -289,14 +289,14 @@ const tCommon = useTranslations("common");
             size="sm"
             variant="outline"
             className="cursor-pointer"
-            aria-label={t("editLabel")}
+            aria-label={tCommon("actions.edit")}
             onClick={() => {
               onOpenChange(false);
               onEdit(meeting);
             }}
           >
             <Pencil className="mr-1.5 size-3.5" />
-            {t("editLabel")}
+            {tCommon("actions.edit")}
           </Button>
           <Button
             size="sm"

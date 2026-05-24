@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.6
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -92,11 +92,11 @@ const tCommon = useTranslations("common");
         </TooltipProvider>
       }
       onEdit={() => onEdit(task)}
-      editLabel={t("editLabel")}
+      editLabel={tCommon("actions.edit")}
       onDelete={() => onDelete(task.id)}
       deleteLabel={tCommon("actions.delete")}
       deleteTitle={t("deleteDialog.title")}
-      deleteDescription={t("deleteDialog.description")}
+      deleteDescription={tCommon("confirmation.cannotUndo")}
       deleteCancelLabel={tCommon("actions.cancel")}
       deleteConfirmLabel={tCommon("actions.delete")}
       actionsAriaLabel={t("actionsLabel")}

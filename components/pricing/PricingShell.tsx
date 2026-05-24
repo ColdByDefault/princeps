@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -39,6 +39,7 @@ type PricingShellProps = {
 
 export function PricingShell({ currentTier }: PricingShellProps) {
   const t = useTranslations("pricing");
+  const tCommon = useTranslations("common");
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
@@ -158,19 +159,19 @@ export function PricingShell({ currentTier }: PricingShellProps) {
                     value={fmt(limits.chatHistoryTotal)}
                   />
                   <LimitRow
-                    label={t("limits.tasksMax")}
+                    label={tCommon("entities.tasks")}
                     value={fmt(limits.tasksMax)}
                   />
                   <LimitRow
-                    label={t("limits.meetingsMax")}
+                    label={tCommon("entities.meetings")}
                     value={fmt(limits.meetingsMax)}
                   />
                   <LimitRow
-                    label={t("limits.decisionsMax")}
+                    label={tCommon("entities.decisions")}
                     value={fmt(limits.decisionsMax)}
                   />
                   <LimitRow
-                    label={t("limits.contactsMax")}
+                    label={tCommon("entities.contacts")}
                     value={fmt(limits.contactsMax)}
                   />
                   <LimitRow

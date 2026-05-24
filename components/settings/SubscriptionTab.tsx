@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -54,6 +54,7 @@ type Props = {
 
 export function SubscriptionTab({ currentTier, appOrigin, priceIds }: Props) {
   const t = useTranslations("settings.subscription");
+  const tCommon = useTranslations("common");
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const [loadingPortal, setLoadingPortal] = useState(false);
   const [loadingTier, setLoadingTier] = useState<Tier | null>(null);
@@ -239,16 +240,19 @@ export function SubscriptionTab({ currentTier, appOrigin, priceIds }: Props) {
 
                   <ul className="mb-5 mt-3 space-y-1.5 text-sm">
                     <LimitRow
-                      label="Messages / month"
+                      label={t("limits.messagesPerMonth")}
                       value={fmt(limits.messagesPerMonth)}
                     />
                     <LimitRow
-                      label="Contacts"
+                      label={tCommon("entities.contacts")}
                       value={fmt(limits.contactsMax)}
                     />
-                    <LimitRow label="Tasks" value={fmt(limits.tasksMax)} />
                     <LimitRow
-                      label="Proactive nudges"
+                      label={tCommon("entities.tasks")}
+                      value={fmt(limits.tasksMax)}
+                    />
+                    <LimitRow
+                      label={t("limits.nudgesEnabled")}
                       value={
                         limits.nudgesEnabled ? (
                           <Check className="h-4 w-4 text-emerald-500" />

@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -41,6 +41,7 @@ export function ToolsTab({
 }: ToolsTabProps) {
   const t = useTranslations("settings.tools");
   const tTools = useTranslations("tools");
+  const tCommon = useTranslations("common");
   const [disabled, setDisabled] = useState<Set<string>>(
     new Set(initialDisabledTools),
   );
@@ -84,6 +85,16 @@ export function ToolsTab({
     new Map(),
   );
 
+  function getGroupLabel(groupKey: string): string {
+    if (groupKey === "tasks") return tCommon("entities.tasks");
+    if (groupKey === "meetings") return tCommon("entities.meetings");
+    if (groupKey === "contacts") return tCommon("entities.contacts");
+    if (groupKey === "decisions") return tCommon("entities.decisions");
+    if (groupKey === "goals") return tCommon("entities.goals");
+    if (groupKey === "labels") return tCommon("entities.labels");
+    return tTools(`groups.${groupKey}`);
+  }
+
   return (
     <div className="space-y-2">
       {/* Section header */}
@@ -98,7 +109,7 @@ export function ToolsTab({
           <Collapsible key={groupKey} defaultOpen={false}>
             <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 pb-1.5">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">
-                {tTools(`groups.${groupKey}`)}
+                {getGroupLabel(groupKey)}
               </p>
               <ChevronDown className="size-3.5 shrink-0 text-muted-foreground transition-transform duration-200 group-data-panel-open:rotate-180" />
             </CollapsibleTrigger>

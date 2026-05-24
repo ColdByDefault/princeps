@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -115,7 +115,7 @@ const tCommon = useTranslations("common");
           onClick={onClose}
           disabled={updating}
         >
-          {t("editDialog.cancel")}
+          {tCommon("actions.cancel")}
         </Button>
         <Button type="submit" className="cursor-pointer" disabled={updating}>
           {updating ? tCommon("states.saving") : tCommon("actions.save")}

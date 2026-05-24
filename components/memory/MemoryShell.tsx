@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.0.2
+ * @version canary-v1.0.7
  * @since canary-v1.0.2
  */ 
 
@@ -96,13 +96,13 @@ const tCommon = useTranslations("common");
             size="sm"
             disabled={isPendingRefresh}
             onClick={handleRefresh}
-            aria-label={t("refresh")}
+            aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? t("refreshing") : t("refresh")}
+            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
           </Button>
           <CreateMemoryEntryDialog onSubmit={createEntry} creating={creating}>
             <Button
@@ -155,7 +155,7 @@ const tCommon = useTranslations("common");
           <AlertDialogHeader>
             <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("deleteDialog.description")}
+              {tCommon("confirmation.cannotUndo")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

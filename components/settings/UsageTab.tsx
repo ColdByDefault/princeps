@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -78,6 +78,7 @@ type UsageTabProps = {
 
 export function UsageTab({ usage: initialUsage }: UsageTabProps) {
   const t = useTranslations("settings.usage");
+  const tCommon = useTranslations("common");
   const [usage, setUsage] = useState<UsageSummary>(initialUsage);
   const [isPending, startTransition] = useTransition();
 
@@ -114,7 +115,9 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           <RefreshCw
             className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
           />
-          {isPending ? t("refreshing") : t("refresh")}
+          {isPending
+            ? tCommon("states.refreshing")
+            : tCommon("actions.refresh")}
         </Button>
       </div>
 
