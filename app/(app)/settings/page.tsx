@@ -77,44 +77,48 @@ export default async function SettingsPage() {
   const currentTier = (userRow?.tier ?? "free") as Tier;
 
   return (
-    <NextIntlClientProvider messages={{ settings: messages.settings }}>
+    <NextIntlClientProvider
+      messages={{ settings: messages.settings, tools: messages.tools }}
+    >
       <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6">
-      <SettingsShell
-        initialStatus={initialStatus}
-        initialTab={initialTab}
-        initialUsage={initialUsage}
-        initialNotificationsEnabled={initialPrefs.notificationsEnabled ?? true}
-        initialTimezone={userRow?.timezone ?? "UTC"}
-        initialLocation={initialPrefs.location ?? null}
-        initialAssistantName={initialPrefs.assistantName ?? null}
-        initialAssistantTone={initialPrefs.assistantTone ?? null}
-        initialAddressStyle={initialPrefs.addressStyle ?? null}
-        initialResponseLength={initialPrefs.responseLength ?? null}
-        initialCustomSystemPrompt={initialPrefs.customSystemPrompt ?? null}
-        initialAutoBriefingEnabled={initialPrefs.autoBriefingEnabled ?? true}
-        initialReportsEnabled={initialPrefs.reportsEnabled ?? true}
-        initialOverdueTaskNudgesEnabled={
-          initialPrefs.overdueTaskNudgesEnabled ?? true
-        }
-        nudgesAvailable={getPlanLimits(currentTier).nudgesEnabled}
-        initialDisabledTools={initialPrefs.disabledTools}
-        allTools={allTools}
-        currentTier={currentTier}
-        appOrigin={process.env.BETTER_AUTH_URL ?? "http://localhost:3000"}
-        initialIntegrations={integrationRows.map((r) => ({
-          provider: r.provider,
-          lastSyncedAt: r.lastSyncedAt?.toISOString() ?? null,
-          expiresAt: r.expiresAt?.toISOString() ?? null,
-          createdAt: r.createdAt.toISOString(),
-        }))}
-        priceIds={{
-          proMonthly: process.env.STRIPE_PRICE_PRO_MONTHLY ?? "",
-          proAnnual: process.env.STRIPE_PRICE_PRO_ANNUAL ?? "",
-          premiumMonthly: process.env.STRIPE_PRICE_PREMIUM_MONTHLY ?? "",
-          premiumAnnual: process.env.STRIPE_PRICE_PREMIUM_ANNUAL ?? "",
-        }}
-      />
-    </div>
+        <SettingsShell
+          initialStatus={initialStatus}
+          initialTab={initialTab}
+          initialUsage={initialUsage}
+          initialNotificationsEnabled={
+            initialPrefs.notificationsEnabled ?? true
+          }
+          initialTimezone={userRow?.timezone ?? "UTC"}
+          initialLocation={initialPrefs.location ?? null}
+          initialAssistantName={initialPrefs.assistantName ?? null}
+          initialAssistantTone={initialPrefs.assistantTone ?? null}
+          initialAddressStyle={initialPrefs.addressStyle ?? null}
+          initialResponseLength={initialPrefs.responseLength ?? null}
+          initialCustomSystemPrompt={initialPrefs.customSystemPrompt ?? null}
+          initialAutoBriefingEnabled={initialPrefs.autoBriefingEnabled ?? true}
+          initialReportsEnabled={initialPrefs.reportsEnabled ?? true}
+          initialOverdueTaskNudgesEnabled={
+            initialPrefs.overdueTaskNudgesEnabled ?? true
+          }
+          nudgesAvailable={getPlanLimits(currentTier).nudgesEnabled}
+          initialDisabledTools={initialPrefs.disabledTools}
+          allTools={allTools}
+          currentTier={currentTier}
+          appOrigin={process.env.BETTER_AUTH_URL ?? "http://localhost:3000"}
+          initialIntegrations={integrationRows.map((r) => ({
+            provider: r.provider,
+            lastSyncedAt: r.lastSyncedAt?.toISOString() ?? null,
+            expiresAt: r.expiresAt?.toISOString() ?? null,
+            createdAt: r.createdAt.toISOString(),
+          }))}
+          priceIds={{
+            proMonthly: process.env.STRIPE_PRICE_PRO_MONTHLY ?? "",
+            proAnnual: process.env.STRIPE_PRICE_PRO_ANNUAL ?? "",
+            premiumMonthly: process.env.STRIPE_PRICE_PREMIUM_MONTHLY ?? "",
+            premiumAnnual: process.env.STRIPE_PRICE_PREMIUM_ANNUAL ?? "",
+          }}
+        />
+      </div>
     </NextIntlClientProvider>
   );
 }
