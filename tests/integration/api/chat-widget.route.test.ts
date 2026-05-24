@@ -75,6 +75,14 @@ vi.mock("@/lib/features/reports", () => ({
 
 import { POST } from "@/app/api/chat/widget/route";
 
+function parseSseEvents(payload: string): Array<Record<string, unknown>> {
+  return payload
+    .split("\n\n")
+    .map((chunk) => chunk.trim())
+    .filter((chunk) => chunk.startsWith("data: "))
+    .map((chunk) => JSON.parse(chunk.slice(6)) as Record<string, unknown>);
+}
+
 describe("/api/chat/widget route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -90,6 +98,10 @@ describe("/api/chat/widget route", () => {
     mocks.getUserPreferences.mockResolvedValue({
       language: "en",
       reportsEnabled: true,
+    });
+    mocks.buildSystemPrompt.mockResolvedValue({
+      role: "system",
+      content: "You are Princeps.",
     });
     mocks.getActiveToolsForUser.mockResolvedValue([]);
   });
@@ -171,5 +183,33 @@ describe("/api/chat/widget route", () => {
       error: "Monthly limit reached.",
     });
     expect(mocks.getUserPreferences).not.toHaveBeenCalled();
+  });
+
+  it("redacts stream errors in SSE events", async () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    mocks.streamChat.mockImplementationOnce(async function* () {
+      throw new Error("refresh_token leaked in provider error");
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/chat/widget", {
+        body: JSON.stringify({ message: "Hello" }),
+        method: "POST",
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const payload = await response.text();
+    const events = parseSseEvents(payload);
+
+    expect(events).toContainEqual({ type: "error", message: "Stream error" });
+    expect(payload).not.toContain("refresh_token");
+    expect(consoleError).toHaveBeenCalledWith("[chat/widget] stream failed", {
+      errorName: "Error",
+    });
+    consoleError.mockRestore();
   });
 });

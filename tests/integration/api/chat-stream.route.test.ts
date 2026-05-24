@@ -98,6 +98,14 @@ function params(chatId = "chat-1") {
   return { params: Promise.resolve({ chatId }) };
 }
 
+function parseSseEvents(payload: string): Array<Record<string, unknown>> {
+  return payload
+    .split("\n\n")
+    .map((chunk) => chunk.trim())
+    .filter((chunk) => chunk.startsWith("data: "))
+    .map((chunk) => JSON.parse(chunk.slice(6)) as Record<string, unknown>);
+}
+
 describe("/api/chat/[chatId]/stream route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -116,6 +124,10 @@ describe("/api/chat/[chatId]/stream route", () => {
     mocks.getUserPreferences.mockResolvedValue({
       language: "en",
       reportsEnabled: true,
+    });
+    mocks.buildSystemPrompt.mockResolvedValue({
+      role: "system",
+      content: "You are Princeps.",
     });
     mocks.getActiveToolsForUser.mockResolvedValue([]);
     mocks.getUserTier.mockResolvedValue("pro");
@@ -205,5 +217,34 @@ describe("/api/chat/[chatId]/stream route", () => {
       error: "Monthly limit reached.",
     });
     expect(mocks.saveUserMessage).not.toHaveBeenCalled();
+  });
+
+  it("redacts stream errors in SSE events", async () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    mocks.streamChat.mockImplementationOnce(async function* () {
+      throw new Error("provider api key leaked: sk-very-secret");
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/chat/chat-1/stream", {
+        body: JSON.stringify({ message: "Hello" }),
+        method: "POST",
+      }),
+      params(),
+    );
+
+    expect(response.status).toBe(200);
+    const payload = await response.text();
+    const events = parseSseEvents(payload);
+
+    expect(events).toContainEqual({ type: "error", message: "Stream error" });
+    expect(payload).not.toContain("sk-very-secret");
+    expect(consoleError).toHaveBeenCalledWith("[chat/stream] stream failed", {
+      errorName: "Error",
+    });
+    consoleError.mockRestore();
   });
 });
