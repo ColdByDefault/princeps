@@ -17,6 +17,8 @@ import { ChatWidgetProvider } from "@/components/chat-widget";
 import { CalendarDrawerProvider } from "@/components/calendar";
 import type { AppLanguage } from "@/types/i18n";
 
+export const dynamic = "force-dynamic";
+
 export default async function AppLayout({
   children,
 }: {
