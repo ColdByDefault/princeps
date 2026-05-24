@@ -31,7 +31,10 @@
       "knowledge": "Wissensbasis",
       "memory": "Gedächtnis",
       "readingQueue": "Leseliste",
-      "dailyBriefing": "Tagesbriefing"
+      "dailyBriefing": "Tagesbriefing",
+      "reports": "Berichte",
+      "settings": "Einstellungen",
+      "plans": "Pläne"
     },
     "filters": {
       "all": "Alle"
@@ -454,8 +457,6 @@
       "brand": "Princeps",
       "home": "Arbeitsbereich",
       "chat": "Chat",
-      "settings": "Einstellungen",
-      "pricing": "Pläne",
       "userFallback": "Arbeitsbereich-Nutzer",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…",
@@ -468,7 +469,6 @@
       "profile": "Mein Profil",
       "apps": "Apps",
       "intel": "Intelligenz",
-      "reports": "Berichte",
       "comingSoon": "Bald verfügbar"
     },
     "language": {
@@ -521,8 +521,6 @@
       },
       "navGroupAccount": "Konto",
       "userFallback": "Arbeitsbereich-Nutzer",
-      "navSettings": "Einstellungen",
-      "navPricing": "Preise",
       "profile": "Mein Profil",
       "signOut": "Abmelden",
       "signingOut": "Wird abgemeldet…"

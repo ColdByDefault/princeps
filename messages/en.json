@@ -31,7 +31,10 @@
       "knowledge": "Knowledge Base",
       "memory": "Memory",
       "readingQueue": "Reading Queue",
-      "dailyBriefing": "Daily Briefing"
+      "dailyBriefing": "Daily Briefing",
+      "reports": "Reports",
+      "settings": "Settings",
+      "plans": "Plans"
     },
     "filters": {
       "all": "All"
@@ -454,8 +457,6 @@
       "brand": "Princeps",
       "home": "Workspace",
       "chat": "Chat",
-      "settings": "Settings",
-      "pricing": "Plans",
       "userFallback": "Workspace user",
       "signOut": "Sign out",
       "signingOut": "Signing out…",
@@ -468,7 +469,6 @@
       "profile": "My profile",
       "apps": "Apps",
       "intel": "Intelligence",
-      "reports": "Reports",
       "comingSoon": "Coming soon"
     },
     "language": {
@@ -521,8 +521,6 @@
       },
       "navGroupAccount": "Account",
       "userFallback": "Workspace user",
-      "navSettings": "Settings",
-      "navPricing": "Pricing",
       "profile": "My profile",
       "signOut": "Sign out",
       "signingOut": "Signing out…"

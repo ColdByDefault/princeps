@@ -91,7 +91,11 @@ export default function Navbar({ sessionUser }: NavbarProps) {
   const navLinks = [
     { href: "/home", icon: LayoutDashboard, label: t("nav.home") },
     { href: "/chat", icon: MessageSquare, label: t("nav.chat") },
-    { href: "/knowledge", icon: BrainCircuit, label: t("nav.knowledge") },
+    {
+      href: "/knowledge",
+      icon: BrainCircuit,
+      label: tCommon("entities.knowledge"),
+    },
     { href: "/labels", icon: Tag, label: tCommon("entities.labels") },
     { href: "/tasks", icon: CheckSquare, label: tCommon("entities.tasks") },
     { href: "/goals", icon: Target, label: tCommon("entities.goals") },
@@ -106,12 +110,28 @@ export default function Navbar({ sessionUser }: NavbarProps) {
       icon: Scale,
       label: tCommon("entities.decisions"),
     },
-    { href: "/memory", icon: BookMarked, label: t("nav.memory") },
-    { href: "/reading-queue", icon: BookOpen, label: t("nav.readingQueue") },
-    { href: "/briefings", icon: Newspaper, label: t("nav.briefings") },
-    { href: "/reports", icon: FileBarChart2, label: t("nav.reports") },
-    { href: "/settings", icon: Settings, label: t("nav.settings") },
-    { href: "/pricing", icon: CreditCard, label: t("nav.pricing") },
+    { href: "/memory", icon: BookMarked, label: tCommon("entities.memory") },
+    {
+      href: "/reading-queue",
+      icon: BookOpen,
+      label: tCommon("entities.readingQueue"),
+    },
+    {
+      href: "/briefings",
+      icon: Newspaper,
+      label: tCommon("entities.dailyBriefing"),
+    },
+    {
+      href: "/reports",
+      icon: FileBarChart2,
+      label: tCommon("entities.reports"),
+    },
+    {
+      href: "/settings",
+      icon: Settings,
+      label: tCommon("entities.settings"),
+    },
+    { href: "/pricing", icon: CreditCard, label: tCommon("entities.plans") },
   ];
 
   const userLabel =

@@ -154,8 +154,12 @@ export function GlobalSearch() {
       icon: BookOpen,
       label: tCommon("entities.readingQueue"),
     },
-    { href: "/settings", icon: Settings, label: t("nav.settings") },
-    { href: "/pricing", icon: CreditCard, label: t("nav.pricing") },
+    {
+      href: "/settings",
+      icon: Settings,
+      label: tCommon("entities.settings"),
+    },
+    { href: "/pricing", icon: CreditCard, label: tCommon("entities.plans") },
     { href: "/profile", icon: User2, label: t("nav.profile") },
   ];
 
