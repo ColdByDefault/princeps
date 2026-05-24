@@ -193,13 +193,7 @@ function HighlightedText({
   );
 }
 
-function PreviewChips({
-  labels,
-  query,
-}: {
-  labels: string[];
-  query: string;
-}) {
+function PreviewChips({ labels, query }: { labels: string[]; query: string }) {
   const visible = labels.slice(0, 3);
 
   if (visible.length === 0) {
@@ -411,7 +405,10 @@ export function GlobalSearch() {
                         />
                         {reportPreview && (
                           <span className="truncate text-xs text-muted-foreground">
-                            <HighlightedText text={reportPreview} query={query} />
+                            <HighlightedText
+                              text={reportPreview}
+                              query={query}
+                            />
                           </span>
                         )}
                       </span>
