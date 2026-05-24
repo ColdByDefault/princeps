@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -252,7 +252,7 @@ export function MeetingCard({
             variant="outline"
             className={cn("text-xs font-medium", STATUS_COLORS[meeting.status])}
           >
-            {t(`status.${meeting.status}`)}
+            {t(`status.${meeting.status}` as never)}
           </Badge>
           {meeting.labels.slice(0, 3).map((lbl) => {
             const Icon = lbl.icon
@@ -290,7 +290,7 @@ export function MeetingCard({
             ) : (
               <Users className="size-3 shrink-0" />
             )}
-            {t(`kind.${meeting.kind}`)}
+            {t(`kind.${meeting.kind}` as never)}
           </Badge>
           {/* Source badge */}
           {(() => {

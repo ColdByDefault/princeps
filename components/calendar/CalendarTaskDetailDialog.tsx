@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -95,7 +95,7 @@ export function CalendarTaskDetailDialog({
               STATUS_COLORS[task.status] ?? STATUS_COLORS.open,
             )}
           >
-            {t(`status.${statusKey(task.status)}`)}
+            {t(`status.${statusKey(task.status)}` as never)}
           </Badge>
           <Badge
             variant="outline"
@@ -104,7 +104,7 @@ export function CalendarTaskDetailDialog({
               PRIORITY_COLORS[task.priority] ?? PRIORITY_COLORS.normal,
             )}
           >
-            {t(`priority.${task.priority}`)}
+            {t(`priority.${task.priority}` as never)}
           </Badge>
         </div>
 

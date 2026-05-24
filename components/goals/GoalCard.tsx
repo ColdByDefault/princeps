@@ -93,7 +93,7 @@ export function GoalCard({
   const [viewOpen, setViewOpen] = useState(false);
 
   const fields: DetailField[] = [
-    { label: t("fields.status"), value: t(`status.${goal.status}`) },
+    { label: t("fields.status"), value: t(`status.${goal.status}` as never) },
     {
       label: t("fields.description"),
       value: <p className="whitespace-pre-wrap">{goal.description}</p>,
@@ -322,7 +322,7 @@ export function GoalCard({
               variant="outline"
               className={cn("text-xs font-medium", STATUS_COLORS[goal.status])}
             >
-              {t(`status.${goal.status}`)}
+              {t(`status.${goal.status}` as never)}
             </Badge>
             {goal.labels.slice(0, 3).map((lbl) => {
               const Icon = lbl.icon

@@ -68,7 +68,7 @@ export function DecisionCard({
   const [viewOpen, setViewOpen] = useState(false);
 
   const fields: DetailField[] = [
-    { label: t("fields.status"), value: t(`status.${decision.status}`) },
+    { label: t("fields.status"), value: t(`status.${decision.status}` as never) },
     {
       label: t("fields.rationale"),
       value: <p className="whitespace-pre-wrap">{decision.rationale}</p>,
@@ -171,7 +171,7 @@ export function DecisionCard({
                 STATUS_COLORS[decision.status],
               )}
             >
-              {t(`status.${decision.status}`)}
+              {t(`status.${decision.status}` as never)}
             </Badge>
             {decision.meetingTitle && (
               <span className="inline-flex h-5 items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-2 text-[10px] font-medium text-muted-foreground">
