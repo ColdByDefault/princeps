@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.7
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -11,11 +11,11 @@ import { getLocale } from "next-intl/server";
 import { auth } from "@/lib/core/auth/auth";
 import { db } from "@/lib/core/db";
 import { getUserPreferences } from "@/lib/platform/settings";
-import { Navbar, Footer } from "@/components/navigation";
-import { GlobalSearch } from "@/components/global-search";
+import { Navbar, Footer } from "@/components/settings/navigation";
+import { GlobalSearch } from "@/components/settings/global-search";
 import { LanguageHydrator, ThemeHydrator } from "@/components/shared";
-import { ChatWidgetProvider } from "@/components/chat-widget";
-import { CalendarDrawerProvider } from "@/components/calendar";
+import { ChatWidgetProvider } from "@/components/chat/chat-widget";
+import { CalendarDrawerProvider } from "@/components/settings/calendar";
 import type { AppLanguage } from "@/types/i18n";
 
 export const dynamic = "force-dynamic";
@@ -90,3 +90,4 @@ export default async function AppLayout({
     </div>
   );
 }
+

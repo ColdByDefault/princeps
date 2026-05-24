@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -14,7 +14,7 @@ import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listTasks } from "@/lib/features/tasks";
 import { listLabels } from "@/lib/features/labels";
 import { listGoals } from "@/lib/features/goals";
-import { TasksShell } from "@/components/tasks";
+import { TasksShell } from "@/components/features/tasks";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -50,3 +50,5 @@ export default async function TasksPage() {
     />
   );
 }
+
+

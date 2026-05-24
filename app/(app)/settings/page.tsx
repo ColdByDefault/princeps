@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -19,7 +19,7 @@ import {
   getUserPreferences,
 } from "@/lib/platform/settings";
 import { TOOL_REGISTRY } from "@/lib/ai/tools";
-import { SettingsShell } from "@/components/settings";
+import { SettingsShell } from "@/components/settings/settings";
 import type { AppLanguage } from "@/types/i18n";
 import { getPlanLimits, type Tier } from "@/types/billing";
 
@@ -114,3 +114,5 @@ export default async function SettingsPage() {
     </div>
   );
 }
+
+

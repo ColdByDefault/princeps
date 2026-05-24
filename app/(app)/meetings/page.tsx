@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -16,7 +16,7 @@ import { listMeetings } from "@/lib/features/meetings";
 import { listLabels } from "@/lib/features/labels";
 import { listContacts } from "@/lib/features/contacts";
 import { listTasks } from "@/lib/features/tasks";
-import { MeetingsShell } from "@/components/meetings";
+import { MeetingsShell } from "@/components/features/meetings";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -60,3 +60,5 @@ export default async function MeetingsPage() {
     />
   );
 }
+
+

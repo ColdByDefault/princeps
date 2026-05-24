@@ -2,13 +2,13 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { ThemeProvider } from "@/components/theme";
+import { ThemeProvider } from "@/components/core/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/core/utils";
@@ -47,3 +47,5 @@ export default async function RootLayout({
     </html>
   );
 }
+
+

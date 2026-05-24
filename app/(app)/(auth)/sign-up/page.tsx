@@ -2,14 +2,14 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
 import { type Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { SignUpCard } from "@/components/auth";
+import { SignUpCard } from "@/components/core/auth";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
@@ -34,3 +34,5 @@ export default async function SignUpPage() {
 
   return <SignUpCard />;
 }
+
+

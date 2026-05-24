@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -10,8 +10,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/core/auth/auth";
 import { getChatMessages } from "@/lib/features/chat";
-import { AppSidebar, SiteHeader } from "@/components/sidebars/chat";
-import { ChatWindow } from "@/components/chat";
+import { AppSidebar, SiteHeader } from "@/components/chat/sidebars/chat";
+import { ChatWindow } from "@/components/chat/chat";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 type Props = { params: Promise<{ chatId: string }> };
@@ -54,3 +54,4 @@ export default async function ChatIdPage({ params }: Props) {
     </SidebarProvider>
   );
 }
+

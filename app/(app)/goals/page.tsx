@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -17,7 +17,7 @@ import { listGoals } from "@/lib/features/goals";
 import { listLabels } from "@/lib/features/labels";
 import { listTasks } from "@/lib/features/tasks";
 import { listContacts } from "@/lib/features/contacts";
-import { GoalsShell } from "@/components/goals";
+import { GoalsShell } from "@/components/features/goals";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -55,3 +55,5 @@ export default async function GoalsPage() {
     />
   );
 }
+
+

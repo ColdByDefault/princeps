@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.8
  * @since beta
  */
 
@@ -15,7 +15,7 @@ import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { getBriefing } from "@/lib/features/briefings";
 import { getUserPreferences } from "@/lib/platform/settings/user-preferences.logic";
-import { BriefingShell } from "@/components/briefings";
+import { BriefingShell } from "@/components/features/briefings";
 import type { AppLanguage } from "@/types/i18n";
 
 export async function generateMetadata() {
@@ -45,3 +45,5 @@ export default async function BriefingsPage() {
     />
   );
 }
+
+
