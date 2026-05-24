@@ -28,6 +28,7 @@ type Props = {
 
 export function ReportCard({ report, onDelete, isDeleting }: Props) {
   const t = useTranslations("reports");
+const tCommon = useTranslations("common");
 
   const date = new Date(report.createdAt);
   const dateStr = date.toLocaleDateString(undefined, {
@@ -72,7 +73,7 @@ export function ReportCard({ report, onDelete, isDeleting }: Props) {
             >
               <Trash2 className="h-4 w-4" />
             </TooltipTrigger>
-            <TooltipContent>{t("delete")}</TooltipContent>
+            <TooltipContent>{tCommon("actions.delete")}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>

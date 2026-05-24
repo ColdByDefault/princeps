@@ -61,6 +61,7 @@ export function CreateTaskDialog({
   children,
 }: CreateTaskDialogProps) {
   const t = useTranslations("tasks");
+const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
 
   function handleOpenChange(v: boolean) {
@@ -281,8 +282,8 @@ export function CreateTaskDialog({
               className="cursor-pointer"
             >
               {creating
-                ? t("createDialog.submitting")
-                : t("createDialog.submit")}
+                ? tCommon("states.creating")
+                : tCommon("actions.create")}
             </Button>
           </DialogFooter>
         </form>

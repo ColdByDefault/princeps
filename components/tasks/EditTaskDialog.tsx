@@ -66,6 +66,7 @@ export function EditTaskDialog({
   availableGoals,
 }: EditTaskDialogProps) {
   const t = useTranslations("tasks");
+const tCommon = useTranslations("common");
   const [title, setTitle] = useState(task?.title ?? "");
   const [notes, setNotes] = useState(task?.notes ?? "");
   const [priority, setPriority] = useState(task?.priority ?? "normal");
@@ -350,7 +351,7 @@ export function EditTaskDialog({
               disabled={updating || !title.trim()}
               className="cursor-pointer"
             >
-              {updating ? t("editDialog.submitting") : t("editDialog.submit")}
+              {updating ? tCommon("states.saving") : tCommon("actions.save")}
             </Button>
           </DialogFooter>
         </form>

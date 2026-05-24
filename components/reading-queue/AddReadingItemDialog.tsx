@@ -35,6 +35,7 @@ export function AddReadingItemDialog({
   isAdding,
 }: AddReadingItemDialogProps) {
   const t = useTranslations("readingQueue");
+const tCommon = useTranslations("common");
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
 
@@ -101,7 +102,7 @@ export function AddReadingItemDialog({
               disabled={isAdding || !url.trim()}
               className="cursor-pointer"
             >
-              {isAdding ? t("addDialog.saving") : t("addDialog.save")}
+              {isAdding ? tCommon("states.saving") : tCommon("actions.save")}
             </Button>
           </DialogFooter>
         </form>

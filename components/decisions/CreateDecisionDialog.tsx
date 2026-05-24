@@ -56,6 +56,7 @@ export function CreateDecisionDialog({
   children,
 }: CreateDecisionDialogProps) {
   const t = useTranslations("decisions");
+const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [rationale, setRationale] = useState("");
@@ -306,8 +307,8 @@ export function CreateDecisionDialog({
               className="cursor-pointer"
             >
               {creating
-                ? t("createDialog.submitting")
-                : t("createDialog.submit")}
+                ? tCommon("states.creating")
+                : tCommon("actions.create")}
             </Button>
           </DialogFooter>
         </form>

@@ -66,6 +66,7 @@ export function CreateMeetingDialog({
   children,
 }: CreateMeetingDialogProps) {
   const t = useTranslations("meetings");
+const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
 
   function handleOpenChange(v: boolean) {
@@ -404,8 +405,8 @@ export function CreateMeetingDialog({
                 className="cursor-pointer"
               >
                 {creating
-                  ? t("createDialog.submitting")
-                  : t("createDialog.submit")}
+                  ? tCommon("states.creating")
+                  : tCommon("actions.create")}
               </Button>
             </DialogFooter>
           </form>

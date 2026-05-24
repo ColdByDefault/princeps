@@ -130,6 +130,7 @@ export function SidebarChats({
   toggleSidebar,
 }: SidebarChatsProps) {
   const t = useTranslations("chat");
+const tCommon = useTranslations("common");
 
   const [initialChatCollapsed] = useState<Record<string, boolean>>(() => {
     if (typeof window === "undefined") return {};
@@ -279,7 +280,7 @@ export function SidebarChats({
                                     onClick={() => setDeleteTarget(chat.id)}
                                   >
                                     <Trash2 className="mr-2 size-3.5" />
-                                    {t("sidebar.delete")}
+                                    {tCommon("actions.delete")}
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
@@ -310,13 +311,13 @@ export function SidebarChats({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("sidebar.deleteCancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               className="cursor-pointer bg-destructive text-white hover:bg-destructive/90"
               onClick={() => deleteTarget && void handleDelete(deleteTarget)}
             >
-              {t("sidebar.deleteConfirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

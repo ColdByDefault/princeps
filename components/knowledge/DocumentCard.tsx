@@ -41,6 +41,7 @@ export function DocumentCard({
   onDelete,
 }: DocumentCardProps) {
   const t = useTranslations("knowledge");
+const tCommon = useTranslations("common");
   const locale = useLocale();
 
   return (
@@ -59,8 +60,8 @@ export function DocumentCard({
         deleteDescription: t("deleteDialog.description", {
           name: document.name,
         }),
-        deleteCancelLabel: t("deleteDialog.cancel"),
-        deleteConfirmLabel: t("deleteDialog.confirm"),
+        deleteCancelLabel: tCommon("actions.cancel"),
+        deleteConfirmLabel: tCommon("actions.delete"),
         actionsAriaLabel: t("deleteAriaLabel", { name: document.name }),
       })}
     >

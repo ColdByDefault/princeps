@@ -45,6 +45,7 @@ function EditForm({
   updating: boolean;
 }) {
   const t = useTranslations("profile");
+const tCommon = useTranslations("common");
 
   const [draftName, setDraftName] = useState(name ?? "");
   const [draftUsername, setDraftUsername] = useState(username ?? "");
@@ -117,7 +118,7 @@ function EditForm({
           {t("editDialog.cancel")}
         </Button>
         <Button type="submit" className="cursor-pointer" disabled={updating}>
-          {updating ? t("editDialog.submitting") : t("editDialog.submit")}
+          {updating ? tCommon("states.saving") : tCommon("actions.save")}
         </Button>
       </DialogFooter>
     </form>

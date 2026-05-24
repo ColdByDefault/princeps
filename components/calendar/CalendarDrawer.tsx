@@ -167,6 +167,7 @@ export function CalendarDrawer({
   deleteMeeting,
 }: CalendarDrawerProps) {
   const t = useTranslations("calendar");
+const tCommon = useTranslations("common");
   const tTasks = useTranslations("tasks");
   const tMeetings = useTranslations("meetings");
 
@@ -492,7 +493,7 @@ export function CalendarDrawer({
                                     type="button"
                                     variant="ghost"
                                     size="icon-sm"
-                                    aria-label={tTasks("deleteLabel")}
+                                    aria-label={tCommon("actions.delete")}
                                     onClick={() => {
                                       closeAllDialogs();
                                       setDeleteTaskId(task.id);
@@ -507,7 +508,7 @@ export function CalendarDrawer({
                                 <Trash2 className="size-3" />
                               </TooltipTrigger>
                               <TooltipContent>
-                                {tTasks("deleteLabel")}
+                                {tCommon("actions.delete")}
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
@@ -628,7 +629,7 @@ export function CalendarDrawer({
                                     type="button"
                                     variant="ghost"
                                     size="icon-sm"
-                                    aria-label={tMeetings("deleteLabel")}
+                                    aria-label={tCommon("actions.delete")}
                                     onClick={() => {
                                       closeAllDialogs();
                                       setDeleteMeetingId(meeting.id);
@@ -644,7 +645,7 @@ export function CalendarDrawer({
                                 <Trash2 className="size-3" />
                               </TooltipTrigger>
                               <TooltipContent>
-                                {tMeetings("deleteLabel")}
+                                {tCommon("actions.delete")}
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
@@ -747,13 +748,13 @@ export function CalendarDrawer({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {tTasks("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               className="cursor-pointer"
               onClick={handleDeleteTaskConfirm}
             >
-              {tTasks("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -777,13 +778,13 @@ export function CalendarDrawer({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {tMeetings("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               className="cursor-pointer"
               onClick={handleDeleteMeetingConfirm}
             >
-              {tMeetings("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

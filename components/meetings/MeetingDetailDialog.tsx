@@ -85,6 +85,7 @@ export function MeetingDetailDialog({
   onPrepPack,
 }: MeetingDetailDialogProps) {
   const t = useTranslations("meetings");
+const tCommon = useTranslations("common");
   const locale = useLocale();
 
   if (!meeting) return null;
@@ -301,14 +302,14 @@ export function MeetingDetailDialog({
             size="sm"
             variant="ghost"
             className="cursor-pointer text-muted-foreground hover:text-destructive ml-auto"
-            aria-label={t("deleteLabel")}
+            aria-label={tCommon("actions.delete")}
             onClick={() => {
               onOpenChange(false);
               onDelete(meeting.id);
             }}
           >
             <Trash2 className="mr-1.5 size-3.5" />
-            {t("deleteLabel")}
+            {tCommon("actions.delete")}
           </Button>
         </div>
       </DialogContent>

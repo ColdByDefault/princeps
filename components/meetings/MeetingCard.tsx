@@ -68,6 +68,7 @@ export function MeetingCard({
   onDetail,
 }: MeetingCardProps) {
   const t = useTranslations("meetings");
+const tCommon = useTranslations("common");
   const locale = useLocale();
 
   return (
@@ -104,11 +105,11 @@ export function MeetingCard({
       onEdit={() => onEdit(meeting)}
       editLabel={t("editLabel")}
       onDelete={() => onDelete(meeting.id)}
-      deleteLabel={t("deleteLabel")}
+      deleteLabel={tCommon("actions.delete")}
       deleteTitle={t("deleteDialog.title")}
       deleteDescription={t("deleteDialog.description")}
-      deleteCancelLabel={t("deleteDialog.cancel")}
-      deleteConfirmLabel={t("deleteDialog.confirm")}
+      deleteCancelLabel={tCommon("actions.cancel")}
+      deleteConfirmLabel={tCommon("actions.delete")}
       actionsAriaLabel={t("actionsLabel")}
     >
       <div className="space-y-1">

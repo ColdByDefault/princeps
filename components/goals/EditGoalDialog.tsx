@@ -77,6 +77,7 @@ export function EditGoalDialog({
   availableTasks,
 }: EditGoalDialogProps) {
   const t = useTranslations("goals");
+const tCommon = useTranslations("common");
 
   // Initialise directly from props — no useEffect
   const [title, setTitle] = useState(goal?.title ?? "");
@@ -397,7 +398,7 @@ export function EditGoalDialog({
               disabled={isUpdating || !title.trim()}
               className="cursor-pointer"
             >
-              {isUpdating ? t("editDialog.submitting") : t("editDialog.submit")}
+              {isUpdating ? tCommon("states.saving") : tCommon("actions.save")}
             </Button>
           </DialogFooter>
         </form>

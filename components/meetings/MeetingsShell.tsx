@@ -54,6 +54,7 @@ export function MeetingsShell({
   hasGoogleCalendar = false,
 }: MeetingsShellProps) {
   const t = useTranslations("meetings");
+const tCommon = useTranslations("common");
   const [meetings, setMeetings] = useState<MeetingRecord[]>(initialMeetings);
   const [filter, setFilter] = useState<Filter>("all");
   const [editMeeting, setEditMeeting] = useState<MeetingRecord | null>(null);
@@ -373,13 +374,13 @@ export function MeetingsShell({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               className="cursor-pointer"
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -136,6 +136,7 @@ type LabelsShellProps = {
 
 export function LabelsShell({ initialLabels }: LabelsShellProps) {
   const t = useTranslations("labels");
+  const tCommon = useTranslations("common");
 
   const [labels, setLabels] = useState<LabelRecord[]>(initialLabels);
 
@@ -347,11 +348,11 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
                 onEdit={() => openEdit(label)}
                 editLabel={t("editLabel")}
                 onDelete={() => handleDeleteLabel(label.id)}
-                deleteLabel={t("deleteLabel")}
+                deleteLabel={tCommon("actions.delete")}
                 deleteTitle={t("deleteDialog.title")}
                 deleteDescription={t("deleteDialog.description")}
-                deleteCancelLabel={t("deleteDialog.cancel")}
-                deleteConfirmLabel={t("deleteDialog.confirm")}
+                deleteCancelLabel={tCommon("actions.cancel")}
+                deleteConfirmLabel={tCommon("actions.delete")}
                 actionsAriaLabel={t("actionsLabel")}
               >
                 <p className="text-sm font-medium">{label.name}</p>
@@ -394,8 +395,8 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
                 className="cursor-pointer"
               >
                 {isPendingCreate
-                  ? t("createDialog.submitting")
-                  : t("createDialog.submit")}
+                  ? tCommon("states.creating")
+                  : tCommon("actions.create")}
               </Button>
             </DialogFooter>
           </form>
@@ -440,8 +441,8 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
                 className="cursor-pointer"
               >
                 {isPendingEdit
-                  ? t("editDialog.submitting")
-                  : t("editDialog.submit")}
+                  ? tCommon("states.saving")
+                  : tCommon("actions.save")}
               </Button>
             </DialogFooter>
           </form>

@@ -39,6 +39,7 @@ export function ContactsShell({
   availableLabels,
 }: ContactsShellProps) {
   const t = useTranslations("contacts");
+const tCommon = useTranslations("common");
 
   const [contacts, setContacts] = useState<ContactRecord[]>(initialContacts);
   const [createOpen, setCreateOpen] = useState(false);
@@ -191,14 +192,14 @@ export function ContactsShell({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               disabled={deleting !== null}
               className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

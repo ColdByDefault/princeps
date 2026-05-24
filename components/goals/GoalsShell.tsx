@@ -50,6 +50,7 @@ export function GoalsShell({
   availableContacts,
 }: GoalsShellProps) {
   const t = useTranslations("goals");
+const tCommon = useTranslations("common");
   const [goals, setGoals] = useState<GoalRecord[]>(initialGoals);
   const [filter, setFilter] = useState<Filter>("all");
   const [editGoal, setEditGoal] = useState<GoalRecord | null>(null);
@@ -362,14 +363,14 @@ export function GoalsShell({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
               disabled={!!deleting}
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

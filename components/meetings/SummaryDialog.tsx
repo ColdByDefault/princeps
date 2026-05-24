@@ -38,6 +38,7 @@ export function SummaryDialog({
   updating,
 }: SummaryDialogProps) {
   const t = useTranslations("meetings");
+const tCommon = useTranslations("common");
   const [summary, setSummary] = useState(meeting?.summary ?? "");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -90,8 +91,8 @@ export function SummaryDialog({
               className="cursor-pointer"
             >
               {updating
-                ? t("summaryDialog.submitting")
-                : t("summaryDialog.submit")}
+                ? tCommon("states.saving")
+                : tCommon("actions.save")}
             </Button>
           </DialogFooter>
         </form>

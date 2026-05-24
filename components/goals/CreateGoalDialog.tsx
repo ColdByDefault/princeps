@@ -59,6 +59,7 @@ export function CreateGoalDialog({
   children,
 }: CreateGoalDialogProps) {
   const t = useTranslations("goals");
+const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -366,8 +367,8 @@ export function CreateGoalDialog({
               className="cursor-pointer"
             >
               {creating
-                ? t("createDialog.submitting")
-                : t("createDialog.submit")}
+                ? tCommon("states.creating")
+                : tCommon("actions.create")}
             </Button>
           </DialogFooter>
         </form>

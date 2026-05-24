@@ -31,6 +31,7 @@ export function MemoryEntryCard({
   onDelete,
 }: MemoryEntryCardProps) {
   const t = useTranslations("memory");
+const tCommon = useTranslations("common");
 
   return (
     <ItemCard
@@ -43,11 +44,11 @@ export function MemoryEntryCard({
       onEdit={() => onEdit(entry)}
       editLabel={t("edit")}
       onDelete={() => onDelete(entry.id)}
-      deleteLabel={t("delete")}
+      deleteLabel={tCommon("actions.delete")}
       deleteTitle={t("deleteDialog.title")}
       deleteDescription={t("deleteDialog.description")}
-      deleteCancelLabel={t("deleteDialog.cancel")}
-      deleteConfirmLabel={t("deleteDialog.confirm")}
+      deleteCancelLabel={tCommon("actions.cancel")}
+      deleteConfirmLabel={tCommon("actions.delete")}
       actionsAriaLabel={t("actions")}
     >
       <div className="space-y-0.5">

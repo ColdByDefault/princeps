@@ -48,6 +48,7 @@ export function TasksShell({
   availableGoals,
 }: TasksShellProps) {
   const t = useTranslations("tasks");
+const tCommon = useTranslations("common");
   const [tasks, setTasks] = useState<TaskRecord[]>(initialTasks);
   const [filter, setFilter] = useState<Filter>("all");
   const [editTask, setEditTask] = useState<TaskRecord | null>(null);
@@ -250,14 +251,14 @@ export function TasksShell({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               className="cursor-pointer"
               onClick={handleDeleteConfirm}
               disabled={!!deleting}
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -32,7 +32,7 @@
       "generateSuccess": "Briefing refreshed.",
       "generateError": "Failed to refresh briefing.",
       "autoOff": "Automatic daily briefing is turned off.",
-      "autoOffHint": "Enable it in Settings \u2192 Assistant to see your briefing here.",
+      "autoOffHint": "Enable it in Settings → Assistant to see your briefing here.",
       "goToSettings": "Open Settings"
     }
   },
@@ -489,11 +489,8 @@
       "empty": "No chats yet.",
       "rename": "Rename",
       "renamePlaceholder": "Chat title",
-      "delete": "Delete",
       "deleteTitle": "Delete this chat?",
       "deleteDescription": "This will permanently delete this chat and all its messages.",
-      "deleteConfirm": "Delete",
-      "deleteCancel": "Cancel",
       "deleteSuccess": "Chat deleted.",
       "renameSuccess": "Chat renamed.",
       "limitReached": "Delete a chat to create a new one.",
@@ -585,29 +582,22 @@
     },
     "createDialog": {
       "heading": "New decision",
-      "submit": "Create",
-      "submitting": "Creating\u2026",
       "success": "Decision created.",
       "error": "Failed to create decision."
     },
     "editDialog": {
       "heading": "Edit decision",
-      "submit": "Save",
-      "submitting": "Saving\u2026",
       "success": "Decision saved.",
       "error": "Failed to save decision."
     },
     "deleteDialog": {
       "title": "Delete this decision?",
       "description": "This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Decision deleted.",
       "error": "Failed to delete decision."
     },
     "actionsLabel": "Decision actions",
     "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "refresh": "Refresh",
     "refreshing": "Refreshing…"
   },
@@ -660,8 +650,6 @@
     "createDialog": {
       "heading": "New goal",
       "description": "Fill in the details below to create a new goal.",
-      "submit": "Create",
-      "submitting": "Creating…",
       "cancel": "Cancel",
       "success": "Goal created.",
       "error": "Failed to create goal."
@@ -669,8 +657,6 @@
     "editDialog": {
       "heading": "Edit goal",
       "description": "Update the details below.",
-      "submit": "Save",
-      "submitting": "Saving…",
       "cancel": "Cancel",
       "success": "Goal saved.",
       "error": "Failed to save goal."
@@ -678,14 +664,11 @@
     "deleteDialog": {
       "heading": "Delete this goal?",
       "body": "This will permanently delete the goal and all its milestones. This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Goal deleted.",
       "error": "Failed to delete goal."
     },
     "actionsLabel": "Goal actions",
     "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "horizon": {
       "link": "Horizons",
       "metadata": {
@@ -699,7 +682,7 @@
       "now": "Now",
       "nowSub": "Next 90 days",
       "medium": "Medium-term",
-      "mediumSub": "3\u201318 months",
+      "mediumSub": "3–18 months",
       "long": "Long-term",
       "longSub": "Beyond 18 months",
       "unplaced": "Unplaced",
@@ -751,10 +734,6 @@
     "sourceUser": "You",
     "actions": "Actions",
     "edit": "Edit",
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "save": "Save",
-    "saving": "Saving…",
     "keyLabel": "Topic",
     "keyPlaceholder": "e.g. job title",
     "valueLabel": "Fact",
@@ -772,8 +751,6 @@
     "deleteDialog": {
       "title": "Delete this fact?",
       "description": "This will permanently remove the fact from memory. The assistant will no longer have access to it.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Fact deleted.",
       "error": "Failed to delete fact."
     }
@@ -828,8 +805,6 @@
     },
     "createDialog": {
       "heading": "New meeting",
-      "submit": "Create",
-      "submitting": "Creating\u2026",
       "cancel": "Cancel",
       "syncGoogle": "Also create in Google Calendar",
       "success": "Meeting created.",
@@ -837,8 +812,6 @@
     },
     "editDialog": {
       "heading": "Edit meeting",
-      "submit": "Save",
-      "submitting": "Saving\u2026",
       "cancel": "Cancel",
       "syncGoogle": "Also add to Google Calendar",
       "success": "Meeting saved.",
@@ -847,14 +820,11 @@
     "deleteDialog": {
       "title": "Delete this meeting?",
       "description": "This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Meeting deleted.",
       "error": "Failed to delete meeting."
     },
     "actionsLabel": "Meeting actions",
     "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "detailLabel": "View meeting details",
     "refresh": "Refresh",
     "refreshing": "Refreshing…",
@@ -872,8 +842,6 @@
     "summaryDialog": {
       "trigger": "Add summary",
       "heading": "Meeting summary",
-      "submit": "Save",
-      "submitting": "Saving\u2026",
       "cancel": "Cancel"
     },
     "prepPackDialog": {
@@ -882,7 +850,7 @@
       "empty": "No prep pack generated yet. Click \"Generate\" to create an AI briefing.",
       "generate": "Generate",
       "regenerate": "Regenerate",
-      "generating": "Generating\u2026",
+      "generating": "Generating…",
       "close": "Close",
       "delete": "Delete",
       "success": "Prep pack generated.",
@@ -899,7 +867,7 @@
       "email": "Email",
       "emailPlaceholder": "email@example.com",
       "submit": "Create & add",
-      "submitting": "Creating\u2026",
+      "submitting": "Creating…",
       "cancel": "Cancel"
     }
   },
@@ -936,7 +904,7 @@
       "title": "Title",
       "titlePlaceholder": "Task title",
       "notes": "Notes",
-      "notesPlaceholder": "Optional notes\u2026",
+      "notesPlaceholder": "Optional notes…",
       "priority": "Priority",
       "dueDate": "Due date",
       "status": "Status",
@@ -945,28 +913,22 @@
       "delegatedTo": "Delegated to",
       "delegatedToPlaceholder": "Name of person (e.g. Marcus)",
       "delegateNotes": "Handoff notes",
-      "delegateNotesPlaceholder": "Context for the handoff\u2026",
+      "delegateNotesPlaceholder": "Context for the handoff…",
       "optional": "Optional"
     },
     "createDialog": {
       "heading": "New task",
-      "submit": "Create",
-      "submitting": "Creating\u2026",
       "success": "Task created.",
       "error": "Failed to create task."
     },
     "editDialog": {
       "heading": "Edit task",
-      "submit": "Save",
-      "submitting": "Saving\u2026",
       "success": "Task saved.",
       "error": "Failed to save task."
     },
     "deleteDialog": {
       "title": "Delete this task?",
       "description": "This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Task deleted.",
       "error": "Failed to delete task."
     },
@@ -977,7 +939,6 @@
     },
     "actionsLabel": "Task actions",
     "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "markDoneLabel": "Mark as done",
     "reopenLabel": "Reopen",
     "refresh": "Refresh",
@@ -1015,31 +976,24 @@
     "createDialog": {
       "heading": "New contact",
       "description": "Fill in the details below to add a new contact.",
-      "submit": "Create",
-      "submitting": "Creating…",
       "success": "Contact created.",
       "error": "Failed to create contact."
     },
     "editDialog": {
       "heading": "Edit contact",
       "description": "Update the contact details below.",
-      "submit": "Save",
-      "submitting": "Saving…",
       "success": "Contact saved.",
       "error": "Failed to save contact."
     },
     "deleteDialog": {
       "title": "Delete this contact?",
       "description": "This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Contact deleted.",
       "error": "Failed to delete contact."
     },
     "actionsLabel": "Contact actions",
     "viewLabel": "View",
     "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "lastContactLabel": "Last contact",
     "refresh": "Refresh",
     "refreshing": "Refreshing…"
@@ -1066,16 +1020,12 @@
     },
     "createDialog": {
       "heading": "New label",
-      "submit": "Create",
-      "submitting": "Creating…",
       "success": "Label created.",
       "error": "Failed to create label.",
       "duplicateError": "A label with this name already exists."
     },
     "editDialog": {
       "heading": "Edit label",
-      "submit": "Save",
-      "submitting": "Saving…",
       "success": "Label saved.",
       "error": "Failed to save label.",
       "duplicateError": "A label with this name already exists."
@@ -1083,13 +1033,10 @@
     "deleteDialog": {
       "title": "Delete this label?",
       "description": "The label will be removed from all linked records.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Label deleted.",
       "error": "Failed to delete label."
     },
     "editLabel": "Edit",
-    "deleteLabel": "Delete",
     "actionsLabel": "Label actions"
   },
   "tools": {
@@ -1389,8 +1336,6 @@
       "usernamePlaceholder": "your_username",
       "usernameHint": "Letters, numbers, underscores, and dots only. 3–30 characters.",
       "cancel": "Cancel",
-      "submit": "Save changes",
-      "submitting": "Saving…",
       "updateSuccess": "Profile updated.",
       "updateError": "Failed to update profile. Please try again.",
       "usernameTaken": "That username is already taken."
@@ -1484,21 +1429,21 @@
     "deleteSuccess": "Document deleted.",
     "deleteError": "Delete failed.",
     "deleteTooltip": "Delete document",
-    "deleteAriaLabel": "Delete document \u201c{name}\u201d",
+    "deleteAriaLabel": "Delete document “{name}”",
     "sourceDrive": "Google Drive",
     "drive": {
       "sectionTitle": "Google Drive",
       "sectionDescription": "Browse your Google Drive files and selectively import them into the Knowledge Base.",
-      "loading": "Loading files\u2026",
+      "loading": "Loading files…",
       "refreshFiles": "Refresh",
       "importFile": "Import",
       "reimportFile": "Re-import",
       "imported": "Imported",
-      "importing": "Importing\u2026",
+      "importing": "Importing…",
       "noFiles": "No supported files found in your Drive.",
       "errorLoad": "Failed to load files.",
       "errorImport": "Import failed.",
-      "importSuccess": "\u201c{name}\u201d imported successfully.",
+      "importSuccess": "“{name}” imported successfully.",
       "fileTypeDoc": "Doc",
       "fileTypeSheet": "Sheet",
       "fileTypeSlide": "Slide",
@@ -1511,9 +1456,7 @@
     },
     "deleteDialog": {
       "title": "Delete document?",
-      "description": "\u201c{name}\u201d and all its text chunks will be permanently deleted. The processed character count will remain in your quota.",
-      "confirm": "Delete",
-      "cancel": "Cancel"
+      "description": "“{name}” and all its text chunks will be permanently deleted. The processed character count will remain in your quota."
     }
   },
   "reports": {
@@ -1524,7 +1467,6 @@
     "pageTitle": "Activity Reports",
     "pageDescription": "A log of every tools interaction your assistant performed.",
     "refresh": "Refresh reports",
-    "delete": "Delete",
     "deleteAriaLabel": "Delete report",
     "deleteSuccess": "Report deleted.",
     "deleteError": "Failed to delete report.",
@@ -1570,8 +1512,6 @@
     "addDialog": {
       "title": "Save article",
       "description": "Enter the URL. The assistant will fetch the content, create a summary, and score its relevance against your current goals.",
-      "save": "Save",
-      "saving": "Saving…",
       "cancel": "Cancel",
       "success": "Article saved.",
       "error": "Could not save the article. Please try again."
@@ -1580,8 +1520,6 @@
       "trigger": "Delete",
       "title": "Delete article?",
       "description": "This article will be permanently removed from your reading queue. This action cannot be undone.",
-      "confirm": "Delete",
-      "cancel": "Cancel",
       "success": "Article deleted.",
       "error": "Could not delete the article."
     },
@@ -1788,6 +1726,18 @@
           "content": "If you discover a security vulnerability in Princeps, please report it responsibly to security@princeps.app. We confirm receipt within 72 hours and work on a resolution promptly."
         }
       ]
+    }
+  },
+  "common": {
+    "actions": {
+      "create": "Create",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel"
+    },
+    "states": {
+      "creating": "Creating…",
+      "saving": "Saving…"
     }
   }
 }

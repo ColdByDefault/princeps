@@ -34,6 +34,7 @@ type MemoryShellProps = {
 
 export function MemoryShell({ initialEntries }: MemoryShellProps) {
   const t = useTranslations("memory");
+const tCommon = useTranslations("common");
   const [entries, setEntries] = useState<MemoryEntryRecord[]>(initialEntries);
   const [editEntry, setEditEntry] = useState<MemoryEntryRecord | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -159,14 +160,14 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               className="cursor-pointer"
               onClick={handleDeleteConfirm}
               disabled={!!deleting}
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

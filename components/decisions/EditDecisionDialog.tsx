@@ -66,6 +66,7 @@ export function EditDecisionDialog({
   availableMeetings,
 }: EditDecisionDialogProps) {
   const t = useTranslations("decisions");
+const tCommon = useTranslations("common");
   const [title, setTitle] = useState(decision?.title ?? "");
   const [rationale, setRationale] = useState(decision?.rationale ?? "");
   const [outcome, setOutcome] = useState(decision?.outcome ?? "");
@@ -308,7 +309,7 @@ export function EditDecisionDialog({
               disabled={updating || !title.trim()}
               className="cursor-pointer"
             >
-              {updating ? t("editDialog.submitting") : t("editDialog.submit")}
+              {updating ? tCommon("states.saving") : tCommon("actions.save")}
             </Button>
           </DialogFooter>
         </form>

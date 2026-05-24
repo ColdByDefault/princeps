@@ -35,6 +35,7 @@ export function CreateMemoryEntryDialog({
   children,
 }: CreateMemoryEntryDialogProps) {
   const t = useTranslations("memory");
+const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
   const [key, setKey] = useState("");
   const [value, setValue] = useState("");
@@ -89,14 +90,14 @@ export function CreateMemoryEntryDialog({
               className="cursor-pointer"
               onClick={() => setOpen(false)}
             >
-              {t("cancel")}
+              {tCommon("actions.cancel")}
             </Button>
             <Button
               type="submit"
               className="cursor-pointer"
               disabled={creating || !key.trim() || !value.trim()}
             >
-              {creating ? t("saving") : t("save")}
+              {creating ? tCommon("states.saving") : tCommon("actions.save")}
             </Button>
           </DialogFooter>
         </form>

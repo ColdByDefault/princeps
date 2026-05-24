@@ -44,6 +44,7 @@ export function ContactForm({
   availableLabels,
 }: ContactFormProps) {
   const t = useTranslations("contacts");
+const tCommon = useTranslations("common");
 
   const [name, setName] = useState(contact?.name ?? "");
   const [role, setRole] = useState(contact?.role ?? "");
@@ -253,7 +254,7 @@ export function ContactForm({
             onClick={onCancel}
             className="cursor-pointer"
           >
-            {t("deleteDialog.cancel")}
+            {tCommon("actions.cancel")}
           </Button>
         )}
         <Button
@@ -263,11 +264,11 @@ export function ContactForm({
         >
           {isSubmitting
             ? contact
-              ? t("editDialog.submitting")
-              : t("createDialog.submitting")
+              ? tCommon("states.saving")
+              : tCommon("states.creating")
             : contact
-              ? t("editDialog.submit")
-              : t("createDialog.submit")}
+              ? tCommon("actions.save")
+              : tCommon("actions.create")}
         </Button>
       </div>
     </form>

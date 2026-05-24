@@ -62,6 +62,7 @@ export function CalendarTaskDetailDialog({
   onDelete,
 }: CalendarTaskDetailDialogProps) {
   const t = useTranslations("tasks");
+const tCommon = useTranslations("common");
   const tCal = useTranslations("calendar");
   const locale = useLocale();
 
@@ -203,7 +204,7 @@ export function CalendarTaskDetailDialog({
             }}
           >
             <Trash2 className="size-3.5" />
-            {t("deleteLabel")}
+            {tCommon("actions.delete")}
           </Button>
           <Button
             type="button"

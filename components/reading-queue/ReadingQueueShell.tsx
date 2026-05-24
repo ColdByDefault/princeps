@@ -34,6 +34,7 @@ type ReadingQueueShellProps = {
 
 export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
   const t = useTranslations("readingQueue");
+const tCommon = useTranslations("common");
   const [items, setItems] = useState<ReadingItemRecord[]>(initialItems);
   const [filter, setFilter] = useState<StatusFilter>("unread");
   const [addOpen, setAddOpen] = useState(false);
@@ -188,13 +189,13 @@ export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -46,6 +46,7 @@ export function DecisionsShell({
   availableMeetings,
 }: DecisionsShellProps) {
   const t = useTranslations("decisions");
+const tCommon = useTranslations("common");
   const [decisions, setDecisions] =
     useState<DecisionRecord[]>(initialDecisions);
   const [filter, setFilter] = useState<Filter>("all");
@@ -234,14 +235,14 @@ export function DecisionsShell({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              {t("deleteDialog.cancel")}
+              {tCommon("actions.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               className="cursor-pointer"
               onClick={handleDeleteConfirm}
               disabled={!!deleting}
             >
-              {t("deleteDialog.confirm")}
+              {tCommon("actions.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

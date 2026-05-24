@@ -84,6 +84,7 @@ export function EditMeetingDialog({
   hasGoogleCalendar = false,
 }: EditMeetingDialogProps) {
   const t = useTranslations("meetings");
+const tCommon = useTranslations("common");
   const [title, setTitle] = useState(meeting?.title ?? "");
   const [scheduledAt, setScheduledAt] = useState(
     meeting ? toDatetimeLocal(meeting.scheduledAt) : "",
@@ -527,7 +528,7 @@ export function EditMeetingDialog({
                 disabled={updating || !title.trim() || !scheduledAt}
                 className="cursor-pointer"
               >
-                {updating ? t("editDialog.submitting") : t("editDialog.submit")}
+                {updating ? tCommon("states.saving") : tCommon("actions.save")}
               </Button>
             </DialogFooter>
           </form>
