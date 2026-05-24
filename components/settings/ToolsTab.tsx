@@ -92,6 +92,11 @@ export function ToolsTab({
     if (groupKey === "decisions") return tCommon("entities.decisions");
     if (groupKey === "goals") return tCommon("entities.goals");
     if (groupKey === "labels") return tCommon("entities.labels");
+    if (groupKey === "knowledge") return tCommon("entities.knowledge");
+    if (groupKey === "memory") return tCommon("entities.memory");
+    if (groupKey === "briefings") return tCommon("entities.dailyBriefing");
+    if (groupKey === "reading-queue")
+      return tCommon("entities.readingQueue");
     return tTools(`groups.${groupKey}`);
   }
 

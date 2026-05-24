@@ -86,7 +86,7 @@ export function BriefingShell({
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">
-            {t("pageTitle")}
+            {tCommon("entities.dailyBriefing")}
           </h1>
           {formattedDate && (
             <p className="mt-0.5 text-xs text-muted-foreground">

@@ -27,7 +27,11 @@
       "contacts": "Contacts",
       "decisions": "Decisions",
       "goals": "Goals",
-      "labels": "Labels"
+      "labels": "Labels",
+      "knowledge": "Knowledge Base",
+      "memory": "Memory",
+      "readingQueue": "Reading Queue",
+      "dailyBriefing": "Daily Briefing"
     },
     "filters": {
       "all": "All"
@@ -450,7 +454,6 @@
       "brand": "Princeps",
       "home": "Workspace",
       "chat": "Chat",
-      "knowledge": "Knowledge Base",
       "settings": "Settings",
       "pricing": "Plans",
       "userFallback": "Workspace user",
@@ -465,9 +468,6 @@
       "profile": "My profile",
       "apps": "Apps",
       "intel": "Intelligence",
-      "memory": "Memory",
-      "readingQueue": "Reading Queue",
-      "briefings": "Daily Briefing",
       "reports": "Reports",
       "comingSoon": "Coming soon"
     },
@@ -521,8 +521,6 @@
       },
       "navGroupAccount": "Account",
       "userFallback": "Workspace user",
-      "navKnowledge": "Knowledge Base",
-      "navMemory": "Memory",
       "navSettings": "Settings",
       "navPricing": "Pricing",
       "profile": "My profile",
@@ -705,7 +703,6 @@
       "title": "Memory",
       "description": "Facts the assistant remembers about you."
     },
-    "pageTitle": "Memory",
     "pageSubtitle": "Facts the assistant remembers about you.",
     "addEntry": "Add fact",
     "empty": "No facts remembered yet.",
@@ -977,12 +974,8 @@
     "description": "Phrases you can say to the assistant to trigger each capability.",
     "groups": {
       "profile": "Profile",
-      "knowledge": "Knowledge",
-      "memory": "Memory",
-      "briefings": "Briefings",
       "web-research": "Web Research",
-      "integrations": "Integrations",
-      "reading-queue": "Reading Queue"
+      "integrations": "Integrations"
     },
     "catalog": {
       "create_task": {
@@ -1330,7 +1323,6 @@
       "title": "Knowledge Base",
       "description": "Upload documents for the assistant to use as context."
     },
-    "pageTitle": "Knowledge Base",
     "pageDescription": "Upload text or markdown files. The assistant uses these documents as context for your queries.",
     "uploadSection": "Upload document",
     "documentsSection": "Documents",
@@ -1412,7 +1404,6 @@
       "title": "Reading Queue",
       "description": "Save articles and web pages for later — AI scores their relevance against your goals."
     },
-    "pageTitle": "Reading Queue",
     "addItem": "Add",
     "empty": "No saved articles yet.",
     "emptyFiltered": "No articles in this category.",
@@ -1455,7 +1446,6 @@
       "title": "Daily Briefing",
       "description": "Your daily AI-generated executive briefing."
     },
-    "pageTitle": "Daily Briefing",
     "generate": "Generate",
     "generating": "Generating…",
     "empty": "No briefing yet. Generate your first daily briefing.",

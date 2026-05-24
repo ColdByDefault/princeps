@@ -34,7 +34,7 @@ type MemoryShellProps = {
 
 export function MemoryShell({ initialEntries }: MemoryShellProps) {
   const t = useTranslations("memory");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const [entries, setEntries] = useState<MemoryEntryRecord[]>(initialEntries);
   const [editEntry, setEditEntry] = useState<MemoryEntryRecord | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -87,7 +87,7 @@ const tCommon = useTranslations("common");
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">
-          {t("pageTitle")}
+          {tCommon("entities.memory")}
         </h1>
         <div className="flex items-center gap-2">
           <Button
@@ -102,7 +102,9 @@ const tCommon = useTranslations("common");
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
+            {isPendingRefresh
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
           <CreateMemoryEntryDialog onSubmit={createEntry} creating={creating}>
             <Button

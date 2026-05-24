@@ -35,7 +35,7 @@ type ReadingQueueShellProps = {
 
 export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
   const t = useTranslations("readingQueue");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const [items, setItems] = useState<ReadingItemRecord[]>(initialItems);
   const [filter, setFilter] = useState<StatusFilter>("unread");
   const [addOpen, setAddOpen] = useState(false);
@@ -103,7 +103,9 @@ const tCommon = useTranslations("common");
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <BookOpen className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-xl font-semibold">{t("pageTitle")}</h1>
+          <h1 className="text-xl font-semibold">
+            {tCommon("entities.readingQueue")}
+          </h1>
           <span className="text-sm text-muted-foreground">
             ({items.filter((i) => i.status === "unread").length})
           </span>

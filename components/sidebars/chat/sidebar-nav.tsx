@@ -110,14 +110,18 @@ export function SidebarNav() {
         {
           href: "/knowledge",
           icon: BrainCircuit,
-          label: t("sidebar.navKnowledge"),
+          label: tCommon("entities.knowledge"),
         },
         {
           href: "/decisions",
           icon: Scale,
           label: tCommon("entities.decisions"),
         },
-        { href: "/memory", icon: BookMarked, label: t("sidebar.navMemory") },
+        {
+          href: "/memory",
+          icon: BookMarked,
+          label: tCommon("entities.memory"),
+        },
         { href: "/labels", icon: Tag, label: tCommon("entities.labels") },
       ],
     },

@@ -27,7 +27,11 @@
       "contacts": "Kontakte",
       "decisions": "Entscheidungen",
       "goals": "Ziele",
-      "labels": "Labels"
+      "labels": "Labels",
+      "knowledge": "Wissensbasis",
+      "memory": "Gedächtnis",
+      "readingQueue": "Leseliste",
+      "dailyBriefing": "Tagesbriefing"
     },
     "filters": {
       "all": "Alle"
@@ -449,7 +453,6 @@
     "nav": {
       "brand": "Princeps",
       "home": "Arbeitsbereich",
-      "knowledge": "Wissensbasis",
       "chat": "Chat",
       "settings": "Einstellungen",
       "pricing": "Pläne",
@@ -465,9 +468,6 @@
       "profile": "Mein Profil",
       "apps": "Apps",
       "intel": "Intelligenz",
-      "memory": "Gedächtnis",
-      "readingQueue": "Leseliste",
-      "briefings": "Tagesbriefing",
       "reports": "Berichte",
       "comingSoon": "Bald verfügbar"
     },
@@ -521,8 +521,6 @@
       },
       "navGroupAccount": "Konto",
       "userFallback": "Arbeitsbereich-Nutzer",
-      "navKnowledge": "Wissensbasis",
-      "navMemory": "Gedächtnis",
       "navSettings": "Einstellungen",
       "navPricing": "Preise",
       "profile": "Mein Profil",
@@ -705,7 +703,6 @@
       "title": "Gedächtnis",
       "description": "Fakten, die sich der Assistent über dich merkt."
     },
-    "pageTitle": "Gedächtnis",
     "pageSubtitle": "Fakten, die sich der Assistent über dich merkt.",
     "addEntry": "Fakt hinzufügen",
     "empty": "Noch keine Fakten gespeichert.",
@@ -977,12 +974,8 @@
     "description": "Formulierungen, mit denen du die einzelnen Werkzeuge aktivieren kannst.",
     "groups": {
       "profile": "Profil",
-      "knowledge": "Wissen",
-      "memory": "Gedächtnis",
-      "briefings": "Briefings",
       "web-research": "Webrecherche",
-      "integrations": "Integrationen",
-      "reading-queue": "Leseliste"
+      "integrations": "Integrationen"
     },
     "catalog": {
       "create_task": {
@@ -1330,7 +1323,6 @@
       "title": "Wissensbasis",
       "description": "Lade Dokumente hoch, die der Assistent als Kontext verwenden soll."
     },
-    "pageTitle": "Wissensbasis",
     "pageDescription": "Lade Text- oder Markdown-Dateien hoch. Der Assistent nutzt diese Dokumente als Kontext für deine Anfragen.",
     "uploadSection": "Dokument hochladen",
     "documentsSection": "Dokumente",
@@ -1412,7 +1404,6 @@
       "title": "Leseliste",
       "description": "Speichere Artikel und Webseiten für später – KI bewertet ihre Relevanz für deine Ziele."
     },
-    "pageTitle": "Leseliste",
     "addItem": "Hinzufügen",
     "empty": "Noch keine gespeicherten Artikel.",
     "emptyFiltered": "Keine Artikel in dieser Kategorie.",
@@ -1455,7 +1446,6 @@
       "title": "Tagesbriefing",
       "description": "Dein täglich KI-generiertes Executive-Briefing."
     },
-    "pageTitle": "Tagesbriefing",
     "generate": "Generieren",
     "generating": "Wird generiert…",
     "empty": "Noch kein Briefing vorhanden. Erstelle dein erstes Tagesbriefing.",
