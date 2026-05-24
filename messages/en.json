@@ -1,4 +1,43 @@
 {
+  "common": {
+    "actions": {
+      "create": "Create",
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "refresh": "Refresh"
+    },
+    "states": {
+      "creating": "Creating…",
+      "saving": "Saving…",
+      "refreshing": "Refreshing…"
+    },
+    "confirmation": {
+      "cannotUndo": "This action cannot be undone."
+    },
+    "fields": {
+      "title": "Title",
+      "status": "Status",
+      "optional": "Optional"
+    },
+    "entities": {
+      "tasks": "Tasks",
+      "meetings": "Meetings",
+      "contacts": "Contacts",
+      "decisions": "Decisions",
+      "goals": "Goals",
+      "labels": "Labels"
+    },
+    "filters": {
+      "all": "All"
+    },
+    "status": {
+      "open": "Open",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    }
+  },
   "landing": {
     "metadata": {
       "title": "Princeps",
@@ -1599,45 +1638,6 @@
           "content": "If you discover a security vulnerability in Princeps, please report it responsibly by opening a support ticket or contacting me directly. We confirm receipt within 72 hours and work on a resolution promptly."
         }
       ]
-    }
-  },
-  "common": {
-    "actions": {
-      "create": "Create",
-      "save": "Save",
-      "delete": "Delete",
-      "cancel": "Cancel",
-      "edit": "Edit",
-      "refresh": "Refresh"
-    },
-    "states": {
-      "creating": "Creating…",
-      "saving": "Saving…",
-      "refreshing": "Refreshing…"
-    },
-    "confirmation": {
-      "cannotUndo": "This action cannot be undone."
-    },
-    "fields": {
-      "title": "Title",
-      "status": "Status",
-      "optional": "Optional"
-    },
-    "entities": {
-      "tasks": "Tasks",
-      "meetings": "Meetings",
-      "contacts": "Contacts",
-      "decisions": "Decisions",
-      "goals": "Goals",
-      "labels": "Labels"
-    },
-    "filters": {
-      "all": "All"
-    },
-    "status": {
-      "open": "Open",
-      "done": "Done",
-      "cancelled": "Cancelled"
     }
   }
 }

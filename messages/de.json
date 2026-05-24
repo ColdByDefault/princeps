@@ -1,4 +1,43 @@
 {
+  "common": {
+    "actions": {
+      "create": "Erstellen",
+      "save": "Speichern",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "edit": "Bearbeiten",
+      "refresh": "Aktualisieren"
+    },
+    "states": {
+      "creating": "Erstellen…",
+      "saving": "Speichern…",
+      "refreshing": "Wird aktualisiert…"
+    },
+    "confirmation": {
+      "cannotUndo": "Diese Aktion kann nicht rückgängig gemacht werden."
+    },
+    "fields": {
+      "title": "Titel",
+      "status": "Status",
+      "optional": "Optional"
+    },
+    "entities": {
+      "tasks": "Aufgaben",
+      "meetings": "Meetings",
+      "contacts": "Kontakte",
+      "decisions": "Entscheidungen",
+      "goals": "Ziele",
+      "labels": "Labels"
+    },
+    "filters": {
+      "all": "Alle"
+    },
+    "status": {
+      "open": "Offen",
+      "done": "Erledigt",
+      "cancelled": "Abgebrochen"
+    }
+  },
   "landing": {
     "metadata": {
       "title": "Princeps",
@@ -1599,45 +1638,6 @@
           "content": "Entdeckst du eine Sicherheitslücke in Princeps, melde sie bitte verantwortungsvoll, indem du ein Support-Ticket öffnest oder mich direkt kontaktierst. Wir bestätigen den Eingang innerhalb von 72 Stunden und arbeiten umgehend an einer Lösung."
         }
       ]
-    }
-  },
-  "common": {
-    "actions": {
-      "create": "Erstellen",
-      "save": "Speichern",
-      "delete": "Löschen",
-      "cancel": "Abbrechen",
-      "edit": "Bearbeiten",
-      "refresh": "Aktualisieren"
-    },
-    "states": {
-      "creating": "Erstellen…",
-      "saving": "Speichern…",
-      "refreshing": "Wird aktualisiert…"
-    },
-    "confirmation": {
-      "cannotUndo": "Diese Aktion kann nicht rückgängig gemacht werden."
-    },
-    "fields": {
-      "title": "Titel",
-      "status": "Status",
-      "optional": "Optional"
-    },
-    "entities": {
-      "tasks": "Aufgaben",
-      "meetings": "Meetings",
-      "contacts": "Kontakte",
-      "decisions": "Entscheidungen",
-      "goals": "Ziele",
-      "labels": "Labels"
-    },
-    "filters": {
-      "all": "Alle"
-    },
-    "status": {
-      "open": "Offen",
-      "done": "Erledigt",
-      "cancelled": "Abgebrochen"
     }
   }
 }

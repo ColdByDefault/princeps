@@ -38,7 +38,7 @@ prisma/schema.prisma                  Single schema, migrations in prisma/migrat
 
 - **Server/client boundary**: Prisma, Better Auth server helpers, LLM calls, and pgvector are server-only. Add `import "server-only"` to modules that must never reach client bundles. No client import chain may reach `@/lib/core/db`.
 - **User-scoped data**: All queries filter by `userId` unless explicitly admin-only.
-- **i18n**: Never hardcode user-facing copy. In-app notices (success, error, etc.) are localized. Logs and validation errors stay in English.
+- **i18n**: Never hardcode user-facing copy. Keep `common` first in `messages/de.json` and `messages/en.json`; place reusable generic labels in `common.*` and keep feature-specific copy in feature namespaces. In-app notices (success, error, etc.) are localized. Logs and validation errors stay in English.
 - **Tools layer**: Tools are standalone — not owned by chat. Any surface (chat, cron, webhooks) can call `executor.ts`. Adding a new feature's tools = create `lib/ai/tools/handlers/<feature>.handler.ts` and spread into `HANDLERS` in `executor.ts`.
 - **API routes**: Thin — authenticate, parse, delegate to `lib/features/<feature>/`, respond. No business logic.
 - **Components**: Logic (hooks, transforms, API calls) lives in `components/<feature>/logic/`. `.tsx` files handle JSX only.

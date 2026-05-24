@@ -183,7 +183,10 @@ Princeps uses `next-intl`.
 - German is the default locale.
 - English is the second locale.
 - Add every user-facing string to both `messages/de.json` and `messages/en.json`.
-- Use flat, namespaced keys under the feature name.
+- Keep `common` as the first top-level namespace in both locale files.
+- Put reusable generic labels under `common.*` (actions, states, entities, fields, filters, status, confirmation).
+- Keep feature/domain-specific copy under feature namespaces.
+- Before adding feature-local keys, prefer reusing existing `common.*` keys.
 - Use `useTranslations("<namespace>")` in client components.
 - Use `getTranslations("<namespace>")` in server pages or server code.
 - Use proper German characters: `ä`, `ö`, `ü`, `ß`, not `ae`, `oe`, `ue`, `ss`.
@@ -193,20 +196,20 @@ Princeps uses `next-intl`.
 Example namespace from `messages/en.json` and `messages/de.json`:
 
 ```json
+"common": {
+  "actions": { "create": "Create" },
+  "states": { "creating": "Creating..." },
+  "fields": { "optional": "Optional" }
+},
 "tasks": {
   "metadata": { "title": "Tasks", "description": "Manage your tasks." },
-  "pageTitle": "Tasks",
   "newTask": "New task",
   "empty": "No tasks yet.",
   "fields": {
-    "title": "Title",
-    "titlePlaceholder": "Task title",
-    "optional": "Optional"
+    "titlePlaceholder": "Task title"
   },
   "createDialog": {
     "heading": "New task",
-    "submit": "Create",
-    "submitting": "Creating...",
     "success": "Task created.",
     "error": "Failed to create task."
   }

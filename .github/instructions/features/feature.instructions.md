@@ -131,7 +131,10 @@ Knowledge, integrations, voice, imports, and other pipeline features may legitim
 ### 7. i18n And Navigation
 
 - Add every user-facing string to both `messages/de.json` and `messages/en.json`.
-- Use flat, namespaced keys under the feature namespace.
+- Keep `common` as the first top-level namespace in both locale files.
+- Put generic reusable labels in `common.*` first (for example actions, states, entities, fields, filters, and status labels).
+- Keep feature/domain-specific copy under feature namespaces.
+- Prefer reusing `common.*` over adding duplicate feature-local keys.
 - Use `useTranslations("<feature>")` in client components and `getTranslations("<feature>")` in server code.
 - Add navigation only when the feature has a first-class page.
 - Add nav labels to both message files.
