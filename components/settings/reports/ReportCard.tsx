@@ -28,7 +28,7 @@ type Props = {
 
 export function ReportCard({ report, onDelete, isDeleting }: Props) {
   const t = useTranslations("reports");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
 
   const date = new Date(report.createdAt);
   const dateStr = date.toLocaleDateString(undefined, {
@@ -42,7 +42,10 @@ const tCommon = useTranslations("common");
   });
 
   return (
-    <div className="rounded-lg border border-border bg-card p-4 space-y-3">
+    <div
+      id={`report-${report.id}`}
+      className="rounded-lg border border-border bg-card p-4 space-y-3"
+    >
       {/* Header row */}
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1 min-w-0">
@@ -123,4 +126,3 @@ const tCommon = useTranslations("common");
     </div>
   );
 }
-

@@ -38,6 +38,22 @@ import {
 } from "@/components/ui/command";
 import { buildKeywords, useGlobalSearch } from "./logic/useGlobalSearch";
 
+function formatReportDate(value: string): string {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleString(undefined, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export function GlobalSearch() {
   const { open, setOpen, data, navigate } = useGlobalSearch();
   const t = useTranslations("shell");
@@ -114,6 +130,38 @@ export function GlobalSearch() {
                 </CommandItem>
               ))}
             </CommandGroup>
+
+            {(data?.reports.length ?? 0) > 0 && (
+              <CommandGroup heading={tCommon("entities.reports")}>
+                {data!.reports.map((item) => {
+                  const reportDate = formatReportDate(item.createdAt);
+                  const reportLabel =
+                    item.toolsCalled.slice(0, 3).join(" · ") ||
+                    tCommon("entities.reports");
+
+                  return (
+                    <CommandItem
+                      key={item.id}
+                      value={`${reportDate} ${reportLabel}`}
+                      keywords={buildKeywords(
+                        "report",
+                        "bericht",
+                        tCommon("entities.reports"),
+                        ...item.toolsCalled,
+                        ...item.detailTools,
+                      )}
+                      onSelect={() => navigate(`/reports#report-${item.id}`)}
+                    >
+                      <BarChart3 />
+                      <span className="flex-1 truncate">{reportLabel}</span>
+                      <span className="ml-auto shrink-0 text-xs text-muted-foreground">
+                        {reportDate}
+                      </span>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+            )}
 
             {(data?.labels.length ?? 0) > 0 && (
               <CommandGroup heading={tCommon("entities.labels")}>

@@ -28,6 +28,12 @@ type ContactItem = {
 type MeetingItem = { id: string; title: string; labels: LabelItem[] };
 type DecisionItem = { id: string; title: string; labels: LabelItem[] };
 type GoalItem = { id: string; title: string; labels: LabelItem[] };
+type ReportItem = {
+  id: string;
+  createdAt: string;
+  toolsCalled: string[];
+  detailTools: string[];
+};
 
 export type SearchData = {
   tasks: TaskItem[];
@@ -36,6 +42,7 @@ export type SearchData = {
   decisions: DecisionItem[];
   goals: GoalItem[];
   labels: LabelItem[];
+  reports: ReportItem[];
 };
 
 const EMPTY_SEARCH_DATA: SearchData = {
@@ -45,6 +52,7 @@ const EMPTY_SEARCH_DATA: SearchData = {
   decisions: [],
   goals: [],
   labels: [],
+  reports: [],
 };
 
 export function buildKeywords(
@@ -62,35 +70,22 @@ export function buildKeywords(
 }
 
 async function fetchSearchData(): Promise<SearchData> {
-  const [taskRes, contactRes, meetingRes, decisionRes, goalRes, labelRes] =
-    await Promise.all([
-      fetch("/api/tasks").then(
-        (r) => r.json() as Promise<{ tasks?: TaskItem[] }>,
-      ),
-      fetch("/api/contacts").then(
-        (r) => r.json() as Promise<{ contacts?: ContactItem[] }>,
-      ),
-      fetch("/api/meetings").then(
-        (r) => r.json() as Promise<{ meetings?: MeetingItem[] }>,
-      ),
-      fetch("/api/decisions").then(
-        (r) => r.json() as Promise<{ decisions?: DecisionItem[] }>,
-      ),
-      fetch("/api/goals").then(
-        (r) => r.json() as Promise<{ goals?: GoalItem[] }>,
-      ),
-      fetch("/api/labels").then(
-        (r) => r.json() as Promise<{ labels?: LabelItem[] }>,
-      ),
-    ]);
+  const res = await fetch("/api/global-search");
+
+  if (!res.ok) {
+    throw new Error("Failed to load global search data");
+  }
+
+  const body = (await res.json()) as Partial<SearchData>;
 
   return {
-    tasks: taskRes.tasks ?? [],
-    contacts: contactRes.contacts ?? [],
-    meetings: meetingRes.meetings ?? [],
-    decisions: decisionRes.decisions ?? [],
-    goals: goalRes.goals ?? [],
-    labels: labelRes.labels ?? [],
+    tasks: body.tasks ?? [],
+    contacts: body.contacts ?? [],
+    meetings: body.meetings ?? [],
+    decisions: body.decisions ?? [],
+    goals: body.goals ?? [],
+    labels: body.labels ?? [],
+    reports: body.reports ?? [],
   };
 }
 
