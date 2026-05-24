@@ -4,23 +4,25 @@ import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   accumulateTokens: vi.fn<() => Promise<void>>(),
   buildSystemPrompt: vi.fn(),
-  chatRateLimitCheck: vi.fn<
-    (identifier: string) => Promise<{ allowed: boolean; retryAfterSeconds: number }>
-  >(),
+  chatRateLimitCheck:
+    vi.fn<
+      (
+        identifier: string,
+      ) => Promise<{ allowed: boolean; retryAfterSeconds: number }>
+    >(),
   createReport: vi.fn<() => Promise<unknown>>(),
-  enforceMonthlyLimits: vi.fn<
-    (userId: string) => Promise<{ allowed: boolean; reason?: string }>
-  >(),
+  enforceMonthlyLimits:
+    vi.fn<(userId: string) => Promise<{ allowed: boolean; reason?: string }>>(),
   enforceToolCallsMonthly: vi.fn(),
-  enforceWidgetChats: vi.fn<
-    (userId: string) => Promise<{ allowed: boolean; reason?: string }>
-  >(),
+  enforceWidgetChats:
+    vi.fn<(userId: string) => Promise<{ allowed: boolean; reason?: string }>>(),
   enforceWidgetTools: vi.fn(),
   executeToolCall: vi.fn(),
   getActiveToolsForUser: vi.fn<() => Promise<unknown[]>>(),
   getRateLimitIdentifier: vi.fn<(req: Request, fallback: string) => string>(),
   getSession: vi.fn<GetSession>(),
-  getUserPreferences: vi.fn<() => Promise<{ language: "en"; reportsEnabled: true }>>(),
+  getUserPreferences:
+    vi.fn<() => Promise<{ language: "en"; reportsEnabled: true }>>(),
   headers: vi.fn<HeadersProvider>(),
   streamChat: vi.fn(),
 }));

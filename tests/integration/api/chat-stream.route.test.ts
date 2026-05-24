@@ -4,21 +4,24 @@ import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
 const mocks = vi.hoisted(() => ({
   accumulateTokens: vi.fn<() => Promise<void>>(),
   buildSystemPrompt: vi.fn(),
-  chatRateLimitCheck: vi.fn<
-    (identifier: string) => Promise<{ allowed: boolean; retryAfterSeconds: number }>
-  >(),
+  chatRateLimitCheck:
+    vi.fn<
+      (
+        identifier: string,
+      ) => Promise<{ allowed: boolean; retryAfterSeconds: number }>
+    >(),
   classifyMessage: vi.fn<() => Promise<string[]>>(),
   createReport: vi.fn<() => Promise<unknown>>(),
-  enforceMonthlyLimits: vi.fn<
-    (userId: string) => Promise<{ allowed: boolean; reason?: string }>
-  >(),
+  enforceMonthlyLimits:
+    vi.fn<(userId: string) => Promise<{ allowed: boolean; reason?: string }>>(),
   enforceToolCallsMonthly: vi.fn(),
   executeToolCall: vi.fn(),
   getActiveToolsForUser: vi.fn<() => Promise<unknown[]>>(),
   getChatMessages: vi.fn(),
   getRateLimitIdentifier: vi.fn<(req: Request, fallback: string) => string>(),
   getSession: vi.fn<GetSession>(),
-  getUserPreferences: vi.fn<() => Promise<{ language: "en"; reportsEnabled: true }>>(),
+  getUserPreferences:
+    vi.fn<() => Promise<{ language: "en"; reportsEnabled: true }>>(),
   getUserTier: vi.fn<() => Promise<"pro">>(),
   headers: vi.fn<HeadersProvider>(),
   runAgent: vi.fn(),
