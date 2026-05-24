@@ -4,7 +4,7 @@
  * @license See License
  * @version canary-v1.0.7
  * @since canary-v1.0.2
- */ 
+ */
 
 "use client";
 
