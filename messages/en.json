@@ -18,7 +18,10 @@
     },
     "fields": {
       "title": "Title",
+      "name": "Name",
+      "email": "Email",
       "status": "Status",
+      "currentPlan": "Current plan",
       "optional": "Optional"
     },
     "entities": {
@@ -133,12 +136,10 @@
       },
       "title": "Create an account",
       "subtitle": "Sign up with your email address.",
-      "nameLabel": "Name",
       "namePlaceholder": "Your name",
       "usernameLabel": "Username",
       "usernamePlaceholder": "username_123",
       "usernameHint": "Must be unique. You can use it to sign in.",
-      "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
@@ -162,7 +163,6 @@
       },
       "title": "Forgot your password?",
       "subtitle": "Enter your email address and we'll send you a reset link.",
-      "emailLabel": "Email",
       "emailPlaceholder": "you@example.com",
       "submit": "Send reset link",
       "submitting": "Sending...",
@@ -251,7 +251,6 @@
     "subscription": {
       "title": "Plan & Subscription",
       "description": "Manage your current plan and billing.",
-      "currentPlan": "Current plan",
       "managePlan": "Manage subscription",
       "managing": "Opening portal…",
       "manageDescription": "Update payment method, view invoices, or cancel your subscription.",
@@ -318,7 +317,6 @@
     "usage": {
       "title": "Usage & Quotas",
       "description": "Your current plan usage for this billing period.",
-      "planLabel": "Current plan",
       "resetLabel": "Monthly reset",
       "resetUnknown": "Not tracked yet",
       "messagesTitle": "Messages this month",
@@ -816,11 +814,9 @@
     },
     "quickContact": {
       "heading": "New contact",
-      "name": "Name",
       "namePlaceholder": "Full name",
       "company": "Company",
       "companyPlaceholder": "Company name",
-      "email": "Email",
       "emailPlaceholder": "email@example.com",
       "submit": "Create & add",
       "submitting": "Creating…"
@@ -895,13 +891,11 @@
     "newContact": "New contact",
     "empty": "No contacts yet.",
     "fields": {
-      "name": "Name",
       "namePlaceholder": "Jane Doe",
       "role": "Role",
       "rolePlaceholder": "Software Engineer",
       "company": "Company",
       "companyPlaceholder": "Acme Inc.",
-      "email": "Email",
       "emailPlaceholder": "jane@example.com",
       "phone": "Phone",
       "phonePlaceholder": "+1 (555) 123-4567",
@@ -941,7 +935,6 @@
     "newLabel": "New label",
     "empty": "No labels yet.",
     "fields": {
-      "name": "Name",
       "namePlaceholder": "Label name",
       "color": "Color",
       "icon": "Icon",
@@ -1239,12 +1232,9 @@
       "description": "Your account profile."
     },
     "title": "Profile",
-    "name": "Name",
     "username": "Username",
-    "email": "Email",
     "emailVerified": "Verified",
     "emailUnverified": "Pending",
-    "plan": "Current plan",
     "memberSince": "Member since",
     "timezone": "Timezone",
     "notSet": "Not set",
@@ -1265,7 +1255,6 @@
     },
     "pageTitle": "Plans & Quotas",
     "pageSubtitle": "Your current plan and all available options.",
-    "currentPlan": "Current plan",
     "price": {
       "free": "Free",
       "perMonth": "/month",

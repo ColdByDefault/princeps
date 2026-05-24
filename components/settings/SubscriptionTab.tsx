@@ -121,7 +121,7 @@ export function SubscriptionTab({ currentTier, appOrigin, priceIds }: Props) {
       {/* Current plan */}
       <section>
         <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-3">
-          {t("currentPlan")}
+          {tCommon("fields.currentPlan")}
         </h3>
         <div className="flex items-center gap-3">
           <span

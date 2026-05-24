@@ -66,7 +66,7 @@ export function CreateMeetingDialog({
   children,
 }: CreateMeetingDialogProps) {
   const t = useTranslations("meetings");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
 
   function handleOpenChange(v: boolean) {
@@ -421,7 +421,7 @@ const tCommon = useTranslations("common");
           </DialogHeader>
           <form onSubmit={handleQuickCreate} className="space-y-3">
             <div className="space-y-1.5">
-              <Label htmlFor="create-qc-name">{t("quickContact.name")}</Label>
+              <Label htmlFor="create-qc-name">{tCommon("fields.name")}</Label>
               <Input
                 id="create-qc-name"
                 value={qcName}
@@ -443,7 +443,7 @@ const tCommon = useTranslations("common");
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="create-qc-email">{t("quickContact.email")}</Label>
+              <Label htmlFor="create-qc-email">{tCommon("fields.email")}</Label>
               <Input
                 id="create-qc-email"
                 type="email"

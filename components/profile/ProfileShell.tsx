@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -48,6 +48,7 @@ type ProfileShellProps = {
 
 export default function ProfileShell({ user }: ProfileShellProps) {
   const t = useTranslations("profile");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
 
   const [name, setName] = useState<string | null>(user.name);
@@ -73,7 +74,7 @@ export default function ProfileShell({ user }: ProfileShellProps) {
 
   const rows: { label: string; value: React.ReactNode }[] = [
     {
-      label: t("name"),
+      label: tCommon("fields.name"),
       value: (
         <span className="text-sm text-foreground">
           {name?.trim() ?? (
@@ -95,11 +96,11 @@ export default function ProfileShell({ user }: ProfileShellProps) {
       ),
     },
     {
-      label: t("email"),
+      label: tCommon("fields.email"),
       value: <span className="text-sm text-foreground">{user.email}</span>,
     },
     {
-      label: t("plan"),
+      label: tCommon("fields.currentPlan"),
       value: <PlanBadge tier={user.tier} />,
     },
     {

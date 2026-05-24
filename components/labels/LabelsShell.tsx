@@ -294,7 +294,9 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
+            {isPendingRefresh
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
           <Button
             type="button"
@@ -370,7 +372,9 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="label-create-name">{t("fields.name")}</Label>
+              <Label htmlFor="label-create-name">
+                {tCommon("fields.name")}
+              </Label>
               <Input
                 id="label-create-name"
                 value={createName}
@@ -416,7 +420,7 @@ export function LabelsShell({ initialLabels }: LabelsShellProps) {
           </DialogHeader>
           <form onSubmit={handleEdit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="label-edit-name">{t("fields.name")}</Label>
+              <Label htmlFor="label-edit-name">{tCommon("fields.name")}</Label>
               <Input
                 id="label-edit-name"
                 value={editName}

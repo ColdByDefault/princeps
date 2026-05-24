@@ -18,7 +18,10 @@
     },
     "fields": {
       "title": "Titel",
+      "name": "Name",
+      "email": "E-Mail",
       "status": "Status",
+      "currentPlan": "Aktueller Plan",
       "optional": "Optional"
     },
     "entities": {
@@ -133,12 +136,10 @@
       },
       "title": "Konto erstellen",
       "subtitle": "Registriere dich mit deiner E-Mail-Adresse.",
-      "nameLabel": "Name",
       "namePlaceholder": "Dein Name",
       "usernameLabel": "Benutzername",
       "usernamePlaceholder": "benutzername_123",
       "usernameHint": "Muss eindeutig sein. Du kannst ihn zum Anmelden verwenden.",
-      "emailLabel": "E-Mail",
       "emailPlaceholder": "du@beispiel.de",
       "passwordLabel": "Passwort",
       "passwordPlaceholder": "••••••••",
@@ -162,7 +163,6 @@
       },
       "title": "Passwort vergessen?",
       "subtitle": "Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen.",
-      "emailLabel": "E-Mail",
       "emailPlaceholder": "du@beispiel.de",
       "submit": "Link senden",
       "submitting": "Wird gesendet …",
@@ -251,7 +251,6 @@
     "subscription": {
       "title": "Plan & Abonnement",
       "description": "Verwalte deinen aktuellen Plan und deine Abrechnung.",
-      "currentPlan": "Aktueller Plan",
       "managePlan": "Abonnement verwalten",
       "managing": "Portal wird geöffnet…",
       "manageDescription": "Zahlungsmethode aktualisieren, Rechnungen einsehen oder Abonnement kündigen.",
@@ -318,7 +317,6 @@
     "usage": {
       "title": "Nutzung & Kontingente",
       "description": "Deine aktuelle Plannutzung für diesen Abrechnungszeitraum.",
-      "planLabel": "Aktueller Plan",
       "resetLabel": "Monatliche Zurücksetzung",
       "resetUnknown": "Noch nicht erfasst",
       "messagesTitle": "Nachrichten diesen Monat",
@@ -816,11 +814,9 @@
     },
     "quickContact": {
       "heading": "Neuer Kontakt",
-      "name": "Name",
       "namePlaceholder": "Vollständiger Name",
       "company": "Unternehmen",
       "companyPlaceholder": "Unternehmensname",
-      "email": "E-Mail",
       "emailPlaceholder": "email@beispiel.de",
       "submit": "Erstellen & hinzufügen",
       "submitting": "Wird erstellt…"
@@ -895,13 +891,11 @@
     "newContact": "Neuer Kontakt",
     "empty": "Noch keine Kontakte.",
     "fields": {
-      "name": "Name",
       "namePlaceholder": "Jane Doe",
       "role": "Rolle",
       "rolePlaceholder": "Software Engineer",
       "company": "Unternehmen",
       "companyPlaceholder": "Acme GmbH",
-      "email": "E-Mail",
       "emailPlaceholder": "jane@beispiel.de",
       "phone": "Telefon",
       "phonePlaceholder": "+49 (0)89 123456",
@@ -941,7 +935,6 @@
     "newLabel": "Neues Label",
     "empty": "Noch keine Labels.",
     "fields": {
-      "name": "Name",
       "namePlaceholder": "Label-Name",
       "color": "Farbe",
       "icon": "Symbol",
@@ -1239,12 +1232,9 @@
       "description": "Dein Kontoprofil."
     },
     "title": "Profil",
-    "name": "Name",
     "username": "Benutzername",
-    "email": "E-Mail",
     "emailVerified": "Bestätigt",
     "emailUnverified": "Ausstehend",
-    "plan": "Aktueller Plan",
     "memberSince": "Mitglied seit",
     "timezone": "Zeitzone",
     "notSet": "Nicht gesetzt",
@@ -1265,7 +1255,6 @@
     },
     "pageTitle": "Pläne & Kontingente",
     "pageSubtitle": "Dein aktueller Plan und alle verfügbaren Optionen.",
-    "currentPlan": "Aktueller Plan",
     "price": {
       "free": "Kostenlos",
       "perMonth": "/Monat",

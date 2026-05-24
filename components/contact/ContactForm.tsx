@@ -44,7 +44,7 @@ export function ContactForm({
   availableLabels,
 }: ContactFormProps) {
   const t = useTranslations("contacts");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
 
   const [name, setName] = useState(contact?.name ?? "");
   const [role, setRole] = useState(contact?.role ?? "");
@@ -85,7 +85,7 @@ const tCommon = useTranslations("common");
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <Label htmlFor="contact-name">
-          {t("fields.name")}
+          {tCommon("fields.name")}
           <span aria-hidden="true" className="ml-0.5 text-destructive">
             *
           </span>
@@ -135,7 +135,7 @@ const tCommon = useTranslations("common");
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <Label htmlFor="contact-email">
-            {t("fields.email")}
+            {tCommon("fields.email")}
             <span className="ml-1 text-xs font-normal text-muted-foreground">
               ({tCommon("fields.optional")})
             </span>

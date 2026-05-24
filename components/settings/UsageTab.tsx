@@ -124,7 +124,7 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
       {/* Plan header */}
       <div className="flex items-center justify-between py-2 border-y border-border/60">
         <p className="text-sm font-medium text-muted-foreground">
-          {t("planLabel")}
+          {tCommon("fields.currentPlan")}
         </p>
         <PlanBadge tier={usage.tier} />
       </div>

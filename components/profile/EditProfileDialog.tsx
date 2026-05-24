@@ -45,7 +45,7 @@ function EditForm({
   updating: boolean;
 }) {
   const t = useTranslations("profile");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
 
   const [draftName, setDraftName] = useState(name ?? "");
   const [draftUsername, setDraftUsername] = useState(username ?? "");
@@ -78,7 +78,7 @@ const tCommon = useTranslations("common");
   return (
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       <div className="space-y-1.5">
-        <Label htmlFor="profile-name">{t("name")}</Label>
+        <Label htmlFor="profile-name">{tCommon("fields.name")}</Label>
         <Input
           id="profile-name"
           value={draftName}
@@ -87,7 +87,7 @@ const tCommon = useTranslations("common");
           minLength={2}
           maxLength={100}
           autoFocus
-          aria-label={t("name")}
+          aria-label={tCommon("fields.name")}
         />
       </div>
 

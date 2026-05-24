@@ -84,7 +84,7 @@ export function EditMeetingDialog({
   hasGoogleCalendar = false,
 }: EditMeetingDialogProps) {
   const t = useTranslations("meetings");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const [title, setTitle] = useState(meeting?.title ?? "");
   const [scheduledAt, setScheduledAt] = useState(
     meeting ? toDatetimeLocal(meeting.scheduledAt) : "",
@@ -186,7 +186,9 @@ const tCommon = useTranslations("common");
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="edit-meeting-title">{tCommon("fields.title")}</Label>
+              <Label htmlFor="edit-meeting-title">
+                {tCommon("fields.title")}
+              </Label>
               <Input
                 id="edit-meeting-title"
                 value={title}
@@ -243,7 +245,9 @@ const tCommon = useTranslations("common");
                     <SelectItem value="upcoming">
                       {t("status.upcoming")}
                     </SelectItem>
-                    <SelectItem value="done">{tCommon("status.done")}</SelectItem>
+                    <SelectItem value="done">
+                      {tCommon("status.done")}
+                    </SelectItem>
                     <SelectItem value="cancelled">
                       {tCommon("status.cancelled")}
                     </SelectItem>
@@ -543,7 +547,7 @@ const tCommon = useTranslations("common");
           </DialogHeader>
           <form onSubmit={handleQuickCreate} className="space-y-3">
             <div className="space-y-1.5">
-              <Label htmlFor="qc-name">{t("quickContact.name")}</Label>
+              <Label htmlFor="qc-name">{tCommon("fields.name")}</Label>
               <Input
                 id="qc-name"
                 value={qcName}
@@ -563,7 +567,7 @@ const tCommon = useTranslations("common");
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="qc-email">{t("quickContact.email")}</Label>
+              <Label htmlFor="qc-email">{tCommon("fields.email")}</Label>
               <Input
                 id="qc-email"
                 type="email"

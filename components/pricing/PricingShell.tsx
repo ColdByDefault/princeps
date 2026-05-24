@@ -63,7 +63,7 @@ export function PricingShell({ currentTier }: PricingShellProps) {
             <div key={tier} className="relative pt-3" data-tier={tier}>
               {isCurrent && (
                 <span className="absolute top-0 left-4 -translate-y-1/2 rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wide border border-tier-accent/30 bg-tier-accent/10 text-tier-accent">
-                  {t("currentPlan")}
+                  {tCommon("fields.currentPlan")}
                 </span>
               )}
 
