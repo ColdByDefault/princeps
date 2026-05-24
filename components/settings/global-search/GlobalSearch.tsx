@@ -23,6 +23,7 @@ import {
   Target,
   BookMarked,
   BookOpen,
+  BarChart3,
   User2,
   Loader2,
   type LucideIcon,
@@ -69,6 +70,11 @@ export function GlobalSearch() {
       href: "/reading-queue",
       icon: BookOpen,
       label: tCommon("entities.readingQueue"),
+    },
+    {
+      href: "/reports",
+      icon: BarChart3,
+      label: tCommon("entities.reports"),
     },
     {
       href: "/settings",
