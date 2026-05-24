@@ -85,6 +85,66 @@ const EMPTY_SEARCH_DATA: SearchData = {
 const SEARCH_LIMIT = 20;
 const QUERY_DEBOUNCE_MS = 200;
 
+export type SearchSectionFilter =
+  | "all"
+  | "navigation"
+  | "tasks"
+  | "contacts"
+  | "meetings"
+  | "decisions"
+  | "goals"
+  | "labels"
+  | "reports";
+
+const SECTION_PREFIX_MAP: Record<string, SearchSectionFilter> = {
+  n: "navigation",
+  nav: "navigation",
+  t: "tasks",
+  task: "tasks",
+  tasks: "tasks",
+  c: "contacts",
+  contact: "contacts",
+  contacts: "contacts",
+  m: "meetings",
+  meeting: "meetings",
+  meetings: "meetings",
+  d: "decisions",
+  decision: "decisions",
+  decisions: "decisions",
+  g: "goals",
+  goal: "goals",
+  goals: "goals",
+  l: "labels",
+  label: "labels",
+  labels: "labels",
+  r: "reports",
+  report: "reports",
+  reports: "reports",
+};
+
+export function parseGlobalSearchQuery(rawQuery: string): {
+  section: SearchSectionFilter;
+  text: string;
+} {
+  const trimmed = rawQuery.trim();
+  const match = trimmed.match(/^([a-z]+)\s*:\s*(.*)$/i);
+
+  if (!match) {
+    return { section: "all", text: trimmed };
+  }
+
+  const section = SECTION_PREFIX_MAP[match[1]!.toLowerCase()];
+
+  if (!section) {
+    return { section: "all", text: trimmed };
+  }
+
+  return {
+    section,
+    text: match[2]?.trim() ?? "",
+  };
+}
+
 export function buildKeywords(
   ...parts: Array<string | null | undefined>
 ): string[] {
@@ -103,8 +163,9 @@ async function fetchSearchData(
   query: string,
   signal?: AbortSignal,
 ): Promise<SearchData> {
+  const parsed = parseGlobalSearchQuery(query);
   const params = new URLSearchParams({ limit: String(SEARCH_LIMIT) });
-  const normalizedQuery = query.trim();
+  const normalizedQuery = parsed.text;
 
   if (normalizedQuery) {
     params.set("q", normalizedQuery);

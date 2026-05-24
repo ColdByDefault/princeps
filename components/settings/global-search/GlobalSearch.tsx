@@ -8,6 +8,12 @@
 
 "use client";
 
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 import { useTranslations } from "next-intl";
 import {
   LayoutDashboard,
@@ -35,8 +41,14 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandItem,
+  CommandShortcut,
 } from "@/components/ui/command";
-import { buildKeywords, useGlobalSearch } from "./logic/useGlobalSearch";
+import {
+  buildKeywords,
+  parseGlobalSearchQuery,
+  type SearchSectionFilter,
+  useGlobalSearch,
+} from "./logic/useGlobalSearch";
 
 function formatReportDate(value: string): string {
   const date = new Date(value);
@@ -222,6 +234,8 @@ function fallbackStatus(status: string): string {
   return status.replace(/_/g, " ");
 }
 
+const NEW_TAB_REQUEST_WINDOW_MS = 700;
+
 export function GlobalSearch() {
   const { open, setOpen, data, query, setQuery, navigate } = useGlobalSearch();
   const t = useTranslations("shell");
@@ -232,6 +246,90 @@ export function GlobalSearch() {
   const tDecisions = useTranslations("decisions");
   const tGoals = useTranslations("goals");
   const tReports = useTranslations("reports");
+
+  const parsedQuery = useMemo(() => parseGlobalSearchQuery(query), [query]);
+  const activeSection = parsedQuery.section;
+  const searchQuery = parsedQuery.text;
+
+  const showNavigation =
+    activeSection === "all" || activeSection === "navigation";
+  const showTasks = activeSection === "all" || activeSection === "tasks";
+  const showContacts = activeSection === "all" || activeSection === "contacts";
+  const showMeetings = activeSection === "all" || activeSection === "meetings";
+  const showDecisions =
+    activeSection === "all" || activeSection === "decisions";
+  const showGoals = activeSection === "all" || activeSection === "goals";
+  const showLabels = activeSection === "all" || activeSection === "labels";
+  const showReports = activeSection === "all" || activeSection === "reports";
+
+  const prefixQueryKeywords = useMemo(() => {
+    if (activeSection === "all") {
+      return [] as string[];
+    }
+
+    const raw = query.trim();
+
+    if (!raw) {
+      return [] as string[];
+    }
+
+    return [raw, raw.replace(/\s+/g, "")];
+  }, [activeSection, query]);
+
+  const sectionPrefixKeywords = useCallback(
+    (section: SearchSectionFilter): string[] => {
+      if (activeSection !== section) {
+        return [];
+      }
+
+      return prefixQueryKeywords;
+    },
+    [activeSection, prefixQueryKeywords],
+  );
+
+  const newTabRequestedAtRef = useRef(0);
+
+  const consumeNewTabRequest = useCallback(() => {
+    const requestedAt = newTabRequestedAtRef.current;
+    newTabRequestedAtRef.current = 0;
+
+    if (!requestedAt) {
+      return false;
+    }
+
+    return Date.now() - requestedAt <= NEW_TAB_REQUEST_WINDOW_MS;
+  }, []);
+
+  const handleNavigate = useCallback(
+    (href: string) => {
+      if (consumeNewTabRequest()) {
+        window.open(href, "_blank", "noopener,noreferrer");
+        setOpen(false);
+        setQuery("");
+        return;
+      }
+
+      navigate(href);
+    },
+    [consumeNewTabRequest, navigate, setOpen, setQuery],
+  );
+
+  const handleInputKeyDown = useCallback(
+    (event: ReactKeyboardEvent<HTMLInputElement>) => {
+      if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+        newTabRequestedAtRef.current = Date.now();
+      }
+    },
+    [],
+  );
+
+  const setSectionShortcut = useCallback(
+    (prefix: string) => {
+      const suffix = searchQuery ? ` ${searchQuery}` : "";
+      setQuery(`${prefix}:${suffix}`.trimEnd());
+    },
+    [searchQuery, setQuery],
+  );
 
   const getTaskStatusLabel = (status: string): string => {
     switch (status) {
@@ -331,6 +429,24 @@ export function GlobalSearch() {
     { href: "/profile", icon: User2, label: t("nav.profile") },
   ];
 
+  const quickCreateLinks: { href: string; icon: LucideIcon; label: string }[] =
+    [
+      { href: "/tasks", icon: CheckSquare, label: tTasks("newTask") },
+      { href: "/meetings", icon: CalendarDays, label: tMeetings("newMeeting") },
+      { href: "/contacts", icon: Users, label: tContacts("newContact") },
+    ];
+
+  const sectionShortcuts: Array<{ prefix: string; label: string }> = [
+    { prefix: "n", label: t("search.navigation") },
+    { prefix: "t", label: tCommon("entities.tasks") },
+    { prefix: "c", label: tCommon("entities.contacts") },
+    { prefix: "m", label: tCommon("entities.meetings") },
+    { prefix: "d", label: tCommon("entities.decisions") },
+    { prefix: "g", label: tCommon("entities.goals") },
+    { prefix: "l", label: tCommon("entities.labels") },
+    { prefix: "r", label: tCommon("entities.reports") },
+  ];
+
   return (
     <CommandDialog
       open={open}
@@ -346,8 +462,12 @@ export function GlobalSearch() {
       <CommandInput
         value={query}
         onValueChange={setQuery}
+        onKeyDown={handleInputKeyDown}
         placeholder={t("search.placeholder")}
       />
+      <p className="px-3 pb-1 text-[11px] text-muted-foreground">
+        {t("search.newTabHint")}
+      </p>
       <CommandList>
         {open && data === null ? (
           <div className="flex items-center justify-center py-8">
@@ -357,20 +477,63 @@ export function GlobalSearch() {
           <>
             <CommandEmpty>{t("search.empty")}</CommandEmpty>
 
-            <CommandGroup heading={t("search.navigation")}>
-              {navLinks.map(({ href, icon: Icon, label }) => (
-                <CommandItem
-                  key={href}
-                  value={label}
-                  onSelect={() => navigate(href)}
-                >
-                  <Icon />
-                  {label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
+            {activeSection === "all" && (
+              <CommandGroup heading={tCommon("actions.create")}>
+                {quickCreateLinks.map(({ href, icon: Icon, label }) => (
+                  <CommandItem
+                    key={href}
+                    value={label}
+                    keywords={buildKeywords(searchQuery, "create", label)}
+                    onSelect={() => handleNavigate(href)}
+                  >
+                    <Icon />
+                    {label}
+                    <CommandShortcut>Enter</CommandShortcut>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
 
-            {(data?.reports.length ?? 0) > 0 && (
+            {activeSection === "all" && (
+              <CommandGroup heading={t("search.navigation")}>
+                {sectionShortcuts.map(({ prefix, label }) => (
+                  <CommandItem
+                    key={prefix}
+                    value={`${prefix}: ${label}`}
+                    keywords={buildKeywords(searchQuery, prefix, label)}
+                    onSelect={() => setSectionShortcut(prefix)}
+                  >
+                    <BookMarked />
+                    {label}
+                    <CommandShortcut>{`${prefix}:`}</CommandShortcut>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+            {showNavigation && (
+              <CommandGroup heading={t("search.navigation")}>
+                {navLinks.map(({ href, icon: Icon, label }) => (
+                  <CommandItem
+                    key={href}
+                    value={label}
+                    keywords={buildKeywords(
+                      searchQuery,
+                      "navigation",
+                      label,
+                      ...sectionPrefixKeywords("navigation"),
+                    )}
+                    onSelect={() => handleNavigate(href)}
+                  >
+                    <Icon />
+                    {label}
+                    <CommandShortcut>Ctrl/Cmd+Enter</CommandShortcut>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+
+            {showReports && (data?.reports.length ?? 0) > 0 && (
               <CommandGroup heading={tCommon("entities.reports")}>
                 {data!.reports.map((item) => {
                   const reportDate = formatReportDate(item.createdAt);
@@ -387,27 +550,30 @@ export function GlobalSearch() {
                       key={item.id}
                       value={`${reportDate} ${reportLabel}`}
                       keywords={buildKeywords(
-                        query,
+                        searchQuery,
                         "report",
                         "bericht",
                         tCommon("entities.reports"),
+                        ...sectionPrefixKeywords("reports"),
                         ...item.toolsCalled,
                         ...item.detailTools,
                       )}
-                      onSelect={() => navigate(`/reports#report-${item.id}`)}
+                      onSelect={() =>
+                        handleNavigate(`/reports#report-${item.id}`)
+                      }
                     >
                       <BarChart3 className="self-start mt-0.5" />
                       <span className="flex min-w-0 flex-1 flex-col">
                         <HighlightedText
                           text={reportLabel}
-                          query={query}
+                          query={searchQuery}
                           className="truncate"
                         />
                         {reportPreview && (
                           <span className="truncate text-xs text-muted-foreground">
                             <HighlightedText
                               text={reportPreview}
-                              query={query}
+                              query={searchQuery}
                             />
                           </span>
                         )}
@@ -421,24 +587,25 @@ export function GlobalSearch() {
               </CommandGroup>
             )}
 
-            {(data?.labels.length ?? 0) > 0 && (
+            {showLabels && (data?.labels.length ?? 0) > 0 && (
               <CommandGroup heading={tCommon("entities.labels")}>
                 {data!.labels.map((item) => (
                   <CommandItem
                     key={item.id}
                     value={item.name}
                     keywords={buildKeywords(
-                      query,
+                      searchQuery,
                       "label",
                       tCommon("entities.labels"),
+                      ...sectionPrefixKeywords("labels"),
                     )}
-                    onSelect={() => navigate("/labels")}
+                    onSelect={() => handleNavigate("/labels")}
                   >
                     <Tag className="self-start mt-0.5" />
                     <span className="flex min-w-0 flex-1 flex-col">
                       <HighlightedText
                         text={item.name}
-                        query={query}
+                        query={searchQuery}
                         className="truncate"
                       />
                       <span className="truncate text-xs text-muted-foreground">
@@ -450,26 +617,27 @@ export function GlobalSearch() {
               </CommandGroup>
             )}
 
-            {(data?.tasks.length ?? 0) > 0 && (
+            {showTasks && (data?.tasks.length ?? 0) > 0 && (
               <CommandGroup heading={tCommon("entities.tasks")}>
                 {data!.tasks.map((item) => (
                   <CommandItem
                     key={item.id}
                     value={item.title}
                     keywords={buildKeywords(
-                      query,
+                      searchQuery,
                       "task",
                       tCommon("entities.tasks"),
+                      ...sectionPrefixKeywords("tasks"),
                       item.status,
                       ...item.labels.map((label) => label.name),
                     )}
-                    onSelect={() => navigate("/tasks")}
+                    onSelect={() => handleNavigate("/tasks")}
                   >
                     <CheckSquare className="self-start mt-0.5" />
                     <span className="flex min-w-0 flex-1 flex-col">
                       <HighlightedText
                         text={item.title}
-                        query={query}
+                        query={searchQuery}
                         className="truncate"
                       />
                       <span className="truncate text-xs text-muted-foreground">
@@ -482,7 +650,7 @@ export function GlobalSearch() {
                       </span>
                       <PreviewChips
                         labels={item.labels.map((label) => label.name)}
-                        query={query}
+                        query={searchQuery}
                       />
                     </span>
                   </CommandItem>
@@ -490,27 +658,28 @@ export function GlobalSearch() {
               </CommandGroup>
             )}
 
-            {(data?.contacts.length ?? 0) > 0 && (
+            {showContacts && (data?.contacts.length ?? 0) > 0 && (
               <CommandGroup heading={tCommon("entities.contacts")}>
                 {data!.contacts.map((item) => (
                   <CommandItem
                     key={item.id}
                     value={item.name}
                     keywords={buildKeywords(
-                      query,
+                      searchQuery,
                       "contact",
                       tCommon("entities.contacts"),
+                      ...sectionPrefixKeywords("contacts"),
                       item.role,
                       item.company,
                       ...item.labels.map((label) => label.name),
                     )}
-                    onSelect={() => navigate("/contacts")}
+                    onSelect={() => handleNavigate("/contacts")}
                   >
                     <Users className="self-start mt-0.5" />
                     <span className="flex min-w-0 flex-1 flex-col">
                       <HighlightedText
                         text={item.name}
-                        query={query}
+                        query={searchQuery}
                         className="truncate"
                       />
                       <span className="truncate text-xs text-muted-foreground">
@@ -523,7 +692,7 @@ export function GlobalSearch() {
                       </span>
                       <PreviewChips
                         labels={item.labels.map((label) => label.name)}
-                        query={query}
+                        query={searchQuery}
                       />
                     </span>
                   </CommandItem>
@@ -531,26 +700,27 @@ export function GlobalSearch() {
               </CommandGroup>
             )}
 
-            {(data?.meetings.length ?? 0) > 0 && (
+            {showMeetings && (data?.meetings.length ?? 0) > 0 && (
               <CommandGroup heading={tCommon("entities.meetings")}>
                 {data!.meetings.map((item) => (
                   <CommandItem
                     key={item.id}
                     value={item.title}
                     keywords={buildKeywords(
-                      query,
+                      searchQuery,
                       "meeting",
                       tCommon("entities.meetings"),
+                      ...sectionPrefixKeywords("meetings"),
                       item.status,
                       ...item.labels.map((label) => label.name),
                     )}
-                    onSelect={() => navigate("/meetings")}
+                    onSelect={() => handleNavigate("/meetings")}
                   >
                     <CalendarDays className="self-start mt-0.5" />
                     <span className="flex min-w-0 flex-1 flex-col">
                       <HighlightedText
                         text={item.title}
-                        query={query}
+                        query={searchQuery}
                         className="truncate"
                       />
                       <span className="truncate text-xs text-muted-foreground">
@@ -561,7 +731,7 @@ export function GlobalSearch() {
                       </span>
                       <PreviewChips
                         labels={item.labels.map((label) => label.name)}
-                        query={query}
+                        query={searchQuery}
                       />
                     </span>
                   </CommandItem>
@@ -569,26 +739,27 @@ export function GlobalSearch() {
               </CommandGroup>
             )}
 
-            {(data?.decisions.length ?? 0) > 0 && (
+            {showDecisions && (data?.decisions.length ?? 0) > 0 && (
               <CommandGroup heading={tCommon("entities.decisions")}>
                 {data!.decisions.map((item) => (
                   <CommandItem
                     key={item.id}
                     value={item.title}
                     keywords={buildKeywords(
-                      query,
+                      searchQuery,
                       "decision",
                       tCommon("entities.decisions"),
+                      ...sectionPrefixKeywords("decisions"),
                       item.status,
                       ...item.labels.map((label) => label.name),
                     )}
-                    onSelect={() => navigate("/decisions")}
+                    onSelect={() => handleNavigate("/decisions")}
                   >
                     <Scale className="self-start mt-0.5" />
                     <span className="flex min-w-0 flex-1 flex-col">
                       <HighlightedText
                         text={item.title}
-                        query={query}
+                        query={searchQuery}
                         className="truncate"
                       />
                       <span className="truncate text-xs text-muted-foreground">
@@ -601,7 +772,7 @@ export function GlobalSearch() {
                       </span>
                       <PreviewChips
                         labels={item.labels.map((label) => label.name)}
-                        query={query}
+                        query={searchQuery}
                       />
                     </span>
                   </CommandItem>
@@ -609,26 +780,27 @@ export function GlobalSearch() {
               </CommandGroup>
             )}
 
-            {(data?.goals.length ?? 0) > 0 && (
+            {showGoals && (data?.goals.length ?? 0) > 0 && (
               <CommandGroup heading={tCommon("entities.goals")}>
                 {data!.goals.map((item) => (
                   <CommandItem
                     key={item.id}
                     value={item.title}
                     keywords={buildKeywords(
-                      query,
+                      searchQuery,
                       "goal",
                       tCommon("entities.goals"),
+                      ...sectionPrefixKeywords("goals"),
                       item.status,
                       ...item.labels.map((label) => label.name),
                     )}
-                    onSelect={() => navigate("/goals")}
+                    onSelect={() => handleNavigate("/goals")}
                   >
                     <Target className="self-start mt-0.5" />
                     <span className="flex min-w-0 flex-1 flex-col">
                       <HighlightedText
                         text={item.title}
-                        query={query}
+                        query={searchQuery}
                         className="truncate"
                       />
                       <span className="truncate text-xs text-muted-foreground">
@@ -641,7 +813,7 @@ export function GlobalSearch() {
                       </span>
                       <PreviewChips
                         labels={item.labels.map((label) => label.name)}
-                        query={query}
+                        query={searchQuery}
                       />
                     </span>
                   </CommandItem>

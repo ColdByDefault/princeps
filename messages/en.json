@@ -479,6 +479,7 @@
       "title": "Quick navigation",
       "description": "Navigate pages in your workspace",
       "placeholder": "Search pages or content…",
+      "newTabHint": "Tip: Press Ctrl/Cmd + Enter to open the selected result in a new tab.",
       "empty": "No results found.",
       "navigation": "Navigation"
     },
