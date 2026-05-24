@@ -261,6 +261,7 @@ export function GlobalSearch() {
   const showGoals = activeSection === "all" || activeSection === "goals";
   const showLabels = activeSection === "all" || activeSection === "labels";
   const showReports = activeSection === "all" || activeSection === "reports";
+  const forceSectionResults = activeSection !== "all";
 
   const prefixQueryKeywords = useMemo(() => {
     if (activeSection === "all") {
@@ -516,6 +517,7 @@ export function GlobalSearch() {
                 {navLinks.map(({ href, icon: Icon, label }) => (
                   <CommandItem
                     key={href}
+                    forceMount={forceSectionResults}
                     value={label}
                     keywords={buildKeywords(
                       searchQuery,
@@ -548,6 +550,7 @@ export function GlobalSearch() {
                   return (
                     <CommandItem
                       key={item.id}
+                      forceMount={forceSectionResults}
                       value={`${reportDate} ${reportLabel}`}
                       keywords={buildKeywords(
                         searchQuery,
@@ -592,6 +595,7 @@ export function GlobalSearch() {
                 {data!.labels.map((item) => (
                   <CommandItem
                     key={item.id}
+                    forceMount={forceSectionResults}
                     value={item.name}
                     keywords={buildKeywords(
                       searchQuery,
@@ -622,6 +626,7 @@ export function GlobalSearch() {
                 {data!.tasks.map((item) => (
                   <CommandItem
                     key={item.id}
+                    forceMount={forceSectionResults}
                     value={item.title}
                     keywords={buildKeywords(
                       searchQuery,
@@ -663,6 +668,7 @@ export function GlobalSearch() {
                 {data!.contacts.map((item) => (
                   <CommandItem
                     key={item.id}
+                    forceMount={forceSectionResults}
                     value={item.name}
                     keywords={buildKeywords(
                       searchQuery,
@@ -705,6 +711,7 @@ export function GlobalSearch() {
                 {data!.meetings.map((item) => (
                   <CommandItem
                     key={item.id}
+                    forceMount={forceSectionResults}
                     value={item.title}
                     keywords={buildKeywords(
                       searchQuery,
@@ -744,6 +751,7 @@ export function GlobalSearch() {
                 {data!.decisions.map((item) => (
                   <CommandItem
                     key={item.id}
+                    forceMount={forceSectionResults}
                     value={item.title}
                     keywords={buildKeywords(
                       searchQuery,
@@ -785,6 +793,7 @@ export function GlobalSearch() {
                 {data!.goals.map((item) => (
                   <CommandItem
                     key={item.id}
+                    forceMount={forceSectionResults}
                     value={item.title}
                     keywords={buildKeywords(
                       searchQuery,
