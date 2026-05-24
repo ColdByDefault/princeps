@@ -1,3 +1,17 @@
+## [1.1.7] - 2026-05-24
+
+- chore: add dynamic export to AppLayout for improved rendering behavior
+- chore: update translation keys and labels for consistency across components, add missing German and English fields
+- chore: update navigation labels for consistency and localization in GlobalSearch, Navbar, and SidebarFooter components
+- chore: format code for consistency in MemoryShell and ToolsTab components
+- chore: standardize translation keys and update labels across components
+- chore: update i18n guidelines and add common labels for localization in German and English
+- fix: update security vulnerability reporting instructions in English and German translations
+- chore: update translations and improve task management UI
+- Refactor translations to use common action labels across components
+
+# Changelog
+
 ## [1.1.6] - 2026-05-23
 
 - feat: update Checkbox component to use rounded-lg for improved styling
