@@ -2,13 +2,14 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { NextIntlClientProvider } from "next-intl";
+import { getTranslations, getLocale, getMessages } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listDecisions } from "@/lib/features/decisions";
@@ -38,11 +39,15 @@ export default async function DecisionsPage() {
     listMeetings(session.user.id),
   ]);
 
+  const messages = await getMessages();
+
   return (
-    <DecisionsShell
-      initialDecisions={decisions}
-      availableLabels={labels}
-      availableMeetings={meetings}
-    />
+    <NextIntlClientProvider messages={{ decisions: messages.decisions }}>
+      <DecisionsShell
+        initialDecisions={decisions}
+        availableLabels={labels}
+        availableMeetings={meetings}
+      />
+    </NextIntlClientProvider>
   );
 }

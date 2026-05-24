@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
  * @since canary-v1.1.4
  */
 
@@ -12,7 +12,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Layers } from "lucide-react";
-import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { NextIntlClientProvider } from "next-intl";
+import { getTranslations, getLocale, getMessages } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listGoals, bucketGoalsByHorizon } from "@/lib/features/goals";
@@ -40,8 +41,11 @@ export default async function HorizonPage() {
 
   const t = await getTranslations("goals.horizon");
 
+  const messages = await getMessages();
+
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">
+    <NextIntlClientProvider messages={{ goals: messages.goals }}>
+      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">
       {/* Header */}
       <div className="mb-8 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -74,5 +78,6 @@ export default async function HorizonPage() {
 
       <HorizonView buckets={buckets} />
     </div>
+    </NextIntlClientProvider>
   );
 }
