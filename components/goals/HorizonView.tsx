@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
  * @since canary-v1.1.4
  */
 
@@ -38,7 +38,7 @@ function GoalPill({ goal }: { goal: GoalRecord }) {
           variant="outline"
           className={cn("text-xs", STATUS_COLORS[goal.status])}
         >
-          {t(`status.${goal.status}`)}
+          {t(`status.${goal.status}` as never)}
         </Badge>
         {goal.targetDate && (
           <span className="flex items-center gap-1 text-xs text-muted-foreground">

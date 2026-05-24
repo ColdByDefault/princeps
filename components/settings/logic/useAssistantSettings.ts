@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -72,12 +72,12 @@ export function useAssistantSettings(input: UseAssistantSettingsInput) {
         body: JSON.stringify(patch),
       });
       if (!res.ok) {
-        toast.error(t(failKey));
+        toast.error(t(failKey as never));
       } else {
-        toast.success(t(successKey));
+        toast.success(t(successKey as never));
       }
     } catch {
-      toast.error(t(failKey));
+      toast.error(t(failKey as never));
     }
   }
 

@@ -77,8 +77,8 @@ export function TaskCard({
   const [viewOpen, setViewOpen] = useState(false);
 
   const fields: DetailField[] = [
-    { label: t("fields.status"), value: t(`status.${task.status}`) },
-    { label: t("fields.priority"), value: t(`priority.${task.priority}`) },
+    { label: t("fields.status"), value: t(`status.${task.status}` as never) },
+    { label: t("fields.priority"), value: t(`priority.${task.priority}` as never) },
     {
       label: t("fields.dueDate"),
       value: task.dueDate ? formatDate(task.dueDate, locale) : null,
@@ -208,7 +208,7 @@ export function TaskCard({
                 PRIORITY_COLORS[task.priority] ?? PRIORITY_COLORS.normal,
               )}
             >
-              {t(`priority.${task.priority}`)}
+              {t(`priority.${task.priority}` as never)}
             </Badge>
             {task.dueDate && (
               <span className="text-[10px] text-muted-foreground">

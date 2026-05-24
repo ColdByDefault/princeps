@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -115,7 +115,7 @@ export function MeetingDetailDialog({
             variant="outline"
             className={cn("text-xs font-medium", STATUS_COLORS[meeting.status])}
           >
-            {t(`status.${meeting.status}`)}
+            {t(`status.${meeting.status}` as never)}
           </Badge>
           {meeting.kind === "appointment" && (
             <Badge variant="outline" className="text-xs text-muted-foreground">

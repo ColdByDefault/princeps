@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -98,7 +98,7 @@ export function ToolsTab({
           <Collapsible key={groupKey} defaultOpen={false}>
             <CollapsibleTrigger className="group flex w-full cursor-pointer items-center justify-between gap-2 pb-1.5">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">
-                {tTools(`groups.${groupKey}`)}
+                {tTools(`groups.${groupKey}` as never)}
               </p>
               <ChevronDown className="size-3.5 shrink-0 text-muted-foreground transition-transform duration-200 group-data-panel-open:rotate-180" />
             </CollapsibleTrigger>
@@ -125,14 +125,14 @@ export function ToolsTab({
                               {tool.name}
                             </Badge>
                             <span className="text-sm font-medium">
-                              {tTools(`catalog.${tool.name}.label`)}
+                              {tTools(`catalog.${tool.name}.label` as never)}
                             </span>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            {tTools(`catalog.${tool.name}.what`)}
+                            {tTools(`catalog.${tool.name}.what` as never)}
                           </p>
                           <p className="text-xs italic text-muted-foreground/70">
-                            {tTools(`catalog.${tool.name}.example`)}
+                            {tTools(`catalog.${tool.name}.example` as never)}
                           </p>
                         </div>
 
@@ -146,7 +146,7 @@ export function ToolsTab({
                                 onCheckedChange={() => {}}
                                 disabled
                                 aria-label={tTools(
-                                  `catalog.${tool.name}.label`,
+                                  `catalog.${tool.name}.label` as never,
                                 )}
                               />
                             </>
@@ -157,7 +157,7 @@ export function ToolsTab({
                                 void handleToggle(tool.name, v)
                               }
                               disabled={isSaving}
-                              aria-label={tTools(`catalog.${tool.name}.label`)}
+                              aria-label={tTools(`catalog.${tool.name}.label` as never)}
                             />
                           )}
                         </div>
