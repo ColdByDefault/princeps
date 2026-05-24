@@ -2,13 +2,14 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { NextIntlClientProvider } from "next-intl";
+import { getTranslations, getLocale, getMessages } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { db } from "@/lib/core/db";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
@@ -48,10 +49,14 @@ export default async function KnowledgePage() {
     }),
   ]);
 
+  const messages = await getMessages();
+
   return (
-    <KnowledgePageClient
-      initialDocuments={documents}
-      driveConnected={driveIntegration !== null}
-    />
+    <NextIntlClientProvider messages={{ knowledge: messages.knowledge }}>
+      <KnowledgePageClient
+        initialDocuments={documents}
+        driveConnected={driveIntegration !== null}
+      />
+    </NextIntlClientProvider>
   );
 }

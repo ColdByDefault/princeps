@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -10,7 +10,8 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { NextIntlClientProvider } from "next-intl";
+import { getTranslations, getLocale, getMessages } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listGoals } from "@/lib/features/goals";
@@ -42,16 +43,20 @@ export default async function GoalsPage() {
     listContacts(session.user.id),
   ]);
 
+  const messages = await getMessages();
+
   return (
-    <GoalsShell
-      initialGoals={goals}
-      availableLabels={labels}
-      availableTasks={tasks.map((t) => ({
-        id: t.id,
-        title: t.title,
-        status: t.status,
-      }))}
-      availableContacts={contacts.map((c) => ({ id: c.id, name: c.name }))}
-    />
+    <NextIntlClientProvider messages={{ goals: messages.goals }}>
+      <GoalsShell
+        initialGoals={goals}
+        availableLabels={labels}
+        availableTasks={tasks.map((t) => ({
+          id: t.id,
+          title: t.title,
+          status: t.status,
+        }))}
+        availableContacts={contacts.map((c) => ({ id: c.id, name: c.name }))}
+      />
+    </NextIntlClientProvider>
   );
 }
