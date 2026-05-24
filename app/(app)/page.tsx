@@ -2,13 +2,14 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
+import { NextIntlClientProvider } from "next-intl";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getTranslations, getLocale } from "@/lib/core/i18n";
+import { getTranslations, getLocale, getMessages } from "@/lib/core/i18n";
 import { auth } from "@/lib/core/auth/auth";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { LandingHero } from "@/components/landing";
@@ -35,9 +36,13 @@ export default async function LandingPage() {
     redirect("/home");
   }
 
+  const messages = await getMessages();
+
   return (
-    <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-16">
-      <LandingHero />
-    </div>
+    <NextIntlClientProvider messages={{ landing: messages.landing }}>
+      <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-16">
+        <LandingHero />
+      </div>
+    </NextIntlClientProvider>
   );
 }

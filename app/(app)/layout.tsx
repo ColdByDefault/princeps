@@ -2,12 +2,13 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
 import { headers } from "next/headers";
-import { getLocale } from "next-intl/server";
+import { getLocale, getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 import { auth } from "@/lib/core/auth/auth";
 import { db } from "@/lib/core/db";
 import { getUserPreferences } from "@/lib/platform/settings";
@@ -26,6 +27,16 @@ export default async function AppLayout({
   const sessionUser = session?.user ?? null;
 
   const locale = (await getLocale()) as AppLanguage;
+  const messages = await getMessages();
+
+  const shellMessages = {
+    shell: messages.shell,
+    notifications: messages.notifications,
+    chatWidget: messages.chatWidget,
+    calendar: messages.calendar,
+    tasks: messages.tasks,
+    meetings: messages.meetings,
+  };
 
   let preferredTheme: string | null = null;
   let preferredLanguage: AppLanguage | null = null;
@@ -52,7 +63,8 @@ export default async function AppLayout({
   }
 
   return (
-    <div className="flex min-h-screen flex-col" data-tier={userTier}>
+    <NextIntlClientProvider messages={shellMessages}>
+      <div className="flex min-h-screen flex-col" data-tier={userTier}>
       {/* Restore language and theme from DB on first load after a browser wipe */}
       <LanguageHydrator
         language={locale}
@@ -71,5 +83,6 @@ export default async function AppLayout({
       />
       {sessionUser && <GlobalSearch />}
     </div>
+    </NextIntlClientProvider>
   );
 }

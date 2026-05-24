@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
@@ -24,6 +24,11 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const messages = await getMessages();
+  const rootMessages = {
+    theme: messages.theme,
+    loading: messages.loading,
+    error: messages.error,
+  };
 
   return (
     <html
@@ -32,7 +37,7 @@ export default async function RootLayout({
       className={cn("font-sans", geist.variable)}
     >
       <body className="antialiased" suppressHydrationWarning>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={rootMessages}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

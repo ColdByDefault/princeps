@@ -2,12 +2,13 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.7
  * @since beta
  */
 
+import { NextIntlClientProvider } from "next-intl";
 import VersionDisplay from "@/components/VersionDisplay";
-import { getTranslations } from "@/lib/core/i18n";
+import { getTranslations, getMessages } from "@/lib/core/i18n";
 
 export default async function AuthLayout({
   children,
@@ -15,8 +16,10 @@ export default async function AuthLayout({
   children: React.ReactNode;
 }) {
   const t = await getTranslations("shell");
+  const messages = await getMessages();
 
   return (
+    <NextIntlClientProvider messages={{ auth: messages.auth }}>
     <div className="flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden px-4 py-4 sm:py-6">
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="w-full max-w-md min-w-0">{children}</div>
@@ -36,5 +39,6 @@ export default async function AuthLayout({
         </div>
       </div>
     </div>
+    </NextIntlClientProvider>
   );
 }
