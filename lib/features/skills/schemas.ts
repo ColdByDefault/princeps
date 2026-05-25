@@ -8,19 +8,31 @@
 
 import { z } from "zod";
 
-const allowedToolsSchema = z.array(z.string().min(1).max(100)).min(1).max(128);
+export const SKILL_NAME_MAX = 12;
+export const SKILL_DESCRIPTION_MAX = 50;
+export const SKILL_INSTRUCTIONS_MAX = 300;
+export const SKILL_ALLOWED_TOOLS_MAX = 10;
+
+const allowedToolsSchema = z
+  .array(z.string().min(1).max(100))
+  .min(1)
+  .max(SKILL_ALLOWED_TOOLS_MAX);
 
 export const createSkillSchema = z.object({
-  name: z.string().min(1).max(100),
-  description: z.string().min(1).max(500),
-  instructionsMarkdown: z.string().min(1).max(20_000),
+  name: z.string().min(1).max(SKILL_NAME_MAX),
+  description: z.string().min(1).max(SKILL_DESCRIPTION_MAX),
+  instructionsMarkdown: z.string().min(1).max(SKILL_INSTRUCTIONS_MAX),
   allowedTools: allowedToolsSchema,
 });
 
 export const updateSkillSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  description: z.string().min(1).max(500).optional(),
-  instructionsMarkdown: z.string().min(1).max(20_000).optional(),
+  name: z.string().min(1).max(SKILL_NAME_MAX).optional(),
+  description: z.string().min(1).max(SKILL_DESCRIPTION_MAX).optional(),
+  instructionsMarkdown: z
+    .string()
+    .min(1)
+    .max(SKILL_INSTRUCTIONS_MAX)
+    .optional(),
   allowedTools: allowedToolsSchema.optional(),
 });
 

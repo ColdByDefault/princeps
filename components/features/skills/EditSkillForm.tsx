@@ -25,14 +25,15 @@ import {
   SKILL_INSTRUCTIONS_MAX,
   SKILL_NAME_MAX,
 } from "@/lib/features/skills/schemas";
-import type { ToolDisplayEntry } from "@/types/api";
+import type { SkillRecord, ToolDisplayEntry } from "@/types/api";
 import type { Tier } from "@/types/billing";
 import type { SkillMutationInput } from "./logic/useSkillMutations";
 
-type CreateSkillFormProps = {
-  onSubmit: (input: SkillMutationInput) => Promise<boolean>;
+type EditSkillFormProps = {
+  skill: SkillRecord;
+  onSubmit: (skillId: string, input: SkillMutationInput) => Promise<boolean>;
   onCancel: () => void;
-  creating: boolean;
+  updating: boolean;
   allTools: ToolDisplayEntry[];
   currentTier: Tier;
 };
@@ -49,21 +50,28 @@ function groupTools(tools: ToolDisplayEntry[]): [string, ToolDisplayEntry[]][] {
   return Array.from(grouped.entries());
 }
 
-export function CreateSkillForm({
+export function EditSkillForm({
+  skill,
   onSubmit,
   onCancel,
-  creating,
+  updating,
   allTools,
   currentTier,
-}: CreateSkillFormProps) {
+}: EditSkillFormProps) {
   const t = useTranslations("skills");
   const tCommon = useTranslations("common");
   const tTools = useTranslations("tools");
   const [showPreview, setShowPreview] = useState(false);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [instructionsMarkdown, setInstructionsMarkdown] = useState("");
-  const [selectedTools, setSelectedTools] = useState<string[]>([]);
+  const [name, setName] = useState(skill.name.slice(0, SKILL_NAME_MAX));
+  const [description, setDescription] = useState(
+    skill.description.slice(0, SKILL_DESCRIPTION_MAX),
+  );
+  const [instructionsMarkdown, setInstructionsMarkdown] = useState(
+    skill.instructionsMarkdown.slice(0, SKILL_INSTRUCTIONS_MAX),
+  );
+  const [selectedTools, setSelectedTools] = useState<string[]>(
+    skill.allowedTools.slice(0, SKILL_ALLOWED_TOOLS_MAX),
+  );
 
   const groupedTools = useMemo(() => groupTools(allTools), [allTools]);
 
@@ -107,30 +115,22 @@ export function CreateSkillForm({
       return;
     }
 
-    const ok = await onSubmit({
+    await onSubmit(skill.id, {
       name: name.trim(),
       description: description.trim(),
       instructionsMarkdown,
       allowedTools: selectedTools,
     });
-
-    if (ok) {
-      setName("");
-      setDescription("");
-      setInstructionsMarkdown("");
-      setSelectedTools([]);
-      setShowPreview(false);
-    }
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="mb-6 space-y-4 rounded-xl border border-border/60 bg-card/50 p-4 sm:p-5"
+      className="space-y-4 rounded-xl border border-primary/40 bg-card/60 p-4 shadow-sm ring-1 ring-primary/10 sm:p-5"
     >
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-base font-semibold tracking-tight">
-          {t("createDialog.heading")}
+          {t("editDialog.heading")}
         </h2>
       </div>
 
@@ -286,7 +286,7 @@ export function CreateSkillForm({
           type="button"
           variant="outline"
           onClick={onCancel}
-          disabled={creating}
+          disabled={updating}
           className="cursor-pointer"
           aria-label={tCommon("actions.cancel")}
         >
@@ -296,14 +296,14 @@ export function CreateSkillForm({
           type="submit"
           className="cursor-pointer"
           disabled={
-            creating ||
+            updating ||
             !name.trim() ||
             !description.trim() ||
             !instructionsMarkdown.trim() ||
             selectedTools.length === 0
           }
         >
-          {creating ? tCommon("states.creating") : tCommon("actions.create")}
+          {updating ? tCommon("states.saving") : tCommon("actions.save")}
         </Button>
       </div>
     </form>

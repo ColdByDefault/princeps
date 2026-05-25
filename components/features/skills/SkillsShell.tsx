@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { SkillCard } from "./SkillCard";
 import { CreateSkillForm } from "./CreateSkillForm";
-import { EditSkillDialog } from "./EditSkillDialog";
+import { EditSkillForm } from "./EditSkillForm";
 import { useSkillMutations } from "./logic/useSkillMutations";
 import type { SkillMutationInput } from "./logic/useSkillMutations";
 import type { SkillRecord, ToolDisplayEntry } from "@/types/api";
@@ -47,8 +47,7 @@ export function SkillsShell({
   const tCommon = useTranslations("common");
   const [skills, setSkills] = useState<SkillRecord[]>(initialSkills);
   const [createOpen, setCreateOpen] = useState(false);
-  const [editSkill, setEditSkill] = useState<SkillRecord | null>(null);
-  const [editOpen, setEditOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPendingRefresh, startRefresh] = useTransition();
@@ -93,8 +92,8 @@ export function SkillsShell({
   }
 
   function handleEdit(skill: SkillRecord) {
-    setEditSkill(skill);
-    setEditOpen(true);
+    setEditingId(skill.id);
+    setCreateOpen(false);
   }
 
   function handleDeleteRequest(skillId: string) {
@@ -120,6 +119,19 @@ export function SkillsShell({
 
     if (ok) {
       setCreateOpen(false);
+    }
+
+    return ok;
+  }
+
+  async function handleUpdateSubmit(
+    skillId: string,
+    input: SkillMutationInput,
+  ) {
+    const ok = await updateSkill(skillId, input);
+
+    if (ok) {
+      setEditingId(null);
     }
 
     return ok;
@@ -211,29 +223,30 @@ export function SkillsShell({
         </div>
       ) : skills.length === 0 ? null : (
         <div className="space-y-3">
-          {skills.map((skill) => (
-            <SkillCard
-              key={skill.id}
-              skill={skill}
-              isUpdating={updating === skill.id}
-              isDeleting={deleting === skill.id}
-              onEdit={handleEdit}
-              onDelete={handleDeleteRequest}
-            />
-          ))}
+          {skills.map((skill) =>
+            editingId === skill.id ? (
+              <EditSkillForm
+                key={skill.id}
+                skill={skill}
+                onSubmit={handleUpdateSubmit}
+                onCancel={() => setEditingId(null)}
+                updating={updating === skill.id}
+                allTools={allTools}
+                currentTier={currentTier}
+              />
+            ) : (
+              <SkillCard
+                key={skill.id}
+                skill={skill}
+                isUpdating={updating === skill.id}
+                isDeleting={deleting === skill.id}
+                onEdit={handleEdit}
+                onDelete={handleDeleteRequest}
+              />
+            ),
+          )}
         </div>
       )}
-
-      <EditSkillDialog
-        key={editSkill?.id ?? "edit-skill"}
-        skill={editSkill}
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        onSubmit={updateSkill}
-        updating={updating !== null}
-        allTools={allTools}
-        currentTier={currentTier}
-      />
 
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
