@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -13,7 +13,7 @@ import { db } from "@/lib/core/db";
 export async function getChatMessages(chatId: string, userId: string) {
   const chat = await db.chat.findFirst({
     where: { id: chatId, userId },
-    select: { id: true, title: true },
+    select: { id: true, title: true, activeSkillId: true },
   });
 
   if (!chat) return null;

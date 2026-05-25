@@ -541,6 +541,14 @@
       "delete": "Chat konnte nicht gelöscht werden.",
       "rename": "Chat konnte nicht umbenannt werden."
     },
+    "skills": {
+      "label": "Skill",
+      "ariaLabel": "Aktiven Skill für diesen Chat auswählen",
+      "none": "Kein Skill",
+      "enableSuccess": "Skill für diesen Chat aktiviert.",
+      "disableSuccess": "Skill für diesen Chat deaktiviert.",
+      "updateError": "Chat-Skill konnte nicht aktualisiert werden."
+    },
     "settings": {
       "tooltipLabel": "Chat-Einstellungen",
       "title": "Chat-Einstellungen",

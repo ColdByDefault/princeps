@@ -541,6 +541,14 @@
       "delete": "Failed to delete chat.",
       "rename": "Failed to rename chat."
     },
+    "skills": {
+      "label": "Skill",
+      "ariaLabel": "Select active skill for this chat",
+      "none": "No skill",
+      "enableSuccess": "Skill enabled for this chat.",
+      "disableSuccess": "Skill disabled for this chat.",
+      "updateError": "Failed to update chat skill."
+    },
     "settings": {
       "tooltipLabel": "Chat settings",
       "title": "Chat Settings",

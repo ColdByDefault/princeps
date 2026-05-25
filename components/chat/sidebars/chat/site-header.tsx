@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -13,6 +13,13 @@ import { SlidersHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +40,7 @@ import {
   CHAT_SETTINGS_DEFAULTS,
   type ChatSettings,
 } from "@/hooks/use-chat-settings";
+import { toast } from "sonner";
 import type { ActiveProvider, ProviderStatusPayload } from "@/types/llm";
 
 const PROVIDER_LABEL: Record<ActiveProvider, string> = {
@@ -41,13 +49,35 @@ const PROVIDER_LABEL: Record<ActiveProvider, string> = {
   groq: "Groq",
 };
 
-export function SiteHeader() {
+const NO_SKILL_VALUE = "none";
+
+type ChatSkillOption = {
+  id: string;
+  name: string;
+};
+
+type SiteHeaderProps = {
+  chatId: string;
+  activeSkillId: string | null;
+  skills: ChatSkillOption[];
+};
+
+export function SiteHeader({ chatId, activeSkillId, skills }: SiteHeaderProps) {
   const t = useTranslations("chat.settings");
+  const tChat = useTranslations("chat");
   const [provider, setProvider] = useState<ActiveProvider | null>(null);
   const [model, setModel] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [isUpdatingSkill, setIsUpdatingSkill] = useState(false);
+  const [selectedSkillId, setSelectedSkillId] = useState(
+    activeSkillId ?? NO_SKILL_VALUE,
+  );
   const { settings, update } = useChatSettings();
   const [draft, setDraft] = useState<ChatSettings>(settings);
+
+  useEffect(() => {
+    setSelectedSkillId(activeSkillId ?? NO_SKILL_VALUE);
+  }, [activeSkillId, chatId]);
 
   useEffect(() => {
     fetch("/api/settings/provider-status")
@@ -69,6 +99,44 @@ export function SiteHeader() {
     setOpen(false);
   };
 
+  const handleSkillChange = async (value: string | null) => {
+    const nextValue = value ?? NO_SKILL_VALUE;
+
+    if (nextValue === selectedSkillId || isUpdatingSkill) {
+      return;
+    }
+
+    const previousValue = selectedSkillId;
+    setSelectedSkillId(nextValue);
+    setIsUpdatingSkill(true);
+
+    try {
+      const res = await fetch(`/api/chat/${chatId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          activeSkillId: nextValue === NO_SKILL_VALUE ? null : nextValue,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("skill_update_failed");
+      }
+
+      toast.success(
+        nextValue === NO_SKILL_VALUE
+          ? tChat("skills.disableSuccess")
+          : tChat("skills.enableSuccess"),
+      );
+      window.dispatchEvent(new CustomEvent("chat:updated"));
+    } catch {
+      setSelectedSkillId(previousValue);
+      toast.error(tChat("skills.updateError"));
+    } finally {
+      setIsUpdatingSkill(false);
+    }
+  };
+
   const timeoutSec = Math.round(draft.timeoutMs / 1000);
 
   return (
@@ -76,6 +144,36 @@ export function SiteHeader() {
       <SidebarTrigger className="-ml-1 cursor-pointer" />
 
       <div className="ml-auto flex items-center gap-1">
+        <div className="flex items-center gap-2 pr-1">
+          <span className="hidden text-xs text-muted-foreground md:inline">
+            {tChat("skills.label")}
+          </span>
+          <Select
+            value={selectedSkillId}
+            onValueChange={(value) => {
+              void handleSkillChange(value ?? NO_SKILL_VALUE);
+            }}
+            disabled={isUpdatingSkill}
+          >
+            <SelectTrigger
+              className="w-32 cursor-pointer sm:w-44"
+              aria-label={tChat("skills.ariaLabel")}
+            >
+              <SelectValue placeholder={tChat("skills.none")} />
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectItem value={NO_SKILL_VALUE}>
+                {tChat("skills.none")}
+              </SelectItem>
+              {skills.map((skill) => (
+                <SelectItem key={skill.id} value={skill.id}>
+                  {skill.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         {provider && model && (
           <div className="flex items-center gap-2 text-xs text-gray-300 dark:text-gray-600 pr-1">
             <span>{PROVIDER_LABEL[provider]}</span>
@@ -195,4 +293,3 @@ export function SiteHeader() {
     </header>
   );
 }
-
