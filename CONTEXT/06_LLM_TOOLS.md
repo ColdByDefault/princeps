@@ -1,6 +1,6 @@
 # 06 - LLM Tools
 
-Last updated: 2026-05-07
+Last updated: 2026-05-25
 
 Read this when adding, changing, reviewing, or debugging tools the assistant can call.
 
@@ -32,6 +32,7 @@ lib/ai/tools/handlers/<feature>.handler.ts
 lib/ai/tools/executor.ts
   -> parses JSON arguments
   -> verifies the tool is active for the user
+  -> optionally verifies the tool is in a runtime allow-list (for scoped runs)
   -> dispatches by tool name
 ```
 
@@ -123,9 +124,7 @@ Handlers should not:
 Tool handlers return one shared shape:
 
 ```ts
-type ActionResult =
-  | { ok: true; data: unknown }
-  | { ok: false; error: string };
+type ActionResult = { ok: true; data: unknown } | { ok: false; error: string };
 ```
 
 Return compact, useful data:
@@ -173,7 +172,7 @@ Add resolvers when multiple handlers need the same name-to-ID behavior. Keep res
 
 ## Executor
 
-`executeToolCall(userId, toolCall)` is the only dispatcher.
+`executeToolCall(userId, toolCall, options?)` is the only dispatcher.
 
 It does four things:
 
@@ -181,6 +180,14 @@ It does four things:
 2. Finds the handler by tool name.
 3. Calls `getActiveToolsForUser(userId)` and rejects tools disabled by tier or user settings.
 4. Calls the handler.
+
+Optional runtime scope:
+
+- `options.allowedToolNames` can be passed by an orchestrator (for example, main chat with an active skill).
+- When provided, a tool must pass both checks:
+  - active for tier/settings
+  - included in `allowedToolNames`
+- This keeps executor-level defense in depth when the LLM emits out-of-scope tool calls.
 
 When adding a tool group, the only executor changes should be:
 
@@ -206,15 +213,24 @@ Main chat and widget chat both follow the same broad flow:
 
 ```text
 getActiveToolsForUser(userId)
-buildSystemPrompt(userId, message, { tools: activeTools })
-streamChat(messages, { tools: activeTools })
+compute effective runtime tools for the surface
+buildSystemPrompt(userId, message, { tools: effectiveTools })
+streamChat(messages, { tools: effectiveTools })
 collect tool calls
 enforceToolCallsMonthly(userId, count)
-executeToolCall(userId, eachToolCall)
+executeToolCall(userId, eachToolCall, { allowedToolNames: effectiveToolNames? })
 append tool results to conversation
 repeat for a small number of rounds
 final pass without tools for text response
 ```
+
+When main chat has an active skill, `effectiveTools` should be the strict intersection of:
+
+- tier-allowed tools
+- user-enabled tools
+- skill-allowed tools
+
+If a surface has no additional runtime scope (for example, standard widget runs), the optional `allowedToolNames` argument can be omitted.
 
 The current chat streams allow up to six tool rounds before a final text-only pass. This lets the model use IDs returned by one tool call in later tool calls.
 

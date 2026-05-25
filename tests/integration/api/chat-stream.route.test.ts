@@ -136,6 +136,8 @@ describe("/api/chat/[chatId]/stream route", () => {
       language: "en",
       reportsEnabled: true,
     });
+    mocks.accumulateTokens.mockResolvedValue();
+    mocks.createReport.mockResolvedValue({ id: "report-1" });
     mocks.buildSystemPrompt.mockResolvedValue({
       role: "system",
       content: "You are Princeps.",
