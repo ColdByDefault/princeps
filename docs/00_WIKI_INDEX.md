@@ -1,6 +1,6 @@
 # Princeps Wiki Index
 
-Last updated: 2026-05-07
+Last updated: 2026-05-25
 
 This folder is the human wiki for Princeps. It is for developers, maintainers, testers, and people who want to understand or use the app without reading every source file.
 
@@ -15,6 +15,8 @@ docs/02_ARCHITECTURE.md        How the app is built
 docs/03_FEATURES_REFERENCE.md  What each feature does and where it lives
 docs/04_DEVELOPER_PLAYBOOK.md  How to change, extend, test, and operate it
 docs/05_SUB_AGENTS.md          Sub-agents architecture plan
+docs/07_SECRET_VAULT_AND_PROVIDER_RESOLUTION_PLAN.md  Secret vault and provider resolution architecture plan
+docs/08_SKILLS_FEATURE_PLAN.md Skills feature plan with dedicated page and chat activation controls
 ```
 
 ## What Princeps Is
