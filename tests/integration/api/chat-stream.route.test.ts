@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { GetSession, HeadersProvider } from "@/tests/helpers/types";
+import type { SkillRecord } from "@/types/api";
 
 const mocks = vi.hoisted(() => ({
   accumulateTokens: vi.fn<() => Promise<void>>(),
@@ -18,6 +19,7 @@ const mocks = vi.hoisted(() => ({
   executeToolCall: vi.fn(),
   getActiveToolsForUser: vi.fn<() => Promise<unknown[]>>(),
   getChatMessages: vi.fn(),
+  getSkillById: vi.fn<() => Promise<SkillRecord | null>>(),
   getRateLimitIdentifier: vi.fn<(req: Request, fallback: string) => string>(),
   getSession: vi.fn<GetSession>(),
   getUserPreferences:
@@ -57,6 +59,10 @@ vi.mock("@/lib/features/chat", () => ({
   saveUserMessage: mocks.saveUserMessage,
   setInitialTitle: mocks.setInitialTitle,
   touchChat: mocks.touchChat,
+}));
+
+vi.mock("@/lib/features/skills", () => ({
+  getSkillById: mocks.getSkillById,
 }));
 
 vi.mock("@/lib/ai/llm-providers", () => ({
@@ -120,10 +126,12 @@ describe("/api/chat/[chatId]/stream route", () => {
       retryAfterSeconds: 0,
     });
     mocks.getChatMessages.mockResolvedValue({
-      chat: { id: "chat-1", title: "Board planning" },
+      chat: { id: "chat-1", title: "Board planning", activeSkillId: null },
       messages: [],
     });
+    mocks.getSkillById.mockResolvedValue(null);
     mocks.enforceMonthlyLimits.mockResolvedValue({ allowed: true });
+    mocks.enforceToolCallsMonthly.mockResolvedValue({ allowed: true });
     mocks.getUserPreferences.mockResolvedValue({
       language: "en",
       reportsEnabled: true,
@@ -135,6 +143,7 @@ describe("/api/chat/[chatId]/stream route", () => {
     mocks.getActiveToolsForUser.mockResolvedValue([]);
     mocks.getUserTier.mockResolvedValue("pro");
     mocks.classifyMessage.mockResolvedValue([]);
+    mocks.runAgent.mockResolvedValue({ ok: true, summary: "" });
   });
 
   it("returns 401 without a session", async () => {
@@ -249,5 +258,156 @@ describe("/api/chat/[chatId]/stream route", () => {
       errorName: "Error",
     });
     consoleError.mockRestore();
+  });
+
+  it("intersects runtime tools with active skill scope and enforces scoped execution", async () => {
+    mocks.getChatMessages.mockResolvedValueOnce({
+      chat: {
+        id: "chat-1",
+        title: "Board planning",
+        activeSkillId: "skill-1",
+      },
+      messages: [],
+    });
+
+    mocks.getSkillById.mockResolvedValueOnce({
+      id: "skill-1",
+      name: "Board Operator",
+      description: "Operate only board-related task tooling.",
+      instructionsMarkdown: "Always structure board actions clearly.",
+      allowedTools: ["create_task"],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    mocks.getActiveToolsForUser.mockResolvedValueOnce([
+      {
+        type: "function",
+        function: {
+          name: "create_task",
+          description: "Create task",
+          parameters: {},
+        },
+      },
+      {
+        type: "function",
+        function: {
+          name: "delete_task",
+          description: "Delete task",
+          parameters: {},
+        },
+      },
+    ]);
+
+    mocks.classifyMessage.mockResolvedValueOnce(["task-extractor"]);
+    mocks.runAgent.mockResolvedValueOnce({ ok: true, summary: "" });
+    mocks.executeToolCall.mockResolvedValueOnce({
+      ok: true,
+      data: { id: "t-1" },
+    });
+
+    let round = 0;
+    mocks.streamChat.mockImplementation(async function* () {
+      round += 1;
+
+      if (round === 1) {
+        yield {
+          id: "tc-1",
+          type: "function",
+          function: {
+            name: "create_task",
+            arguments: JSON.stringify({ title: "Prep board deck" }),
+          },
+        };
+        return;
+      }
+
+      yield "Done.";
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/chat/chat-1/stream", {
+        body: JSON.stringify({ message: "Prepare board tasks" }),
+        method: "POST",
+      }),
+      params(),
+    );
+
+    expect(response.status).toBe(200);
+    await response.text();
+
+    expect(mocks.getSkillById).toHaveBeenCalledWith("user-1", "skill-1");
+
+    const buildOpts = mocks.buildSystemPrompt.mock.calls[0]?.[2] as {
+      language: string;
+      tools?: Array<{ function: { name: string } }>;
+    };
+    expect(buildOpts.language).toBe("en");
+    expect(buildOpts.tools?.map((tool) => tool.function.name)).toEqual([
+      "create_task",
+    ]);
+
+    expect(mocks.runAgent).toHaveBeenCalledWith(
+      "task-extractor",
+      { userId: "user-1", userMessage: "Prepare board tasks" },
+      { allowedToolNames: ["create_task"] },
+    );
+
+    expect(mocks.executeToolCall).toHaveBeenCalledWith(
+      "user-1",
+      expect.objectContaining({
+        function: expect.objectContaining({ name: "create_task" }),
+      }),
+      { allowedToolNames: ["create_task"] },
+    );
+  });
+
+  it("appends active skill instructions as a secondary system layer", async () => {
+    mocks.getChatMessages.mockResolvedValueOnce({
+      chat: {
+        id: "chat-1",
+        title: "Board planning",
+        activeSkillId: "skill-1",
+      },
+      messages: [],
+    });
+
+    mocks.getSkillById.mockResolvedValueOnce({
+      id: "skill-1",
+      name: "Board Operator",
+      description: "Operate only board-related task tooling.",
+      instructionsMarkdown: "Use concise markdown bullets.",
+      allowedTools: ["create_task"],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    mocks.streamChat.mockImplementationOnce(async function* () {
+      yield "Acknowledged.";
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/chat/chat-1/stream", {
+        body: JSON.stringify({ message: "Summarize board actions" }),
+        method: "POST",
+      }),
+      params(),
+    );
+
+    expect(response.status).toBe(200);
+    await response.text();
+
+    const firstCallMessages = mocks.streamChat.mock.calls[0]?.[0] as Array<{
+      role: string;
+      content: string | null;
+    }>;
+    const system = firstCallMessages[0];
+
+    expect(system.role).toBe("system");
+    expect(system.content).toContain(
+      "## Active Skill (Secondary Instruction Layer)",
+    );
+    expect(system.content).toContain("Skill: Board Operator");
+    expect(system.content).toContain("Use concise markdown bullets.");
   });
 });
