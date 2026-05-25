@@ -2,9 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.10
  * @since canary-v1.1.3
- * @module
  * @description Shared types for the Princeps sub-agents system.
  */
 
@@ -40,6 +39,14 @@ export type AgentInput = {
   userMessage: string;
   /** Optional pre-built context string (e.g. system-prompt slot data). */
   context?: string;
+};
+
+/**
+ * Optional runtime constraints supplied by the orchestrator.
+ */
+export type AgentRunOptions = {
+  /** Optional runtime allow-list for tool names (e.g. active-skill intersection). */
+  allowedToolNames?: string[];
 };
 
 /**

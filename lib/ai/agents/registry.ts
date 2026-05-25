@@ -2,9 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.10
  * @since canary-v1.1.3
- * @module
  * @description Agent registry for the Princeps sub-agents system.
  * Maps stable agent names to their AgentDefinition and exposes the public
  * runAgent(name, input) entry point used by the orchestrator, cron, and webhooks.
@@ -13,7 +12,12 @@
 import "server-only";
 
 import { runAgentWithDefinition } from "./runner";
-import type { AgentDefinition, AgentInput, AgentOutput } from "./types";
+import type {
+  AgentDefinition,
+  AgentInput,
+  AgentOutput,
+  AgentRunOptions,
+} from "./types";
 import { taskExtractorAgent } from "./agents/task-extractor.agent";
 import { decisionLoggerAgent } from "./agents/decision-logger.agent";
 import { weeklyReviewAgent } from "./agents/weekly-review.agent";
@@ -50,6 +54,7 @@ export function getAgentDefinition(name: string): AgentDefinition | undefined {
 export async function runAgent(
   agentName: string,
   input: AgentInput,
+  options?: AgentRunOptions,
 ): Promise<AgentOutput> {
   const definition = getAgentDefinition(agentName);
 
@@ -61,5 +66,5 @@ export async function runAgent(
     };
   }
 
-  return runAgentWithDefinition(definition, input);
+  return runAgentWithDefinition(definition, input, options);
 }

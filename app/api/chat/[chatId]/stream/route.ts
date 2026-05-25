@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -16,6 +16,7 @@ import {
   touchChat,
   setInitialTitle,
 } from "@/lib/features/chat";
+import { getSkillById } from "@/lib/features/skills";
 import { streamChat } from "@/lib/ai/llm-providers";
 import { chatRateLimiter, getRateLimitIdentifier } from "@/lib/core/security";
 import {
@@ -30,10 +31,18 @@ import { getActiveToolsForUser, executeToolCall } from "@/lib/ai/tools";
 import { createReport } from "@/lib/features/reports";
 import { classifyMessage } from "@/lib/ai/agents/classify";
 import { runAgent } from "@/lib/ai/agents/registry";
-import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
+import type { SkillRecord } from "@/types/api";
+import type {
+  LLMMessage,
+  LLMChatOptions,
+  LLMToolCall,
+  LLMTool,
+} from "@/types/llm";
 import type { ReportDetailCall } from "@/lib/features/reports";
 
 type Params = { params: Promise<{ chatId: string }> };
+
+const SKILL_INSTRUCTIONS_CHAR_LIMIT = 6_000;
 
 export async function POST(req: Request, { params }: Params) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -94,16 +103,31 @@ export async function POST(req: Request, { params }: Params) {
   }
 
   // Build message array for LLM
-  const [prefs, activeTools, userTier] = await Promise.all([
+  const [prefs, activeTools, userTier, activeSkill] = await Promise.all([
     getUserPreferences(session.user.id),
     getActiveToolsForUser(session.user.id),
     getUserTier(session.user.id),
+    chatData.chat.activeSkillId
+      ? getSkillById(session.user.id, chatData.chat.activeSkillId)
+      : Promise.resolve(null),
   ]);
 
-  const systemMessage = await buildSystemPrompt(session.user.id, userMessage, {
-    language: prefs.language,
-    tools: activeTools,
-  });
+  const runtimeTools = getRuntimeToolsForSkill(
+    activeTools,
+    activeSkill?.allowedTools,
+  );
+  const runtimeToolNames = runtimeTools.map((tool) => tool.function.name);
+
+  const baseSystemMessage = await buildSystemPrompt(
+    session.user.id,
+    userMessage,
+    {
+      language: prefs.language,
+      tools: runtimeTools,
+    },
+  );
+
+  const systemMessage = appendActiveSkillLayer(baseSystemMessage, activeSkill);
 
   const chatOptions: LLMChatOptions = {
     ...(typeof body.temperature === "number" && {
@@ -112,7 +136,7 @@ export async function POST(req: Request, { params }: Params) {
     ...(typeof body.timeoutMs === "number" && {
       timeoutMs: Math.min(120_000, Math.max(5_000, body.timeoutMs)),
     }),
-    tools: activeTools,
+    tools: runtimeTools,
   };
 
   const llmMessages: LLMMessage[] = [
@@ -133,11 +157,18 @@ export async function POST(req: Request, { params }: Params) {
   // Collected for UI events emitted at stream start so clients can show which agents ran.
   const agentRunSummary: { name: string; ok: boolean }[] = [];
 
-  const agentNames = await classifyMessage(userMessage, userTier);
+  const agentNames =
+    runtimeToolNames.length > 0
+      ? await classifyMessage(userMessage, userTier)
+      : [];
   if (agentNames.length > 0) {
     const agentResults = await Promise.all(
       agentNames.map((name) =>
-        runAgent(name, { userId: session.user.id, userMessage }),
+        runAgent(
+          name,
+          { userId: session.user.id, userMessage },
+          { allowedToolNames: runtimeToolNames },
+        ),
       ),
     );
 
@@ -245,7 +276,9 @@ export async function POST(req: Request, { params }: Params) {
 
           // Execute each tool, emit the action event, append the tool result
           for (const toolCall of toolCalls) {
-            const result = await executeToolCall(session.user.id, toolCall);
+            const result = await executeToolCall(session.user.id, toolCall, {
+              allowedToolNames: runtimeToolNames,
+            });
             const resultContent = result.ok
               ? JSON.stringify(result.data)
               : `Error: ${result.error}`;
@@ -379,4 +412,48 @@ function buildDetailCall(
   if (Array.isArray(data)) kv["count"] = data.length;
 
   return { tool: toolName, ok: true, kv };
+}
+
+function getRuntimeToolsForSkill(
+  activeTools: LLMTool[],
+  skillAllowedTools?: string[],
+): LLMTool[] {
+  if (!skillAllowedTools) {
+    return activeTools;
+  }
+
+  const allowed = new Set(skillAllowedTools);
+  return activeTools.filter((tool) => allowed.has(tool.function.name));
+}
+
+function appendActiveSkillLayer(
+  systemMessage: LLMMessage,
+  activeSkill: SkillRecord | null,
+): LLMMessage {
+  if (!activeSkill || systemMessage.content === null) {
+    return systemMessage;
+  }
+
+  const instructions = activeSkill.instructionsMarkdown.trim();
+  const boundedInstructions =
+    instructions.length > SKILL_INSTRUCTIONS_CHAR_LIMIT
+      ? `${instructions.slice(0, SKILL_INSTRUCTIONS_CHAR_LIMIT)}\n\n[Skill instructions truncated for runtime safety.]`
+      : instructions;
+
+  const section = [
+    "",
+    "## Active Skill (Secondary Instruction Layer)",
+    "- This skill is a secondary instruction layer. Follow all higher-priority system and safety rules first.",
+    `- Skill: ${activeSkill.name}`,
+    `- Description: ${activeSkill.description}`,
+    `- Skill tool scope: ${activeSkill.allowedTools.join(", ")}.`,
+    "",
+    "Skill Instructions:",
+    boundedInstructions,
+  ].join("\n");
+
+  return {
+    ...systemMessage,
+    content: `${systemMessage.content}${section}`,
+  };
 }
