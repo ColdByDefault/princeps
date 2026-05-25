@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.9
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -26,6 +26,7 @@ import {
   Newspaper,
   FileBarChart2,
   BookOpen,
+  Sparkles,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -99,6 +100,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
       icon: BrainCircuit,
       label: tCommon("entities.knowledge"),
     },
+    { href: "/skills", icon: Sparkles, label: tCommon("entities.skills") },
     { href: "/labels", icon: Tag, label: tCommon("entities.labels") },
     { href: "/tasks", icon: CheckSquare, label: tCommon("entities.tasks") },
     { href: "/goals", icon: Target, label: tCommon("entities.goals") },

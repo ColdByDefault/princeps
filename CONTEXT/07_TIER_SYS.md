@@ -85,7 +85,7 @@ Common patterns:
 
 - `enforceTasksMax(userId)` counts current tasks and compares with `tasksMax`.
 - `enforceMonthlyLimits(userId)` checks/increments monthly chat message quota and checks token budget.
-- `accumulateTokens(userId, ...)` adds approximate token use after the response, fire-and-forget.
+- `accumulateTokens(userId, ...)` adds approximate token use after the response, fire-and-forget. Accepts `userMessageChars`, `assistantResponseChars`, `toolCallChars`, and `systemPromptChars` (used today to count the active-skill prompt layer in main chat).
 - `enforceToolCallsMonthly(userId, count)` checks/increments monthly tool-call usage.
 - `enforcePrepPackMonthly(userId)` checks `prepPacksPerMonth`; `0` blocks the feature.
 - `createTierLimitResponse(reason)` returns a `403` JSON response.

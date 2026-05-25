@@ -30,6 +30,8 @@ const usage: UsageSummary = {
   memoryLimit: 100,
   readingQueueStored: 3,
   readingQueueLimit: 50,
+  skillsStored: 2,
+  skillsLimit: 25,
   prepPacksGenerated: 1,
   prepPacksLimit: 10,
   briefingsGenerated: 2,

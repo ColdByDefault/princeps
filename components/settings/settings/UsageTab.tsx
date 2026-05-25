@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -215,6 +215,12 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
           limit={usage.readingQueueLimit}
           note={t("readingQueueNote")}
         />
+        <QuotaCard
+          label={t("skillsTitle")}
+          used={usage.skillsStored}
+          limit={usage.skillsLimit}
+          note={t("skillsNote")}
+        />
 
         {/* Generation */}
         <SectionHeading label={t("sectionGeneration")} />
@@ -270,4 +276,3 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
     </div>
   );
 }
-

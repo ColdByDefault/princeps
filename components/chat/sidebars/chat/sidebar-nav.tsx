@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.9
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -28,6 +28,7 @@ import {
   Tag,
   Target,
   Users,
+  Sparkles,
 } from "lucide-react";
 import {
   Collapsible,
@@ -117,6 +118,11 @@ export function SidebarNav() {
           href: "/knowledge",
           icon: BrainCircuit,
           label: tCommon("entities.knowledge"),
+        },
+        {
+          href: "/skills",
+          icon: Sparkles,
+          label: tCommon("entities.skills"),
         },
         {
           href: "/decisions",

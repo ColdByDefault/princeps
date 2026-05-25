@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -44,6 +44,11 @@ export interface PlanLimits {
    * `-1` = unlimited — the enforce function skips the count check.
    */
   contactsMax: number;
+  /**
+   * Max total saved skills stored at once (no monthly reset).
+   * `-1` = unlimited — the enforce function skips the count check.
+   */
+  skillsMax: number;
   /**
    * Max total tasks stored at once (no monthly reset).
    * `-1` = unlimited — the enforce function skips the count check.
@@ -129,6 +134,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetToolsPerDay: 5,
     toolCallsPerMonth: 50,
     contactsMax: 10,
+    skillsMax: 3,
     tasksMax: 20,
     meetingsMax: 10,
     decisionsMax: 10,
@@ -155,6 +161,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetToolsPerDay: 25,
     toolCallsPerMonth: 200,
     contactsMax: 25,
+    skillsMax: 10,
     tasksMax: 100,
     meetingsMax: 50,
     decisionsMax: 50,
@@ -181,6 +188,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetToolsPerDay: 50,
     toolCallsPerMonth: 500,
     contactsMax: 50,
+    skillsMax: 25,
     tasksMax: 500,
     meetingsMax: 200,
     decisionsMax: 200,
@@ -207,6 +215,7 @@ export const PLAN_LIMITS: Record<Tier, PlanLimits> = {
     widgetToolsPerDay: 100,
     toolCallsPerMonth: 2_000,
     contactsMax: -1,
+    skillsMax: 50,
     tasksMax: -1,
     meetingsMax: -1,
     decisionsMax: -1,
@@ -322,4 +331,8 @@ export interface UsageSummary {
   readingQueueStored: number;
   /** Plan maximum for reading queue items. `0` = feature disabled. `-1` = unlimited. */
   readingQueueLimit: number;
+  /** Current count of skills at rest. */
+  skillsStored: number;
+  /** Plan maximum for skills at rest. `-1` = unlimited. */
+  skillsLimit: number;
 }

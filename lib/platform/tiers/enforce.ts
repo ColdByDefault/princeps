@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -333,9 +333,14 @@ export async function accumulateTokens(
   userMessageChars: number,
   assistantResponseChars: number,
   toolCallChars = 0,
+  systemPromptChars = 0,
 ): Promise<void> {
   const approxTokens = Math.ceil(
-    (userMessageChars + assistantResponseChars + toolCallChars) / 4,
+    (userMessageChars +
+      assistantResponseChars +
+      toolCallChars +
+      systemPromptChars) /
+      4,
   );
 
   await db.usageCounter.update({
@@ -608,6 +613,32 @@ export async function enforceContactsMax(
     return {
       allowed: false,
       reason: "Contact limit reached for your plan.",
+    };
+  }
+
+  return { allowed: true };
+}
+
+// ─── Skills limit ─────────────────────────────────────────
+
+/**
+ * Checks whether the user is allowed to create another saved skill.
+ * This is a count-at-rest limit (no monthly reset) —
+ * no counter is incremented here. The caller creates the skill on success.
+ * Enterprise does not currently use unlimited for this feature.
+ */
+export async function enforceSkillsMax(userId: string): Promise<EnforceResult> {
+  const [tier, count] = await Promise.all([
+    getUserTier(userId),
+    db.skill.count({ where: { userId } }),
+  ]);
+
+  const limits = getPlanLimits(tier);
+
+  if (limits.skillsMax !== -1 && count >= limits.skillsMax) {
+    return {
+      allowed: false,
+      reason: "Skill limit reached for your plan.",
     };
   }
 

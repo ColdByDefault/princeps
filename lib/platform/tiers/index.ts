@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -16,6 +16,7 @@ export {
   enforcePrepPackMonthly,
   enforceBriefingMonthly,
   enforceContactsMax,
+  enforceSkillsMax,
   enforceTasksMax,
   enforceMeetingsMax,
   enforceDecisionsMax,

@@ -2,9 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.10
  * @since canary-v1.1.3
- * @module
  * @description Core runner for the Princeps sub-agents system.
  * Executes an AgentDefinition against an AgentInput and returns an AgentOutput.
  * Any surface (chat orchestrator, cron, webhooks) can call runAgentWithDefinition directly,
@@ -22,6 +21,7 @@ import type { Tier } from "@/types/billing";
 import type {
   AgentDefinition,
   AgentInput,
+  AgentRunOptions,
   AgentOutput,
   AgentActionCall,
 } from "./types";
@@ -51,6 +51,7 @@ const DEFAULT_MAX_ROUNDS = 3;
 export async function runAgentWithDefinition(
   definition: AgentDefinition,
   input: AgentInput,
+  options?: AgentRunOptions,
 ): Promise<AgentOutput> {
   // ── 1. Tier gate ──────────────────────────────────────────
   let user: { tier: string };
@@ -76,9 +77,17 @@ export async function runAgentWithDefinition(
 
   // ── 2. Tool filtering ─────────────────────────────────────
   const activeTools = await getActiveToolsForUser(input.userId);
-  const agentTools = activeTools.filter((t) =>
-    definition.tools.includes(t.function.name),
-  );
+  const agentTools = activeTools.filter((t) => {
+    if (!definition.tools.includes(t.function.name)) {
+      return false;
+    }
+
+    if (options?.allowedToolNames) {
+      return options.allowedToolNames.includes(t.function.name);
+    }
+
+    return true;
+  });
 
   if (agentTools.length === 0) {
     return {
@@ -130,7 +139,13 @@ export async function runAgentWithDefinition(
 
       // Execute each tool call and append results to the conversation
       for (const toolCall of toolCalls) {
-        const result = await executeToolCall(input.userId, toolCall);
+        const result = await executeToolCall(
+          input.userId,
+          toolCall,
+          options?.allowedToolNames
+            ? { allowedToolNames: options.allowedToolNames }
+            : undefined,
+        );
         collectedAgentCalls.push({
           toolName: toolCall.function.name,
           args: toolCall.function.arguments ?? "",

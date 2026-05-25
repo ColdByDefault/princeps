@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -26,6 +26,14 @@ import type { LLMToolCall } from "@/types/llm";
 import type { ActionResult } from "@/lib/ai/tools/types";
 
 export type { ActionResult };
+
+type ExecuteToolCallOptions = {
+  /**
+   * Optional runtime allow-list (e.g. chat-level skill intersection).
+   * When provided, tool names must pass both this list and normal tier/settings checks.
+   */
+  allowedToolNames?: string[];
+};
 
 /**
  * Handler map: tool name → handler function.
@@ -58,6 +66,7 @@ const HANDLERS: Record<
 export async function executeToolCall(
   userId: string,
   toolCall: LLMToolCall,
+  options?: ExecuteToolCallOptions,
 ): Promise<ActionResult> {
   const toolName = toolCall.function.name;
   let args: Record<string, unknown>;
@@ -79,6 +88,16 @@ export async function executeToolCall(
     return {
       ok: false,
       error: `Tool not available for this user's plan or settings: ${toolName}`,
+    };
+  }
+
+  if (
+    options?.allowedToolNames &&
+    !options.allowedToolNames.includes(toolName)
+  ) {
+    return {
+      ok: false,
+      error: `Tool not available in the current runtime scope: ${toolName}`,
     };
   }
 

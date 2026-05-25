@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.10
  * @since canary-v1.1.4
  */
 
@@ -174,6 +174,17 @@ export interface DecisionRecord {
 
 /** Client-safe shape of a Label record. */
 export interface LabelRecord extends LabelOptionRecord {
+  createdAt: string; // ISO string on the client
+  updatedAt: string; // ISO string on the client
+}
+
+/** Client-safe shape of a Skill record. */
+export interface SkillRecord {
+  id: string;
+  name: string;
+  description: string;
+  instructionsMarkdown: string;
+  allowedTools: string[];
   createdAt: string; // ISO string on the client
   updatedAt: string; // ISO string on the client
 }

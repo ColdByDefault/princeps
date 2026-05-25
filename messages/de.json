@@ -32,6 +32,7 @@
       "goals": "Ziele",
       "labels": "Labels",
       "knowledge": "Wissensbasis",
+      "skills": "Skills",
       "memory": "Gedächtnis",
       "readingQueue": "Leseliste",
       "dailyBriefing": "Tagesbriefing",
@@ -347,6 +348,8 @@
       "memoryNote": "Anzahl der aktuell gespeicherten Gedächtnis-Fakten.",
       "readingQueueTitle": "Leseliste (gespeichert)",
       "readingQueueNote": "Anzahl der aktuell in der Leseliste gespeicherten Artikel.",
+      "skillsTitle": "Skills (gespeichert)",
+      "skillsNote": "Anzahl der aktuell in deinem Plan gespeicherten Skills.",
       "voiceRequestsTitle": "Sprachtranskriptionen (heute)",
       "voiceRequestsNote": "Anzahl der heute verwendeten Sprache-zu-Text-Transkriptionen. Wird täglich zurückgesetzt.",
       "voiceRequestsMonthlyTitle": "Sprachtranskriptionen (Monat)",
@@ -539,6 +542,14 @@
       "create": "Chat konnte nicht erstellt werden.",
       "delete": "Chat konnte nicht gelöscht werden.",
       "rename": "Chat konnte nicht umbenannt werden."
+    },
+    "skills": {
+      "label": "Skill",
+      "ariaLabel": "Aktiven Skill für diesen Chat auswählen",
+      "none": "Kein Skill",
+      "enableSuccess": "Skill für diesen Chat aktiviert.",
+      "disableSuccess": "Skill für diesen Chat deaktiviert.",
+      "updateError": "Chat-Skill konnte nicht aktualisiert werden."
     },
     "settings": {
       "tooltipLabel": "Chat-Einstellungen",
@@ -882,6 +893,61 @@
     "reopenLabel": "Wiedereröffnen",
     "delegatedBadge": "Delegiert an {name}",
     "emptyDelegated": "Keine delegierten Aufgaben."
+  },
+  "skills": {
+    "metadata": {
+      "title": "Skills",
+      "description": "Erstelle und verwalte wiederverwendbare Assistant-Skills."
+    },
+    "subtitle": "Wiederverwendbare Anweisungsprofile für fokussiertes Chat-Verhalten.",
+    "newSkill": "Neuer Skill",
+    "empty": "Noch keine Skills.",
+    "usage": {
+      "limited": "{used}/{limit} verwendet",
+      "unlimited": "{used} verwendet"
+    },
+    "updatedAt": "Aktualisiert {date}",
+    "selectedTools": "{count} ausgewählt",
+    "tierHint": "Plan",
+    "noTools": "Keine Werkzeuge ausgewählt.",
+    "actions": {
+      "previewMarkdown": "Vorschau",
+      "editMarkdown": "Bearbeiten",
+      "edit": "Bearbeiten",
+      "delete": "Löschen"
+    },
+    "fields": {
+      "namePlaceholder": "z. B. Board-Prep-Assistent",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Wofür dieser Skill gedacht ist…",
+      "instructions": "Anweisungen (Markdown)",
+      "instructionsPlaceholder": "Schreibe detaillierte Verhaltensanweisungen in Markdown…",
+      "allowedTools": "Erlaubte Werkzeuge",
+      "allowedToolsHelp": "Wähle, welche Werkzeuge dieser Skill im Chat anfordern darf."
+    },
+    "preview": {
+      "label": "Vorschau"
+    },
+    "createDialog": {
+      "heading": "Neuer Skill",
+      "success": "Skill erstellt.",
+      "error": "Skill konnte nicht erstellt werden."
+    },
+    "editDialog": {
+      "heading": "Skill bearbeiten",
+      "success": "Skill gespeichert.",
+      "error": "Skill konnte nicht gespeichert werden."
+    },
+    "deleteDialog": {
+      "title": "Diesen Skill löschen?",
+      "success": "Skill gelöscht.",
+      "error": "Skill konnte nicht gelöscht werden."
+    },
+    "errors": {
+      "invalidTools": "Mindestens ein ausgewähltes Werkzeug ist ungültig.",
+      "limitReached": "Skill-Limit für deinen aktuellen Plan erreicht.",
+      "notFound": "Skill nicht gefunden."
+    }
   },
   "contacts": {
     "metadata": {
