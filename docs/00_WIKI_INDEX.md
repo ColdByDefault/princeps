@@ -16,7 +16,7 @@ docs/03_FEATURES_REFERENCE.md  What each feature does and where it lives
 docs/04_DEVELOPER_PLAYBOOK.md  How to change, extend, test, and operate it
 docs/05_SUB_AGENTS.md          Sub-agents architecture plan
 docs/07_SECRET_VAULT_AND_PROVIDER_RESOLUTION_PLAN.md  Secret vault and provider resolution architecture plan
-docs/08_SKILLS_FEATURE_PLAN.md Skills feature plan with dedicated page and chat activation controls
+docs/08_SKILLS_FEATURE_PLAN.md Skills system documentation (library, chat activation, runtime scope)
 ```
 
 ## What Princeps Is

@@ -1,189 +1,143 @@
-# Skills Feature Plan
+# Skills System
 
 Last updated: 2026-05-25
 
 ## Purpose
 
-Define the delivery plan for Skills with two clear product surfaces:
+Skills let a user define reusable instruction profiles for the assistant and apply one of them to a specific chat thread.
 
-- A dedicated page for creating and managing skills.
-- Lightweight skill selection controls inside main chat.
+The system is designed to keep behavior focused and repeatable without changing global assistant settings.
 
-This plan keeps current assistant settings behavior unchanged and keeps chat-widget isolated from Skills.
+## What A Skill Contains
 
-## Decision Update
+Each skill stores:
 
-The project will not use chat settings as the place to author full skills.
+- Name
+- Description
+- Instructions in markdown
+- Allowed tool names
+- Timestamps for creation and last update
 
-Updated direction:
+Skills are user-owned records. A user can only read and modify their own skills.
 
-- Use a dedicated `/skills` page for create, edit, delete, and library management, add it to intelligence dropdown.
-- Use `/chat` only to select one active skill per chat thread and quickly enable or disable it for that thread.
-- Keep chat-widget behavior unchanged (no Skills injection in widget prompt/runtime).
+## Product Surfaces
 
-## Product Scope
+### Skills Library
 
-### Included
+The Skills page is the authoring and management surface.
 
-- User-created reusable skills.
-- Skill fields: name, description, markdown instructions, allowed tools.
-- Tier-gated saved skill library per user.
-- Chat-scoped activation with one active skill maximum per chat.
-- Markdown authoring support on `/skills`.
+Core behavior:
 
-### Excluded For This Pass
+- List saved skills
+- Create skill
+- Edit skill
+- Delete skill
+- Choose allowed tools per skill
+- Write instructions in markdown with preview
+- Show plan usage against skill-library limit
 
-- Temperature and timeout migration to DB (keep current local behavior).
-- Applying skills to chat-widget.
-- Multi-skill composition inside a single chat turn.
+### Chat Thread Controls
 
-## UX Surfaces
+Main chat includes thread-level skill selection.
 
-## 1) Dedicated `/skills` Page
+Core behavior:
 
-Primary workspace for skill authoring and management.
+- Select no skill or one saved skill for the current chat
+- Replace the active skill with another
+- Disable skill for the current chat
 
-Core capabilities:
+One chat can have at most one active skill at a time.
+Different chats can have different active skills simultaneously.
 
-- View saved skills with status and last update time.
-- Create a new skill.
-- Edit existing skill.
-- Delete skill.
-- Duplicate skill (optional nice-to-have).
-- Assign allowed tools from the currently known tool catalog.
-- Markdown editor for skill instructions with live preview toggle.
-- Usage indicator for tier limit (for example: 2/3 used on free).
+### Chat Widget
 
-Skill form fields:
+Widget behavior is intentionally unchanged.
 
-- Name (required, short).
-- Description (required, plain text).
-- Instructions (required, markdown supported).
-- Allowed tools (required set, at least one recommended).
+- No skill injection in widget prompt assembly
+- No skill-specific runtime tool filtering for widget
 
-Authoring notes:
+## Runtime Model In Main Chat
 
-- Markdown is stored as source text.
-- Preview rendering is for author UX only; runtime uses plain instruction text.
+When a chat has an active skill, runtime behavior applies in two layers.
 
-## 2) Main Chat (`/chat`)
+### Prompt Layering
 
-Main chat should provide quick thread-level controls only:
+The standard system prompt is built first.
+Then a secondary skill section is appended containing:
 
-- Skill picker for the current chat: `None` + user skill library.
-- Enable skill for this chat.
-- Disable active skill for this chat.
-- Replace active skill with a different one (still max one active).
+- Skill name
+- Skill description
+- Skill-scoped tool list
+- Skill instructions text
 
-Behavior rules:
+Skill instructions are bounded in length for runtime safety.
 
-- Different chats can use different active skills at the same time.
-- One chat can never run more than one active skill.
-- If active skill is deleted, that chat falls back to `None` safely.
+### Tool Availability
 
-## 3) Chat Widget
+Effective runtime tools are the strict intersection of:
 
-No skill injection for widget in this feature.
+- Tier-allowed tools
+- User-enabled tools
+- Skill-allowed tools
 
-- Widget keeps existing prompt construction.
-- Widget keeps existing tool availability behavior.
-- Existing assistant naming/settings behavior remains unchanged.
+This means a skill can only narrow tool access, never expand it.
 
-## Data Model Direction
+## Enforcement Model
 
-Use a user-owned feature entity, not `User.preferences`.
+Enforcement happens at multiple levels:
 
-Suggested shape:
+- Tool list passed to the model is already skill-scoped
+- Sub-agent pre-pass is constrained by the same runtime allow-list
+- Final tool execution validates runtime scope in addition to tier and settings checks
 
-- `Skill`
-  - `id`, `userId`
-  - `name`, `description`
-  - `instructionsMarkdown`
-  - `allowedTools` (string array/json)
-  - `createdAt`, `updatedAt`
+This provides defense in depth if a model attempts to call out-of-scope tools.
 
-- `Chat`
-  - `activeSkillId` (nullable, user-owned relation safety enforced)
+## Tier Limits
 
-This preserves per-chat activation while keeping one reusable skill library per user.
+Skill library limits per user:
 
-## Prompt And Tool Resolution
+- Free: 3
+- Pro: 10
+- Premium: 25
+- Enterprise: 50
 
-When a main chat has an active skill:
+Activation limit per chat:
 
-1. Build normal base system prompt exactly as today.
-2. Append a bounded skill section (secondary layer) using the skill markdown instructions.
-3. Compute runtime tools with strict intersection:
+- One active skill maximum
 
-`effectiveTools = tierAllowedTools INTERSECT userEnabledTools INTERSECT skillAllowedTools`
+## Ownership And Validation Rules
 
-Enforcement guarantees:
+- Skill read and write operations are user-scoped
+- Chat updates are user-scoped
+- A chat can only activate a skill owned by the same user
+- Allowed tool names are validated against the registered tool catalog
 
-- Skills never bypass tier restrictions.
-- Skills never bypass disabled tools from Tools settings.
-- Tool executor still enforces final availability as defense in depth.
+## API Surface
 
-## Tier Contract
+Skills library endpoints:
 
-Saved skill library cap per user:
+- GET /api/skills
+- POST /api/skills
+- PATCH /api/skills/[id]
+- DELETE /api/skills/[id]
 
-- free: 3
-- pro: 10
-- premium: 25
-- enterprise: 50
+Chat thread skill activation is handled through chat update:
 
-Activation cap per chat:
+- PATCH /api/chat/[chatId] with activeSkillId updates
 
-- all tiers: max 1 active skill per chat
+## Localization
 
-## API Direction
+User-facing Skills UI and chat skill-control text are localized in English and German, including:
 
-Skills library APIs:
+- Labels
+- Placeholders
+- Dialog text
+- Success and error feedback
 
-- `GET /api/skills`
-- `POST /api/skills`
-- `PATCH /api/skills/[id]`
-- `DELETE /api/skills/[id]`
+## Expected Behavior
 
-Chat skill activation API (thread scoped):
-
-- `PATCH /api/chat/[chatId]` with `activeSkillId` updates (or dedicated sub-route if preferred).
-
-Validation expectations:
-
-- Skill ownership by `userId`.
-- Chat ownership by `userId`.
-- Skill and chat must belong to same user on activation.
-- Allowed tools validated against known tool names.
-
-## i18n Requirements
-
-All user-facing text must be in both locales:
-
-- `messages/en.json`
-- `messages/de.json`
-
-Required areas:
-
-- `/skills` page labels, placeholders, notices, dialogs.
-- Chat skill picker and action labels.
-- Tier-limit and validation feedback.
-
-## Implementation Phases
-
-1. Data + tier limits.
-2. Skills backend CRUD.
-3. `/skills` page with markdown authoring.
-4. Main chat skill picker and thread activation controls.
-5. Main chat runtime prompt/tool intersection wiring.
-6. i18n, usage display, validation.
-
-## Acceptance Checks
-
-- Free user can save up to 3 skills, then receives tier-limit response.
-- Pro user can save up to 10, Premium 25, Enterprise 50.
-- Two chats can run two different skills simultaneously.
-- A single chat cannot run two skills at once.
-- Disabling a tool in Tools settings prevents that tool inside skill runtime.
-- Widget responses are unchanged by skill activation in main chat.
-- Markdown authoring works on `/skills` and persists correctly.
+- A user can maintain a reusable skill library within their plan limit
+- Selecting a skill in one chat does not affect other chats
+- Removing or switching skills updates only the current chat
+- Disabled tools and tier restrictions remain enforced under skills
+- Widget responses remain unaffected by skill activation in main chat
