@@ -20,6 +20,7 @@ import type { NotificationRecord } from "@/types/api";
 export const GREETING_SESSION_KEY = "ss-greeting-fired";
 // Tracks which greeting notification already surfaced as a toast in this tab.
 export const GREETING_TOAST_SESSION_KEY = "ss-greeting-toast-id";
+const NOTIFICATION_TOAST_DURATION_MS = 6000;
 
 function getTodaysUnreadGreeting(
   notifications: NotificationRecord[],
@@ -60,6 +61,7 @@ export function useNotifications() {
     sessionStorage.setItem(GREETING_TOAST_SESSION_KEY, notification.id);
     toast(notification.title, {
       description: notification.body,
+      duration: NOTIFICATION_TOAST_DURATION_MS,
     });
   }, []);
 
