@@ -348,6 +348,8 @@
       "memoryNote": "Anzahl der aktuell gespeicherten Gedächtnis-Fakten.",
       "readingQueueTitle": "Leseliste (gespeichert)",
       "readingQueueNote": "Anzahl der aktuell in der Leseliste gespeicherten Artikel.",
+      "skillsTitle": "Skills (gespeichert)",
+      "skillsNote": "Anzahl der aktuell in deinem Plan gespeicherten Skills.",
       "voiceRequestsTitle": "Sprachtranskriptionen (heute)",
       "voiceRequestsNote": "Anzahl der heute verwendeten Sprache-zu-Text-Transkriptionen. Wird täglich zurückgesetzt.",
       "voiceRequestsMonthlyTitle": "Sprachtranskriptionen (Monat)",

@@ -333,9 +333,14 @@ export async function accumulateTokens(
   userMessageChars: number,
   assistantResponseChars: number,
   toolCallChars = 0,
+  systemPromptChars = 0,
 ): Promise<void> {
   const approxTokens = Math.ceil(
-    (userMessageChars + assistantResponseChars + toolCallChars) / 4,
+    (userMessageChars +
+      assistantResponseChars +
+      toolCallChars +
+      systemPromptChars) /
+      4,
   );
 
   await db.usageCounter.update({

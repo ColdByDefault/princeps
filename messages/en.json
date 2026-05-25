@@ -348,6 +348,8 @@
       "memoryNote": "Number of memory facts currently stored.",
       "readingQueueTitle": "Reading queue (saved)",
       "readingQueueNote": "Number of articles currently saved in your reading queue.",
+      "skillsTitle": "Skills (stored)",
+      "skillsNote": "Number of skills currently saved on your plan.",
       "voiceRequestsTitle": "Voice transcriptions (today)",
       "voiceRequestsNote": "Number of voice-to-text transcriptions used today. Resets daily.",
       "voiceRequestsMonthlyTitle": "Voice transcriptions (month)",

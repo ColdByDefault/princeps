@@ -331,4 +331,8 @@ export interface UsageSummary {
   readingQueueStored: number;
   /** Plan maximum for reading queue items. `0` = feature disabled. `-1` = unlimited. */
   readingQueueLimit: number;
+  /** Current count of skills at rest. */
+  skillsStored: number;
+  /** Plan maximum for skills at rest. `-1` = unlimited. */
+  skillsLimit: number;
 }

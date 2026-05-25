@@ -129,6 +129,17 @@ export async function POST(req: Request, { params }: Params) {
 
   const systemMessage = appendActiveSkillLayer(baseSystemMessage, activeSkill);
 
+  // Characters added to the system prompt by the active skill layer.
+  // Counted toward the user's monthly token usage so skill-driven prompt
+  // bloat is reflected in their quota (same ~chars/4 heuristic).
+  const skillPromptChars =
+    activeSkill && typeof systemMessage.content === "string"
+      ? systemMessage.content.length -
+        (typeof baseSystemMessage.content === "string"
+          ? baseSystemMessage.content.length
+          : 0)
+      : 0;
+
   const chatOptions: LLMChatOptions = {
     ...(typeof body.temperature === "number" && {
       temperature: Math.min(2, Math.max(0, body.temperature)),
@@ -322,11 +333,15 @@ export async function POST(req: Request, { params }: Params) {
             userMessage.length,
             assistantContent.length,
             toolCallChars,
+            skillPromptChars,
           ).catch(() => {});
           // Create report if tools were called and user has reports enabled
           if (reportDetails.length > 0 && prefs.reportsEnabled !== false) {
             const approxTokens = Math.ceil(
-              (userMessage.length + assistantContent.length + toolCallChars) /
+              (userMessage.length +
+                assistantContent.length +
+                toolCallChars +
+                skillPromptChars) /
                 4,
             );
             createReport(session.user.id, {
