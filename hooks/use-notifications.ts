@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.9
  * @since beta
  */
 
@@ -64,9 +64,15 @@ export function useNotifications() {
           notification: NotificationRecord | null;
         };
         if (data.created && data.notification) {
-          setNotifications((prev) => [data.notification!, ...prev]);
-          toast(data.notification.title, {
-            description: data.notification.body,
+          const createdNotification = data.notification;
+          setNotifications((prev) => {
+            if (prev.some((n) => n.id === createdNotification.id)) {
+              return prev;
+            }
+            return [createdNotification, ...prev];
+          });
+          toast(createdNotification.title, {
+            description: createdNotification.body,
           });
         }
       } catch {
