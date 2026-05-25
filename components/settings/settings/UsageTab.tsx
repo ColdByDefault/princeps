@@ -276,4 +276,3 @@ export function UsageTab({ usage: initialUsage }: UsageTabProps) {
     </div>
   );
 }
-
