@@ -94,7 +94,7 @@ describe("getUserUsage", () => {
       readingQueueStored: 0,
       readingQueueLimit: 50,
       skillsStored: 1,
-      skillsLimit: 25,
+      skillsLimit: 10,
       prepPacksGenerated: 13,
       briefingsGenerated: 14,
       voiceRequestsUsed: 15,

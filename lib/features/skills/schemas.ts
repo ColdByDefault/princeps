@@ -8,9 +8,9 @@
 
 import { z } from "zod";
 
-export const SKILL_NAME_MAX = 12;
-export const SKILL_DESCRIPTION_MAX = 50;
-export const SKILL_INSTRUCTIONS_MAX = 300;
+export const SKILL_NAME_MAX = 15;
+export const SKILL_DESCRIPTION_MAX = 100;
+export const SKILL_INSTRUCTIONS_MAX = 500;
 export const SKILL_ALLOWED_TOOLS_MAX = 10;
 
 const allowedToolsSchema = z

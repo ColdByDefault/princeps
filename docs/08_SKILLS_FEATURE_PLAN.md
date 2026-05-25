@@ -12,11 +12,13 @@ The system is designed to keep behavior focused and repeatable without changing 
 
 Each skill stores:
 
-- Name
-- Description
-- Instructions in markdown
-- Allowed tool names
+- Name (max 12 characters)
+- Description (max 50 characters)
+- Instructions in markdown (max 300 characters)
+- Allowed tool names (max 10 entries)
 - Timestamps for creation and last update
+
+Input limits are defined in `lib/features/skills/schemas.ts` (`SKILL_NAME_MAX`, `SKILL_DESCRIPTION_MAX`, `SKILL_INSTRUCTIONS_MAX`, `SKILL_ALLOWED_TOOLS_MAX`) and enforced server-side via Zod and mirrored in the create/edit forms.
 
 Skills are user-owned records. A user can only read and modify their own skills.
 
@@ -104,6 +106,26 @@ Skill library limits per user:
 Activation limit per chat:
 
 - One active skill maximum
+
+## Token Accounting
+
+When a chat has an active skill, the appended skill section (name, description, tool scope, and instructions) is counted toward the user's monthly token quota.
+
+Implementation:
+
+- `app/api/chat/[chatId]/stream/route.ts` computes the character delta between the base system prompt and the skill-augmented system prompt.
+- That delta is passed as `systemPromptChars` to `accumulateTokens(...)` in `lib/platform/tiers/enforce.ts`, which uses the standard ~chars / 4 heuristic.
+- The same delta is added to `tokenUsage` on generated reports.
+
+The remainder of the system prompt (base instructions and context slots) is not currently counted. Only the skill layer is.
+
+## Usage Tracking
+
+Skill library usage appears in Settings → Usage as a quota card.
+
+- `UsageSummary.skillsStored` reports the user's current skill count.
+- `UsageSummary.skillsLimit` reports `PlanLimits.skillsMax` for the user's tier.
+- The Skills page header also shows `X/Y used` against the same limit.
 
 ## Ownership And Validation Rules
 
