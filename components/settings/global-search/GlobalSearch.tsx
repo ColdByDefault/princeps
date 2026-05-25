@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -22,6 +22,7 @@ import {
   CheckSquare,
   CreditCard,
   BrainCircuit,
+  Sparkles,
   Users,
   CalendarDays,
   Scale,
@@ -396,6 +397,7 @@ export function GlobalSearch() {
       icon: BrainCircuit,
       label: tCommon("entities.knowledge"),
     },
+    { href: "/skills", icon: Sparkles, label: tCommon("entities.skills") },
     { href: "/labels", icon: Tag, label: tCommon("entities.labels") },
     { href: "/tasks", icon: CheckSquare, label: tCommon("entities.tasks") },
     { href: "/goals", icon: Target, label: tCommon("entities.goals") },

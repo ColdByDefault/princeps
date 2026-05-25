@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.9
+ * @version canary-v1.1.10
  * @since beta
  */
 
@@ -63,6 +63,7 @@ function isActivePath(pathname: string, href: string) {
 const GROUPED_HREFS = new Set(["/tasks", "/goals", "/contacts", "/meetings"]);
 const INTEL_HREFS = new Set([
   "/knowledge",
+  "/skills",
   "/decisions",
   "/memory",
   "/reading-queue",

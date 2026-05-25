@@ -32,6 +32,7 @@
       "goals": "Goals",
       "labels": "Labels",
       "knowledge": "Knowledge Base",
+      "skills": "Skills",
       "memory": "Memory",
       "readingQueue": "Reading Queue",
       "dailyBriefing": "Daily Briefing",
@@ -882,6 +883,61 @@
     "reopenLabel": "Reopen",
     "delegatedBadge": "Delegated to {name}",
     "emptyDelegated": "No delegated tasks."
+  },
+  "skills": {
+    "metadata": {
+      "title": "Skills",
+      "description": "Create and manage reusable assistant skills."
+    },
+    "subtitle": "Reusable instruction profiles for focused chat behavior.",
+    "newSkill": "New skill",
+    "empty": "No skills yet.",
+    "usage": {
+      "limited": "{used}/{limit} used",
+      "unlimited": "{used} used"
+    },
+    "updatedAt": "Updated {date}",
+    "selectedTools": "{count} selected",
+    "tierHint": "tier",
+    "noTools": "No tools selected.",
+    "actions": {
+      "previewMarkdown": "Preview",
+      "editMarkdown": "Edit",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "fields": {
+      "namePlaceholder": "e.g. Board prep assistant",
+      "description": "Description",
+      "descriptionPlaceholder": "What this skill is for…",
+      "instructions": "Instructions (Markdown)",
+      "instructionsPlaceholder": "Write detailed behavior instructions in Markdown…",
+      "allowedTools": "Allowed tools",
+      "allowedToolsHelp": "Choose which tools this skill may request during chat."
+    },
+    "preview": {
+      "label": "Preview"
+    },
+    "createDialog": {
+      "heading": "New skill",
+      "success": "Skill created.",
+      "error": "Failed to create skill."
+    },
+    "editDialog": {
+      "heading": "Edit skill",
+      "success": "Skill saved.",
+      "error": "Failed to save skill."
+    },
+    "deleteDialog": {
+      "title": "Delete this skill?",
+      "success": "Skill deleted.",
+      "error": "Failed to delete skill."
+    },
+    "errors": {
+      "invalidTools": "One or more selected tools are invalid.",
+      "limitReached": "Skill limit reached for your current plan.",
+      "notFound": "Skill not found."
+    }
   },
   "contacts": {
     "metadata": {
