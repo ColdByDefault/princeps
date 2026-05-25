@@ -1,3 +1,17 @@
+## [1.1.9] - 2026-05-25
+
+- fix(useNotifications): set notification toast duration for improved user experience
+- fix: update version to canary-v1.1.9 and add GREETING_TOAST_SESSION_KEY for notification handling
+- fix: update notification version to canary-v1.1.9 and improve notification deduplication logic
+- chore: increment version to canary-v1.1.9 across multiple components
+- fix(IntegrationCard): replace Link component with anchor tag for improved accessibility
+- feat(KnowledgePageClient): enhance layout responsiveness based on drive connection status
+- feat(SidebarNav): add manage section with links for reports and daily briefings; update initial nav state
+- feat(NavbarDesktop): add manage dropdown for reports, labels, and settings; update version to 1.1.9 feat(i18n): add "manage" translation to English and German language files
+- feat(ReadingQueueShell): update layout and styling, enhance button accessibility, and increment version to 1.1.9
+
+# Changelog
+
 ## [1.1.8] - 2026-05-24
 
 - feat(GlobalSearch): add forceMount prop to CommandItem for section-specific rendering
