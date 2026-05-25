@@ -59,7 +59,9 @@ export function KnowledgePageClient({
         <p className="text-sm text-muted-foreground">{t("pageDescription")}</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <div
+        className={`grid grid-cols-1 gap-8 ${driveConnected ? "lg:grid-cols-2" : "lg:max-w-xl lg:mx-auto"}`}
+      >
         {/* Left column: upload + documents */}
         <div className="space-y-8">
           {/* Upload section */}
@@ -119,4 +121,3 @@ export function KnowledgePageClient({
     </div>
   );
 }
-
