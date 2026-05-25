@@ -22,7 +22,6 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import Link from "next/link";
 
 export interface IntegrationInfo {
   provider: string;
@@ -202,17 +201,16 @@ export function IntegrationCard({
             </Button>
           </>
         ) : (
-          <Link
+          <a
             href={meta.connectHref}
             aria-label={t("ariaConnect", { provider: meta.label })}
             className="inline-flex cursor-pointer items-center rounded-lg border border-transparent bg-primary px-2.5 py-1 text-[0.8rem] font-medium text-primary-foreground transition-all hover:bg-primary/80"
           >
             <Plug className="mr-1.5 h-3.5 w-3.5" />
             {t("connect")}
-          </Link>
+          </a>
         )}
       </CardFooter>
     </Card>
   );
 }
-
