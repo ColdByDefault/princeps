@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.9
  * @since beta
  */
 
@@ -12,7 +12,10 @@ import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { GREETING_SESSION_KEY } from "@/hooks/use-notifications";
+import {
+  GREETING_TOAST_SESSION_KEY,
+  GREETING_SESSION_KEY,
+} from "@/hooks/use-notifications";
 import { type ChatSummary } from "@/types/chat";
 
 export function useSidebarMutations() {
@@ -145,6 +148,7 @@ export function useSidebarMutations() {
       return;
     }
     sessionStorage.removeItem(GREETING_SESSION_KEY);
+    sessionStorage.removeItem(GREETING_TOAST_SESSION_KEY);
     router.replace("/");
     router.refresh();
   };
@@ -170,4 +174,3 @@ export function useSidebarMutations() {
     atLimit: (chats?.length ?? 0) >= historyLimit,
   };
 }
-

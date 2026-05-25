@@ -18,12 +18,59 @@ import type { NotificationRecord } from "@/types/api";
 // render the bell) sees the flag on the very same render cycle and skips the API call.
 // Exported so logout handlers can clear it when the auth session ends.
 export const GREETING_SESSION_KEY = "ss-greeting-fired";
+// Tracks which greeting notification already surfaced as a toast in this tab.
+export const GREETING_TOAST_SESSION_KEY = "ss-greeting-toast-id";
+
+function getTodaysUnreadGreeting(
+  notifications: NotificationRecord[],
+): NotificationRecord | null {
+  const todayUtc = new Date().toISOString().slice(0, 10);
+
+  for (const notification of notifications) {
+    if (notification.category !== "daily_greeting" || notification.read) {
+      continue;
+    }
+
+    const metadata = notification.metadata;
+    if (!metadata || typeof metadata !== "object") {
+      continue;
+    }
+
+    const date = (metadata as Record<string, unknown>).date;
+    if (typeof date === "string" && date === todayUtc) {
+      return notification;
+    }
+  }
+
+  return null;
+}
 
 export function useNotifications() {
   const [notifications, setNotifications] = useState<NotificationRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const toastGreetingOnce = useCallback((notification: NotificationRecord) => {
+    if (
+      sessionStorage.getItem(GREETING_TOAST_SESSION_KEY) === notification.id
+    ) {
+      return;
+    }
+    sessionStorage.setItem(GREETING_TOAST_SESSION_KEY, notification.id);
+    toast(notification.title, {
+      description: notification.body,
+    });
+  }, []);
+
+  const maybeToastFromList = useCallback(
+    (items: NotificationRecord[]) => {
+      const todaysGreeting = getTodaysUnreadGreeting(items);
+      if (!todaysGreeting) return;
+      toastGreetingOnce(todaysGreeting);
+    },
+    [toastGreetingOnce],
+  );
 
   const refresh = useCallback(async () => {
     try {
@@ -33,10 +80,11 @@ export function useNotifications() {
         notifications: NotificationRecord[];
       };
       setNotifications(data.notifications);
+      maybeToastFromList(data.notifications);
     } catch {
       // Non-critical
     }
-  }, []);
+  }, [maybeToastFromList]);
 
   // Initial load + greeting (greeting fires at most once per browser tab session)
   useEffect(() => {
@@ -48,6 +96,7 @@ export function useNotifications() {
           notifications: NotificationRecord[];
         };
         setNotifications(data.notifications);
+        maybeToastFromList(data.notifications);
       } finally {
         setLoading(false);
       }
@@ -71,9 +120,7 @@ export function useNotifications() {
             }
             return [createdNotification, ...prev];
           });
-          toast(createdNotification.title, {
-            description: createdNotification.body,
-          });
+          toastGreetingOnce(createdNotification);
         }
       } catch {
         // Non-critical — greeting failure is silent
@@ -94,7 +141,7 @@ export function useNotifications() {
     return () => {
       window.removeEventListener("notifications:refresh", handleRefresh);
     };
-  }, [refresh]);
+  }, [refresh, maybeToastFromList, toastGreetingOnce]);
 
   const markRead = useCallback(async (id: string) => {
     // Optimistic
