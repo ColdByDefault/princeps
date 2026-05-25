@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.9
  * @since beta
  */
 
@@ -14,6 +14,7 @@ import {
   LayoutGrid,
   ChevronDown,
   BrainCog,
+  SlidersHorizontal,
   Search,
   type LucideIcon,
 } from "lucide-react";
@@ -63,11 +64,11 @@ const GROUPED_HREFS = new Set(["/tasks", "/goals", "/contacts", "/meetings"]);
 const INTEL_HREFS = new Set([
   "/knowledge",
   "/decisions",
-  "/labels",
   "/memory",
-  "/reports",
+  "/reading-queue",
 ]);
-const AFTER_DROPDOWN_HREFS = new Set(["/settings", "/pricing"]);
+const MANAGE_HREFS = new Set(["/reports", "/labels", "/settings"]);
+const AFTER_DROPDOWN_HREFS = new Set(["/pricing"]);
 
 export default function NavbarDesktop({
   navLinks,
@@ -82,8 +83,16 @@ export default function NavbarDesktop({
   const intelLinks = navLinks.filter((l) => INTEL_HREFS.has(l.href));
   const isIntelActive = intelLinks.some((l) => isActivePath(pathname, l.href));
 
+  const manageLinks = navLinks.filter((l) => MANAGE_HREFS.has(l.href));
+  const isManageActive = manageLinks.some((l) =>
+    isActivePath(pathname, l.href),
+  );
+
   const flatLinks = navLinks.filter(
-    (l) => !GROUPED_HREFS.has(l.href) && !INTEL_HREFS.has(l.href),
+    (l) =>
+      !GROUPED_HREFS.has(l.href) &&
+      !INTEL_HREFS.has(l.href) &&
+      !MANAGE_HREFS.has(l.href),
   );
   const beforeLinks = flatLinks.filter(
     (l) => !AFTER_DROPDOWN_HREFS.has(l.href),
@@ -210,6 +219,52 @@ export default function NavbarDesktop({
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* Manage dropdown: Reports, Labels, Settings */}
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                type="button"
+                variant={isManageActive ? "secondary" : "ghost"}
+                size="sm"
+                className={cn(
+                  "cursor-pointer rounded-none bg-transparent px-3",
+                  isManageActive && "shadow-sm",
+                )}
+              />
+            }
+          >
+            <SlidersHorizontal className="size-3.5" />
+            {t("nav.manage")}
+            <ChevronDown className="size-3" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            side="bottom"
+            align="start"
+            className="min-w-44 rounded-md border-border/70 bg-background/95 backdrop-blur-xl"
+          >
+            <DropdownMenuGroup>
+              {manageLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = isActivePath(pathname, link.href);
+                return (
+                  <DropdownMenuItem
+                    key={link.href}
+                    className={cn(
+                      "cursor-pointer rounded-sm",
+                      isActive && "bg-accent text-accent-foreground",
+                    )}
+                    render={<Link href={link.href} />}
+                  >
+                    <Icon className="size-3.5" />
+                    {link.label}
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         {afterLinks.map((link) => {
           const Icon = link.icon;
           const isActive = isActivePath(pathname, link.href);
@@ -312,4 +367,3 @@ export default function NavbarDesktop({
     </>
   );
 }
-
