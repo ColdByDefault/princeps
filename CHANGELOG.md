@@ -1,3 +1,23 @@
+## [1.1.10] - 2026-05-25
+
+- feat(skills): update skill limits and descriptions in documentation and schemas
+- chore(usage): remove unnecessary newline at the end of UsageTab component
+- feat(usage): add skills storage tracking and update related components
+- feat(skills): implement EditSkillForm component and update SkillsShell to use it
+- feat(skills): refactor skill creation to use CreateSkillForm component and update SkillsShell logic
+- feat(docs): update skills feature documentation for clarity and structure
+- test(chat-stream): add mocks for token accumulation and report creation in stream route tests
+- feat(chat): enhance chat stream functionality with active skill integration and tool execution enforcement
+- feat: update agent and tool execution logic to support runtime constraints and skill-based tool filtering
+- feat(chat): enhance chat functionality with active skill management and update schemas
+- feat: add skills management feature with create, edit, and delete functionality
+- feat(skills): implement CRUD operations for skills management and add validation schemas
+- feat: add skills management with enforceSkillsMax function and update plan limits
+- fix: update last modified date in wiki index and add new documentation for secret vault and skills feature plans
+- fix: reorder model list in feature agent for consistency
+
+# Changelog
+
 ## [1.1.9] - 2026-05-25
 
 - fix(useNotifications): set notification toast duration for improved user experience
