@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.9
  * @since beta
  */
 
@@ -14,13 +14,17 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   BookMarked,
+  BookOpen,
   BrainCircuit,
   CalendarDays,
   CheckSquare,
   ChevronRight,
+  FileBarChart2,
   LayoutDashboard,
   LayoutGrid,
+  Newspaper,
   Scale,
+  SlidersHorizontal,
   Tag,
   Target,
   Users,
@@ -62,10 +66,12 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   const [initialNavCollapsed] = useState<Record<string, boolean>>(() => {
-    if (typeof window === "undefined") return { apps: true, intel: true };
+    if (typeof window === "undefined")
+      return { apps: true, intel: true, manage: true };
     return {
       apps: true,
       intel: true,
+      manage: true,
       ...readLocalJson(NAV_GROUPS_KEY),
     };
   });
@@ -122,7 +128,29 @@ export function SidebarNav() {
           icon: BookMarked,
           label: tCommon("entities.memory"),
         },
+        {
+          href: "/reading-queue",
+          icon: BookOpen,
+          label: tCommon("entities.readingQueue"),
+        },
+        {
+          href: "/briefings",
+          icon: Newspaper,
+          label: tCommon("entities.dailyBriefing"),
+        },
+      ],
+    },
+    {
+      key: "manage",
+      icon: SlidersHorizontal,
+      label: ts("nav.manage"),
+      items: [
         { href: "/labels", icon: Tag, label: tCommon("entities.labels") },
+        {
+          href: "/reports",
+          icon: FileBarChart2,
+          label: tCommon("entities.reports"),
+        },
       ],
     },
   ] as const;
@@ -195,4 +223,3 @@ export function SidebarNav() {
     </SidebarGroup>
   );
 }
-

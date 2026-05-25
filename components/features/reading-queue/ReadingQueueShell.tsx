@@ -2,14 +2,14 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.9
  * @since canary-v1.1.4
  */
 
 "use client";
 
 import { useState, useTransition } from "react";
-import { BookOpen, Plus, RefreshCw } from "lucide-react";
+import { Plus, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -98,67 +98,83 @@ export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-4 sm:p-6">
+    <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
       {/* Header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-2">
-          <BookOpen className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-xl font-semibold">
-            {tCommon("entities.readingQueue")}
-          </h1>
-          <span className="text-sm text-muted-foreground">
-            ({items.filter((i) => i.status === "unread").length})
-          </span>
-        </div>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {tCommon("entities.readingQueue")}
+        </h1>
         <div className="flex items-center gap-2">
           <Button
-            variant="ghost"
-            size="icon"
+            type="button"
+            variant="outline"
+            size="sm"
             onClick={handleRefresh}
             disabled={isPendingRefresh}
             aria-label={tCommon("actions.refresh")}
             className="cursor-pointer"
           >
             <RefreshCw
-              className={`h-4 w-4 ${isPendingRefresh ? "animate-spin" : ""}`}
+              className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
+            {isPendingRefresh
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
           <Button
+            type="button"
+            size="sm"
             onClick={() => setAddOpen(true)}
             disabled={adding}
-            className="cursor-pointer gap-1.5"
+            className="cursor-pointer"
+            aria-label={t("addItem")}
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="size-4" />
             {t("addItem")}
           </Button>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2">
+      <div className="mb-4 flex flex-wrap gap-1.5">
         {FILTERS.map(({ key, label }) => (
           <Button
             key={key}
-            variant={filter === key ? "secondary" : "outline"}
+            type="button"
+            variant={filter === key ? "default" : "outline"}
             size="sm"
             onClick={() => setFilter(key)}
-            className="cursor-pointer"
+            className="cursor-pointer rounded-full px-3 text-xs"
           >
             {label}
+            {key === "all"
+              ? ` (${items.length})`
+              : ` (${items.filter((i) => i.status === key).length})`}
           </Button>
         ))}
       </div>
 
       {/* Items */}
       {visible.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-2 py-16 text-center text-muted-foreground">
-          <BookOpen className="h-10 w-10 opacity-30" />
-          <p className="text-sm">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/60 px-6 py-16 text-center">
+          <p className="text-sm text-muted-foreground">
             {filter === "all" ? t("empty") : t("emptyFiltered")}
           </p>
+          {filter === "all" && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setAddOpen(true)}
+              className="mt-4 cursor-pointer"
+            >
+              <Plus className="size-4" />
+              {t("addItem")}
+            </Button>
+          )}
         </div>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-2">
           {visible.map((item) => (
             <ReadingItemCard
               key={item.id}
@@ -206,4 +222,3 @@ export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
     </div>
   );
 }
-

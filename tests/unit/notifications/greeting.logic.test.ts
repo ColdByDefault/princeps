@@ -58,12 +58,11 @@ const mocks = vi.hoisted(() => ({
     } | null>
   >(),
   listTasks: vi.fn<() => Promise<unknown[]>>(),
-  notificationCreate: vi.fn<
-    (args: NotificationCreateArgs) => Promise<DbNotificationRow>
-  >(),
-  notificationFindMany: vi.fn<
-    (args: NotificationFindManyArgs) => Promise<DbNotificationRow[]>
-  >(),
+  notificationCreate:
+    vi.fn<(args: NotificationCreateArgs) => Promise<DbNotificationRow>>(),
+  notificationFindMany:
+    vi.fn<(args: NotificationFindManyArgs) => Promise<DbNotificationRow[]>>(),
+  transaction: vi.fn(),
   userFindUnique: vi.fn<
     (args: UserFindUniqueArgs) => Promise<{
       name: string | null;
@@ -75,6 +74,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("@/lib/core/db", () => ({
   db: {
+    $transaction: mocks.transaction,
     notification: {
       create: mocks.notificationCreate,
       findMany: mocks.notificationFindMany,
@@ -153,6 +153,22 @@ describe("generateDailyGreeting", () => {
     mocks.callChat.mockResolvedValue({ content: "  Good morning, Yazan.  " });
     mocks.accumulateTokens.mockResolvedValue();
     mocks.notificationCreate.mockResolvedValue(makeNotificationRow());
+    mocks.transaction.mockImplementation(
+      async (
+        callback: (tx: {
+          notification: {
+            findMany: typeof mocks.notificationFindMany;
+            create: typeof mocks.notificationCreate;
+          };
+        }) => Promise<unknown>,
+      ) =>
+        callback({
+          notification: {
+            findMany: mocks.notificationFindMany,
+            create: mocks.notificationCreate,
+          },
+        }),
+    );
   });
 
   afterEach(() => {

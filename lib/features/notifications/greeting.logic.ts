@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version beta
+ * @version canary-v1.1.9
  * @since beta
  */
 
@@ -13,6 +13,7 @@ import { callChat } from "@/lib/ai/llm-providers/provider";
 import { fetchWeather } from "@/lib/services/weather/fetch";
 import { listTasks } from "@/lib/features/tasks/list.logic";
 import { accumulateTokens } from "@/lib/platform/tiers/enforce";
+import { Prisma } from "@/prisma/generated/prisma/client";
 import {
   NOTIFICATION_SELECT,
   toNotificationRecord,
@@ -123,13 +124,6 @@ export async function generateDailyGreeting(
       { role: "user", content: userPrompt },
     ]);
     greetingBody = result.content?.trim() ?? "";
-
-    // Accumulate token usage — greeting counts against monthly quota same as chat
-    await accumulateTokens(
-      userId,
-      systemPrompt.length + userPrompt.length,
-      greetingBody.length,
-    );
   } catch {
     return { created: false, notification: null };
   }
@@ -175,17 +169,105 @@ export async function generateDailyGreeting(
       : {}),
   } satisfies Record<string, unknown>;
 
-  const created = await db.notification.create({
-    data: {
-      userId,
-      category: "daily_greeting",
-      source: "assistant",
-      title,
-      body: greetingBody,
-      metadata,
-    },
-    select: NOTIFICATION_SELECT,
-  });
+  const saveResult = forceGreeting
+    ? await db.notification
+        .create({
+          data: {
+            userId,
+            category: "daily_greeting",
+            source: "assistant",
+            title,
+            body: greetingBody,
+            metadata,
+          },
+          select: NOTIFICATION_SELECT,
+        })
+        .then((created) => ({
+          created: true,
+          notification: toNotificationRecord(created),
+        }))
+    : await withSerializableRetry(() =>
+        db.$transaction(
+          async (tx) => {
+            const rows = await tx.notification.findMany({
+              where: { userId, category: "daily_greeting" },
+              select: NOTIFICATION_SELECT,
+              orderBy: { createdAt: "desc" },
+              take: 10,
+            });
 
-  return { created: true, notification: toNotificationRecord(created) };
+            const existing = rows.find((r) => {
+              const meta = r.metadata as Record<string, unknown> | null;
+              return meta?.date === metadata.date;
+            });
+
+            if (existing) {
+              return {
+                created: false,
+                notification: toNotificationRecord(existing),
+              } satisfies GreetingResult;
+            }
+
+            const created = await tx.notification.create({
+              data: {
+                userId,
+                category: "daily_greeting",
+                source: "assistant",
+                title,
+                body: greetingBody,
+                metadata,
+              },
+              select: NOTIFICATION_SELECT,
+            });
+
+            return {
+              created: true,
+              notification: toNotificationRecord(created),
+            } satisfies GreetingResult;
+          },
+          { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+        ),
+      );
+
+  if (saveResult.created) {
+    // Token accounting should not block notification delivery.
+    accumulateTokens(
+      userId,
+      systemPrompt.length + userPrompt.length,
+      greetingBody.length,
+    ).catch(() => {});
+  }
+
+  return saveResult;
+}
+
+const SERIALIZABLE_RETRY_LIMIT = 3;
+
+async function withSerializableRetry<T>(
+  operation: () => Promise<T>,
+): Promise<T> {
+  let attempt = 0;
+
+  while (true) {
+    try {
+      return await operation();
+    } catch (error) {
+      attempt++;
+      if (
+        attempt >= SERIALIZABLE_RETRY_LIMIT ||
+        !isSerializationConflict(error)
+      ) {
+        throw error;
+      }
+    }
+  }
+}
+
+function isSerializationConflict(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code?: unknown }).code === "P2034"
+  );
 }

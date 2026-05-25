@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.9
  * @since beta
  */
 
@@ -36,7 +36,10 @@ import {
   NavbarMobilePanel,
 } from "@/components/settings/navigation/Navbar-Mobile";
 import { authClient } from "@/lib/core/auth/auth-client";
-import { GREETING_SESSION_KEY } from "@/hooks/use-notifications";
+import {
+  GREETING_TOAST_SESSION_KEY,
+  GREETING_SESSION_KEY,
+} from "@/hooks/use-notifications";
 
 export { LanguageToggle } from "@/components/shared";
 
@@ -148,6 +151,7 @@ export default function Navbar({ sessionUser }: NavbarProps) {
       return;
     }
     sessionStorage.removeItem(GREETING_SESSION_KEY);
+    sessionStorage.removeItem(GREETING_TOAST_SESSION_KEY);
     router.replace("/");
     router.refresh();
   };
@@ -192,4 +196,3 @@ export default function Navbar({ sessionUser }: NavbarProps) {
     </div>
   );
 }
-
