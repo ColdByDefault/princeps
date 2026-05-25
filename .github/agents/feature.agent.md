@@ -2,7 +2,7 @@
 description: "Use when implementing Princeps features, bug fixes, refactors, docs/context updates, i18n changes, and validation. Full coding agent with architecture enforcement."
 name: "Feature"
 argument-hint: "Describe the Princeps change to implement, including the feature area and acceptance criteria if known."
-model: ["Claude Sonnet 4.6", "GPT-5.5", "GPT-5.3-Codex"]
+model: ["GPT-5.3-Codex", "Claude Sonnet 4.6"]
 tools: [vscode, execute, read, agent, edit, search, web, 'github/*', todo]
 agents: [Explore, Reviewer]
 disable-model-invocation: false
