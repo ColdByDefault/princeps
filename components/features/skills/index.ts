@@ -8,5 +8,5 @@
 
 export { SkillsShell } from "./SkillsShell";
 export { SkillCard } from "./SkillCard";
-export { CreateSkillDialog } from "./CreateSkillDialog";
+export { CreateSkillForm } from "./CreateSkillForm";
 export { EditSkillDialog } from "./EditSkillDialog";

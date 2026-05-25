@@ -9,7 +9,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, RefreshCw } from "lucide-react";
+import { Plus, RefreshCw, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,9 +23,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { SkillCard } from "./SkillCard";
-import { CreateSkillDialog } from "./CreateSkillDialog";
+import { CreateSkillForm } from "./CreateSkillForm";
 import { EditSkillDialog } from "./EditSkillDialog";
 import { useSkillMutations } from "./logic/useSkillMutations";
+import type { SkillMutationInput } from "./logic/useSkillMutations";
 import type { SkillRecord, ToolDisplayEntry } from "@/types/api";
 import type { Tier } from "@/types/billing";
 
@@ -45,6 +46,7 @@ export function SkillsShell({
   const t = useTranslations("skills");
   const tCommon = useTranslations("common");
   const [skills, setSkills] = useState<SkillRecord[]>(initialSkills);
+  const [createOpen, setCreateOpen] = useState(false);
   const [editSkill, setEditSkill] = useState<SkillRecord | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -113,6 +115,16 @@ export function SkillsShell({
     }
   }
 
+  async function handleCreateSubmit(input: SkillMutationInput) {
+    const ok = await createSkill(input);
+
+    if (ok) {
+      setCreateOpen(false);
+    }
+
+    return ok;
+  }
+
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
@@ -148,48 +160,56 @@ export function SkillsShell({
               : tCommon("actions.refresh")}
           </Button>
 
-          <CreateSkillDialog
-            onSubmit={createSkill}
-            creating={creating}
-            allTools={allTools}
-            currentTier={currentTier}
+          <Button
+            type="button"
+            size="sm"
+            className="cursor-pointer"
+            aria-label={createOpen ? tCommon("actions.cancel") : t("newSkill")}
+            disabled={isAtLimit && !createOpen}
+            onClick={() => setCreateOpen((prev) => !prev)}
           >
-            <Button
-              type="button"
-              size="sm"
-              className="cursor-pointer"
-              aria-label={t("newSkill")}
-              disabled={isAtLimit}
-            >
-              <Plus className="size-4" />
-              {t("newSkill")}
-            </Button>
-          </CreateSkillDialog>
+            {createOpen ? (
+              <>
+                <X className="size-4" />
+                {tCommon("actions.cancel")}
+              </>
+            ) : (
+              <>
+                <Plus className="size-4" />
+                {t("newSkill")}
+              </>
+            )}
+          </Button>
         </div>
       </div>
 
-      {skills.length === 0 ? (
+      {createOpen && (
+        <CreateSkillForm
+          onSubmit={handleCreateSubmit}
+          onCancel={() => setCreateOpen(false)}
+          creating={creating}
+          allTools={allTools}
+          currentTier={currentTier}
+        />
+      )}
+
+      {skills.length === 0 && !createOpen ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/60 px-6 py-14 text-center">
           <p className="text-sm text-muted-foreground">{t("empty")}</p>
-          <CreateSkillDialog
-            onSubmit={createSkill}
-            creating={creating}
-            allTools={allTools}
-            currentTier={currentTier}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-4 cursor-pointer"
+            disabled={isAtLimit}
+            aria-label={t("newSkill")}
+            onClick={() => setCreateOpen(true)}
           >
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-4 cursor-pointer"
-              disabled={isAtLimit}
-            >
-              <Plus className="size-4" />
-              {t("newSkill")}
-            </Button>
-          </CreateSkillDialog>
+            <Plus className="size-4" />
+            {t("newSkill")}
+          </Button>
         </div>
-      ) : (
+      ) : skills.length === 0 ? null : (
         <div className="space-y-3">
           {skills.map((skill) => (
             <SkillCard
