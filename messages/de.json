@@ -619,7 +619,10 @@
       "in_progress": "In Arbeit"
     },
     "status": {
-      "in_progress": "In Arbeit"
+      "open": "Offen",
+      "in_progress": "In Arbeit",
+      "done": "Erledigt",
+      "cancelled": "Abgebrochen"
     },
     "fields": {
       "titlePlaceholder": "z. B. Neues Produkt launchen",

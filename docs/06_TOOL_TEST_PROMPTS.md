@@ -142,7 +142,7 @@ These are target call mixes for manual validation. Higher-level prompts are inte
 
 ---
 
-### Level 3 — 1 Agent + 5 Tool Calls
+### Level 3 — 1 Agent + 5 Top-Level Tool Calls
 
 > "Run Task Extractor on this note: 'Call Markus Vogel about contract renewal, update the pricing slide, and set a finance prep meeting for June 7, 2026 at 10:00.' Then add Markus Vogel as a contact (markus.vogel@example.com, COO at Helion), create that finance prep meeting for June 7 at 10:00 for 45 minutes, generate a prep pack for the meeting, create a goal 'Close contract renewal by July 15, 2026', and list my open tasks."
 
@@ -154,6 +154,10 @@ These are target call mixes for manual validation. Higher-level prompts are inte
 4. `generate_meeting_prep_pack`
 5. `create_goal`
 6. `list_tasks`
+
+**Expected report detail count for this prompt:**
+
+- Usually 9 total calls, because `run_task_extractor` often creates 3 internal `create_task` calls in addition to the 6 top-level calls above.
 
 ---
 
