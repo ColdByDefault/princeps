@@ -1,6 +1,6 @@
 # 06 - LLM Tools
 
-Last updated: 2026-05-25
+Last updated: 2026-05-26
 
 Read this when adding, changing, reviewing, or debugging tools the assistant can call.
 
@@ -9,12 +9,15 @@ Reference tool set:
 - `tasks` is the best full reference: registry entries, handler validation, label name resolution, duplicate protection, tier gate, CRUD delegation.
 - `labels` is the simplest resolver-adjacent reference.
 - `knowledge`, `briefings`, `web-research`, and `drive` are specialized tools; do not force them into CRUD shape.
+- `agents` is the agents-as-tools layer: see [docs/05_SUB_AGENTS.md](../docs/05_SUB_AGENTS.md). Each `run_*` tool wraps a sub-agent that internally calls other tools through the same executor.
 
 ## Tool Layer Principle
 
 Tools are standalone application actions. They are not owned by chat.
 
 Any surface should be able to call the same executor: chat, widget chat, cron, webhooks, or future agents. Chat is only one consumer.
+
+Sub-agents are tools too. They live in `lib/ai/tools/registry/agents.registry.ts` as `run_*` entries and call other tools through the same `executeToolCall` path. There is no separate routing or classifier pre-pass — the main LLM picks `run_*` tools the same way it picks `create_task`.
 
 The tool flow is:
 
@@ -303,3 +306,22 @@ Before finishing tool work, verify:
 - Active-tool filtering still works for tier and disabled tools.
 - Tool result is compact and does not leak secrets or raw internal data.
 - Destructive tools require clear user intent or confirmation before use.
+
+## Agent Tools (`run_*`)
+
+Sub-agents are exposed as ordinary LLM tools whose names start with `run_`. They follow the same registry/handler pattern as any other tool, with a few extra conventions:
+
+- Registry entries live in `lib/ai/tools/registry/agents.registry.ts`. Current entries: `run_weekly_review`, `run_task_extractor`, `run_decision_logger`, `run_signal_feed`, `run_commitment_tracker`. All carry `group: "agents"`.
+- The handler in `lib/ai/tools/handlers/agents.handler.ts` calls `runAgent(name, input)` from `lib/ai/agents/registry.ts` and returns `{ ok, data: { agent, summary, agentCalls } }` as `ActionResult`.
+- The agent runs its own bounded `streamChat` loop and dispatches every internal tool call through the same `executeToolCall`. There is no separate executor for agents.
+- Cron routes invoke agent tools through `lib/ai/tools/cron.ts → runToolFromCron(userId, toolName, args)`. This builds a synthetic `LLMToolCall`, calls `executeToolCall`, and (when `reportsEnabled`) writes a `Report` with the same flattened detail rows chat produces.
+- Each agent tool row in a `Report` carries `kv.agent = "<agent-name>"` and `kv.summary`. Inner tool calls performed by the agent are flattened into additional detail rows that also carry `kv.agent`. The Reports UI renders a violet badge and indents inner rows so the parent/child relationship is visible.
+- The main system prompt (`lib/ai/context/build.ts`) carries routing guidance steering the model toward the right `run_*` tool and away from manually chaining the underlying tools for the same intent.
+
+When adding a new agent:
+
+1. Add an `AgentDefinition` under `lib/ai/agents/agents/<name>.agent.ts` and register it in `AGENT_REGISTRY`.
+2. Add a `run_<name>` entry to `agents.registry.ts` with `minTier`, `group: "agents"`, and a description that tells the orchestrator exactly when to use it (and when NOT to).
+3. Add a routing line to the system prompt in `lib/ai/context/build.ts` if the intent could otherwise be mis-routed.
+4. Add i18n catalog entries (label/what/example) under `tools.catalog.run_<name>` in `messages/de.json` and `messages/en.json`.
+5. If the agent should run on a schedule, add a cron route that calls `runToolFromCron(userId, "run_<name>", args)`.
