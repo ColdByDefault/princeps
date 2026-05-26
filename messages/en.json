@@ -1448,6 +1448,7 @@
     "emptyHint": "Reports appear here after your assistant uses tools.",
     "toolCalls": "tool calls",
     "tokens": "tokens",
+    "agentBadge": "Agent: {name}",
     "frequency": {
       "title": "Most-used Tools",
       "totalCalls": "{count} total calls",

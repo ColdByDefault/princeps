@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.11
  * @since beta
  */
 
@@ -100,27 +100,64 @@ export function ReportCard({ report, onDelete, isDeleting }: Props) {
       {/* Detail KV rows */}
       {report.details.length > 0 && (
         <div className="space-y-1.5 border-t border-border/60 pt-3">
-          {report.details.map((detail, i) => (
-            <div key={i} className="flex items-start gap-2 text-xs">
-              {detail.ok ? (
-                <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500 mt-0.5" />
-              ) : (
-                <XCircle className="h-3.5 w-3.5 shrink-0 text-destructive mt-0.5" />
-              )}
-              <div className="min-w-0">
-                <span className="font-mono text-muted-foreground">
-                  {detail.tool}
-                </span>
-                {Object.entries(detail.kv).length > 0 && (
-                  <span className="ml-1.5 text-muted-foreground/70">
-                    {Object.entries(detail.kv)
-                      .map(([k, v]) => `${k}:${String(v)}`)
-                      .join(" · ")}
-                  </span>
+          {report.details.map((detail, i) => {
+            const agent =
+              typeof detail.kv["agent"] === "string"
+                ? (detail.kv["agent"] as string)
+                : null;
+            const summary =
+              typeof detail.kv["summary"] === "string"
+                ? (detail.kv["summary"] as string)
+                : null;
+            const isAgentOuter =
+              agent !== null && detail.tool.startsWith("run_");
+            // Inner agent tool calls indent under their parent agent row.
+            const isAgentInner =
+              agent !== null && !detail.tool.startsWith("run_");
+            // KV entries to render inline (drop agent/summary which get special treatment).
+            const inlineKv = Object.entries(detail.kv).filter(
+              ([k]) => k !== "agent" && k !== "summary",
+            );
+            return (
+              <div
+                key={i}
+                className={`flex items-start gap-2 text-xs ${
+                  isAgentInner ? "ml-5 border-l-2 border-border/60 pl-2" : ""
+                }`}
+              >
+                {detail.ok ? (
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500 mt-0.5" />
+                ) : (
+                  <XCircle className="h-3.5 w-3.5 shrink-0 text-destructive mt-0.5" />
                 )}
+                <div className="min-w-0 space-y-0.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {agent && (
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] font-medium border-violet-500/40 bg-violet-500/10 text-violet-600 dark:text-violet-300"
+                      >
+                        {t("agentBadge", { name: agent })}
+                      </Badge>
+                    )}
+                    <span className="font-mono text-muted-foreground">
+                      {detail.tool}
+                    </span>
+                    {inlineKv.length > 0 && (
+                      <span className="text-muted-foreground/70">
+                        {inlineKv
+                          .map(([k, v]) => `${k}:${String(v)}`)
+                          .join(" · ")}
+                      </span>
+                    )}
+                  </div>
+                  {isAgentOuter && summary && (
+                    <p className="text-muted-foreground/80 italic">{summary}</p>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

@@ -1448,6 +1448,7 @@
     "emptyHint": "Berichte erscheinen hier, sobald dein Assistent Tools verwendet.",
     "toolCalls": "Tool-Aufrufe",
     "tokens": "Tokens",
+    "agentBadge": "Agent: {name}",
     "frequency": {
       "title": "Häufigste Tools",
       "totalCalls": "{count} Aufrufe gesamt",
