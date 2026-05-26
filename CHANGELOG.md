@@ -1,3 +1,17 @@
+## [1.2.0] - 2026-05-26
+
+- feat: enhance user data retrieval by adding unique user find and tool gate row types
+- docs: update tool test prompts and status translations for improved clarity and consistency
+- docs: update tool test prompts to include a four-level complexity ladder and clarify expected tool sequences
+- docs: update LLM tools and skills documentation for agent tools and runtime allow-list enforcement
+- feat: add new agent commands and translations for weekly review, task extractor, decision logger, signal feed, and commitment tracker
+- feat: update ReportCard to display agent information and add agent badge translation
+- refactor(tests): remove unused mocks for classifyMessage and runAgent in chat-stream tests
+- feat: implement runToolFromCron for cron-triggered agent runs and update version to canary-v1.1.11
+- fix: /chat does not create reports for tool usage (widget does) Fixes #119
+
+# Changelog
+
 ## [1.1.10] - 2026-05-25
 
 - feat(skills): update skill limits and descriptions in documentation and schemas
