@@ -10,6 +10,16 @@ type UserFindManyArgs = {
   select: { id: true; tier: true };
 };
 
+type UserFindUniqueOrThrowArgs = {
+  where: { id: string };
+  select: { tier: true; preferences: true };
+};
+
+type UserToolGateRow = {
+  tier: string;
+  preferences: unknown;
+};
+
 type RunAgentInput = {
   userId: string;
   userMessage: string;
@@ -21,16 +31,20 @@ type UserPreferences = {
 
 const mocks = vi.hoisted(() => ({
   getUserPreferences: vi.fn<(userId: string) => Promise<UserPreferences>>(),
-  runAgent: vi.fn<
-    (agentName: string, input: RunAgentInput) => Promise<{ ok: boolean }>
-  >(),
+  runAgent:
+    vi.fn<
+      (agentName: string, input: RunAgentInput) => Promise<{ ok: boolean }>
+    >(),
   userFindMany: vi.fn<(args: UserFindManyArgs) => Promise<UserRow[]>>(),
+  userFindUniqueOrThrow:
+    vi.fn<(args: UserFindUniqueOrThrowArgs) => Promise<UserToolGateRow>>(),
 }));
 
 vi.mock("@/lib/core/db", () => ({
   db: {
     user: {
       findMany: mocks.userFindMany,
+      findUniqueOrThrow: mocks.userFindUniqueOrThrow,
     },
   },
 }));
@@ -51,12 +65,27 @@ describe("/api/cron/signal-feed route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     process.env.CRON_SECRET = "cron-secret";
+
+    const tiersByUserId: Record<string, string> = {
+      "no-topics": "pro",
+      "user-ok": "premium",
+      "user-failed": "enterprise",
+      "unexpected-free": "free",
+    };
+
     mocks.userFindMany.mockResolvedValue([
       { id: "no-topics", tier: "pro" },
       { id: "user-ok", tier: "premium" },
       { id: "user-failed", tier: "enterprise" },
       { id: "unexpected-free", tier: "free" },
     ]);
+    mocks.userFindUniqueOrThrow.mockImplementation(async ({ where }) => {
+      const tier = tiersByUserId[where.id];
+      if (!tier) {
+        throw new Error(`User not found: ${where.id}`);
+      }
+      return { tier, preferences: {} };
+    });
     mocks.getUserPreferences.mockImplementation(async (userId) => ({
       signalTopics:
         userId === "no-topics" ? [] : ["AI regulation", "energy markets"],
@@ -126,17 +155,28 @@ describe("/api/cron/signal-feed route", () => {
     expect(mocks.getUserPreferences).toHaveBeenCalledWith("no-topics");
     expect(mocks.getUserPreferences).toHaveBeenCalledWith("user-ok");
     expect(mocks.getUserPreferences).toHaveBeenCalledWith("user-failed");
-    expect(mocks.getUserPreferences).not.toHaveBeenCalledWith("unexpected-free");
+    expect(mocks.getUserPreferences).not.toHaveBeenCalledWith(
+      "unexpected-free",
+    );
     expect(mocks.runAgent).toHaveBeenCalledTimes(2);
+    expect(mocks.userFindUniqueOrThrow).toHaveBeenCalledTimes(2);
+    expect(mocks.userFindUniqueOrThrow).toHaveBeenCalledWith({
+      where: { id: "user-ok" },
+      select: { tier: true, preferences: true },
+    });
+    expect(mocks.userFindUniqueOrThrow).toHaveBeenCalledWith({
+      where: { id: "user-failed" },
+      select: { tier: true, preferences: true },
+    });
     expect(mocks.runAgent).toHaveBeenCalledWith("signal-feed", {
       userId: "user-ok",
       userMessage:
-        "Fetch the latest signals and developments on: AI regulation, energy markets",
+        "Produce a signal-feed digest on: AI regulation, energy markets",
     });
     expect(mocks.runAgent).toHaveBeenCalledWith("signal-feed", {
       userId: "user-failed",
       userMessage:
-        "Fetch the latest signals and developments on: AI regulation, energy markets",
+        "Produce a signal-feed digest on: AI regulation, energy markets",
     });
   });
 });
