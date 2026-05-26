@@ -1,6 +1,6 @@
 # Tool Test Prompts
 
-A reference set of chat prompts for manually verifying each LLM tool fires correctly, followed by three multi-tool stress tests at increasing complexity.
+A reference set of chat prompts for manually verifying each LLM tool fires correctly, followed by a four-level complexity ladder that mixes single tools, multi-tool flows, and agent+tool orchestration.
 
 ---
 
@@ -115,54 +115,67 @@ One prompt per tool. Each prompt should trigger exactly that tool and nothing el
 
 ---
 
-## Part 2 — Multi-Tool Complex Prompts
+## Part 2 — Complexity Ladder (One Prompt Per Level)
 
-### Level 1 — Easy (2–3 tools, linear flow)
+These are target call mixes for manual validation. Higher-level prompts are intentionally ambitious, so exact sequences may vary.
 
-> "I just had a quick call with Marcus Holt from Peakline Ventures. Add him as a contact, then create a task to send him our pitch deck by next Friday."
+### Level 1 — 1 Tool Call
+
+> "Show me all my open tasks."
 
 **Expected tool sequence:**
 
-1. `create_contact` → create Marcus Holt
-2. `create_task` → send pitch deck, linked to Marcus, due next Friday
+1. `list_tasks`
 
 ---
 
-### Level 2 — Medium (4–6 tools, branching + recall)
+### Level 2 — 4 Tool Calls
 
-> "I have a board meeting on June 12, 2026 at 9:00 AM. Schedule it, generate a prep pack for it, then search my knowledge base for anything related to 'Q2 targets' and add a task to incorporate those numbers into the board presentation. Also label the task 'board' — create that label if it doesn't exist yet."
+> "Create a label called 'board-ops' in blue, log a decision that we approved the Q3 hiring plan, add a high-priority task called 'Prepare board memo' due June 14, 2026, then show me my open tasks."
 
 **Expected tool sequence:**
 
-1. `create_meeting` → board meeting on June 12
-2. `generate_meeting_prep_pack` → for that meeting
-3. `search_knowledge` → query: Q2 targets
-4. `list_labels` → check if 'board' label exists
-5. `create_label` (conditional) → only if 'board' not found
-6. `create_task` → incorporate Q2 numbers into board presentation, label 'board', linked to the board meeting
+1. `create_label`
+2. `create_decision`
+3. `create_task`
+4. `list_tasks`
 
 ---
 
-### Level 3 — Hard (8+ tools, multi-pass, re-calls, memory + research)
+### Level 3 — 1 Agent + 5 Tool Calls
 
-> "Plan my week around the Series B fundraising push. First, recall anything you remember about my fundraising preferences or investor notes. Then search the web for active European VC firms investing in B2B SaaS right now and save a summary to my knowledge base. Create a goal: close Series B by Q4 2026, with two milestones — shortlist 10 VCs by June 30, and first close by September 30. List my contacts to see if any are already tagged as investors; if so, list my tasks to check if I already have follow-up work for them. Create a meeting with the internal team for June 9, 2026 at 11:00 AM titled 'Series B Strategy Session', generate a prep pack for it, and add three tasks: research each milestone deadline, draft the investor deck outline (urgent, due June 8), and book intro calls with the top 3 VCs from the web research. Finally, remember the fact that Series B prep is the top priority for June 2026."
+> "Run Task Extractor on this note: 'Call Markus Vogel about contract renewal, update the pricing slide, and set a finance prep meeting for June 7, 2026 at 10:00.' Then add Markus Vogel as a contact (markus.vogel@example.com, COO at Helion), create that finance prep meeting for June 7 at 10:00 for 45 minutes, generate a prep pack for the meeting, create a goal 'Close contract renewal by July 15, 2026', and list my open tasks."
 
-**Expected tool sequence:**
+**Expected top-level call sequence:**
 
-1. `recall_facts` → fundraising preferences / investor notes
-2. `web_search` → active European VC firms, B2B SaaS 2026
-3. `create_knowledge` → save VC landscape summary
-4. `create_goal` → close Series B by Q4 2026
-5. `add_goal_milestone` → shortlist 10 VCs by June 30
-6. `add_goal_milestone` → first close by September 30
-7. `list_contacts` → scan for investor-tagged contacts
-8. `list_tasks` → check for existing investor follow-up tasks (conditional re-call if contacts found)
-9. `create_meeting` → Series B Strategy Session, June 9, 11:00 AM
-10. `generate_meeting_prep_pack` → for that meeting
-11. `create_task` → research each milestone deadline, linked to goal + meeting
-12. `create_task` → draft investor deck outline, urgent, due June 8, linked to goal + meeting
-13. `create_task` → book intro calls with top 3 VCs, linked to goal + meeting
-14. `remember_fact` → Series B is top priority for June 2026
+1. `run_task_extractor` (agent)
+2. `create_contact`
+3. `create_meeting`
+4. `generate_meeting_prep_pack`
+5. `create_goal`
+6. `list_tasks`
+
+---
+
+### Level 4 — 3 Agents + 10 Tool Calls (Most Complex)
+
+> "Run a full Series B command-center cycle. First run Weekly Review, then Signal Feed focused on current European B2B SaaS funding signals, then Commitment Tracker for open investor and board commitments. After that, recall my stored fundraising preferences. Search the web for active European B2B SaaS VCs and save a summary to my knowledge base. Create a goal 'Series B first close by Q4 2026' with two milestones: 'Shortlist 10 VCs by June 30, 2026' and 'Data room ready by July 15, 2026'. Schedule a meeting on June 10, 2026 at 09:00 titled 'Series B War Room', generate a prep pack, and create two tasks: 'Finalize investor deck narrative' (urgent, due June 9) and 'Send updates to top 5 investors' (high, due June 11)."
+
+**Expected top-level call sequence:**
+
+1. `run_weekly_review` (agent)
+2. `run_signal_feed` (agent)
+3. `run_commitment_tracker` (agent)
+4. `recall_facts`
+5. `web_search`
+6. `create_knowledge`
+7. `create_goal`
+8. `add_goal_milestone`
+9. `add_goal_milestone`
+10. `create_meeting`
+11. `generate_meeting_prep_pack`
+12. `create_task`
+13. `create_task`
 
 ---
 
