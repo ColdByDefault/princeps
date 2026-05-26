@@ -6,10 +6,8 @@
  * @since beta
  */
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listReports, getToolFrequency } from "@/lib/features/reports";
 import { ReportsShell } from "@/components/settings/reports";
@@ -28,11 +26,9 @@ export async function generateMetadata() {
 }
 
 export default async function ReportsPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await requireSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  
 
   const [reports, frequencyData] = await Promise.all([
     listReports(session.user.id),
@@ -43,5 +39,4 @@ export default async function ReportsPage() {
     <ReportsShell initialReports={reports} frequencyData={frequencyData} />
   );
 }
-
 

@@ -7,10 +7,8 @@
 
 import "server-only";
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listReadingItems } from "@/lib/features/reading-queue";
 import { ReadingQueueShell } from "@/components/features/reading-queue";
@@ -28,12 +26,11 @@ export async function generateMetadata() {
 }
 
 export default async function ReadingQueuePage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
+  const session = await requireSession();
+  
 
   const items = await listReadingItems(session.user.id);
 
   return <ReadingQueueShell initialItems={items} />;
 }
-
 

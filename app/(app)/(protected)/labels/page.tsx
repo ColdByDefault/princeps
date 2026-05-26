@@ -6,11 +6,8 @@
  * @since beta
  */
 
-
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listLabels } from "@/lib/features/labels";
 import { LabelsShell } from "@/components/settings/labels";
@@ -28,12 +25,11 @@ export async function generateMetadata() {
 }
 
 export default async function LabelsPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
+  const session = await requireSession();
+  
 
   const labels = await listLabels(session.user.id);
 
   return <LabelsShell initialLabels={labels} />;
 }
-
 

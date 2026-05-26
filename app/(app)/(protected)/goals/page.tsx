@@ -8,10 +8,8 @@
 
 import "server-only";
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listGoals } from "@/lib/features/goals";
 import { listLabels } from "@/lib/features/labels";
@@ -32,8 +30,8 @@ export async function generateMetadata() {
 }
 
 export default async function GoalsPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
+  const session = await requireSession();
+  
 
   const [goals, labels, tasks, contacts] = await Promise.all([
     listGoals(session.user.id),
@@ -55,5 +53,4 @@ export default async function GoalsPage() {
     />
   );
 }
-
 

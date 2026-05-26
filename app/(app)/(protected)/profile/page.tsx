@@ -6,10 +6,9 @@
  * @since beta
  */
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { db } from "@/lib/core/db";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { ProfileShell } from "@/components/settings/profile";
@@ -28,11 +27,9 @@ export async function generateMetadata() {
 }
 
 export default async function ProfilePage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await requireSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  
 
   const user = await db.user.findUnique({
     where: { id: session.user.id },
@@ -67,5 +64,4 @@ export default async function ProfilePage() {
     />
   );
 }
-
 

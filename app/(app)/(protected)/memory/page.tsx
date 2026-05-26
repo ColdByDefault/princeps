@@ -6,10 +6,8 @@
  * @since beta
  */
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listMemoryEntries } from "@/lib/features/memory";
 import { MemoryShell } from "@/components/features/memory";
@@ -27,12 +25,11 @@ export async function generateMetadata() {
 }
 
 export default async function MemoryPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
+  const session = await requireSession();
+  
 
   const entries = await listMemoryEntries(session.user.id);
 
   return <MemoryShell initialEntries={entries} />;
 }
-
 

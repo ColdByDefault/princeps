@@ -6,10 +6,8 @@
  * @since canary-v1.1.10
  */
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { TOOL_REGISTRY } from "@/lib/ai/tools";
 import { listSkills } from "@/lib/features/skills";
@@ -32,11 +30,9 @@ export async function generateMetadata() {
 }
 
 export default async function SkillsPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await requireSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  
 
   const [skills, currentTier] = await Promise.all([
     listSkills(session.user.id),

@@ -6,11 +6,9 @@
  * @since beta
  */
 
-import { headers } from "next/headers";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { db } from "@/lib/core/db";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import {
@@ -36,13 +34,9 @@ export async function generateMetadata() {
 }
 
 export default async function SettingsPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await requireSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  
 
   const [initialStatus, initialUsage, initialPrefs, userRow, integrationRows] =
     await Promise.all([
@@ -114,5 +108,4 @@ export default async function SettingsPage() {
     </div>
   );
 }
-
 

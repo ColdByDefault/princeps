@@ -6,10 +6,8 @@
  * @since beta
  */
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { db } from "@/lib/core/db";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listKnowledgeDocuments } from "@/lib/features/knowledge";
@@ -29,11 +27,9 @@ export async function generateMetadata() {
 }
 
 export default async function KnowledgePage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await requireSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  
 
   const [documents, driveIntegration] = await Promise.all([
     listKnowledgeDocuments(session.user.id),
@@ -55,5 +51,4 @@ export default async function KnowledgePage() {
     />
   );
 }
-
 

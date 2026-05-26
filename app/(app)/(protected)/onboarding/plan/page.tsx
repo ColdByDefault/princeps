@@ -7,10 +7,9 @@
  */
 
 import { type Metadata } from "next";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { db } from "@/lib/core/db";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { PlanPickerShell } from "@/components/growth/onboarding";
@@ -31,8 +30,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function OnboardingPlanPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
+  const session = await requireSession();
+  
 
   // If user already has a paid plan, skip this step
   const user = await db.user.findUniqueOrThrow({
@@ -59,5 +58,4 @@ export default async function OnboardingPlanPage() {
     />
   );
 }
-
 

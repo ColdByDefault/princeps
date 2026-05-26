@@ -7,10 +7,8 @@
 
  */
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { fetchWeather } from "@/lib/services/weather";
 import { getUserPreferences } from "@/lib/platform/settings/user-preferences.logic";
@@ -64,13 +62,9 @@ function buildGreetingTitle(
 }
 
 export default async function HomePage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await requireSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  
 
   const timezone = session.user.timezone ?? "UTC";
   const prefs = (session.user.preferences ?? {}) as unknown as Record<
@@ -111,5 +105,4 @@ export default async function HomePage() {
     />
   );
 }
-
 

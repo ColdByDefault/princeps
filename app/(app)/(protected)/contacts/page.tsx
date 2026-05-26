@@ -6,10 +6,8 @@
  * @since beta
  */
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { getTranslations, getLocale } from "@/lib/core/i18n";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { defineSEO, getSeoLocale } from "@/lib/core/seo";
 import { listContacts } from "@/lib/features/contacts";
 import { listLabels } from "@/lib/features/labels";
@@ -29,11 +27,9 @@ export async function generateMetadata() {
 }
 
 export default async function ContactPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await requireSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  
 
   const [contacts, labels] = await Promise.all([
     listContacts(session.user.id),
@@ -42,5 +38,4 @@ export default async function ContactPage() {
 
   return <ContactsShell initialContacts={contacts} availableLabels={labels} />;
 }
-
 

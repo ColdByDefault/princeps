@@ -6,9 +6,8 @@
  * @since beta
  */
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { stripe } from "@/lib/platform/stripe/client";
 import { syncUserTierFromSubscription } from "@/lib/platform/stripe/sync";
 
@@ -17,8 +16,8 @@ type Props = {
 };
 
 export default async function OnboardingSuccessPage({ searchParams }: Props) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
+  const session = await requireSession();
+  
 
   const params = await searchParams;
   const sessionId = params["session_id"];

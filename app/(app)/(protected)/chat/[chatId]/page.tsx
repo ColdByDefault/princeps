@@ -6,9 +6,8 @@
  * @since beta
  */
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/core/auth/auth";
+import { requireSession } from "@/lib/core/auth/session";
 import { getChatMessages } from "@/lib/features/chat";
 import { listSkills } from "@/lib/features/skills";
 import { AppSidebar, SiteHeader } from "@/components/chat/sidebars/chat";
@@ -18,11 +17,9 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 type Props = { params: Promise<{ chatId: string }> };
 
 export default async function ChatIdPage({ params }: Props) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await requireSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  
 
   const { chatId } = await params;
   const [chatData, skills] = await Promise.all([
