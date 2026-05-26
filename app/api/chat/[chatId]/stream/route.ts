@@ -36,6 +36,7 @@ import type {
   LLMTool,
 } from "@/types/llm";
 import type { ReportDetailCall } from "@/lib/features/reports";
+import type { AgentActionCall } from "@/lib/ai/agents/types";
 
 type Params = { params: Promise<{ chatId: string }> };
 
@@ -249,6 +250,26 @@ export async function POST(req: Request, { params }: Params) {
                 result,
               ),
             );
+            // If this was a sub-agent tool, flatten its inner tool calls into
+            // their own report rows tagged with `kv.agent` so the reports UI
+            // can show which agent did what.
+            if (result.ok && toolCall.function.name.startsWith("run_")) {
+              const agentData = result.data as
+                | { agent?: string; agentCalls?: AgentActionCall[] }
+                | null
+                | undefined;
+              const agentName = agentData?.agent;
+              const inner = agentData?.agentCalls ?? [];
+              for (const call of inner) {
+                const innerDetail = buildDetailCall(
+                  call.toolName,
+                  call.args,
+                  call.result,
+                );
+                if (agentName) innerDetail.kv["agent"] = agentName;
+                reportDetails.push(innerDetail);
+              }
+            }
             conversationMessages.push({
               role: "tool",
               tool_call_id: toolCall.id,
@@ -336,6 +357,17 @@ function buildDetailCall(
   }
 
   const data = result.data as Record<string, unknown> | null | undefined;
+
+  // Sub-agent tool result: tag the outer row with the agent name and a short summary.
+  if (toolName.startsWith("run_") && typeof data?.["agent"] === "string") {
+    kv["agent"] = data["agent"];
+    if (typeof data["summary"] === "string") {
+      const summary = data["summary"] as string;
+      kv["summary"] =
+        summary.length > 160 ? `${summary.slice(0, 157)}…` : summary;
+    }
+    return { tool: toolName, ok: true, kv };
+  }
 
   // Extract compact identifiers from args or result
   if (typeof args["title"] === "string") kv["title"] = args["title"];
