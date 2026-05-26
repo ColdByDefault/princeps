@@ -11,7 +11,6 @@ const mocks = vi.hoisted(() => ({
         identifier: string,
       ) => Promise<{ allowed: boolean; retryAfterSeconds: number }>
     >(),
-  classifyMessage: vi.fn<() => Promise<string[]>>(),
   createReport: vi.fn<() => Promise<unknown>>(),
   enforceMonthlyLimits:
     vi.fn<(userId: string) => Promise<{ allowed: boolean; reason?: string }>>(),
@@ -24,9 +23,7 @@ const mocks = vi.hoisted(() => ({
   getSession: vi.fn<GetSession>(),
   getUserPreferences:
     vi.fn<() => Promise<{ language: "en"; reportsEnabled: true }>>(),
-  getUserTier: vi.fn<() => Promise<"pro">>(),
   headers: vi.fn<HeadersProvider>(),
-  runAgent: vi.fn(),
   saveAssistantMessage: vi.fn<() => Promise<unknown>>(),
   saveUserMessage: vi.fn<() => Promise<unknown>>(),
   setInitialTitle: vi.fn<() => Promise<unknown>>(),
@@ -73,7 +70,6 @@ vi.mock("@/lib/platform/tiers", () => ({
   accumulateTokens: mocks.accumulateTokens,
   enforceMonthlyLimits: mocks.enforceMonthlyLimits,
   enforceToolCallsMonthly: mocks.enforceToolCallsMonthly,
-  getUserTier: mocks.getUserTier,
 }));
 
 vi.mock("@/lib/platform/settings", () => ({
@@ -91,14 +87,6 @@ vi.mock("@/lib/ai/tools", () => ({
 
 vi.mock("@/lib/features/reports", () => ({
   createReport: mocks.createReport,
-}));
-
-vi.mock("@/lib/ai/agents/classify", () => ({
-  classifyMessage: mocks.classifyMessage,
-}));
-
-vi.mock("@/lib/ai/agents/registry", () => ({
-  runAgent: mocks.runAgent,
 }));
 
 import { POST } from "@/app/api/chat/[chatId]/stream/route";
@@ -143,9 +131,6 @@ describe("/api/chat/[chatId]/stream route", () => {
       content: "You are Princeps.",
     });
     mocks.getActiveToolsForUser.mockResolvedValue([]);
-    mocks.getUserTier.mockResolvedValue("pro");
-    mocks.classifyMessage.mockResolvedValue([]);
-    mocks.runAgent.mockResolvedValue({ ok: true, summary: "" });
   });
 
   it("returns 401 without a session", async () => {
@@ -301,8 +286,6 @@ describe("/api/chat/[chatId]/stream route", () => {
       },
     ]);
 
-    mocks.classifyMessage.mockResolvedValueOnce(["task-extractor"]);
-    mocks.runAgent.mockResolvedValueOnce({ ok: true, summary: "" });
     mocks.executeToolCall.mockResolvedValueOnce({
       ok: true,
       data: { id: "t-1" },
@@ -348,12 +331,6 @@ describe("/api/chat/[chatId]/stream route", () => {
     expect(buildOpts.tools?.map((tool) => tool.function.name)).toEqual([
       "create_task",
     ]);
-
-    expect(mocks.runAgent).toHaveBeenCalledWith(
-      "task-extractor",
-      { userId: "user-1", userMessage: "Prepare board tasks" },
-      { allowedToolNames: ["create_task"] },
-    );
 
     expect(mocks.executeToolCall).toHaveBeenCalledWith(
       "user-1",
