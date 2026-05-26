@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 type ChatFindFirstArgs = {
   where: { id: string; userId: string };
-  select: { id: true; title: true };
+  select: { id: true; title: true; activeSkillId: true };
 };
 
 type ChatMessageFindManyArgs = {
@@ -31,14 +31,16 @@ type DbMessageRow = {
 
 const mocks = vi.hoisted(() => ({
   chatFindFirst: vi.fn<
-    (args: ChatFindFirstArgs) => Promise<{ id: string; title: string } | null>
+    (args: ChatFindFirstArgs) => Promise<{
+      id: string;
+      title: string;
+      activeSkillId: string | null;
+    } | null>
   >(),
-  chatMessageCreate: vi.fn<
-    (args: ChatMessageCreateArgs) => Promise<{ id: string }>
-  >(),
-  chatMessageFindMany: vi.fn<
-    (args: ChatMessageFindManyArgs) => Promise<DbMessageRow[]>
-  >(),
+  chatMessageCreate:
+    vi.fn<(args: ChatMessageCreateArgs) => Promise<{ id: string }>>(),
+  chatMessageFindMany:
+    vi.fn<(args: ChatMessageFindManyArgs) => Promise<DbMessageRow[]>>(),
   chatUpdate: vi.fn<(args: ChatUpdateArgs) => Promise<unknown>>(),
 }));
 
@@ -68,6 +70,7 @@ describe("chat message logic", () => {
     mocks.chatFindFirst.mockResolvedValue({
       id: "chat-1",
       title: "Board planning",
+      activeSkillId: null,
     });
     mocks.chatMessageFindMany.mockResolvedValue([]);
     mocks.chatMessageCreate.mockResolvedValue({ id: "message-1" });
@@ -86,7 +89,7 @@ describe("chat message logic", () => {
     expect(result).toBeNull();
     expect(mocks.chatFindFirst).toHaveBeenCalledWith({
       where: { id: "chat-1", userId: "user-1" },
-      select: { id: true, title: true },
+      select: { id: true, title: true, activeSkillId: true },
     });
     expect(mocks.chatMessageFindMany).not.toHaveBeenCalled();
   });
@@ -118,7 +121,7 @@ describe("chat message logic", () => {
       select: { id: true, role: true, content: true, createdAt: true },
     });
     expect(result).toEqual({
-      chat: { id: "chat-1", title: "Board planning" },
+      chat: { id: "chat-1", title: "Board planning", activeSkillId: null },
       messages: [userMessage, assistantMessage],
     });
   });

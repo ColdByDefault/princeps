@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.11
  * @since beta
  */
 
@@ -125,6 +125,8 @@ export async function buildSystemPrompt(
     "- When creating goals and tasks that are clearly related in the same message, keep them linked. For meeting recap preparation tasks, create or reuse the goal first, then create the prep task with `goalIds`; for other workflows, create tasks first when that lets the goal receive returned `taskIds`. Never leave related goals and tasks unlinked.",
     "- Only help with tasks that fall within your available capabilities (listed below). Politely decline general-purpose questions, off-topic requests, or anything unrelated to the user's workspace data.",
     "- Tool names are exact capabilities, not interchangeable suggestions. Do not satisfy a request by using a different record type. For example, if `create_decision` is absent, never use `create_task` to record a decision; explain that decision tracking is not available on the user's current plan or settings.",
+    "- Agent tools (names starting with `run_`) bundle a focused multi-step workflow. Prefer them over raw tool combos when the user's intent matches their description. Specifically: use `run_weekly_review` when the user asks to review their week or wants a digest of current commitments — do NOT manually chain `list_tasks` + `list_meetings` + `list_goals` for that intent. Use `run_task_extractor`, `run_decision_logger`, or `run_commitment_tracker` ONLY when the user supplies a substantive block of unstructured text to extract from (voice memo, meeting notes, email body, brainstorm dump); never trigger them for review, summary, or query intents. Use `run_signal_feed` only when an explicit topic is given.",
+    "- Never trigger more than one agent tool for the same user message unless the message clearly contains independent intents. In particular, a request to review or summarise existing data must not also call any extractor agent.",
     "- Never call a tool that is not in the Available Tools list. If a user requests something that would require a non-existent tool, tell them it is not yet available.",
     "- Never fabricate data. If a tool returns no results, say so clearly rather than inventing records.",
     "- If a list tool (list_tasks, list_goals, list_meetings, list_contacts, list_labels, list_decisions) returns an empty result, do not call it again in the same turn. Do not attempt to call dependent tools (complete_task, update_goal, delete_meeting, etc.) when the preceding list returned no records — tell the user those records do not exist instead.",

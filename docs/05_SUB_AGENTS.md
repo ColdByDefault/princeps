@@ -1,30 +1,28 @@
 # Sub-Agents System
 
-Last updated: 2026-05-21
+Last updated: 2026-05-26
 
-This document describes the planned sub-agents architecture for Princeps — a way to let the assistant delegate specialised work to focused, purpose-built agents rather than doing everything in a single chat loop.
+This document describes the sub-agents architecture for Princeps — focused, purpose-built agents that the assistant can delegate specialised multi-step work to instead of doing everything in a single chat loop.
 
 ---
 
 ## Problem
 
-The current chat loop handles all requests in one pass: build system prompt → stream tokens → execute tool calls → repeat up to 6 rounds → final text response.
-
-This works well for single-domain actions ("create a task", "recall a contact") but breaks down for multi-step, cross-domain work such as:
+A single chat loop (system prompt → stream → tool calls → repeat → final text) works well for single-domain actions ("create a task", "recall a contact") but breaks down for multi-step, cross-domain work such as:
 
 - "Process my voice memo and extract tasks, decisions, and meeting notes."
 - "Monitor a topic and surface a weekly signal digest."
 - "Run my weekly review ritual."
 
-These workflows need planning, parallel data gathering, synthesis, and conditional branching — none of which fit neatly into the 6-round single-thread model.
+These workflows need planning, parallel data gathering, synthesis, and conditional branching — none of which fit neatly into the main chat round budget.
 
 ---
 
 ## Goal
 
-Add a sub-agents layer that lets the main assistant (the **orchestrator**) delegate bounded units of work to small, focused **sub-agents**, each with a narrow system prompt, a restricted tool set, and a well-defined output contract.
+Add a sub-agents layer that the main assistant (the **orchestrator**) can delegate bounded units of work to. Each sub-agent has a narrow system prompt, a restricted tool set, and a well-defined output contract.
 
-Sub-agents are **not** visible to the user. They run server-side, return structured results, and the orchestrator incorporates those results into the final user-facing response.
+Sub-agents are **not** a separate UI surface — they run server-side and return a structured summary. The orchestrator decides when to invoke them and incorporates the result into the final user-facing response.
 
 ---
 
@@ -32,10 +30,11 @@ Sub-agents are **not** visible to the user. They run server-side, return structu
 
 1. **Orchestrator owns the user conversation.** Sub-agents are internal workers.
 2. **Each sub-agent has a single responsibility.** Narrow scope = predictable output.
-3. **Sub-agents use the same `lib/ai/tools/` layer.** No parallel tool system needed.
-4. **Sub-agents are stateless per invocation.** Context is passed in; state is written to the DB.
-5. **Any surface can trigger a sub-agent.** Chat, cron, webhooks, and future automation pipelines all use the same runner.
-6. **Tier and usage gates are enforced inside each sub-agent**, just like regular tool handlers.
+3. **Sub-agents are exposed as LLM tools.** They live in the same `lib/ai/tools/` registry as any other tool. No parallel routing system.
+4. **Sub-agents use the same executor.** Their internal tool calls flow through `executeToolCall`, so every action is tracked uniformly.
+5. **Sub-agents are stateless per invocation.** Context is passed in; state is written to the DB.
+6. **Any surface can trigger a sub-agent.** Chat, widget chat, cron, and webhooks all dispatch through the same executor.
+7. **Tier and usage gates are enforced on the agent tool entry**, just like regular tool handlers.
 
 ---
 
@@ -43,27 +42,32 @@ Sub-agents are **not** visible to the user. They run server-side, return structu
 
 ```text
 lib/ai/agents/
-  types.ts                    AgentInput, AgentOutput, AgentDefinition
-  runner.ts                   runAgent(agentName, input, userId) → AgentOutput
-  registry.ts                 Maps agent names to definitions
+  types.ts                    AgentDefinition, AgentInput, AgentOutput, AgentActionCall
+  runner.ts                   runAgentWithDefinition(def, input) — internal streamChat loop
+  registry.ts                 AGENT_REGISTRY, getAgentDefinition(), runAgent(name, input)
   agents/
-    task-extractor.agent.ts   Extract tasks from free text or voice memo transcript
-    decision-logger.agent.ts  Extract and log decisions from meeting notes
-    weekly-review.agent.ts    Run the structured weekly review ritual
-    signal-feed.agent.ts      Fetch + score + summarise topic signals
-    <purpose>.agent.ts        One file per sub-agent
+    task-extractor.agent.ts       Extract tasks from free text or voice memo transcript
+    decision-logger.agent.ts      Extract and log decisions from meeting notes
+    weekly-review.agent.ts        Run the structured weekly review ritual
+    signal-feed.agent.ts          Fetch + score + summarise topic signals
+    commitment-tracker.agent.ts   Extract follow-up commitments from meeting notes
+
+lib/ai/tools/
+  registry/agents.registry.ts   One LLM tool entry per agent (run_weekly_review, run_task_extractor, ...)
+  handlers/agents.handler.ts    Thin handler that calls runAgent() and wraps AgentOutput as ActionResult
+  cron.ts                       runToolFromCron(userId, toolName, args) — cron-side dispatch + report tracking
 ```
 
 ### Agent Definition Shape
 
 ```ts
 type AgentDefinition = {
-  name: string; // stable snake_case identifier
-  description: string; // used by orchestrator to decide when to delegate
+  name: string; // stable snake_case identifier (e.g. "task-extractor")
+  description: string; // used internally by the runner; not seen by orchestrator
   systemPrompt: string; // narrow, task-specific instructions
   tools: string[]; // allowed tool names from lib/ai/tools/registry.ts
   minTier: Tier; // minimum user tier to invoke this agent
-  maxRounds?: number; // default 3; orchestrator can override
+  maxRounds?: number; // default 3
 };
 ```
 
@@ -73,79 +77,124 @@ type AgentDefinition = {
 type AgentInput = {
   userId: string;
   userMessage: string;
-  context?: string; // optional pre-built context string
+  context?: string;
+};
+
+type AgentActionCall = {
+  toolName: string;
+  args: Record<string, unknown>;
+  result: ActionResult;
 };
 
 type AgentOutput = {
   ok: boolean;
-  summary: string; // concise result for the orchestrator to use
-  actions?: ActionResult[]; // tool call results performed during the run
+  summary: string; // concise result for the orchestrator and the user
+  agentCalls?: AgentActionCall[]; // every tool call the agent executed internally
   error?: string;
 };
 ```
 
-`runner.ts` is the only entry point. It:
+`runAgent(name, input)` is the only entry point. It:
 
 1. Looks up the `AgentDefinition` by name.
 2. Enforces the `minTier` gate.
-3. Builds a minimal system prompt from the definition.
-4. Calls `streamChat` / `callChat` with the restricted tool set.
-5. Executes tool calls via `executeToolCall` (reuses the existing executor).
-6. Returns an `AgentOutput` summary to the orchestrator.
+3. Intersects `definition.tools` with `getActiveToolsForUser(userId)` so tier + user toggles are respected.
+4. Builds a minimal system prompt from the definition.
+5. Calls `streamChat` with the restricted tool set.
+6. Executes tool calls via `executeToolCall` (the same executor every surface uses).
+7. Records each call as an `AgentActionCall` and returns the final `AgentOutput`.
 
 ---
 
 ## Orchestrator Integration
 
-The main chat route gains a pre-pass step:
+The main assistant does **not** run a pre-pass classifier. Instead, every sub-agent is exposed as a regular LLM tool whose name starts with `run_`:
+
+| LLM tool                 | Backing agent        | Min tier |
+| ------------------------ | -------------------- | -------- |
+| `run_weekly_review`      | `weekly-review`      | pro      |
+| `run_task_extractor`     | `task-extractor`     | free     |
+| `run_decision_logger`    | `decision-logger`    | free     |
+| `run_signal_feed`        | `signal-feed`        | pro      |
+| `run_commitment_tracker` | `commitment-tracker` | pro      |
+
+The main LLM decides when to invoke an agent based on the tool description, the same way it picks any other tool. The system prompt (`lib/ai/context/build.ts`) carries explicit routing guidance to bias the model toward the right `run_*` tool and away from manually chaining the underlying tools for the same intent.
+
+### Why this is better than a classifier pre-pass
+
+- **One round-trip removed.** Every chat used to pay a small classify LLM call up front. Now agents only run when the main loop actually picks them.
+- **No phantom delegations.** The classifier sometimes fired `task-extractor` on plain review queries, causing duplicate tasks. The orchestrator can now reason about intent in the same context where it answers.
+- **Uniform tracking.** Agent invocations are normal tool calls. They appear in `reportDetails`, count toward the user's monthly tool quota, and respect runtime allow-lists.
+- **Skill scoping works for free.** A skill's runtime allow-list can include or exclude `run_*` tools just like any other tool.
+
+### Provenance: `kv.agent` on tool report rows
+
+Every chat/widget/cron run produces a `Report` with `ReportDetailCall[]` rows. To make agent activity legible:
+
+1. The outer `run_*` tool row carries `kv.agent = "<agent-name>"` and `kv.summary = "<truncated summary>"`.
+2. After the outer row is appended, each entry of `(result.data as AgentToolData).agentCalls` is flattened into its own `ReportDetailCall` row, also tagged with `kv.agent = "<agent-name>"`.
+3. The Reports UI ([ReportCard.tsx](../components/settings/reports/ReportCard.tsx)) renders a violet **Agent: \<name\>** badge on tagged rows and indents inner rows under their parent `run_*` row, so it is visually obvious which actions belonged to an agent.
+
+This works for chat, widget chat, and cron uniformly because all three call `executeToolCall` and use the same flattening logic.
+
+---
+
+## Cron Triggers
+
+Cron routes do not call `runAgent` directly. They call `runToolFromCron`, which dispatches through the same `executeToolCall` path the chat surfaces use:
 
 ```text
-1. classify(userMessage) → decide if delegation is useful
-2. for each delegated task: runAgent(agentName, input, userId)
-3. append AgentOutput summaries to the conversation as assistant context
-4. continue normal streaming chat with full tool set
+app/api/cron/weekly-review/route.ts
+  -> for each eligible user: runToolFromCron(user.id, "run_weekly_review", {})
+
+app/api/cron/signal-feed/route.ts
+  -> for each eligible user with signalTopics: runToolFromCron(user.id, "run_signal_feed", { topic })
 ```
 
-The orchestrator does **not** stream sub-agent work to the user. It waits for sub-agent results, then streams its own synthesis.
+`runToolFromCron` builds a synthetic `LLMToolCall`, calls `executeToolCall`, then (when the user has `reportsEnabled`) creates a `Report` with the same outer + flattened agent-call rows that chat produces. Token usage is accumulated via `accumulateTokens`.
 
-A new `classify` helper (`lib/ai/agents/classify.ts`) uses a lightweight LLM call to map a user message to zero or more agent names. It is cheap (no tools, short prompt, small model) and returns quickly.
-
----
-
-## Planned Sub-Agents (Phase 1)
-
-| Agent             | Trigger                                  | Tools Used                                  | Output                                       |
-| ----------------- | ---------------------------------------- | ------------------------------------------- | -------------------------------------------- |
-| `task-extractor`  | Voice memo / long text with action items | `create_task`, `list_tasks`                 | Tasks created; summary of what was extracted |
-| `decision-logger` | Meeting note / recap with decisions      | `create_decision`, `list_decisions`         | Decisions logged; summary                    |
-| `weekly-review`   | "Run my weekly review" / cron            | `list_tasks`, `list_meetings`, `list_goals` | Structured review summary                    |
-| `signal-feed`     | Cron / "what's happening in X"           | `web_search` (future), `create_knowledge`   | Scored digest written to knowledge base      |
+All tracking is best-effort (try/catch fire-and-forget) so a reporting failure never blocks the agent run.
 
 ---
 
-## Relationship to Existing Issues
+## Phase Status (canary/v.1.1.11)
 
-| Issue                                  | Addressed By                                   |
-| -------------------------------------- | ---------------------------------------------- |
-| #86 F1 — Commitment Tracker            | `commitment-tracker` agent (Phase 2)           |
-| #87 F2 — Voice Memo → Structured Data  | `task-extractor` + `decision-logger` agents    |
-| #88 F3 — Reading Queue with AI scoring | `signal-feed` agent extended to score articles |
-| #84 E1 — Decision Outcome Journal      | `decision-logger` agent output                 |
-| #91 G3 — Weekly Review ritual          | `weekly-review` agent                          |
-| #93 G5 — Signal / Intelligence Feed    | `signal-feed` agent                            |
+Agents-as-LLM-tools refactor is complete. The classifier pre-pass and `lib/ai/agents/classify.ts` have been removed.
 
----
+### Files in current use
 
-## Implementation Order
+| File                                               | Purpose                                                                         |
+| -------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `lib/ai/agents/types.ts`                           | `AgentDefinition`, `AgentInput`, `AgentOutput`, `AgentActionCall`               |
+| `lib/ai/agents/runner.ts`                          | `runAgentWithDefinition()` — tier gate, tool filtering, `streamChat` loop       |
+| `lib/ai/agents/registry.ts`                        | `AGENT_REGISTRY`, `getAgentDefinition()`, `runAgent(name, input)`               |
+| `lib/ai/agents/agents/task-extractor.agent.ts`     | Extracts action items → `create_task` calls                                     |
+| `lib/ai/agents/agents/decision-logger.agent.ts`    | Extracts decisions → `create_decision` calls                                    |
+| `lib/ai/agents/agents/weekly-review.agent.ts`      | Gathers tasks + meetings + goals → executive digest                             |
+| `lib/ai/agents/agents/signal-feed.agent.ts`        | Web search + knowledge cross-ref → scored intelligence digest                   |
+| `lib/ai/agents/agents/commitment-tracker.agent.ts` | Extracts commitments from meeting notes → `create_task` follow-ups (issue #86)  |
+| `lib/ai/tools/registry/agents.registry.ts`         | 5 `run_*` LLM tool entries — one per agent                                      |
+| `lib/ai/tools/handlers/agents.handler.ts`          | Calls `runAgent()` and packages `AgentOutput` as `ActionResult` with `kv.agent` |
+| `lib/ai/tools/cron.ts`                             | `runToolFromCron()` — cron-side executor + report tracking                      |
+| `app/api/cron/weekly-review/route.ts`              | Cron entry — dispatches `run_weekly_review` for every pro+ user                 |
+| `app/api/cron/signal-feed/route.ts`                | Cron entry — dispatches `run_signal_feed` for pro+ users with `signalTopics`    |
+| `components/settings/reports/ReportCard.tsx`       | Renders the **Agent: \<name\>** badge and indents inner rows under `run_*` rows |
 
-1. **`lib/ai/agents/types.ts`** — shared types.
-2. **`lib/ai/agents/runner.ts`** — minimal runner using existing `callChat` + `executeToolCall`.
-3. **`lib/ai/agents/registry.ts`** — agent name → definition map.
-4. **`lib/ai/agents/agents/task-extractor.agent.ts`** — first real agent, narrow scope, easy to test.
-5. **`lib/ai/agents/classify.ts`** — lightweight orchestrator routing helper.
-6. Update **`app/api/chat/[chatId]/stream/route.ts`** — add pre-pass delegation step.
-7. Add remaining Phase 1 agents one at a time.
-8. Add cron trigger support for agents that run on a schedule.
+### Removed in this refactor
+
+- `lib/ai/agents/classify.ts` — deleted.
+- Classifier pre-pass block in `app/api/chat/[chatId]/stream/route.ts` — removed; `runAgent` is no longer imported there.
+- `agentRunSummary` SSE event seeding — removed; agent context now reaches the user as the natural tool result of a `run_*` call.
+
+### Key implementation notes
+
+- `runner.ts` uses `streamChat` (not `callChat`) — `callChat` does not forward the `tools` array to the provider.
+- Tool filtering inside the runner intersects `definition.tools` with `getActiveToolsForUser(userId)` so tier gates and user-level tool toggles are respected.
+- **Early exit guard**: if the intersection is empty, the runner returns `{ ok: false }` immediately instead of running a text-only agent pass.
+- Tool entries (`run_*`) carry `minTier` themselves, so the main LLM does not even see agents the user cannot afford.
+- All agent failures are silent: `runner.ts` never throws. The `run_*` handler converts failures into `{ ok: false, error }` so the main loop just continues.
+- Signal-feed cron only runs for users with at least one `signalTopics` entry in their preferences.
+- `signal-feed` is still read-only. A future `create_knowledge` tool will let it persist digests.
 
 ---
 
@@ -153,59 +202,10 @@ A new `classify` helper (`lib/ai/agents/classify.ts`) uses a lightweight LLM cal
 
 - Not a multi-user agentic platform.
 - Not autonomous background workers with persistent memory loops.
-- Not a replacement for the tool system — agents call the same tools.
+- Not a parallel routing system — agents are ordinary LLM tools.
 - Not exposed as a public API.
 
-Sub-agents are an internal orchestration pattern for the Princeps executive assistant. They stay invisible to the user and are always user-scoped.
-
----
-
-## Implementation Status — Phase 1 complete + Phase 2 (canary/v1.1.3)
-
-All known gaps from the Phase 1 review are resolved. Phase 2 adds the `commitment-tracker` agent and cron triggers.
-
-### Files added (Phase 1 original)
-
-| File                                            | Purpose                                                                   |
-| ----------------------------------------------- | ------------------------------------------------------------------------- |
-| `lib/ai/agents/types.ts`                        | `AgentDefinition`, `AgentInput`, `AgentOutput`, `AgentActionCall` types   |
-| `lib/ai/agents/runner.ts`                       | `runAgentWithDefinition()` — tier gate, tool filtering, `streamChat` loop |
-| `lib/ai/agents/registry.ts`                     | `AGENT_REGISTRY`, `getAgentDefinition()`, public `runAgent(name, input)`  |
-| `lib/ai/agents/classify.ts`                     | `classifyMessage(msg, userTier?)` — tier-filtered routing call            |
-| `lib/ai/agents/agents/task-extractor.agent.ts`  | Extracts action items → `create_task` calls                               |
-| `lib/ai/agents/agents/decision-logger.agent.ts` | Extracts decisions → `create_decision` calls                              |
-| `lib/ai/agents/agents/weekly-review.agent.ts`   | Gathers tasks + meetings + goals → executive digest                       |
-| `lib/ai/agents/agents/signal-feed.agent.ts`     | Web search + knowledge cross-ref → scored intelligence digest             |
-
-### Files added (Phase 2 / gap fixes)
-
-| File                                               | Purpose                                                                           |
-| -------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `lib/ai/agents/agents/commitment-tracker.agent.ts` | Extracts commitments from meeting notes → `create_task` follow-ups (issue #86 F1) |
-| `app/api/cron/weekly-review/route.ts`              | Cron handler — runs `weekly-review` for all pro+ users every Monday at 08:00 UTC  |
-| `app/api/cron/signal-feed/route.ts`                | Cron handler — runs `signal-feed` for pro+ users with `signalTopics` every Monday |
-
-### Files modified
-
-| File                                              | Change                                                                                                                                        |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `app/api/chat/[chatId]/stream/route.ts`           | Agent pre-pass with tier-aware classify; `reportDetails` hoisted before stream and seeded with agent tool calls; `getUserTier` added to batch |
-| `lib/platform/tiers/enforce.ts`                   | `getUserTier` exported (was private)                                                                                                          |
-| `lib/platform/tiers/index.ts`                     | Re-exports `getUserTier`                                                                                                                      |
-| `lib/platform/settings/user-preferences.logic.ts` | Added `signalTopics: string[]` field — used by signal-feed cron to know what to fetch                                                         |
-| `vercel.json`                                     | Added `weekly-review` (Mon 08:00) and `signal-feed` (Mon 06:00) cron entries                                                                  |
-
-### Key implementation notes
-
-- `runner.ts` uses `streamChat` (not `callChat`) — `callChat` does not forward the `tools` array to the provider API.
-- Tool filtering: the runner intersects `definition.tools` with `getActiveToolsForUser()`, so both tier gates and user-level tool toggles are respected.
-- **Early exit guard**: if the intersection is empty, the runner returns `{ ok: false }` immediately rather than running a text-only agent pass.
-- Classifier receives the user's tier and only sees agents at or below that tier — no wasted LLM calls for gated agents.
-- Classifier output is validated against `AGENT_REGISTRY` keys — hallucinated names are silently dropped.
-- All agent failures are silent: `runner.ts` never throws, `classifyMessage` returns `[]` on any error. The main chat loop is unaffected.
-- **Agent calls visible in reports**: `AgentOutput.agentCalls` carries `{ toolName, args, result }`. The stream route seeds `reportDetails` from these before the `ReadableStream` starts.
-- `signal-feed` is still read-only. A future `create_knowledge` tool will allow it to persist digests to the knowledge base.
-- Signal-feed cron only runs for users who have at least one `signalTopics` entry in their preferences.
+Sub-agents are an internal orchestration pattern for the Princeps executive assistant. They stay invisible as a UI surface and are always user-scoped.
 
 ---
 
@@ -213,11 +213,7 @@ All known gaps from the Phase 1 review are resolved. Phase 2 adds the `commitmen
 
 ### `signal-feed` is still read-only
 
-The agent can search the web and query the knowledge base but cannot persist digests. Requires a future `create_knowledge` tool. When that tool is added, update `signalFeedAgent.tools` to include it and update the `signal-feed` system prompt.
-
-### Classifier still triggers on every message
-
-The classifier always runs a cheap LLM call regardless of message content. A fast heuristic pre-check (keyword detection or message length threshold) could skip the classify call entirely for short conversational messages and avoid a redundant round-trip.
+The agent can search the web and query the knowledge base but cannot persist digests. Requires a future `create_knowledge` tool. When that tool is added, update `signalFeedAgent.tools` to include it and update its system prompt.
 
 ### Commitment tracker has no contact creation
 

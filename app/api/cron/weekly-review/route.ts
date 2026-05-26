@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.11
  * @since canary-v1.1.3
  * @module
  * @description Cron handler for the weekly-review sub-agent.
@@ -13,13 +13,11 @@
 
 import { NextResponse } from "next/server";
 import { db } from "@/lib/core/db";
-import { runAgent } from "@/lib/ai/agents/registry";
+import { runToolFromCron } from "@/lib/ai/tools/cron";
 
 export const dynamic = "force-dynamic";
 
 const PRO_TIERS = new Set(["pro", "premium", "enterprise"]);
-const WEEKLY_REVIEW_MESSAGE =
-  "Run my weekly review and produce an executive digest.";
 
 export async function POST(req: Request) {
   const cronSecret = process.env.CRON_SECRET;
@@ -49,10 +47,7 @@ export async function POST(req: Request) {
       continue;
     }
 
-    const result = await runAgent("weekly-review", {
-      userId: user.id,
-      userMessage: WEEKLY_REVIEW_MESSAGE,
-    });
+    const result = await runToolFromCron(user.id, "run_weekly_review", {});
 
     if (result.ok) {
       results.ok++;

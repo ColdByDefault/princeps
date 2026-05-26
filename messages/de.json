@@ -619,7 +619,10 @@
       "in_progress": "In Arbeit"
     },
     "status": {
-      "in_progress": "In Arbeit"
+      "open": "Offen",
+      "in_progress": "In Arbeit",
+      "done": "Erledigt",
+      "cancelled": "Abgebrochen"
     },
     "fields": {
       "titlePlaceholder": "z. B. Neues Produkt launchen",
@@ -1034,7 +1037,8 @@
     "groups": {
       "profile": "Profil",
       "web-research": "Webrecherche",
-      "integrations": "Integrationen"
+      "integrations": "Integrationen",
+      "agents": "Agenten"
     },
     "catalog": {
       "create_task": {
@@ -1291,6 +1295,31 @@
         "label": "Briefing neu generieren",
         "what": "Erstellt ein neues tägliches Briefing aus deinen Aufgaben, Meetings und offenen Entscheidungen.",
         "example": "\"Briefing neu erstellen\" oder \"Erstelle eine neue Tageszusammenfassung\""
+      },
+      "run_weekly_review": {
+        "label": "Wochenrückblick starten",
+        "what": "Startet den Wochenrückblick-Agenten, der eine Executive-Zusammenfassung deiner offenen Aufgaben, anstehenden Meetings und aktiven Ziele erstellt. Nur lesend — erzeugt keine neuen Aufgaben.",
+        "example": "\"Gib mir einen Rückblick auf meine Woche\" oder \"Zeige eine Zusammenfassung meiner aktuellen Verpflichtungen\""
+      },
+      "run_task_extractor": {
+        "label": "Aufgaben-Extraktor starten",
+        "what": "Lässt den Aufgaben-Extraktor einen unstrukturierten Textblock (Meetingnotizen, Sprachmemo, E-Mail) analysieren und erstellt pro erkanntem Punkt eine Aufgabe.",
+        "example": "\"Hier sind meine Meetingnotizen — zieh die To-dos heraus: ...\""
+      },
+      "run_decision_logger": {
+        "label": "Entscheidungslogger starten",
+        "what": "Lässt den Entscheidungslogger-Agenten eine Entscheidung mit Begründung, geprüften Optionen und Ergebnis erfassen und im Entscheidungslog ablegen.",
+        "example": "\"Protokolliere diese Entscheidung: Wir nehmen Postgres, weil ...\""
+      },
+      "run_signal_feed": {
+        "label": "Signal-Feed starten",
+        "what": "Lässt den Signal-Feed-Agenten das Web nach Nachrichten, Marktsignalen oder Themenupdates durchsuchen, die für dich relevant sind, und fasst die wichtigsten Punkte zusammen.",
+        "example": "\"Gib mir einen Signal-Feed zu KI-Infrastruktur\" oder \"Was gibt es diese Woche Neues in unserem Markt?\""
+      },
+      "run_commitment_tracker": {
+        "label": "Commitment-Tracker starten",
+        "what": "Lässt den Commitment-Tracker-Agenten Zusagen identifizieren, die du gemacht hast — gegenüber Kontakten, in Meetings oder in Notizen — und die noch keine Nachverfolgung haben.",
+        "example": "\"Welche Zusagen habe ich gemacht, die ich noch nicht nachverfolgt habe?\""
       }
     }
   },
@@ -1448,6 +1477,7 @@
     "emptyHint": "Berichte erscheinen hier, sobald dein Assistent Tools verwendet.",
     "toolCalls": "Tool-Aufrufe",
     "tokens": "Tokens",
+    "agentBadge": "Agent: {name}",
     "frequency": {
       "title": "Häufigste Tools",
       "totalCalls": "{count} Aufrufe gesamt",

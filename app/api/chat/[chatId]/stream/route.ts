@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.10
+ * @version canary-v1.1.11
  * @since beta
  */
 
@@ -23,14 +23,11 @@ import {
   enforceMonthlyLimits,
   accumulateTokens,
   enforceToolCallsMonthly,
-  getUserTier,
 } from "@/lib/platform/tiers";
 import { getUserPreferences } from "@/lib/platform/settings";
 import { buildSystemPrompt } from "@/lib/ai/context/build";
 import { getActiveToolsForUser, executeToolCall } from "@/lib/ai/tools";
 import { createReport } from "@/lib/features/reports";
-import { classifyMessage } from "@/lib/ai/agents/classify";
-import { runAgent } from "@/lib/ai/agents/registry";
 import type { SkillRecord } from "@/types/api";
 import type {
   LLMMessage,
@@ -39,6 +36,7 @@ import type {
   LLMTool,
 } from "@/types/llm";
 import type { ReportDetailCall } from "@/lib/features/reports";
+import type { AgentActionCall } from "@/lib/ai/agents/types";
 
 type Params = { params: Promise<{ chatId: string }> };
 
@@ -103,10 +101,9 @@ export async function POST(req: Request, { params }: Params) {
   }
 
   // Build message array for LLM
-  const [prefs, activeTools, userTier, activeSkill] = await Promise.all([
+  const [prefs, activeTools, activeSkill] = await Promise.all([
     getUserPreferences(session.user.id),
     getActiveToolsForUser(session.user.id),
-    getUserTier(session.user.id),
     chatData.chat.activeSkillId
       ? getSkillById(session.user.id, chatData.chat.activeSkillId)
       : Promise.resolve(null),
@@ -159,58 +156,10 @@ export async function POST(req: Request, { params }: Params) {
     { role: "user" as const, content: userMessage },
   ];
 
-  // ── Sub-agent pre-pass ──────────────────────────────────
-  // Classify the message and run matched agents before streaming.
-  // Results are injected as a synthetic assistant turn so the main LLM
-  // can reference completed work without streaming it to the user.
-  // Agent tool calls are seeded into reportDetails so they appear in reports.
+  // Report details are collected during tool execution below. Sub-agents are
+  // invoked through normal tool calls (run_weekly_review, run_task_extractor,
+  // etc.) so their inner work is tracked uniformly via the executor.
   const reportDetails: ReportDetailCall[] = [];
-  // Collected for UI events emitted at stream start so clients can show which agents ran.
-  const agentRunSummary: { name: string; ok: boolean }[] = [];
-
-  const agentNames =
-    runtimeToolNames.length > 0
-      ? await classifyMessage(userMessage, userTier)
-      : [];
-  if (agentNames.length > 0) {
-    const agentResults = await Promise.all(
-      agentNames.map((name) =>
-        runAgent(
-          name,
-          { userId: session.user.id, userMessage },
-          { allowedToolNames: runtimeToolNames },
-        ),
-      ),
-    );
-
-    // Collect run summary for UI events
-    for (let i = 0; i < agentNames.length; i++) {
-      agentRunSummary.push({ name: agentNames[i], ok: agentResults[i].ok });
-    }
-
-    // Seed reportDetails with every tool call the agents performed
-    for (const agentResult of agentResults) {
-      if (agentResult.agentCalls) {
-        for (const call of agentResult.agentCalls) {
-          reportDetails.push(
-            buildDetailCall(call.toolName, call.args, call.result),
-          );
-        }
-      }
-    }
-
-    const summaries = agentResults
-      .filter((r) => r.ok && r.summary)
-      .map((r) => r.summary)
-      .join("\n\n");
-    if (summaries) {
-      // Insert before the final user message so the main LLM sees the results naturally
-      llmMessages.splice(llmMessages.length - 1, 0, {
-        role: "assistant",
-        content: summaries,
-      });
-    }
-  }
 
   // Stream response as SSE
   const stream = new ReadableStream({
@@ -225,12 +174,6 @@ export async function POST(req: Request, { params }: Params) {
 
       let assistantContent = "";
       let toolCallChars = 0;
-      // reportDetails is declared above and pre-seeded with any agent tool calls
-
-      // Emit agent pre-pass events so the client can show which agents ran
-      for (const agentRun of agentRunSummary) {
-        send({ type: "agent", name: agentRun.name, ok: agentRun.ok });
-      }
 
       try {
         // Multi-round tool calling before the final text-only response pass.
@@ -307,6 +250,26 @@ export async function POST(req: Request, { params }: Params) {
                 result,
               ),
             );
+            // If this was a sub-agent tool, flatten its inner tool calls into
+            // their own report rows tagged with `kv.agent` so the reports UI
+            // can show which agent did what.
+            if (result.ok && toolCall.function.name.startsWith("run_")) {
+              const agentData = result.data as
+                | { agent?: string; agentCalls?: AgentActionCall[] }
+                | null
+                | undefined;
+              const agentName = agentData?.agent;
+              const inner = agentData?.agentCalls ?? [];
+              for (const call of inner) {
+                const innerDetail = buildDetailCall(
+                  call.toolName,
+                  call.args,
+                  call.result,
+                );
+                if (agentName) innerDetail.kv["agent"] = agentName;
+                reportDetails.push(innerDetail);
+              }
+            }
             conversationMessages.push({
               role: "tool",
               tool_call_id: toolCall.id,
@@ -394,6 +357,17 @@ function buildDetailCall(
   }
 
   const data = result.data as Record<string, unknown> | null | undefined;
+
+  // Sub-agent tool result: tag the outer row with the agent name and a short summary.
+  if (toolName.startsWith("run_") && typeof data?.["agent"] === "string") {
+    kv["agent"] = data["agent"];
+    if (typeof data["summary"] === "string") {
+      const summary = data["summary"] as string;
+      kv["summary"] =
+        summary.length > 160 ? `${summary.slice(0, 157)}…` : summary;
+    }
+    return { tool: toolName, ok: true, kv };
+  }
 
   // Extract compact identifiers from args or result
   if (typeof args["title"] === "string") kv["title"] = args["title"];

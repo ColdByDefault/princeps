@@ -89,7 +89,7 @@ This means a skill can only narrow tool access, never expand it.
 Enforcement happens at multiple levels:
 
 - Tool list passed to the model is already skill-scoped
-- Sub-agent pre-pass is constrained by the same runtime allow-list
+- Agent tools (`run_*`) are subject to the same runtime allow-list — a skill can include or exclude them just like any other tool
 - Final tool execution validates runtime scope in addition to tier and settings checks
 
 This provides defense in depth if a model attempts to call out-of-scope tools.

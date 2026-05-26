@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.1.11
  * @since beta
  */
 
@@ -24,6 +24,7 @@ import { getActiveToolsForUser, executeToolCall } from "@/lib/ai/tools";
 import { createReport } from "@/lib/features/reports";
 import type { LLMMessage, LLMChatOptions, LLMToolCall } from "@/types/llm";
 import type { ReportDetailCall } from "@/lib/features/reports";
+import type { AgentActionCall } from "@/lib/ai/agents/types";
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -208,6 +209,25 @@ export async function POST(req: Request) {
                 result,
               ),
             );
+            // Flatten any sub-agent inner tool calls into separate report rows
+            // tagged with `kv.agent` for provenance.
+            if (result.ok && toolCall.function.name.startsWith("run_")) {
+              const agentData = result.data as
+                | { agent?: string; agentCalls?: AgentActionCall[] }
+                | null
+                | undefined;
+              const agentName = agentData?.agent;
+              const inner = agentData?.agentCalls ?? [];
+              for (const call of inner) {
+                const innerDetail = buildDetailCall(
+                  call.toolName,
+                  call.args,
+                  call.result,
+                );
+                if (agentName) innerDetail.kv["agent"] = agentName;
+                reportDetails.push(innerDetail);
+              }
+            }
             conversationMessages.push({
               role: "tool",
               tool_call_id: toolCall.id,
@@ -312,6 +332,17 @@ function buildDetailCall(
   }
 
   const data = result.data as Record<string, unknown> | null | undefined;
+
+  // Sub-agent tool result: tag the outer row with the agent name and a short summary.
+  if (toolName.startsWith("run_") && typeof data?.["agent"] === "string") {
+    kv["agent"] = data["agent"];
+    if (typeof data["summary"] === "string") {
+      const summary = data["summary"] as string;
+      kv["summary"] =
+        summary.length > 160 ? `${summary.slice(0, 157)}…` : summary;
+    }
+    return { tool: toolName, ok: true, kv };
+  }
 
   if (typeof args["title"] === "string") kv["title"] = args["title"];
   else if (typeof data?.["title"] === "string") kv["title"] = data["title"];

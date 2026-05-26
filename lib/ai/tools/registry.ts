@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.1.11
  * @since beta
  */
 
@@ -25,6 +25,7 @@ import { briefingTools } from "./registry/briefings.registry";
 import { webResearchTools } from "./registry/web-research.registry";
 import { driveTools } from "./registry/drive.registry";
 import { readingQueueTools } from "./registry/reading-queue.registry";
+import { agentTools } from "./registry/agents.registry";
 
 export type { ToolRegistryEntry };
 
@@ -94,4 +95,5 @@ export const TOOL_REGISTRY: ToolRegistryEntry[] = [
   ...webResearchTools,
   ...driveTools,
   ...readingQueueTools,
+  ...agentTools,
 ];

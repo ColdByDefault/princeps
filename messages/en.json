@@ -619,7 +619,10 @@
       "in_progress": "In progress"
     },
     "status": {
-      "in_progress": "In progress"
+      "open": "Open",
+      "in_progress": "In progress",
+      "done": "Done",
+      "cancelled": "Cancelled"
     },
     "fields": {
       "titlePlaceholder": "e.g. Launch new product",
@@ -1034,7 +1037,8 @@
     "groups": {
       "profile": "Profile",
       "web-research": "Web Research",
-      "integrations": "Integrations"
+      "integrations": "Integrations",
+      "agents": "Agents"
     },
     "catalog": {
       "create_task": {
@@ -1291,6 +1295,31 @@
         "label": "Regenerate Briefing",
         "what": "Generates a fresh daily briefing from your tasks, meetings, and decisions.",
         "example": "\"Regenerate my briefing\" or \"Create a new daily summary\""
+      },
+      "run_weekly_review": {
+        "label": "Run Weekly Review",
+        "what": "Triggers the weekly-review agent to compile an executive digest of your open tasks, upcoming meetings, and active goals. Read-only — never creates tasks.",
+        "example": "\"Give me a review of my week\" or \"Show me a digest of my current commitments\""
+      },
+      "run_task_extractor": {
+        "label": "Run Task Extractor",
+        "what": "Runs the task-extractor agent on a block of unstructured text (meeting notes, voice memo, email) and creates one task per action item it finds.",
+        "example": "\"Here are my meeting notes — pull out the to-dos: ...\""
+      },
+      "run_decision_logger": {
+        "label": "Run Decision Logger",
+        "what": "Runs the decision-logger agent to capture a decision with rationale, options considered, and outcome — then files it in your decision log.",
+        "example": "\"Log this decision: we're going with Postgres because ...\""
+      },
+      "run_signal_feed": {
+        "label": "Run Signal Feed",
+        "what": "Runs the signal-feed agent to scan the web for news, market signals, or topic updates relevant to you and summarise the most important items.",
+        "example": "\"Give me a signal feed on AI infrastructure\" or \"What's new in our market this week?\""
+      },
+      "run_commitment_tracker": {
+        "label": "Run Commitment Tracker",
+        "what": "Runs the commitment-tracker agent to surface promises you made — to contacts, in meetings, or via notes — that have not yet been followed up.",
+        "example": "\"What commitments have I made that I haven't followed up on?\""
       }
     }
   },
@@ -1448,6 +1477,7 @@
     "emptyHint": "Reports appear here after your assistant uses tools.",
     "toolCalls": "tool calls",
     "tokens": "tokens",
+    "agentBadge": "Agent: {name}",
     "frequency": {
       "title": "Most-used Tools",
       "totalCalls": "{count} total calls",

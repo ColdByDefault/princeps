@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.10
+ * @version canary-v1.1.11
  * @since beta
  */
 
@@ -21,6 +21,7 @@ import { briefingHandlers } from "@/lib/ai/tools/handlers/briefings.handler";
 import { webResearchHandlers } from "@/lib/ai/tools/handlers/web-research.handler";
 import { driveHandlers } from "@/lib/ai/tools/handlers/drive.handler";
 import { readingQueueHandlers } from "@/lib/ai/tools/handlers/reading-queue.handler";
+import { agentHandlers } from "@/lib/ai/tools/handlers/agents.handler";
 import { getActiveToolsForUser } from "@/lib/ai/tools/registry";
 import type { LLMToolCall } from "@/types/llm";
 import type { ActionResult } from "@/lib/ai/tools/types";
@@ -57,6 +58,7 @@ const HANDLERS: Record<
   ...webResearchHandlers,
   ...driveHandlers,
   ...readingQueueHandlers,
+  ...agentHandlers,
 };
 
 /**

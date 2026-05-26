@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.3
+ * @version canary-v1.1.11
  * @since canary-v1.1.3
  * @module
  * @description Cron handler for the signal-feed sub-agent.
@@ -13,7 +13,7 @@
 
 import { NextResponse } from "next/server";
 import { db } from "@/lib/core/db";
-import { runAgent } from "@/lib/ai/agents/registry";
+import { runToolFromCron } from "@/lib/ai/tools/cron";
 import { getUserPreferences } from "@/lib/platform/settings/user-preferences.logic";
 
 export const dynamic = "force-dynamic";
@@ -56,10 +56,9 @@ export async function POST(req: Request) {
       continue;
     }
 
-    const topics = prefs.signalTopics.join(", ");
-    const result = await runAgent("signal-feed", {
-      userId: user.id,
-      userMessage: `Fetch the latest signals and developments on: ${topics}`,
+    const topic = prefs.signalTopics.join(", ");
+    const result = await runToolFromCron(user.id, "run_signal_feed", {
+      topic,
     });
 
     if (result.ok) {
