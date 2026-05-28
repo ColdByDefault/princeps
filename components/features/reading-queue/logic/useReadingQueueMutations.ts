@@ -2,7 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.2.1
+ * @since canary-v1.1.8
  */
 
 import { useState } from "react";
@@ -14,8 +15,12 @@ type MutationMessages = {
   addError: string;
   markReadSuccess: string;
   markReadError: string;
+  markUnreadSuccess: string;
+  markUnreadError: string;
   archiveSuccess: string;
   archiveError: string;
+  unarchiveSuccess: string;
+  unarchiveError: string;
   deleteSuccess: string;
   deleteError: string;
 };
@@ -91,6 +96,48 @@ export function useReadingQueueMutations(
     }
   }
 
+  async function markUnread(id: string) {
+    setUpdatingId(id);
+    try {
+      const res = await fetch(`/api/reading-queue/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "unread" }),
+      });
+      if (!res.ok) throw new Error();
+      const data = (await res.json()) as { item: ReadingItemRecord };
+      setItems((prev) => prev.map((i) => (i.id === id ? data.item : i)));
+      toast.success(messages.markUnreadSuccess);
+      return true;
+    } catch {
+      toast.error(messages.markUnreadError);
+      return false;
+    } finally {
+      setUpdatingId(null);
+    }
+  }
+
+  async function unarchive(id: string) {
+    setUpdatingId(id);
+    try {
+      const res = await fetch(`/api/reading-queue/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "unread" }),
+      });
+      if (!res.ok) throw new Error();
+      const data = (await res.json()) as { item: ReadingItemRecord };
+      setItems((prev) => prev.map((i) => (i.id === id ? data.item : i)));
+      toast.success(messages.unarchiveSuccess);
+      return true;
+    } catch {
+      toast.error(messages.unarchiveError);
+      return false;
+    } finally {
+      setUpdatingId(null);
+    }
+  }
+
   async function deleteItem(id: string) {
     setDeletingId(id);
     try {
@@ -115,8 +162,9 @@ export function useReadingQueueMutations(
     deletingId,
     addItem,
     markRead,
+    markUnread,
     archive,
+    unarchive,
     deleteItem,
   };
 }
-

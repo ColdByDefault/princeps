@@ -1521,9 +1521,15 @@
       "markRead": "Als gelesen markieren",
       "markReadSuccess": "Als gelesen markiert.",
       "markReadError": "Status konnte nicht aktualisiert werden.",
+      "markUnread": "Als ungelesen markieren",
+      "markUnreadSuccess": "Als ungelesen markiert.",
+      "markUnreadError": "Status konnte nicht aktualisiert werden.",
       "archive": "Archivieren",
       "archiveSuccess": "Artikel archiviert.",
-      "archiveError": "Artikel konnte nicht archiviert werden."
+      "archiveError": "Artikel konnte nicht archiviert werden.",
+      "unarchive": "Aus Archiv wiederherstellen",
+      "unarchiveSuccess": "Artikel wiederhergestellt.",
+      "unarchiveError": "Artikel konnte nicht wiederhergestellt werden."
     },
     "scoreLabel": "Relevanz"
   },

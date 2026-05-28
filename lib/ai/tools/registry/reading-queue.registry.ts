@@ -2,7 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.2.1
+ * @since canary-v1.1.4
  */
 
 import "server-only";
@@ -83,6 +84,27 @@ export const readingQueueTools: ToolRegistryEntry[] = [
     group: "reading-queue",
     type: "function",
     function: {
+      name: "mark_reading_item_unread",
+      description:
+        "Mark a saved reading item as unread again. Use this when the user wants to revisit an article they previously marked as read, or asks to move it back to the unread queue.",
+      parameters: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description:
+              "The ID of the reading item to mark as unread. Use list_reading_queue to find the ID first.",
+          },
+        },
+        required: ["id"],
+      },
+    },
+  },
+  {
+    minTier: "pro",
+    group: "reading-queue",
+    type: "function",
+    function: {
       name: "archive_reading_item",
       description:
         "Archive a reading item to remove it from the active queue without deleting it. Use when the user says to archive, dismiss, or set aside an article.",
@@ -92,6 +114,26 @@ export const readingQueueTools: ToolRegistryEntry[] = [
           id: {
             type: "string",
             description: "The ID of the reading item to archive.",
+          },
+        },
+        required: ["id"],
+      },
+    },
+  },
+  {
+    minTier: "pro",
+    group: "reading-queue",
+    type: "function",
+    function: {
+      name: "unarchive_reading_item",
+      description:
+        "Restore an archived reading item back to the unread queue. Use when the user says to unarchive, restore, or bring back a previously archived article.",
+      parameters: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description: "The ID of the reading item to restore from archive.",
           },
         },
         required: ["id"],

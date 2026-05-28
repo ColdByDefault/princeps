@@ -1521,9 +1521,15 @@
       "markRead": "Mark as read",
       "markReadSuccess": "Marked as read.",
       "markReadError": "Could not update status.",
+      "markUnread": "Mark as unread",
+      "markUnreadSuccess": "Marked as unread.",
+      "markUnreadError": "Could not update status.",
       "archive": "Archive",
       "archiveSuccess": "Article archived.",
-      "archiveError": "Could not archive the article."
+      "archiveError": "Could not archive the article.",
+      "unarchive": "Restore from archive",
+      "unarchiveSuccess": "Article restored.",
+      "unarchiveError": "Could not restore the article."
     },
     "scoreLabel": "Relevance"
   },

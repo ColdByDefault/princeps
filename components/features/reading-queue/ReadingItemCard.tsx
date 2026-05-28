@@ -2,13 +2,20 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.8
+ * @version canary-v1.2.1
  * @since canary-v1.1.4
  */
 
 "use client";
 
-import { ExternalLink, BookCheck, Archive, Trash2 } from "lucide-react";
+import {
+  ExternalLink,
+  BookCheck,
+  BookOpen,
+  Archive,
+  ArchiveRestore,
+  Trash2,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +37,9 @@ import type { ReadingItemRecord } from "@/types/api";
 type ReadingItemCardProps = {
   item: ReadingItemRecord;
   onMarkRead: () => void;
+  onMarkUnread: () => void;
   onArchive: () => void;
+  onUnarchive: () => void;
   onDelete: () => void;
   isUpdating: boolean;
   isDeleting: boolean;
@@ -57,7 +66,9 @@ function RelevanceBadge({ score }: { score: number | null }) {
 export function ReadingItemCard({
   item,
   onMarkRead,
+  onMarkUnread,
   onArchive,
+  onUnarchive,
   onDelete,
   isUpdating,
   isDeleting,
@@ -127,6 +138,28 @@ export function ReadingItemCard({
             </TooltipProvider>
           )}
 
+          {item.status === "read" && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={onMarkUnread}
+                      disabled={isUpdating}
+                      aria-label={t("status.markUnread")}
+                      className="size-7 cursor-pointer"
+                    />
+                  }
+                >
+                  <BookOpen className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{t("status.markUnread")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+
           {item.status !== "archived" && (
             <TooltipProvider>
               <Tooltip>
@@ -145,6 +178,28 @@ export function ReadingItemCard({
                   <Archive className="size-3.5" />
                 </TooltipTrigger>
                 <TooltipContent>{t("status.archive")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+
+          {item.status === "archived" && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={onUnarchive}
+                      disabled={isUpdating}
+                      aria-label={t("status.unarchive")}
+                      className="size-7 cursor-pointer"
+                    />
+                  }
+                >
+                  <ArchiveRestore className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>{t("status.unarchive")}</TooltipContent>
               </Tooltip>
             </TooltipProvider>
           )}
@@ -173,4 +228,3 @@ export function ReadingItemCard({
     </Card>
   );
 }
-

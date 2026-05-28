@@ -2,7 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.2.1
+ * @since canary-v1.1.4
  */
 
 import "server-only";
@@ -70,7 +71,13 @@ async function summariseAndScore(
   url: string,
   pageText: string,
   goalDescriptions: string[],
-): Promise<{ title: string | null; summary: string | null; score: number }> {
+): Promise<{
+  title: string | null;
+  summary: string | null;
+  score: number;
+  promptTokens: number;
+  completionTokens: number;
+}> {
   const goalSection =
     goalDescriptions.length > 0
       ? `User's active goals:\n${goalDescriptions.map((g) => `- ${g}`).join("\n")}`
@@ -121,9 +128,21 @@ Only return valid JSON. Do not add markdown fences.`;
     const rawScore = typeof parsed.score === "number" ? parsed.score : 0;
     const score = Math.max(0, Math.min(1, rawScore));
 
-    return { title, summary, score };
+    return {
+      title,
+      summary,
+      score,
+      promptTokens: result.promptTokens ?? 0,
+      completionTokens: result.completionTokens ?? 0,
+    };
   } catch {
-    return { title: null, summary: null, score: 0 };
+    return {
+      title: null,
+      summary: null,
+      score: 0,
+      promptTokens: 0,
+      completionTokens: 0,
+    };
   }
 }
 
@@ -141,11 +160,8 @@ export async function createReadingItem(
     .map((g) => (g.description ? `${g.title}: ${g.description}` : g.title))
     .filter(Boolean);
 
-  const { title, summary, score } = await summariseAndScore(
-    input.url,
-    pageText,
-    goalDescriptions,
-  );
+  const { title, summary, score, promptTokens, completionTokens } =
+    await summariseAndScore(input.url, pageText, goalDescriptions);
 
   const row = await db.readingItem.create({
     data: {
@@ -157,6 +173,20 @@ export async function createReadingItem(
     },
     select: READING_ITEM_SELECT,
   });
+
+  // Accumulate summarisation tokens into the monthly budget so manual UI
+  // saves and tool-call saves both count against the user's usage.
+  // Fire-and-forget — token tracking must never block the user response.
+  const totalTokens = promptTokens + completionTokens;
+  if (totalTokens > 0) {
+    db.usageCounter
+      .upsert({
+        where: { userId },
+        create: { userId, tokenMonthlyCount: totalTokens },
+        update: { tokenMonthlyCount: { increment: totalTokens } },
+      })
+      .catch(() => {});
+  }
 
   return toReadingItemRecord(row);
 }

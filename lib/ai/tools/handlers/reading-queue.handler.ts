@@ -2,7 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.2.1
+ * @since canary-v1.1.4
  */
 
 import "server-only";
@@ -97,6 +98,40 @@ async function handleArchiveReadingItem(
   return { ok: true, data: result.record };
 }
 
+async function handleMarkReadingItemUnread(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.id !== "string" || !args.id.trim()) {
+    return { ok: false, error: "id is required for mark_reading_item_unread." };
+  }
+
+  const result = await updateReadingItem(userId, args.id, { status: "unread" });
+
+  if (!result.ok) {
+    return { ok: false, error: "Reading item not found." };
+  }
+
+  return { ok: true, data: result.record };
+}
+
+async function handleUnarchiveReadingItem(
+  userId: string,
+  args: Record<string, unknown>,
+): Promise<ActionResult> {
+  if (typeof args.id !== "string" || !args.id.trim()) {
+    return { ok: false, error: "id is required for unarchive_reading_item." };
+  }
+
+  const result = await updateReadingItem(userId, args.id, { status: "unread" });
+
+  if (!result.ok) {
+    return { ok: false, error: "Reading item not found." };
+  }
+
+  return { ok: true, data: result.record };
+}
+
 async function handleDeleteReadingItem(
   userId: string,
   args: Record<string, unknown>,
@@ -118,6 +153,8 @@ export const readingQueueHandlers: Record<string, ToolHandler> = {
   add_to_reading_queue: handleAddToReadingQueue,
   list_reading_queue: handleListReadingQueue,
   mark_reading_item_read: handleMarkReadingItemRead,
+  mark_reading_item_unread: handleMarkReadingItemUnread,
   archive_reading_item: handleArchiveReadingItem,
+  unarchive_reading_item: handleUnarchiveReadingItem,
   delete_reading_item: handleDeleteReadingItem,
 };

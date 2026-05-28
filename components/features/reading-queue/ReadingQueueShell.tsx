@@ -2,7 +2,7 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.9
+ * @version canary-v1.2.1
  * @since canary-v1.1.4
  */
 
@@ -62,15 +62,21 @@ export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
     deletingId,
     addItem,
     markRead,
+    markUnread,
     archive,
+    unarchive,
     deleteItem,
   } = useReadingQueueMutations(setItems, {
     addSuccess: t("addDialog.success"),
     addError: t("addDialog.error"),
     markReadSuccess: t("status.markReadSuccess"),
     markReadError: t("status.markReadError"),
+    markUnreadSuccess: t("status.markUnreadSuccess"),
+    markUnreadError: t("status.markUnreadError"),
     archiveSuccess: t("status.archiveSuccess"),
     archiveError: t("status.archiveError"),
+    unarchiveSuccess: t("status.unarchiveSuccess"),
+    unarchiveError: t("status.unarchiveError"),
     deleteSuccess: t("deleteDialog.success"),
     deleteError: t("deleteDialog.error"),
   });
@@ -180,7 +186,9 @@ export function ReadingQueueShell({ initialItems }: ReadingQueueShellProps) {
               key={item.id}
               item={item}
               onMarkRead={() => markRead(item.id)}
+              onMarkUnread={() => markUnread(item.id)}
               onArchive={() => archive(item.id)}
+              onUnarchive={() => unarchive(item.id)}
               onDelete={() => handleDeleteClick(item.id)}
               isUpdating={updatingId === item.id}
               isDeleting={deletingId === item.id}

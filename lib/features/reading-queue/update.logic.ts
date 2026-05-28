@@ -2,7 +2,8 @@
  * @author ColdByDefault
  * @copyright 2026 ColdByDefault
  * @license See License
- * @version canary-v1.1.4
+ * @version canary-v1.2.1
+ * @since canary-v1.1.4
  */
 
 import "server-only";
@@ -35,6 +36,11 @@ export async function updateReadingItem(
       ...(input.status !== undefined ? { status: input.status } : {}),
       ...(input.title !== undefined ? { title: input.title } : {}),
       ...(input.status === "read" ? { readAt: now } : {}),
+      // Clear readAt when moving back to unread or to archived so the timeline
+      // accurately reflects the article's current state.
+      ...(input.status === "unread" || input.status === "archived"
+        ? { readAt: null }
+        : {}),
     },
     select: READING_ITEM_SELECT,
   });
