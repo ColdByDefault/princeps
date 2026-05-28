@@ -64,11 +64,12 @@ const GROUPED_HREFS = new Set(["/tasks", "/goals", "/contacts", "/meetings"]);
 const INTEL_HREFS = new Set([
   "/knowledge",
   "/skills",
+  "/labels",
   "/decisions",
   "/memory",
   "/reading-queue",
 ]);
-const MANAGE_HREFS = new Set(["/reports", "/labels", "/settings"]);
+const MANAGE_HREFS = new Set(["/reports", "/settings"]);
 const AFTER_DROPDOWN_HREFS = new Set(["/pricing"]);
 
 export default function NavbarDesktop({
@@ -128,7 +129,7 @@ export default function NavbarDesktop({
           );
         })}
 
-        {/* Intelligence dropdown: Knowledge Base + Decisions */}
+        {/* Intelligence dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
@@ -220,7 +221,7 @@ export default function NavbarDesktop({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Manage dropdown: Reports, Labels, Settings */}
+        {/* Manage dropdown: Reports + Settings */}
         <DropdownMenu>
           <DropdownMenuTrigger
             render={

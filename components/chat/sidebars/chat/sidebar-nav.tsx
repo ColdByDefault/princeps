@@ -124,6 +124,7 @@ export function SidebarNav() {
           icon: Sparkles,
           label: tCommon("entities.skills"),
         },
+        { href: "/labels", icon: Tag, label: tCommon("entities.labels") },
         {
           href: "/decisions",
           icon: Scale,
@@ -151,7 +152,6 @@ export function SidebarNav() {
       icon: SlidersHorizontal,
       label: ts("nav.manage"),
       items: [
-        { href: "/labels", icon: Tag, label: tCommon("entities.labels") },
         {
           href: "/reports",
           icon: FileBarChart2,
