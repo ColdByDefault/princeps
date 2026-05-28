@@ -59,116 +59,112 @@ export function DecisionDetailDialog({
       description={decision.rationale ?? decision.outcome ?? decision.title}
       descriptionClassName="sr-only"
     >
-
-        <div className="flex flex-wrap items-center gap-1.5">
-          <Badge
-            variant="outline"
-            className={cn(
-              "text-xs font-medium",
-              STATUS_COLORS[decision.status],
-            )}
-          >
-            {t(`status.${decision.status}`)}
+      <div className="flex flex-wrap items-center gap-1.5">
+        <Badge
+          variant="outline"
+          className={cn("text-xs font-medium", STATUS_COLORS[decision.status])}
+        >
+          {t(`status.${decision.status}`)}
+        </Badge>
+        {decision.decidedAt && (
+          <Badge variant="outline" className="text-xs text-muted-foreground">
+            {t("fields.decidedAt")}: {formatDate(decision.decidedAt, locale)}
           </Badge>
-          {decision.decidedAt && (
-            <Badge variant="outline" className="text-xs text-muted-foreground">
-              {t("fields.decidedAt")}: {formatDate(decision.decidedAt, locale)}
-            </Badge>
-          )}
-        </div>
+        )}
+      </div>
 
-        {decision.meetingTitle && (
-          <div className="text-sm text-muted-foreground flex items-center gap-2">
-            <CalendarDays className="size-3.5 shrink-0" />
-            <span>
-              {t("fields.linkedMeeting")}: {decision.meetingTitle}
-            </span>
+      {decision.meetingTitle && (
+        <div className="text-sm text-muted-foreground flex items-center gap-2">
+          <CalendarDays className="size-3.5 shrink-0" />
+          <span>
+            {t("fields.linkedMeeting")}: {decision.meetingTitle}
+          </span>
+        </div>
+      )}
+
+      {decision.rationale && (
+        <>
+          <Separator />
+          <div>
+            <p className="mb-1 text-xs font-medium text-foreground">
+              {t("fields.rationale")}
+            </p>
+            <p className="text-sm text-muted-foreground whitespace-pre-line">
+              {decision.rationale}
+            </p>
           </div>
-        )}
+        </>
+      )}
 
-        {decision.rationale && (
-          <>
-            <Separator />
-            <div>
-              <p className="mb-1 text-xs font-medium text-foreground">
-                {t("fields.rationale")}
-              </p>
-              <p className="text-sm text-muted-foreground whitespace-pre-line">
-                {decision.rationale}
-              </p>
-            </div>
-          </>
-        )}
+      {decision.outcome && (
+        <>
+          <Separator />
+          <div>
+            <p className="mb-1 text-xs font-medium text-foreground">
+              {t("fields.outcome")}
+            </p>
+            <p className="text-sm text-muted-foreground whitespace-pre-line">
+              {decision.outcome}
+            </p>
+          </div>
+        </>
+      )}
 
-        {decision.outcome && (
-          <>
-            <Separator />
-            <div>
-              <p className="mb-1 text-xs font-medium text-foreground">
-                {t("fields.outcome")}
-              </p>
-              <p className="text-sm text-muted-foreground whitespace-pre-line">
-                {decision.outcome}
-              </p>
-            </div>
-          </>
-        )}
+      {decision.labels.length > 0 && (
+        <>
+          <Separator />
+          <div className="flex flex-wrap gap-1.5">
+            {decision.labels.map((label) => {
+              const Icon = label.icon
+                ? LABEL_ICON_MAP[label.icon as LabelIconName]
+                : null;
 
-        {decision.labels.length > 0 && (
-          <>
-            <Separator />
-            <div className="flex flex-wrap gap-1.5">
-              {decision.labels.map((label) => {
-                const Icon = label.icon
-                  ? LABEL_ICON_MAP[label.icon as LabelIconName]
-                  : null;
+              return (
+                <Badge
+                  key={label.id}
+                  variant="outline"
+                  className="border-transparent text-white text-xs gap-1"
+                  style={{ backgroundColor: label.color }}
+                >
+                  {Icon && <Icon className="size-3 shrink-0" />}
+                  {label.name}
+                </Badge>
+              );
+            })}
+          </div>
+        </>
+      )}
 
-                return (
-                  <Badge
-                    key={label.id}
-                    variant="outline"
-                    className="border-transparent text-white text-xs gap-1"
-                    style={{ backgroundColor: label.color }}
-                  >
-                    {Icon && <Icon className="size-3 shrink-0" />}
-                    {label.name}
-                  </Badge>
-                );
-              })}
-            </div>
-          </>
-        )}
+      <Separator />
 
-        <Separator />
-
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            className="cursor-pointer"
-            aria-label={tCommon("actions.edit")}
-            onClick={() => {
-              onOpenChange(false);
-              onEdit(decision);
-            }}
-          >
-            <Pencil className="mr-1.5 size-3.5" />
-            {tCommon("actions.edit")}
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            className="cursor-pointer text-muted-foreground hover:text-destructive ml-auto"
-            aria-label={tCommon("actions.delete")}
-            onClick={() => {
-              onOpenChange(false);
-              onDelete(decision.id);
-            }}
-          >
-            <Trash2 className="mr-1.5 size-3.5" />
-            {tCommon("actions.delete")}
-          </Button>
-        </div>
+      <div className="flex items-center gap-2">
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          aria-label={tCommon("actions.edit")}
+          onClick={() => {
+            onOpenChange(false);
+            onEdit(decision);
+          }}
+        >
+          <Pencil className="mr-1.5 size-3.5" />
+          {tCommon("actions.edit")}
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="cursor-pointer text-muted-foreground hover:text-destructive ml-auto"
+          aria-label={tCommon("actions.delete")}
+          onClick={() => {
+            onOpenChange(false);
+            onDelete(decision.id);
+          }}
+        >
+          <Trash2 className="mr-1.5 size-3.5" />
+          {tCommon("actions.delete")}
+        </Button>
+      </div>
     </DetailDialogShell>
   );
 }

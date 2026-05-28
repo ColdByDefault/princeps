@@ -14,14 +14,8 @@ import { cn } from "@/lib/core/utils";
 import type { MemoryEntryRecord } from "@/types/api";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DetailDialogShell } from "@/components/shared/DetailDialogShell";
 import { Separator } from "@/components/ui/separator";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 interface MemoryEntryDetailDialogProps {
   entry: MemoryEntryRecord | null;
@@ -44,67 +38,65 @@ export function MemoryEntryDetailDialog({
   if (!entry) return null;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle className="text-base font-semibold leading-snug pr-6">
-            {entry.key}
-          </DialogTitle>
-          <DialogDescription className="sr-only">{entry.value}</DialogDescription>
-        </DialogHeader>
+    <DetailDialogShell
+      open={open}
+      onOpenChange={onOpenChange}
+      title={entry.key}
+      titleClassName="text-base font-semibold leading-snug pr-6"
+      description={entry.value}
+      descriptionClassName="sr-only"
+    >
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Brain className="size-4 shrink-0" />
+        <Badge
+          variant="outline"
+          className={cn(
+            "text-xs",
+            entry.source === "llm"
+              ? "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-800 dark:bg-violet-950/30 dark:text-violet-400"
+              : "border-border text-muted-foreground",
+          )}
+        >
+          {entry.source === "llm" ? t("sourceAI") : t("sourceUser")}
+        </Badge>
+      </div>
 
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Brain className="size-4 shrink-0" />
-          <Badge
-            variant="outline"
-            className={cn(
-              "text-xs",
-              entry.source === "llm"
-                ? "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-800 dark:bg-violet-950/30 dark:text-violet-400"
-                : "border-border text-muted-foreground",
-            )}
-          >
-            {entry.source === "llm" ? t("sourceAI") : t("sourceUser")}
-          </Badge>
-        </div>
+      <Separator />
 
-        <Separator />
+      <p className="text-sm leading-relaxed whitespace-pre-line text-foreground">
+        {entry.value}
+      </p>
 
-        <p className="text-sm leading-relaxed whitespace-pre-line text-foreground">
-          {entry.value}
-        </p>
+      <Separator />
 
-        <Separator />
-
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            className="cursor-pointer"
-            aria-label={tCommon("actions.edit")}
-            onClick={() => {
-              onOpenChange(false);
-              onEdit(entry);
-            }}
-          >
-            <Pencil className="mr-1.5 size-3.5" />
-            {tCommon("actions.edit")}
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            className="cursor-pointer text-muted-foreground hover:text-destructive ml-auto"
-            aria-label={tCommon("actions.delete")}
-            onClick={() => {
-              onOpenChange(false);
-              onDelete(entry.id);
-            }}
-          >
-            <Trash2 className="mr-1.5 size-3.5" />
-            {tCommon("actions.delete")}
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+      <div className="flex items-center gap-2">
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          aria-label={tCommon("actions.edit")}
+          onClick={() => {
+            onOpenChange(false);
+            onEdit(entry);
+          }}
+        >
+          <Pencil className="mr-1.5 size-3.5" />
+          {tCommon("actions.edit")}
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="cursor-pointer text-muted-foreground hover:text-destructive ml-auto"
+          aria-label={tCommon("actions.delete")}
+          onClick={() => {
+            onOpenChange(false);
+            onDelete(entry.id);
+          }}
+        >
+          <Trash2 className="mr-1.5 size-3.5" />
+          {tCommon("actions.delete")}
+        </Button>
+      </div>
+    </DetailDialogShell>
   );
 }

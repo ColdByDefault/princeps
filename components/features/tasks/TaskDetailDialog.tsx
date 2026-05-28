@@ -22,15 +22,9 @@ import type { LabelIconName } from "@/components/settings/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
 import { cn, formatDate } from "@/lib/core/utils";
 import type { TaskRecord } from "@/types/api";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DetailDialogShell } from "@/components/shared/DetailDialogShell";
 import { Separator } from "@/components/ui/separator";
 
 const PRIORITY_COLORS: Record<string, string> = {
@@ -84,189 +78,183 @@ export function TaskDetailDialog({
           : tCommon("status.cancelled");
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle
-            className={cn(
-              "text-base font-semibold leading-snug pr-6",
-              isDone && "line-through text-muted-foreground",
-            )}
-          >
-            {task.title}
-          </DialogTitle>
-          <DialogDescription className="sr-only">
-            {task.notes ?? task.title}
-          </DialogDescription>
-        </DialogHeader>
+    <DetailDialogShell
+      open={open}
+      onOpenChange={onOpenChange}
+      title={task.title}
+      titleClassName={cn(
+        "text-base font-semibold leading-snug pr-6",
+        isDone && "line-through text-muted-foreground",
+      )}
+      description={task.notes ?? task.title}
+      descriptionClassName="sr-only"
+    >
+      <div className="flex flex-wrap items-center gap-1.5">
+        <Badge
+          variant="outline"
+          className={cn("text-xs font-medium", STATUS_COLORS[task.status])}
+        >
+          {statusLabel}
+        </Badge>
+        <Badge
+          variant="outline"
+          className={cn(
+            "text-xs font-medium",
+            PRIORITY_COLORS[task.priority] ?? PRIORITY_COLORS.normal,
+          )}
+        >
+          {t(`priority.${task.priority}`)}
+        </Badge>
+      </div>
 
-        <div className="flex flex-wrap items-center gap-1.5">
-          <Badge
-            variant="outline"
-            className={cn("text-xs font-medium", STATUS_COLORS[task.status])}
-          >
-            {statusLabel}
-          </Badge>
-          <Badge
-            variant="outline"
-            className={cn(
-              "text-xs font-medium",
-              PRIORITY_COLORS[task.priority] ?? PRIORITY_COLORS.normal,
-            )}
-          >
-            {t(`priority.${task.priority}`)}
-          </Badge>
+      {(task.dueDate || task.meetingTitle || task.delegatedTo) && (
+        <div className="space-y-1.5 text-sm text-muted-foreground">
+          {task.dueDate && (
+            <div className="flex items-center gap-2">
+              <CalendarDays className="size-3.5 shrink-0" />
+              <span>
+                {t("fields.dueDate")}: {formatDate(task.dueDate, locale)}
+              </span>
+            </div>
+          )}
+          {task.meetingTitle && (
+            <div className="flex items-center gap-2">
+              <CalendarDays className="size-3.5 shrink-0" />
+              <span>
+                {tCommon("entities.meetings")}: {task.meetingTitle}
+              </span>
+            </div>
+          )}
+          {task.delegatedTo && (
+            <div className="flex items-center gap-2">
+              <UserCheck className="size-3.5 shrink-0" />
+              <span>
+                {t("fields.delegatedTo")}: {task.delegatedTo}
+              </span>
+            </div>
+          )}
         </div>
+      )}
 
-        {(task.dueDate || task.meetingTitle || task.delegatedTo) && (
-          <div className="space-y-1.5 text-sm text-muted-foreground">
-            {task.dueDate && (
-              <div className="flex items-center gap-2">
-                <CalendarDays className="size-3.5 shrink-0" />
-                <span>
-                  {t("fields.dueDate")}: {formatDate(task.dueDate, locale)}
-                </span>
-              </div>
-            )}
-            {task.meetingTitle && (
-              <div className="flex items-center gap-2">
-                <CalendarDays className="size-3.5 shrink-0" />
-                <span>
-                  {tCommon("entities.meetings")}: {task.meetingTitle}
-                </span>
-              </div>
-            )}
-            {task.delegatedTo && (
-              <div className="flex items-center gap-2">
-                <UserCheck className="size-3.5 shrink-0" />
-                <span>
-                  {t("fields.delegatedTo")}: {task.delegatedTo}
-                </span>
-              </div>
-            )}
+      {task.notes && (
+        <>
+          <Separator />
+          <div>
+            <p className="mb-1 text-xs font-medium text-foreground">
+              {t("fields.notes")}
+            </p>
+            <p className="text-sm text-muted-foreground whitespace-pre-line">
+              {task.notes}
+            </p>
           </div>
-        )}
+        </>
+      )}
 
-        {task.notes && (
-          <>
-            <Separator />
-            <div>
-              <p className="mb-1 text-xs font-medium text-foreground">
-                {t("fields.notes")}
-              </p>
-              <p className="text-sm text-muted-foreground whitespace-pre-line">
-                {task.notes}
-              </p>
-            </div>
-          </>
-        )}
+      {task.delegateNotes && (
+        <>
+          <Separator />
+          <div>
+            <p className="mb-1 text-xs font-medium text-foreground">
+              {t("fields.delegateNotes")}
+            </p>
+            <p className="text-sm text-muted-foreground whitespace-pre-line">
+              {task.delegateNotes}
+            </p>
+          </div>
+        </>
+      )}
 
-        {task.delegateNotes && (
-          <>
-            <Separator />
-            <div>
-              <p className="mb-1 text-xs font-medium text-foreground">
-                {t("fields.delegateNotes")}
-              </p>
-              <p className="text-sm text-muted-foreground whitespace-pre-line">
-                {task.delegateNotes}
-              </p>
-            </div>
-          </>
-        )}
-
-        {task.goals.length > 0 && (
-          <>
-            <Separator />
-            <div>
-              <p className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-foreground">
-                <Target className="size-3.5" />
-                {t("fields.linkedGoals")}
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {task.goals.map((goal) => (
-                  <Badge key={goal.id} variant="outline" className="text-xs">
-                    {goal.title}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {task.labels.length > 0 && (
-          <>
-            <Separator />
+      {task.goals.length > 0 && (
+        <>
+          <Separator />
+          <div>
+            <p className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-foreground">
+              <Target className="size-3.5" />
+              {t("fields.linkedGoals")}
+            </p>
             <div className="flex flex-wrap gap-1.5">
-              {task.labels.map((label) => {
-                const Icon = label.icon
-                  ? LABEL_ICON_MAP[label.icon as LabelIconName]
-                  : null;
-
-                return (
-                  <Badge
-                    key={label.id}
-                    variant="outline"
-                    className="border-transparent text-white text-xs gap-1"
-                    style={{ backgroundColor: label.color }}
-                  >
-                    {Icon && <Icon className="size-3 shrink-0" />}
-                    {label.name}
-                  </Badge>
-                );
-              })}
+              {task.goals.map((goal) => (
+                <Badge key={goal.id} variant="outline" className="text-xs">
+                  {goal.title}
+                </Badge>
+              ))}
             </div>
-          </>
-        )}
+          </div>
+        </>
+      )}
 
-        <Separator />
+      {task.labels.length > 0 && (
+        <>
+          <Separator />
+          <div className="flex flex-wrap gap-1.5">
+            {task.labels.map((label) => {
+              const Icon = label.icon
+                ? LABEL_ICON_MAP[label.icon as LabelIconName]
+                : null;
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            className="cursor-pointer"
-            aria-label={isDone ? t("reopenLabel") : t("markDoneLabel")}
-            onClick={() => {
-              onOpenChange(false);
-              onToggleDone(task);
-            }}
-          >
-            {isDone ? (
-              <Circle className="mr-1.5 size-3.5" />
-            ) : (
-              <CheckCircle2 className="mr-1.5 size-3.5" />
-            )}
-            {isDone ? t("reopenLabel") : t("markDoneLabel")}
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="cursor-pointer"
-            aria-label={tCommon("actions.edit")}
-            onClick={() => {
-              onOpenChange(false);
-              onEdit(task);
-            }}
-          >
-            <Pencil className="mr-1.5 size-3.5" />
-            {tCommon("actions.edit")}
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            className="cursor-pointer text-muted-foreground hover:text-destructive ml-auto"
-            aria-label={tCommon("actions.delete")}
-            onClick={() => {
-              onOpenChange(false);
-              onDelete(task.id);
-            }}
-          >
-            <Trash2 className="mr-1.5 size-3.5" />
-            {tCommon("actions.delete")}
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+              return (
+                <Badge
+                  key={label.id}
+                  variant="outline"
+                  className="border-transparent text-white text-xs gap-1"
+                  style={{ backgroundColor: label.color }}
+                >
+                  {Icon && <Icon className="size-3 shrink-0" />}
+                  {label.name}
+                </Badge>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      <Separator />
+
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          aria-label={isDone ? t("reopenLabel") : t("markDoneLabel")}
+          onClick={() => {
+            onOpenChange(false);
+            onToggleDone(task);
+          }}
+        >
+          {isDone ? (
+            <Circle className="mr-1.5 size-3.5" />
+          ) : (
+            <CheckCircle2 className="mr-1.5 size-3.5" />
+          )}
+          {isDone ? t("reopenLabel") : t("markDoneLabel")}
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          className="cursor-pointer"
+          aria-label={tCommon("actions.edit")}
+          onClick={() => {
+            onOpenChange(false);
+            onEdit(task);
+          }}
+        >
+          <Pencil className="mr-1.5 size-3.5" />
+          {tCommon("actions.edit")}
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="cursor-pointer text-muted-foreground hover:text-destructive ml-auto"
+          aria-label={tCommon("actions.delete")}
+          onClick={() => {
+            onOpenChange(false);
+            onDelete(task.id);
+          }}
+        >
+          <Trash2 className="mr-1.5 size-3.5" />
+          {tCommon("actions.delete")}
+        </Button>
+      </div>
+    </DetailDialogShell>
   );
 }

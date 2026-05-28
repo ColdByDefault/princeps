@@ -12,3 +12,4 @@ export { PlanBadge } from "./PlanBadge";
 export { ThemeHydrator } from "./ThemeHydrator";
 export { LoadingRing } from "./LoadingRing";
 export { CustomToggle } from "./CustomeToggle";
+export { DetailDialogShell } from "./DetailDialogShell";
