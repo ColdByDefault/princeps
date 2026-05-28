@@ -16,8 +16,7 @@ type Props = {
 };
 
 export default async function OnboardingSuccessPage({ searchParams }: Props) {
-  const session = await requireSession();
-  
+  await requireSession();
 
   const params = await searchParams;
   const sessionId = params["session_id"];
