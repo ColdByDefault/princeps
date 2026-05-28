@@ -29,6 +29,65 @@ Tests use Vitest. Server logic tests run in the default Node environment with
 database and external service boundaries mocked. Component tests can use React
 Testing Library and jsdom when they need browser APIs.
 
+## Branch Strategy
+
+Two active branches:
+
+- `main` — stable, presentable code. Never push to it directly.
+- `canary/v.<app-version>-canary.<iteration>` — pre-release snapshots. All work lands here first.
+
+### Naming convention
+
+```
+canary/v.1.2.1-canary.3.10   ← first iteration for app version 1.2.1
+canary/v.1.2.1-canary.3.11   ← refined
+canary/v.1.2.1-canary.3.12   ← final, ready to merge
+```
+
+Each branch is a discrete checkpoint. Increment the canary number for each new iteration of the same app version. This lets you abandon or roll back to any previous state without losing work.
+
+### Daily workflow
+
+```bash
+# Create a new canary snapshot
+git checkout -b canary/v.<app-version>-canary.<iteration>
+
+# Work, commit, push
+git add .
+git commit -m "feat: short description"
+git push origin canary/v.<app-version>-canary.<iteration>
+```
+
+### Merging to main
+
+When the final canary iteration is stable:
+
+```bash
+git checkout main
+git merge canary/v.1.2.1-canary.3.12
+git tag v1.2.1
+git push origin main --tags
+```
+
+### Cleanup after merging
+
+Delete all canary branches for that version — keep the repo clean for anyone reviewing it:
+
+```bash
+git push origin --delete canary/v.1.2.1-canary.3.10
+git push origin --delete canary/v.1.2.1-canary.3.11
+git push origin --delete canary/v.1.2.1-canary.3.12
+```
+
+Or delete them in bulk on GitHub: repo → **Branches** tab → delete merged branches.
+
+### Protect main on GitHub
+
+Settings → Branches → Add rule → pattern `main`:
+
+- Require a pull request before merging
+- Do not allow force pushes
+
 ## Before You Change Code
 
 Check:
