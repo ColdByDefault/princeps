@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { TaskCard } from "./TaskCard";
 import { CreateTaskDialog } from "./CreateTaskDialog";
 import { EditTaskDialog } from "./EditTaskDialog";
+import { TaskDetailDialog } from "./TaskDetailDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,9 +49,11 @@ export function TasksShell({
   availableGoals,
 }: TasksShellProps) {
   const t = useTranslations("tasks");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const [tasks, setTasks] = useState<TaskRecord[]>(initialTasks);
   const [filter, setFilter] = useState<Filter>("all");
+  const [detailTask, setDetailTask] = useState<TaskRecord | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [editTask, setEditTask] = useState<TaskRecord | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -111,6 +114,11 @@ const tCommon = useTranslations("common");
     setEditOpen(true);
   }
 
+  function handleDetail(task: TaskRecord) {
+    setDetailTask(task);
+    setDetailOpen(true);
+  }
+
   function handleDeleteRequest(taskId: string) {
     setDeleteTarget(taskId);
     setDeleteOpen(true);
@@ -143,7 +151,9 @@ const tCommon = useTranslations("common");
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
+            {isPendingRefresh
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
           <CreateTaskDialog
             onSubmit={createTask}
@@ -221,6 +231,7 @@ const tCommon = useTranslations("common");
               isUpdating={updating === task.id}
               isDeleting={deleting === task.id}
               onToggleDone={toggleDone}
+              onView={handleDetail}
               onEdit={handleEdit}
               onDelete={handleDeleteRequest}
             />
@@ -238,6 +249,25 @@ const tCommon = useTranslations("common");
         updating={!!updating}
         availableLabels={availableLabels}
         availableGoals={availableGoals}
+      />
+
+      <TaskDetailDialog
+        task={
+          detailTask
+            ? (tasks.find((task) => task.id === detailTask.id) ?? detailTask)
+            : null
+        }
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onToggleDone={toggleDone}
+        onEdit={(task) => {
+          setDetailOpen(false);
+          handleEdit(task);
+        }}
+        onDelete={(taskId) => {
+          setDetailOpen(false);
+          handleDeleteRequest(taskId);
+        }}
       />
 
       {/* Delete confirmation */}
@@ -266,4 +296,3 @@ const tCommon = useTranslations("common");
     </div>
   );
 }
-

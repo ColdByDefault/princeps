@@ -26,6 +26,7 @@ import {
 import { GoalCard } from "./GoalCard";
 import { CreateGoalDialog } from "./CreateGoalDialog";
 import { EditGoalDialog } from "./EditGoalDialog";
+import { GoalDetailDialog } from "./GoalDetailDialog";
 import { StakeholderMapDialog } from "./StakeholderMapDialog";
 import { useGoalMutations } from "./logic/useGoalMutations";
 import type {
@@ -50,9 +51,11 @@ export function GoalsShell({
   availableContacts,
 }: GoalsShellProps) {
   const t = useTranslations("goals");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const [goals, setGoals] = useState<GoalRecord[]>(initialGoals);
   const [filter, setFilter] = useState<Filter>("all");
+  const [detailGoal, setDetailGoal] = useState<GoalRecord | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [editGoal, setEditGoal] = useState<GoalRecord | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -110,6 +113,11 @@ const tCommon = useTranslations("common");
   function handleEdit(goal: GoalRecord) {
     setEditGoal(goal);
     setEditOpen(true);
+  }
+
+  function handleDetail(goal: GoalRecord) {
+    setDetailGoal(goal);
+    setDetailOpen(true);
   }
 
   function handleOpenStakeholders(goal: GoalRecord) {
@@ -237,7 +245,9 @@ const tCommon = useTranslations("common");
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
+            {isPendingRefresh
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
           <CreateGoalDialog
             onSubmit={createGoal}
@@ -311,6 +321,7 @@ const tCommon = useTranslations("common");
               isUpdating={updating === goal.id}
               isDeleting={deleting === goal.id}
               milestonePending={milestonePending}
+              onView={handleDetail}
               onEdit={handleEdit}
               onDelete={handleDeleteRequest}
               onToggleMilestone={toggleMilestone}
@@ -352,6 +363,29 @@ const tCommon = useTranslations("common");
         />
       )}
 
+      {/* Detail dialog */}
+      <GoalDetailDialog
+        goal={
+          detailGoal
+            ? (goals.find((goal) => goal.id === detailGoal.id) ?? detailGoal)
+            : null
+        }
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onEdit={(goal) => {
+          setDetailOpen(false);
+          handleEdit(goal);
+        }}
+        onDelete={(goalId) => {
+          setDetailOpen(false);
+          handleDeleteRequest(goalId);
+        }}
+        onOpenStakeholders={(goal) => {
+          setDetailOpen(false);
+          handleOpenStakeholders(goal);
+        }}
+      />
+
       {/* Delete confirmation */}
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
@@ -378,4 +412,3 @@ const tCommon = useTranslations("common");
     </div>
   );
 }
-

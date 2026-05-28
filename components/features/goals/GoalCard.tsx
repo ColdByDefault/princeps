@@ -14,6 +14,7 @@ import {
   Circle,
   ListChecks,
   Users,
+  Eye,
   Flame,
   Minus,
   Snowflake,
@@ -40,6 +41,7 @@ type GoalCardProps = {
   isUpdating: boolean;
   isDeleting: boolean;
   milestonePending: string | null;
+  onView: (goal: GoalRecord) => void;
   onEdit: (goal: GoalRecord) => void;
   onDelete: (goalId: string) => void;
   onToggleMilestone: (
@@ -55,13 +57,14 @@ export function GoalCard({
   isUpdating,
   isDeleting,
   milestonePending,
+  onView,
   onEdit,
   onDelete,
   onToggleMilestone,
   onOpenStakeholders,
 }: GoalCardProps) {
   const t = useTranslations("goals");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
 
   const totalMilestones = goal.milestones.length;
   const doneMilestones = goal.milestones.filter((m) => m.completed).length;
@@ -81,11 +84,18 @@ const tCommon = useTranslations("common");
         </div>
       }
       inlineActions={
-        <CardIconButton
-          icon={<Users className="size-3.5" />}
-          label={t("stakeholders.openLabel")}
-          onClick={() => onOpenStakeholders(goal)}
-        />
+        <>
+          <CardIconButton
+            icon={<Eye className="size-3.5" />}
+            label={tCommon("actions.view")}
+            onClick={() => onView(goal)}
+          />
+          <CardIconButton
+            icon={<Users className="size-3.5" />}
+            label={t("stakeholders.openLabel")}
+            onClick={() => onOpenStakeholders(goal)}
+          />
+        </>
       }
       onEdit={() => onEdit(goal)}
       editLabel={tCommon("actions.edit")}
@@ -260,5 +270,3 @@ const tCommon = useTranslations("common");
     </ItemCard>
   );
 }
-
-

@@ -10,4 +10,4 @@ export { TasksShell } from "./TasksShell";
 export { TaskCard } from "./TaskCard";
 export { CreateTaskDialog } from "./CreateTaskDialog";
 export { EditTaskDialog } from "./EditTaskDialog";
-
+export { TaskDetailDialog } from "./TaskDetailDialog";

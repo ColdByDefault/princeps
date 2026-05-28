@@ -8,13 +8,14 @@
 
 "use client";
 
-import { Scale, CalendarDays } from "lucide-react";
+import { Scale, CalendarDays, Eye } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/settings/labels/label-icons";
 import type { LabelIconName } from "@/components/settings/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
 import { cn, formatDate } from "@/lib/core/utils";
 import { Badge } from "@/components/ui/badge";
 import { ItemCard } from "@/components/shared/ItemCard";
+import { CardIconButton } from "@/components/shared/CardIconButton";
 import type { DecisionRecord } from "@/types/api";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -28,6 +29,7 @@ type DecisionCardProps = {
   decision: DecisionRecord;
   isUpdating: boolean;
   isDeleting: boolean;
+  onView: (decision: DecisionRecord) => void;
   onEdit: (decision: DecisionRecord) => void;
   onDelete: (decisionId: string) => void;
 };
@@ -36,6 +38,7 @@ export function DecisionCard({
   decision,
   isUpdating,
   isDeleting,
+  onView,
   onEdit,
   onDelete,
 }: DecisionCardProps) {
@@ -50,6 +53,13 @@ const tCommon = useTranslations("common");
         <div className="mt-0.5 shrink-0 text-muted-foreground">
           <Scale className="size-5" />
         </div>
+      }
+      inlineActions={
+        <CardIconButton
+          icon={<Eye className="size-3.5" />}
+          label={tCommon("actions.view")}
+          onClick={() => onView(decision)}
+        />
       }
       onEdit={() => onEdit(decision)}
       editLabel={tCommon("actions.edit")}

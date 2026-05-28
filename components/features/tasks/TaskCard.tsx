@@ -14,6 +14,7 @@ import {
   Target,
   CalendarDays,
   UserCheck,
+  Eye,
 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/settings/labels/label-icons";
 import type { LabelIconName } from "@/components/settings/labels/label-icons";
@@ -28,6 +29,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ItemCard } from "@/components/shared/ItemCard";
+import { CardIconButton } from "@/components/shared/CardIconButton";
 import type { TaskRecord } from "@/types/api";
 
 const PRIORITY_COLORS: Record<string, string> = {
@@ -44,6 +46,7 @@ type TaskCardProps = {
   isUpdating: boolean;
   isDeleting: boolean;
   onToggleDone: (task: TaskRecord) => void;
+  onView: (task: TaskRecord) => void;
   onEdit: (task: TaskRecord) => void;
   onDelete: (taskId: string) => void;
 };
@@ -53,11 +56,12 @@ export function TaskCard({
   isUpdating,
   isDeleting,
   onToggleDone,
+  onView,
   onEdit,
   onDelete,
 }: TaskCardProps) {
   const t = useTranslations("tasks");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const isDone = task.status === "done";
   const locale = useLocale();
 
@@ -90,6 +94,13 @@ const tCommon = useTranslations("common");
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+      }
+      inlineActions={
+        <CardIconButton
+          icon={<Eye className="size-3.5" />}
+          label={tCommon("actions.view")}
+          onClick={() => onView(task)}
+        />
       }
       onEdit={() => onEdit(task)}
       editLabel={tCommon("actions.edit")}
@@ -176,6 +187,3 @@ const tCommon = useTranslations("common");
     </ItemCard>
   );
 }
-
-
-
