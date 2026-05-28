@@ -43,7 +43,7 @@ export function DecisionCard({
   onDelete,
 }: DecisionCardProps) {
   const t = useTranslations("decisions");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
 
   return (
@@ -144,5 +144,3 @@ const tCommon = useTranslations("common");
     </ItemCard>
   );
 }
-
-

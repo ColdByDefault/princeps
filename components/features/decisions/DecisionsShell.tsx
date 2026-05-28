@@ -4,7 +4,7 @@
  * @license See License
  * @version canary-v1.1.8
  * @since canary-v1.0.2
- */ 
+ */
 
 "use client";
 
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DecisionCard } from "./DecisionCard";
 import { CreateDecisionDialog } from "./CreateDecisionDialog";
+import { DecisionDetailDialog } from "./DecisionDetailDialog";
 import { EditDecisionDialog } from "./EditDecisionDialog";
 import { useDecisionMutations } from "./logic/useDecisionMutations";
 import type {
@@ -46,10 +47,14 @@ export function DecisionsShell({
   availableMeetings,
 }: DecisionsShellProps) {
   const t = useTranslations("decisions");
-const tCommon = useTranslations("common");
+  const tCommon = useTranslations("common");
   const [decisions, setDecisions] =
     useState<DecisionRecord[]>(initialDecisions);
   const [filter, setFilter] = useState<Filter>("all");
+  const [detailDecision, setDetailDecision] = useState<DecisionRecord | null>(
+    null,
+  );
+  const [detailOpen, setDetailOpen] = useState(false);
   const [editDecision, setEditDecision] = useState<DecisionRecord | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -100,6 +105,11 @@ const tCommon = useTranslations("common");
     setEditOpen(true);
   }
 
+  function handleDetail(decision: DecisionRecord) {
+    setDetailDecision(decision);
+    setDetailOpen(true);
+  }
+
   function handleDeleteRequest(decisionId: string) {
     setDeleteTarget(decisionId);
     setDeleteOpen(true);
@@ -132,7 +142,9 @@ const tCommon = useTranslations("common");
             <RefreshCw
               className={`size-3.5 ${isPendingRefresh ? "animate-spin" : ""}`}
             />
-            {isPendingRefresh ? tCommon("states.refreshing") : tCommon("actions.refresh")}
+            {isPendingRefresh
+              ? tCommon("states.refreshing")
+              : tCommon("actions.refresh")}
           </Button>
           <CreateDecisionDialog
             onSubmit={createDecision}
@@ -205,12 +217,32 @@ const tCommon = useTranslations("common");
               decision={decision}
               isUpdating={updating === decision.id}
               isDeleting={deleting === decision.id}
+              onView={handleDetail}
               onEdit={handleEdit}
               onDelete={handleDeleteRequest}
             />
           ))}
         </div>
       )}
+
+      <DecisionDetailDialog
+        decision={
+          detailDecision
+            ? (decisions.find((d) => d.id === detailDecision.id) ??
+              detailDecision)
+            : null
+        }
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onEdit={(decision) => {
+          setDetailOpen(false);
+          handleEdit(decision);
+        }}
+        onDelete={(decisionId) => {
+          setDetailOpen(false);
+          handleDeleteRequest(decisionId);
+        }}
+      />
 
       {/* Edit dialog */}
       <EditDecisionDialog
@@ -250,4 +282,3 @@ const tCommon = useTranslations("common");
     </div>
   );
 }
-
