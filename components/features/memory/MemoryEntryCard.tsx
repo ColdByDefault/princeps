@@ -8,17 +8,19 @@
 
 "use client";
 
-import { Brain } from "lucide-react";
+import { Brain, Eye } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/core/utils";
 import { Badge } from "@/components/ui/badge";
 import { ItemCard } from "@/components/shared/ItemCard";
+import { CardIconButton } from "@/components/shared/CardIconButton";
 import type { MemoryEntryRecord } from "@/types/api";
 
 type MemoryEntryCardProps = {
   entry: MemoryEntryRecord;
   isUpdating: boolean;
   isDeleting: boolean;
+  onView: (entry: MemoryEntryRecord) => void;
   onEdit: (entry: MemoryEntryRecord) => void;
   onDelete: (id: string) => void;
 };
@@ -27,6 +29,7 @@ export function MemoryEntryCard({
   entry,
   isUpdating,
   isDeleting,
+  onView,
   onEdit,
   onDelete,
 }: MemoryEntryCardProps) {
@@ -40,6 +43,13 @@ export function MemoryEntryCard({
         <div className="mt-0.5 shrink-0 text-muted-foreground">
           <Brain className="size-5" />
         </div>
+      }
+      inlineActions={
+        <CardIconButton
+          icon={<Eye className="size-3.5" />}
+          label={tCommon("actions.view")}
+          onClick={() => onView(entry)}
+        />
       }
       onEdit={() => onEdit(entry)}
       editLabel={tCommon("actions.edit")}
@@ -73,4 +83,3 @@ export function MemoryEntryCard({
     </ItemCard>
   );
 }
-

@@ -8,22 +8,16 @@
 
 "use client";
 
-import { Scale, CalendarDays, Pencil, Trash2 } from "lucide-react";
+import { CalendarDays, Pencil, Trash2 } from "lucide-react";
 import { LABEL_ICON_MAP } from "@/components/settings/labels/label-icons";
 import type { LabelIconName } from "@/components/settings/labels/label-icons";
 import { useTranslations, useLocale } from "next-intl";
 import { cn, formatDate } from "@/lib/core/utils";
 import type { DecisionRecord } from "@/types/api";
+import { DetailDialogShell } from "@/components/shared/DetailDialogShell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 const STATUS_COLORS: Record<string, string> = {
   open: "text-blue-600 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30",
@@ -54,22 +48,17 @@ export function DecisionDetailDialog({
   if (!decision) return null;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle
-            className={cn(
-              "text-base font-semibold leading-snug pr-6",
-              decision.status === "reversed" &&
-                "line-through text-muted-foreground",
-            )}
-          >
-            {decision.title}
-          </DialogTitle>
-          <DialogDescription className="sr-only">
-            {decision.rationale ?? decision.outcome ?? decision.title}
-          </DialogDescription>
-        </DialogHeader>
+    <DetailDialogShell
+      open={open}
+      onOpenChange={onOpenChange}
+      title={decision.title}
+      titleClassName={cn(
+        "text-base font-semibold leading-snug pr-6",
+        decision.status === "reversed" && "line-through text-muted-foreground",
+      )}
+      description={decision.rationale ?? decision.outcome ?? decision.title}
+      descriptionClassName="sr-only"
+    >
 
         <div className="flex flex-wrap items-center gap-1.5">
           <Badge
@@ -180,7 +169,6 @@ export function DecisionDetailDialog({
             {tCommon("actions.delete")}
           </Button>
         </div>
-      </DialogContent>
-    </Dialog>
+    </DetailDialogShell>
   );
 }

@@ -8,6 +8,6 @@
 
 export { MemoryShell } from "./MemoryShell";
 export { MemoryEntryCard } from "./MemoryEntryCard";
+export { MemoryEntryDetailDialog } from "./MemoryEntryDetailDialog";
 export { CreateMemoryEntryDialog } from "./CreateMemoryEntryDialog";
 export { EditMemoryEntryDialog } from "./EditMemoryEntryDialog";
-

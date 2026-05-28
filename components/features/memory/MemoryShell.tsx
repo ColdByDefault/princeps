@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { MemoryEntryCard } from "./MemoryEntryCard";
 import { CreateMemoryEntryDialog } from "./CreateMemoryEntryDialog";
+import { MemoryEntryDetailDialog } from "./MemoryEntryDetailDialog";
 import { EditMemoryEntryDialog } from "./EditMemoryEntryDialog";
 import { useMemoryMutations } from "./logic/useMemoryMutations";
 import type { MemoryEntryRecord } from "@/types/api";
@@ -36,6 +37,10 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
   const t = useTranslations("memory");
   const tCommon = useTranslations("common");
   const [entries, setEntries] = useState<MemoryEntryRecord[]>(initialEntries);
+  const [detailEntry, setDetailEntry] = useState<MemoryEntryRecord | null>(
+    null,
+  );
+  const [detailOpen, setDetailOpen] = useState(false);
   const [editEntry, setEditEntry] = useState<MemoryEntryRecord | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -73,6 +78,11 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
   function handleDeleteRequest(id: string) {
     setDeleteTarget(id);
     setDeleteOpen(true);
+  }
+
+  function handleDetail(entry: MemoryEntryRecord) {
+    setDetailEntry(entry);
+    setDetailOpen(true);
   }
 
   async function handleDeleteConfirm() {
@@ -136,12 +146,32 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
               entry={entry}
               isUpdating={updating === entry.id}
               isDeleting={deleting === entry.id}
+              onView={handleDetail}
               onEdit={(e) => setEditEntry(e)}
               onDelete={handleDeleteRequest}
             />
           ))}
         </div>
       )}
+
+      <MemoryEntryDetailDialog
+        entry={
+          detailEntry
+            ? (entries.find((entry) => entry.id === detailEntry.id) ??
+              detailEntry)
+            : null
+        }
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onEdit={(entry) => {
+          setDetailOpen(false);
+          setEditEntry(entry);
+        }}
+        onDelete={(id) => {
+          setDetailOpen(false);
+          handleDeleteRequest(id);
+        }}
+      />
 
       {/* Edit dialog */}
       <EditMemoryEntryDialog
@@ -177,4 +207,3 @@ export function MemoryShell({ initialEntries }: MemoryShellProps) {
     </div>
   );
 }
-

@@ -11,7 +11,6 @@
 import {
   CheckCircle2,
   Circle,
-  Target,
   ListChecks,
   Users,
   Flame,
